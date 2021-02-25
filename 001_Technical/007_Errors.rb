@@ -5,14 +5,15 @@ class Reset < Exception
 end
 
 def pbGetExceptionMessage(e,_script="")
-  emessage = e.message
+  emessage = e.message.dup
+  emessage.force_encoding(Encoding::UTF_8)
   if e.is_a?(Hangup)
     emessage = "The script is taking too long. The game will restart."
   elsif e.is_a?(Errno::ENOENT)
     filename = emessage.sub("No such file or directory - ", "")
     emessage = "File #{filename} not found."
   end
-  emessage.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+  emessage.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
   return emessage
 end
 
@@ -30,7 +31,7 @@ def pbPrintException(e)
     maxlength = ($INTERNAL) ? 25 : 10
     e.backtrace[0,maxlength].each { |i| btrace += "#{i}\r\n" }
   end
-  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
   message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
   message += "#{Essentials::ERROR_TEXT}"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
@@ -41,12 +42,22 @@ def pbPrintException(e)
     errorlog = RTP.getSaveFileName("errorlog.txt")
   end
   File.open(errorlog,"ab") { |f| f.write(premessage); f.write(message) }
-  errorlogline = errorlog.sub("/", "\\")
-  errorlogline.sub!(Dir.pwd + "\\", "")
+  errorlogline = errorlog
+  errorlogline.sub!(Dir.pwd + "/", "")
   errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
-  errorlogline.gsub!("/", "\\")
-  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nPress Ctrl+C to copy this message to the clipboard.")
+  errorlogline.gsub!("/", "\\") if System.platform[/Windows/]
+
+  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard.")
+  # Give a ~500ms coyote time to start holding Control
+  (0.5 / (1.0 / Graphics.frame_rate)).ceil.times{
+    Graphics.update
+    Input.update
+    if Input.press?(Input::CTRL)
+      Input.clipboard = message
+      break
+    end
+  }
 end
 
 def pbCriticalCode
