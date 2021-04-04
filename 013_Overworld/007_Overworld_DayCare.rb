@@ -356,7 +356,7 @@ def pbDayCareGenerateEgg
   egg.happiness = 120
   egg.iv = ivs
   egg.moves = finalmoves
-  egg.calcStats
+  egg.calc_stats
   egg.obtain_text = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")
   egg.steps_to_hatch = egg.species_data.hatch_steps
@@ -394,7 +394,7 @@ Events.onStepTaken += proc { |_sender,_e|
     oldlevel = pkmn.level
     pkmn.exp += 1   # Gain Exp
     next if pkmn.level==oldlevel
-    pkmn.calcStats
+    pkmn.calc_stats
     movelist = pkmn.getMoveList
     for i in movelist
       pkmn.learn_move(i[1]) if i[0]==pkmn.level   # Learned a new move

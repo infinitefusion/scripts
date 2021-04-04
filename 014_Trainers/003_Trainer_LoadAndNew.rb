@@ -9,14 +9,6 @@ def pbLoadTrainer(tr_type, tr_name, tr_version = 0)
   return (trainer_data) ? trainer_data.to_trainer : nil
 end
 
-def pbConvertTrainerData
-  tr_type_names = []
-  GameData::TrainerType.each { |t| tr_type_names[t.id_number] = t.real_name }
-  MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
-  Compiler.write_trainer_types
-  Compiler.write_trainers
-end
-
 def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
   for i in 0...Settings::MAX_PARTY_SIZE
@@ -66,6 +58,14 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   return trainer
 end
 
+def pbConvertTrainerData
+  tr_type_names = []
+  GameData::TrainerType.each { |t| tr_type_names[t.id_number] = t.real_name }
+  MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
+  Compiler.write_trainer_types
+  Compiler.write_trainers
+end
+
 def pbTrainerTypeCheck(trainer_type)
   return true if !$DEBUG
   return true if GameData::TrainerType.exists?(trainer_type)
@@ -74,16 +74,6 @@ def pbTrainerTypeCheck(trainer_type)
   end
   pbMapInterpreter.command_end if pbMapInterpreter
   return false
-end
-
-def pbGetFreeTrainerParty(tr_type, tr_name)
-  tr_type_data = GameData::TrainerType.try_get(tr_type)
-  raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
-  tr_type = tr_type_data.id
-  for i in 0...256
-    return i if !GameData::Trainer.try_get(tr_type, tr_name, i)
-  end
-  return -1
 end
 
 # Called from trainer events to ensure the trainer exists
@@ -104,6 +94,16 @@ def pbTrainerCheck(tr_type, tr_name, max_battles, tr_version = 0)
   return true
 end
 
+def pbGetFreeTrainerParty(tr_type, tr_name)
+  tr_type_data = GameData::TrainerType.try_get(tr_type)
+  raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
+  tr_type = tr_type_data.id
+  for i in 0...256
+    return i if !GameData::Trainer.try_get(tr_type, tr_name, i)
+  end
+  return -1
+end
+
 def pbMissingTrainer(tr_type, tr_name, tr_version)
   tr_type_data = GameData::TrainerType.try_get(tr_type)
   raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
@@ -120,72 +120,4 @@ def pbMissingTrainer(tr_type, tr_name, tr_version)
   cmd = pbMessage(message, [_INTL("Yes"), _INTL("No")], 2)
   pbNewTrainer(tr_type, tr_name, tr_version) if cmd == 0
   return cmd
-end
-
-
-
-#===============================================================================
-# Walking charset, for use in text entry screens and load game screen
-#===============================================================================
-class TrainerWalkingCharSprite < SpriteWrapper
-  def initialize(charset,viewport=nil)
-    super(viewport)
-    @animbitmap = nil
-    self.charset = charset
-    @animframe      = 0   # Current pattern
-    @frame          = 0   # Frame counter
-    self.animspeed  = 5   # Animation speed (frames per pattern)
-  end
-
-  def charset=(value)
-    @animbitmap.dispose if @animbitmap
-    @animbitmap = nil
-    bitmapFileName = sprintf("Graphics/Characters/%s",value)
-    @charset = pbResolveBitmap(bitmapFileName)
-    if @charset
-      @animbitmap = AnimatedBitmap.new(@charset)
-      self.bitmap = @animbitmap.bitmap
-      self.src_rect.set(0,0,self.bitmap.width/4,self.bitmap.height/4)
-    else
-      self.bitmap = nil
-    end
-  end
-
-  def altcharset=(value)   # Used for box icon in the naming screen
-    @animbitmap.dispose if @animbitmap
-    @animbitmap = nil
-    @charset = pbResolveBitmap(value)
-    if @charset
-      @animbitmap = AnimatedBitmap.new(@charset)
-      self.bitmap = @animbitmap.bitmap
-      self.src_rect.set(0,0,self.bitmap.width/4,self.bitmap.height)
-    else
-      self.bitmap = nil
-    end
-  end
-
-  def animspeed=(value)
-    @frameskip = value*Graphics.frame_rate/40
-  end
-
-  def dispose
-    @animbitmap.dispose if @animbitmap
-    super
-  end
-
-  def update
-    @updating = true
-    super
-    if @animbitmap
-      @animbitmap.update
-      self.bitmap = @animbitmap.bitmap
-    end
-    @frame += 1
-    if @frame>=@frameskip
-      @animframe = (@animframe+1)%4
-      self.src_rect.x = @animframe*@animbitmap.bitmap.width/4
-      @frame -= @frameskip
-    end
-    @updating = false
-  end
 end

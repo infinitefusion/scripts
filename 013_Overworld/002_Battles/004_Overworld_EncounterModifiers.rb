@@ -23,8 +23,8 @@ Events.onWildPokemonCreate += proc { |_sender, e|
     new_level = pbBalancedLevel($Trainer.party) - 4 + rand(5)   # For variety
     new_level = new_level.clamp(1, GameData::GrowthRate.max_level)
     pokemon.level = new_level
-    pokemon.calcStats
-    pokemon.resetMoves
+    pokemon.calc_stats
+    pokemon.reset_moves
   end
 }
 

@@ -226,7 +226,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   end
   yourPokemon.name          = nickname
   yourPokemon.obtain_method = 2   # traded
-  yourPokemon.resetMoves if resetmoves
+  yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
   $Trainer.set_seen(yourPokemon.species)
   $Trainer.set_owned(yourPokemon.species)

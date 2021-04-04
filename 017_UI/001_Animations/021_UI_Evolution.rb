@@ -586,7 +586,7 @@ class PokemonEvolutionScene
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
-    @pokemon.calcStats
+    @pokemon.calc_stats
     # See and own evolved species
     $Trainer.set_seen(@newspecies)
     $Trainer.set_owned(@newspecies)
@@ -611,7 +611,7 @@ class PokemonEvolutionScene
     new_pkmn.poke_ball = :POKEBALL
     new_pkmn.item      = nil
     new_pkmn.clearAllRibbons
-    new_pkmn.calcStats
+    new_pkmn.calc_stats
     new_pkmn.heal
     # Add duplicate Pokémon to party
     $Trainer.party.push(new_pkmn)

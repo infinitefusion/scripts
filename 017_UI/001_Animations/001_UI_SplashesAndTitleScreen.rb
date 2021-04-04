@@ -121,14 +121,14 @@ end
 
 
 class Scene_Intro
-  def initialize(pics, splash = nil)
-    @pics   = pics
-    @splash = splash
-  end
+  # Splash screen images that appear for a few seconds and then disappear.
+  INTRO_SPLASHES = ['intro1']
+  # The main title screen background image.
+  TITLE_SCREEN   = 'splash'
 
   def main
     Graphics.transition(0)
-    @eventscene = IntroEventScene.new(@pics,@splash)
+    @eventscene = IntroEventScene.new(INTRO_SPLASHES, TITLE_SCREEN)
     @eventscene.main
     Graphics.freeze
   end

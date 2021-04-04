@@ -31,6 +31,10 @@ class Game_Event < Game_Character
   def id;   return @event.id;   end
   def name; return @event.name; end
 
+  def set_starting
+    @starting = true
+  end
+
   def clear_starting
     @starting = false
   end

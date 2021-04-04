@@ -58,6 +58,7 @@ Your credits go here.
 Your credits go here.
 
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
+
 "Pokémon Essentials" was created by:
 Flameguru
 Poccil (Peter O.)
@@ -70,14 +71,12 @@ Brother1440<s>Near Fantastica
 FL.<s>PinkMan
 Genzai Kawakami<s>Popper
 help-14<s>Rataime
-IceGod64<s>SoundSpawn
-Jacob O. Wobbrock<s>the__end
-KitsuneKouta<s>Venom12
-Lisa Anthony<s>Wachunga
-Luka S.J.<s>
+IceGod64<s>Savordez
+Jacob O. Wobbrock<s>SoundSpawn
+KitsuneKouta<s>the__end
+Lisa Anthony<s>Venom12
+Luka S.J.<s>Wachunga
 and everyone else who helped out
-
-
 
 "mkxp-z" by:
 Roza

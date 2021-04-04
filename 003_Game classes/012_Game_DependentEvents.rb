@@ -48,14 +48,6 @@ end
 
 
 
-class Game_Event
-  def set_starting
-    @starting=true
-  end
-end
-
-
-
 def pbTestPass(follower,x,y,_direction=nil)
   return $MapFactory.isPassableStrict?(follower.map.map_id,x,y,follower)
 end
