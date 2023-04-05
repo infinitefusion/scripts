@@ -782,6 +782,8 @@ end
 
 def pbEndSurf(_xOffset, _yOffset)
   return false if !$PokemonGlobal.surfing
+  return false if !$PokemonGlobal.diving
+
   x = $game_player.x
   y = $game_player.y
   if $game_map.terrain_tag(x, y).can_surf && !$game_player.pbFacingTerrainTag.can_surf || !$game_map.terrain_tag(x, y).can_surf

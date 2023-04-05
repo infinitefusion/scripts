@@ -206,6 +206,7 @@ module GameData
     end
 
     def replaceSingleSpeciesModeIfApplicable(species)
+      return species if getDexNumberForSpecies(species) >= Settings::ZAPMOLCUNO_NB
       if $game_switches[SWITCH_SINGLE_POKEMON_MODE]
         if $game_switches[SWITCH_SINGLE_POKEMON_MODE_HEAD]
           return replaceFusionsHeadWithSpecies(species)
