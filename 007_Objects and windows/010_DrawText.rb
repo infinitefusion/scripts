@@ -1195,6 +1195,7 @@ end
 def pbDrawTextPositions(bitmap,textpos)
   for i in textpos
     textsize = bitmap.text_size(i[0])
+
     x = i[1]
     y = i[2] + 6
     if i[3]==true || i[3]==1   # right align

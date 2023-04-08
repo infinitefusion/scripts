@@ -414,6 +414,10 @@ class IconSprite < SpriteWrapper
     end
   end
 
+  def getBitmap
+    return @_iconbitmap
+  end
+
   def clearBitmaps
     @_iconbitmap.dispose if @_iconbitmap
     @_iconbitmap = nil

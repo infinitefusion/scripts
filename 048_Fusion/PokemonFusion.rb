@@ -688,8 +688,11 @@ class PokemonFusionScene
       newspeciesname = newSpecies.real_name
       oldspeciesname = GameData::Species.get(@pokemon1.species).real_name
 
+      overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
+      drawSpriteCredits(@sprites["rsprite2"].getBitmap.filename, overlay)
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
                               _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+
 
       #exp
       @pokemon1.exp_when_fused_head = @pokemon2.exp
@@ -705,7 +708,7 @@ class PokemonFusionScene
       @pokemon1.debug_shiny = true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
 
       setFusionIVs(superSplicer)
-      #add to pokedex 
+      #add to pokedex
       if !$Trainer.pokedex.owned?(newSpecies)
         $Trainer.pokedex.set_seen(newSpecies)
         $Trainer.pokedex.set_owned(newSpecies)
@@ -713,6 +716,7 @@ class PokemonFusionScene
                                 _INTL("{1}'s data was added to the Pokédex", newspeciesname))
         @scene.pbShowPokedex(@newspecies)
       end
+      overlay.dispose
       #first check if hidden ability
       # getAbilityList format: [[:ABILITY, index],...]
       hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[-1][0]
@@ -761,6 +765,25 @@ class PokemonFusionScene
 
     end
   end
+end
+
+def drawSpriteCredits(filename,overlay)
+  x= Graphics.width/2
+  y=240
+  spritename = File.basename(filename,'.*')
+  discord_name = getSpriteCredits(spritename)
+  return  if !discord_name
+
+  author_name = File.basename(discord_name,'#*')
+  return  if author_name == nil
+
+  label_base_color = Color.new(98, 231, 110)
+  label_shadow_color = Color.new(27, 169, 40)
+
+  #label_shadow_color = Color.new(33, 209, 50)
+  text = _INTL("Sprite by {1}",author_name)
+  textpos = [[text, x, y, 2, label_base_color, label_shadow_color]]
+  pbDrawTextPositions(overlay, textpos)
 end
 
 def clearUIForMoves

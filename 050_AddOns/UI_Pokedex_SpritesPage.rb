@@ -46,6 +46,8 @@ class PokemonPokedexInfo_Scene
     @sprites["bgSelected_next"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms_selected_small"))
     @sprites["bgSelected_next"].visible = false
 
+    @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
+
   end
 
   def initializeSpritesPage(altsList)
@@ -129,10 +131,27 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].setBitmap(@available[previousIndex]) if previousIndex != nextIndex
     @sprites["selectedSprite"].setBitmap(@available[@selected_index])
     @sprites["nextSprite"].setBitmap(@available[nextIndex])
-
+    showSpriteCredits(@sprites["selectedSprite"].getBitmap.filename)
     update_selected
   end
 
+  def showSpriteCredits(filename)
+    @creditsOverlay.dispose
+
+    x= Graphics.width/2 -60
+    y=Graphics.height - 60
+    spritename = File.basename(filename,'.*')
+    discord_name = getSpriteCredits(spritename)
+    return  if !discord_name
+
+    author_name = File.basename(discord_name,'#*')
+
+    label_base_color = Color.new(248, 248, 248)
+    label_shadow_color = Color.new(104, 104, 104)
+    @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
+    textpos = [[author_name, x, y, 0, label_base_color, label_shadow_color]]
+    pbDrawTextPositions(@creditsOverlay, textpos)
+  end
 
 
   def pbChooseForm

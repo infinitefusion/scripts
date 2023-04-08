@@ -26,6 +26,7 @@ module Settings
   BATTLERS_FOLDER = "Graphics/Battlers/"
   DOWNLOADED_SPRITES_FOLDER = "Graphics/temp/"
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"
+  CREDITS_FILE_PATH = "Data/credits.csv"
   FRONTSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_SCALE = 0.6666666666
   BACKRPSPRITE_SCALE = 1

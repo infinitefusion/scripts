@@ -25,6 +25,10 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
+  def filename
+    return @bitmap
+  end
+
   def changeOrigin
     return if !self.bitmap
     @offset = PictureOrigin::Center if !@offset
@@ -74,6 +78,10 @@ class PokemonSprite < SpriteWrapper
     @_iconbitmap = GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
+  end
+
+  def getBitmap
+    return @_iconbitmap
   end
 
   def update
