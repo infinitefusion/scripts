@@ -228,7 +228,7 @@ def pbBattleOnStepTaken(repel_active)
   if isFusedEncounter()
     encounter_fusedWith = getEncounter(encounter_type)
     if encounter[0] != encounter_fusedWith[0]
-      encounter[0] = getFusionSpecies(encounter[0], encounter_fusedWith[0])
+      encounter[0] = getFusionSpeciesSymbol(encounter[0], encounter_fusedWith[0])
     end
   end
 

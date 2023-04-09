@@ -208,11 +208,18 @@ def getEvolution(speciesParam, halfToEvolve=nil)
   end
 end
 
-def getFusionSpecies(body, head)
+def getFusionSpeciesSymbol(body, head)
   body_num = dexNum(body)
   head_num = dexNum(head)
   id = body_num * Settings::NB_POKEMON + head_num
   return GameData::Species.get(id).species
+end
+
+def getFusionSpecies(body, head)
+  body_num = dexNum(body)
+  head_num = dexNum(head)
+  id = body_num * Settings::NB_POKEMON + head_num
+  return GameData::Species.get(id)
 end
 
 #
@@ -225,7 +232,7 @@ def evolveHead(species)
   head = getBasePokemonID(species_id, false)
   body = getBasePokemonID(species_id)
   headEvo = getEvolution(head)
-  return headEvo == -1 ? species_id : getFusionSpecies(body, headEvo)
+  return headEvo == -1 ? species_id : getFusionSpeciesSymbol(body, headEvo)
 end
 
 def evolveBody(species)
@@ -237,7 +244,7 @@ def evolveBody(species)
   head = getBasePokemonID(species_id, false)
   body = getBasePokemonID(species_id)
   bodyEvo = getEvolution(body)
-  return bodyEvo == -1 ? species_id : getFusionSpecies(bodyEvo, head)
+  return bodyEvo == -1 ? species_id : getFusionSpeciesSymbol(bodyEvo, head)
 end
 
 def getCorrectEvolvedSpecies(pokemon)

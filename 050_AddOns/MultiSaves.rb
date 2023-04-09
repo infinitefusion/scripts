@@ -320,6 +320,7 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
+    updateCreditsFile
     if ($game_temp.unimportedSprites && $game_temp.unimportedSprites.size > 0)
       handleReplaceExistingSprites()
     end
