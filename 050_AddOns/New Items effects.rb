@@ -1479,6 +1479,10 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
           end
         end
       end
+
+      pokemon.ability_index = pokemon.body_original_ability_index if pokemon.body_original_ability_index
+      poke2.ability_index = pokemon.head_original_ability_index if pokemon.head_original_ability_index
+
       pokemon.debug_shiny=true if pokemon.debug_shiny && pokemon.body_shiny
       poke2.debug_shiny=true if pokemon.debug_shiny && poke2.head_shiny
 

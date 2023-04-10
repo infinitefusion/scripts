@@ -801,13 +801,29 @@ def setAbilityAndNatureAndNickname(abilitiesList, naturesList)
   screen = PokemonOptionScreen.new(scene)
   screen.pbStartScreen
 
+  @pokemon1.body_original_ability_index = @pokemon1.ability_index
+  @pokemon1.head_original_ability_index = @pokemon2.ability_index
+
+
   @pokemon1.ability = scene.selectedAbility
+  @pokemon1.ability_index = locate_ability_index(@pokemon1,scene.selectedAbility)
   @pokemon1.nature = scene.selectedNature
   if scene.hasNickname
     @pokemon1.name = scene.nickname
   end
 
 end
+
+def locate_ability_index(pokemon, ability)
+  abilityList = pokemon.getAbilityList
+  for possible_ability in abilityList
+    if possible_ability[0] == ability.id
+      return possible_ability[1]
+    end
+  end
+  return nil
+end
+
 
 def setFusionMoves(fusedPoke, poke2, selected2ndOption = false)
   #NEW METHOD (not ready)

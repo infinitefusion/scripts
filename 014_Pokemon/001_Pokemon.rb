@@ -42,6 +42,10 @@ class Pokemon
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
   # @param value [Integer, nil] forced ability index (nil if none is set)
   attr_writer :ability_index
+  attr_accessor :body_original_ability_index
+  attr_accessor :head_original_ability_index
+
+
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
