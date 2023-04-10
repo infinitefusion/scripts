@@ -11,7 +11,7 @@ def map_sprites_by_artist
   return creditsMap
 end
 
-def analyzeSpritesList(spritesList)
+def analyzeSpritesList(spritesList, mostPopularCallbackVariable=1)
   pokemon_map = Hash.new
   for spritename in spritesList
     splitName = spritename.split(".")
@@ -30,8 +30,12 @@ def analyzeSpritesList(spritesList)
       pokemon_map[bodyNum] = 1
     end
   end
-  most_popular =  pokemon_map.max_by { |key, value| value }[0]
-  species = getSpecies(most_popular)
+  most_popular =  pokemon_map.max_by { |key, value| value }
+  most_popular_poke = most_popular[0]
+  most_popular_nb = most_popular[1]
+
+  pbSet(mostPopularCallbackVariable,most_popular_nb)
+  species = getSpecies(most_popular_poke)
 
   return  species
 end
