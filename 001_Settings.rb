@@ -6,7 +6,7 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.1.3"
+  GAME_VERSION_NUMBER = "5.1.3.2"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -26,8 +26,11 @@ module Settings
   BATTLERS_FOLDER = "Graphics/Battlers/"
   DOWNLOADED_SPRITES_FOLDER = "Graphics/temp/"
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"
-  CREDITS_FILE_PATH = "Data/credits.csv"
+  CREDITS_FILE_PATH = "Data/SPRITE_CREDS"
+  VERSION_FILE_PATH = "Data/VERSION"
   CREDITS_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Sprite Credits.csv"
+  VERSION_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/VERSION"
+
   FRONTSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_SCALE = 0.6666666666
   BACKRPSPRITE_SCALE = 1

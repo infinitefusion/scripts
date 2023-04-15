@@ -6,10 +6,6 @@ def test_http_get
   end
 end
 
-def downloadCustomSprite(head_id, body_id)
-  base_custom_path = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Sprite%20Credits.csv"
-end
-
 def updateCreditsFile
   return if $PokemonSystem.download_sprites != 0
   download_file(Settings::CREDITS_FILE_URL,Settings::CREDITS_FILE_PATH,)
@@ -18,6 +14,7 @@ end
 def download_file(url, saveLocation)
   begin
     response = HTTPLite.get(url)
+    p response
     if response[:status] == 200
       File.open(saveLocation, "wb") do |file|
         file.write(response[:body])
@@ -26,7 +23,8 @@ def download_file(url, saveLocation)
       return saveLocation
     end
     return nil
-  rescue MKXPError
+  rescue MKXPError => error
+    echo error
     return nil
   end
 end
@@ -83,4 +81,23 @@ def list_online_custom_sprites
   # api_url = "https://api.github.com/repos/#{repo}/contents/#{folder}"
   # response = HTTPLite.get(api_url)
   # return HTTPLite::JSON.parse(response[:body]).map { |file| file['name'] }
+end
+
+GAME_VERSION_FORMAT_REGEX = /\A\d+(\.\d+)*\z/
+def fetch_latest_game_version
+  begin
+    download_file(Settings::VERSION_FILE_URL,Settings::VERSION_FILE_PATH,)
+    version_file = File.open(Settings::VERSION_FILE_PATH, "r")
+    version = version_file.first
+    version_file.close
+
+    version_format_valid = version.match(GAME_VERSION_FORMAT_REGEX)
+
+    return version if version_format_valid
+    return nil
+  rescue MKXPError, Errno::ENOENT => error
+    echo error
+    return nil
+  end
+
 end

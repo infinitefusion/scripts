@@ -415,7 +415,8 @@ end
 def getSpriteCredits(spriteName)
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
     row = line.split(';')
-    if row[0].include?(spriteName)
+    echo row[0]
+    if row[0] == spriteName
       return row[1]
     end
   end
@@ -556,4 +557,26 @@ def get_default_moves_at_level(species,level)
   end
   p moves
   return moves
+end
+
+
+def find_newer_available_version
+  latest_Version = fetch_latest_game_version
+  return nil if !latest_Version
+  return nil if is_higher_version(Settings::GAME_VERSION_NUMBER,latest_Version)
+  return latest_Version
+end
+
+def is_higher_version(gameVersion, latestVersion)
+  gameVersion_parts = gameVersion.split('.').map(&:to_i)
+  latestVersion_parts = latestVersion.split('.').map(&:to_i)
+
+  # Compare each part of the version numbers from left to right
+  gameVersion_parts.each_with_index do |part, i|
+    return true if (latestVersion_parts[i].nil? || part > latestVersion_parts[i])
+    return false if part < latestVersion_parts[i]
+  end
+
+  # If all parts are equal up to this point, the longer version is considered higher
+  return latestVersion_parts.length < gameVersion_parts.length
 end

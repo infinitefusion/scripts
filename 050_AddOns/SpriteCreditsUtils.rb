@@ -88,7 +88,7 @@ end
 def getSpriteCredits(spriteName)
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
     row = line.split(',')
-    if row[0].include?(spriteName)
+    if row[0] == (spriteName)
       return row[1]
     end
   end

@@ -782,7 +782,7 @@ end
 
 def pbEndSurf(_xOffset, _yOffset)
   return false if !$PokemonGlobal.surfing
-  return false if !$PokemonGlobal.diving
+  return false if $PokemonGlobal.diving
 
   x = $game_player.x
   y = $game_player.y
@@ -796,6 +796,7 @@ def pbEndSurf(_xOffset, _yOffset)
     end
     $PokemonTemp.surfJump = nil
     return true
+
   end
   return false
 end
