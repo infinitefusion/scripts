@@ -14,7 +14,6 @@ end
 def download_file(url, saveLocation)
   begin
     response = HTTPLite.get(url)
-    p response
     if response[:status] == 200
       File.open(saveLocation, "wb") do |file|
         file.write(response[:body])

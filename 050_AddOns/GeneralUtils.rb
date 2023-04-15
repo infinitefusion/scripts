@@ -576,7 +576,5 @@ def is_higher_version(gameVersion, latestVersion)
     return true if (latestVersion_parts[i].nil? || part > latestVersion_parts[i])
     return false if part < latestVersion_parts[i]
   end
-
-  # If all parts are equal up to this point, the longer version is considered higher
-  return latestVersion_parts.length < gameVersion_parts.length
+  return latestVersion_parts.length <= gameVersion_parts.length
 end
