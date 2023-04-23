@@ -85,6 +85,9 @@ def Kernel.pbShuffleDex(range = 50, type = 0)
 
   # create hash
   pokemon_list = only_customs ? getCustomSpeciesList() : get_pokemon_list(should_include_fusions)
+  if !pokemon_list  #when not enough custom sprites
+    pokemon_list = get_pokemon_list(should_include_fusions)
+  end
   $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list,range,should_include_fusions)
 end
 

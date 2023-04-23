@@ -28,7 +28,10 @@ module Settings
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"
   CREDITS_FILE_PATH = "Data/SPRITE_CREDS"
   VERSION_FILE_PATH = "Data/VERSION"
+  CUSTOM_SPRITES_FILE_PATH = "Data/CUSTOM_SPRITES"
+
   CREDITS_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Sprite Credits.csv"
+  SPRITES_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/CUSTOM_SPRITES"
   VERSION_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/VERSION"
 
   FRONTSPRITE_POSITION_OFFSET = 20

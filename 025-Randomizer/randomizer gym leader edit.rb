@@ -360,7 +360,8 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
-  customsList = getCustomSpeciesList()
+  customsList = getCustomSpeciesList(true )
+  p customsList
   Kernel.pbMessage(_INTL("{1} sprites found", customsList.length.to_s))
 
   if customsList.length == 0
@@ -368,7 +369,11 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
     Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
     return Kernel.pbShuffleTrainers(bst_range)
   elsif customsList.length < 200
-    if Kernel.pbConfirmMessage(_INTL("Too few custom sprites were found. This will result in a very low Pokémon variety for trainers. Continue anyway?"))
+    if Kernel.pbConfirmMessage(_INTL("Too few custom sprites were found. This will result in a very low Pokémon variety for trainers. Would you like to disable the Custom Sprites only option?"))
+      Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
+      return Kernel.pbShuffleTrainers(bst_range) ##use regular shuffle if not enough sprites
+    end
+      if Kernel.pbConfirmMessage(_INTL("This will result in a very low Pokémon variety for trainers. Continue anyway?"))
       bst_range = 999
     else
       Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
@@ -408,7 +413,7 @@ end
 #end
 
 
-def getCustomSpeciesList(allowOnline=true)
+def getCustomSpeciesList(allowOnline=false)
   speciesList = []
 
   for num in 1..NB_POKEMON
@@ -429,18 +434,24 @@ def getCustomSpeciesList(allowOnline=true)
 
 
   if speciesList.length <= 200 && allowOnline
+    Kernel.pbMessage(_INTL("Not enough local sprites found, attempting to fetch list from the internet."))
     #try to get list from github
-    online_list = list_online_custom_sprites
-    return nil if !online_list
+    online_list = list_online_custom_sprites(true)
+    return speciesList if !online_list
     species_id_list = []
     for file in online_list
-      species_id_list << getDexNumFromFilename(file)
+      dexnum = getDexNumFromFilename(file)
+      species_id_list << dexnum if dexnum && dexnum <= maxDexNumber && dexnum > 0
     end
     return species_id_list
   end
 
-
   return speciesList
+end
+
+def is_file_alt(file)
+  filename = file.split(".")[0]
+  return filename.match(/[a-zA-Z]/)
 end
 
 #input: ex: 10.10.png
@@ -448,6 +459,8 @@ def getDexNumFromFilename(filename)
   splitPoke = filename.split(".")
   head = splitPoke[0].to_i
   body = splitPoke[1].to_i
+
+  return nil if (body * NB_POKEMON) + head > (NB_POKEMON*NB_POKEMON)+420
   return (body * NB_POKEMON) + head
 end
 

@@ -22,7 +22,7 @@ def download_file(url, saveLocation)
       return saveLocation
     end
     return nil
-  rescue MKXPError => error
+  rescue MKXPError, Errno::ENOENT => error
     echo error
     return nil
   end
@@ -42,7 +42,7 @@ def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp")
       return downloaded_file_name
     end
     return nil
-  rescue MKXPError
+  rescue MKXPError,Errno::ENOENT
     return nil
   end
 end
@@ -71,16 +71,57 @@ end
 #   repo = "Aegide/custom-fusion-sprites"
 #   folder = "CustomBattlers"
 #
-# todo: github api returns a maximum of 1000 files. Need to find workaround.
-# Possibly using git trees https://docs.github.com/fr/rest/git/trees?apiVersion=2022-11-28#get-a-tree
-def list_online_custom_sprites
-  return nil
-  #   repo = "infinitefusion/sprites"
-  #   folder = "CustomBattlers"
-  # api_url = "https://api.github.com/repos/#{repo}/contents/#{folder}"
-  # response = HTTPLite.get(api_url)
-  # return HTTPLite::JSON.parse(response[:body]).map { |file| file['name'] }
+
+# def fetch_online_custom_sprites
+#   page_start =1
+#   page_end =2
+#
+#   repo = "infinitefusion/sprites"
+#   folder = "CustomBattlers"
+#   api_url = "https://api.github.com/repos/#{repo}/contents/#{folder}"
+#
+#   files = []
+#   page = page_start
+#
+#   File.open(Settings::CUSTOM_SPRITES_FILE_PATH, "wb") do |csv|
+#     loop do
+#       break if page > page_end
+#       response = HTTPLite.get(api_url, {'page' => page.to_s})
+#       response_files = HTTPLite::JSON.parse(response[:body])
+#       break if response_files.empty?
+#       response_files.each do |file|
+#         csv << [file['name']].to_s
+#         csv << "\n"
+#       end
+#       page += 1
+#     end
+#   end
+#
+#
+#   write_custom_sprites_csv(files)
+# end
+
+
+# Too many file to get everything without getting
+# rate limited by github, so instead we're getting the
+# files list from a  csv file that will be manually updated
+# with each new spritepack
+
+def updateOnlineCustomSpritesFile
+  return if $PokemonSystem.download_sprites != 0
+  download_file(Settings::SPRITES_FILE_URL,Settings::CUSTOM_SPRITES_FILE_PATH)
 end
+
+
+def list_online_custom_sprites(updateList=false)
+  updateOnlineCustomSpritesFile if updateList
+  sprites_list= []
+  File.foreach(Settings::CUSTOM_SPRITES_FILE_PATH) do |line|
+    sprites_list << line
+  end
+  return sprites_list
+end
+
 
 GAME_VERSION_FORMAT_REGEX = /\A\d+(\.\d+)*\z/
 def fetch_latest_game_version
