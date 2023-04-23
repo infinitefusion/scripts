@@ -28,6 +28,13 @@ def download_file(url, saveLocation)
   end
 end
 
+def download_pokemon_sprite_if_missing(body, head)
+  return if $PokemonSystem.download_sprites != 0
+  get_fusion_sprite_path(head,body)
+end
+
+
+
 def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp")
   begin
     downloaded_file_name = _INTL("{1}/{2}.{3}.png", saveLocation, head_id, body_id)
@@ -114,7 +121,6 @@ end
 
 
 def list_online_custom_sprites(updateList=false)
-  updateOnlineCustomSpritesFile if updateList
   sprites_list= []
   File.foreach(Settings::CUSTOM_SPRITES_FILE_PATH) do |line|
     sprites_list << line

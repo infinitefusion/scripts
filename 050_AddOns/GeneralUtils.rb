@@ -382,9 +382,10 @@ end
 
 
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
+  download_pokemon_sprite_if_missing(bodyId,headId)
   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
 
-  if include_customs
+  if include_customs && customSpriteExists(bodyId,headId)
     pathCustom = getCustomSpritePath(bodyId,headId)
     if (pbResolveBitmap(pathCustom))
       picturePath = pathCustom
@@ -400,6 +401,16 @@ end
 def customSpriteExists(species)
   head = getBasePokemonID(species, false)
   body = getBasePokemonID(species, true)
+  pathCustom = getCustomSpritePath(body,head)
+
+  return true if pbResolveBitmap(pathCustom) != nil
+  return download_custom_sprite(head, body) != nil
+end
+
+
+
+
+def customSpriteExists(body, head)
   pathCustom = getCustomSpritePath(body,head)
 
   return true if pbResolveBitmap(pathCustom) != nil

@@ -82,9 +82,8 @@ def Kernel.pbShuffleDex(range = 50, type = 0)
   range = 1 if range == 0
   should_include_fusions = $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
   only_customs = $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] && should_include_fusions
-
   # create hash
-  pokemon_list = only_customs ? getCustomSpeciesList() : get_pokemon_list(should_include_fusions)
+  pokemon_list = only_customs ? getCustomSpeciesList(true) : get_pokemon_list(should_include_fusions)
   if !pokemon_list  #when not enough custom sprites
     pokemon_list = get_pokemon_list(should_include_fusions)
   end

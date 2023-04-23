@@ -360,7 +360,7 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
-  customsList = getCustomSpeciesList(true)
+  customsList = getCustomSpeciesList(true,true)
   Kernel.pbMessage(_INTL("{1} sprites found", customsList.length.to_s))
 
   if customsList.length == 0
@@ -410,7 +410,7 @@ end
 #    return (body*NB_POKEMON)+head
 #end
 
-def getCustomSpeciesList(allowOnline = false)
+def getCustomSpeciesList(allowOnline = true, redownload_file=false)
   speciesList = []
 
   for num in 1..NB_POKEMON
@@ -430,17 +430,18 @@ def getCustomSpeciesList(allowOnline = false)
   end
 
   if speciesList.length <= 200 && allowOnline
-    if Kernel.pbConfirmMessage(_INTL("Not enough local sprites found.  Attempt to fetch list from the internet?"))
-      #try to get list from github
-      online_list = list_online_custom_sprites(true)
-      return speciesList if !online_list
-      species_id_list = []
-      for file in online_list
-        dexnum = getDexNumFromFilename(file)
-        species_id_list << dexnum if dexnum && dexnum <= maxDexNumber && dexnum > 0
-      end
-      return species_id_list
+    if redownload_file && Kernel.pbConfirmMessage(_INTL("Not enough local sprites found.  Attempt to fetch list from the internet?"))
+      updateOnlineCustomSpritesFile
     end
+    #try to get list from github
+    online_list = list_online_custom_sprites(true)
+    return speciesList if !online_list
+    species_id_list = []
+    for file in online_list
+      dexnum = getDexNumFromFilename(file)
+      species_id_list << dexnum if dexnum && dexnum <= maxDexNumber && dexnum > 0
+    end
+    return species_id_list
   end
   return speciesList
 end
