@@ -837,7 +837,7 @@ end
 def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom=true)
   #item_name -> pour donner un autre nom à l'item. Pas encore réimplémenté et surtout là pour éviter que ça plante quand des events essaient de le faire
   canRandom = false if !$game_switches[SWITCH_RANDOM_ITEMS_GENERAL]
-  original_item = GameData::Item.get(item).is_TM
+  original_item = GameData::Item.get(item).is_TM?
   if canRandom && ((!original_item.is_TM? && $game_switches[SWITCH_RANDOM_GIVEN_ITEMS]) || (original_item.is_TM? && $game_switches[SWITCH_RANDOM_GIVEN_TMS]))
     item = pbGetRandomItem(item) if canRandom #fait rien si pas activé
   else
