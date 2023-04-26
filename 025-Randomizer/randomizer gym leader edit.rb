@@ -422,7 +422,7 @@ def getCustomSpeciesList(allowOnline = true, redownload_file=false)
       path = filesList[i]
       file = File.basename(path, ".*")
       fused = getDexNumFromFilename(file)
-      if fused <= maxDexNumber && fused > 0
+      if fused && (fused <= maxDexNumber && fused > 0)
         speciesList << fused
       end
 

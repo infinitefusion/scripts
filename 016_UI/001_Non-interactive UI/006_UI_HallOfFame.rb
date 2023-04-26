@@ -371,7 +371,7 @@ class HallOfFame_Scene
     if $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
       gameMode = "Randomized mode"
     end
-    if $PokemonBag.pbQuantity(:MAGICBOOTS)>=1 || $DEBUG
+    if $game_switches[ENABLED_DEBUG_MODE_AT_LEAST_ONCE] || $DEBUG
       gameMode = "Debug mode"
     end
 

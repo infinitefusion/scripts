@@ -407,7 +407,7 @@ ItemHandlers::UseFromBag.add(:MAGICBOOTS, proc { |item|
   else
     if Kernel.pbConfirmMessageSerious(_INTL("Put on the Magic Boots?"))
       Kernel.pbMessage(_INTL("Debug mode is now active."))
-      $game_switches[842] = true #got debug mode (for compatibility)
+      $game_switches[ENABLED_DEBUG_MODE_AT_LEAST_ONCE] = true #got debug mode (for compatibility)
       $DEBUG = true
     end
   end
