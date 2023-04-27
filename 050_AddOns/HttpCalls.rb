@@ -68,6 +68,10 @@ def download_custom_sprite(head_id, body_id)
   #base_path = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/{1}.{2}.png"
   url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/CustomBattlers/{1}.{2}.png"
   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+  if !Dir.exist?(destPath)
+    Dir.mkdir(destPath)
+  end
+
   sprite = download_sprite(_INTL(url, head_id, body_id), head_id, body_id, destPath)
   return sprite if sprite
   return nil
