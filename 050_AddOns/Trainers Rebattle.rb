@@ -211,7 +211,14 @@ end
 def getFusionSpeciesSymbol(body, head)
   body_num = dexNum(body)
   head_num = dexNum(head)
-  id = body_num * Settings::NB_POKEMON + head_num
+  nb_pokemon = Settings::NB_POKEMON
+  id = body_num * nb_pokemon + head_num
+  if id > (nb_pokemon*nb_pokemon)+nb_pokemon
+    Kernel.pbMessage(_INTL("The game has encountered an error. You should try to re-randomize your game as soon as possible."))
+    Kernel.pbMessage(_INTL("You can do this on the top floor of Pokémon Centers."))
+    return body
+  end
+
   return GameData::Species.get(id).species
 end
 
