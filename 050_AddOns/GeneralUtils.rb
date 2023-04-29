@@ -589,3 +589,69 @@ def is_higher_version(gameVersion, latestVersion)
   end
   return latestVersion_parts.length <= gameVersion_parts.length
 end
+
+def get_current_game_difficulty
+  return :EASY if $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
+  return :HARD if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
+  return :NORMAL
+end
+
+def get_difficulty_text
+  if $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
+    return "Easy"
+  elsif $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
+    return "Hard"
+  else
+    return "Normal"
+  end
+end
+
+def change_game_difficulty(down_only=false)
+  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  pbMessage(message)
+
+
+  choice_easy = "Easy"
+  choice_normal = "Normal"
+  choice_hard = "Hard"
+  choice_cancel = "Cancel"
+
+
+  available_difficulties = []
+  currentDifficulty =get_current_game_difficulty
+  if down_only
+    if currentDifficulty == :HARD
+      available_difficulties << choice_hard
+      available_difficulties << choice_normal
+      available_difficulties << choice_easy
+    elsif currentDifficulty ==:NORMAL
+      available_difficulties << choice_normal
+      available_difficulties << choice_easy
+    elsif currentDifficulty ==:EASY
+      available_difficulties << choice_easy
+    end
+  else
+    available_difficulties << choice_easy
+    available_difficulties << choice_normal
+    available_difficulties << choice_hard
+  end
+  available_difficulties << choice_cancel
+  index = pbMessage("Select a new difficulty", available_difficulties, available_difficulties[-1])
+  choice = available_difficulties[index]
+  case choice
+  when choice_easy
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=true
+    $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = false
+  when choice_normal
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=false
+    $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = false
+  when choice_hard
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=false
+    $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = true
+  when choice_cancel
+    return
+  end
+
+  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  pbMessage(message)
+end

@@ -478,7 +478,7 @@ class PokeBattle_SafariZone
           if @ballCount<=0
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
-          elsif pbRandom(100)<5*escapeFactor
+          elsif can_escape(pkmn, escapeFactor)
             pbSEPlay("Battle flee")
             pbDisplay(_INTL("{1} fled!",pkmn.name))
             @decision = 3
@@ -502,4 +502,10 @@ class PokeBattle_SafariZone
     end
     return @decision
   end
+end
+
+def can_escape(pokemon, escapeFactor)
+  return false if pokemon.shiny?
+  return false if pokemon.species == :VOLCARONA
+  return pbRandom(100)<5*escapeFactor
 end

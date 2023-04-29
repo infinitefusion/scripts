@@ -78,39 +78,48 @@ Pokémon Gold and Silver.
 Both games are made by Game Freak.
 
 All of the custom fused Pokémon sprites 
-were madeby various members of the sp
+were made by various members of the sp
 Pokémon Infinite Fusion Discord
 
 Including massive contributions from these users:
 
-Toad 900#1617, Kiwi#4199, Aquatic#7954, 
-Knuckles3&Knuckles#7559, Katten#7455, Blaquaza#1347, 
-Blackboots#7369, Milchik#6233, Gdei#2810, 
-Universez#0767, Scarecrow_924#8531, mammuth use ursaluna#3114, 
-Kulgun#3323, Retrogamer#9934, Scrapi#6319, 
-PinkYoshi#2350, Tomate#6670, Stan#3932, 
-Xiapher#4244, Howls#4468, xoto#0766, 
-xigzagoon#9354, Beespoon#2222, NeoSoup#6526, 
-Sjoba_sheep#1111, Maelmc#9965, Thornsoflight#3245, 
-Xillo#5236, pengu#6874, Mope7#1139, 
-Gorky#1761, All-Seeing#9253, IGot50lbsOfTanneritelnMyAnus#4093, 
-Emisys#4024, JamoJauhis#4971, Cheepoof#8815, 
-Moon_Tah#2688, BButton#8097, Punko#1235, 
-NakaMagic#0774, Tabarnak#2210, M4rcus#0928, 
-Bubba-Rottweiler#7322, Keksgesicht#7133, Teamama#4369, 
-BTT#3408, calicorn#6994, Pain T#3334, 
-Taylor Mai#0134, Underuser#5401, AkumaDelta#2364, 
-Scotsman#6299, GenoRhye#3335, (✿◠‿◠)Kanger#3997, 
-JoshuLips#5010, GREEN#2016, SpiDrone#6590, 
-Bizmythe#4062, Silver#4784, gnose_#6945, 
-D'Octobre#2420, Tenedranox#5660
+Toad 900#1617<s>Kiwi#4199
+Aquatic#7954<s>Knuckles3&Knuckles#7559
+Katten#7455<s>Blaquaza#1347
+Blackboots#7369<s>Milchik#6233
+Gdei#2810<s>Universez#0767
+Scarecrow_924#8531<s>mammuth use ursaluna#3114
+Kulgun#3323<s>Retrogamer#9934
+Scrapi#6319<s>PinkYoshi#2350
+Tomate#6670<s>Stan#3932
+Xiapher#4244<s>Howls#4468
+xoto#0766<s>xigzagoon#9354
+Beespoon#2222<s>NeoSoup#6526
+Sjoba_sheep#1111<s>Maelmc#9965
+Thornsoflight#3245<s>Xillo#5236
+pengu#6874<s>Mope7#1139
+Gorky#1761<s>All-Seeing#9253
+IGot50lbsOfTanneritelnMyAnus#4093<s>Emisys#4024
+JamoJauhis#4971<s>Cheepoof#8815
+Moon_Tah#2688<s>BButton#8097
+Punko#1235<s>NakaMagic#0774
+Tabarnak#2210<s>M4rcus#0928
+Bubba-Rottweiler#7322<s>Keksgesicht#7133
+Teamama#4369<s>BTT#3408
+calicorn#6994<s>Pain T#3334
+Taylor Mai#0134<s>Underuser#5401
+AkumaDelta#2364<s>Scotsman#6299
+GenoRhye#3335<s>(✿◠‿◠)Kanger#3997
+JoshuLips#5010<s>GREEN#2016
+SpiDrone#6590<s>Bizmythe#4062
+Silver#4784<s>gnose_#6945
+D'Octobre#2420<s>Tenedranox#5660
 
 
 Other custom graphics:
 calicorn, Doctor Miawoo, Frogman, Kiwi,
 Knuckles, magnuzone, ,mammuth89, Miawoo, 
 Milchik, Rick1234, Universez, UnworthyPie,
-
 
 The following free ressources were also used 
 with their respective authors' consent:
@@ -125,13 +134,18 @@ OceansLugiaSpirit,Pokemon-Diamond,
 rekman, Rick1234, SailorVicious,WolfPP
 
 Tileset graphics:
-Alucus BoOmxBiG, chimcharsfireworkd, 
-EpicDay, EternalTakai, Gallanty Heavy-Metal-Lover, 
-Hek-el-grande,DirtyWiggles, iametrine, Jorginho, 
-kizemaru-kurunosuke, KKKaito, kyle-dove, Minorthreat0987,
- Phyromatical, Pokemon-Diamond, rayd12smitty, Rossay, 
-Shiney570, Spacemotion, Speedialga, ThatsSoWitty Thurpok, 
-TyranitarDark, UltimoSpriter, WesleyFG,
+Alucus BoOmxBiG<s>chimcharsfireworkd
+EpicDay<s>EternalTakai
+Gallanty Heavy-Metal-Lover<s>Hek-el-grande
+DirtyWiggles<s>iametrine
+Jorginho<s>kizemaru-kurunosuke
+KKKaito<s>kyle-dove
+Minorthreat0987<s>Phyromatical
+Pokemon-Diamond<s>rayd12smitty
+Rossay<s>Shiney570
+Spacemotion<s>Speedialga
+ThatsSoWitty Thurpok<s>TyranitarDark
+UltimoSpriter<s>WesleyFG
 
 Music:    
 Pokeli, TailDoll666100
@@ -144,7 +158,6 @@ FL, KleinStudio, carmaniac, Wootius,
 andracass
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
 
-
 Data sources:  
 Bulbapedia
 
@@ -156,7 +169,6 @@ TheDeKay, viperk1, SunakazeKun,
 Radical Raptr, RPD490, 
 Takyon!, Pokegod7020, Drakath569,
 Florio, MrDeepDarkMind, snooper117
-
 
 "Pokémon Essentials" was created by:
 Flameguru
