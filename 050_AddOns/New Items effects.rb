@@ -81,6 +81,7 @@ def useLantern()
   end
   Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   darkness.radius += 176
+  $PokemonGlobal.flashUsed = true
   while darkness.radius < 176
     Graphics.update
     Input.update
