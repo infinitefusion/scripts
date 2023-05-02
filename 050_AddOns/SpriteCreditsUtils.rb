@@ -124,11 +124,17 @@ end
 
 
 def format_names_for_game_credits()
-  spriters_map = get_top_artists(50)
+  spriters_map = get_top_artists(100)
   formatted = ""
+  i =1
   for spriter in spriters_map.keys
-    line = spriter + "<s>" + spriters_map[spriter].to_s + " sprites\n"
-    formatted << line
+    formatted << spriter
+    if i%2 == 0
+      formatted << "\n"
+    else
+      formatted << "<s>"
+    end
+    i+=1
   end
   return formatted
 end
