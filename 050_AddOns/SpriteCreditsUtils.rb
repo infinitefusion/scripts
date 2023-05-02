@@ -11,6 +11,22 @@ def map_sprites_by_artist
   return creditsMap
 end
 
+def get_top_artists(nb_names=100)
+  filename = Settings::CREDITS_FILE_PATH
+  name_counts = Hash.new(0)
+
+  File.readlines(filename).each do |line|
+    name = line.strip.split(',')[1]
+    name_counts[name] += 1
+  end
+
+  name_counts.sort_by { |name, count| -count }.to_h
+             .first(nb_names)
+             .to_h
+end
+
+
+
 def analyzeSpritesList(spritesList, mostPopularCallbackVariable=1)
   pokemon_map = Hash.new
   for spritename in spritesList
@@ -93,4 +109,26 @@ def getSpriteCredits(spriteName)
     end
   end
   return nil
+end
+
+
+def formatList(list,separator)
+  formatted = ""
+  i =0
+  for element in list
+    formatted << element
+    formatted << separator if i < list.length
+    i+=1
+  end
+end
+
+
+def format_names_for_game_credits()
+  spriters_map = get_top_artists(50)
+  formatted = ""
+  for spriter in spriters_map.keys
+    line = spriter + "<s>" + spriters_map[spriter].to_s + " sprites\n"
+    formatted << line
+  end
+  return formatted
 end
