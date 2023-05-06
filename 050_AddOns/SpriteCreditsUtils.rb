@@ -11,7 +11,7 @@ def map_sprites_by_artist
   return creditsMap
 end
 
-def get_top_artists(nb_names=100)
+def get_top_artists(nb_names = 100)
   filename = Settings::CREDITS_FILE_PATH
   name_counts = Hash.new(0)
 
@@ -25,9 +25,7 @@ def get_top_artists(nb_names=100)
              .to_h
 end
 
-
-
-def analyzeSpritesList(spritesList, mostPopularCallbackVariable=1)
+def analyzeSpritesList(spritesList, mostPopularCallbackVariable = 1)
   pokemon_map = Hash.new
   for spritename in spritesList
     splitName = spritename.split(".")
@@ -46,17 +44,18 @@ def analyzeSpritesList(spritesList, mostPopularCallbackVariable=1)
       pokemon_map[bodyNum] = 1
     end
   end
-  most_popular =  pokemon_map.max_by { |key, value| value }
+  most_popular = pokemon_map.max_by { |key, value| value }
   most_popular_poke = most_popular[0]
   most_popular_nb = most_popular[1]
 
-  pbSet(mostPopularCallbackVariable,most_popular_nb)
+  pbSet(mostPopularCallbackVariable, most_popular_nb)
   species = getSpecies(most_popular_poke)
 
-  return  species
+  return species
 end
 
 def getPokemonSpeciesFromSprite(spritename)
+  return nil if !spritename
   splitName = spritename.split(".")
   headNum = splitName[0].to_i
   bodyNum = splitName[1].to_i
@@ -68,7 +67,7 @@ def getPokemonSpeciesFromSprite(spritename)
   return species
 end
 
-def doesCurrentExhibitionFeaturePokemon(displayedSprites,pokemon)
+def doesCurrentExhibitionFeaturePokemon(displayedSprites, pokemon)
   for sprite in displayedSprites
     parts = sprite.split(".")
     headNum = parts[0].to_i
@@ -78,7 +77,48 @@ def doesCurrentExhibitionFeaturePokemon(displayedSprites,pokemon)
   return false
 end
 
-def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, saveSpritesInVariable = 2, saveAllArtistSpritesInVariable=3,artistName=nil)
+def select_spriter(minNbSprites = 10, save_in_var = 1)
+  spriters_list = list_all_spriters_with_min_nb_of_sprites(minNbSprites)
+  commands = []
+  spriters_list.each { |name, i| commands.push([i, name, name]) }
+  chosen = pbChooseList(commands, 0, nil, 1)
+  return nil if !chosen
+  return chosen
+end
+
+def list_all_spriters_with_min_nb_of_sprites(minNbSprites)
+  return list_all_spriters() if !minNbSprites
+  filename = Settings::CREDITS_FILE_PATH
+  spriters_hash = Hash.new(0)
+
+  File.readlines(filename).each do |line|
+    name = line.strip.split(',')[1]
+    spriters_hash[name] += 1
+  end
+
+  spriters_list = []
+  for spriter_name in spriters_hash.keys
+    if spriters_hash[spriter_name] >= minNbSprites
+      spriters_list << spriter_name
+    end
+  end
+  return spriters_list
+end
+
+def list_all_spriters()
+  filename = Settings::CREDITS_FILE_PATH
+  names_list = []
+  File.readlines(filename).each do |line|
+    name = line.strip.split(',')[1]
+    if !names_list.include?(name)
+      names_list << name
+    end
+  end
+  return names_list
+end
+
+def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, saveSpritesInVariable = 2, saveAllArtistSpritesInVariable = 3, artistName = nil)
+  artistName = nil if artistName == 0
   creditsMap = map_sprites_by_artist
   featuredArtist = artistName ? artistName : getRandomSpriteArtist(creditsMap, nbSpritesDisplayed)
   if featuredArtist
@@ -89,6 +129,10 @@ def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, sav
     return featuredSprites
   end
   return nil
+end
+
+def format_artist_name(full_name)
+  return File.basename(full_name, '#*')
 end
 
 def getRandomSpriteArtist(creditsMap = nil, minimumNumberOfSprites = 1, giveUpAfterX = 50)
@@ -111,30 +155,28 @@ def getSpriteCredits(spriteName)
   return nil
 end
 
-
-def formatList(list,separator)
+def formatList(list, separator)
   formatted = ""
-  i =0
+  i = 0
   for element in list
     formatted << element
     formatted << separator if i < list.length
-    i+=1
+    i += 1
   end
 end
-
 
 def format_names_for_game_credits()
   spriters_map = get_top_artists(100)
   formatted = ""
-  i =1
+  i = 1
   for spriter in spriters_map.keys
     formatted << spriter
-    if i%2 == 0
+    if i % 2 == 0
       formatted << "\n"
     else
       formatted << "<s>"
     end
-    i+=1
+    i += 1
   end
   return formatted
 end
