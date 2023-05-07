@@ -96,9 +96,13 @@ class PokemonPokedexInfo_Scene
 
 
   def pbGetAvailableForms
+    body_id = getBodyID(@species)
+    head_id = getHeadID(@species,body_id)
+    download_custom_sprite(head_id,body_id)
+    download_autogen_sprite(head_id,body_id)
+    download_alt_sprites(head_id,body_id)
     return PokedexUtils.new.pbGetAvailableAlts(@species)
   end
-
   def hide_all_selected_windows
     @sprites["bgSelected_previous"].visible = false if @sprites["bgSelected_previous"]
     @sprites["bgSelected_center"].visible = false if @sprites["bgSelected_center"]
@@ -251,4 +255,24 @@ class PokemonPokedexInfo_Scene
     # return POSSIBLE_ALTS.include?(File.basename(old_main_sprite, ".png")[-1])
   end
 
+
+
+
+end
+
+
+class PokemonGlobalMetadata
+  attr_accessor :alt_sprite_substitutions
+  def initialize
+    @alt_sprite_substitutions = {}
+  end
+end
+
+def set_alt_sprite_substitution(original_sprite_name,selected_alt)
+  if ! $PokemonGlobal.alt_sprite_substitutions
+    $PokemonGlobal.alt_sprite_substitutions = {}
+  end
+
+  $PokemonGlobal.alt_sprite_substitutions[original_sprite_name] = selected_alt
+  p  $PokemonGlobal.alt_sprite_substitutions
 end

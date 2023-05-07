@@ -25,11 +25,12 @@ class StorageSystemPC
   end
 
   def name
-    if $Trainer.seen_storage_creator
-      return _INTL("{1}'s PC",pbGetStorageCreator)
-    else
-      return _INTL("Someone's PC")
-    end
+    return "Pokemon Storage"
+    #if $Trainer.seen_storage_creator
+    #  return _INTL("{1}'s PC",pbGetStorageCreator)
+    #else
+    #  return _INTL("Someone's PC")
+    #end
   end
 
   def access

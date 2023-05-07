@@ -35,11 +35,12 @@ end
 
 
 
-def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp")
+def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp", alt_letter= "")
   begin
-    downloaded_file_name = _INTL("{1}/{2}.{3}.png", saveLocation, head_id, body_id)
+    downloaded_file_name = _INTL("{1}/{2}.{3}{4}.png", saveLocation, head_id, body_id,alt_letter)
     return downloaded_file_name if pbResolveBitmap(downloaded_file_name)
     url = _INTL(base_path, head_id, body_id)
+    echo "\nSending request to " + url
     response = HTTPLite.get(url)
     if response[:status] == 200
       File.open(downloaded_file_name, "wb") do |file|
@@ -76,6 +77,22 @@ def download_custom_sprite(head_id, body_id)
   return sprite if sprite
   return nil
 end
+
+def download_alt_sprites(head_id,body_id)
+  base_url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/CustomBattlers/{1}.{2}"
+  extension = ".png"
+  destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+  if !Dir.exist?(destPath)
+    Dir.mkdir(destPath)
+  end
+  alphabet = ('a'..'z').to_a
+  alphabet.each do |letter|
+    alt_url = base_url + letter + extension
+    sprite = download_sprite(alt_url, head_id, body_id, destPath, letter)
+    return if !sprite
+  end
+end
+
 
 #format: [1.1.png, 1.2.png, etc.]
 # https://api.github.com/repos/infinitefusion/contents/sprites/CustomBattlers
