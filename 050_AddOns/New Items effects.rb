@@ -399,7 +399,6 @@ ItemHandlers::UseInField.add(:DREAMMIRROR, proc { |item|
   next 1
 })
 
-
 ItemHandlers::UseFromBag.add(:MAGICBOOTS, proc { |item|
   if $DEBUG
     if Kernel.pbConfirmMessageSerious(_INTL("Take off the Magic Boots?"))
@@ -472,7 +471,43 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next false
 })
 
+ItemHandlers::UseInField.add(:DNASPLICERS, proc { |item|
+  fusion_success = useSplicerFromField(false, false)
+  next 3 if fusion_success
+  next false
+})
 
+
+ItemHandlers::UseInField.add(:SUPERSPLICERS, proc { |item|
+  fusion_success = useSplicerFromField(true, true)
+  next 3 if fusion_success
+  next false
+})
+
+
+ItemHandlers::UseInField.add(:INFINITESPLICERS, proc { |item|
+  fusion_success = useSplicerFromField(false, false)
+  next true if fusion_success
+  next false
+})
+
+ItemHandlers::UseInField.add(:INFINITESPLICERS2, proc { |item|
+  fusion_success = useSplicerFromField(true, true)
+  next true if fusion_success
+  next false
+})
+
+def useSplicerFromField(supersplicers, superSplicer_arg2)
+  scene = PokemonParty_Scene.new
+  scene.pbStartScene($Trainer.party,"Select a Pokémon")
+  screen = PokemonPartyScreen.new(scene, $Trainer.party)
+  chosen = screen.pbChoosePokemon("Select a Pokémon")
+  pokemon = $Trainer.party[chosen]
+  fusion_success = pbDNASplicing(pokemon, scene, supersplicers, superSplicer_arg2)
+  screen.pbEndScene
+  scene.dispose
+  return fusion_success
+end
 
 ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
   if !pokemon.isFusion?
@@ -500,7 +535,7 @@ def reverseFusion(pokemon)
   pokemon.exp_when_fused_body = head_exp
   pokemon.exp_when_fused_head = body_exp
 
-  pokemon.head_shiny,pokemon.body_shiny = pokemon.body_shiny,pokemon.head_shiny
+  pokemon.head_shiny, pokemon.body_shiny = pokemon.body_shiny, pokemon.head_shiny
   #play animation
   pbFadeOutInWithMusic(99999) {
     fus = PokemonEvolutionScene.new
@@ -1280,6 +1315,7 @@ def getPokemonPositionInParty(pokemon)
   return -1
 end
 
+#don't remember why there's two Supersplicers arguments.... probably a mistake
 def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   playingBGM = $game_system.getPlayingBGM
   dexNumber = pokemon.species_data.id_number
@@ -1312,17 +1348,17 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
             return false
           end
 
-          selectedHead =selectFusion(pokemon, poke2, supersplicers)
+          selectedHead = selectFusion(pokemon, poke2, supersplicers)
           if selectedHead == -1 #cancelled
             return false
           end
-          if selectedHead == nil  #can't fuse (egg, etc.)
+          if selectedHead == nil #can't fuse (egg, etc.)
             scene.pbDisplay(_INTL("It won't have any effect."))
             return false
           end
           selectedBase = selectedHead == pokemon ? poke2 : pokemon
 
-          firstOptionSelected= selectedHead == pokemon
+          firstOptionSelected = selectedHead == pokemon
           if !firstOptionSelected
             chosen = getPokemonPositionInParty(pokemon)
             if chosen == -1
@@ -1356,21 +1392,19 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   end
 end
 
-
 def selectFusion(pokemon, poke2, supersplicers = false)
-  return nil if !pokemon.is_a?(Pokemon) ||  !poke2.is_a?(Pokemon)
-  return nil if pokemon.egg? ||  poke2.egg?
+  return nil if !pokemon.is_a?(Pokemon) || !poke2.is_a?(Pokemon)
+  return nil if pokemon.egg? || poke2.egg?
 
-  selectorWindow = FusionPreviewScreen.new(poke2, pokemon, supersplicers)#PictureWindow.new(picturePath)
+  selectorWindow = FusionPreviewScreen.new(poke2, pokemon, supersplicers) #PictureWindow.new(picturePath)
   selectedHead = selectorWindow.getSelection
   selectorWindow.dispose
   return selectedHead
 end
-  # firstOptionSelected= selectedHead == pokemon
-  # selectedBody = selectedHead == pokemon ? poke2 : pokemon
-  # newid = (selectedBody.species_data.id_number) * NB_POKEMON + selectedHead.species_data.id_number
 
-
+# firstOptionSelected= selectedHead == pokemon
+# selectedBody = selectedHead == pokemon ? poke2 : pokemon
+# newid = (selectedBody.species_data.id_number) * NB_POKEMON + selectedHead.species_data.id_number
 
 # def pbFuse(pokemon, poke2, supersplicers = false)
 #   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
@@ -1392,17 +1426,16 @@ end
 #   end
 # end
 
-
 def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
-    fus = PokemonFusionScene.new
-    if (fus.pbStartScreen(pokemon, poke2, newid))
-      returnItemsToBag(pokemon, poke2)
-      fus.pbFusionScreen(false, supersplicers)
-      $game_variables[VAR_FUSE_COUNTER] += 1 #fuse counter
-      fus.pbEndScreen
-      return true
-    end
+  fus = PokemonFusionScene.new
+  if (fus.pbStartScreen(pokemon, poke2, newid))
+    returnItemsToBag(pokemon, poke2)
+    fus.pbFusionScreen(false, supersplicers)
+    $game_variables[VAR_FUSE_COUNTER] += 1 #fuse counter
+    fus.pbEndScreen
+    return true
+  end
 end
 
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
@@ -1456,7 +1489,6 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       pokemon.exp_when_fused_head = nil
       pokemon.exp_when_fused_body = nil
 
-
       if pokemon.shiny?
         pokemon.shiny = false
         if pokemon.bodyShiny? && pokemon.headShiny?
@@ -1472,8 +1504,9 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
           poke2.shiny = true
           pokemon.shiny = false
           poke2.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
-        else         #shiny was obtained already fused
-        if rand(2) == 0
+        else
+          #shiny was obtained already fused
+          if rand(2) == 0
             pokemon.shiny = true
           else
             poke2.shiny = true
@@ -1484,19 +1517,17 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       pokemon.ability_index = pokemon.body_original_ability_index if pokemon.body_original_ability_index
       poke2.ability_index = pokemon.head_original_ability_index if pokemon.head_original_ability_index
 
-      pokemon.debug_shiny=true if pokemon.debug_shiny && pokemon.body_shiny
-      poke2.debug_shiny=true if pokemon.debug_shiny && poke2.head_shiny
+      pokemon.debug_shiny = true if pokemon.debug_shiny && pokemon.body_shiny
+      poke2.debug_shiny = true if pokemon.debug_shiny && poke2.head_shiny
 
-
-      pokemon.body_shiny=false
-      pokemon.head_shiny=false
-
+      pokemon.body_shiny = false
+      pokemon.head_shiny = false
 
       if !pokemon.shiny?
-        pokemon.debug_shiny=false
+        pokemon.debug_shiny = false
       end
       if !poke2.shiny?
-        poke2.debug_shiny=false
+        poke2.debug_shiny = false
       end
 
       if $Trainer.party.length >= 6
