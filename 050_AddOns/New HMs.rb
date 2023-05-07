@@ -85,7 +85,7 @@ end
 
 ############### MORNING SUN / MOONLIGHT
 HiddenMoveHandlers::CanUseMove.add(:MORNINGSUN,proc{|move,pkmn|
-  mapMetadata = GameData::MapMetadata.get($game_map.map_id)
+  mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
   if !mapMetadata || !mapMetadata.outdoor_map
     Kernel.pbMessage(_INTL("Can't use that here."))
     next false
@@ -108,7 +108,7 @@ HiddenMoveHandlers::UseMove.add(:MORNINGSUN,proc{|move,pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:MOONLIGHT,proc{|move,pkmn|
-  mapMetadata = GameData::MapMetadata.get($game_map.map_id)
+  mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
   if !mapMetadata || !mapMetadata.outdoor_map
     Kernel.pbMessage(_INTL("Can't use that here."))
     next false
