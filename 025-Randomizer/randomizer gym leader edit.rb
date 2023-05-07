@@ -461,6 +461,8 @@ def getDexNumFromFilename(filename)
   return (body * NB_POKEMON) + head
 end
 
+
+
 # def getCustomSpeciesList()
 #   filesList = Dir["./Graphics/CustomBattlers/*"]
 #   maxDexNumber = (NB_POKEMON * NB_POKEMON) + NB_POKEMON

@@ -2,11 +2,11 @@ class PokemonPokedexInfo_Scene
   #todo add indicator to show which one is the main sprite -
   # also maybe add an indicator in main list for when a sprite has available alts
 
-  Y_POSITION_SMALL = 40#90
+  Y_POSITION_SMALL = 40 #90
   Y_POSITION_BIG = 60
-  X_POSITION_PREVIOUS = -30#20
+  X_POSITION_PREVIOUS = -30 #20
   X_POSITION_SELECTED = 105
-  X_POSITION_NEXT = 340#380
+  X_POSITION_NEXT = 340 #380
 
   Y_POSITION_BG_SMALL = 70
   Y_POSITION_BG_BIG = 93
@@ -66,15 +66,15 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].x = X_POSITION_PREVIOUS
     @sprites["previousSprite"].y = Y_POSITION_SMALL
     @sprites["previousSprite"].visible = false
-    @sprites["previousSprite"].zoom_x = Settings::FRONTSPRITE_SCALE#/2
-    @sprites["previousSprite"].zoom_y = Settings::FRONTSPRITE_SCALE#/2
+    @sprites["previousSprite"].zoom_x = Settings::FRONTSPRITE_SCALE #/2
+    @sprites["previousSprite"].zoom_y = Settings::FRONTSPRITE_SCALE #/2
 
     @sprites["nextSprite"] = IconSprite.new(0, 0, @viewport)
     @sprites["nextSprite"].x = X_POSITION_NEXT
     @sprites["nextSprite"].y = Y_POSITION_SMALL
     @sprites["nextSprite"].visible = false
-    @sprites["nextSprite"].zoom_x = Settings::FRONTSPRITE_SCALE#/2
-    @sprites["nextSprite"].zoom_y = Settings::FRONTSPRITE_SCALE#/2
+    @sprites["nextSprite"].zoom_x = Settings::FRONTSPRITE_SCALE #/2
+    @sprites["nextSprite"].zoom_y = Settings::FRONTSPRITE_SCALE #/2
 
     @sprites["selectedSprite"].z = 9999999
     @sprites["previousSprite"].z = 9999999
@@ -94,15 +94,15 @@ class PokemonPokedexInfo_Scene
 
   end
 
-
   def pbGetAvailableForms
     body_id = getBodyID(@species)
-    head_id = getHeadID(@species,body_id)
-    download_custom_sprite(head_id,body_id)
-    download_autogen_sprite(head_id,body_id)
-    download_alt_sprites(head_id,body_id)
+    head_id = getHeadID(@species, body_id)
+    download_custom_sprite(head_id, body_id)
+    download_autogen_sprite(head_id, body_id)
+    download_alt_sprites(head_id, body_id)
     return PokedexUtils.new.pbGetAvailableAlts(@species)
   end
+
   def hide_all_selected_windows
     @sprites["bgSelected_previous"].visible = false if @sprites["bgSelected_previous"]
     @sprites["bgSelected_center"].visible = false if @sprites["bgSelected_center"]
@@ -135,20 +135,29 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].setBitmap(@available[previousIndex]) if previousIndex != nextIndex
     @sprites["selectedSprite"].setBitmap(@available[@selected_index])
     @sprites["nextSprite"].setBitmap(@available[nextIndex])
-    showSpriteCredits(@sprites["selectedSprite"].getBitmap.filename)
+
+    selected_bitmap = @sprites["selectedSprite"].getBitmap
+    is_generated = !selected_bitmap.path.include?(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED)
+    showSpriteCredits(selected_bitmap.filename,is_generated)
     update_selected
   end
 
-  def showSpriteCredits(filename)
+  def showSpriteCredits(filename,generated_sprite=false)
     @creditsOverlay.dispose
 
-    x= Graphics.width/2 -60
-    y=Graphics.height - 60
-    spritename = File.basename(filename,'.*')
-    discord_name = getSpriteCredits(spritename)
-    return  if !discord_name
+    x = Graphics.width / 2 - 75
+    y = Graphics.height - 60
+    spritename = File.basename(filename, '.*')
 
-    author_name = File.basename(discord_name,'#*')
+    if !generated_sprite
+      discord_name = getSpriteCredits(spritename)
+      discord_name = "Unknown artist" if !discord_name
+    else
+      #todo give credits to Japeal - need to differenciate unfused sprites
+      discord_name = ""#"Japeal\n(Generated)"
+    end
+
+    author_name = File.basename(discord_name, '#*')
 
     label_base_color = Color.new(248, 248, 248)
     label_shadow_color = Color.new(104, 104, 104)
@@ -156,7 +165,6 @@ class PokemonPokedexInfo_Scene
     textpos = [[author_name, x, y, 0, label_base_color, label_shadow_color]]
     pbDrawTextPositions(@creditsOverlay, textpos)
   end
-
 
   def pbChooseForm
     loop do
@@ -194,17 +202,38 @@ class PokemonPokedexInfo_Scene
     @sprites["downarrow"].visible = false
   end
 
+  # def is_main_sprite(index = nil)
+  #   return false if !@available
+  #   if index == nil
+  #     index = @selected_index
+  #   end
+  #   return true if @available.size <= 1
+  #   if @speciesData.always_use_generated
+  #     selected_sprite = @available[index]
+  #     return selected_sprite.start_with?(Settings::BATTLERS_FOLDER)
+  #   end
+  #   return index == 0
+  # end
+
   def is_main_sprite(index = nil)
-    return false if !@available
-    if index == nil
+    if !index
       index = @selected_index
     end
-    return true if @available.size <= 1
-    if @speciesData.always_use_generated
-      selected_sprite = @available[index]
-      return selected_sprite.start_with?(Settings::BATTLERS_FOLDER)
+    selected_sprite = @available[index]
+    species_id = getDexNumberForSpecies(@species)
+    if $PokemonGlobal.alt_sprite_substitutions[species_id]
+      return $PokemonGlobal.alt_sprite_substitutions[species_id] == selected_sprite
     end
-    return index == 0
+    is_generated = !selected_sprite.include?(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED)
+    if is_generated
+      return !checkIfCustomSpriteExistsByPath(selected_sprite)
+    end
+    return !sprite_is_alt(selected_sprite)
+  end
+
+  def sprite_is_alt(sprite_path)
+    spritename = File.basename(sprite_path, '.*')
+    return spritename.match?(/[a-zA-Z]/)
   end
 
   def select_sprite
@@ -220,59 +249,59 @@ class PokemonPokedexInfo_Scene
   end
 
   def swap_main_sprite
-    begin
-      old_main_sprite = @available[0]
-      new_main_sprite = @available[@selected_index]
-
-      if main_sprite_is_non_custom()
-        @speciesData.set_always_use_generated_sprite(false)
-        return
-        # new_name_without_ext = File.basename(old_main_sprite, ".png")
-        # new_name_without_letter=new_name_without_ext.chop
-        # File.rename(new_main_sprite, Settings::CUSTOM_BATTLERS_FOLDER+new_name_without_letter + ".png")
-      end
-
-      if new_main_sprite.start_with?(Settings::BATTLERS_FOLDER)
-        @speciesData.set_always_use_generated_sprite(true)
-        return
-        # new_name_without_ext = File.basename(old_main_sprite, ".png")
-        # File.rename(old_main_sprite, Settings::CUSTOM_BATTLERS_FOLDER+new_name_without_ext+"x" + ".png")x
-        # return
-      end
-      File.rename(new_main_sprite, new_main_sprite + "temp")
-      File.rename(old_main_sprite, new_main_sprite)
-      File.rename(new_main_sprite + "temp", old_main_sprite)
-    rescue
-      pbMessage("There was an error while swapping the sprites. Please save and restart the game as soon as possible.")
-    end
-  end
-
-  def main_sprite_is_non_custom()
-    speciesData = getSpecies(@species)
-    return speciesData.always_use_generated || @available.size <= 1
-    #dégueu, je sais - si le 1er element de la liste finit par une lettre (le 1er element devrait etre considéré comme le main), ça veut dire que le main est non-custom
-    # speciesData.set_always_use_generated_sprite(true)
-    # return POSSIBLE_ALTS.include?(File.basename(old_main_sprite, ".png")[-1])
+    old_main_sprite = @available[0]
+    new_main_sprite = @available[@selected_index]
+    species_number = dexNum(@species)
+    set_alt_sprite_substitution(species_number, new_main_sprite)
   end
 
 
 
+  # def swap_main_sprite
+  #   begin
+  #     old_main_sprite = @available[0]
+  #     new_main_sprite = @available[@selected_index]
+  #
+  #     if main_sprite_is_non_custom()
+  #       @speciesData.set_always_use_generated_sprite(false)
+  #       return
+  #       # new_name_without_ext = File.basename(old_main_sprite, ".png")
+  #       # new_name_without_letter=new_name_without_ext.chop
+  #       # File.rename(new_main_sprite, Settings::CUSTOM_BATTLERS_FOLDER+new_name_without_letter + ".png")
+  #     end
+  #
+  #     if new_main_sprite.start_with?(Settings::BATTLERS_FOLDER)
+  #       @speciesData.set_always_use_generated_sprite(true)
+  #       return
+  #       # new_name_without_ext = File.basename(old_main_sprite, ".png")
+  #       # File.rename(old_main_sprite, Settings::CUSTOM_BATTLERS_FOLDER+new_name_without_ext+"x" + ".png")x
+  #       # return
+  #     end
+  #     File.rename(new_main_sprite, new_main_sprite + "temp")
+  #     File.rename(old_main_sprite, new_main_sprite)
+  #     File.rename(new_main_sprite + "temp", old_main_sprite)
+  #   rescue
+  #     pbMessage("There was an error while swapping the sprites. Please save and restart the game as soon as possible.")
+  #   end
+  # end
 
+  # def main_sprite_is_non_custom()
+  #   speciesData = getSpecies(@species)
+  #   return speciesData.always_use_generated || @available.size <= 1
+  # end
 end
-
 
 class PokemonGlobalMetadata
   attr_accessor :alt_sprite_substitutions
+
   def initialize
     @alt_sprite_substitutions = {}
   end
 end
 
-def set_alt_sprite_substitution(original_sprite_name,selected_alt)
-  if ! $PokemonGlobal.alt_sprite_substitutions
+def set_alt_sprite_substitution(original_sprite_name, selected_alt)
+  if !$PokemonGlobal.alt_sprite_substitutions
     $PokemonGlobal.alt_sprite_substitutions = {}
   end
-
   $PokemonGlobal.alt_sprite_substitutions[original_sprite_name] = selected_alt
-  p  $PokemonGlobal.alt_sprite_substitutions
 end

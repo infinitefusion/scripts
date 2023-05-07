@@ -689,7 +689,9 @@ class PokemonFusionScene
       oldspeciesname = GameData::Species.get(@pokemon1.species).real_name
 
       overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
-      drawSpriteCredits(@sprites["rsprite2"].getBitmap.filename, overlay)
+
+      sprite_bitmap = @sprites["rsprite2"].getBitmap
+      drawSpriteCredits(sprite_bitmap.filename,sprite_bitmap.path, overlay)
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
                               _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
 
@@ -767,10 +769,12 @@ class PokemonFusionScene
   end
 end
 
-def drawSpriteCredits(filename,overlay)
+def drawSpriteCredits(filename,path,overlay)
+  return if path.start_with?(Settings::BATTLERS_FOLDER)
   x= Graphics.width/2
   y=240
   spritename = File.basename(filename,'.*')
+
   discord_name = getSpriteCredits(spritename)
   return  if !discord_name
 

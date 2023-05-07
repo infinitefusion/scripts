@@ -200,7 +200,17 @@ def get_unfused_sprite_path(dex_number)
   return lightmode_path
 end
 
+def alt_sprites_substitutions_available
+  return $PokemonGlobal && $PokemonGlobal.alt_sprite_substitutions
+end
+
 def get_fusion_sprite_path(head_id,body_id)
+  #Swap path if alt is selected for this pokemon
+  dex_num = getSpeciesIdForFusion(head_id,body_id)
+  if alt_sprites_substitutions_available && $PokemonGlobal.alt_sprite_substitutions.keys.include?(dex_num)
+    return $PokemonGlobal.alt_sprite_substitutions[dex_num]
+  end
+
   #Try local custom sprite
   filename = sprintf("%s.%s.png", head_id, body_id)
   local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s + "/" +filename

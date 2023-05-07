@@ -396,6 +396,7 @@ class PokemonLoadScreen
           @scene.pbEndScene
           Game.load(@save_data)
           $game_switches[SWITCH_V5_1] = true
+          $PokemonGlobal.alt_sprite_substitutions = {} if !$PokemonGlobal.alt_sprite_substitutions
           return
         when cmd_new_game
           @scene.pbEndScene

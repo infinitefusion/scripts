@@ -113,6 +113,8 @@ def getDexNumberForSpecies(species)
   return dexNum
 end
 
+
+
 def getPokemon(dexNum)
   return GameData::Species.get(dexNum)
 end
@@ -120,6 +122,11 @@ end
 def getSpecies(dexnum)
   return getPokemon(dexnum)
 end
+
+def getSpeciesIdForFusion(head_id, body_id)
+  return (body_id) * Settings::NB_POKEMON + head_id
+end
+
 
 #shortcut for using in game events because of script characters limit
 def dexNum(species)
@@ -407,7 +414,9 @@ def customSpriteExists(species)
   return download_custom_sprite(head, body) != nil
 end
 
-
+def checkIfCustomSpriteExistsByPath(path)
+  return true if pbResolveBitmap(path) != nil
+end
 
 
 def customSpriteExistsBodyHead(body, head)
