@@ -560,7 +560,7 @@ def pbFadeOutIn(z=99999,nofadeout=false)
   col=Color.new(0,0,0,0)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=z
-  numFrames = (Graphics.frame_rate*0.4).floor
+  numFrames = (Graphics.frame_rate*Settings::FADEOUT_SPEED).floor
   alphaDiff = (255.0/numFrames).ceil
   for j in 0..numFrames
     col.set(0,0,0,j*alphaDiff)
@@ -589,7 +589,7 @@ def pbFadeOutInWithUpdate(z,sprites,nofadeout=false)
   col=Color.new(0,0,0,0)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=z
-  numFrames = (Graphics.frame_rate*0.4).floor
+  numFrames = (Graphics.frame_rate*Settings::FADEOUT_SPEED).floor
   alphaDiff = (255.0/numFrames).ceil
   for j in 0..numFrames
     col.set(0,0,0,j*alphaDiff)
@@ -634,7 +634,7 @@ end
 
 def pbFadeOutAndHide(sprites)
   visiblesprites = {}
-  numFrames = (Graphics.frame_rate*0.4).floor
+  numFrames = (Graphics.frame_rate*Settings::FADEOUT_SPEED).floor
   alphaDiff = (255.0/numFrames).ceil
   pbDeactivateWindows(sprites) {
     for j in 0..numFrames
@@ -659,7 +659,7 @@ def pbFadeInAndShow(sprites,visiblesprites=nil)
       end
     end
   end
-  numFrames = (Graphics.frame_rate*0.4).floor
+  numFrames = (Graphics.frame_rate*Settings::FADEOUT_SPEED).floor
   alphaDiff = (255.0/numFrames).ceil
   pbDeactivateWindows(sprites) {
     for j in 0..numFrames

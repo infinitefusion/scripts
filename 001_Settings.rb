@@ -77,6 +77,8 @@ module Settings
   # The default screen scale factor. Possible values are 0.5, 1.0, 1.5 and 2.0.
   SCREEN_SCALE = 1.0
 
+  FADEOUT_SPEED = 0.2
+
   #=============================================================================
 
   # The maximum level Pokémon can reach.
