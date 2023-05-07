@@ -24,9 +24,9 @@ class SafariState
       pbFadeOutIn {
         $game_temp.player_transferring   = true
         $game_temp.transition_processing = true
-        $game_temp.player_new_map_id    = @start[0]
-        $game_temp.player_new_x         = @start[1]
-        $game_temp.player_new_y         = @start[2]
+        $game_temp.player_new_map_id    = 472 #@start[0]
+        $game_temp.player_new_x         = 28#@start[1]
+        $game_temp.player_new_y         = 11#@start[2]
         $game_temp.player_new_direction = 2
         $scene.transfer_player
       }
@@ -63,10 +63,16 @@ def pbInSafari?
     reception = pbSafariState.pbReceptionMap
     return true if $game_map.map_id == reception
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    return true if map_metadata && map_metadata.safari_map
+    return true if map_metadata && map_metadata.safari_map || is_hardcoded_safari_map($game_map.map_id)
   end
   return false
 end
+
+def is_hardcoded_safari_map(map_id)
+  safari_maps = [445,74,484,75,485,82,486,107,487,715,718,488,717]
+  return safari_maps.include?(map_id)
+end
+
 
 def pbSafariState
   $PokemonGlobal.safariState = SafariState.new if !$PokemonGlobal.safariState
