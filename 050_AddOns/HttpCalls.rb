@@ -40,7 +40,7 @@ def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp",
     downloaded_file_name = _INTL("{1}/{2}.{3}{4}.png", saveLocation, head_id, body_id,alt_letter)
     return downloaded_file_name if pbResolveBitmap(downloaded_file_name)
     url = _INTL(base_path, head_id, body_id)
-    echo "\nSending request to " + url
+    #echo "\nSending request to " + url
     response = HTTPLite.get(url)
     if response[:status] == 200
       File.open(downloaded_file_name, "wb") do |file|

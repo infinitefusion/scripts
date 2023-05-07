@@ -821,7 +821,6 @@ Events.onAction += proc { |_sender, _e|
   next if GameData::MapMetadata.exists?($game_map.map_id) &&
     GameData::MapMetadata.get($game_map.map_id).always_bicycle
   next if !$game_player.pbFacingTerrainTag.can_surf_freely
-  next if !$game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
   pbSurf
 }
 
