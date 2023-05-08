@@ -221,6 +221,7 @@ class PokemonPokedexInfo_Scene
     end
     selected_sprite = @available[index]
     species_id = getDexNumberForSpecies(@species)
+    $PokemonGlobal.alt_sprite_substitutions = {} if !$PokemonGlobal.alt_sprite_substitutions
     if $PokemonGlobal.alt_sprite_substitutions[species_id]
       return $PokemonGlobal.alt_sprite_substitutions[species_id] == selected_sprite
     end
@@ -293,10 +294,6 @@ end
 
 class PokemonGlobalMetadata
   attr_accessor :alt_sprite_substitutions
-
-  def initialize
-    @alt_sprite_substitutions = {}
-  end
 end
 
 def set_alt_sprite_substitution(original_sprite_name, selected_alt)

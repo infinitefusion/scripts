@@ -401,6 +401,7 @@ class PokemonLoadScreen
         when cmd_new_game
           @scene.pbEndScene
           Game.start_new
+          $PokemonGlobal.alt_sprite_substitutions = {} if !$PokemonGlobal.alt_sprite_substitutions
           return
         when cmd_new_game_plus
           @scene.pbEndScene
