@@ -1,5 +1,6 @@
 class PokedexUtils
-  POSSIBLE_ALTS = %w[a b c d e f g h i j k x]
+  POSSIBLE_ALTS = ["", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
+                   "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
   def pbGetAvailableAlts(species)
     ret = []
@@ -8,6 +9,14 @@ class PokedexUtils
     isFusion = dexNum > NB_POKEMON
     if !isFusion
       ret << Settings::BATTLERS_FOLDER + dexNum.to_s + "/" + dexNum.to_s + ".png"
+
+      POSSIBLE_ALTS.each { |alt_letter|
+        altFilePath = Settings::CUSTOM_BASE_SPRITES_FOLDER + dexNum.to_s + alt_letter + ".png"
+        if pbResolveBitmap(altFilePath)
+          ret << altFilePath
+        end
+      }
+
       return ret
     end
     body_id = getBodyID(species)
@@ -19,15 +28,16 @@ class PokedexUtils
       ret << baseFilePath
     end
     POSSIBLE_ALTS.each { |alt_letter|
-      altFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s + "/" + baseFilename + alt_letter + ".png"
-      if pbResolveBitmap(altFilePath)
-        ret << altFilePath
+      if alt_letter != "" #empty is included in alt letters because unfused sprites can be alts and not have a letter
+        altFilePath = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s + "/" + baseFilename + alt_letter + ".png"
+        if pbResolveBitmap(altFilePath)
+          ret << altFilePath
+        end
       end
     }
     ret << Settings::BATTLERS_FOLDER + head_id.to_s + "/" + baseFilename + ".png"
     return ret
   end
-
 
   #todo: return array for split evolution lines that have multiple final evos
   def getFinalEvolution(species)

@@ -194,6 +194,10 @@ def get_unfused_sprite_path(dex_number)
   folder = dex_number.to_s
   filename = sprintf("%s.png", dex_number)
 
+  if alt_sprites_substitutions_available && $PokemonGlobal.alt_sprite_substitutions.keys.include?(dex_number)
+    return $PokemonGlobal.alt_sprite_substitutions[dex_number]
+  end
+
   normal_path = Settings::BATTLERS_FOLDER + folder + "/" + filename
   lightmode_path = Settings::BATTLERS_FOLDER + filename
   return normal_path if pbResolveBitmap(normal_path)

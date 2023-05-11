@@ -95,11 +95,17 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbGetAvailableForms
-    body_id = getBodyID(@species)
-    head_id = getHeadID(@species, body_id)
-    download_custom_sprite(head_id, body_id)
-    download_autogen_sprite(head_id, body_id)
-    download_alt_sprites(head_id, body_id)
+    dex_num = getDexNumberForSpecies(@species)
+    if dex_num <= NB_POKEMON
+      download_unfused_alt_sprites(dex_num)
+    else
+      body_id = getBodyID(@species)
+      head_id = getHeadID(@species, body_id)
+      download_custom_sprite(head_id, body_id)
+      download_autogen_sprite(head_id, body_id)
+      download_alt_sprites(head_id, body_id)
+    end
+
     return PokedexUtils.new.pbGetAvailableAlts(@species)
   end
 
@@ -137,12 +143,13 @@ class PokemonPokedexInfo_Scene
     @sprites["nextSprite"].setBitmap(@available[nextIndex])
 
     selected_bitmap = @sprites["selectedSprite"].getBitmap
-    is_generated = !selected_bitmap.path.include?(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED)
-    showSpriteCredits(selected_bitmap.filename,is_generated)
+    sprite_path = selected_bitmap.path
+    is_generated = sprite_path.start_with?(Settings::BATTLERS_FOLDER)
+    showSpriteCredits(selected_bitmap.filename, is_generated)
     update_selected
   end
 
-  def showSpriteCredits(filename,generated_sprite=false)
+  def showSpriteCredits(filename, generated_sprite = false)
     @creditsOverlay.dispose
 
     x = Graphics.width / 2 - 75
@@ -154,7 +161,7 @@ class PokemonPokedexInfo_Scene
       discord_name = "Unknown artist" if !discord_name
     else
       #todo give credits to Japeal - need to differenciate unfused sprites
-      discord_name = ""#"Japeal\n(Generated)"
+      discord_name = "" #"Japeal\n(Generated)"
     end
 
     author_name = File.basename(discord_name, '#*')
@@ -255,8 +262,6 @@ class PokemonPokedexInfo_Scene
     species_number = dexNum(@species)
     set_alt_sprite_substitution(species_number, new_main_sprite)
   end
-
-
 
   # def swap_main_sprite
   #   begin

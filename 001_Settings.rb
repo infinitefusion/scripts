@@ -6,7 +6,7 @@
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
-  GAME_VERSION_NUMBER = "5.2.0"
+  GAME_VERSION_NUMBER = "5.2.1"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -21,6 +21,7 @@ module Settings
 
   #Infinite fusion settings
   NB_POKEMON = 420
+  CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/customBaseSprites/"
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
   CUSTOM_BATTLERS_FOLDER_INDEXED = "Graphics/CustomBattlers/indexed/"
   BATTLERS_FOLDER = "Graphics/Battlers/"

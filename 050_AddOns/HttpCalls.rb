@@ -38,9 +38,15 @@ end
 def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp", alt_letter= "")
   begin
     downloaded_file_name = _INTL("{1}/{2}.{3}{4}.png", saveLocation, head_id, body_id,alt_letter)
+    if !body_id
+      downloaded_file_name = _INTL("{1}/{2}{3}.png", saveLocation, head_id,alt_letter)
+    end
+
     return downloaded_file_name if pbResolveBitmap(downloaded_file_name)
     url = _INTL(base_path, head_id, body_id)
-    #echo "\nSending request to " + url
+    if !body_id
+      url = _INTL(base_path, head_id)
+    end
     response = HTTPLite.get(url)
     if response[:status] == 200
       File.open(downloaded_file_name, "wb") do |file|
@@ -76,6 +82,24 @@ def download_custom_sprite(head_id, body_id)
   sprite = download_sprite(_INTL(url, head_id, body_id), head_id, body_id, destPath)
   return sprite if sprite
   return nil
+end
+
+def download_unfused_alt_sprites(dex_num)
+  base_url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Other/Alternate%20Base%20Sprites/{1}"
+  extension = ".png"
+  destPath = _INTL("{1}", Settings::CUSTOM_BASE_SPRITES_FOLDER)
+  if !Dir.exist?(destPath)
+    Dir.mkdir(destPath)
+  end
+  alt_url = _INTL(base_url,dex_num)  + extension
+
+  download_sprite(alt_url, dex_num,nil, destPath )
+  alphabet = ('a'..'z').to_a
+  alphabet.each do |letter|
+    alt_url = _INTL(base_url,dex_num) + letter + extension
+    sprite = download_sprite(alt_url, dex_num,nil, destPath, letter)
+    return if !sprite
+  end
 end
 
 def download_alt_sprites(head_id,body_id)
