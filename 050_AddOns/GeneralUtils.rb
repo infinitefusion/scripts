@@ -162,7 +162,6 @@ def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customP
       randPoke << rand(maxPoke) + 1
     end
   end
-
   return randPoke
 end
 

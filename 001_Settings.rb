@@ -16,7 +16,7 @@ module Settings
   LEADER_VICTORY_MUSIC="Battle victory leader"
   TRAINER_VICTORY_MUSIC="trainer-victory"
   WILD_VICTORY_MUSIC="wild-victory"
-  #
+  #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10
 
   #Infinite fusion settings
@@ -42,7 +42,8 @@ module Settings
   BACKSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_POSITION = 200
   SHINY_HUE_OFFSET = 75
-  NO_LEVEL_MODE_LEVEL = 25
+  NO_LEVEL_MODE_LEVEL_INCR = 5.8
+  NO_LEVEL_MODE_LEVEL_BASE = 6
 
   RIVAL_STARTER_PLACEHOLDER_SPECIES = :MEW #(MEW)
   VAR_1_PLACEHOLDER_SPECIES = :DIALGA

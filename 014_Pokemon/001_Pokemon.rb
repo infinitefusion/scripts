@@ -1139,6 +1139,16 @@ class Pokemon
     return ((((base * 2 + iv + (ev / 4)) * level / 100).floor + 5) * nat / 100).floor
   end
 
+  def adjust_level_for_base_stats_mode()
+    nb_badges = $Trainer.badge_count
+    this_level = ((nb_badges * Settings::NO_LEVEL_MODE_LEVEL_INCR) + Settings::NO_LEVEL_MODE_LEVEL_BASE).ceil
+    if this_level > Settings::MAXIMUM_LEVEL
+      this_level = Settings::MAXIMUM_LEVEL
+    end
+    return this_level
+  end
+
+
   # Recalculates this Pokémon's stats.
   def calc_stats
     base_stats = self.baseStats
@@ -1146,7 +1156,7 @@ class Pokemon
     this_IV = self.calcIV
 
     if $game_switches[SWITCH_NO_LEVELS_MODE]
-      this_level = Settings::NO_LEVEL_MODE_LEVEL
+      this_level = adjust_level_for_base_stats_mode()
     end
 
     # Format stat multipliers due to nature

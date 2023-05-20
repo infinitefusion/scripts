@@ -429,7 +429,7 @@ def getCustomSpeciesList(allowOnline = true, redownload_file=false)
     end
   end
 
-  if speciesList.length <= 200 && allowOnline
+  if speciesList.length <= 20000 && allowOnline
     if redownload_file && Kernel.pbConfirmMessage(_INTL("Not enough local sprites found.  Attempt to fetch list from the internet?"))
       updateOnlineCustomSpritesFile
     end
