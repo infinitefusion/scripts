@@ -659,7 +659,7 @@ PokemonDebugMenuCommands.register("setitem", {
 
 PokemonDebugMenuCommands.register("setability", {
   "parent"      => "main",
-  "name"        => _INTL("Set ability"),
+  "name"        => _INTL("Set primary ability"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
@@ -699,6 +699,56 @@ PokemonDebugMenuCommands.register("setability", {
       when 2   # Reset
         pkmn.ability_index = nil
         pkmn.ability = nil
+        screen.pbRefreshSingle(pkmnid)
+      end
+    end
+    next false
+  }
+})
+
+
+PokemonDebugMenuCommands.register("setability2", {
+  "parent"      => "main",
+  "name"        => _INTL("Set secondary ability"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    cmd = 0
+    commands = [
+      _INTL("Set possible ability"),
+      _INTL("Set any ability"),
+      _INTL("Reset")
+    ]
+    loop do
+      if pkmn.ability
+        msg = _INTL("Ability 2 is {1} (index {2}).", pkmn.ability2.name, pkmn.ability2_index)
+      else
+        msg = _INTL("No ability (index {1}).", pkmn.ability2_index)
+      end
+      cmd = screen.pbShowCommands(msg, commands, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Set possible ability
+        abils = pkmn.getAbilityList
+        ability_commands = []
+        abil_cmd = 0
+        for i in abils
+          ability_commands.push(((i[1] < 2) ? "" : "(H) ") + GameData::Ability.get(i[0]).name)
+          abil_cmd = ability_commands.length - 1 if pkmn.ability2_id == i[0]
+        end
+        abil_cmd = screen.pbShowCommands(_INTL("Choose an ability."), ability_commands, abil_cmd)
+        next if abil_cmd < 0
+        pkmn.ability2_index = abils[abil_cmd][1]
+        pkmn.ability2 = nil
+        screen.pbRefreshSingle(pkmnid)
+      when 1   # Set any ability
+        new_ability = pbChooseAbilityList(pkmn.ability2_id)
+        if new_ability && new_ability != pkmn.ability2_id
+          pkmn.ability2 = new_ability
+          screen.pbRefreshSingle(pkmnid)
+        end
+      when 2   # Reset
+        pkmn.ability2_index = nil
+        pkmn.ability2 = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end

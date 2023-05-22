@@ -103,13 +103,9 @@ class FusionSelectOptionsScene < PokemonOption_Scene
                        @selectedNature=@natureList[value]
                      }, [getNatureDescription(@natureList[0]), getNatureDescription(@natureList[1])]
       )
-    addOptionsExtension(options)
     return options
   end
 
-  def addOptionsExtension(options)
-    return options
-  end
 
   def isConfirmedOnKeyPress
     return true

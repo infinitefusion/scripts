@@ -43,7 +43,7 @@ class PokeBattle_Scene
       for i in 0...@battle.sideSizes[1]
         idxBattler = 2*i+1
 
-        #hidden ability animation
+          #hidden ability animation
         if @battle.battlers[idxBattler].hasHiddenAbility?
           pbCommonAnimation("StatUp",@battle.battlers[idxBattler])
           if @battle.is_a?(PokeBattle_Battle)
@@ -173,7 +173,7 @@ class PokeBattle_Scene
   #=============================================================================
   # Ability splash bar animations
   #=============================================================================
-  def pbShowAbilitySplash(battler)
+  def pbShowAbilitySplash(battler,ability_name=nil)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
     side = battler.index%2
     pbHideAbilitySplash(battler) if @sprites["abilityBar_#{side}"].visible
@@ -186,6 +186,7 @@ class PokeBattle_Scene
     end
     abilitySplashAnim.dispose
   end
+
 
   def pbHideAbilitySplash(battler)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
