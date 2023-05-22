@@ -1148,6 +1148,9 @@ class Pokemon
     return this_level
   end
 
+  def adjustHPForWonderGuard(stats)
+    return self.ability == :WONDERGUARD ? 1 : stats[:HP]
+  end
 
   # Recalculates this Pokémon's stats.
   def calc_stats
@@ -1177,7 +1180,7 @@ class Pokemon
     end
     hpDiff = @totalhp - @hp
     #@totalhp = stats[:HP]
-    @totalhp = self.ability == :WONDERGUARD ? 1 : stats[:HP]
+    @totalhp = adjustHPForWonderGuard(stats)
     calculated_hp = @totalhp - hpDiff
     @hp = calculated_hp > 0 ? calculated_hp : 0
     @attack = stats[:ATTACK]
