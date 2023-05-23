@@ -42,7 +42,14 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
       scene.pbDisplay(_INTL("It's no good! It's impossible to aim at a Pokémon that's not in sight!")) if showMessages
       next false
     end
-    # NOTE: The code below stops you from throwing a Poké Ball if there is more
+
+    if $game_switches[SWITCH_SILVERBOSS_BATTLE]
+      scene.pbDisplay(_INTL("It's no good! It's too agitated to aim!")) if showMessages
+      next false
+    end
+
+
+      # NOTE: The code below stops you from throwing a Poké Ball if there is more
     #       than one unfainted opposing Pokémon. (Snag Balls can be thrown in
     #       this case, but only in trainer battles, and the trainer will deflect
     #       them if they are trying to catch a non-Shadow Pokémon.)
