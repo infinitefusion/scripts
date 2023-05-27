@@ -92,7 +92,7 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim=true)
+  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim=true, abilityName=nil)
     return false if fainted?
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
