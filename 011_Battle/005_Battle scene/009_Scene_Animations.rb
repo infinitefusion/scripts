@@ -173,7 +173,7 @@ class PokeBattle_Scene
   #=============================================================================
   # Ability splash bar animations
   #=============================================================================
-  def pbShowAbilitySplash(battler,ability_name=nil)
+  def pbShowAbilitySplash(battler)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
     side = battler.index%2
     pbHideAbilitySplash(battler) if @sprites["abilityBar_#{side}"].visible
@@ -186,6 +186,7 @@ class PokeBattle_Scene
     end
     abilitySplashAnim.dispose
   end
+
 
 
   def pbHideAbilitySplash(battler)

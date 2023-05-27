@@ -330,9 +330,7 @@ module GameData
           secondary_ability_index = pkmn.ability_index == 0 ? 1 : 0
           pkmn.ability2_index = secondary_ability_index
           pkmn.ability2 = pkmn.getAbilityList[secondary_ability_index][0]
-
-
-          print _INTL("Primary: {1}, Secondary: {2}",pkmn.ability.id, pkmn.ability2.id)
+          #print _INTL("Primary: {1}, Secondary: {2}",pkmn.ability.id, pkmn.ability2.id)
         end
 
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)

@@ -228,14 +228,21 @@ end
 # Makes a Pokémon's ability bar appear
 #===============================================================================
 class AbilitySplashAppearAnimation < PokeBattle_Animation
-  def initialize(sprites,viewport,side)
+  def initialize(sprites,viewport,side,secondAbility=false)
+    @secondAbility=secondAbility
     @side = side
     super(sprites,viewport)
   end
 
   def createProcesses
-    return if !@sprites["abilityBar_#{@side}"]
-    bar = addSprite(@sprites["abilityBar_#{@side}"])
+    if @secondAbility
+      return if !@sprites["ability2Bar_#{@side}"]
+      bar = addSprite(@sprites["ability2Bar_#{@side}"])
+    else
+      return if !@sprites["abilityBar_#{@side}"]
+      bar = addSprite(@sprites["abilityBar_#{@side}"])
+    end
+
     bar.setVisible(0,true)
     dir = (@side==0) ? 1 : -1
     bar.moveDelta(0,8,dir*Graphics.width/2,0)

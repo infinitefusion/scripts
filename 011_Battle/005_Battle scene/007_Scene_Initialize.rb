@@ -61,6 +61,8 @@ class PokeBattle_Scene
       # Ability splash bars
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         @sprites["abilityBar_#{side}"] = AbilitySplashBar.new(side,@viewport)
+        @sprites["ability2Bar_#{side}"] = AbilitySplashBar.new(side,@viewport,true) if $game_switches[SWITCH_DOUBLE_ABILITIES]
+        @sprites["ability2Bar_#{side}"].y = @sprites["ability2Bar_#{side}"].y+30
       end
     end
     # Player's and partner trainer's back sprite
