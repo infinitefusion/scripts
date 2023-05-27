@@ -318,6 +318,10 @@ class PokeBattle_Battler
     return @pokemon.isFusionOf(check_species)
   end
 
+  def isFusion?()
+    return @pokemon.isFusion?()
+  end
+
   # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid type numbers
   # (e.g. -1).
