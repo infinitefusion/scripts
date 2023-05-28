@@ -58,7 +58,7 @@ module BattleHandlers
 
   def self.triggerCertainSwitchingUserAbility(ability,switcher,battle)
     ability1 = ability
-    ability2 = battler.ability2
+    ability2 = switcher.ability2
 
     ret = CertainSwitchingUserAbility.trigger(ability1,switcher,battle) ||  CertainSwitchingUserAbility.trigger(ability2,switcher,battle)
     return (ret!=nil) ? ret : false
@@ -66,7 +66,7 @@ module BattleHandlers
 
   def self.triggerCertainSwitchingUserAbility(ability,switcher,battle)
     ability1 = ability
-    ability2 = battler.ability2
+    ability2 = switcher.ability2
 
     ret = CertainSwitchingUserAbility.trigger(ability1,switcher,battle) || CertainSwitchingUserAbility.trigger(ability2,switcher,battle)
     return (ret!=nil) ? ret : false
@@ -74,7 +74,7 @@ module BattleHandlers
 
   def self.triggerTrappingTargetAbility(ability,switcher,bearer,battle)
     ability1 = ability
-    ability2 = battler.ability2
+    ability2 = switcher.ability2
     ret = TrappingTargetAbility.trigger(ability1,switcher,bearer,battle) || TrappingTargetAbility.trigger(ability2,switcher,bearer,battle)
     return (ret!=nil) ? ret : false
   end

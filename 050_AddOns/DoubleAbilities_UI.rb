@@ -44,7 +44,7 @@ class AbilitySplashDisappearAnimation < PokeBattle_Animation
 end
 
 class PokeBattle_Scene
-  def pbShowAbilitySplash(battler,secondAbility=false)
+  def pbShowAbilitySplash(battler,secondAbility=false, abilityName=nil)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
     side = battler.index%2
     if secondAbility
@@ -52,6 +52,12 @@ class PokeBattle_Scene
     else
       pbHideAbilitySplash(battler) if @sprites["abilityBar_#{side}"].visible
     end
+    if abilityName
+      @sprites["abilityBar_#{side}"].ability_name = abilityName if !secondAbility
+      @sprites["ability2Bar_#{side}"].ability_name = abilityName if secondAbility
+    end
+
+
     @sprites["abilityBar_#{side}"].battler = battler
     @sprites["ability2Bar_#{side}"].battler = battler if @sprites["ability2Bar_#{side}"]
 
