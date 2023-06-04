@@ -161,19 +161,25 @@ class Pokemon
     @ability2 = (value) ? GameData::Ability.get(value).id : value
   end
 
-  def ability2_id
-    if !@ability2
+
+  def ability_id
+    if !@ability
       sp_data = species_data
-      abil_index = ability2_index()
+      abil_index = ability_index
       if abil_index >= 2 # Hidden ability
-        @ability2 = sp_data.hidden_abilities[abil_index - 2]
-        abil_index = (@personalID & 1) if !@ability2
+        @ability = sp_data.hidden_abilities[abil_index - 2]
+        abil_index = (@personalID & 1) if !@ability
       end
-      if !@ability2 # Natural ability or no hidden ability defined
-        @ability2 = sp_data.abilities[abil_index] || sp_data.abilities[0]
+      if !@ability # Natural ability or no hidden ability defined
+        if $game_switches[SWITCH_NO_LEVELS_MODE]
+          @ability = sp_data.abilities[0] || sp_data.abilities[0]
+          @ability2 = sp_data.abilities[1] || sp_data.abilities[0]
+        else
+          @ability = sp_data.abilities[abil_index] || sp_data.abilities[0]
+        end
       end
     end
-    return @ability2
+    return @ability
   end
 
   def ability2_id
