@@ -3,10 +3,12 @@ def map_sprites_by_artist
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
     row = line.split(',')
     spritename = row[0]
-    artist = row[1].chomp
-    sprites = creditsMap.key?(artist) ? creditsMap[artist] : []
-    sprites << spritename
-    creditsMap[artist] = sprites
+    if row[1]
+      artist = row[1].chomp
+      sprites = creditsMap.key?(artist) ? creditsMap[artist] : []
+      sprites << spritename
+      creditsMap[artist] = sprites
+    end
   end
   return creditsMap
 end
