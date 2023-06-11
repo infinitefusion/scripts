@@ -77,6 +77,18 @@ off Pokémon Red and Blue, as well as
 Pokémon Gold and Silver.
 Both games are made by Game Freak.
 
+Sprites pack manager
+Kiwi
+
+Sprite Managers
+Howls
+Kiwi
+Melmcs
+Milchik the Miltank
+rezza
+Punko
+Skel'n
+
 All of the custom fused Pokémon sprites 
 were made by various members of the sp
 Pokémon Infinite Fusion Discord

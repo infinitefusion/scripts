@@ -82,7 +82,11 @@ end
 def select_spriter(minNbSprites = 10, save_in_var = 1)
   spriters_list = list_all_spriters_with_min_nb_of_sprites(minNbSprites)
   commands = []
-  spriters_list.each { |name, i| commands.push([i, name, name]) }
+  spriters_list.each do |name, i|
+    if name
+      commands.push([i, name, name])
+    end
+  end
   chosen = pbChooseList(commands, 0, nil, 1)
   return nil if !chosen
   return chosen
@@ -95,7 +99,9 @@ def list_all_spriters_with_min_nb_of_sprites(minNbSprites)
 
   File.readlines(filename).each do |line|
     name = line.strip.split(',')[1]
-    spriters_hash[name] += 1
+    if name
+      spriters_hash[name] += 1
+    end
   end
 
   spriters_list = []
