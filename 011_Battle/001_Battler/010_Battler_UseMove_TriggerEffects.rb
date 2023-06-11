@@ -2,19 +2,25 @@ class PokeBattle_Battler
   #=============================================================================
   # Effect per hit
   #=============================================================================
+  #
+
+  def triggerAbilityEffectsOnHit(move,user,target)
+    # Target's ability
+    if target.abilityActive?(true)
+      oldHP = user.hp
+      BattleHandlers.triggerTargetAbilityOnHit(target.ability,user,target,move,@battle)
+      user.pbItemHPHealCheck if user.hp<oldHP
+    end
+    # User's ability
+    if user.abilityActive?(true)
+      BattleHandlers.triggerUserAbilityOnHit(user.ability,user,target,move,@battle)
+      user.pbItemHPHealCheck
+    end
+  end
+
   def pbEffectsOnMakingHit(move,user,target)
     if target.damageState.calcDamage>0 && !target.damageState.substitute
-      # Target's ability
-      if target.abilityActive?(true)
-        oldHP = user.hp
-        BattleHandlers.triggerTargetAbilityOnHit(target.ability,user,target,move,@battle)
-        user.pbItemHPHealCheck if user.hp<oldHP
-      end
-      # User's ability
-      if user.abilityActive?(true)
-        BattleHandlers.triggerUserAbilityOnHit(user.ability,user,target,move,@battle)
-        user.pbItemHPHealCheck
-      end
+      triggerAbilityEffectsOnHit(move,user,target)
       # Target's item
       if target.itemActive?(true)
         oldHP = user.hp
@@ -92,6 +98,7 @@ class PokeBattle_Battler
     # User's ability
     if user.abilityActive?
       BattleHandlers.triggerUserAbilityEndOfMove(user.ability,user,targets,move,@battle)
+      BattleHandlers.triggerUserAbilityEndOfMove(user.ability2,user,targets,move,@battle) if user.ability2
     end
     # Greninja - Battle Bond
     if !user.fainted? && !user.effects[PBEffects::Transform] &&
@@ -161,6 +168,7 @@ class PokeBattle_Battler
       next if b.damageState.unaffected || switchedBattlers.include?(b.index)
       next if !b.abilityActive?
       BattleHandlers.triggerTargetAbilityAfterMoveUse(b.ability,b,user,move,switchedBattlers,@battle)
+      BattleHandlers.triggerTargetAbilityAfterMoveUse(b.ability2,b,user,move,switchedBattlers,@battle) if b.ability2
       if !switchedBattlers.include?(b.index) && move.damagingMove?
         if b.pbAbilitiesOnDamageTaken(b.damageState.initialHP)   # Emergency Exit, Wimp Out
           switchWimpOut.push(b.index)

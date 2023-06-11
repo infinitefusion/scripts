@@ -325,6 +325,14 @@ module GameData
         end
         pkmn.ability_index = pkmn_data[:ability_index]
         pkmn.ability = pkmn_data[:ability]
+
+        if $game_switches[SWITCH_DOUBLE_ABILITIES] && pkmn.isFusion?
+          secondary_ability_index = pkmn.ability_index == 0 ? 1 : 0
+          pkmn.ability2_index = secondary_ability_index
+          pkmn.ability2 = pkmn.getAbilityList[secondary_ability_index][0]
+          #print _INTL("Primary: {1}, Secondary: {2}",pkmn.ability.id, pkmn.ability2.id)
+        end
+
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
         pkmn.shiny = (pkmn_data[:shininess]) ? true : false
         if pkmn_data[:nature]

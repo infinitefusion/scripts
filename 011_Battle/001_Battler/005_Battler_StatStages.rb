@@ -92,10 +92,10 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim=true)
+  def pbRaiseStatStageByAbility(stat,increment,user,splashAnim=true, abilityName=nil)
     return false if fainted?
     ret = false
-    @battle.pbShowAbilitySplash(user) if splashAnim
+    @battle.pbShowAbilitySplash(user,false,true,abilityName) #if splashAnim
     if pbCanRaiseStatStage?(stat,user,nil,PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         ret = pbRaiseStatStage(stat,increment,user)
@@ -224,9 +224,9 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbLowerStatStageByAbility(stat,increment,user,splashAnim=true,checkContact=false)
+  def pbLowerStatStageByAbility(stat,increment,user,splashAnim=true,checkContact=false,ability_name=nil)
     ret = false
-    @battle.pbShowAbilitySplash(user) if splashAnim
+    @battle.pbShowAbilitySplash(user,false ,false ,ability_name) if splashAnim
     if pbCanLowerStatStage?(stat,user,nil,PokeBattle_SceneConstants::USE_ABILITY_SPLASH) &&
        (!checkContact || affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH))
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -252,7 +252,7 @@ class PokeBattle_Battler
       return false
     end
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(:ATTACK,1,user,false)
+      return pbLowerStatStageByAbility(:ATTACK,1,user,false,false ,user.abilityName)
     end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the

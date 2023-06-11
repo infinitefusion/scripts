@@ -103,9 +103,9 @@ class FusionSelectOptionsScene < PokemonOption_Scene
                        @selectedNature=@natureList[value]
                      }, [getNatureDescription(@natureList[0]), getNatureDescription(@natureList[1])]
       )
-
     return options
   end
+
 
   def isConfirmedOnKeyPress
     return true
