@@ -424,10 +424,9 @@ def pbDisplayBattleFactoryPointsWindow(msgwindow)
   pbDisplayVariableWindow(msgwindow, "Tokens", VAR_BATTLE_FACTORY_TOKENS)
 end
 
-
-def pbDisplayVariableWindow(msgwindow,name,variable_id)
+def pbDisplayVariableWindow(msgwindow, name, variable_id)
   pointsString = $game_variables[variable_id].to_s
-  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:\n<ar>{2}</ar>",name, pointsString))
+  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:\n<ar>{2}</ar>", name, pointsString))
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text, Graphics.width)
   pointswindow.width = 160 if pointswindow.width <= 160
@@ -441,11 +440,11 @@ def pbDisplayVariableWindow(msgwindow,name,variable_id)
   return pointswindow
 end
 
-def pbDisplayTwoVariableWindow(msgwindow,name1,variable1_id,name2, variable2_id)
+def pbDisplayTwoVariableWindow(msgwindow, name1, variable1_id, name2, variable2_id)
   pointsString1 = $game_variables[variable1_id].to_s
   pointsString2 = $game_variables[variable2_id].to_s
 
-  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:<ar>{2}</ar>\n{3}:<ar>{4}</ar>",name1, pointsString1,name2,pointsString2))
+  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:<ar>{2}</ar>\n{3}:<ar>{4}</ar>", name1, pointsString1, name2, pointsString2))
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text, Graphics.width)
   pointswindow.width = 160 if pointswindow.width <= 160
@@ -551,10 +550,10 @@ end
 # Main message-displaying function
 #===============================================================================
 def pbMessageDisplayNoSound(msgwindow, message, letterbyletter = true, commandProc = nil)
-  pbMessageDisplay(msgwindow,message,letterbyletter,commandProc,false)
+  pbMessageDisplay(msgwindow, message, letterbyletter, commandProc, false)
 end
 
-def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil,withSound=true)
+def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil, withSound = true)
   return if !msgwindow
   oldletterbyletter = msgwindow.letterbyletter
   msgwindow.letterbyletter = (letterbyletter) ? true : false
@@ -730,15 +729,17 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       param = controls[i][1]
       case control
       when "f"
-        isFusion = param.to_i > NB_POKEMON
-        head = getBasePokemonID(param.to_i, false)
-        body = getBasePokemonID(param.to_i, true)
-        facewindow.dispose if facewindow
-        path = obtainPokemonSpritePath(body, head, $game_variables[VAR_CUSTOM_SPRITES_ENABLED] == 0)
-        facewindow = isFusion ? PictureWindow.new(path) : PictureWindow.new("Graphics/Battlers/#{head}/#{head}.png")
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        facewindow.viewport = msgwindow.viewport
-        facewindow.z = msgwindow.z
+        if param.to_i > 0
+          isFusion = param.to_i > NB_POKEMON
+          head = getBasePokemonID(param.to_i, false)
+          body = getBasePokemonID(param.to_i, true)
+          facewindow.dispose if facewindow
+          path = obtainPokemonSpritePath(body, head, $game_variables[VAR_CUSTOM_SPRITES_ENABLED] == 0)
+          facewindow = isFusion ? PictureWindow.new(path) : PictureWindow.new("Graphics/Battlers/#{head}/#{head}.png")
+          pbPositionNearMsgWindow(facewindow, msgwindow, :left)
+          facewindow.viewport = msgwindow.viewport
+          facewindow.z = msgwindow.z
+        end
       when "ff"
         facewindow.dispose if facewindow
         facewindow = FaceWindowVX.new(param)
@@ -876,9 +877,9 @@ def pbMessageNoSound(message, commands = nil, cmdIfCancel = 0, skin = nil, defau
   msgwindow = pbCreateMessageWindow(nil, skin)
   if commands
     ret = pbMessageDisplayNoSound(msgwindow, message, true,
-                           proc { |msgwindow|
-                             next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
-                           }, &block)
+                                  proc { |msgwindow|
+                                    next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+                                  }, &block)
   else
     pbMessageDisplay(msgwindow, message, &block)
   end
@@ -886,7 +887,6 @@ def pbMessageNoSound(message, commands = nil, cmdIfCancel = 0, skin = nil, defau
   Input.update
   return ret
 end
-
 
 def pbConfirmMessage(message, &block)
   return (pbMessage(message, [_INTL("Yes"), _INTL("No")], 2, &block) == 0)

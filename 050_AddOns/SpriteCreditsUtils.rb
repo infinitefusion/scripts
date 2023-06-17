@@ -125,11 +125,42 @@ def list_all_spriters()
   return names_list
 end
 
+def generateCurrentGalleryBattle(level = nil, number_of_pokemon = 3)
+  spriter_name = pbGet(259)
+  #set highest level in party if nil
+  if !level
+    level = $Trainer.highest_level_pokemon_in_party
+  end
+  possible_battlers = []
+  for i in 0..5
+    sprite = pbGet(VAR_GALLERY_FEATURED_SPRITES)[i]
+    species = getPokemonSpeciesFromSprite(sprite)
+    possible_battlers << species if species
+  end
+
+  selected_battlers_idx = possible_battlers.sample(number_of_pokemon)
+  party = []
+  selected_battlers_idx.each { |species|
+    party << Pokemon.new(species, level)
+  }
+  customTrainerBattle(spriter_name,
+                      :PAINTER,
+                      party,
+                      level,
+                      pick_spriter_losing_dialog(spriter_name),
+                      pick_trainer_sprite(spriter_name)
+  )
+
+end
+
 def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, saveSpritesInVariable = 2, saveAllArtistSpritesInVariable = 3, artistName = nil)
   artistName = nil if artistName == 0
   creditsMap = map_sprites_by_artist
   featuredArtist = artistName ? artistName : getRandomSpriteArtist(creditsMap, nbSpritesDisplayed)
   if featuredArtist
+    if !creditsMap[featuredArtist]  #try again if issue
+      return generateArtGallery(nbSpritesDisplayed,saveSpritesInVariable,saveSpritesInVariable,saveSpritesInVariable,artistName)
+    end
     featuredSprites = creditsMap[featuredArtist].shuffle.take(nbSpritesDisplayed)
     pbSet(saveArtistNameInVariable, File.basename(featuredArtist, '#*'))
     pbSet(saveSpritesInVariable, featuredSprites)
@@ -143,7 +174,7 @@ def format_artist_name(full_name)
   return File.basename(full_name, '#*')
 end
 
-def getRandomSpriteArtist(creditsMap = nil, minimumNumberOfSprites = 1, giveUpAfterX = 50)
+def getRandomSpriteArtist(creditsMap = nil, minimumNumberOfSprites = 10, giveUpAfterX = 50)
   creditsMap = map_sprites_by_artist if !creditsMap
   i = 0
   while i < giveUpAfterX

@@ -17,6 +17,12 @@ class TripleFusion <  Pokemon
     super(:ZAPMOLTICUNO,level,owner,withMoves,recheck_form)
   end
 
+
+
+  def types
+    return [@species1_data.type1, @species2_data.type1,@species3_data.type1]
+  end
+
   def baseStats
     ret = {}
     GameData::Stat.each_main do |s|
@@ -33,6 +39,9 @@ class TripleFusion <  Pokemon
     return (nicknamed?) ? @name : @species_name
   end
 
+  def speciesName
+    return @species_name
+  end
 
   def generate_triple_fusion_name()
     part1 = split_string_with_syllables(@species1_data.name)[0]
@@ -58,6 +67,23 @@ class TripleFusion <  Pokemon
 
   end
 
+  def ability_id
+    if !@ability
+      abil_index = ability_index
+      if !@ability # Natural ability or no hidden ability defined
+        chosen_poke_for_ability= rand(1..3)
+        if chosen_poke_for_ability == 1
+          @ability = @species1_data.abilities[abil_index] || @species1_data.abilities[0]
+        elsif chosen_poke_for_ability == 2
+          @ability = @species2_data.abilities[abil_index] || @species2_data.abilities[0]
+        else
+          @ability = @species3_data.abilities[abil_index] || @species3_data.abilities[0]
+        end
+
+      end
+    end
+    return @ability
+  end
 
 
 end

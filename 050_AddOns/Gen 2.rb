@@ -145,6 +145,7 @@ end
 #param2 = true pour body, false pour head
 #return int du pokemon de base
 def getBasePokemonID(pokemon, body = true)
+  return nil if pokemon <= 0
   if pokemon.is_a?(Symbol)
     dex_number = GameData::Species.get(pokemon).id_number
     pokemon = dex_number
