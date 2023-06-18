@@ -140,7 +140,7 @@ def generateCurrentGalleryBattle(level = nil, number_of_pokemon = 3)
 
   selected_battlers_idx = possible_battlers.sample(number_of_pokemon)
   party = []
-  selected_battlers_idx.each { |species|
+  selected_battlers_idx.each { |species|00
     party << Pokemon.new(species, level)
   }
   customTrainerBattle(spriter_name,
@@ -159,6 +159,7 @@ def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, sav
   featuredArtist = artistName ? artistName : getRandomSpriteArtist(creditsMap, nbSpritesDisplayed)
   if featuredArtist
     if !creditsMap[featuredArtist]  #try again if issue
+      artistName = getRandomSpriteArtist(creditsMap, nbSpritesDisplayed)
       return generateArtGallery(nbSpritesDisplayed,saveSpritesInVariable,saveSpritesInVariable,saveSpritesInVariable,artistName)
     end
     featuredSprites = creditsMap[featuredArtist].shuffle.take(nbSpritesDisplayed)
