@@ -10,7 +10,6 @@ class FusionQuiz
   def initialize(difficulty = :REGULAR)
     @sprites      = {}
 
-    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @previewwindow=nil
     @difficulty = difficulty
     @customs_list = getCustomSpeciesList(true, false)
@@ -81,7 +80,6 @@ class FusionQuiz
     correct_answers << new_question(base_points_q1*round_multiplier, "Which Pokémon is this fusion's body?",@body_id,true,true )
     pbMessage("Next question!")
     correct_answers << new_question(base_points_q2*round_multiplier,"Which Pokémon is this fusion's head?", @head_id,true,true )
-    @viewport.dispose
 
     show_fusion_picture(false )
     #NON-OBSCURED
@@ -101,7 +99,6 @@ class FusionQuiz
       pbMessage("Wow! A perfect round! Let's see what this Pokémon looked like!")
     end
     hide_fusion_picture()
-    @viewport.dispose
 
   end
 
@@ -177,6 +174,8 @@ class FusionQuiz
       confirmed = pbMessage("Is this your final answer?",["Yes","No"])
       if confirmed==0
         question_answered=true
+      else
+        should_generate_new_choices=false
       end
     end
     return player_answer == answer_pokemon_name
@@ -194,9 +193,8 @@ class FusionQuiz
   end
 
   def prompt_pick_answer_regular(prompt_message,real_answer,should_new_choices)
-    commands = should_new_choices ? generate_new_choices(real_answer) : @choices
+    commands = should_new_choices ? generate_new_choices(real_answer) : @choices.shuffle
     chosen = pbMessage(prompt_message,commands)
-    #chosen = pbChooseList(commands, 0, nil, 1)
     return commands[chosen]
   end
 
@@ -233,6 +231,10 @@ class FusionQuiz
 
   def player_abandonned
     return @abandonned
+  end
+
+  def dispose
+    @previewwindow.dispose
   end
 
 end
