@@ -18,7 +18,7 @@ class FusionQuiz
     @head_id = nil
     @body_id = nil
     @choices = []
-
+    @abandonned=false
     @score = 0
   end
 
@@ -40,18 +40,18 @@ class FusionQuiz
 
       rounds_left = nb_rounds-i
       if rounds_left >0
-        pbMessage(_INTL("That's it for round {1}. You've accumulated {2} points so far.",i,@score))
+        pbMessage(_INTL("That's it for round {1}. You've cumulated {2} points so far.",i,@score))
         prompt_next_round = pbMessage(_INTL("Are you ready to move on to the next round?",i),["Yes","No"])
         if prompt_next_round != 0
           prompt_quit = pbMessage(_INTL("You still have {1} rounds to go. You'll only keep your points if you finish all {2} rounds. Do you really want to quit now?",rounds_left,nb_rounds),["Yes","No"])
           if prompt_quit
-            pbMessage(_INTL("Well that's the show, folks. Make sure to tune in next time for some more Guess The Fusion!"))
+            @abandonned=true
             return
           end
         end
         round_multiplier += round_multiplier_increase
       else
-        pbMessage(_INTL("That concludes our quiz! You've accumulated {1} points in total.",@score))
+        pbMessage(_INTL("That concludes our quiz! You've cumulated {1} points in total.",@score))
         pbMessage("Thanks for playing with us today!")
       end
     end
@@ -60,11 +60,17 @@ class FusionQuiz
   end
 
   def start_quiz_new_round(round_multiplier=1)
-    base_points_q1=300
-    base_points_q1_redemption=100
-
-    base_points_q2=400
-    base_points_q2_redemption=100
+    if @difficulty == :ADVANCED
+      base_points_q1=500
+      base_points_q1_redemption=200
+      base_points_q2=600
+      base_points_q2_redemption=200
+    else
+      base_points_q1=300
+      base_points_q1_redemption=100
+      base_points_q2=400
+      base_points_q2_redemption=100
+    end
 
 
     pick_random_pokemon()
@@ -92,7 +98,7 @@ class FusionQuiz
         new_question(base_points_q2_redemption,"Which Pokémon is this fusion's head?", @head_id,true,false )
       end
     else
-      pbMessage("A perfect round! Here's what this Pokémon looked like!")
+      pbMessage("Wow! A perfect round! Let's see what this Pokémon looked like!")
     end
     hide_fusion_picture()
     @viewport.dispose
@@ -139,7 +145,7 @@ class FusionQuiz
     bitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
     @previewwindow = PictureWindow.new(bitmap)
     @previewwindow.y = 30
-    @previewwindow.x = 100
+    @previewwindow.x = @difficulty==:ADVANCED ? 200 : 100
     @previewwindow.z = 100000
     if obscured
       @previewwindow.picture.pbSetColor(255, 255, 255, 200)
@@ -212,16 +218,21 @@ class FusionQuiz
 
 
   def prompt_pick_answer_advanced(prompt_message,answer)
-    choices.each do |dex_num, i|
+    commands = []
+    for dex_num in 1..NB_POKEMON
       species = getPokemon(dex_num)
-      commands.push([i, species.real_name, species.real_name])
+      commands.push([dex_num-1, species.real_name, species.real_name])
     end
     pbMessage(prompt_message)
-    #chosen = pbChooseList(commands, 0, nil, 1)
+    return  pbChooseList(commands, 0, nil, 1)
   end
 
   def get_score
     return @score
+  end
+
+  def player_abandonned
+    return @abandonned
   end
 
 end

@@ -1917,7 +1917,7 @@ class PokemonStorageScreen
             p = (heldpoke) ? heldpoke : @storage[-1, index]
             p.time_form_set = nil
             p.form = 0 if p.isSpecies?(:SHAYMIN)
-            p.heal
+            #p.heal
           end
           @scene.pbStore(selected, heldpoke, destbox, firstfree)
           if heldpoke
@@ -1964,7 +1964,7 @@ class PokemonStorageScreen
     if box >= 0
       @heldpkmn.time_form_set = nil
       @heldpkmn.form = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
-      @heldpkmn.heal
+      #@heldpkmn.heal
     end
     @scene.pbPlace(selected, @heldpkmn)
     @storage[box, index] = @heldpkmn
@@ -1993,7 +1993,7 @@ class PokemonStorageScreen
     if box >= 0
       @heldpkmn.time_form_set = nil
       @heldpkmn.form = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
-      @heldpkmn.heal
+      #@heldpkmn.heal
     end
     @scene.pbSwap(selected, @heldpkmn)
     tmp = @storage[box, index]

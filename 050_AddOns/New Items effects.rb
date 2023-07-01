@@ -1865,3 +1865,17 @@ ItemHandlers::BattleUseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, battl
 ItemHandlers::UseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 50, scene)
 })
+
+ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
+  blacklisted_maps = [
+    315,316,317,318,328,343,#Elite Four
+    776,777,778,779,780,781,782,783,784, #Mt. Silver
+    722,723,724,720 #Dream sequence
+  ]
+  if blacklisted_maps.include?($game_map.map_id)
+    Kernel.pbMessage("There doesn't seem to be any network coverage here...")
+  else
+    pbPokeCenterPC()
+  end
+  next 1
+})
