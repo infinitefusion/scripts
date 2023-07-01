@@ -188,6 +188,7 @@ class PokemonIconSprite < SpriteWrapper
     icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
 
     dexNum = getDexNumberForSpecies(@pokemon.species)
+    ensureFusionIconExists
     bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
     headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)

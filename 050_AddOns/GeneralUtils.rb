@@ -48,6 +48,11 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
 end
 
 
+def ensureFusionIconExists
+  directory_name = "Graphics/Pokemon/FusionIcons"
+  Dir.mkdir(directory_name) unless File.exists?(directory_name)
+end
+
 def addNewTripleFusion(pokemon1,pokemon2,pokemon3,level = 1)
   return if !pokemon1
   return if !pokemon2
