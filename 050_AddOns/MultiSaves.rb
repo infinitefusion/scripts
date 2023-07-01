@@ -115,7 +115,12 @@ module SaveData
     self.each_slot do |file_slot|
       full_path = self.get_full_path(file_slot)
       next if !File.file?(full_path)
-      temp_save_data = self.read_from_file(full_path)
+      begin
+        temp_save_data = self.read_from_file(full_path)
+      rescue
+        next
+      end
+
       save_time = temp_save_data[:player].last_time_saved || Time.at(1)
       if save_time > newest_time
         newest_time = save_time
@@ -266,15 +271,24 @@ class PokemonLoadScreen
   # @param file_path [String] file to load save data from
   # @return [Hash] save data
   def load_save_file(file_path)
-    save_data = SaveData.read_from_file(file_path)
+    begin
+      save_data = SaveData.read_from_file(file_path)
+    rescue
+      save_data =try_load_backup(file_path)
+    end
     unless SaveData.valid?(save_data)
-      if File.file?(file_path + ".bak")
-        pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
-        save_data = load_save_file(file_path + ".bak")
-      else
-        self.prompt_save_deletion(file_path)
-        return {}
-      end
+      save_data =try_load_backup(file_path)
+    end
+    return save_data
+  end
+
+  def try_load_backup(file_path)
+    if File.file?(file_path + ".bak")
+      pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
+      save_data = load_save_file(file_path + ".bak")
+    else
+      self.prompt_save_deletion(file_path)
+      return {}
     end
     return save_data
   end
@@ -300,7 +314,7 @@ class PokemonLoadScreen
   end
 
   def checkEnableSpritesDownload
-    if $PokemonSystem.download_sprites && $PokemonSystem.download_sprites  != 0
+    if $PokemonSystem.download_sprites && $PokemonSystem.download_sprites != 0
       customSprites = getCustomSpeciesList
       if !customSprites
         promptEnableSpritesDownload
@@ -323,7 +337,7 @@ class PokemonLoadScreen
     updateCreditsFile
     newer_version = find_newer_available_version
     if newer_version
-      pbMessage(_INTL("Version {1} is now available! Please check the game's official page to download the newest version.",newer_version))
+      pbMessage(_INTL("Version {1} is now available! Please check the game's official page to download the newest version.", newer_version))
     end
 
     if ($game_temp.unimportedSprites && $game_temp.unimportedSprites.size > 0)
