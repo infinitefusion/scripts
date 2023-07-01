@@ -1875,7 +1875,11 @@ ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
   if blacklisted_maps.include?($game_map.map_id)
     Kernel.pbMessage("There doesn't seem to be any network coverage here...")
   else
-    pbPokeCenterPC()
+    pbFadeOutIn {
+      scene = PokemonStorageScene.new
+      screen = PokemonStorageScreen.new(scene,$PokemonStorage)
+      screen.pbStartScreen(0) #Boot PC in organize mode
+    }
   end
   next 1
 })
