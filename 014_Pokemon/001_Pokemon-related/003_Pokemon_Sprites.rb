@@ -187,13 +187,20 @@ class PokemonIconSprite < SpriteWrapper
     icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
     icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
 
+    dexNum = getDexNumberForSpecies(@pokemon.species)
+    bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
+    headPokeFileName = GameData::Species.icon_filename(headPoke)
+    bitmapPath = sprintf("%s.png", bitmapFileName)
+    IO.copy_stream(headPokeFileName, bitmapPath)
+    result_icon = AnimatedBitmap.new(bitmapPath)
+
     for i in 0..icon1.width-1
       for j in ((icon1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..icon1.height-1
         temp = icon2.bitmap.get_pixel(i, j)
-        icon1.bitmap.set_pixel(i, j, temp)
+        result_icon.bitmap.set_pixel(i, j, temp)
       end
     end
-    return icon1
+    return result_icon
   end
 
   def setOffset(offset = PictureOrigin::Center)
