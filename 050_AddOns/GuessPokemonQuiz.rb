@@ -55,7 +55,7 @@ class FusionQuiz
         end
         round_multiplier += round_multiplier_increase
       else
-        pbMessage(_INTL("That concludes our quiz! You've cumulated {1} points in total.", @score))
+        pbMessage(_INTL("This concludes our quiz! You've cumulated {1} points in total.", @score))
         pbMessage("Thanks for playing with us today!")
       end
     end
@@ -185,7 +185,7 @@ class FusionQuiz
       pbSEPlay("buzzer", 80)
       break_streak
       pbMessage("Unfortunately, that was a wrong answer.")
-      pbMessage("But you'll get another chance!") if other_chance_later
+      pbMessage("But you'll get another chance at it!") if other_chance_later
     end
   end
 

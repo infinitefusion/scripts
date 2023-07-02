@@ -330,6 +330,11 @@ class PokemonBag_Scene
     end
   end
 
+  def get_current_pocket
+    itemwindow = @sprites["itemlist"]
+    return @bag.pockets[itemwindow.pocket]
+  end
+
   # Called when the item screen wants an item to be chosen from the screen
   def pbChooseItem
     @sprites["helpwindow"].visible = false
@@ -459,6 +464,7 @@ class PokemonBagScreen
       cmdRegister = -1
       cmdGive     = -1
       cmdToss     = -1
+      cmdSort     = -1
       cmdDebug    = -1
       commands = []
       # Generate command list
@@ -477,6 +483,7 @@ class PokemonBagScreen
       elsif pbCanRegisterItem?(item)
         commands[cmdRegister = commands.length] = _INTL("Register")
       end
+      commands[cmdSort = commands.length]        = _INTL("Sort bag")
       commands[cmdDebug = commands.length]      = _INTL("Debug") if $DEBUG
       commands[commands.length]                 = _INTL("Cancel")
       # Show commands generated above
@@ -524,6 +531,24 @@ class PokemonBagScreen
           @bag.pbUnregisterItem(item)
         else
           @bag.pbRegisterItem(item)
+        end
+        @scene.pbRefresh
+      elsif cmdSort >=0 && command == cmdSort # Sort bag
+        command = @scene.pbShowCommands(_INTL("How to sort?",itemname),[
+          _INTL("Alphabetically"),
+          _INTL("By quantity"),
+          # _INTL("Recently used"),
+          # _INTL("Recently obtained"),
+          _INTL("Cancel")
+        ],0)
+        case command
+          ### Cancel ###
+        when -1, 3
+          next
+        when 0
+          @bag.sort_pocket_alphabetically()
+        when 1
+          @bag.sort_pocket_by_quantity()
         end
         @scene.pbRefresh
       elsif cmdDebug>=0 && command==cmdDebug   # Debug
