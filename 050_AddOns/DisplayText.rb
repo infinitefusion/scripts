@@ -3,8 +3,8 @@ def Kernel.pbDisplayText(message,xposition,yposition,z=nil, baseColor=nil, shado
     @hud = []
   end
   # Draw the text
-    baseColor= baseColor != nil ? baseColor : Color.new(72,72,72)
-    shadowColor= shadowColor !=nil ? shadowColor : Color.new(160,160,160)
+    baseColor= baseColor ? baseColor : Color.new(72,72,72)
+    shadowColor= shadowColor ? shadowColor : Color.new(160,160,160)
     sprite = BitmapSprite.new(Graphics.width,Graphics.height,@viewport1)
     if z != nil
       sprite.z=z
