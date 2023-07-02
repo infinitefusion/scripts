@@ -112,7 +112,7 @@ class PokeRadar_UI
     bitmap1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
     bitmap2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
     ensureFusionIconExists()
-    bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", pokemonId)
+    bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", headPoke_number)
     headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)
     IO.copy_stream(headPokeFileName, bitmapPath)
