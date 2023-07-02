@@ -64,11 +64,13 @@ class FusionQuiz
       base_points_q1_redemption=200
       base_points_q2=600
       base_points_q2_redemption=200
+      perfect_round_points=100
     else
       base_points_q1=300
       base_points_q1_redemption=100
       base_points_q2=400
       base_points_q2_redemption=100
+      perfect_round_points=50
     end
 
 
@@ -81,22 +83,26 @@ class FusionQuiz
     pbMessage("Next question!")
     correct_answers << new_question(base_points_q2*round_multiplier,"Which Pokémon is this fusion's head?", @head_id,true,true )
 
-    show_fusion_picture(false )
     #NON-OBSCURED
     if !correct_answers[0] || !correct_answers[1]
+      show_fusion_picture(false )
       pbMessage("Okay, now's your chance to make up for the points you missed!")
       if !correct_answers[0] #1st question redemption
-        new_question(base_points_q1_redemption, "Which Pokémon is this fusion's body?",@body_id,true,false )
+        new_question(base_points_q1_redemption*round_multiplier, "Which Pokémon is this fusion's body?",@body_id,true,false )
         if !correct_answers[1]
           pbMessage("Next question!")
         end
       end
 
       if !correct_answers[1] #2nd question redemption
-        new_question(base_points_q2_redemption,"Which Pokémon is this fusion's head?", @head_id,true,false )
+        new_question(base_points_q2_redemption*round_multiplier,"Which Pokémon is this fusion's head?", @head_id,true,false )
       end
-    else
-      pbMessage("Wow! A perfect round! Let's see what this Pokémon looked like!")
+      else
+      pbSEPlay("Applause",80)
+      pbMessage(_INTL("Wow! A perfect round! You get {1} more points!",perfect_round_points))
+      show_fusion_picture(false,100 )
+      pbMessage("Let's see what this Pokémon looked like!")
+
     end
     hide_fusion_picture()
 
@@ -126,23 +132,25 @@ class FusionQuiz
     end
 
     if answered_correctly
+      pbSEPlay("itemlevel",80)
       pbMessage("That's a correct answer!")
       pbMessage(_INTL("You're awarded {1} points for your answer. Your current score is {2}",points_awarded_if_win,@score.to_s))
     else
+      pbSEPlay("buzzer",80)
       pbMessage("Unfortunately, that was a wong answer.")
       pbMessage("But you'll get another chance!") if other_chance_later
     end
   end
 
 
-  def show_fusion_picture(obscured = false)
+  def show_fusion_picture(obscured = false,x=nil, y=nil)
     hide_fusion_picture()
     picturePath = get_fusion_sprite_path(@head_id, @body_id)
     bitmap = AnimatedBitmap.new(picturePath)
     bitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
     @previewwindow = PictureWindow.new(bitmap)
-    @previewwindow.y = 30
-    @previewwindow.x = @difficulty==:ADVANCED ? 200 : 100
+    @previewwindow.y = y ? y : 30
+    @previewwindow.x = x ? x : (@difficulty==:ADVANCED ? 275 : 100)
     @previewwindow.z = 100000
     if obscured
       @previewwindow.picture.pbSetColor(255, 255, 255, 200)
@@ -224,6 +232,7 @@ class FusionQuiz
     pbMessage(prompt_message)
     return  pbChooseList(commands, 0, nil, 1)
   end
+
 
   def get_score
     return @score
