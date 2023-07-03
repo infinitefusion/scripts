@@ -19,10 +19,12 @@ class PokeBattle_Battler
 
   #Secondary ability utility methods for battlers class
   def ability2
+    return nil if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     return GameData::Ability.try_get(@ability2_id)
   end
 
   def ability2=(value)
+    return if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     new_ability = GameData::Ability.try_get(value)
     @ability2_id = (new_ability) ? new_ability.id : nil
   end
@@ -42,6 +44,7 @@ class PokeBattle_Battler
   end
 
   def hasActiveAbilityDouble?(check_ability, ignore_fainted = false)
+    return false if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     return false if !abilityActive?(ignore_fainted)
     if check_ability.is_a?(Array)
       return check_ability.include?(@ability_id) || check_ability.include?(@ability2_id)
@@ -148,15 +151,18 @@ class Pokemon
 
   #Secondary ability utility methods for pokemon class
   def ability2_index
+    return nil if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     @ability2_index = (@personalID & 1) if !@ability2_index
     return @ability2_index
   end
 
   def ability2
+    return nil if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     return GameData::Ability.try_get(ability2_id())
   end
 
   def ability2=(value)
+    return if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     return if value && !GameData::Ability.exists?(value)
     @ability2 = (value) ? GameData::Ability.get(value).id : value
   end
@@ -183,6 +189,7 @@ class Pokemon
   end
 
   def ability2_id
+    return nil if !$game_switches[SWITCH_DOUBLE_ABILITIES]
     if !@ability2
       sp_data = species_data
       abil_index = ability_index
@@ -244,10 +251,6 @@ class PokemonFusionScene
     if scene.hasNickname
       @pokemon1.name = scene.nickname
     end
-
-    p @pokemon1.ability.real_name
-    p @pokemon1.ability2.real_name
-
   end
 
 end

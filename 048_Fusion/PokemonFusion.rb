@@ -730,6 +730,7 @@ class PokemonFusionScene
         @pokemon1.steps_to_hatch = @pokemon1.species_data.hatch_steps
       end
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
+      #
       pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
 
       setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves
