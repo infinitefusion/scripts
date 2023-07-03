@@ -85,14 +85,13 @@ def download_custom_sprite(head_id, body_id)
 end
 
 def download_unfused_alt_sprites(dex_num)
-  base_url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Other/Alternate%20Base%20Sprites/{1}"
+  base_url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Other/Base%20Sprites/{1}"
   extension = ".png"
   destPath = _INTL("{1}", Settings::CUSTOM_BASE_SPRITES_FOLDER)
   if !Dir.exist?(destPath)
     Dir.mkdir(destPath)
   end
   alt_url = _INTL(base_url,dex_num)  + extension
-
   download_sprite(alt_url, dex_num,nil, destPath )
   alphabet = ('a'..'z').to_a
   alphabet.each do |letter|
