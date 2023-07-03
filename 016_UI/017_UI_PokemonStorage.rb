@@ -33,8 +33,9 @@ class PokemonBoxIcon < IconSprite
 
     icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
     icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
+    dexNum = getDexNumberForSpecies(species)
     ensureFusionIconExists
-    bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", headPoke_number)
+    bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
     headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)
     IO.copy_stream(headPokeFileName, bitmapPath)
