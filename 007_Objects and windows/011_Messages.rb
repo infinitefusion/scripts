@@ -734,7 +734,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
           head = getBasePokemonID(param.to_i, false)
           body = getBasePokemonID(param.to_i, true)
           facewindow.dispose if facewindow
-          path = obtainPokemonSpritePath(body, head, $game_variables[VAR_CUSTOM_SPRITES_ENABLED] == 0)
+          path = obtainPokemonSpritePath(body, head, true)
           facewindow = isFusion ? PictureWindow.new(path) : PictureWindow.new("Graphics/Battlers/#{head}/#{head}.png")
           pbPositionNearMsgWindow(facewindow, msgwindow, :left)
           facewindow.viewport = msgwindow.viewport
