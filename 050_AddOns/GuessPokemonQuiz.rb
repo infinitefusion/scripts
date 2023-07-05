@@ -191,12 +191,16 @@ class FusionQuiz
 
   def current_streak_dialog()
     return if @current_streak ==0
+    streak_base_worth= @difficulty == :REGULAR ? 25 : 100
     if @current_streak % 4 == 0
+      extra_points = (@current_streak/4)*streak_base_worth
       if @current_streak >= 8
         pbMessage(_INTL("That's {1} correct answers in a row. You're on a roll!", @current_streak))
       else
         pbMessage(_INTL("That's {1} correct answers in a row. You're doing great!", @current_streak))
       end
+      pbMessage(_INTL("Here's {1} extra points for maintaining a streak!",extra_points))
+      award_points(extra_points)
     end
   end
 
@@ -229,7 +233,6 @@ class FusionQuiz
   def give_answer(prompt_message, answer_id, should_generate_new_choices)
     question_answered = false
     answer_pokemon_name = getPokemon(answer_id).real_name
-
     while !question_answered
       if @difficulty == :ADVANCED
         player_answer = prompt_pick_answer_advanced(prompt_message, answer_id)
