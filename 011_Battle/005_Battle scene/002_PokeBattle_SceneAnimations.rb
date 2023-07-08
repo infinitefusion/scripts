@@ -621,7 +621,7 @@ class BattlerDamageAnimation < PokeBattle_Animation
     # Animation
     delay = 0
     case @effectiveness
-    when 0 then battler.setSE(delay, "Battle damage normal")
+    when 0 then battler.setSE(delay, "Battle damage normal");
     when 1 then battler.setSE(delay, "Battle damage weak")
     when 2 then battler.setSE(delay, "Battle damage super")
     end
