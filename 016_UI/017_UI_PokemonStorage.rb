@@ -1671,7 +1671,7 @@ class PokemonStorageScreen
                   commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
                   commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0 || $PokemonBag.pbQuantity(:INFINITEREVERSERS) > 0
                 else
-                  commands[cmdFuse = commands.length] = _INTL("Fuse")
+                  commands[cmdFuse = commands.length] = _INTL("Fuse") if !@heldpkmn
                 end
               end
               commands[cmdNickname = commands.length] = _INTL("Nickname")
@@ -2201,7 +2201,6 @@ class PokemonStorageScreen
           pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
           return
         end
-        p selected
         if(heldpoke.egg?)
           pbDisplay(_INTL("It's impossible to fuse an egg!"))
           return
