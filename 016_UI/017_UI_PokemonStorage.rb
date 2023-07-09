@@ -1674,7 +1674,7 @@ class PokemonStorageScreen
                   commands[cmdFuse = commands.length] = _INTL("Fuse") if !@heldpkmn
                 end
               end
-              commands[cmdNickname = commands.length] = _INTL("Nickname")
+              commands[cmdNickname = commands.length] = _INTL("Nickname") if !@heldpkmn
               commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
               commands[cmdItem = commands.length] = _INTL("Item")
 
