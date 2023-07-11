@@ -116,8 +116,8 @@ class PokeRadar_UI
     bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
     headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)
-    IO.copy_stream(headPokeFileName, bitmapPath)
-    result_bitmap = AnimatedBitmap.new(bitmapPath)
+    generated_new_icon = generateFusionIcon(headPokeFileName,bitmapPath)
+    result_bitmap = generated_new_icon ? AnimatedBitmap.new(bitmapPath) : bitmap1
 
     for i in 0..bitmap1.width-1
       for j in ((bitmap1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..bitmap1.height-1

@@ -13,7 +13,7 @@ def pbAddPokemonID(pokemon, level = nil, seeform = true, dontRandomize = false)
   end
   #random species if randomized gift pokemon &  wild poke
   if $game_switches[SWITCH_RANDOM_GIFT_POKEMON] && $game_switches[SWITCH_RANDOM_WILD] && !dontRandomize
-    tryRandomizeGiftPokemon(pokemon,dontRandomize)
+    tryRandomizeGiftPokemon(pokemon, dontRandomize)
   end
 
   speciesname = PBSpecies.getName(pokemon.species)
@@ -38,7 +38,7 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
 
   #random species if randomized gift pokemon &  wild poke
   if $game_switches[SWITCH_RANDOM_GIFT_POKEMON] && $game_switches[SWITCH_RANDOM_WILD] && !skip_randomize
-    tryRandomizeGiftPokemon(pokemon,skip_randomize)
+    tryRandomizeGiftPokemon(pokemon, skip_randomize)
   end
 
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
@@ -47,13 +47,21 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
   return true
 end
 
+def generateFusionIcon(dexNum, path)
+  begin
+    IO.copy_stream(dexNum, path)
+    return true
+  rescue
+    return false
+  end
+end
 
 def ensureFusionIconExists
   directory_name = "Graphics/Pokemon/FusionIcons"
   Dir.mkdir(directory_name) unless File.exists?(directory_name)
 end
 
-def addNewTripleFusion(pokemon1,pokemon2,pokemon3,level = 1)
+def addNewTripleFusion(pokemon1, pokemon2, pokemon3, level = 1)
   return if !pokemon1
   return if !pokemon2
   return if !pokemon3
@@ -64,7 +72,7 @@ def addNewTripleFusion(pokemon1,pokemon2,pokemon3,level = 1)
     return false
   end
 
-  pokemon = TripleFusion.new(pokemon1,pokemon2,pokemon3,level)
+  pokemon = TripleFusion.new(pokemon1, pokemon2, pokemon3, level)
   pokemon.calc_stats
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, pokemon.name))
   pbNicknameAndStore(pokemon)
@@ -85,9 +93,8 @@ def pbHasSpecies?(species)
   return false
 end
 
-
 #ancienne methode qui est encore callée un peu partout dans les vieux scripts
-def getID(pbspecies_unused,species)
+def getID(pbspecies_unused, species)
   if species.is_a?(String)
     return nil
   elsif species.is_a?(Symbol)
@@ -96,6 +103,7 @@ def getID(pbspecies_unused,species)
     id = species.dexNum
   end
 end
+
 #Check if the Pokemon can learn a TM
 def CanLearnMove(pokemon, move)
   species = getID(PBSpecies, pokemon)
@@ -138,8 +146,6 @@ def getDexNumberForSpecies(species)
   return dexNum
 end
 
-
-
 def getPokemon(dexNum)
   return GameData::Species.get(dexNum)
 end
@@ -152,7 +158,6 @@ def getSpeciesIdForFusion(head_id, body_id)
   return (body_id) * Settings::NB_POKEMON + head_id
 end
 
-
 #shortcut for using in game events because of script characters limit
 def dexNum(species)
   return getDexNumberForSpecies(species)
@@ -162,10 +167,9 @@ def isTripleFusion?(num)
   return num >= Settings::ZAPMOLCUNO_NB
 end
 
-
 def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
   if customPokeList.length == 0
-    customPokeList = getCustomSpeciesList(false )
+    customPokeList = getCustomSpeciesList(false)
   end
   randPoke = []
   if customPokeList.length >= 5000
@@ -191,11 +195,10 @@ def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customP
   return randPoke
 end
 
-
-def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx=nil, srcy=nil, width=nil, height=nil,
-                                 showSecondStarUnder=false, showSecondStarAbove=false )
-  color = debugShiny ? Color.new(0,0,0,255) : nil
-  imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
+def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx = nil, srcy = nil, width = nil, height = nil,
+                                 showSecondStarUnder = false, showSecondStarAbove = false)
+  color = debugShiny ? Color.new(0, 0, 0, 255) : nil
+  imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
   if shinyBody && shinyHead
     if showSecondStarUnder
       yPos += 15
@@ -204,7 +207,7 @@ def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, d
     else
       xPos -= 15
     end
-    imageArray.push(["Graphics/Pictures/shiny",xPos,yPos,srcx,srcy,width,height,color])
+    imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
   end
   # if onlyOutline
   #   imageArray.push(["Graphics/Pictures/shiny_black",xPos,yPos,srcx,srcy,width,height,color])
@@ -212,7 +215,7 @@ def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, d
 
 end
 
-def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3, maxBST=300)
+def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3, maxBST = 300)
   if customPokeList.length == 0
     customPokeList = getCustomSpeciesList()
   end
@@ -235,11 +238,10 @@ def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList 
   return randPoke
 end
 
-
 def getBodyID(species)
   dexNum = getDexNumberForSpecies(species)
-  if dexNum % NB_POKEMON ==0
-    return (dexNum/NB_POKEMON)-1
+  if dexNum % NB_POKEMON == 0
+    return (dexNum / NB_POKEMON) - 1
   end
   return (dexNum / NB_POKEMON).round
 end
@@ -409,16 +411,12 @@ def obtainPokemonSpritePath(id, includeCustoms = true)
   return obtainPokemonSpritePath(body, head, includeCustoms)
 end
 
-
-
-
-
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
-  download_pokemon_sprite_if_missing(bodyId,headId)
+  download_pokemon_sprite_if_missing(bodyId, headId)
   picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
 
-  if include_customs && customSpriteExistsBodyHead(bodyId,headId)
-    pathCustom = getCustomSpritePath(bodyId,headId)
+  if include_customs && customSpriteExistsBodyHead(bodyId, headId)
+    pathCustom = getCustomSpritePath(bodyId, headId)
     if (pbResolveBitmap(pathCustom))
       picturePath = pathCustom
     end
@@ -426,14 +424,14 @@ def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
   return picturePath
 end
 
-def getCustomSpritePath(body,head)
+def getCustomSpritePath(body, head)
   return _INTL("Graphics/CustomBattlers/indexed/{1}/{1}.{2}.png", head, body)
 end
 
 def customSpriteExists(species)
   head = getBasePokemonID(species, false)
   body = getBasePokemonID(species, true)
-  pathCustom = getCustomSpritePath(body,head)
+  pathCustom = getCustomSpritePath(body, head)
 
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
@@ -443,16 +441,15 @@ def checkIfCustomSpriteExistsByPath(path)
   return true if pbResolveBitmap(path) != nil
 end
 
-
 def customSpriteExistsBodyHead(body, head)
-  pathCustom = getCustomSpritePath(body,head)
+  pathCustom = getCustomSpritePath(body, head)
 
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
 end
 
-def customSpriteExistsBase(body,head)
-  pathCustom = getCustomSpritePath(body,head)
+def customSpriteExistsBase(body, head)
+  pathCustom = getCustomSpritePath(body, head)
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
 end
@@ -521,48 +518,46 @@ def reverseFusionSpecies(species)
 end
 
 def Kernel.getRoamingMap(roamingArrayPos)
-  curmap=$PokemonGlobal.roamPosition[roamingArrayPos]
-  mapinfos=$RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
-  text= mapinfos[curmap].name#,(curmap==$game_map.map_id) ? _INTL("(this map)") : "")
+  curmap = $PokemonGlobal.roamPosition[roamingArrayPos]
+  mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
+  text = mapinfos[curmap].name #,(curmap==$game_map.map_id) ? _INTL("(this map)") : "")
   return text
 end
 
 def Kernel.listPlatesInBag()
   list = []
-  list << PBItems::FISTPLATE if $PokemonBag.pbQuantity(:FISTPLATE)>=1
-  list << PBItems::SKYPLATE if $PokemonBag.pbQuantity(:SKYPLATE)>=1
-  list << PBItems::TOXICPLATE if $PokemonBag.pbQuantity(:TOXICPLATE)>=1
-  list << PBItems::EARTHPLATE if $PokemonBag.pbQuantity(:EARTHPLATE)>=1
-  list << PBItems::STONEPLATE if $PokemonBag.pbQuantity(:STONEPLATE)>=1
-  list << PBItems::INSECTPLATE if $PokemonBag.pbQuantity(:INSECTPLATE)>=1
-  list << PBItems::SPOOKYPLATE if $PokemonBag.pbQuantity(:SPOOKYPLATE)>=1
-  list << PBItems::IRONPLATE if $PokemonBag.pbQuantity(:IRONPLATE)>=1
-  list << PBItems::FLAMEPLATE if $PokemonBag.pbQuantity(:FLAMEPLATE)>=1
-  list << PBItems::SPLASHPLATE if $PokemonBag.pbQuantity(:SPLASHPLATE)>=1
-  list << PBItems::MEADOWPLATE if $PokemonBag.pbQuantity(:MEADOWPLATE)>=1
-  list << PBItems::ZAPPLATE if $PokemonBag.pbQuantity(:ZAPPLATE)>=1
-  list << PBItems::MINDPLATE if $PokemonBag.pbQuantity(:MINDPLATE)>=1
-  list << PBItems::ICICLEPLATE if $PokemonBag.pbQuantity(:ICICLEPLATE)>=1
-  list << PBItems::DRACOPLATE if $PokemonBag.pbQuantity(:DRACOPLATE)>=1
-  list << PBItems::DREADPLATE if $PokemonBag.pbQuantity(:DREADPLATE)>=1
-  list << PBItems::PIXIEPLATE if $PokemonBag.pbQuantity(:PIXIEPLATE)>=1
+  list << PBItems::FISTPLATE if $PokemonBag.pbQuantity(:FISTPLATE) >= 1
+  list << PBItems::SKYPLATE if $PokemonBag.pbQuantity(:SKYPLATE) >= 1
+  list << PBItems::TOXICPLATE if $PokemonBag.pbQuantity(:TOXICPLATE) >= 1
+  list << PBItems::EARTHPLATE if $PokemonBag.pbQuantity(:EARTHPLATE) >= 1
+  list << PBItems::STONEPLATE if $PokemonBag.pbQuantity(:STONEPLATE) >= 1
+  list << PBItems::INSECTPLATE if $PokemonBag.pbQuantity(:INSECTPLATE) >= 1
+  list << PBItems::SPOOKYPLATE if $PokemonBag.pbQuantity(:SPOOKYPLATE) >= 1
+  list << PBItems::IRONPLATE if $PokemonBag.pbQuantity(:IRONPLATE) >= 1
+  list << PBItems::FLAMEPLATE if $PokemonBag.pbQuantity(:FLAMEPLATE) >= 1
+  list << PBItems::SPLASHPLATE if $PokemonBag.pbQuantity(:SPLASHPLATE) >= 1
+  list << PBItems::MEADOWPLATE if $PokemonBag.pbQuantity(:MEADOWPLATE) >= 1
+  list << PBItems::ZAPPLATE if $PokemonBag.pbQuantity(:ZAPPLATE) >= 1
+  list << PBItems::MINDPLATE if $PokemonBag.pbQuantity(:MINDPLATE) >= 1
+  list << PBItems::ICICLEPLATE if $PokemonBag.pbQuantity(:ICICLEPLATE) >= 1
+  list << PBItems::DRACOPLATE if $PokemonBag.pbQuantity(:DRACOPLATE) >= 1
+  list << PBItems::DREADPLATE if $PokemonBag.pbQuantity(:DREADPLATE) >= 1
+  list << PBItems::PIXIEPLATE if $PokemonBag.pbQuantity(:PIXIEPLATE) >= 1
   return list
 end
 
 def Kernel.getItemNamesAsString(list)
   strList = ""
-  for i in 0..list.length-1
+  for i in 0..list.length - 1
     id = list[i]
-    name =PBItems.getName(id)
+    name = PBItems.getName(id)
     strList += name
-    if i != list.length-1 && list.length > 1
+    if i != list.length - 1 && list.length > 1
       strList += ","
     end
   end
   return strList
 end
-
-
 
 def Kernel.getPlateType(item)
   return :FIGHTING if item == PBItems::FISTPLATE
@@ -584,7 +579,8 @@ def Kernel.getPlateType(item)
   return :FAIRY if item == PBItems::PIXIEPLATE
   return -1
 end
-def get_default_moves_at_level(species,level)
+
+def get_default_moves_at_level(species, level)
   moveset = GameData::Species.get(species).moves
   knowable_moves = []
   moveset.each { |m| knowable_moves.push(m[1]) if m[0] <= level }
@@ -604,11 +600,10 @@ def get_default_moves_at_level(species,level)
   return moves
 end
 
-
 def find_newer_available_version
   latest_Version = fetch_latest_game_version
   return nil if !latest_Version
-  return nil if is_higher_version(Settings::GAME_VERSION_NUMBER,latest_Version)
+  return nil if is_higher_version(Settings::GAME_VERSION_NUMBER, latest_Version)
   return latest_Version
 end
 
@@ -640,28 +635,26 @@ def get_difficulty_text
   end
 end
 
-def change_game_difficulty(down_only=false)
+def change_game_difficulty(down_only = false)
   message = "The game is currently on " + get_difficulty_text() + " difficulty."
   pbMessage(message)
-
 
   choice_easy = "Easy"
   choice_normal = "Normal"
   choice_hard = "Hard"
   choice_cancel = "Cancel"
 
-
   available_difficulties = []
-  currentDifficulty =get_current_game_difficulty
+  currentDifficulty = get_current_game_difficulty
   if down_only
     if currentDifficulty == :HARD
       available_difficulties << choice_hard
       available_difficulties << choice_normal
       available_difficulties << choice_easy
-    elsif currentDifficulty ==:NORMAL
+    elsif currentDifficulty == :NORMAL
       available_difficulties << choice_normal
       available_difficulties << choice_easy
-    elsif currentDifficulty ==:EASY
+    elsif currentDifficulty == :EASY
       available_difficulties << choice_easy
     end
   else
@@ -674,13 +667,13 @@ def change_game_difficulty(down_only=false)
   choice = available_difficulties[index]
   case choice
   when choice_easy
-    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=true
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY] = true
     $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = false
   when choice_normal
-    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=false
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY] = false
     $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = false
   when choice_hard
-    $game_switches[SWITCH_GAME_DIFFICULTY_EASY]=false
+    $game_switches[SWITCH_GAME_DIFFICULTY_EASY] = false
     $game_switches[SWITCH_GAME_DIFFICULTY_HARD] = true
   when choice_cancel
     return
