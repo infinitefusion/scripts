@@ -1572,6 +1572,14 @@ class PokemonStorageScene
     end
     pbDrawTextPositions(overlay, textstrings)
     @sprites["pokemon"].setPokemonBitmap(pokemon)
+
+    if pokemon.egg?
+      @sprites["pokemon"].zoom_x = Settings::EGGSPRITE_SCALE
+      @sprites["pokemon"].zoom_y = Settings::EGGSPRITE_SCALE
+    else
+      @sprites["pokemon"].zoom_x = Settings::FRONTSPRITE_SCALE
+      @sprites["pokemon"].zoom_y = Settings::FRONTSPRITE_SCALE
+    end
   end
 
   def update
