@@ -11,6 +11,15 @@ def updateCreditsFile
   download_file(Settings::CREDITS_FILE_URL,Settings::CREDITS_FILE_PATH,)
 end
 
+def createCustomSpriteFolders()
+  if !Dir.exist?(Settings::CUSTOM_BATTLERS_FOLDER)
+    Dir.mkdir(Settings::CUSTOM_BATTLERS_FOLDER)
+  end
+  if !Dir.exist?(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED)
+    Dir.mkdir(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED)
+  end
+end
+
 def download_file(url, saveLocation)
   begin
     response = HTTPLite.get(url)
@@ -72,7 +81,6 @@ end
 
 def download_custom_sprite(head_id, body_id)
   return nil if $PokemonSystem.download_sprites != 0
-  #base_path = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/{1}.{2}.png"
   url = "https://raw.githubusercontent.com/infinitefusion/sprites/main/CustomBattlers/{1}.{2}.png"
   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
   if !Dir.exist?(destPath)
