@@ -741,6 +741,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     @row_height = 32
     @column_spacing = 32
     @ignore_input = false
+    @allow_arrows_jump=false
   end
 
   def itemCount
@@ -765,6 +766,10 @@ class SpriteWindow_Selectable < SpriteWindow_Base
       self.top_row=oldTopRow
       update_cursor_rect
     end
+  end
+
+  def setAllowArrowsJump(value)
+    @allow_arrows_jump=value
   end
 
   def columns
@@ -851,13 +856,13 @@ class SpriteWindow_Selectable < SpriteWindow_Base
         scroll_up()
       elsif Input.repeat?(Input::DOWN)
         scroll_down()
-      elsif Input.repeat?(Input::LEFT) && @column_max > 1
+      elsif Input.repeat?(Input::LEFT) && !@allow_arrows_jump
         scroll_left()
-      elsif Input.repeat?(Input::RIGHT) && @column_max > 1
+      elsif Input.repeat?(Input::RIGHT) && !@allow_arrows_jump
         scroll_right()
-      elsif Input.repeat?(Input::JUMPUP) || Input.repeat?(Input::LEFT)
+      elsif Input.repeat?(Input::JUMPUP) || (Input.repeat?(Input::LEFT) && @allow_arrows_jump)
         jump_up()
-      elsif Input.repeat?(Input::JUMPDOWN) || Input.repeat?(Input::RIGHT)
+      elsif Input.repeat?(Input::JUMPDOWN) || (Input.repeat?(Input::RIGHT) && @allow_arrows_jump)
         jump_down()
       end
     end

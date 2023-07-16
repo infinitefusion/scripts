@@ -196,9 +196,10 @@ class Window_PokemonOption < Window_DrawableCommand
     @selBaseColor = Color.new(31 * 8, 6 * 8, 3 * 8)
     @selShadowColor = Color.new(31 * 8, 17 * 8, 16 * 8)
     @optvalues = []
-    @mustUpdateOptions = false
+  @mustUpdateOptions = false
     @mustUpdateDescription = false
     @selected_position = 0
+    @allow_arrows_jump=false
     for i in 0...@options.length
       @optvalues[i] = 0
     end
