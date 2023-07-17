@@ -113,9 +113,14 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
-    pbSetSystemFont(@sprites["overlay"].bitmap)
-    pbUpdateDummyPokemon
-    drawPage(@page)
+
+
+
+  pbSetSystemFont(@sprites["overlay"].bitmap)
+  pbUpdateDummyPokemon
+  drawPage(@page)
+  sprite_bitmap= @sprites["infosprite"].getBitmap
+
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 

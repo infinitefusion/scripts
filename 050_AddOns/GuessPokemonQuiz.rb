@@ -50,7 +50,7 @@ class FusionQuiz
           prompt_quit = pbMessage(_INTL("You still have {1} rounds to go. You'll only keep your points if you finish all {2} rounds. Do you really want to quit now?", rounds_left, nb_rounds), ["Yes", "No"])
           if prompt_quit
             @abandonned = true
-            return
+            break
           end
         end
         round_multiplier += round_multiplier_increase
@@ -63,12 +63,14 @@ class FusionQuiz
   end
 
   def end_quiz()
+    hide_fusion_picture
     Kernel.pbClearText()
     previous_highest = pbGet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE)
     pbSet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE,@score) if @score > previous_highest
 
     previous_total = pbGet(VAR_STAT_FUSION_QUIZ_TOTAL_PTS)
     pbSet(VAR_STAT_FUSION_QUIZ_TOTAL_PTS,previous_total+@score)
+    dispose
   end
 
   def start_quiz_new_round(round_multiplier = 1)
