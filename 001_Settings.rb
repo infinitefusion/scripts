@@ -32,7 +32,8 @@ module Settings
   CUSTOM_SPRITES_FILE_PATH = "Data/CUSTOM_SPRITES"
 
   HTTP_CONFIGS_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/Scripts/RemoteUrls.rb"
-  HTTP_CONFIGS_FILE_PATH = "/Data/Scripts/RemoteUrls.rb"
+
+  HTTP_CONFIGS_FILE_PATH = "Data/Scripts/RemoteUrls.rb"
 
   FRONTSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_SCALE = 0.6666666666
