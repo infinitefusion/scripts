@@ -115,7 +115,7 @@ def download_unfused_alt_sprites(dex_num)
 end
 
 def download_alt_sprites(head_id,body_id)
-  base_url = Settings::CUSTOM_SPRITES_REPO_URL +"{1}.{2}"
+  base_url = "#{Settings::CUSTOM_SPRITES_REPO_URL}{1}.{2}"
   extension = ".png"
   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
   if !Dir.exist?(destPath)
