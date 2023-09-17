@@ -6,6 +6,11 @@ def test_http_get
   end
 end
 
+def updateHttpSettingsFile
+  return if $PokemonSystem.download_sprites != 0
+  download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::CREDITS_FILE_PATH,)
+end
+
 def updateCreditsFile
   return if $PokemonSystem.download_sprites != 0
   download_file(Settings::CREDITS_FILE_URL,Settings::CREDITS_FILE_PATH,)
