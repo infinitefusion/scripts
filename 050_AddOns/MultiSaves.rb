@@ -334,7 +334,7 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
-    #updateHttpSettingsFile
+    updateHttpSettingsFile
     updateCreditsFile
     newer_version = find_newer_available_version
     if newer_version
