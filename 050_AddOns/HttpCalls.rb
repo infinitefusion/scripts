@@ -8,7 +8,7 @@ end
 
 def updateHttpSettingsFile
   return if $PokemonSystem.download_sprites != 0
-  download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::CREDITS_FILE_PATH,)
+  download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::HTTP_CONFIGS_FILE_PATH)
 end
 
 def updateCreditsFile
