@@ -1,6 +1,5 @@
 PUDDLE_ANIMATION_ID = 22
 Events.onStepTakenFieldMovement += proc { |_sender, e|
-  return if !$game_switches[1]
   event = e[0] # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
