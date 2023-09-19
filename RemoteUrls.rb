@@ -1,5 +1,6 @@
 
 module Settings
+  SHINY_POKEMON_CHANCE = 16
   CREDITS_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/sprites/main/Sprite Credits.csv"
   SPRITES_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/CUSTOM_SPRITES"
   VERSION_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/VERSION"
