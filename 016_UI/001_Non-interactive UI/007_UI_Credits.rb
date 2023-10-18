@@ -82,11 +82,13 @@ Kiwi
 
 Sprite Managers
 avianAnnihilator<s>Blaquaza
-BéBoutton<s>Howls
-Ignus<s>Kiwi
-Maelmc<s>Milchik the Miltank
-rezza<s>Skel'n
-Thorns<s>TM
+BéBoutton<s>CaBiNE
+CoramSun<s>hero.drawing
+Howls<s>Ignus
+Kiwi<s>Maelmc
+Milchik the Miltank<s>Payapon
+Pix<s>Rosemagwin
+Thorns
 
 
 All of the custom fused Pokémon sprites 
