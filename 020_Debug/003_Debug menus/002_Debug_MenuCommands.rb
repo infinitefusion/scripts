@@ -802,28 +802,37 @@ DebugMenuCommands.register("dexlists", {
 
 DebugMenuCommands.register("setplayer", {
   "parent"      => "playermenu",
-  "name"        => _INTL("Set Player Character"),
-  "description" => _INTL("Edit the player's character, as defined in \"metadata.txt\"."),
+  "name"        => _INTL("Switch Player Character"),
+  "description" => _INTL("Switch the player character from male to female or vice-versa."),
   "effect"      => proc {
-    limit = 0
-    for i in 0...8
-      meta = GameData::Metadata.get_player(i)
-      next if meta
-      limit = i
-      break
-    end
-    if limit <= 1
-      pbMessage(_INTL("There is only one player defined."))
+    if pbGet(VAR_TRAINER_GENDER)==0
+      pbChangePlayer(1)
+      pbSet(VAR_TRAINER_GENDER,1)
     else
-      params = ChooseNumberParams.new
-      params.setRange(0, limit - 1)
-      params.setDefaultValue($Trainer.character_ID)
-      newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
-      if newid != $Trainer.character_ID
-        pbChangePlayer(newid)
-        pbMessage(_INTL("The player character was changed."))
-      end
+      pbChangePlayer(0)
+      pbSet(VAR_TRAINER_GENDER,0)
     end
+    pbMessage(_INTL("The player character was changed."))
+
+    # limit = 0
+    # for i in 0...8
+    #   meta = GameData::Metadata.get_player(i)
+    #   next if meta
+    #   limit = i
+    #   break
+    # end
+    # if limit <= 1
+    #   pbMessage(_INTL("There is only one player defined."))
+    # else
+    #   params = ChooseNumberParams.new
+    #   params.setRange(0, limit - 1)
+    #   params.setDefaultValue($Trainer.character_ID)
+    #   newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
+    #   if newid != $Trainer.character_ID
+    #     pbChangePlayer(newid)
+    #     pbMessage(_INTL("The player character was changed."))
+    #   end
+    # end
   }
 })
 
@@ -911,65 +920,6 @@ DebugMenuCommands.register("terraintags", {
   }
 })
 
-DebugMenuCommands.register("setencounters", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Wild Encounters"),
-  "description" => _INTL("Edit the wild Pokémon that can be found on maps, and how they are encountered."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbEncountersEditor }
-  }
-})
-
-DebugMenuCommands.register("trainertypes", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Trainer Types"),
-  "description" => _INTL("Edit the properties of trainer types."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbTrainerTypeEditor }
-  }
-})
-
-DebugMenuCommands.register("edittrainers", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Individual Trainers"),
-  "description" => _INTL("Edit individual trainers, their Pokémon and items."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbTrainerBattleEditor }
-  }
-})
-
-DebugMenuCommands.register("edititems", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Items"),
-  "description" => _INTL("Edit item data."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbItemEditor }
-  }
-})
-
-DebugMenuCommands.register("editpokemon", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Pokémon"),
-  "description" => _INTL("Edit Pokémon species data."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbPokemonEditor }
-  }
-})
-
-DebugMenuCommands.register("editdexes", {
-  "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Regional Dexes"),
-  "description" => _INTL("Create, rearrange and delete Regional Pokédex lists."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbFadeOutIn { pbRegionalDexEditorMain }
-  }
-})
 
 DebugMenuCommands.register("positionsprites", {
   "parent"      => "editorsmenu",
@@ -1044,73 +994,60 @@ DebugMenuCommands.register("exportanims", {
 #===============================================================================
 # Other options
 #===============================================================================
-DebugMenuCommands.register("othermenu", {
-  "parent"      => "main",
-  "name"        => _INTL("Other options..."),
-  "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
-  "always_show" => true
-})
-
-DebugMenuCommands.register("mysterygift", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Manage Mystery Gifts"),
-  "description" => _INTL("Edit and enable/disable Mystery Gifts."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbManageMysteryGifts
-  }
-})
-
-DebugMenuCommands.register("extracttext", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Extract Text"),
-  "description" => _INTL("Extract all text in the game to a single file for translating."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbExtractText
-  }
-})
-
-DebugMenuCommands.register("compiletext", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Compile Text"),
-  "description" => _INTL("Import text and converts it into a language file."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbCompileTextUI
-  }
-})
-
-DebugMenuCommands.register("compiledata", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Compile Data"),
-  "description" => _INTL("Fully compile all data."),
-  "always_show" => true,
-  "effect"      => proc {
-    msgwindow = pbCreateMessageWindow
-    Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow, msg, false); echoln(msg) }
-    pbMessageDisplay(msgwindow, _INTL("All game data was compiled."))
-    pbDisposeMessageWindow(msgwindow)
-  }
-})
-
-
-DebugMenuCommands.register("renamesprites", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Rename Old Sprites"),
-  "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
-  "always_show" => true,
-  "effect"      => proc {
-    SpriteRenamer.convert_files
-  }
-})
-
-DebugMenuCommands.register("invalidtiles", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Fix Invalid Tiles"),
-  "description" => _INTL("Scans all maps and erases non-existent tiles."),
-  "always_show" => true,
-  "effect"      => proc {
-    pbDebugFixInvalidTiles
-  }
-})
+# DebugMenuCommands.register("othermenu", {
+#   "parent"      => "main",
+#   "name"        => _INTL("Other options..."),
+#   "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
+#   "always_show" => true
+# })
+#
+# DebugMenuCommands.register("mysterygift", {
+#   "parent"      => "othermenu",
+#   "name"        => _INTL("Manage Mystery Gifts"),
+#   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
+#   "always_show" => true,
+#   "effect"      => proc {
+#     pbManageMysteryGifts
+#   }
+# })
+#
+# DebugMenuCommands.register("extracttext", {
+#   "parent"      => "othermenu",
+#   "name"        => _INTL("Extract Text"),
+#   "description" => _INTL("Extract all text in the game to a single file for translating."),
+#   "always_show" => true,
+#   "effect"      => proc {
+#     pbExtractText
+#   }
+# })
+#
+# DebugMenuCommands.register("compiletext", {
+#   "parent"      => "othermenu",
+#   "name"        => _INTL("Compile Text"),
+#   "description" => _INTL("Import text and converts it into a language file."),
+#   "always_show" => true,
+#   "effect"      => proc {
+#     pbCompileTextUI
+#   }
+# })
+#
+#
+# DebugMenuCommands.register("renamesprites", {
+#   "parent"      => "othermenu",
+#   "name"        => _INTL("Rename Old Sprites"),
+#   "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
+#   "always_show" => true,
+#   "effect"      => proc {
+#     SpriteRenamer.convert_files
+#   }
+# })
+#
+# DebugMenuCommands.register("invalidtiles", {
+#   "parent"      => "othermenu",
+#   "name"        => _INTL("Fix Invalid Tiles"),
+#   "description" => _INTL("Scans all maps and erases non-existent tiles."),
+#   "always_show" => true,
+#   "effect"      => proc {
+#     pbDebugFixInvalidTiles
+#   }
+# })

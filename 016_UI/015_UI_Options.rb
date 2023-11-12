@@ -14,6 +14,7 @@ class PokemonSystem
   attr_accessor :sevolume
   attr_accessor :textinput
   attr_accessor :quicksurf
+  attr_accessor :level_caps
   attr_accessor :battle_type
   attr_accessor :download_sprites
 
@@ -569,6 +570,12 @@ class PokemonOption_Scene
                               proc { $PokemonSystem.quicksurf },
                               proc { |value| $PokemonSystem.quicksurf = value },
                               "Start surfing automatically when interacting with water"
+    )
+
+    options << EnumOption.new(_INTL("Level caps"), [_INTL("Off"), _INTL("On")],
+                              proc { $PokemonSystem.level_caps },
+                              proc { |value| $PokemonSystem.level_caps = value },
+                              "Prevents leveling above the next gym leader's highest leveled Pokemon"
     )
 
     return options
