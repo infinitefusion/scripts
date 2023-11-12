@@ -59,19 +59,18 @@ module GameData
     # @param form [Integer]
     # @return [self, nil]
     def self.get_species_form(species, form)
-      return GameData::Species.get(species) rescue nil
-      # return nil if !species || !form
-      # validate species => [Symbol, self, String, Integer]
-      # validate form => Integer
-      # #      if other.is_a?(Integer)
-      # #        p "Please switch to symbols, thanks."
-      # #      end
-      # species = species.species if species.is_a?(self)
-      # species = DATA[species].species if species.is_a?(Integer)
-      # species = species.to_sym if species.is_a?(String)
-      # trial = sprintf("%s_%d", species, form).to_sym
-      # species_form = (DATA[trial].nil?) ? species : trial
-      # return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
+      return nil if !species || !form
+      validate species => [Symbol, self, String, Integer]
+      validate form => Integer
+      #      if other.is_a?(Integer)
+      #        p "Please switch to symbols, thanks."
+      #      end
+      species = species.species if species.is_a?(self)
+      species = DATA[species].species if species.is_a?(Integer)
+      species = species.to_sym if species.is_a?(String)
+      trial = sprintf("%s_%d", species, form).to_sym
+      species_form = (DATA[trial].nil?) ? species : trial
+      return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
     end
 
     def self.schema(compiling_forms = false)
@@ -192,26 +191,22 @@ module GameData
     end
     # @return [String] the translated name of this species
     def name
-      return @real_name
-      #return pbGetMessage(MessageTypes::Species, @id_number)
+      return pbGetMessage(MessageTypes::Species, @id_number)
     end
 
     # @return [String] the translated name of this form of this species
     def form_name
-      return @real_form_name
-      #return pbGetMessage(MessageTypes::FormNames, @id_number)
+      return pbGetMessage(MessageTypes::FormNames, @id_number)
     end
 
     # @return [String] the translated Pokédex category of this species
     def category
-      return @real_category
-      #return pbGetMessage(MessageTypes::Kinds, @id_number)
+      return pbGetMessage(MessageTypes::Kinds, @id_number)
     end
 
     # @return [String] the translated Pokédex entry of this species
     def pokedex_entry
-      return @real_pokedex_entry
-      #return pbGetMessage(MessageTypes::Entries, @id_number)
+      return pbGetMessage(MessageTypes::Entries, @id_number)
     end
 
     def is_fusion
@@ -250,8 +245,8 @@ module GameData
     end
 
     def shows_shadow?
-      return true
-      #      return @front_sprite_altitude > 0
+      #return true
+            return @front_sprite_altitude > 0
     end
 
     def get_evolutions(exclude_invalid = false)

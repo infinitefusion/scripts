@@ -58,9 +58,9 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
-  def setPokemonBitmapFromId(id, back = false, shiny = false, bodyShiny = false, headShiny = false,spriteform_body=nil,spriteform_head=nil)
+  def setPokemonBitmapFromId(id, back = false, shiny=false, bodyShiny=false, headShiny=false)
     @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap = GameData::Species.sprite_bitmap_from_pokemon_id(id, back, shiny, bodyShiny, headShiny)
+    @_iconbitmap = GameData::Species.sprite_bitmap_from_pokemon_id(id, back,shiny, bodyShiny,headShiny)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     self.color = Color.new(0, 0, 0, 0)
     changeOrigin
@@ -154,8 +154,6 @@ class PokemonIconSprite < SpriteWrapper
     end
     if useRegularIcon(@pokemon.species) || @pokemon.egg?
       @animBitmap = AnimatedBitmap.new(GameData::Species.icon_filename_from_pokemon(value))
-    elsif useTripleFusionIcon(@pokemon.species)
-      @animBitmap = AnimatedBitmap.new(pbResolveBitmap(sprintf("Graphics/Icons/iconDNA")))
     else
       @animBitmap = createFusionIcon()
     end
@@ -165,10 +163,6 @@ class PokemonIconSprite < SpriteWrapper
     @numFrames = @animBitmap.width / @animBitmap.height
     @currentFrame = 0 if @currentFrame >= @numFrames
     changeOrigin
-  end
-  def useTripleFusionIcon(species)
-    dexNum = getDexNumberForSpecies(species)
-    return isTripleFusion?(dexNum)
   end
 
   def useRegularIcon(species)
@@ -182,28 +176,26 @@ class PokemonIconSprite < SpriteWrapper
   end
 
   SPRITE_OFFSET = 10
-
   def createFusionIcon()
     bodyPoke_number = getBodyID(pokemon.species)
     headPoke_number = getHeadID(pokemon.species, bodyPoke_number)
 
+
     bodyPoke = GameData::Species.get(bodyPoke_number).species
     headPoke = GameData::Species.get(headPoke_number).species
 
-    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke, @pokemon.spriteform_head))
-    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke, @pokemon.spriteform_body))
-
+    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
+    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
     dexNum = getDexNumberForSpecies(@pokemon.species)
     ensureFusionIconExists
     bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
-    headPokeFileName = GameData::Species.icon_filename(headPoke, @pokemon.spriteform_head)
-
+    headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)
-    generated_new_icon = generateFusionIcon(headPokeFileName, bitmapPath)
+    generated_new_icon = generateFusionIcon(headPokeFileName,bitmapPath)
     result_icon = generated_new_icon ? AnimatedBitmap.new(bitmapPath) : icon1
 
-    for i in 0..icon1.width - 1
-      for j in ((icon1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..icon1.height - 1
+    for i in 0..icon1.width-1
+      for j in ((icon1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..icon1.height-1
         temp = icon2.bitmap.get_pixel(i, j)
         result_icon.bitmap.set_pixel(i, j, temp)
       end

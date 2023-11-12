@@ -79,7 +79,7 @@ def useLantern()
     Kernel.pbMessage(_INTL("It's already illuminated..."))
     return false
   end
-  Kernel.pbMessage(_INTL("The Lantern illuminated the area!"))
+  Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   darkness.radius += 176
   $PokemonGlobal.flashUsed = true
   while darkness.radius < 176
@@ -208,7 +208,7 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
     Kernel.pbMessage(_INTL("The cave is already illuminated."))
     next false
   end
-  Kernel.pbMessage(_INTL("The Lantern illuminated the area!"))
+  Kernel.pbMessage(_INTL("The Lantern illuminated the cave!"))
   $PokemonGlobal.flashUsed = true
   darkness.radius += 176
   while darkness.radius < 176
@@ -388,17 +388,6 @@ def useDreamMirror
   Kernel.pbMessage(_INTL("You can see a faint glimpse of {1} in the reflection.", map_name))
 end
 
-
-def useStrangePlant
-  if darknessEffectOnCurrentMap()
-    Kernel.pbMessage(_INTL("The strange plant appears to be glowing."))
-    $scene.spriteset.addUserSprite(LightEffect_GlowPlant.new($game_player))
-  else
-    Kernel.pbMessage(_INTL("It had no effect"))
-  end
-
-end
-
 #DREAMMIRROR
 ItemHandlers::UseFromBag.add(:DREAMMIRROR, proc { |item|
   useDreamMirror
@@ -407,17 +396,6 @@ ItemHandlers::UseFromBag.add(:DREAMMIRROR, proc { |item|
 
 ItemHandlers::UseInField.add(:DREAMMIRROR, proc { |item|
   useDreamMirror
-  next 1
-})
-
-#STRANGE PLANT
-ItemHandlers::UseFromBag.add(:STRANGEPLANT, proc { |item|
-  useStrangePlant()
-  next 1
-})
-
-ItemHandlers::UseInField.add(:STRANGEPLANT, proc { |item|
-  useStrangePlant()
   next 1
 })
 
@@ -484,52 +462,48 @@ end
 #########################
 
 ItemHandlers::UseOnPokemon.add(:INFINITESPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene, true, true)
   next false
 })
 
 ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene)
   next false
 })
 
 ItemHandlers::UseInField.add(:DNASPLICERS, proc { |item|
-  fusion_success = useSplicerFromField(item)
+  fusion_success = useSplicerFromField(false, false)
   next 3 if fusion_success
   next false
 })
 
 
 ItemHandlers::UseInField.add(:SUPERSPLICERS, proc { |item|
-  fusion_success = useSplicerFromField(item)
+  fusion_success = useSplicerFromField(true, true)
   next 3 if fusion_success
   next false
 })
 
 
 ItemHandlers::UseInField.add(:INFINITESPLICERS, proc { |item|
-  fusion_success = useSplicerFromField(item)
+  fusion_success = useSplicerFromField(false, false)
   next true if fusion_success
   next false
 })
 
 ItemHandlers::UseInField.add(:INFINITESPLICERS2, proc { |item|
-  fusion_success = useSplicerFromField(item)
+  fusion_success = useSplicerFromField(true, true)
   next true if fusion_success
   next false
 })
 
-def isSuperSplicersMechanics(item)
-  return [:SUPERSPLICERS,:INFINITESPLICERS2].include?(item)
-end
-
-def useSplicerFromField(item)
+def useSplicerFromField(supersplicers, superSplicer_arg2)
   scene = PokemonParty_Scene.new
   scene.pbStartScene($Trainer.party,"Select a Pokémon")
   screen = PokemonPartyScreen.new(scene, $Trainer.party)
   chosen = screen.pbChoosePokemon("Select a Pokémon")
   pokemon = $Trainer.party[chosen]
-  fusion_success = pbDNASplicing(pokemon, scene, item)
+  fusion_success = pbDNASplicing(pokemon, scene, supersplicers, superSplicer_arg2)
   screen.pbEndScene
   scene.dispose
   return fusion_success
@@ -768,7 +742,7 @@ def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
 end
 
 ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene, true, true)
 })
 
 def returnItemsToBag(pokemon, poke2)
@@ -899,18 +873,22 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 
 #easter egg for evolving shellder into slowbro's tail
 ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
-  echoln pokemon.species
-  #next false if pokemon.species != :SHELLDER
+  shellbroNum = NB_POKEMON * PBSpecies::SHELLDER + PBSpecies::SLOWBRO #SHELLBRO
+  newspecies = pokemon.species == PBSpecies::SHELLDER ? shellbroNum : -1
+  if newspecies <= 0
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  else
     pbFadeOutInWithMusic(99999) {
       evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, :B90H80)
+      evo.pbStartScreen(pokemon, newspecies)
       evo.pbEvolution(false)
       evo.pbEndScreen
       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 }) if scene.pbHasAnnotations?
       scene.pbRefresh
     }
     next true
-
+  end
 })
 #
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
@@ -1314,17 +1292,17 @@ end
 #########################
 
 ItemHandlers::UseOnPokemon.add(:INFINITESPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene)
   next false
 })
 
 ItemHandlers::UseOnPokemon.add(:INFINITESPLICERS2, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene, true, true)
   next false
 })
 
 ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene)
   next false
 })
 
@@ -1338,9 +1316,7 @@ def getPokemonPositionInParty(pokemon)
 end
 
 #don't remember why there's two Supersplicers arguments.... probably a mistake
-def pbDNASplicing(pokemon, scene, item=:DNASPLICERS)
-  is_supersplicer = isSuperSplicersMechanics(item)
-
+def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   playingBGM = $game_system.getPlayingBGM
   dexNumber = pokemon.species_data.id_number
   if (pokemon.species_data.id_number <= NB_POKEMON)
@@ -1372,7 +1348,7 @@ def pbDNASplicing(pokemon, scene, item=:DNASPLICERS)
             return false
           end
 
-          selectedHead = selectFusion(pokemon, poke2, is_supersplicer)
+          selectedHead = selectFusion(pokemon, poke2, supersplicers)
           if selectedHead == -1 #cancelled
             return false
           end
@@ -1391,8 +1367,8 @@ def pbDNASplicing(pokemon, scene, item=:DNASPLICERS)
             end
           end
 
-          if (Kernel.pbConfirmMessage(_INTL("Fuse {1} and {2}?",selectedHead.name,selectedBase.name)))
-            pbFuse(selectedHead, selectedBase, item)
+          if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
+            pbFuse(selectedHead, selectedBase, superSplicer)
             pbRemovePokemonAt(chosen)
             scene.pbHardRefresh
             pbBGMPlay(playingBGM)
@@ -1412,7 +1388,7 @@ def pbDNASplicing(pokemon, scene, item=:DNASPLICERS)
     end
   else
     #UNFUSE
-    return true if pbUnfuse(pokemon, scene, is_supersplicer)
+    return true if pbUnfuse(pokemon, scene, supersplicers)
   end
 end
 
@@ -1450,20 +1426,12 @@ end
 #   end
 # end
 
-def pbFuse(pokemon, poke2, splicer_item)
-
-  use_supersplicers_mechanics =isSuperSplicersMechanics(splicer_item)
-  pokemon.spriteform_body=nil
-  pokemon.spriteform_head=nil
-  poke2.spriteform_body=nil
-  poke2.spriteform_head=nil
-
+def pbFuse(pokemon, poke2, supersplicers = false)
   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
   fus = PokemonFusionScene.new
-
-  if (fus.pbStartScreen(pokemon, poke2, newid,splicer_item))
+  if (fus.pbStartScreen(pokemon, poke2, newid))
     returnItemsToBag(pokemon, poke2)
-    fus.pbFusionScreen(false, use_supersplicers_mechanics)
+    fus.pbFusionScreen(false, supersplicers)
     $game_variables[VAR_FUSE_COUNTER] += 1 #fuse counter
     fus.pbEndScreen
     return true
@@ -1471,9 +1439,6 @@ def pbFuse(pokemon, poke2, splicer_item)
 end
 
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
-  pokemon.spriteform_body=nil
-  pokemon.spriteform_head=nil
-
   bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
   headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
 
@@ -1604,6 +1569,8 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       #On ajoute l'autre dans le pokedex aussi
       $Trainer.pokedex.set_seen(poke1.species)
       $Trainer.pokedex.set_owned(poke1.species)
+      $Trainer.pokedex.set_seen(poke2.species)
+      $Trainer.pokedex.set_owned(poke2.species)
 
       pokemon.species = poke1.species
       pokemon.level = poke1.level
@@ -1621,7 +1588,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
 end
 
 ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
-  next true if pbDNASplicing(pokemon, scene, item)
+  next true if pbDNASplicing(pokemon, scene, true, true)
 })
 
 def returnItemsToBag(pokemon, poke2)

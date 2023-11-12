@@ -784,14 +784,8 @@ ItemHandlers::UseOnPokemon.add(:SWIFTWING, proc { |item, pkmn, scene|
   next true
 })
 
-def can_use_rare_candy(pkmn)
-  return false if pkmn.level >= GameData::GrowthRate.max_level || pkmn.shadowPokemon?
-  return false if $PokemonSystem.level_caps==1 && pokemonExceedsLevelCap(pkmn)
-  return true
-end
-
 ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, pkmn, scene|
-  if !(can_use_rare_candy(pkmn))
+  if pkmn.level >= GameData::GrowthRate.max_level || pkmn.shadowPokemon?
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -1081,14 +1075,4 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, pkmn, scene|
     next true
   end
   next false
-})
-
-
-ItemHandlers::UseInField.add(:REGITABLET, proc { |item|
-  pbCommonEvent(COMMON_EVENT_REGI_TABLET)
-  next true
-})
-
-ItemHandlers::UseFromBag.add(:POKERADAR, proc { |item|
-  next (pbCanUsePokeRadar?) ? 2 : 0
 })

@@ -234,11 +234,7 @@ class Game_Character
     new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
     new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
     return false unless self.map.valid?(new_x, new_y)
-    if self.character_name == "SHARPEDO"
-      return false if pbFacingTerrainTag().id==:SharpedoObstacle
-    end
     return true if @through
-
     if strict
       return false unless self.map.passableStrict?(x, y, d, self)
       return false unless self.map.passableStrict?(new_x, new_y, 10 - d, self)

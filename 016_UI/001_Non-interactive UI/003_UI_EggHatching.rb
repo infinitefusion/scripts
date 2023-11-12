@@ -113,14 +113,6 @@ class PokemonEggHatch_Scene
       @pokemon.name = nickname
       @nicknamed = true
     end
-
-    if !$Trainer.pokedex.owned?(@pokemon.species)
-      $Trainer.pokedex.register(@pokemon)
-      $Trainer.pokedex.set_owned(@pokemon.species)
-      pbMessage(_INTL("{1}'s data was added to the Pokédex", @pokemon.name))
-      pbShowPokedex(@pokemon.species)
-    end
-
   end
 
   def pbEndScene
@@ -214,6 +206,8 @@ def pbHatch(pokemon)
   end
 
 
+  $Trainer.pokedex.register(pokemon)
+  $Trainer.pokedex.set_owned(pokemon.species)
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
     pbMessage(_INTL("Huh?\1"))
@@ -226,7 +220,6 @@ def pbHatch(pokemon)
       pokemon.name = nickname
     end
   end
-
 end
 
 Events.onStepTaken += proc { |_sender,_e|

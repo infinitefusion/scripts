@@ -24,20 +24,19 @@ class PokemonBoxIcon < IconSprite
     return false
   end
 
-  def createFusionIcon(species,spriteform_head=nil,spriteform_body=nil)
+  def createFusionIcon(species)
     bodyPoke_number = getBodyID(species)
     headPoke_number = getHeadID(species, bodyPoke_number)
 
     bodyPoke = GameData::Species.get(bodyPoke_number).species
     headPoke = GameData::Species.get(headPoke_number).species
 
-    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke,spriteform_head))
-    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke,spriteform_body))
-
+    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
+    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
     dexNum = getDexNumberForSpecies(species)
     ensureFusionIconExists
     bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
-    headPokeFileName = GameData::Species.icon_filename(headPoke,spriteform_head)
+    headPokeFileName = GameData::Species.icon_filename(headPoke)
     bitmapPath = sprintf("%s.png", bitmapFileName)
     generated_new_icon = generateFusionIcon(headPokeFileName,bitmapPath)
     result_icon = generated_new_icon ? AnimatedBitmap.new(bitmapPath) : icon1
@@ -69,7 +68,7 @@ class PokemonBoxIcon < IconSprite
     if useRegularIcon(@pokemon.species) || @pokemon.egg?
       self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
     else
-      self.setBitmapDirectly(createFusionIcon(@pokemon.species,@pokemon.spriteform_head, @pokemon.spriteform_body))
+      self.setBitmapDirectly(createFusionIcon(@pokemon.species))
       if fusion_enabled
         self.visible = true
       else
@@ -2201,7 +2200,7 @@ class PokemonStorageScreen
   #
 
   def pbFuseFromPC(selected, heldpoke)
-    box = selected[0]
+      box = selected[0]
       index = selected[1]
       poke_body = @storage[box, index]
       poke_head = heldpoke
@@ -2318,7 +2317,6 @@ class PokemonStorageScreen
 
 
         if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
-          playingBGM = $game_system.getPlayingBGM
           pbFuse(selectedHead, selectedBase, isSuperSplicer)
           if canDeleteItem(@fusionItem)
             $PokemonBag.pbDeleteItem(@fusionItem)
@@ -2332,7 +2330,6 @@ class PokemonStorageScreen
           @scene.setFusing(false)
           @fusionMode = false
           @scene.sprites["box"].enableFusions()
-          pbBGMPlay(playingBGM)
           return
         else
           # print "fusion cancelled"

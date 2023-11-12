@@ -3,14 +3,11 @@
 # The player's party Pokémon are stored in the array $Trainer.party.
 #===============================================================================
 class Pokemon
-  attr_accessor :spriteform_body
-  attr_accessor :spriteform_head
-
   # @return [Symbol] this Pokémon's species
   attr_reader :species
   # If defined, this Pokémon's form will be this value even if a MultipleForms
   # handler tries to say otherwise.
-  # @return [Integer, nil] this Pokémon's formspriteform
+  # @return [Integer, nil] this Pokémon's form
   attr_accessor :forced_form
   # If defined, is the time (in Integer form) when this Pokémon's form was set.
   # @return [Integer, nil] the time this Pokémon's form was set
@@ -47,6 +44,7 @@ class Pokemon
   attr_writer :ability_index
   attr_accessor :body_original_ability_index
   attr_accessor :head_original_ability_index
+
 
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
@@ -128,10 +126,7 @@ class Pokemon
   end
 
   def species_data
-    if !@species_data || @species != @species_data.species
-      @species_data = GameData::Species.get(@species)
-    end
-    return @species_data #GameData::Species.get(@species)
+    return GameData::Species.get_species_form(@species, form_simple)
   end
 
   #=============================================================================
@@ -166,7 +161,7 @@ class Pokemon
       return isSpecies?(check_species)
     end
     bodySpecies = getBodyID(species)
-    checkSpeciesId = getID(nil, check_species)
+    checkSpeciesId = getID(nil,check_species)
     return bodySpecies == checkSpeciesId
   end
 
@@ -175,14 +170,14 @@ class Pokemon
       return isSpecies?(check_species)
     end
     headSpecies = getHeadID(species)
-    checkSpeciesId = getID(nil, check_species)
+    checkSpeciesId = getID(nil,check_species)
     return headSpecies == checkSpeciesId
   end
 
   def shiny=(value)
-    @shiny = value
+    @shiny=value
     if value && Settings::SHINY_POKEMON_CHANCE != S_CHANCE_VALIDATOR
-      @debug_shiny = true
+      @debug_shiny=true
     end
   end
 
@@ -390,7 +385,6 @@ class Pokemon
     if @ability == :MULTITYPE && species_data.type1 == :NORMAL
       return getHeldPlateType()
     end
-    return @type1 if @type1
     return species_data.type1
   end
 
@@ -401,14 +395,6 @@ class Pokemon
     end
     sp_data = species_data
     return sp_data.type2 || sp_data.type1
-  end
-
-  def type1=(value)
-    @type1 = value
-  end
-
-  def type2=(value)
-    @type2 = value
   end
 
   # @return [Array<Symbol>] an array of this Pokémon's types
@@ -492,6 +478,8 @@ class Pokemon
     return [:AlwaysMale, :AlwaysFemale, :Genderless].include?(gender_ratio)
   end
 
+
+
   #=============================================================================
   # Shininess
   #=============================================================================
@@ -506,13 +494,13 @@ class Pokemon
       is_shiny = d < Settings::SHINY_POKEMON_CHANCE
       if is_shiny
         @shiny = true
-        @natural_shiny = true
+        @natural_shiny=true
       end
 
     end
     if @shiny && Settings::SHINY_POKEMON_CHANCE != S_CHANCE_VALIDATOR
-      @debug_shiny = true
-      @natural_shiny = false
+      @debug_shiny=true
+      @natural_shiny=false
     end
     return @shiny
   end
@@ -799,9 +787,9 @@ class Pokemon
       body_species_id = getBasePokemonID(species)
       head_species = GameData::Species.get(head_species_id)
       body_species = GameData::Species.get(body_species_id)
-      return move_data && (pokemon_can_learn_move(head_species, move_data) || pokemon_can_learn_move(body_species, move_data))
+      return move_data && (pokemon_can_learn_move(head_species,move_data) || pokemon_can_learn_move(body_species,move_data))
     else
-      return move_data && pokemon_can_learn_move(species_data, move_data)
+      return move_data && pokemon_can_learn_move(species_data,move_data)
     end
   end
 
@@ -1062,53 +1050,11 @@ class Pokemon
   #=============================================================================
   # Checks whether this Pokemon can evolve because of levelling up.
   # @return [Symbol, nil] the ID of the species to evolve into
-  def prompt_evolution_choice(body_evolution, head_evolution)
-    current_body = @species_data.body_pokemon
-    current_head = @species_data.head_pokemon
-
-    choices = [
-      #_INTL("Evolve both!"),
-      _INTL("Evolve head!"),
-      _INTL("Evolve body!"),
-      _INTL("Don't evolve")
-    ]
-    choice = pbMessage(_INTL('Both halves of {1} are ready to evolve!', self.name), choices, 0)
-    # if choice == 0  #EVOLVE BOTH
-    #   newspecies = getFusionSpecies(body_evolution,head_evolution)
-    if choice == 0 #EVOLVE HEAD
-      newspecies = getFusionSpecies(current_body, head_evolution)
-    elsif choice == 1 #EVOLVE BODY
-      newspecies = getFusionSpecies(body_evolution, current_head)
-    else
-      newspecies = nil
-    end
-    return newspecies
-  end
-
   def check_evolution_on_level_up
-
-    if @species_data.is_a?(GameData::FusedSpecies)
-      body = self.species_data.body_pokemon
-      head = self.species_data.head_pokemon
-
-      body_evolution = check_evolution_internal(@species_data.body_pokemon) { |pkmn, new_species, method, parameter|
-        success = GameData::Evolution.get(method).call_level_up(pkmn, parameter)
-        next (success) ? new_species : nil
-      }
-      head_evolution = check_evolution_internal(@species_data.head_pokemon) { |pkmn, new_species, method, parameter|
-        success = GameData::Evolution.get(method).call_level_up(pkmn, parameter)
-        next (success) ? new_species : nil
-      }
-      if body_evolution && head_evolution
-        return prompt_evolution_choice(body_evolution, head_evolution)
-      end
-    end
-
     return check_evolution_internal { |pkmn, new_species, method, parameter|
       success = GameData::Evolution.get(method).call_level_up(pkmn, parameter)
       next (success) ? new_species : nil
     }
-
   end
 
   # Checks whether this Pokemon can evolve because of using an item on it.
@@ -1145,13 +1091,11 @@ class Pokemon
   # which will provide either a GameData::Species ID (the species to evolve
   # into) or nil (keep checking).
   # @return [Symbol, nil] the ID of the species to evolve into
-  def check_evolution_internal(species = nil)
+  def check_evolution_internal
     return nil if egg? || shadowPokemon?
     return nil if hasItem?(:EVERSTONE)
     return nil if hasAbility?(:BATTLEBOND)
-    species = species_data if !species
-
-    species.get_evolutions(true).each do |evo|
+    species_data.get_evolutions(true).each do |evo|
       # [new_species, method, parameter, boolean]
       next if evo[3] # Prevolution
       ret = yield self, evo[0], evo[1], evo[2] # pkmn, new_species, method, parameter
@@ -1277,9 +1221,9 @@ class Pokemon
   # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves
   # @param rechech_form [TrueClass, FalseClass] whether to auto-check the form
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
-    @species_data = GameData::Species.get(species)
-    @species = @species_data.species
-    @form = @species_data.form
+    species_data = GameData::Species.get(species)
+    @species = species_data.species
+    @form = species_data.form
     @forced_form = nil
     @time_form_set = nil
     self.level = level
@@ -1309,14 +1253,14 @@ class Pokemon
     @sheen = 0
     @pokerus = 0
     @name = nil
-    @happiness = @species_data.happiness
+    @happiness = species_data.happiness
     @poke_ball = :POKEBALL
     @markings = 0
     @iv = {}
     @ivMaxed = {}
     @ev = {}
     @hiddenPowerType = nil
-    @glitter = nil
+    @glitter=nil
     GameData::Stat.each_main do |s|
       @iv[s.id] = rand(IV_STAT_LIMIT + 1)
       @ev[s.id] = 0
@@ -1340,8 +1284,6 @@ class Pokemon
     @personalID = rand(2 ** 16) | rand(2 ** 16) << 16
     @hp = 1
     @totalhp = 1
-    @spriteform_body = nil
-    @spriteform_head = nil
     calc_stats
     if @form == 0 && recheck_form
       f = MultipleForms.call("getFormOnCreation", self)

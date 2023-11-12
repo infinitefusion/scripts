@@ -177,10 +177,6 @@ class Trainer
     return pokemon_party.any? { |p| p && p.isSpecies?(species) && (form < 0 || p.form == form) }
   end
 
-  def has_species_or_fusion?(species, form = -1)
-    return pokemon_party.any? { |p| p && p.isSpecies?(species) || p.isFusionOf(species) }
-  end
-
   # Returns whether there is a fatefully met Pokémon of the given species in the
   # trainer's party.
   def has_fateful_species?(species)

@@ -361,7 +361,7 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
   Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
-  customsList = getCustomSpeciesList(true, true)
+  customsList = getCustomSpeciesList(true,true)
   Kernel.pbMessage(_INTL("{1} sprites found", customsList.length.to_s))
 
   if customsList.length == 0
@@ -411,7 +411,7 @@ end
 #    return (body*NB_POKEMON)+head
 #end
 
-def getCustomSpeciesList(allowOnline = true, redownload_file = false)
+def getCustomSpeciesList(allowOnline = true, redownload_file=false)
   speciesList = []
 
   for num in 1..NB_POKEMON
@@ -454,18 +454,15 @@ end
 
 #input: ex: 10.10.png
 def getDexNumFromFilename(filename)
-  begin
-    splitPoke = filename.split(".")
-    head = splitPoke[0].to_i
-    body = splitPoke[1].to_i
+  splitPoke = filename.split(".")
+  head = splitPoke[0].to_i
+  body = splitPoke[1].to_i
 
-    return nil if (body * NB_POKEMON) + head > (NB_POKEMON * NB_POKEMON) + NB_POKEMON
-    return (body * NB_POKEMON) + head
-  rescue
-    return nil
-  end
-
+  return nil if (body * NB_POKEMON) + head > (NB_POKEMON * NB_POKEMON) + 420
+  return (body * NB_POKEMON) + head
 end
+
+
 
 # def getCustomSpeciesList()
 #   filesList = Dir["./Graphics/CustomBattlers/*"]
