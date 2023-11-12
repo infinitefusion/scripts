@@ -89,6 +89,7 @@ class PokeBattle_Battle
     end
   end
 
+
   def pbGainExpOne(idxParty, defeatedBattler, numPartic, expShare, expAll, showMessages = true)
     pkmn = pbParty(0)[idxParty] # The Pokémon gaining EVs from defeatedBattler
     growth_rate = pkmn.growth_rate
@@ -153,8 +154,15 @@ class PokeBattle_Battle
     end
     exp = i if i >= 0
     # Make sure Exp doesn't exceed the maximum
+
+    exp = 0 if $PokemonSystem.level_caps==1 && pokemonExceedsLevelCap(pkmn)
+
     expFinal = growth_rate.add_exp(pkmn.exp, exp)
     expGained = expFinal - pkmn.exp
+
+
+
+
     return if expGained <= 0
     # "Exp gained" message
     if showMessages
@@ -166,11 +174,14 @@ class PokeBattle_Battle
     end
     curLevel = pkmn.level
     newLevel = growth_rate.level_from_exp(expFinal)
+    dontAnimate=false
     if newLevel < curLevel
-      debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
-      raise RuntimeError.new(
-        _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
-              pkmn.name, debugInfo))
+      dontAnimate = true
+      # debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
+      # raise RuntimeError.new(
+      #   echoln  _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
+      #         pkmn.name, debugInfo)
+      pbDisplayPaused(_INTL("{1}'s growth rate has changed to '{2}''. Its level will be adjusted to reflect its current exp.", pkmn.name, pkmn.growth_rate.real_name))
     end
     # Give Exp
     if pkmn.shadowPokemon?
@@ -187,6 +198,8 @@ class PokeBattle_Battle
       tempExp2 = (levelMaxExp < expFinal) ? levelMaxExp : expFinal
       pkmn.exp = tempExp2
 
+
+
       if pkmn.isFusion?
         if pkmn.exp_gained_since_fused == nil
           pkmn.exp_gained_since_fused = expGained
@@ -195,7 +208,9 @@ class PokeBattle_Battle
         end
 
       end
-      @scene.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2)
+      @scene.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2) if !dontAnimate
+
+
       tempExp1 = tempExp2
       curLevel += 1
       if curLevel > newLevel
@@ -224,6 +239,8 @@ class PokeBattle_Battle
         @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
                          oldSpAtk, oldSpDef, oldSpeed)
       end
+
+      echoln "256"
 
       # Learn all moves learned at this level
       moveList = pkmn.getMoveList

@@ -285,9 +285,7 @@ class PokemonLoadScreen
   def try_load_backup(file_path)
     if File.file?(file_path + ".bak")
       pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
-      file_copy(file_path, SaveData.get_backup_file_path)
-      File.rename(file_path + '.bak', file_path)
-      save_data = load_save_file(file_path)
+      save_data = load_save_file(file_path + ".bak")
     else
       self.prompt_save_deletion(file_path)
       return {}
@@ -696,9 +694,6 @@ module Game
     $Trainer.save_slot = slot unless auto
     $Trainer.last_time_saved = Time.now
     begin
-      if File.exists?(file_path)
-        file_copy(file_path, file_path + '.bak')
-      end
       SaveData.save_to_file(file_path)
       Graphics.frame_reset
     rescue IOError, SystemCallError

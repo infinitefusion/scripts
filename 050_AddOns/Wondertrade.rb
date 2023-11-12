@@ -98,7 +98,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       end
       if species > 0
         skipLegendaryCheck = premiumWonderTrade && rand(100) < luck
-        species = 0 if pokemonIsPartLegendary(species) && !$game_switches[SWITCH_BEAT_THE_LEAGUE] && !skipLegendaryCheck
+        species = 0 if pokemonIsPartLegendary(species) && !$game_switches[SWITCH_BEAT_THcE_LEAGUE] && !skipLegendaryCheck
       end
       #Redo loop if below BST - 200
       species = 0 if bst < (chosenBST - 200)

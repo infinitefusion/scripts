@@ -216,13 +216,12 @@ class PokemonFusionScene
 
   def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
     abilityList = poke.getAbilityList
-
     if $game_switches[SWITCH_DOUBLE_ABILITIES]
       abID1 = @pokemon1.ability
       abID2 = @pokemon2.ability
     else
-      abID1 = hidden1 ? abilityList[4][0] : abilityList[0][0]
-      abID2 = hidden2 ? abilityList[5][0] : abilityList[1][0]
+      abID1 = hidden1 ? abilityList[-2][0] : abilityList[0][0]
+      abID2 = hidden2 ? abilityList[-1][0] : abilityList[1][0]
     end
     availableNatures = []
     availableNatures << @pokemon1.nature
