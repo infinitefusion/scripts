@@ -401,6 +401,9 @@ def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
     $game_temp.player_new_x = x
     $game_temp.player_new_y = y
     $game_temp.player_new_direction = direction
+    $PokemonGlobal.diving = true
+    $PokemonGlobal.surfing = false
+
     $scene.transfer_player(false)
     $game_map.autoplay
     $game_map.refresh
@@ -424,7 +427,6 @@ Events.onAction += proc { |_sender, _e|
     pbDive if $game_player.terrain_tag.can_dive
   end
 }
-
 
 HiddenMoveHandlers::CanUseMove.add(:DIVE, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, showmsg)
@@ -492,7 +494,7 @@ HiddenMoveHandlers::UseMove.add(:DIVE, proc { |move, pokemon|
 HiddenMoveHandlers::CanUseMove.add(:FLASH, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLASH, showmsg)
   if !GameData::MapMetadata.exists?($game_map.map_id) ||
-    !GameData::MapMetadata.get($game_map.map_id).dark_map
+    !(GameData::MapMetadata.get($game_map.map_id).dark_map || darknessEffectOnCurrentMap())
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -825,6 +827,49 @@ Events.onAction += proc { |_sender, _e|
   pbSurf
 }
 
+#Flowers
+Events.onAction += proc { |_sender, _e|
+  next if !$game_player.pbFacingTerrainTag.flower
+  if $game_player.pbFacingTerrainTag.flowerRed
+    if $game_switches[SWITCH_ORICORIO_QUEST_IN_PROGRESS]
+      oricorioEventPickFlower(:RED)
+    else
+      changeOricorioFlower(1)
+    end
+  end
+  if $game_player.pbFacingTerrainTag.flowerYellow
+    if $game_switches[SWITCH_ORICORIO_QUEST_IN_PROGRESS]
+
+    else
+      changeOricorioFlower(2)
+    end
+  end
+  if $game_player.pbFacingTerrainTag.flowerPink
+    if $game_switches[SWITCH_ORICORIO_QUEST_IN_PROGRESS]
+      oricorioEventPickFlower(:PINK)
+    else
+      changeOricorioFlower(3)
+    end
+  end
+  if $game_player.pbFacingTerrainTag.flowerBlue
+    if $game_switches[SWITCH_ORICORIO_QUEST_IN_PROGRESS]
+      oricorioEventPickFlower(:BLUE)
+    else
+      changeOricorioFlower(4)
+    end
+  end
+}
+
+#Trashcan
+Events.onAction += proc { |_sender, _e|
+  next if !$game_player.pbFacingTerrainTag.trashcan
+  if $PokemonGlobal.stepcount % 25 == 0
+    pbMessage(_INTL("Woah! A Pokémon jumped out of the trashcan!"))
+    pbWildBattle(:TRUBBISH, 10)
+    $PokemonGlobal.stepcount += 1
+  end
+}
+
 HiddenMoveHandlers::CanUseMove.add(:SURF, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, showmsg)
   if $PokemonGlobal.surfing
@@ -1040,8 +1085,6 @@ HiddenMoveHandlers::UseMove.add(:WATERFALL, proc { |move, pokemon|
   pbAscendWaterfall
   next true
 })
-
-
 
 HiddenMoveHandlers::CanUseMove.add(:ROCKCLIMB, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKCLIMB, showmsg)

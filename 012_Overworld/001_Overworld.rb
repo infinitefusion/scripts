@@ -204,11 +204,9 @@ def isFusedEncounter
   return (rand(chance) == 0)
 end
 
-
-
 def getEncounter(encounter_type)
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
-  if $game_switches[SWITCH_RANDOM_WILD]  #wild poke random activated
+  if $game_switches[SWITCH_RANDOM_WILD] #wild poke random activated
     if $game_switches[SWITCH_WILD_RANDOM_GLOBAL] && encounter != nil
       encounter[0] = getRandomizedTo(encounter[0])
     end
@@ -273,8 +271,6 @@ Events.onMapChanging += proc { |_sender, e|
   $game_screen.weather(:None, 0, 0)
 }
 
-
-
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender, e|
   old_map_ID = e[0] # previous map ID, is 0 if no map ID
@@ -287,10 +283,10 @@ Events.onMapChange += proc { |_sender, e|
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
   next if old_map_ID == 0 || old_map_ID == $game_map.map_id
 
-   if !new_map_metadata || !new_map_metadata.weather
-     $game_screen.weather(:None, 0, 0)
-     next
-   end
+  if !new_map_metadata || !new_map_metadata.weather
+    $game_screen.weather(:None, 0, 0)
+    next
+  end
   map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[old_map_ID].name
     old_map_metadata = GameData::MapMetadata.try_get(old_map_ID)
@@ -318,7 +314,6 @@ Events.onMapChange += proc { |_sender, e|
   end
 }
 
-
 Events.onMapSceneChange += proc { |_sender, e|
   scene = e[0]
   mapChanged = e[1]
@@ -333,7 +328,7 @@ Events.onMapSceneChange += proc { |_sender, e|
   end
   # Display darkness circle on dark maps
   map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-  if map_metadata && map_metadata.dark_map
+  if map_metadata && map_metadata.dark_map || (darknessEffectOnCurrentMap())
     $PokemonTemp.darknessSprite = DarknessSprite.new
     scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
     if $PokemonGlobal.flashUsed
@@ -833,7 +828,7 @@ end
 # Being given an item
 #===============================================================================
 
-def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom=true)
+def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom = true)
   #item_name -> pour donner un autre nom à l'item. Pas encore réimplémenté et surtout là pour éviter que ça plante quand des events essaient de le faire
   canRandom = false if !$game_switches[SWITCH_RANDOM_ITEMS_GENERAL]
   original_item = GameData::Item.get(item)
@@ -859,8 +854,8 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom=tru
   if item == :LEFTOVERS
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine? # TM or HM
-    if $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] && $game_variables[VAR_CURRENT_GYM_TYPE]>-1
-      item=randomizeGymTM(item)
+    if $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] && $game_variables[VAR_CURRENT_GYM_TYPE] > -1
+      item = randomizeGymTM(item)
     end
     pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]", meName, itemname, GameData::Move.get(move).name))
   elsif quantity > 1
@@ -878,22 +873,18 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom=tru
   return false # Can't add the item
 end
 
-
-
-
-
 def randomizeGymTM(old_item)
   gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
   type_id = pbGet(VAR_GYM_TYPES_ARRAY)[gym_index]
-  idx=0
+  idx = 0
   if $Trainer.badge_count >= 3
-    idx=1
+    idx = 1
   end
   if $Trainer.badge_count >= 6
-    idx=2
+    idx = 2
   end
   if $Trainer.badge_count >= 8
-    idx=3
+    idx = 3
   end
   typed_tms_array = Settings::RANDOMIZED_GYM_TYPE_TM[type_id]
   return old_item if !typed_tms_array

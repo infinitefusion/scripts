@@ -55,7 +55,9 @@ module Graphics
       $GameSpeed = 0 if $GameSpeed >= SPEEDUP_STAGES.size
     end
     $frame += 1
-    return unless $frame % SPEEDUP_STAGES[$GameSpeed] == 0
+    speedStage = SPEEDUP_STAGES[$GameSpeed]
+    speedStage=5 if $DEBUG && Input.press?(Input::SHIFT)
+    return unless $frame % speedStage == 0
     fast_forward_update
     $frame = 0
   end
