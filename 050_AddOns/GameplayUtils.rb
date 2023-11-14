@@ -141,7 +141,6 @@ def getFossilsGuyTeam(level)
   elsif $game_switches[SWITCH_PICKED_ANORITH_FOSSIL]
     fossils << :LILEEP if level < fossils_evolution_level_1
     fossils << :CRADILY if level >= fossils_evolution_level_1
-
   end
   #Celadon fossil
   if $game_switches[SWITCH_PICKED_ARMOR_FOSSIL]
