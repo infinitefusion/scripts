@@ -210,9 +210,7 @@ end
 
 def restoreDefaultCharacterSprite(charset_number=0)
   meta = GameData::Metadata.get_player($Trainer.character_ID)
-  charset = pbGetPlayerCharset(meta,charset_number)
-
-  $game_player.setDefaultCharName(charset, 0, false)
+  $game_player.setDefaultCharName(nil, 0, false)
   Graphics.update
   Input.update
   pbUpdateSceneMap
