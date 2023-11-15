@@ -1471,6 +1471,11 @@ def pbFuse(pokemon, poke2, splicer_item)
 end
 
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
+  if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
+    scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
+    return false
+  end
+
   pokemon.spriteform_body=nil
   pokemon.spriteform_head=nil
 
@@ -1482,11 +1487,6 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
     return false
   else
     if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
-      if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
-        scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
-        return false
-      end
-
       keepInParty = 0
       if $Trainer.party.length >= 6 && !pcPosition
         scene.pbDisplay(_INTL("Your party is full! Keep which Pokémon in party?"))
