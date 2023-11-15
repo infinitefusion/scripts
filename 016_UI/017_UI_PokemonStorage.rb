@@ -2319,7 +2319,7 @@ class PokemonStorageScreen
 
         if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
           playingBGM = $game_system.getPlayingBGM
-          pbFuse(selectedHead, selectedBase, isSuperSplicer)
+          pbFuse(selectedHead, selectedBase, @fusionItem)
           if canDeleteItem(@fusionItem)
             $PokemonBag.pbDeleteItem(@fusionItem)
           end
