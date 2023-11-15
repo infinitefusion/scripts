@@ -616,13 +616,21 @@ def validate_regirock_ice_puzzle(solution)
   return true
 end
 
+def unpress_all_regirock_steel_switches()
+  switch_ids = [75,77,76,67, 74,68, 73,72,70,69]
+  regi_map = 813
+  switch_ids.each do |event_id|
+    pbSetSelfSwitch(event_id,"A",false,regi_map)
+  end
+end
+
+
 def validate_regirock_steel_puzzle()
   expected_pressed_switches = [75,77,74,68,73,69]
   expected_unpressed_switches = [76,67,72,70]
   switch_ids = [75,77,76,67,
                 74,68,
                 73,72,70,69]
-
 
   pressed_switches =[]
   unpressed_switches = []
