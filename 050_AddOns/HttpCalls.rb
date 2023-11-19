@@ -81,11 +81,16 @@ def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp",
   end
 end
 
-def download_autogen_sprite(head_id, body_id)
+def download_autogen_sprite(head_id, body_id,spriteformBody_suffix=nil,spriteformHead_suffix=nil)
   return nil if $PokemonSystem.download_sprites != 0
-  url = Settings::AUTOGEN_SPRITES_REPO_URL + "{1}/{1}.{2}.png"
+  template_url = Settings::AUTOGEN_SPRITES_REPO_URL + "{1}/{1}.{2}.png"
+
+  head_id = (head_id.to_s) + "_" + spriteformHead_suffix.to_s if spriteformHead_suffix
+  body_id = (body_id.to_s) + "_" + spriteformBody_suffix.to_s if spriteformBody_suffix
+
   destPath = _INTL("{1}{2}", Settings::BATTLERS_FOLDER, head_id)
-  sprite = download_sprite(_INTL(url, head_id, body_id), head_id, body_id, destPath)
+  url = _INTL(template_url, head_id, body_id)
+  sprite = download_sprite(url, head_id, body_id, destPath)
   return sprite if sprite
   return nil
 end
