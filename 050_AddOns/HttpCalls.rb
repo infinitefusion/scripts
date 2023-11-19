@@ -56,7 +56,7 @@ def download_sprite(base_path, head_id, body_id, saveLocation = "Graphics/temp",
 
     downloaded_file_name = _INTL("{1}/{2}.{3}{4}.png", saveLocation, head_id, body_id, alt_letter)
     if !body_id || body_id == ""
-      downloaded_file_name = _INTL("{1}/{2}{3}.png", saveLocation, head_id, alt_letter)
+      downloaded_file_name = _INTL("{1}{2}{3}.png", saveLocation, head_id, alt_letter)
     end
 
     return downloaded_file_name if pbResolveBitmap(downloaded_file_name)
@@ -109,8 +109,6 @@ def download_unfused_main_sprite(dex_num, alt_letter="")
   base_url = alt_letter == "" ? Settings::BASE_POKEMON_SPRITES_REPO_URL : Settings::BASE_POKEMON_ALT_SPRITES_REPO_URL
   filename = _INTL("{1}{2}.png",dex_num,alt_letter)
   url = base_url + filename
-
-
   destPath = alt_letter == "" ? _INTL("{1}{2}", Settings::BATTLERS_FOLDER, dex_num) : Settings::CUSTOM_BASE_SPRITES_FOLDER
   sprite = download_sprite(url, dex_num, nil, destPath,alt_letter)
 
