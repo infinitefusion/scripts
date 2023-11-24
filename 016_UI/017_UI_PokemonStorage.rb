@@ -1932,7 +1932,7 @@ class PokemonStorageScreen
           if heldpoke || selected[0] == -1
             p = (heldpoke) ? heldpoke : @storage[-1, index]
             p.time_form_set = nil
-            p.form = 0 if p.isSpecies?(:SHAYMIN)
+            #p.form = 0 if p.isSpecies?(:SHAYMIN)
             #p.heal
           end
           @scene.pbStore(selected, heldpoke, destbox, firstfree)

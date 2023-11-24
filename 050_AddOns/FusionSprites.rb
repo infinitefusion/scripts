@@ -257,7 +257,18 @@ def record_sprite_substitution(substitution_id, sprite_name)
   $PokemonGlobal.alt_sprite_substitutions[substitution_id] = sprite_name
 end
 
+def add_to_autogen_cache(pokemon_id, sprite_name)
+  return if !$PokemonGlobal
+  return if !$PokemonGlobal.autogen_sprites_cache
+  $PokemonGlobal.autogen_sprites_cache[pokemon_id]=sprite_name
+end
+
+class PokemonGlobalMetadata
+  attr_accessor :autogen_sprites_cache
+end
+
 def get_fusion_sprite_path(head_id, body_id, spriteform_body = nil, spriteform_head = nil)
+  $PokemonGlobal.autogen_sprites_cache = {} if $PokemonGlobal && !$PokemonGlobal.autogen_sprites_cache
   #Todo: ça va chier si on fusionne une forme d'un pokemon avec une autre forme, mais pas un problème pour tout de suite
   form_suffix = ""
   form_suffix += "_" + spriteform_body.to_s if spriteform_body
@@ -286,6 +297,11 @@ def get_fusion_sprite_path(head_id, body_id, spriteform_body = nil, spriteform_h
     record_sprite_substitution(substitution_id, local_custom_path)
     return local_custom_path
   end
+  echoln $PokemonGlobal.autogen_sprites_cache
+
+  #if the game has loaded an autogen earlier, no point in trying to redownload, so load that instead
+  return $PokemonGlobal.autogen_sprites_cache[substitution_id] if $PokemonGlobal.autogen_sprites_cache[substitution_id] && $PokemonGlobal
+
   #Try to download custom sprite if none found locally
   downloaded_custom = download_custom_sprite(head_id, body_id, spriteform_body_letter, spriteform_head_letter, random_alt)
   if downloaded_custom
@@ -295,11 +311,17 @@ def get_fusion_sprite_path(head_id, body_id, spriteform_body = nil, spriteform_h
 
   #Try local generated sprite
   local_generated_path = Settings::BATTLERS_FOLDER + head_id.to_s + spriteform_head_letter + "/" + filename
-  return local_generated_path if pbResolveBitmap(local_generated_path)
+  if pbResolveBitmap(local_generated_path)
+    add_to_autogen_cache(substitution_id,local_generated_path)
+    return local_generated_path
+  end
 
   #Download generated sprite if nothing else found
   autogen_path = download_autogen_sprite(head_id, body_id,spriteform_body,spriteform_head)
-  return autogen_path if pbResolveBitmap(autogen_path)
+  if pbResolveBitmap(autogen_path)
+    add_to_autogen_cache(substitution_id,autogen_path)
+    return autogen_path
+  end
 
   return Settings::DEFAULT_SPRITE_PATH
 end
