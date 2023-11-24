@@ -298,7 +298,7 @@ def get_fusion_sprite_path(head_id, body_id, spriteform_body = nil, spriteform_h
     return local_custom_path
   end
   #if the game has loaded an autogen earlier, no point in trying to redownload, so load that instead
-  return $PokemonGlobal.autogen_sprites_cache[substitution_id] if $PokemonGlobal.autogen_sprites_cache[substitution_id] && $PokemonGlobal
+  return $PokemonGlobal.autogen_sprites_cache[substitution_id] if  $PokemonGlobal && $PokemonGlobal.autogen_sprites_cache[substitution_id]
 
   #Try to download custom sprite if none found locally
   downloaded_custom = download_custom_sprite(head_id, body_id, spriteform_body_letter, spriteform_head_letter, random_alt)
