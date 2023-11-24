@@ -297,8 +297,6 @@ def get_fusion_sprite_path(head_id, body_id, spriteform_body = nil, spriteform_h
     record_sprite_substitution(substitution_id, local_custom_path)
     return local_custom_path
   end
-  echoln $PokemonGlobal.autogen_sprites_cache
-
   #if the game has loaded an autogen earlier, no point in trying to redownload, so load that instead
   return $PokemonGlobal.autogen_sprites_cache[substitution_id] if $PokemonGlobal.autogen_sprites_cache[substitution_id] && $PokemonGlobal
 
