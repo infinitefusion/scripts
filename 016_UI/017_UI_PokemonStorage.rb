@@ -1967,7 +1967,9 @@ class PokemonStorageScreen
     box = selected[0]
     index = selected[1]
     if @storage[box, index]
-      raise _INTL("Position {1},{2} is not empty...", box, index)
+      pbDisplay("Can't place that there.")
+      return
+      echoln _INTL("Position {1},{2} is not empty...", box, index)
     end
     if box != -1 && index >= @storage.maxPokemon(box)
       pbDisplay("Can't place that there.")
