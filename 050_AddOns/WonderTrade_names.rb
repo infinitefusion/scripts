@@ -1,4 +1,3 @@
-
 RandTrainerNames_male = [
   "Mikaël",
   "James",
@@ -1067,5 +1066,6 @@ RandPokeNick = [
   "Term",
   "Vince",
   "Thorns",
-  "Xillo"
+  "Xillo",
+  "Froggywoggy"
 ]
