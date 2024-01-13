@@ -333,7 +333,28 @@ class PokemonLoadScreen
     end
   end
 
+  def detectFakeDownload()
+    blacklist = ["pokemoninfinitefusion.net"]
+    current_user_directory=Dir.pwd
+    for keyword in blacklist
+      if current_user_directory.include?(keyword)
+        pbMessage("The game has detected that it has been installed from an illegitimate source which likely contains viruses.")
+        pbMessage("Please delete the game and reinstall it from the Discord or subreddit")
+        pbMessage("discord.gg/infinitefusion\nreddit.com/r/pokemoninfinitefusion")
+
+        pbMessage("Please also make sure to report the website you originally downloaded the game from to Google.")
+        return true
+      end
+    end
+    return false
+  end
+  def fakeWebsiteDisclaimer()
+    pbMessage("Reminder: This game does NOT have an official website. The ONLY official sources for the game are game's official discord or subreddit.")
+  end
+
   def pbStartLoadScreen
+    return if detectFakeDownload
+    fakeWebsiteDisclaimer()
     updateHttpSettingsFile
     updateCreditsFile
     newer_version = find_newer_available_version
