@@ -55,8 +55,15 @@ module Graphics
       $GameSpeed = 0 if $GameSpeed >= SPEEDUP_STAGES.size
     end
     $frame += 1
-    speedStage = SPEEDUP_STAGES[$GameSpeed]
-    speedStage=5 if $DEBUG && Input.press?(Input::SHIFT)
+    if $PokemonSystem && $PokemonSystem.speedup == 1
+      speedStage = SPEEDUP_STAGES[$GameSpeed]
+    else
+      speedStage = 1
+      if Input.press?(Input::AUX1) && $CanToggle
+        $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed==0
+        speedStage=$PokemonSystem.speedup_speed+1
+      end
+    end
     return unless $frame % speedStage == 0
     fast_forward_update
     $frame = 0

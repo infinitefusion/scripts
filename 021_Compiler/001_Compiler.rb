@@ -1,3 +1,5 @@
+require 'zlib'
+
 #===============================================================================
 # Records which file, section and line are currently being read
 #===============================================================================
@@ -737,7 +739,7 @@ module Compiler
 
 
   def main
-     return
+    #return
     return if !$DEBUG
     begin
       dataFiles = [

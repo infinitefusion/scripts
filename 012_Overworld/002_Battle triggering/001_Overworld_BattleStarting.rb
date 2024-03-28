@@ -242,6 +242,8 @@ def pbCanTripleBattle?
   return $PokemonGlobal.partner && $Trainer.able_pokemon_count >= 2
 end
 
+
+
 #===============================================================================
 # Start a wild battle
 #===============================================================================
@@ -257,6 +259,7 @@ def pbWildBattleCore(*args)
     $PokemonGlobal.nextBattleME        = nil
     $PokemonGlobal.nextBattleCaptureME = nil
     $PokemonGlobal.nextBattleBack      = nil
+    $PokemonTemp.forced_alt_sprites=nil
     pbMEStop
     return 1   # Treat it as a win
   end
@@ -329,6 +332,30 @@ def pbWildBattleCore(*args)
   #    5 - Draw
   pbSet(outcomeVar,decision)
   return decision
+end
+
+def pbWildDoubleBattleSpecific(pokemon1,pokemon2, outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  setBattleRule("double")
+  # Perform the battle
+  decision = pbWildBattleCore(pokemon1, pokemon2)
+  return (decision!=2 && decision!=5)
+end
+
+def pbWildBattleSpecific(pokemon, outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  # Perform the battle
+  decision = pbWildBattleCore(pokemon)
+  # Used by the Poké Radar to update/break the chain
+  #Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  # Return false if the player lost or drew the battle, and true if any other result
+  return (decision!=2 && decision!=5)
 end
 
 #===============================================================================
@@ -423,6 +450,7 @@ def pbTrainerBattleCore(*args)
     $PokemonGlobal.nextBattleME        = nil
     $PokemonGlobal.nextBattleCaptureME = nil
     $PokemonGlobal.nextBattleBack      = nil
+    $PokemonTemp.forced_alt_sprites=nil
     pbMEStop
     return ($Trainer.able_pokemon_count == 0) ? 0 : 1   # Treat it as undecided/a win
   end

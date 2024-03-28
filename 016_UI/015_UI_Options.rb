@@ -17,6 +17,8 @@ class PokemonSystem
   attr_accessor :level_caps
   attr_accessor :battle_type
   attr_accessor :download_sprites
+  attr_accessor :speedup
+  attr_accessor :speedup_speed
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
@@ -32,8 +34,9 @@ class PokemonSystem
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
     @quicksurf = 0
     @battle_type = 0
+    @speedup = 0 #0= hold, 1=toggle
+    @speedup_speed = 3 #for hold only
     @download_sprites = 0
-
   end
 end
 
@@ -197,10 +200,10 @@ class Window_PokemonOption < Window_DrawableCommand
     @selBaseColor = Color.new(31 * 8, 6 * 8, 3 * 8)
     @selShadowColor = Color.new(31 * 8, 17 * 8, 16 * 8)
     @optvalues = []
-  @mustUpdateOptions = false
+    @mustUpdateOptions = false
     @mustUpdateDescription = false
     @selected_position = 0
-    @allow_arrows_jump=false
+    @allow_arrows_jump = false
     for i in 0...@options.length
       @optvalues[i] = 0
     end
@@ -439,6 +442,14 @@ class PokemonOption_Scene
                                   end
                                 }, "Sets the volume for sound effects"
     )
+
+    options << EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
+                              proc { $PokemonSystem.runstyle },
+                              proc { |value| $PokemonSystem.runstyle = value },
+                              ["Default to walking when not holding the Run key",
+                               "Default to running when not holding the Run key"]
+    )
+
     options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
                               proc { $PokemonSystem.textspeed },
                               proc { |value|
@@ -446,6 +457,36 @@ class PokemonOption_Scene
                                 MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
                               }, "Sets the speed at which the text is displayed"
     )
+
+    if $game_switches
+      options <<
+        EnumOption.new(_INTL("Autosave"), [_INTL("On"), _INTL("Off")],
+                       proc { $game_switches[AUTOSAVE_ENABLED_SWITCH] ? 0 : 1 },
+                       proc { |value|
+                         if !$game_switches[AUTOSAVE_ENABLED_SWITCH] && value == 0
+                           @autosave_menu = true
+                           openAutosaveMenu()
+                         end
+                         $game_switches[AUTOSAVE_ENABLED_SWITCH] = value == 0
+                       },
+                       "Automatically saves when healing at Pokémon centers"
+        )
+    end
+
+
+    options << EnumOption.new(_INTL("Speed-up type"), [_INTL("Hold"), _INTL("Toggle")],
+                              proc { $PokemonSystem.speedup },
+                              proc { |value|
+                                $PokemonSystem.speedup = value
+                              }, "Pick how you want speed-up to be enabled"
+    )
+
+      options << SliderOption.new(_INTL("Speed-up speed"), 1, 10, 1,
+                                  proc { $PokemonSystem.speedup_speed },
+                                  proc { |value|
+                                    $PokemonSystem.speedup_speed = value
+                                  }, "Sets by how much to speed up the game when holding the speed up button (Default: 3x)"
+      )
     # if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
     #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast"), _INTL("Instant")],
     #                             proc { $PokemonSystem.textspeed },
@@ -465,7 +506,7 @@ class PokemonOption_Scene
     # end
     options <<
       EnumOption.new(_INTL("Download sprites"), [_INTL("On"), _INTL("Off")],
-                     proc { $PokemonSystem.download_sprites},
+                     proc { $PokemonSystem.download_sprites },
                      proc { |value|
                        $PokemonSystem.download_sprites = value
                      },
@@ -473,22 +514,6 @@ class PokemonOption_Scene
       )
 
 
-
-
-    if $game_switches
-      options <<
-        EnumOption.new(_INTL("Autosave"), [_INTL("On"), _INTL("Off")],
-                       proc { $game_switches[AUTOSAVE_ENABLED_SWITCH] ? 0 : 1 },
-                       proc { |value|
-                         if !$game_switches[AUTOSAVE_ENABLED_SWITCH] && value == 0
-                           @autosave_menu = true
-                           openAutosaveMenu()
-                         end
-                         $game_switches[AUTOSAVE_ENABLED_SWITCH] = value == 0
-                       },
-                       "Automatically saves when healing at Pokémon centers"
-        )
-    end
 
     if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
       options <<
@@ -522,12 +547,6 @@ class PokemonOption_Scene
                                "No prompt to switch Pokémon before the opponent sends the next one"]
     )
 
-    options << EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
-                              proc { $PokemonSystem.runstyle },
-                              proc { |value| $PokemonSystem.runstyle = value },
-                              ["Default to walking when not holding the Run key",
-                               "Default to running when not holding the Run key"]
-    )
 
     options << NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
                                 proc { $PokemonSystem.textskin },

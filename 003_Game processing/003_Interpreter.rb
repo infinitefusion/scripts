@@ -324,7 +324,7 @@ class Interpreter
   end
 
   # Sets another event's self switch (eg. pbSetSelfSwitch(20, "A", true) ).
-  def pbSetSelfSwitch(eventid, switch_name, value, mapid = -1)
+    def pbSetSelfSwitch(eventid, switch_name, value, mapid = -1)
     mapid = @map_id if mapid < 0
     old_value = $game_self_switches[[mapid, eventid, switch_name]]
     $game_self_switches[[mapid, eventid, switch_name]] = value

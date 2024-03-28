@@ -158,19 +158,19 @@ class PokemonPauseMenu
         else
           #if $Trainer.pokedex.accessible_dexes.length == 1
           $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[0]
-          pbFadeOutIn {
-            scene = PokemonPokedex_Scene.new
-            screen = PokemonPokedexScreen.new(scene)
-            screen.pbStartScreen
-            @scene.pbRefresh
-          }
+          # pbFadeOutIn {
+          #   scene = PokemonPokedex_Scene.new
+          #   screen = PokemonPokedexScreen.new(scene)
+          #   screen.pbStartScreen
+          #   @scene.pbRefresh
+          # }
           # else
-          #   pbFadeOutIn {
-          #     scene = PokemonPokedexMenu_Scene.new
-          #     screen = PokemonPokedexMenuScreen.new(scene)
-          #     screen.pbStartScreen
-          #     @scene.pbRefresh
-          #   }
+            pbFadeOutIn {
+              scene = PokemonPokedexMenu_Scene.new
+              screen = PokemonPokedexMenuScreen.new(scene)
+              screen.pbStartScreen
+              @scene.pbRefresh
+            }
           # end
         end
       elsif cmdPokemon >= 0 && command == cmdPokemon

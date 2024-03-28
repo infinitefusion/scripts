@@ -333,28 +333,7 @@ class PokemonLoadScreen
     end
   end
 
-  def detectFakeDownload()
-    blacklist = ["pokemoninfinitefusion.net"]
-    current_user_directory=Dir.pwd
-    for keyword in blacklist
-      if current_user_directory.include?(keyword)
-        pbMessage("The game has detected that it has been installed from an illegitimate source which likely contains viruses.")
-        pbMessage("Please delete the game and reinstall it from the Discord or subreddit")
-        pbMessage("discord.gg/infinitefusion\nreddit.com/r/pokemoninfinitefusion")
-
-        pbMessage("Please also make sure to report the website you originally downloaded the game from to Google.")
-        return true
-      end
-    end
-    return false
-  end
-  def fakeWebsiteDisclaimer()
-    pbMessage("Reminder: This game does NOT have an official website. The ONLY official sources for the game are game's official discord or subreddit.")
-  end
-
   def pbStartLoadScreen
-    return if detectFakeDownload
-    fakeWebsiteDisclaimer()
     updateHttpSettingsFile
     updateCreditsFile
     newer_version = find_newer_available_version
@@ -406,6 +385,8 @@ class PokemonLoadScreen
       end
       commands[cmd_options = commands.length] = _INTL('Options')
       commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES.length >= 2
+      commands[cmd_discord = commands.length] = _INTL('Discord')
+      commands[cmd_wiki = commands.length] = _INTL('Wiki')
       commands[cmd_debug = commands.length] = _INTL('Debug') if $DEBUG
       commands[cmd_quit = commands.length] = _INTL('Quit Game')
       cmd_left = -3
@@ -445,6 +426,10 @@ class PokemonLoadScreen
           Game.start_new(@save_data[:bag], @save_data[:storage_system], @save_data[:player])
           @save_data[:player].new_game_plus_unlocked = true
           return
+        when cmd_discord
+          openUrlInBrowser(Settings::DISCORD_URL)
+        when cmd_wiki
+          openUrlInBrowser(Settings::WIKI_URL)
         when cmd_mystery_gift
           pbFadeOutIn { pbDownloadMysteryGift(@save_data[:player]) }
         when cmd_options

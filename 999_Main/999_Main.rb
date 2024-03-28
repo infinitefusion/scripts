@@ -43,8 +43,6 @@ def handleReplaceExistingSprites()
   end
 end
 
-
-
 def pbCallTitle
   #return Scene_DebugIntro.new if $DEBUG
   return Scene_Intro.new

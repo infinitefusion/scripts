@@ -21,8 +21,8 @@ class Game_Map
   attr_accessor :fog_zoom # fog zoom rate
   attr_accessor :fog_sx # fog sx
   attr_accessor :fog_sy # fog sy
-  attr_reader :fog_ox # fog x-coordinate starting point
-  attr_reader :fog_oy # fog y-coordinate starting point
+  attr_accessor :fog_ox # fog x-coordinate starting point
+  attr_accessor :fog_oy # fog y-coordinate starting point
   attr_reader :fog_tone # fog color tone
   attr_accessor :battleback_name # battleback file name
   attr_reader :display_x # display x-coordinate * 128
