@@ -97,6 +97,10 @@ class Game_Character
     end
   end
 
+  def set_opacity(opacity)
+    @opacity = opacity
+  end
+
   def move_speed=(val)
     return if val == @move_speed
     @move_speed = val
