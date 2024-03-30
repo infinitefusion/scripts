@@ -593,6 +593,7 @@ end
         oldindex = @index
         pbGoToPrevious
         if @index != oldindex
+          @selected_index=0
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
@@ -603,6 +604,7 @@ end
         oldindex = @index
         pbGoToNext
         if @index != oldindex
+          @selected_index=0
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
