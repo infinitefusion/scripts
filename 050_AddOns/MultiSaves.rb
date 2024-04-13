@@ -336,6 +336,7 @@ class PokemonLoadScreen
   def pbStartLoadScreen
     updateHttpSettingsFile
     updateCreditsFile
+    updateCustomDexFile
     newer_version = find_newer_available_version
     if newer_version
       pbMessage(_INTL("Version {1} is now available! Please use the game's installer to download the newest version. Check the Discord for more information.", newer_version))
