@@ -357,7 +357,7 @@ class HallOfFame_Scene
   def writeGameMode(overlay, x, y)
     gameMode = "Classic mode"
     if $game_switches[SWITCH_MODERN_MODE]
-      gameMode = "Modern mode"
+      gameMode = "Remix mode"
     end
     if $game_switches[SWITCH_EXPERT_MODE]
       gameMode = "Expert mode"
