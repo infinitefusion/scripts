@@ -215,7 +215,7 @@ def add_hat_to_bitmap(bitmap, hat_id, x_pos, y_pos, scale = 1, mirrored = false)
   hat_filename = getTrainerSpriteHatFilename(hat_id)
   hatBitmapWrapper = AnimatedBitmap.new(hat_filename, 0) if pbResolveBitmap(hat_filename)
   hatBitmapWrapper.scale_bitmap(adjusted_scale) if hatBitmapWrapper
-  hatBitmapWrapper.mirror if mirrored
+  hatBitmapWrapper.mirror if hatBitmapWrapper && mirrored
   bitmap.blt(x_pos * adjusted_scale, y_pos * adjusted_scale, hatBitmapWrapper.bitmap, hatBitmapWrapper.bitmap.rect) if hatBitmapWrapper
 end
 

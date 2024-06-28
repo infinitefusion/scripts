@@ -110,7 +110,6 @@ Knuckles
 UnworthyPie
 Doctor Miawoo
 Chardub
-elupsis
 TCGrunler#4583
 
 The following free ressources were also used 

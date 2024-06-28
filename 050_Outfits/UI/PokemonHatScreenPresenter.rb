@@ -58,8 +58,8 @@ class PokemonHatPresenter
     loop do
       Graphics.update
       Input.update
-      @hat_id = selector.selectNextOutfit(@hat_id, 1, selector.hats_list, [], false, "hat_trainer") if Input.trigger?(Input::RIGHT)
-      @hat_id = selector.selectNextOutfit(@hat_id, -1, selector.hats_list, [], false, "hat_trainer") if Input.trigger?(Input::LEFT)
+      @hat_id = selector.selectNextOutfit(@hat_id, 1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::RIGHT)
+      @hat_id = selector.selectNextOutfit(@hat_id, -1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::LEFT)
       break if Input.trigger?(Input::USE)
       return false if Input.trigger?(Input::BACK)
       @view.update()

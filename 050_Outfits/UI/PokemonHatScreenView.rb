@@ -79,7 +79,6 @@ class PokemonHatView
 
     @sprites["rightarrow"].play
     @sprites["leftarrow"].play
-    echoln @sprites["rightarrow"].frame
   end
 
   def hide_select_arrows
