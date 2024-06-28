@@ -1110,6 +1110,7 @@ def setRivalStarter(starterIndex1,starterIndex2)
     starter = GameData::Species.get(starterSpecies.get_baby_species(false)).id_number
   end
   pbSet(VAR_RIVAL_STARTER,starter)
+  $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
   return starter
 end
 
