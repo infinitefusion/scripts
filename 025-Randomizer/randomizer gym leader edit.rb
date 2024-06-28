@@ -41,17 +41,17 @@ def Kernel.initRandomTypeArray()
   $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY
 end
 
-def setRivalStarter(starter1, starter2, starter3, choice)
-  starters = [starter1, starter2, starter3]
-  starters.delete_at(choice)
-  if starters[0] > NB_POKEMON || starters[1] > NB_POKEMON
-    rivalStarter = starters[0]
-  else
-    rivalStarter = starters[0] * NB_POKEMON + starters[1]
-  end
-  pbSet(VAR_RIVAL_STARTER, rivalStarter)
-  $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
-end
+# def setRivalStarter(starter1, starter2, starter3, choice)
+#   starters = [starter1, starter2, starter3]
+#   starters.delete_at(choice)
+#   if starters[0] > NB_POKEMON || starters[1] > NB_POKEMON
+#     rivalStarter = starters[0]
+#   else
+#     rivalStarter = starters[0] * NB_POKEMON + starters[1]
+#   end
+#   pbSet(VAR_RIVAL_STARTER, rivalStarter)
+#   $game_switches[SWITCH_DEFINED_RIVAL_STARTER] = true
+# end
 
 def setRivalStarterSpecific(rivalStarter)
   pbSet(VAR_RIVAL_STARTER, rivalStarter)
@@ -734,13 +734,13 @@ def fixRivalStarter()
   end
   starterChoice = pbGet(7)
 
-  s1 = $PokemonGlobal.psuedoBSTHash[1]
-  s2 = $PokemonGlobal.psuedoBSTHash[4]
-  s3 = $PokemonGlobal.psuedoBSTHash[7]
-  setRivalStarter(s3, s2, s1, starterChoice)
-
+  setRivalStarter(0, 1) if starterChoice == 2
+  setRivalStarter(0, 2) if starterChoice == 1
+  setRivalStarter(1, 2) if starterChoice == 0
+  setRivalStarter(0, 1) if starterChoice > 2
+  echoln pbGet(VAR_RIVAL_STARTER)
   #evolve en fct des badges
-  rivalStarter = pbGet(250)
+  rivalStarter = pbGet(VAR_RIVAL_STARTER)
 
   if $game_switches[68] #beat blue cerulean
     rivalStarter = evolveBody(rivalStarter)
