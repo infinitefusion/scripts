@@ -1022,6 +1022,8 @@ RandPokeNick = [
   "NullPointerException",
   "Myriam",
   "pink",
+  "Ram",
+  "Cheeto",
   "Gump",
   "shazam",
   "Stefano",

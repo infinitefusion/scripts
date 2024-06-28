@@ -64,7 +64,7 @@ class PokeBattle_Battle
     for pokemon in party
       next if !pokemon
       newspecies = rand(PBSpecies.maxValue - 1) + 1
-      while !gymLeaderOk(newspecies) || bstOk(newspecies, pokemon.species, $game_variables[VAR_RANDOMIZER_WILD_POKE_BST])
+      while !gymLeaderOk(newspecies) || bstNotOk(newspecies, pokemon.species, $game_variables[VAR_RANDOMIZER_WILD_POKE_BST])
         newspecies = rand(PBSpecies.maxValue - 1) + 1
       end
       pokemon.species = newspecies
@@ -120,7 +120,18 @@ end
 # end
 #
 
-def bstOk(newspecies, oldPokemonSpecies, bst_range = 50)
+def legendaryOk(oldspecies,newspecies,includeLegendaries)
+  oldSpeciesIsLegendary = is_legendary(oldspecies)
+  if oldSpeciesIsLegendary  #legendaries always randomize to legendaries
+    return is_legendary(newspecies)
+  else
+    return true if includeLegendaries
+    return !is_legendary(newspecies)
+  end
+
+end
+
+def bstNotOk(newspecies, oldPokemonSpecies, bst_range = 50)
   newBST = calcBaseStatsSum(newspecies)
   originalBST = calcBaseStatsSum(oldPokemonSpecies)
   return newBST < originalBST - bst_range || newBST > originalBST + bst_range
@@ -259,13 +270,13 @@ def Kernel.pbRandomizeTM()
   end
 end
 
-def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue)
+def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries=true)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   newspecies_dex = rand(maxDexNumber - 1) + 1
   i = 0
-  while bstOk(newspecies_dex, oldSpecies_dex, bst_range)
+  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
     newspecies_dex = rand(maxDexNumber - 1) + 1
     i += 1
     if i % 10 == 0
@@ -275,14 +286,15 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
   return newspecies_dex
 end
 
-def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false)
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false,includeLegendaries=true)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   i = rand(customSpeciesList.length - 1) + 1
   n = 0
   newspecies_dex = customSpeciesList[i]
-  while bstOk(newspecies_dex, oldSpecies_dex, bst_range)
+
+  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
     i = rand(customSpeciesList.length - 1) #+1
     newspecies_dex = customSpeciesList[i]
     n += 1

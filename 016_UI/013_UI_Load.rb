@@ -65,8 +65,12 @@ class PokemonLoadPanel < SpriteWrapper
         textpos.push([@title,16*2,2*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Badges:"),16*2,53*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([@trainer.badge_count.to_s,103*2,53*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Pokédex:"),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.pokedex.seen_count.to_s,103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        # textpos.push([_INTL("Pokédex:"),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        # textpos.push([@trainer.pokedex.seen_count.to_s,103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+
+        textpos.push([_INTL(getDisplayDifficultyFromIndex(@trainer.lowest_difficulty)),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([getGameModeFromIndex(@trainer.game_mode),103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+
         textpos.push([_INTL("Time:"),16*2,85*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         hour = @totalsec / 60 / 60
         min  = @totalsec / 60 % 60
@@ -166,7 +170,7 @@ class PokemonLoad_Scene
     meta = GameData::Metadata.get_player(trainer.character_ID)
     if meta
       filename = pbGetPlayerCharset(meta,1,trainer,true)
-      @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport)
+      @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport,trainer)
       charwidth  = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height
       @sprites["player"].x        = 56*2-charwidth/8
@@ -341,7 +345,7 @@ class PokemonLoadScreen
         pbFadeOutIn { pbDownloadMysteryGift(@save_data[:player]) }
       when cmd_options
         pbFadeOutIn do
-          scene = PokemonOption_Scene.new
+          scene = PokemonGameOption_Scene.new
           screen = PokemonOptionScreen.new(scene)
           screen.pbStartScreen(true)
         end

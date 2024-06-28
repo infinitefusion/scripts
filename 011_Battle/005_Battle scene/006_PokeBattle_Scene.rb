@@ -244,6 +244,7 @@ class PokeBattle_Scene
     sprite = IconSprite.new(x,y,viewport)
     if filename
       sprite.setBitmap(filename) rescue nil
+
     end
     @sprites[id] = sprite
     return sprite

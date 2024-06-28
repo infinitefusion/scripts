@@ -251,7 +251,7 @@ class PokemonPauseMenu
       elsif cmdOption >= 0 && command == cmdOption
         pbPlayDecisionSE
         pbFadeOutIn {
-          scene = PokemonOption_Scene.new
+          scene = PokemonGameOption_Scene.new
           screen = PokemonOptionScreen.new(scene)
           screen.pbStartScreen
           pbUpdateSceneMap

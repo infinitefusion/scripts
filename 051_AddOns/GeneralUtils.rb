@@ -173,6 +173,7 @@ def getPokemon(dexNum)
 end
 
 def getSpecies(dexnum)
+  return getPokemon(dexnum.species) if dexnum.is_a?(Pokemon)
   return getPokemon(dexnum)
 end
 
@@ -211,6 +212,16 @@ def getFusionSpecies(body, head)
   return GameData::Species.get(id)
 end
 
+def getAbilityIndexFromID(abilityID,fusedPokemon)
+  abilityList = fusedPokemon.getAbilityList
+  for abilityArray in abilityList #ex: [:CHLOROPHYLL, 0]
+    ability = abilityArray[0]
+    index = abilityArray[1]
+    return index if ability == abilityID
+  end
+  return 0
+end
+
 #shortcut for using in game events because of script characters limit
 def dexNum(species)
   return getDexNumberForSpecies(species)
@@ -228,6 +239,7 @@ def isSpeciesFusion(species)
   num = getDexNumberForSpecies(species)
   return isFusion(num)
 end
+
 
 def getRandomCustomFusionForIntro(returnRandomPokemonIfNoneFound = true, customPokeList = [], maxPoke = -1, recursionLimit = 3)
   if customPokeList.length == 0
@@ -300,33 +312,7 @@ def getRandomCustomFusion(returnRandomPokemonIfNoneFound = true, customPokeList 
   return randPoke
 end
 
-def getBodyID(species)
-  if species.is_a?(Integer)
-    dexNum = species
-  else
-    dexNum = getDexNumberForSpecies(species)
-  end
-  if dexNum % NB_POKEMON == 0
-    return (dexNum / NB_POKEMON) - 1
-  end
-  return (dexNum / NB_POKEMON).round
-end
 
-def getHeadID(species, bodyId = nil)
-  if species.is_a?(Integer)
-    fused_dexNum = species
-  else
-    fused_dexNum = getDexNumberForSpecies(species)
-  end
-
-  if bodyId == nil
-    bodyId = getBodyID(species)
-  end
-  body_dexNum = getDexNumberForSpecies(bodyId)
-
-  calculated_number = (fused_dexNum - (body_dexNum * NB_POKEMON)).round
-  return calculated_number == 0 ? NB_POKEMON : calculated_number
-end
 
 def getAllNonLegendaryPokemon()
   list = []
@@ -455,9 +441,7 @@ def isSinnohPokemon(species)
      266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 288, 294,
      295, 296, 297, 298, 299, 305, 306, 307, 308, 315, 316, 317,
      318, 319, 320, 321, 322, 323, 324, 326, 332, 343, 344, 345,
-     346, 347, 352, 353, 354, 358, 383, 384, 388, 389, 400, 402, 403,
-     429
-    ]
+     346, 347, 352, 353, 354, 358, 383, 384, 388, 389, 400, 402, 403]
   return list.include?(dexNum)
 end
 
@@ -467,9 +451,7 @@ def isHoennPokemon(species)
           285, 286, 287, 289, 290, 291, 292, 293, 300, 301, 302, 303,
           304, 309, 310, 311, 312, 313, 314, 333, 334, 335, 336, 340,
           341, 342, 355, 356, 357, 378, 379, 380, 381, 382, 385, 386, 387, 390,
-          391, 392, 393, 394, 395, 396, 401, 404, 405,
-          421, 427,428, 436,437,442,443,447,448,449, 457,458
-  ]
+          391, 392, 393, 394, 395, 396, 401, 404, 405]
   return list.include?(dexNum)
 end
 
@@ -669,4 +651,12 @@ def pokemonExceedsLevelCap(pokemon)
   current_max_level = Settings::LEVEL_CAPS[$Trainer.badge_count]
   current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
   return pokemon.level >= current_max_level
+end
+
+def listPokemonIDs()
+  for id in 0..NB_POKEMON
+    pokemon = GameData::Species.get(id).species
+    echoln id.to_s + ": " + "\"" + pokemon.to_s + "\"" + ", "
+  end
+
 end

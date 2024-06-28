@@ -282,6 +282,8 @@ class PokeBattle_Battle
     pbStartBattleSendOut(sendOuts)
     # Weather announcement
     weather_data = GameData::BattleWeather.try_get(@field.weather)
+    echoln @field.weather
+
     pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
     when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
@@ -466,7 +468,7 @@ class PokeBattle_Battle
       @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
     # Register captured Pokémon in the Pokédex, and store them
-    pbRecordAndStoreCaughtPokemon
+    #pbRecordAndStoreCaughtPokemon
 
     isRematch = $game_switches[SWITCH_IS_REMATCH]
     begin
@@ -504,13 +506,7 @@ class PokeBattle_Battle
         end
       end
     end
-    # Clean up battle stuff
-    @scene.pbEndBattle(@decision)
-    @battlers.each do |b|
-      next if !b
-      pbCancelChoice(b.index)   # Restore unused items to Bag
-      BattleHandlers.triggerAbilityOnSwitchOut(b.ability,b,true) if b.abilityActive?
-    end
+
     pbParty(0).each_with_index do |pkmn,i|
       next if !pkmn
       @peer.pbOnLeavingBattle(self,pkmn,@usedInBattle[0][i],true)   # Reset form
@@ -518,6 +514,16 @@ class PokeBattle_Battle
       pkmn.spriteform_head=nil
       pkmn.spriteform_body=nil
     end
+    pbRecordAndStoreCaughtPokemon
+
+    # Clean up battle stuff
+    @scene.pbEndBattle(@decision)
+    @battlers.each do |b|
+      next if !b
+      pbCancelChoice(b.index)   # Restore unused items to Bag
+      BattleHandlers.triggerAbilityOnSwitchOut(b.ability,b,true) if b.abilityActive?
+    end
+
     return @decision
   end
 
