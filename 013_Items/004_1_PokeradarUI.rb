@@ -10,7 +10,7 @@ class PokeRadar_UI
 
   ICON_LINE_END = 450
 
-  GRAPHICS_Z = 99999
+  GRAPHICS_Z = 99998
 
   def initialize(seenPokemon = [], unseenPokemon = [], rarePokemon = [])
     @seen_pokemon = seenPokemon
