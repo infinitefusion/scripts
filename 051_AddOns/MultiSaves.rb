@@ -64,7 +64,7 @@ def migrateOldSavesToCharacterCustomization()
     $Trainer.unlocked_hairstyles = [Settings::DEFAULT_OUTFIT_MALE, Settings::DEFAULT_OUTFIT_FEMALE]
   end
 
-  if !$Trainer.clothes || !$Trainer.hair || !$Trainer.hat
+  if !$Trainer.clothes || !$Trainer.hair #|| !$Trainer.hat
     setupStartingOutfit()
   end
 end
