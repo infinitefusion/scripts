@@ -6,56 +6,56 @@ class Sprite_Hat < Sprite_Wearable
 
   end
 
-  def set_sprite_position(action, direction, current_frame)
-    @sprite.x = @player_sprite.x - @player_sprite.ox
-    @sprite.y = @player_sprite.y - @player_sprite.oy
-    case action
-    when "run"
-      if direction == DIRECTION_DOWN
-        apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_DOWN, current_frame)
-      elsif direction == DIRECTION_LEFT
-        apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_LEFT, current_frame)
-      elsif direction == DIRECTION_RIGHT
-        apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_RIGHT, current_frame)
-      elsif direction == DIRECTION_UP
-        apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_UP, current_frame)
-      end
-    when "surf"
-      if direction == DIRECTION_DOWN
-        apply_sprite_offset(Outfit_Offsets::SURF_OFFSETS_DOWN,current_frame)
-      elsif direction == DIRECTION_LEFT
-        apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_LEFT,current_frame)
-      elsif direction == DIRECTION_RIGHT
-        apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_RIGHT,current_frame)
-      elsif direction == DIRECTION_UP
-        apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_UP,current_frame)
-      end
-    when "dive"
-      if direction == DIRECTION_DOWN
-        apply_sprite_offset(Outfit_Offsets::DIVE_OFFSETS_DOWN,current_frame)
-      elsif direction == DIRECTION_LEFT
-        apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_LEFT,current_frame)
-      elsif direction == DIRECTION_RIGHT
-        apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_RIGHT,current_frame)
-      elsif direction == DIRECTION_UP
-        apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_UP,current_frame)
-      end
-    when "bike"
-      if direction == DIRECTION_DOWN
-        apply_sprite_offset(Outfit_Offsets::BIKE_OFFSETS_DOWN,current_frame)
-      elsif direction == DIRECTION_LEFT
-        apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_LEFT,current_frame)
-      elsif direction == DIRECTION_RIGHT
-        apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_RIGHT,current_frame)
-      elsif direction == DIRECTION_UP
-        apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_UP,current_frame)
-      end
-    else
-      @sprite.x = @player_sprite.x - @player_sprite.ox
-      @sprite.y = @player_sprite.y - @player_sprite.oy
-    end
-    @sprite.y -= 2 if current_frame % 2 == 1
-  end
+  # def set_sprite_position(action, direction, current_frame)
+  #   @sprite.x = @player_sprite.x - @player_sprite.ox
+  #   @sprite.y = @player_sprite.y - @player_sprite.oy
+  #   case action
+  #   when "run"
+  #     if direction == DIRECTION_DOWN
+  #       apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_DOWN, current_frame)
+  #     elsif direction == DIRECTION_LEFT
+  #       apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_LEFT, current_frame)
+  #     elsif direction == DIRECTION_RIGHT
+  #       apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_RIGHT, current_frame)
+  #     elsif direction == DIRECTION_UP
+  #       apply_sprite_offset(Outfit_Offsets::RUN_OFFSETS_UP, current_frame)
+  #     end
+  #   when "surf"
+  #     if direction == DIRECTION_DOWN
+  #       apply_sprite_offset(Outfit_Offsets::SURF_OFFSETS_DOWN,current_frame)
+  #     elsif direction == DIRECTION_LEFT
+  #       apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_LEFT,current_frame)
+  #     elsif direction == DIRECTION_RIGHT
+  #       apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_RIGHT,current_frame)
+  #     elsif direction == DIRECTION_UP
+  #       apply_sprite_offset( Outfit_Offsets::SURF_OFFSETS_UP,current_frame)
+  #     end
+  #   when "dive"
+  #     if direction == DIRECTION_DOWN
+  #       apply_sprite_offset(Outfit_Offsets::DIVE_OFFSETS_DOWN,current_frame)
+  #     elsif direction == DIRECTION_LEFT
+  #       apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_LEFT,current_frame)
+  #     elsif direction == DIRECTION_RIGHT
+  #       apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_RIGHT,current_frame)
+  #     elsif direction == DIRECTION_UP
+  #       apply_sprite_offset( Outfit_Offsets::DIVE_OFFSETS_UP,current_frame)
+  #     end
+  #   when "bike"
+  #     if direction == DIRECTION_DOWN
+  #       apply_sprite_offset(Outfit_Offsets::BIKE_OFFSETS_DOWN,current_frame)
+  #     elsif direction == DIRECTION_LEFT
+  #       apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_LEFT,current_frame)
+  #     elsif direction == DIRECTION_RIGHT
+  #       apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_RIGHT,current_frame)
+  #     elsif direction == DIRECTION_UP
+  #       apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_UP,current_frame)
+  #     end
+  #   else
+  #     @sprite.x = @player_sprite.x - @player_sprite.ox
+  #     @sprite.y = @player_sprite.y - @player_sprite.oy
+  #   end
+  #   @sprite.y -= 2 if current_frame % 2 == 1
+  # end
 
 end
 

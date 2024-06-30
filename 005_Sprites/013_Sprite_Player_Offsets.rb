@@ -1,5 +1,8 @@
 
 #[FRAME1 [x,y]],[FRAME2 [x,y], etc.]
+#
+# exact number of pixels that the sprite needs to be moved for each frame
+# add 2 pixels on even frames
 module Outfit_Offsets
   BASE_OFFSET = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
@@ -24,4 +27,8 @@ module Outfit_Offsets
   BIKE_OFFSETS_RIGHT = [[4, -4], [2, -2], [4, -4], [6, -2]]
   BIKE_OFFSETS_UP = [[0, -2], [-2, 0], [0, -2], [2, 0]]
 
+  FISH_OFFSETS_DOWN = [[0, -6], [0, -2], [0, -8], [2, -6]]
+  FISH_OFFSETS_LEFT = [[0, -8], [-6, -6], [0, -8], [2, -8]]
+  FISH_OFFSETS_RIGHT = [[0, -8], [6, -6], [0, -8], [-2, -8]]
+  FISH_OFFSETS_UP = [[0, -6], [0, -6], [0, -6], [2, -4]]
 end
