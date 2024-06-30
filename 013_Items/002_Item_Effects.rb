@@ -244,7 +244,7 @@ ItemHandlers::UseInField.copy(:BICYCLE, :RACEBIKE)
 
 ItemHandlers::UseInField.add(:OLDROD, proc { |item|
   notCliff = $game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
-  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
+  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff) || $PokemonGlobal.surfing
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
@@ -257,7 +257,7 @@ ItemHandlers::UseInField.add(:OLDROD, proc { |item|
 
 ItemHandlers::UseInField.add(:GOODROD, proc { |item|
   notCliff = $game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
-  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
+  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff) || $PokemonGlobal.surfing
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
@@ -270,7 +270,7 @@ ItemHandlers::UseInField.add(:GOODROD, proc { |item|
 
 ItemHandlers::UseInField.add(:SUPERROD, proc { |item|
   notCliff = $game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
-  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
+  if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff) || $PokemonGlobal.surfing
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
