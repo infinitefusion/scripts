@@ -72,7 +72,7 @@ end
 
 def applyRoamWeather()
   return if $game_screen.weather_type != :None
-  currently_roaming = $PokemonGlobal.roamPosition.keys
+  currently_roaming = getAllCurrentlyRoamingPokemon()
   currently_roaming.each do |roamer_id|
     roamerOnCurrentMap = $PokemonGlobal.roamPosition[roamer_id] == $game_map.map_id
     if roamerOnCurrentMap

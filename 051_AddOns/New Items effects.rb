@@ -1868,13 +1868,27 @@ ItemHandlers::UseInField.add(:DEVONSCOPE, proc { |item|
 #TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
   track_pokemon()
+  next true
 })
 ItemHandlers::UseFromBag.add(:REVEALGLASS, proc { |item|
   track_pokemon()
+  next true
 })
 
+def getAllCurrentlyRoamingPokemon
+  currently_roaming = []
+  Settings::ROAMING_SPECIES.each_with_index do |data, i|
+    next if !GameData::Species.exists?(data[0])
+    next if data[2] > 0 && !$game_switches[data[2]]   # Isn't roaming
+    next if $PokemonGlobal.roamPokemon[i] == true   # Roaming Pokémon has been caught
+    currently_roaming << i
+  end
+  return currently_roaming
+end
+
 def track_pokemon()
-  currently_roaming = $PokemonGlobal.roamPosition.keys
+  currently_roaming = getAllCurrentlyRoamingPokemon()
+  echoln currently_roaming
   weather_data = []
   mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
   currently_roaming.each do |roamer_id|
@@ -1891,11 +1905,10 @@ def track_pokemon()
     end
     weather_data << forecast_msg if forecast_msg && !weather_data.include?(forecast_msg)
   end
-
+  weather_data << _INTL("No unusual weather patterns have been detected.") if weather_data.empty?
   weather_data.each do |message|
     Kernel.pbMessage(message)
   end
-
 
   # nbRoaming = 0
   # if Settings::ROAMING_SPECIES.length == 0
