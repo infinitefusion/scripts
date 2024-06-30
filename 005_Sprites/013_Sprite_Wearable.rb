@@ -72,6 +72,16 @@ class Sprite_Wearable < RPG::Sprite
       elsif direction == DIRECTION_UP
         apply_sprite_offset( Outfit_Offsets::BIKE_OFFSETS_UP,current_frame)
       end
+    when "fish"
+      if direction == DIRECTION_DOWN
+        apply_sprite_offset(Outfit_Offsets::FISH_OFFSETS_DOWN,current_frame)
+      elsif direction == DIRECTION_LEFT
+        apply_sprite_offset( Outfit_Offsets::FISH_OFFSETS_LEFT,current_frame)
+      elsif direction == DIRECTION_RIGHT
+        apply_sprite_offset( Outfit_Offsets::FISH_OFFSETS_RIGHT,current_frame)
+      elsif direction == DIRECTION_UP
+        apply_sprite_offset( Outfit_Offsets::FISH_OFFSETS_UP,current_frame)
+      end
     else
       @sprite.x = @player_sprite.x - @player_sprite.ox
       @sprite.y = @player_sprite.y - @player_sprite.oy
@@ -79,9 +89,10 @@ class Sprite_Wearable < RPG::Sprite
     @sprite.y -= 2 if current_frame % 2 == 1
   end
 
-  def animate(action)
+
+  def animate(action, frame=nil)
     @action = action
-    current_frame = @player_sprite.character.pattern
+    current_frame = @player_sprite.character.pattern if !frame
     direction = @player_sprite.character.direction
     crop_spritesheet(direction)
     set_sprite_position(@action, direction, current_frame)
