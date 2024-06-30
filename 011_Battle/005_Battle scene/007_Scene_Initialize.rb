@@ -177,7 +177,7 @@ class PokeBattle_Scene
     sprite.setBitmapDirectly(generate_front_trainer_sprite_bitmap())
     sprite.zoom_x=2
     sprite.zoom_y=2
-    sprite.z=30 + idxTrainer
+    sprite.z=100 + idxTrainer
 
     sprite.mirror =true
     @sprites["player_#{idxTrainer + 1}"] = sprite
