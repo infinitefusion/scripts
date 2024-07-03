@@ -176,11 +176,11 @@ end
 
 
 def playPokeFluteAnimation
-  return if $Trainer.outfit != 0
-  $game_player.setDefaultCharName("players/pokeflute", 0, false)
-  Graphics.update
-  Input.update
-  pbUpdateSceneMap
+  # return if $Trainer.outfit != 0
+  # $game_player.setDefaultCharName("players/pokeflute", 0, false)
+  # Graphics.update
+  # Input.update
+  # pbUpdateSceneMap
 end
 
 def restoreDefaultCharacterSprite(charset_number = 0)
