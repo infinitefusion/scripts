@@ -236,6 +236,7 @@ class PokemonMart_Scene
 
   def pbStartBuyOrSellScene(buying, stock, adapter)
     # Scroll right before showing screen
+    $scene.spritesetGlobal.playersprite.toggleWearableScrollAdjustments(true) # todo temp
     scroll_map()
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -277,6 +278,8 @@ class PokemonMart_Scene
     @buying = buying
     pbRefresh
     Graphics.frame_reset
+    $scene.spritesetGlobal.playersprite.toggleWearableScrollAdjustments(false) # todo temp
+
   end
 
   def pbStartBuyScene(stock, adapter)

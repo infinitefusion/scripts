@@ -2,6 +2,7 @@ class Sprite_Wearable < RPG::Sprite
   attr_accessor :filename
   attr_accessor :action
   attr_accessor :sprite
+  attr_accessor :must_adjust_scroll
 
   def initialize(player_sprite, filename, action, viewport)
     @player_sprite = player_sprite
@@ -16,6 +17,8 @@ class Sprite_Wearable < RPG::Sprite
     @frameHeight = 80 #@sprite.height / 4
     @sprite.z = 0
     @relative_z=0 #relative to player
+    @map_scrolled=false #true if the map has scrolled, false if centered on the player
+    @must_adjust_scroll = false   #todo temp fix for weird pokemart scrolling glitch
     echoln(_INTL("init had at z = {1}, player sprite at {2}",@sprite.z,@player_sprite.z))
 
     #Unused position offset
@@ -27,6 +30,31 @@ class Sprite_Wearable < RPG::Sprite
     @sprite.x  += offsets_array[current_frame][0]
     @sprite.y  += offsets_array[current_frame][1]
   end
+
+  def adjustPositionForScreenScrolling
+    return if !$game_map.scrolling? && !(@map_scrolled && @must_adjust_scroll)
+    if $game_player.isCentered()
+      @map_scrolled=false
+      return
+    end
+    @map_scrolled=true if @must_adjust_scroll
+    offset_x = 0
+    offset_y = 0
+    @sprite.z+=10
+    case $game_map.scroll_direction
+    when DIRECTION_RIGHT
+      offset_x=-8
+    when DIRECTION_LEFT
+      offset_x=8
+    when DIRECTION_UP
+      offset_y=16
+    when DIRECTION_DOWN
+      offset_y=-16
+    end
+    @sprite.x+=offset_x
+    @sprite.y+=offset_y
+  end
+
 
   def set_sprite_position(action, direction, current_frame)
     @sprite.x = @player_sprite.x - @player_sprite.ox
@@ -86,6 +114,8 @@ class Sprite_Wearable < RPG::Sprite
       @sprite.x = @player_sprite.x - @player_sprite.ox
       @sprite.y = @player_sprite.y - @player_sprite.oy
     end
+    adjustPositionForScreenScrolling()
+
     @sprite.y -= 2 if current_frame % 2 == 1
   end
 
