@@ -178,6 +178,12 @@ class Game_Player < Game_Character
     self.map.display_y = y * Game_Map::REAL_RES_Y - SCREEN_CENTER_Y
   end
 
+
+  def isCentered()
+    x_centered = self.map.display_x == x * Game_Map::REAL_RES_X - SCREEN_CENTER_X
+    y_centered = self.map.display_y == y * Game_Map::REAL_RES_Y - SCREEN_CENTER_Y
+    return x_centered && y_centered
+  end
   #-----------------------------------------------------------------------------
   # * Move to Designated Position
   #     x : x-coordinate

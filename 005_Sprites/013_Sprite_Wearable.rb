@@ -28,6 +28,31 @@ class Sprite_Wearable < RPG::Sprite
     @sprite.y  += offsets_array[current_frame][1]
   end
 
+  def adjustPositionForScreenScrolling
+    return if !$game_map.scrolling? && !@was_just_scrolling
+    if $game_map.scrolling?
+      @was_just_scrolling=true
+    else
+      @was_just_scrolling=false
+    end
+    offset_x = 0
+    offset_y = 0
+    case $game_map.scroll_direction
+    when DIRECTION_RIGHT
+      offset_x=-8
+    when DIRECTION_LEFT
+      offset_x=8
+    when DIRECTION_UP
+      offset_y=8
+      @sprite.z+=50 #weird layering glitch for some reason otherwise. It's reset to the correct value in the next animation frame
+    when DIRECTION_DOWN
+      offset_y=-8
+    end
+    @sprite.x+=offset_x
+    @sprite.y+=offset_y
+  end
+
+
   def set_sprite_position(action, direction, current_frame)
     @sprite.x = @player_sprite.x - @player_sprite.ox
     @sprite.y = @player_sprite.y - @player_sprite.oy
@@ -86,6 +111,8 @@ class Sprite_Wearable < RPG::Sprite
       @sprite.x = @player_sprite.x - @player_sprite.ox
       @sprite.y = @player_sprite.y - @player_sprite.oy
     end
+    adjustPositionForScreenScrolling()
+
     @sprite.y -= 2 if current_frame % 2 == 1
   end
 
@@ -95,8 +122,8 @@ class Sprite_Wearable < RPG::Sprite
     current_frame = @player_sprite.character.pattern if !frame
     direction = @player_sprite.character.direction
     crop_spritesheet(direction)
-    set_sprite_position(@action, direction, current_frame)
     adjust_layer()
+    set_sprite_position(@action, direction, current_frame)
   end
 
   def update(action, filename,color)

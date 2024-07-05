@@ -17,6 +17,7 @@ class Sprite_Player < Sprite_Character
     getClothedPlayerSprite(true)
   end
 
+
   def updateCharacterBitmap
     skinTone = $Trainer.skin_tone ? $Trainer.skin_tone : 0
     baseBitmapFilename = getBaseOverworldSpriteFilename(@character_name, skinTone)
@@ -78,9 +79,7 @@ class Sprite_Player < Sprite_Character
     return baseBitmap
   end
 
-  def positionHair(baseBitmap, hairBirmap, offset)
-    baseBitmap.blt(offset[0], offset[1], hairBirmap, hairBirmap.rect)
-  end
+
 
 
   def update

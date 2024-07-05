@@ -36,6 +36,7 @@ class Game_Map
   attr_reader :display_x # display x-coordinate * 128
   attr_reader :display_y # display y-coordinate * 128
   attr_accessor :need_refresh # refresh request flag
+  attr_accessor :scroll_direction
 
   TILE_WIDTH = 32
   TILE_HEIGHT = 32

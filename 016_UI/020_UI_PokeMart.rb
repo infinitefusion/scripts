@@ -587,6 +587,7 @@ class PokemonMartScreen
     @scene.pbStartBuyScene(@stock,@adapter)
     item=nil
     loop do
+      pbWait(4)
       item=@scene.pbChooseBuyItem
       break if !item
       quantity=0
