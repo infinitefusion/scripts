@@ -231,7 +231,7 @@ def Kernel.sumGameStats()
   stringStats << "\nRematched " << $game_variables[VAR_STAT_LEADER_REMATCH].to_s << " Gym Leaders"
   stringStats << "\nTook " << $PokemonGlobal.stepcount.to_s << " steps"
   stringStats << "\nVisited " << countVisitedMaps.to_s << " different areas"
-  stringStats << "\nUsed " << $game_variables[VAR_STAT_RARE_CANDY] << " Rare Candies"
+  stringStats << "\nUsed " << $game_variables[VAR_STAT_RARE_CANDY].to_s << " Rare Candies"
 
   if $game_switches[910]
     stringStats << "\nMade " << $game_variables[VAR_STAT_NB_WONDERTRADES].to_s << " Wonder Trades"
