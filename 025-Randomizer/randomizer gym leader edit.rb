@@ -228,10 +228,11 @@ def Kernel.sumGameStats()
   stringStats << "\nBeaten the Elite Four " << $game_variables[VAR_STAT_NB_ELITE_FOUR].to_s << " times"
   stringStats << "\nFused " << $game_variables[VAR_STAT_NB_FUSIONS].to_s << " Pokémon"
 
-  stringStats << "\nRematched " << $game_variables[VAR_STAT_LEADER_REMATCH].to_s << " Gym Leaders"
+  nbGymRematches = $game_variables[VAR_STAT_LEADER_REMATCH]
+  stringStats << "\nRematched " << nbGymRematches.to_s << " Gym Leaders" if nbGymRematches > 0
   stringStats << "\nTook " << $PokemonGlobal.stepcount.to_s << " steps"
   stringStats << "\nVisited " << countVisitedMaps.to_s << " different areas"
-  stringStats << "\nUsed " << $game_variables[VAR_STAT_RARE_CANDY] << " Rare Candies"
+  stringStats << "\nUsed " << $game_variables[VAR_STAT_RARE_CANDY].to_s << " Rare Candies"
 
   if $game_switches[910]
     stringStats << "\nMade " << $game_variables[VAR_STAT_NB_WONDERTRADES].to_s << " Wonder Trades"

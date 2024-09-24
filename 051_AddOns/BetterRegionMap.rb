@@ -107,13 +107,12 @@ class BetterRegionMap
       if map_metadata
         player = map_metadata.town_map_position
         if true#player && player[0] == @region  #only use 1 region
-          $PokemonGlobal.regionMapSel[0] = player[1]
-          $PokemonGlobal.regionMapSel[1] = player[2]
+          $PokemonGlobal.regionMapSel = [0, 0]
           gender = $Trainer.gender.to_digits(3)
           # @window["player"].bmp("Graphics/Pictures/map/Player#{gender}")
           @window["player"].bmp("Graphics/Pictures/map/location_icon")
-          @window["player"].x = TileWidth * player[1] + (TileWidth / 2.0)
-          @window["player"].y = TileHeight * player[2] + (TileHeight / 2.0)
+          @window["player"].x = TileWidth * player[1] + (TileWidth / 2.0) if player
+          @window["player"].y = TileHeight * player[2] + (TileHeight / 2.0)  if player
           @window["player"].center_origins
         end
       else
