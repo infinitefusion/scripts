@@ -7,7 +7,7 @@ module Settings
   CUSTOM_DEX_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/dex.json"
 
   AUTOGEN_SPRITES_REPO_URL = "https://gitlab.com/infinitefusion2/autogen-fusion-sprites/-/raw/main/Battlers/"
-  CUSTOM_SPRITES_REPO_URL = "https://gitlab.com/infinitefusion2/customSprites/-/raw/master/CustomBattlers/"
+  CUSTOM_SPRITES_REPO_URL = "https://infinitefusion.net/CustomBattlers/"#"https://gitlab.com/infinitefusion2/customSprites/-/raw/master/CustomBattlers/"
   BASE_POKEMON_SPRITES_REPO_URL = "https://gitlab.com/infinitefusion2/autogen-fusion-sprites/-/raw/main/Battlers/"
   BASE_POKEMON_ALT_SPRITES_REPO_URL = "https://gitlab.com/infinitefusion2/customSprites/-/raw/main/Other/BaseSprites/"
 
