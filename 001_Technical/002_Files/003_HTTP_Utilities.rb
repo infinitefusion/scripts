@@ -120,6 +120,7 @@ end
 
 def clean_json_string(str)
   # Remove non-UTF-8 characters and unexpected control characters
+  cleaned_str = str
   cleaned_str = str.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') if !$PokemonSystem.on_mobile
 
   # Remove literal \n, \r, \t, etc.
