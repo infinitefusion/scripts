@@ -634,6 +634,7 @@ class PokeBattle_Battle
 
   def pbSetSeen(battler)
     return if !battler || !@internalBattle
+    try_resync_pokedex()
     pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
   end
 
