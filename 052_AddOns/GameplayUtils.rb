@@ -1483,7 +1483,8 @@ def isPlayerFemale()
   return pbGet(VAR_TRAINER_GENDER) == GENDER_FEMALE
 end
 
-def optionsMenu(options = [], cmdIfCancel = nil, startingOption = 0)
+def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)
+  cmdIfCancel = -1 if !cmdIfCancel
   result = pbShowCommands(nil, options, cmdIfCancel, startingOption)
   echoln "menuResult :#{result}"
   return result
