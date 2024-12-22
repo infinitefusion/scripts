@@ -119,9 +119,10 @@ def downloadAllowed?()
 end
 
 def clean_json_string(str)
+  return str if $PokemonSystem.on_mobile
   # Remove non-UTF-8 characters and unexpected control characters
   cleaned_str = str
-  cleaned_str = str.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') if !$PokemonSystem.on_mobile
+  cleaned_str = str.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
 
   # Remove literal \n, \r, \t, etc.
   cleaned_str = cleaned_str.gsub(/\\n|\\r|\\t/, '')
