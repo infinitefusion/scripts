@@ -323,7 +323,7 @@ class PokemonPokedexInfo_Scene
       #            species_data.pokedex_entry, base, shadow)
       #
       #
-
+      #$PokemonSystem.use_generated_dex_entries=true if $PokemonSystem.use_generated_dex_entries ==nil
       drawEntryText(overlay, species_data)
 
       # Draw the footprint
@@ -362,7 +362,8 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
-  def drawEntryText(overlay, species_data)
+
+  def   drawEntryText(overlay, species_data)
     baseColor = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     shadowCustom = Color.new(160, 200, 150)
@@ -374,12 +375,17 @@ class PokemonPokedexInfo_Scene
         entryText = customEntry
         shadowColor = shadowCustom
       else
-        aiEntry = getAIDexEntry(species_data.species, species_data.name)
-        if aiEntry
-          entryText = aiEntry
-          shadowColor = shadowAI
+        if $PokemonSystem.use_generated_dex_entries
+          aiEntry = getAIDexEntry(species_data.species, species_data.name)
+          if aiEntry
+            entryText = aiEntry
+            shadowColor = shadowAI
+          else
+            entryText = species_data.pokedex_entry
+            shadowColor = shadow
+          end
         else
-          entryText = species_data.pokedex_entry
+          entryText = "No custom Pokédex entry available for this Pokémon. Placeholder entries can be enabled in the game's options."
           shadowColor = shadow
         end
       end
