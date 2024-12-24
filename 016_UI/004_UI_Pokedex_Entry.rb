@@ -375,7 +375,7 @@ class PokemonPokedexInfo_Scene
         entryText = customEntry
         shadowColor = shadowCustom
       else
-        if $PokemonSystem.use_generated_dex_entries
+        if false#$PokemonSystem.use_generated_dex_entries
           aiEntry = getAIDexEntry(species_data.species, species_data.name)
           if aiEntry
             entryText = aiEntry
@@ -385,7 +385,8 @@ class PokemonPokedexInfo_Scene
             shadowColor = shadow
           end
         else
-          entryText = "No custom Pokédex entry available for this Pokémon. Auto-generated placeholder entries can be enabled in the game's options."
+          entryText = "No custom Pokédex entry available for this Pokémon. Due to community backlash, auto-generated Pokédex entries are no longer available."
+          #entryText = "No custom Pokédex entry available for this Pokémon. Auto-generated placeholder entries can be enabled in the game's options."
           shadowColor = shadow
         end
       end
