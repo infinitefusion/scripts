@@ -385,7 +385,7 @@ class PokemonPokedexInfo_Scene
             shadowColor = shadow
           end
         else
-          entryText = "No custom Pokédex entry available for this Pokémon. Placeholder entries can be enabled in the game's options."
+          entryText = "No custom Pokédex entry available for this Pokémon. Auto-generated placeholder entries can be enabled in the game's options."
           shadowColor = shadow
         end
       end

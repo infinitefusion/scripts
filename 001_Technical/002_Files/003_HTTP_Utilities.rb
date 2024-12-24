@@ -137,7 +137,6 @@ def clean_json_string(str)
   cleaned_str = cleaned_str.gsub(/\\u([\da-fA-F]{4})/) { |match|
     [$1.to_i(16)].pack("U")
   }
-  echoln cleaned_str
   return cleaned_str
 end
 
