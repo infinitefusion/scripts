@@ -21,7 +21,7 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].zoom_x = Settings::FRONTSPRITE_SCALE
     @sprites["infosprite"].zoom_y = Settings::FRONTSPRITE_SCALE
     @spritesLoader = BattleSpriteLoader.new
-
+    @randomEntryText = nil
     # @mapdata = pbLoadTownMapData
     # map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
     # mappos = (map_metadata) ? map_metadata.town_map_position : nil
@@ -375,18 +375,12 @@ class PokemonPokedexInfo_Scene
         entryText = customEntry
         shadowColor = shadowCustom
       else
-        if false#$PokemonSystem.use_generated_dex_entries
-          aiEntry = getAIDexEntry(species_data.species, species_data.name)
-          if aiEntry
-            entryText = aiEntry
-            shadowColor = shadowAI
-          else
-            entryText = species_data.pokedex_entry
-            shadowColor = shadow
-          end
+        if $PokemonSystem.use_generated_dex_entries && species_data.is_a?(GameData::FusedSpecies)
+          @randomEntryText = species_data.get_random_dex_entry if !@randomEntryText
+          entryText = @randomEntryText
+          shadowColor = shadow
         else
-          entryText = "No custom Pokédex entry available for this Pokémon. Due to community backlash, auto-generated Pokédex entries are no longer available."
-          #entryText = "No custom Pokédex entry available for this Pokémon. Auto-generated placeholder entries can be enabled in the game's options."
+          entryText = "No custom Pokédex entry available for this Pokémon. Please consider submitting an entry for this Pokémon on the game's Discord."
           shadowColor = shadow
         end
       end

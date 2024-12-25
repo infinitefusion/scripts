@@ -35,6 +35,8 @@ module Settings
   BASE_SPRITES_FILE_PATH = "Data/sprites/BASE_SPRITES"
   CUSTOM_DEX_ENTRIES_PATH = "Data/pokedex/dex.json"
   AI_DEX_ENTRIES_PATH = "Data/pokedex/generated_entries.json"
+  POKEDEX_ENTRIES_PATH = "Data/pokedex/all_entries.json"
+
   UPDATED_SPRITESHEETS_CACHE = "Data/sprites/updated_spritesheets_cache"
 
   BACK_ITEM_ICON_PATH = "Graphics/Items/back.png"
