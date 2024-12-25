@@ -305,13 +305,16 @@ module GameData
 
 
         body_entry = all_body_entries[@body_pokemon.id_number.to_s].sample
+        body_entry = body_entry.gsub(/#{@body_pokemon.real_name}/i, @real_name)
+        body_entry = clean_json_string(body_entry).gsub(@body_pokemon.real_name, @real_name)
+
         head_entry = all_body_entries[@head_pokemon.id_number.to_s].sample
+        head_entry = head_entry.gsub(/#{@head_pokemon.real_name}/i, @real_name)
+        head_entry = clean_json_string(head_entry).gsub(@head_pokemon.real_name, @real_name)
       rescue
-        @body_pokemon.real_pokedex_entry.gsub(@body_pokemon.real_name, @real_name)
+        body_entry = @body_pokemon.real_pokedex_entry.gsub(@body_pokemon.real_name, @real_name)
         head_entry = @head_pokemon.real_pokedex_entry.gsub(@head_pokemon.real_name, @real_name)
       end
-      body_entry = clean_json_string(body_entry).gsub(@body_pokemon.real_name, @real_name)
-      head_entry = clean_json_string(head_entry).gsub(@head_pokemon.real_name, @real_name)
       echoln body_entry
       echoln head_entry
 
