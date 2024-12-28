@@ -49,6 +49,7 @@ class HatsMartAdapter < OutfitsMartAdapter
     if item.is_a?(Outfit)
       previewWindow.hat = item.id
       $Trainer.hat = item.id# unless $Trainer.hat==nil
+      set_dye_color(item,previewWindow)
     else
       $Trainer.hat=nil
       previewWindow.hat= nil
@@ -56,6 +57,31 @@ class HatsMartAdapter < OutfitsMartAdapter
     pbRefreshSceneMap
     previewWindow.updatePreview()
   end
+  
+  def get_dye_color(item)
+    $Trainer.dyed_hats= {} if ! $Trainer.dyed_hats
+    if $Trainer.dyed_hats.include?(item.id)
+      return $Trainer.dyed_hats[item.id]
+    end
+    return 0
+  end
+  
+  
+  def set_dye_color(item,previewWindow)
+    if !isShop?
+      $Trainer.dyed_hats= {} if ! $Trainer.dyed_hats
+      if $Trainer.dyed_hats.include?(item.id)
+        dye_color = $Trainer.dyed_hats[item.id]
+        $Trainer.hat_color = dye_color
+        previewWindow.hat_color = dye_color
+      else
+        $Trainer.hat_color=0
+        previewWindow.hat_color=0
+      end
+      echoln $Trainer.dyed_hats
+    end
+  end
+
 
   def addItem(item)
     return unless item.is_a?(Outfit)
