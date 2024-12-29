@@ -481,7 +481,8 @@ module Settings
     [561, 50, :FLETCHINDER,32,45],      #Mt. Ember
     [562, 50, :NINJASK,45,50],          #Boon Island
     [603, 50, :KECLEON,45,50],          #Chrono Island
-    [654, 50, :WHIMSICOTT,32,45]        #Brine Road
+    [654, 50, :WHIMSICOTT,32,45],        #Brine Road
+    [654, 50, :SCRAGGY,32,45]        #Kindle Road
   ]
 
   #=============================================================================
