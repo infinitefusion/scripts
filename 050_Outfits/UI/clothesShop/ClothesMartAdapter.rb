@@ -1,7 +1,6 @@
 class ClothesMartAdapter < OutfitsMartAdapter
   DEFAULT_NAME = "[unknown]"
   DEFAULT_DESCRIPTION = "A piece of clothing that trainers can wear."
-
   def toggleEvent(item)
     if !isShop? && $Trainer.clothes_color != 0
       if pbConfirmMessage(_INTL("Would you like to remove the dye?"))
@@ -44,6 +43,7 @@ class ClothesMartAdapter < OutfitsMartAdapter
   end
 
   def get_dye_color(item)
+    return 0 if isShop?
     $Trainer.dyed_clothes= {} if ! $Trainer.dyed_clothes
     if $Trainer.dyed_clothes.include?(item.id)
       return $Trainer.dyed_clothes[item.id]
@@ -62,7 +62,9 @@ class ClothesMartAdapter < OutfitsMartAdapter
         $Trainer.clothes_color=0
         previewWindow.clothes_color=0
       end
-      echoln $Trainer.dyed_clothes
+    else
+      $Trainer.clothes_color=0
+      previewWindow.clothes_color=0
     end
   end
 
@@ -84,6 +86,7 @@ class ClothesMartAdapter < OutfitsMartAdapter
 
   def reset_player_clothes()
     $Trainer.clothes = @worn_clothes
+    $Trainer.clothes_color = $Trainer.dyed_clothes[@worn_clothes] if  $Trainer.dyed_clothes && $Trainer.dyed_clothes[@worn_clothes]
   end
 
   def get_unlocked_items_list()

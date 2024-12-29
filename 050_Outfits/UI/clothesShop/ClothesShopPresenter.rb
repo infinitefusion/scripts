@@ -14,46 +14,58 @@ class ClothesShopPresenter < PokemonMartScreen
   end
 
   def playerHatActionsMenu(item)
-    if $Trainer.hat_color != 0
-      choice = pbMessage("What would you like to do?", ["Wear", "Remove dye", "Cancel"])
-      if choice == 0
+    is_player_hat = item.id == @adapter.worn_clothes
+    options = []
+    if is_player_hat
+      options << "Take off"
+    else
+      options << "Wear"
+    end
+
+    remove_dye_option_available = $Trainer.hat_color != 0
+    options << "Remove dye" if remove_dye_option_available
+    options << "Cancel"
+    #if $Trainer.hat_color != 0
+    choice = pbMessage("What would you like to do?",options,-1)
+    if choice == 0
+      if is_player_hat #remove
+        @adapter.doSpecialItemAction(:REMOVE)
+        @scene.pbEndBuyScene
+        return false
+      else
+        #wear
         putOnClothes(item)
         $Trainer.hat_color = @adapter.get_dye_color(item)
-        return
-      elsif choice == 1
-        if pbConfirm(_INTL("Are you sure you want to remove the dye from the {1}?", item.name))
-          $Trainer.hat_color = 0
-        end
-        return
+        return false
       end
-    else
-      if pbConfirm(_INTL("Would you like to put on the {1}?", item.name))
-        putOnClothes(item)
-        return
+    elsif choice == 1 && remove_dye_option_available
+      if pbConfirm(_INTL("Are you sure you want to remove the dye from the {1}?", item.name))
+        $Trainer.hat_color = 0
       end
+      return true
     end
+    echoln "cancelled"
+    return true
   end
 
   #returns if should stay in the menu
   def playerClothesActionsMenu(item)
-    if $Trainer.clothes_color != 0
-      choice = pbMessage("What would you like to do?", ["Wear", "Remove dye", "Cancel"])
-      if choice == 0
+    is_worn = item.id == @adapter.worn_clothes
+    options = []
+    options << "Wear"
+    options << "Remove dye" if $Trainer.clothes_color != 0
+    options << "Cancel"
+    choice = pbMessage("What would you like to do?",options,-1)
+    if choice == 0
         putOnClothes(item)
         $Trainer.clothes_color = @adapter.get_dye_color(item)
         return false
-      elsif choice == 1
-        if pbConfirm(_INTL("Are you sure you want to remove the dye from the {1}?", item.name))
-          $Trainer.clothes_color = 0
-        end
-        return true
-      end
-    else
-      if pbConfirm(_INTL("Would you like to put on the {1}?", item.name))
-        putOnClothes(item)
-        return false
+    elsif choice == 1
+      if pbConfirm(_INTL("Are you sure you want to remove the dye from the {1}?", item.name))
+        $Trainer.clothes_color = 0
       end
     end
+    return true
   end
 
   def pbBuyScreen
@@ -67,9 +79,12 @@ class ClothesShopPresenter < PokemonMartScreen
         if @adapter.is_a?(ClothesMartAdapter)
           stay_in_menu = playerClothesActionsMenu(item)
           next if stay_in_menu
+          return
         elsif @adapter.is_a?(HatsMartAdapter)
           stay_in_menu = playerHatActionsMenu(item)
+          echoln stay_in_menu
           next if stay_in_menu
+          return
         else
           if pbConfirm(_INTL("Would you like to put on the {1}?", item.name))
             putOnClothes(item)

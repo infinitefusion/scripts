@@ -59,6 +59,7 @@ class HatsMartAdapter < OutfitsMartAdapter
   end
   
   def get_dye_color(item)
+    return 0 if isShop?
     $Trainer.dyed_hats= {} if ! $Trainer.dyed_hats
     if $Trainer.dyed_hats.include?(item.id)
       return $Trainer.dyed_hats[item.id]
@@ -79,6 +80,9 @@ class HatsMartAdapter < OutfitsMartAdapter
         previewWindow.hat_color=0
       end
       echoln $Trainer.dyed_hats
+    else
+      $Trainer.hat_color=0
+      previewWindow.hat_color=0
     end
   end
 
@@ -103,6 +107,7 @@ class HatsMartAdapter < OutfitsMartAdapter
 
   def reset_player_clothes()
     $Trainer.hat = @worn_clothes
+    $Trainer.hat_color = $Trainer.dyed_hats[@worn_clothes] if  $Trainer.dyed_hats && $Trainer.dyed_hats[@worn_clothes]
   end
 
   def get_unlocked_items_list()

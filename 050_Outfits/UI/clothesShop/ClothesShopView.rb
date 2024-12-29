@@ -152,8 +152,10 @@ class ClothesShopView < PokemonMart_Scene
   end
 
   def pbEndBuyScene
-    @sprites["trainerPreview"].erase()
-    @sprites["trainerPreview"] = nil
+    if !@sprites.empty?
+      @sprites["trainerPreview"].erase()
+      @sprites["trainerPreview"] = nil
+    end
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     Kernel.pbClearText()
