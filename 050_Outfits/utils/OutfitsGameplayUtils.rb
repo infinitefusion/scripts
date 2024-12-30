@@ -72,11 +72,11 @@ def putOnHat(outfit_id, silent = false)
   outfit = get_hat_by_id(outfit_id)
   $Trainer.hat = outfit_id
 
-  dye_color = $Trainer.dyed_clothes[outfit_id]
+  dye_color = $Trainer.dyed_hats[outfit_id]
   if dye_color
-    $Trainer.clothes_color = dye_color
+    $Trainer.hat_color = dye_color
   else
-    $Trainer.clothes_color = nil
+    $Trainer.hat_color = nil
   end
 
   $game_map.refreshPlayerOutfit()
