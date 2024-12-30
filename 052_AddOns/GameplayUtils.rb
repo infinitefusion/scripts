@@ -1366,6 +1366,8 @@ def get_mart_exclusive_items(city)
     items_list = [:PSYCHICGEM, :FIGHTINGGEM, :FRIENDBALL]
   when :CINNABAR;
     items_list = [:FIREGEM, :ICEGEM, :HEAVYBALL]
+  when :CRIMSON;
+    items_list = [:DRAGONGEM, :LEVELBALL]
   when :GOLDENROD;
     items_list = [:EVERSTONE, :MOONSTONE, :SUNSTONE, :DUSKSTONE, :DAWNSTONE, :SHINYSTONE]
   when :AZALEA;
@@ -1559,19 +1561,57 @@ def turnPlayerTowardsEvent(event)
   end
 end
 
+def showQuestStatistics(eventId,includeRocketQuests=false)
+  quests_accepted = []
+  quests_in_progress=[]
+  quests_completed=[]
+  for quest in $Trainer.quests
+    next if quest.npc == QuestBranchRocket && !includeRocketQuests
+    quests_accepted<<quest
+    if quest.completed
+      quests_completed << quest
+    else
+      quests_in_progress << quest
+    end
+  end
+  pbCallBub(2, eventId)
+  pbMessage("Accepted quests: \\C[1]#{quests_accepted.length}")
+  pbCallBub(2, eventId)
+  pbMessage("Completed quests: \\C[1]#{quests_completed.length}")
+  pbCallBub(2, eventId)
+  pbMessage("In-progress: \\C[1]#{quests_in_progress.length}")
+end
+
+def get_completed_quests(includeRocketQuests=false)
+  quests_completed=[]
+  for quest in $Trainer.quests
+    next if quest.npc == QuestBranchRocket && !includeRocketQuests
+    quests_completed << quest if quest.completed
+  end
+  return quests_completed
+end
+
 def getQuestReward(eventId)
   $PokemonGlobal.questRewardsObtained = [] if !$PokemonGlobal.questRewardsObtained
-  echoln $PokemonGlobal.questRewardsObtained
-  nb_quests_completed = pbGet(VAR_STAT_QUESTS_COMPLETED)
+  nb_quests_completed = get_completed_quests(false).length #pbGet(VAR_STAT_QUESTS_COMPLETED)
+  pbSet(VAR_STAT_QUESTS_COMPLETED,nb_quests_completed)
   rewards_to_give = []
   for reward in QUEST_REWARDS
     rewards_to_give << reward if nb_quests_completed >= reward.nb_quests && !$PokemonGlobal.questRewardsObtained.include?(reward.item)
   end
 
+  #Calculate how many until next reward
+  next_reward = get_next_quest_reward
+  nb_to_next_reward = next_reward.nb_quests - nb_quests_completed
+  rewards_to_give << next_reward if nb_to_next_reward <=0 #for compatibility with old system
+
+
+
   #Give rewards
   for reward in rewards_to_give
-    if !reward.can_have_multiple
-      next if $PokemonBag.pbQuantity(reward.item) >= 1
+    if !reward.can_have_multiple && $PokemonBag.pbQuantity(reward.item) >= 1
+      $PokemonGlobal.questRewardsObtained << reward.item
+      next
     end
     pbCallBub(2, eventId)
     pbMessage("Also, there's one more thing...")
@@ -1579,15 +1619,13 @@ def getQuestReward(eventId)
     pbMessage("As a gift for having helped so many people, I want to give you this.")
     pbReceiveItem(reward.item, reward.quantity)
     $PokemonGlobal.questRewardsObtained << reward.item
+
+    #recalculate nb to next reward
+    next_reward = get_next_quest_reward
+    nb_to_next_reward = next_reward.nb_quests - nb_quests_completed
   end
 
-  #Calculate how many until next reward
-  for reward in QUEST_REWARDS
-    nextReward = reward
-    break if !$PokemonGlobal.questRewardsObtained.include?(reward.item)
-  end
-  pbCallBub(2, eventId)
-  nb_to_next_reward = nextReward.nb_quests - nb_quests_completed
+
   pbCallBub(2, eventId)
   if nb_to_next_reward == 0
     pbMessage("I have no more rewards to give you! Thanks for helping all these people!")
@@ -1596,6 +1634,15 @@ def getQuestReward(eventId)
   else
     pbMessage("Help #{nb_to_next_reward} more people and I'll give you something good!")
   end
+end
+
+def get_next_quest_reward()
+  for reward in QUEST_REWARDS
+    nextReward = reward
+    break if !$PokemonGlobal.questRewardsObtained.include?(reward.item)
+  end
+  # rewards_to_give << nextReward if nb_to_next_reward <=0 #for compatibility with old system
+  return nextReward
 end
 
 def displaySpriteWindowWithMessage(pif_sprite, message = "", x = 0, y = 0,z=0)
