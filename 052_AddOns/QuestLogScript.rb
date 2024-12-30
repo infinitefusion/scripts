@@ -92,7 +92,7 @@ QUESTS = {
   #Cerulean hotel
   3 => Quest.new(3, "Playing Cupid", "A boy in Cerulean City wants you bring a love letter to a Pokémon Breeder named Maude. She's probably somewhere in one of the routes near Cerulean City", QuestBranchHotels, "BW (18)", "Cerulean City", HotelQuestColor),
   4 => Quest.new(4, "Fishing for Sole", "A fisherman wants you to fish up an old boot. Hook it up with the old rod in any body of water.", QuestBranchHotels, "BW (71)", "Cerulean City", HotelQuestColor),
-  5 => Quest.new(5, "Johto Pokémon", "An traveller in the PokéMart wants you to show him a Pokémon native to the Johto region.", QuestBranchHotels, "traveller_johto", "Cerulean City", HotelQuestColor),
+  5 => Quest.new(5, "Johto Pokémon", "An traveler in the PokéMart wants you to show him a Pokémon native to the Johto region.", QuestBranchHotels, "traveler_johto", "Cerulean City", HotelQuestColor),
   "cerulean_2" => Quest.new(5, "Type Experts", "Defeat all of the Type Experts scattered around the Kanto region (#{pbGet(VAR_TYPE_EXPERTS_BEATEN)}/#{TOTAL_NB_TYPE_EXPERTS})", QuestBranchHotels, "expert-normal", "Cerulean City", HotelQuestColor),
 
   #Route 24
@@ -127,7 +127,7 @@ QUESTS = {
   #Saffron City
   24 => Quest.new(24, "Dancing Queen!", "Dance with the Copycat Girl!", QuestBranchField, "BW (24)", "Saffron City (nightclub)", FieldQuestColor),
     #celadon
-  25 => Quest.new(25, "Sinnoh Pokémon", "A traveller in the Department Center wants you to show him a Pokémon native to the Sinnoh region.", QuestBranchHotels, "traveller_sinnoh", "Celadon City", HotelQuestColor),
+  25 => Quest.new(25, "Sinnoh Pokémon", "A traveler in the Department Center wants you to show him a Pokémon native to the Sinnoh region.", QuestBranchHotels, "traveler_sinnoh", "Celadon City", HotelQuestColor),
   26 => Quest.new(26, "Lost Puppies", "Find all of the missing Growlithe in the routes around Saffron City.", QuestBranchHotels, "BW (73)", "Saffron City", HotelQuestColor),
   27 => Quest.new(27, "Invisible Pokémon", "Find an invisible Pokémon in the eastern part of Saffron City.", QuestBranchHotels, "BW (57)", "Saffron City", HotelQuestColor),
   28 => Quest.new(28, "Bad to the Bone!", "Find a Rare Bone using Rock Smash.", QuestBranchHotels, "BW (72)", "Saffron City", HotelQuestColor),
@@ -135,10 +135,10 @@ QUESTS = {
   #Cinnabar Island
   29 => Quest.new(29, "The transformation Pokémon", "The scientist wants you to find some Quick Powder that can sometimes be found with wild Ditto in the mansion's basement.", QuestBranchHotels, "BW (82)", "Cinnabar Island", HotelQuestColor),
   30 => Quest.new(30, "Diamonds and Pearls", "Find a Diamond Necklace to save the man's marriage.", QuestBranchHotels, "BW (71)", "Cinnabar Island", HotelQuestColor),
-  62 => Quest.new(62, "Alola Pokémon", "A traveller in the PokéMart wants you to show him a Pokémon native to the Alola region.", QuestBranchHotels, "traveller_alola", "Cinnabar Island", HotelQuestColor),
+  62 => Quest.new(62, "Alola Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Alola region.", QuestBranchHotels, "traveler_alola", "Cinnabar Island", HotelQuestColor),
 
   #Vermillion City
-  31 => Quest.new(31, "Hoenn Pokémon", "A traveller in the PokéMart you to show him a Pokémon native to the Hoenn region.", QuestBranchHotels, "traveller_hoenn", "Vermillion City", HotelQuestColor),
+  31 => Quest.new(31, "Hoenn Pokémon", "A traveler in the PokéMart you to show him a Pokémon native to the Hoenn region.", QuestBranchHotels, "traveler_hoenn", "Vermillion City", HotelQuestColor),
   #Goldenrod City
   32 => Quest.new(32, "Safari Souvenir!", "Bring back a souvenir from the Fuchsia City Safari Zone", QuestBranchHotels, "BW (28)", "Goldenrod City", HotelQuestColor),
   65 => Quest.new(65, "Undercover police work!", "Go see the police in Goldenrod City to help them with an important police operation.", QuestBranchField, "BW (80)", "Goldenrod City", FieldQuestColor),
@@ -154,14 +154,14 @@ QUESTS = {
   37 => Quest.new(37, "The Largest Carp", "A fisherman wants you to fish up a Magikarp that's exceptionally high-level at Dragon's Den.", QuestBranchHotels, "BW (71)", "Blackthorn City", HotelQuestColor),
 
     #saffron
-  38 => Quest.new(38, "Kalos Pokémon", "A traveller in the PokéMart wants you to show him a Pokémon native to the Kalos region.", QuestBranchHotels, "traveller_kalos", "Saffron City", HotelQuestColor),
+  38 => Quest.new(38, "Kalos Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Kalos region.", QuestBranchHotels, "traveler_kalos", "Saffron City", HotelQuestColor),
   #Ecruteak City
   39 => Quest.new(39, "Ghost Evolution", "A girl in Ecruteak City wants you to show her a fully-evolved Ghost Pokémon.", QuestBranchHotels, "BW014", "Ecruteak City", HotelQuestColor),
 
   #Kin Island
   40 => Quest.new(40, "Banana Slamma!", "Collect 30 bananas", QuestBranchHotels, "BW059", "Kin Island", HotelQuestColor),
     #fuchsia
-  41 => Quest.new(41, "Unova Pokémon", "A traveller in the PokéMart wants you to show him a Pokémon native to the Unova region.", QuestBranchHotels, "traveller_unova", "Fuchsia City", HotelQuestColor),
+  41 => Quest.new(41, "Unova Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Unova region.", QuestBranchHotels, "traveler_unova", "Fuchsia City", HotelQuestColor),
   42 => Quest.new(42, "Stolen artifact", "Recover a stolen vase from a burglar in the Pokémon Mansion", QuestBranchHotels, "BW (21)", "Cinnabar Island", HotelQuestColor),
   43 => Quest.new(43, "Fallen Meteor", "Investigate a crater near Bond Bridge.", QuestBranchHotels, "BW009", "Kin Island", HotelQuestColor),
   44 => Quest.new(44, "First Contact", "Find the missing pieces of a fallen alien spaceship", QuestBranchHotels, "BW (92)", "Bond Bridge", LegendaryQuestColor),
