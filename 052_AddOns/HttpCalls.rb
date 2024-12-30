@@ -364,7 +364,7 @@ end
 
 def updateOnlineCustomSpritesFile
   return if !downloadAllowed?()
-  echoln "HERE"
+  echoln "UPDATING CUSTOM SPRITE LISTS"
   download_file(Settings::SPRITES_FILE_URL, Settings::CUSTOM_SPRITES_FILE_PATH)
   download_file(Settings::BASE_SPRITES_FILE_URL, Settings::BASE_SPRITES_FILE_PATH)
 end
