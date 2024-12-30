@@ -8,6 +8,7 @@ end
 
 def updateHttpSettingsFile
   return if !downloadAllowed?()
+  echoln "UPDATING SETTINGS"
   download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::HTTP_CONFIGS_FILE_PATH,)
 end
 
@@ -41,7 +42,7 @@ def download_file(url, saveLocation)
       echoln _INTL("\nDownloaded file {1} to {2}", url, saveLocation)
       return saveLocation
     else
-      echoln _INTL("Tried to download file {1}", url)
+      echoln _INTL("Failed to download file {1}", url)
     end
     return nil
   rescue MKXPError, Errno::ENOENT => error
@@ -363,6 +364,7 @@ end
 
 def updateOnlineCustomSpritesFile
   return if !downloadAllowed?()
+  echoln "HERE"
   download_file(Settings::SPRITES_FILE_URL, Settings::CUSTOM_SPRITES_FILE_PATH)
   download_file(Settings::BASE_SPRITES_FILE_URL, Settings::BASE_SPRITES_FILE_PATH)
 end
