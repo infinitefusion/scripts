@@ -1013,6 +1013,7 @@ def showQuestStatistics(eventId,includeRocketQuests=false)
   quests_accepted = []
   quests_in_progress=[]
   quests_completed=[]
+  $Trainer.quests=[] if !$Trainer.quests
   for quest in $Trainer.quests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
     quests_accepted<<quest
