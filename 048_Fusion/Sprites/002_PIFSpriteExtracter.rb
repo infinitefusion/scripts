@@ -2,6 +2,11 @@ class PIFSpriteExtracter
   COLUMNS = 20               # Number of columns in the spritesheet
   @@spritesheet_cache = SpritesBitmapCache.new
 
+  #factor by which the sprite needs to be resized to get it to base game resolution (288x288)
+  def get_resize_scale
+    return 1
+  end
+
   def load_sprite(pif_sprite,download_allowed=true)
     begin
     start_time = Time.now
@@ -19,6 +24,7 @@ class PIFSpriteExtracter
       end
     end
     sprite_bitmap = AnimatedBitmap.from_bitmap(bitmap)
+    sprite_bitmap.scale_bitmap(get_resize_scale())
     end_time = Time.now
     source = loaded_from_spritesheet ? :"spritesheet" : "cache"
     echoln "Loaded sprite for <head:#{pif_sprite.head_id}, body: #{pif_sprite.body_id}, variant: #{pif_sprite.alt_letter}> from #{source} in #{end_time - start_time} seconds"
