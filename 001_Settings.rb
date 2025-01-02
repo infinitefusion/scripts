@@ -22,7 +22,7 @@ module Settings
 
   #Infinite fusion settings
   NB_POKEMON = 501
-  CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_spritesBaseSprites/"
+  CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
   CUSTOM_SPRITES_TO_IMPORT_FOLDER = "Graphics/CustomBattlers/Sprites to import/"
   CUSTOM_BATTLERS_FOLDER_INDEXED = "Graphics/CustomBattlers/local_sprites/indexed/"
