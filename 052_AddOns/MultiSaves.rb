@@ -378,11 +378,25 @@ class PokemonLoadScreen
 
   def check_for_spritepack_update()
     $updated_spritesheets = [] if !$updated_spritesheets
-    echoln new_spritepack_was_released()
+    echoln "wawawa"
     if new_spritepack_was_released()
+      echoln "waaaah!"
+      reset_updated_spritesheets_cache()
       $updated_spritesheets = []
     end
   end
+
+  def reset_updated_spritesheets_cache()
+    echoln "resetting updated spritesheets list"
+    begin
+      File.open(Settings::UPDATED_SPRITESHEETS_CACHE, 'w') { |file| file.truncate(0) }
+      echoln "File reset successfully."
+    rescue => e
+      echoln "Failed to reset file: #{e.message}"
+    end
+  end
+
+
 
   def preload_party(trainer)
     spriteLoader = BattleSpriteLoader.new
@@ -429,6 +443,8 @@ class PokemonLoadScreen
       handleReplaceExistingSprites()
     end
     if ($game_temp.nb_imported_sprites && $game_temp.nb_imported_sprites > 0)
+      echoln $game_temp.nb_imported_sprites
+      echoln $game_temp.nb_imported_sprites.to_s
       pbMessage(_INTL("{1} new custom sprites were imported into the game", $game_temp.nb_imported_sprites.to_s))
     end
     checkEnableSpritesDownload
