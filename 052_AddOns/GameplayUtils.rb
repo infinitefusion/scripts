@@ -1527,8 +1527,8 @@ QUEST_REWARDS = [
   QuestReward.new(10, :LANTERN, 1, "This will allow you to illuminate caves without having to use a HM! Practical, isn't it?"),
   QuestReward.new(15, :LINKINGCORD, 3, "This strange cable triggers the evolution of Pokémon that typically evolve via trade. I know you'll put it to good use!"),
   QuestReward.new(20, :SLEEPINGBAG, 1, "This handy item will allow you to sleep anywhere you want. You won't even need hotels anymore!"),
-  QuestReward.new(30, :MISTSTONE, 1, "This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!"),
-  QuestReward.new(45, :MASTERBALL, 1, "This rare ball can catch any Pokémon. Don't waste it!"),
+  QuestReward.new(30, :MISTSTONE, 1, "This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!",true),
+  QuestReward.new(45, :MASTERBALL, 1, "This rare ball can catch any Pokémon. Don't waste it!",true),
   QuestReward.new(60, :GSBALL, 1, "This mysterious ball is rumored to be the key to call upon the protector of Ilex Forest.  It's a precious relic."),
 ]
 
