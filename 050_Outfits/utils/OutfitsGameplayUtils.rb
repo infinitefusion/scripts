@@ -315,3 +315,7 @@ def randomizePlayerOutfit()
   $Trainer.hair = getFullHairId(hair_id,hair_color)
 
 end
+
+def canPutHatOnPokemon(pokemon)
+  return !pokemon.egg? && !pokemon.isTripleFusion? && $game_switches[SWITCH_UNLOCKED_POKEMON_HATS]
+end
