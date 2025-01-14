@@ -1398,7 +1398,7 @@ def get_mart_exclusive_items(city)
   return items_list
 end
 
-def calculate_pokemon_weight(pokemon)
+def calculate_pokemon_weight(pokemon,nerf=0)
 
   base_weight = pokemon.weight
   ivs = []
@@ -1426,18 +1426,20 @@ def calculate_pokemon_weight(pokemon)
 
   # Cap the weight between min and max values
   weight = [[weight, min_weight].max, max_weight].min
-
+  weight -= nerf if nerf > nerf
   return weight.round(2) # Round to 2 decimal places
 end
 
-def generate_weight_contest_entries(species, level, resultsVariable)
+#nerf: remove x kg from each generated pokemon
+def generate_weight_contest_entries(species, level, resultsVariable,nerf=0)
   #echoln "Generating Pokemon"
   pokemon1 = pbGenerateWildPokemon(species, level) #Pokemon.new(species,level)
   pokemon2 = pbGenerateWildPokemon(species, level) #Pokemon.new(species,level)
   new_weights = []
-  new_weights << calculate_pokemon_weight(pokemon1)
-  new_weights << calculate_pokemon_weight(pokemon2)
+  new_weights << calculate_pokemon_weight(pokemon1,nerf)
+  new_weights << calculate_pokemon_weight(pokemon2,nerf)
   echoln new_weights
+  echoln "(nerfed by -#{nerf})"
   pbSet(resultsVariable, new_weights.max)
 
 end
