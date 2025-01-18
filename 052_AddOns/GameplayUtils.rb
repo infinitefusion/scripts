@@ -1426,7 +1426,7 @@ def calculate_pokemon_weight(pokemon,nerf=0)
 
   # Cap the weight between min and max values
   weight = [[weight, min_weight].max, max_weight].min
-  weight -= nerf if nerf > nerf
+  weight -= nerf if weight- nerf > min_weight
   return weight.round(2) # Round to 2 decimal places
 end
 
