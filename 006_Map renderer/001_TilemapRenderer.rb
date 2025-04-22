@@ -46,14 +46,24 @@ class TilemapRenderer
 
   EXTRA_AUTOTILES = {
     1 => {  #route-field
-            532 => "flowers_orange[10]",
-            527 => "flowers_pink[10]",
-            535 => "flowers_yellow[10]",
-            543 => "flowers_blue[10]",
-            551 => "flowers_purple[10]",
-            559 => "flowers_red[10]",
-            567 => "flowers_grey[10]",
-            575 => "flowers_white[10]",
+            996 => "flowers_orange[10]",
+            991 => "flowers_pink[10]",
+            999 => "flowers_yellow[10]",
+            1007 => "flowers_blue[10]",
+            1015 => "flowers_purple[10]",
+            1023 => "flowers_red[10]",
+            1031 => "flowers_grey[10]",
+            1039 => "flowers_white[10]",
+    },
+    2 => {  #small-town
+            996 => "flowers_orange[10]",
+            991 => "flowers_pink[10]",
+            999 => "flowers_yellow[10]",
+            1007 => "flowers_blue[10]",
+            1015 => "flowers_purple[10]",
+            1023 => "flowers_red[10]",
+            1031 => "flowers_grey[10]",
+            1039 => "flowers_white[10]",
     },
 
 
