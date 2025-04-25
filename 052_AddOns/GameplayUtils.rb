@@ -732,26 +732,65 @@ def unlock_easter_egg_hats()
   end
 end
 
+def getPlayerDefaultName(gender)
+  if gender == GENDER_MALE
+    return Settings::GAME_ID == :IF_HOENN ? "Brendan" : "Red"
+  else
+    return Settings::GAME_ID == :IF_HOENN ? "May" : "Green"
+  end
+end
+def getDefaultClothes(gender)
+  if gender == GENDER_MALE
+    return Settings::GAME_ID == :IF_HOENN ? CLOTHES_BRENDAN : DEFAULT_OUTFIT_MALE
+  else
+    return Settings::GAME_ID == :IF_HOENN ? CLOTHES_MAY : DEFAULT_OUTFIT_FEMALE
+  end
+end
+def getDefaultHat(gender)
+  if gender == GENDER_MALE
+    return Settings::GAME_ID == :IF_HOENN ? HAT_BRENDAN : DEFAULT_OUTFIT_MALE
+  else
+    return Settings::GAME_ID == :IF_HOENN ? HAT_MAY : DEFAULT_OUTFIT_FEMALE
+  end
+end
+
+def getDefaultHair(gender)
+  if gender == GENDER_MALE
+    return Settings::GAME_ID == :IF_HOENN ? HAIR_BRENDAN : DEFAULT_OUTFIT_MALE
+  else
+    return Settings::GAME_ID == :IF_HOENN ? HAIR_MAY : DEFAULT_OUTFIT_FEMALE
+  end
+end
+
 def setupStartingOutfit()
+  default_clothes_male = getDefaultClothes(GENDER_MALE)
+  default_clothes_female = getDefaultClothes(GENDER_FEMALE)
+
+  default_hat_male = getDefaultHat(GENDER_MALE)
+  default_hat_female = getDefaultHat(GENDER_FEMALE)
+
+  default_hair_male = getDefaultHair(GENDER_MALE)
+  default_hair_female = getDefaultHair(GENDER_FEMALE)
+
   $Trainer.hat = nil
   $Trainer.clothes = STARTING_OUTFIT
   unlock_easter_egg_hats()
   gender = pbGet(VAR_TRAINER_GENDER)
   if gender == GENDER_FEMALE
-    $Trainer.unlock_clothes(DEFAULT_OUTFIT_FEMALE, true)
-    $Trainer.unlock_hat(DEFAULT_OUTFIT_FEMALE, true)
-    $Trainer.hair = "3_" + DEFAULT_OUTFIT_FEMALE if !$Trainer.hair # when migrating old savefiles
+    $Trainer.unlock_clothes(default_clothes_female, true)
+    $Trainer.unlock_hat(default_hat_female, true)
+    $Trainer.hair = "3_" + default_hair_female if !$Trainer.hair # when migrating old savefiles
 
   elsif gender == GENDER_MALE
-    $Trainer.unlock_clothes(DEFAULT_OUTFIT_MALE, true)
-    $Trainer.unlock_hat(DEFAULT_OUTFIT_MALE, true)
+    $Trainer.unlock_clothes(default_clothes_male, true)
+    $Trainer.unlock_hat(default_hat_male, true)
 
     echoln $Trainer.hair
-    $Trainer.hair = ("3_" + DEFAULT_OUTFIT_MALE) if !$Trainer.hair # when migrating old savefiles
+    $Trainer.hair = ("3_" + default_hair_male) if !$Trainer.hair # when migrating old savefiles
     echoln $Trainer.hair
   end
-  $Trainer.unlock_hair(DEFAULT_OUTFIT_MALE, true)
-  $Trainer.unlock_hair(DEFAULT_OUTFIT_FEMALE, true)
+  $Trainer.unlock_hair(default_hair_male, true)
+  $Trainer.unlock_hair(default_hair_female, true)
   $Trainer.unlock_clothes(STARTING_OUTFIT, true)
 end
 

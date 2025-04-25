@@ -28,6 +28,8 @@ DEFAULT_OUTFIT_MALE = "red"
 DEFAULT_OUTFIT_FEMALE = "leaf"
 STARTING_OUTFIT = "pikajamas"
 
+CLOTHES_BRENDAN = "red" #todo
+CLOTHES_MAY = "leaf"    #todo
 
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
@@ -38,6 +40,9 @@ HAT_PIKACHUM_NEST = "pikhatchum"
 HAT_PIKACHUF_NEST = "pikhatchuf"
 HAT_PARAS_NEST = "headparas"
 HAT_EEVEE_NEST = "eevee"
+
+HAT_BRENDAN = "brendanRSE"
+HAT_MAY = "mayRSE"
 
 HAT_PARASHROOM = "parashroom"
 HAT_AERODACTYL = "aerodactylSkull"
@@ -146,3 +151,6 @@ HAIR_HAPPINY="happinysuit"
 HAIR_LATIAS="SpecialLatias"
 HAIR_GARDEVOIR="gardevoir"
 HAIR_EEVEE="eeveetail"
+
+HAIR_BRENDAN = "buzzcut"
+HAIR_MAY = "may"

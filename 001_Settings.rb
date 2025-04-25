@@ -20,6 +20,8 @@ module Settings
   #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10
 
+  ANIMATE_REFLECTIONS= true
+
   #Infinite fusion settings
   NB_POKEMON = 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
