@@ -183,27 +183,51 @@ class TilemapRenderer
       set_current_frame(filename)
     end
 
+    EXPANDED_AUTOTILES_FOLDER = "Graphics/Autotiles/ExpandedAutotiles/"
     def add(filename)
       return if nil_or_empty?(filename)
       if @bitmaps[filename]
         @load_counts[filename] += 1
         return
       end
-      orig_bitmap = pbGetAutotile(filename)
-      @bitmap_wraps[filename] = false
-      duration = AUTOTILE_FRAME_DURATION
-      if filename[/\[\s*(\d+?)\s*\]\s*$/]
-        duration = $~[1].to_i
+
+      # Try to load expanded autotile from cache first
+      cached_path = File.join("Graphics", "Autotiles/ExpandedAutotiles", "#{filename}.png")
+      if safeExists?(cached_path)
+        echoln "Loading cached expanded autotile for #{filename}"
+        bitmap = RPG::Cache.load_bitmap(EXPANDED_AUTOTILES_FOLDER, filename)
+
+        duration = AUTOTILE_FRAME_DURATION
+        if filename[/\[\s*(\d+?)\s*\]\s*$/]
+          duration = $~[1].to_i
+        end
+        @frame_durations[filename] = duration.to_f / 20
+
+      else
+        orig_bitmap = pbGetAutotile(filename)
+        @bitmap_wraps[filename] = false
+        duration = AUTOTILE_FRAME_DURATION
+        if filename[/\[\s*(\d+?)\s*\]\s*$/]
+          duration = $~[1].to_i
+        end
+        @frame_durations[filename] = duration.to_f / 20
+        expanded_bitmap = AutotileExpander.expand(orig_bitmap)
+
+        # Save expanded bitmap to cache for next time
+        Dir.mkdir(EXPANDED_AUTOTILES_FOLDER) unless Dir.exist?(EXPANDED_AUTOTILES_FOLDER)
+        expanded_bitmap.save_to_png(cached_path)
+
+        bitmap = expanded_bitmap
+        orig_bitmap.dispose if orig_bitmap != expanded_bitmap
       end
-      @frame_durations[filename] = duration.to_f / 20
-      bitmap = AutotileExpander.expand(orig_bitmap)
+
       self[filename] = bitmap
       if bitmap.height > SOURCE_TILE_HEIGHT && bitmap.height < TILES_PER_AUTOTILE * SOURCE_TILE_HEIGHT
         @bitmap_wraps[filename] = true
       end
-      orig_bitmap.dispose if orig_bitmap != bitmap
       @load_counts[filename] = 1
     end
+
 
     def remove(filename)
       super
