@@ -185,6 +185,9 @@ class Sprite_Character < RPG::Sprite
     end
     return if @character.is_a?(Game_Event) && !@character.should_update?
     super
+
+
+    #RESET GRAPHICS
     if should_update?
       @manual_refresh = false
       @tile_id = @character.tile_id
@@ -211,7 +214,12 @@ class Sprite_Character < RPG::Sprite
         @charbitmap = updateCharacterBitmap()
         @charbitmap = @bitmap_override.clone if @bitmap_override
 
-        RPG::Cache.retain('Graphics/Characters/', @character_name, @character_hue) if @charbitmapAnimated = true
+        if @character == $game_player
+          RPG::Cache.retain("Graphics/Characters/", @character_name, @character_hue)
+          @charbitmapAnimated = true
+        end
+
+
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
         #@spriteoffset = @character_name[/offset/i]
@@ -221,6 +229,9 @@ class Sprite_Character < RPG::Sprite
         self.ox = @cw / 2
         @character.sprite_size = [@cw, @ch]
       end
+      ##END RESET GRAPHICS
+
+
     end
     @charbitmap.update if @charbitmapAnimated
     bushdepth = @character.bush_depth
