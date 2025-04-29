@@ -79,8 +79,14 @@ class Sprite_Character < RPG::Sprite
       @reflection = Sprite_Reflection.new(self, viewport)
     end
     @surfbase = Sprite_SurfBase.new(self, character, viewport) if character == $game_player
-    checkModifySpriteGraphics(@character) if @character
+    if @character && @character != $game_player
+      checkModifySpriteGraphics(@character) if @character.active?
+    end
     update
+  end
+
+  def event_is_active?(game_event)
+    return !game_event.event.page.nil?
   end
 
   def checkModifySpriteGraphics(character)

@@ -276,4 +276,10 @@ class Game_Event < Game_Character
       @interpreter.update
     end
   end
+
+  def active?
+    return !@erased && @page != nil
+  end
+
+
 end

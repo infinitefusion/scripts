@@ -17,6 +17,7 @@ module Settings
   LEADER_VICTORY_MUSIC="Battle victory leader"
   TRAINER_VICTORY_MUSIC="trainer-victory"
   WILD_VICTORY_MUSIC="wild-victory"
+
   #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10
 
