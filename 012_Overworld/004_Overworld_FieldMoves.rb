@@ -435,7 +435,7 @@ Events.onAction += proc { |_sender, _e|
       pbSurfacing
     end
   else
-    pbDive if $game_player.terrain_tag.can_dive
+    pbDive if $game_player.terrain_tag.can_dive || (Settings::GAME_ID == :IF_HOENN && $game_player.terrain_tag.can_surf)
   end
 }
 
