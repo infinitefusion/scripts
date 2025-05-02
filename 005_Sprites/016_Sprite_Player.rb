@@ -96,6 +96,12 @@ class Sprite_Player < Sprite_Character
 
   def update
     super
+    if Settings::GAME_ID == :IF_HOENN && $PokemonGlobal.diving
+      self.z = -4
+      @hat.adjust_layer if @hat
+      @hat2.adjust_layer if @hat2
+      @hair.adjust_layer if @hair
+    end
   end
 
   def dispose

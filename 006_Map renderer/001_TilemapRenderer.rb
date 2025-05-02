@@ -194,7 +194,7 @@ class TilemapRenderer
       # Try to load expanded autotile from cache first
       cached_path = File.join("Graphics", "Autotiles/ExpandedAutotiles", "#{filename}.png")
       if safeExists?(cached_path)
-        echoln "Loading cached expanded autotile for #{filename}"
+        #echoln "Loading cached expanded autotile for #{filename}"
         bitmap = RPG::Cache.load_bitmap(EXPANDED_AUTOTILES_FOLDER, filename)
 
         duration = AUTOTILE_FRAME_DURATION
@@ -322,6 +322,7 @@ class TilemapRenderer
     attr_accessor :animated
     attr_accessor :priority
     attr_accessor :shows_reflection
+    attr_accessor :underwater_tile
     attr_accessor :bridge
     attr_accessor :need_refresh
 
@@ -489,6 +490,7 @@ class TilemapRenderer
       end
 
       tile.shows_reflection = terrain_tag_data&.shows_reflections
+      tile.underwater_tile = terrain_tag_data&.underwater
       tile.bridge = terrain_tag_data&.bridge
     end
     refresh_tile_src_rect(tile, tile_id)
@@ -515,8 +517,8 @@ class TilemapRenderer
   end
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
-    if false#tile.shows_reflection
-        tile.z = -2000
+    if tile.underwater_tile#tile.shows_reflection -2000
+        tile.z = -5
     elsif tile.bridge && $PokemonGlobal.bridge > 0
       tile.z = 0
     else
