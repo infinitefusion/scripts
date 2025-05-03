@@ -1262,8 +1262,7 @@ class Pokemon
     return newspecies
   end
 
-  def check_evolution_on_level_up
-
+  def check_evolution_on_level_up(prompt_choice=true)
     if @species_data.is_a?(GameData::FusedSpecies)
       body = self.species_data.body_pokemon
       head = self.species_data.head_pokemon
@@ -1277,7 +1276,8 @@ class Pokemon
         next (success) ? new_species : nil
       }
       if body_evolution && head_evolution
-        return prompt_evolution_choice(body_evolution, head_evolution)
+        return prompt_evolution_choice(body_evolution, head_evolution) if prompt_choice
+        return [body_evolution,head_evolution].sample
       end
     end
 

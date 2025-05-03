@@ -29,6 +29,7 @@ module GameData
     attr_reader :flower
     attr_reader :trashcan
     attr_reader :sharpedoObstacle
+    attr_reader :underwater #only visible when diving
 
     DATA = {}
 
@@ -79,6 +80,7 @@ module GameData
       @flower = hash[:flower] || false
       @trashcan = hash[:trashcan] || false
       @sharpedoObstacle = hash[:sharpedoObstacle] || false
+      @underwater = hash[:underwater] || false
 
     end
 
@@ -177,6 +179,7 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :UnderwaterGrass,
                                 :id_number => 11,
+                                :underwater => true,
                                 :land_wild_encounters => true
                               })
 
@@ -289,4 +292,11 @@ GameData::TerrainTag.register({
                                 :can_fish => true,
                                 :battle_environment => :StillWater,
                                 :shows_reflections      => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Underwater,
+                                :id_number => 28,
+                                :battle_environment => :underwater,
+                                :underwater => true,
                               })
