@@ -332,6 +332,35 @@ def addNewTripleFusion(pokemon1, pokemon2, pokemon3, level = 1)
   return true
 end
 
+def get_pokemon_readable_internal_name(pokemon)
+  if pokemon.isFusion?
+    body_pokemon = get_body_species_from_symbol(pokemon.species)
+    head_pokemon = get_head_species_from_symbol(pokemon.species)
+    name = "#{head_pokemon}_#{body_pokemon}"
+  else
+    name = pokemon.species
+  end
+  return name
+end
+
+def get_species_readable_internal_name(species_symbol)
+  if isSpeciesFusion(species_symbol)
+    body_pokemon = get_body_species_from_symbol(species_symbol)
+    head_pokemon = get_head_species_from_symbol(species_symbol)
+    name = "#{head_pokemon}_#{body_pokemon}"
+  else
+    name = species_symbol
+  end
+  return name
+end
+
+def getSpeciesRealName(species_symbol)
+  return nil if !species_symbol
+  species = GameData::Species.get(species_symbol)
+  return species.real_name
+end
+
+
 def get_triple_fusion_components(species_id)
   dex_num = GameData::Species.get(species_id).id_number
   case dex_num

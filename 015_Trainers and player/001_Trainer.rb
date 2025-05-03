@@ -233,10 +233,11 @@ end
 class NPCTrainer < Trainer
   attr_accessor :items
   attr_accessor :lose_text
-
   def initialize(name, trainer_type, sprite_override=nil,custom_appearance=nil)
     super
     @items = []
     @lose_text = nil
   end
+
+
 end

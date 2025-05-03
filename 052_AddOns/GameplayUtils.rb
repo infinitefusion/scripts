@@ -1555,7 +1555,7 @@ end
 def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)
   cmdIfCancel = -1 if !cmdIfCancel
   result = pbShowCommands(nil, options, cmdIfCancel, startingOption)
-  echoln "menuResult :#{result}"
+  #echoln "menuResult :#{result}"
   return result
 end
 

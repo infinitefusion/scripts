@@ -8,6 +8,39 @@ end
 
 TIME_FOR_RANDOM_EVENTS = 60#3600 #1 hour
 
+
+#eventType
+# :EVOLVE
+# :FUSE
+# :UNFUSE
+# :REVERSE
+# :CAUGHT
+class BattledTrainerRandomEvent
+  attr_accessor :eventType
+  attr_accessor :caught_pokemon #species_sym
+
+  attr_accessor :unevolved_pokemon #species_sym
+  attr_accessor :evolved_pokemon #species_sym
+
+  attr_accessor :fusion_head_pokemon #species_sym
+  attr_accessor :fusion_body_pokemon #species_sym
+  attr_accessor :fusion_fused_pokemon #species_sym
+
+
+  attr_accessor :unreversed_pokemon #species_sym
+  attr_accessor :reversed_pokemon #species_sym
+
+
+  attr_accessor :unfused_pokemon #species_sym
+
+
+
+  def initialize(eventType)
+    @eventType = eventType
+  end
+end
+
+
 class BattledTrainer
   attr_accessor :trainerType
   attr_accessor :trainerName
@@ -47,6 +80,9 @@ class BattledTrainer
   attr_accessor :favorite_pokemon #Used for generating trade offers. Should be set from trainer.txt (todo)
   #If empty, then trade offers ask for a Pokemon of a type depending on the trainer's class
 
+  attr_accessor :previous_random_events
+  attr_accessor :has_pending_action
+
   def initialize(trainerType,trainerName,trainerVersion)
     @trainerType = trainerType
     @trainerName = trainerName
@@ -56,6 +92,68 @@ class BattledTrainer
     @currentStatus = :IDLE
     @previous_status = :IDLE
     @previous_action_timestamp = Time.now
+    @previous_random_events =[]
+    @has_pending_action=false
+  end
+
+  def set_pending_action(value)
+    @has_pending_action=value
+  end
+
+  def log_evolution_event(unevolved_pokemon_species, evolved_pokemon_species)
+    echoln "NPC Trainer #{@trainerName} evolved their #{get_species_readable_internal_name(unevolved_pokemon_species)} to #{get_species_readable_internal_name(evolved_pokemon_species)}!"
+
+    event = BattledTrainerRandomEvent.new(:EVOLVE)
+    event.unevolved_pokemon = unevolved_pokemon_species
+    event.evolved_pokemon = evolved_pokemon_species
+    @previous_random_events = [] unless @previous_random_events
+    @previous_random_events << event
+  end
+
+  def log_fusion_event(body_pokemon_species, head_pokemon_species, fused_pokemon_species)
+    echoln "NPC trainer #{@trainerName} fused #{body_pokemon_species} and #{head_pokemon_species}!"
+    event = BattledTrainerRandomEvent.new(:FUSE)
+    event.fusion_body_pokemon =body_pokemon_species
+    event.fusion_head_pokemon =head_pokemon_species
+    event.fusion_fused_pokemon =fused_pokemon_species
+    @previous_random_events = [] unless @previous_random_events
+    @previous_random_events << event
+  end
+
+  def log_unfusion_event(original_fused_pokemon_species, unfused_body_species, unfused_body_head)
+    echoln "NPC trainer #{@trainerName} unfused #{get_species_readable_internal_name(original_fused_pokemon_species)}!"
+    event = BattledTrainerRandomEvent.new(:UNFUSE)
+    event.unfused_pokemon = original_fused_pokemon_species
+    event.fusion_body_pokemon = unfused_body_species
+    event.fusion_head_pokemon = unfused_body_head
+    @previous_random_events = [] unless @previous_random_events
+    @previous_random_events << event
+  end
+
+  def log_reverse_event(original_fused_pokemon_species, reversed_fusion_species)
+    echoln "NPC trainer #{@trainerName} reversed #{get_species_readable_internal_name(original_fused_pokemon_species)}!"
+
+    event = BattledTrainerRandomEvent.new(:REVERSE)
+    event.unreversed_pokemon = original_fused_pokemon_species
+    event.reversed_pokemon = reversed_fusion_species
+    @previous_random_events = [] unless @previous_random_events
+    @previous_random_events << event
+  end
+
+  def log_catch_event(new_pokemon_species)
+    echoln "NPC Trainer #{@trainerName} caught a #{new_pokemon_species}!"
+    event = BattledTrainerRandomEvent.new(:CATCH)
+    event.caught_pokemon = new_pokemon_species
+    @previous_random_events = [] unless @previous_random_events
+    @previous_random_events <<  event
+  end
+
+  def clear_previous_random_events()
+    @previous_random_events = []
+  end
+
+  def loadOriginalTrainer(trainerVersion=0)
+    return pbLoadTrainer(@trainerType,@trainerName,trainerVersion)
   end
 
   def loadOriginalTrainerTeam(trainerVersion=0)
@@ -111,16 +209,48 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
   postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
   return result
 end
-def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion)
+def postTrainerBattleActions(trainerID, trainerName,trainerVersion)
+  trainer = registerBattledTrainer(@event_id,$game_map.map_id,trainerID,trainerName,trainerVersion)
+  makeRebattledTrainerTeamGainExp(trainer)
+end
+
+
+#Do NOT call this alone. Rebattlable trainers are always intialized after
+# defeating them.
+# Having a rematchable trainer that is not registered will cause crashes.
+def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion=0)
   key = [event_id,mapId]
   $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
   trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion)
   $PokemonGlobal.battledTrainers[key] = trainer
+  return trainer
 end
-def postTrainerBattleActions(trainerID, trainerName,trainerVersion)
-  registerBattledTrainer(@event_id,$game_map.map_id,trainerID,trainerName,trainerVersion)
-  makeRebattledTrainerTeamGainExp(@event_id,$game_map.map_id)
+
+def unregisterBattledTrainer(event_id, mapId)
+  key = [event_id,mapId]
+  $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
+  if  $PokemonGlobal.battledTrainers.has_key?(key)
+    $PokemonGlobal.battledTrainers[key] =nil
+    echoln "Unregistered Battled Trainer #{key}"
+  else
+    echoln "Could not unregister Battled Trainer #{key}"
+  end
 end
+
+def resetTrainerRebattle(event_id, map_id)
+  trainer = getRebattledTrainer(event_id,map_id)
+
+  trainerType = trainer.trainerType
+  trainerName = trainer.trainerName
+
+  unregisterBattledTrainer(event_id,map_id)
+  registerBattledTrainer(event_id,map_id,trainerType,trainerName)
+end
+
+
+
+
+
 
 
 #####
@@ -149,6 +279,7 @@ end
 # as a result
 #
 def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
+  return if !trainer
   updated_team = []
 
   trainer_pokemon = $Trainer.party[0]
@@ -161,28 +292,24 @@ def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
     growth_rate = pokemon.growth_rate
     new_exp = growth_rate.add_exp(pokemon.exp, gained_exp)
     pokemon.exp = new_exp
-    echoln new_exp
-    #todo:add exp (based on how strong the player's team is, maybe)
-    # evolve if they need to
     updated_team.push(pokemon)
   end
   trainer.currentTeam = updated_team
-  echoln trainer.currentTeam
   return trainer
 end
 
 def evolveRebattledTrainerPokemon(trainer)
   updated_team = []
   for pokemon in trainer.currentTeam
-    evolution_species = pokemon.check_evolution_on_level_up
+    evolution_species = pokemon.check_evolution_on_level_up(false)
     if evolution_species
-      echoln "NPC Trainer #{trainer.trainerName} evolved their #{pokemon.species} to #{evolution_species}!"
+      trainer.log_evolution_event(pokemon.species,evolution_species)
+      trainer.set_pending_action(true)
       pokemon.species = evolution_species if evolution_species
     end
     updated_team.push(pokemon)
   end
   trainer.currentTeam = updated_team
-  echoln trainer.currentTeam
   return trainer
 end
 
@@ -198,6 +325,7 @@ end
 #prefered type depends on the trainer class
 #
 def generateTrainerTradeOffer(trainer)
+  trainer.set_pending_action(false) if trainer
   return trainer
 end
 
@@ -209,45 +337,72 @@ end
 ####
 
 def generateTrainerRematch(trainer)
-  end_speech = "You won again!"
-  #todo - Add rebattle speech to trainer metadata?
-  # - Or just pass it to the method from the event.
-  if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,end_speech)
+  trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
+
+  loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
+  if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
     updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
     updated_trainer = healRebattledTrainerPokemon(updated_trainer)
   else
     updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
   end
+  updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
   return updated_trainer
 
 end
 
 
+def printNPCTrainerCurrentTeam(trainer)
+  team_string = "["
+  trainer.currentTeam.each do |pokemon|
+    name= get_pokemon_readable_internal_name(pokemon)
+    level = pokemon.level
+    formatted_info = "#{name} (lv.#{level}), "
+    team_string += formatted_info
+  end
+  team_string += "]"
+  echoln "Trainer's current team is: #{team_string}"
 
+end
 
 def applyTrainerRandomEvents(trainer)
+  return if trainer.has_pending_action
+  trainer.clear_previous_random_events
+
   time_passed = trainer.getTimeSinceLastAction
   return trainer if time_passed < TIME_FOR_RANDOM_EVENTS
 
-  #Chances of each event happening (out of 10)
-  chance_of_new_pokemon = 3
-  chance_of_fuse    = 6
-  chance_of_reverse = 1
-  chance_of_unfuse = 2
+  # Weighted chances out of 10
+  weighted_events = [
+    [:CATCH,   3],
+    [:FUSE,    6],
+    [:REVERSE, 1],
+    [:UNFUSE,  2]
+  ]
 
-  should_add_pokemon = rand(10) < chance_of_new_pokemon
-  should_unfuse = rand(10) < chance_of_unfuse
-  should_fuse = rand(10) < chance_of_fuse
-  should_reverse = rand(10) < chance_of_reverse
+  # Create a flat array of events based on weight
+  event_pool = weighted_events.flat_map { |event, weight| [event] * weight }
 
-  updated_trainer = trainer
-  updated_trainer = catch_new_team_pokemon(updated_trainer) if should_add_pokemon
-  updated_trainer = unfuse_random_team_pokemon(updated_trainer) if should_unfuse
-  updated_trainer = fuse_random_team_pokemon(updated_trainer) if should_fuse
-  updated_trainer = reverse_random_team_pokemon(updated_trainer) if should_reverse
-  return updated_trainer
+  selected_event = event_pool.sample
+  return trainer if selected_event.nil?
+
+  case selected_event
+  when :CATCH
+    trainer = catch_new_team_pokemon(trainer)
+  when :FUSE
+    trainer = fuse_random_team_pokemon(trainer)
+  when :UNFUSE
+    trainer = unfuse_random_team_pokemon(trainer)
+  when :REVERSE
+    trainer = reverse_random_team_pokemon(trainer)
+  end
+  trainer.set_pending_action(true)
+  printNPCTrainerCurrentTeam(trainer)
+  return trainer
 end
+
+
 
 def chooseEncounterType(trainerClass)
   water_trainer_classes = [:SWIMMER_F, :SWIMMER_M, :FISHERMAN]
@@ -279,7 +434,7 @@ def chooseEncounterType(trainerClass)
     possible_encounter_types += [:GoodRod] * chance_of_fishing_encounter
     possible_encounter_types += [:Water] * chance_of_surf_encounter
   end
-  echoln "possible_encounter_types: #{possible_encounter_types}"
+  #echoln "possible_encounter_types: #{possible_encounter_types}"
   return possible_encounter_types.sample
 end
 
@@ -289,7 +444,7 @@ def catch_new_team_pokemon(trainer)
   return trainer if !encounter_type
   wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   trainer.currentTeam << Pokemon.new(wild_pokemon[0],wild_pokemon[1])
-  echoln "NPC Trainer #{trainer.trainerName} caught a #{wild_pokemon} since last time!"
+  trainer.log_catch_event(wild_pokemon[0])
   return trainer
 end
 
@@ -301,6 +456,7 @@ def reverse_random_team_pokemon(trainer)
   return trainer if eligible_pokemon.length < 1
   return trainer if trainer.currentTeam.length > 5
   pokemon_to_reverse = eligible_pokemon.sample
+  old_species = pokemon_to_reverse.species
   trainer.currentTeam.delete(pokemon_to_reverse)
 
   body_pokemon = get_body_species_from_symbol(pokemon_to_reverse.species)
@@ -308,8 +464,7 @@ def reverse_random_team_pokemon(trainer)
 
   pokemon_to_reverse.species = getFusedPokemonIdFromSymbols(head_pokemon,body_pokemon)
   trainer.currentTeam.push(pokemon_to_reverse)
-
-  echoln "NPC trainer reversed #{pokemon_to_reverse} into #{pokemon_to_reverse.species}!"
+  trainer.log_reverse_event(old_species,pokemon_to_reverse.species)
   return trainer
 end
 
@@ -327,7 +482,7 @@ def unfuse_random_team_pokemon(trainer)
   trainer.currentTeam.delete(pokemon_to_unfuse)
   trainer.currentTeam.push(Pokemon.new(body_pokemon,level))
   trainer.currentTeam.push(Pokemon.new(head_pokemon,level))
-  echoln "NPC trainer unfused #{pokemon_to_unfuse}!"
+  trainer.log_unfusion_event(pokemon_to_unfuse.species, body_pokemon, head_pokemon)
   return trainer
 end
 
@@ -338,10 +493,6 @@ def fuse_random_team_pokemon(trainer)
   pokemon_to_fuse = eligible_pokemon.sample(2)
   body_pokemon = pokemon_to_fuse[0]
   head_pokemon = pokemon_to_fuse[1]
-
-  echoln body_pokemon
-  echoln head_pokemon
-
   fusion_species = getFusedPokemonIdFromSymbols(body_pokemon.species,head_pokemon.species)
   level = (body_pokemon.level + head_pokemon.level)/2
   fused_pokemon = Pokemon.new(fusion_species,level)
@@ -349,9 +500,11 @@ def fuse_random_team_pokemon(trainer)
   trainer.currentTeam.delete(body_pokemon)
   trainer.currentTeam.delete(head_pokemon)
   trainer.currentTeam.push(fused_pokemon)
-  echoln "NPC trainer fused #{body_pokemon.species} and #{head_pokemon.species}!"
+  trainer.log_fusion_event(body_pokemon.species,head_pokemon.species,fusion_species)
   return trainer
 end
+
+
 
 
 
@@ -362,22 +515,139 @@ def doPostBattleAction(actionType)
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
+  trainer.clear_previous_random_events()
+
   return if !trainer
-  updated_trainer = applyTrainerRandomEvents(trainer)
   case actionType
   when :BATTLE
-    updated_trainer = generateTrainerRematch(updated_trainer)
+    trainer = generateTrainerRematch(trainer)
   when :TRADE
-    updated_trainer = generateTrainerTradeOffer(updated_trainer)
+    trainer = generateTrainerTradeOffer(trainer)
   end
-  updateRebattledTrainer(event.id,map_id,updated_trainer)
+  updateRebattledTrainer(event.id,map_id,trainer)
+
 end
+
+
+
+def getBestMatchingPreviousRandomEvent(trainer_data, previous_events)
+  return nil if trainer_data.nil? || previous_events.nil?
+
+  priority = [:CATCH, :EVOLVE, :FUSE, :UNFUSE, :REVERSE]
+  event_message_map = {
+    CATCH:   trainer_data.preRematchText_caught,
+    EVOLVE:  trainer_data.preRematchText_evolved,
+    FUSE:    trainer_data.preRematchText_fused,
+    UNFUSE:  trainer_data.preRematchText_unfused,
+    REVERSE: trainer_data.preRematchText_reversed
+  }
+  sorted_events = previous_events.sort_by do |event|
+    priority.index(event.eventType) || Float::INFINITY
+  end
+
+  sorted_events.find { |event| event_message_map[event.eventType] }
+end
+
+
+def showPrerematchDialog()
+  event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
+  trainer = getRebattledTrainer(event.id,map_id)
+  return "" if trainer.nil?
+
+  trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
+
+  all_previous_random_events = trainer.previous_random_events
+
+
+  if all_previous_random_events
+    previous_random_event = getBestMatchingPreviousRandomEvent(trainer_data, trainer.previous_random_events)
+
+    if previous_random_event
+      event_message_map = {
+        CATCH:   trainer_data.preRematchText_caught,
+        EVOLVE:  trainer_data.preRematchText_evolved,
+        FUSE:    trainer_data.preRematchText_fused,
+        UNFUSE:  trainer_data.preRematchText_unfused,
+        REVERSE: trainer_data.preRematchText_reversed
+      }
+
+      message_text = event_message_map[previous_random_event.eventType] || trainer_data.preRematchText
+    else
+      message_text = trainer_data.preRematchText
+    end
+  end
+
+  if previous_random_event
+    message_text = message_text.gsub("<CAUGHT_POKEMON>", getSpeciesRealName(previous_random_event.caught_pokemon).to_s)
+    message_text = message_text.gsub("<UNEVOLVED_POKEMON>", getSpeciesRealName(previous_random_event.unevolved_pokemon).to_s)
+    message_text = message_text.gsub("<EVOLVED_POKEMON>", getSpeciesRealName(previous_random_event.evolved_pokemon).to_s)
+    message_text = message_text.gsub("<HEAD_POKEMON>", getSpeciesRealName(previous_random_event.fusion_head_pokemon).to_s)
+    message_text = message_text.gsub("<BODY_POKEMON>", getSpeciesRealName(previous_random_event.fusion_body_pokemon).to_s)
+    message_text = message_text.gsub("<FUSED_POKEMON>", getSpeciesRealName(previous_random_event.fusion_fused_pokemon).to_s)
+    message_text = message_text.gsub("<UNREVERSED_POKEMON>", getSpeciesRealName(previous_random_event.unreversed_pokemon).to_s)
+    message_text = message_text.gsub("<REVERSED_POKEMON>", getSpeciesRealName(previous_random_event.reversed_pokemon).to_s)
+    message_text = message_text.gsub("<UNFUSED_POKEMON>", getSpeciesRealName(previous_random_event.unfused_pokemon).to_s)
+  else
+    message_text = trainer_data.preRematchText
+  end
+  split_messages = message_text.split("<br>")
+
+  split_messages.each do |msg|
+    pbCallBub(2,event.id)
+    pbMessage(msg)
+  end
+end
+
 
 #party: array of pokemon team
 # [[:SPECIES,level], ... ]
 #
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
+def postBattleActionsMenu()
+  rematchCommand = "Rematch"
+  tradeCommand = "Trade Offer"
+  cancelCommand = "See ya!"
 
+  updateTeamDebugCommand = "(Debug) Simulate random event"
+  resetTrainerDebugCommand = "(Debug) Reset trainer"
+  printTrainerTeamDebugCommand = "(Debug) Print team"
+
+  options = [rematchCommand,tradeCommand,cancelCommand]
+  options << updateTeamDebugCommand if $DEBUG
+  options << resetTrainerDebugCommand if $DEBUG
+  options << printTrainerTeamDebugCommand if $DEBUG
+
+  event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
+  trainer = getRebattledTrainer(event.id,map_id)
+  trainer = applyTrainerRandomEvents(trainer)
+  showPrerematchDialog
+  choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
+
+  case options[choice]
+  when rematchCommand
+    doPostBattleAction(:BATTLE)
+  when tradeCommand
+    doPostBattleAction(:TRADE)
+  when updateTeamDebugCommand
+    echoln("")
+    echoln "---------------"
+    makeRebattledTrainerTeamGainExp(trainer,true)
+    evolveRebattledTrainerPokemon(trainer)
+    applyTrainerRandomEvents(trainer)
+  when resetTrainerDebugCommand
+    resetTrainerRebattle(event.id,map_id)
+  when printTrainerTeamDebugCommand
+    trainer = getRebattledTrainer(event.id,map_id)
+    printNPCTrainerCurrentTeam(trainer)
+  when cancelCommand
+  else
+    return
+  end
+
+
+end
 
 
 
