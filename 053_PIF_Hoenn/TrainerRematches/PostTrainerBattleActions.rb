@@ -15,7 +15,7 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
   result = original_pbTrainerBattle(trainerID, trainerName, *args)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
+  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) #if Settings::GAME_ID == :IF_HOENN
   return result
 end
 def postTrainerBattleActions(trainerID, trainerName,trainerVersion)
@@ -393,12 +393,14 @@ def showPrerematchDialog()
   else
     message_text = trainer_data.preRematchText
   end
-  split_messages = message_text.split("<br>")
-
-  split_messages.each do |msg|
-    pbCallBub(2,event.id)
-    pbMessage(msg)
+  if message_text
+    split_messages = message_text.split("<br>")
+    split_messages.each do |msg|
+      pbCallBub(2,event.id)
+      pbMessage(msg)
+    end
   end
+
 end
 
 
