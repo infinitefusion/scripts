@@ -10,7 +10,6 @@ alias originalCausticsMethod addWaterCausticsEffect
 def addWaterCausticsEffect(fog_name = "caustic1", opacity = 16)
   originalCausticsMethod(fog_name, 8)
   if Settings::GAME_ID == :IF_HOENN && $PokemonGlobal.diving
-    echoln "BABOU"
     if $game_temp.water_plane
       $game_temp.water_plane.bitmap.dispose if $game_temp.water_plane.bitmap
       $game_temp.water_plane.dispose
