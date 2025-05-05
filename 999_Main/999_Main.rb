@@ -137,9 +137,15 @@ end
 
 
 def showLoadingScreen
-     intro_frames_path = "Graphics\\titles\\loading_screen"
-     picture = Sprite.new(@viewport)
-     picture.bitmap = pbBitmap(intro_frames_path)
+  loading_screen_folder = "Graphics/titles/loading_screens"
+  available_loading_screens = Dir.glob("#{loading_screen_folder}/*.png")
+  if available_loading_screens.length > 0
+    selected_loading_screen = available_loading_screens.sample
+  else
+    selected_loading_screen = "Graphics/titles/default_loading_screen"
+  end
+  picture = Sprite.new(@viewport)
+     picture.bitmap = pbBitmap(selected_loading_screen)
      picture.visible=true
      Graphics.update
      picture.dispose
