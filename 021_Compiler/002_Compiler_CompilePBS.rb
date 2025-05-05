@@ -952,9 +952,9 @@ module Compiler
         end
         # Raise an error if a map/version combo is used twice
         key = sprintf("%s_%d", map_number, map_version).to_sym
-        if GameData::Encounter::DATA[key]
-          raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
-        end
+        # if GameData::Encounter::DATA[key]
+        #   raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
+        # end
         step_chances = {}
         # Construct encounter hash
         encounter_hash = {
