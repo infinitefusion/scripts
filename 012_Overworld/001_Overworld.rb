@@ -50,8 +50,8 @@ end
 Events.onMapUpdate += proc { |_sender, _e|
   if !$PokemonTemp.batterywarning && pbBatteryLow?
     if !$game_temp.in_menu && !$game_temp.in_battle &&
-      !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
-      !pbMapInterpreterRunning?
+       !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
+       !pbMapInterpreterRunning?
       if pbGetTimeNow.sec == 0
         pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
         $PokemonTemp.batterywarning = true
@@ -381,9 +381,9 @@ Events.onMapSceneChange += proc { |_sender, e|
     if $PokemonGlobal.mapTrail[1]
       for i in 0...Settings::NO_SIGNPOSTS.length / 2
         nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
-          Settings::NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
+                             Settings::NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
         nosignpost = true if Settings::NO_SIGNPOSTS[2 * i + 1] == $PokemonGlobal.mapTrail[1] &&
-          Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
+                             Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
         break if nosignpost
       end
       mapinfos = pbLoadMapInfos
@@ -421,22 +421,21 @@ def pbFacingTileRegular(direction = nil, event = nil)
   return [$game_map.map_id, x + x_offset, y + y_offset]
 end
 
-def pbEventNextToPlayer?(event,player)
+def pbEventNextToPlayer?(event, player)
   return false if !event || !player
   return false if $PokemonGlobal.sliding
   if event.x == player.x
-    return event.y == player.y+1 || event.y == player.y-1
+    return event.y == player.y + 1 || event.y == player.y - 1
   elsif event.y == player.y
-    return event.x == player.x-1 || event.x == player.x+1
+    return event.x == player.x - 1 || event.x == player.x + 1
   end
   return false
 end
 
-
 # Returns whether event is in line with the player, is
 # within distance tiles of the player.
 def pbEventFacesPlayer?(event, player, distance)
-  return pbEventNextToPlayer?(event,player) if distance == 0
+  return pbEventNextToPlayer?(event, player) if distance == 0
   return false if !event || !player || distance < 0
   x_min = x_max = y_min = y_max = -1
   case event.direction
@@ -464,7 +463,7 @@ def pbEventFacesPlayer?(event, player, distance)
     return false
   end
   return player.x >= x_min && player.x <= x_max &&
-    player.y >= y_min && player.y <= y_max
+           player.y >= y_min && player.y <= y_max
 end
 
 # Returns whether event is able to walk up to the player.
@@ -495,7 +494,6 @@ end
 def pbFacingEachOther(event1, event2)
   return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
-
 
 #===============================================================================
 # Audio playing
@@ -595,8 +593,8 @@ def pbMoveRoute(event, commands, waitComplete = false)
   while i < commands.length
     case commands[i]
     when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
-      PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
-      PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
+         PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
+         PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
       route.list.push(RPG::MoveCommand.new(commands[i], [commands[i + 1]]))
       i += 1
     when PBMoveRoute::ScriptAsync
@@ -623,8 +621,7 @@ def pbMoveRoute(event, commands, waitComplete = false)
   return route
 end
 
-def
-pbWait(numFrames)
+def pbWait(numFrames)
   numFrames.times do
     Graphics.update
     Input.update
@@ -743,13 +740,13 @@ def pbJumpToward(dist = 1, playSound = false, cancelSurf = false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction
-  when 2 then
+  when 2
     $game_player.jump(0, dist) # down
-  when 4 then
+  when 4
     $game_player.jump(-dist, 0) # left
-  when 6 then
+  when 6
     $game_player.jump(dist, 0) # right
-  when 8 then
+  when 8
     $game_player.jump(0, -dist) # up
   end
   if $game_player.x != x || $game_player.y != y
@@ -934,7 +931,7 @@ end
 
 def promptRegisterItem(item)
   if item.is_key_item? && pbCanRegisterItem?(item)
-    if pbConfirmMessage(_INTL("Would you like to register the \\c[3]{1}\\c[0] in the quick actions menu?",item.name))
+    if pbConfirmMessage(_INTL("Would you like to register the \\c[3]{1}\\c[0] in the quick actions menu?", item.name))
       $PokemonBag.pbRegisterItem(item)
       pbMessage(_INTL("\\se[{1}]The \\c[3]{2}\\c[0] was registered!", "GUI trainer card open", item.name))
     end

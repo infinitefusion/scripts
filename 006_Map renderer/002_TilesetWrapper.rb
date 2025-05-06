@@ -18,10 +18,10 @@
 #===============================================================================
 class TilemapRenderer
   module TilesetWrapper
-    TILESET_WIDTH        = SOURCE_TILE_WIDTH * TILESET_TILES_PER_ROW
+    TILESET_WIDTH = SOURCE_TILE_WIDTH * TILESET_TILES_PER_ROW
     # Looks useless, but covers weird numbers given to mkxp.json or a funky driver
-    MAX_TEX_SIZE         = (Bitmap.max_size / 1024) * 1024
-    MAX_TEX_SIZE_BOOSTED = (MAX_TEX_SIZE**2) / TILESET_WIDTH
+    MAX_TEX_SIZE = (Bitmap.max_size / 1024) * 1024
+    MAX_TEX_SIZE_BOOSTED = (MAX_TEX_SIZE ** 2) / TILESET_WIDTH
 
     module_function
 
@@ -72,7 +72,7 @@ class TilemapRenderer
         # more than 32k pixels high at once anyway
         side = {
           :a => MAX_TEX_SIZE - srcrect_mod.y,
-          :b => srcrect_mod.height - MAX_TEX_SIZE + srcrect_mod.y
+          :b => srcrect_mod.height - MAX_TEX_SIZE + srcrect_mod.y,
         }
         dest.blt(destX, destY, src, Rect.new(srcrect_mod.x, srcrect_mod.y, srcrect_mod.width, side[:a]))
         dest.blt(destX, destY + side[:a], src, Rect.new(srcrect_mod.x + TILESET_WIDTH, 0, srcrect_mod.width, side[:b]))

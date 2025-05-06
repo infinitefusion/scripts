@@ -8,7 +8,7 @@ class Bitmap
       parts = str.split(".")
       {
         from: parts[0].split.map(&:to_f),
-        to: parts[1].split.map(&:to_f)
+        to: parts[1].split.map(&:to_f),
       }
     end
     width.times do |x|
@@ -20,25 +20,25 @@ class Bitmap
         r = 10 if r <= 10
         g = 10 if g <= 10
         b = 10 if b <= 10
-        
+
         min_distance = Float::INFINITY
         closest_rule = nil
-  
+
         rules.each do |rule|
           from = rule[:from]
           # Avoid division by zero
           from[0] = 10 if from[0] <= 10
           from[1] = 10 if from[1] <= 10
           from[2] = 10 if from[2] <= 10
-          dist = (r - from[0])**2 + (g - from[1])**2 + (b - from[2])**2
+          dist = (r - from[0]) ** 2 + (g - from[1]) ** 2 + (b - from[2]) ** 2
           if dist < min_distance
             min_distance = dist
             closest_rule = rule
           end
         end
-  
+
         next unless closest_rule
-  
+
         from = closest_rule[:from]
         to = closest_rule[:to]
         # Avoid mult by zero
@@ -48,14 +48,14 @@ class Bitmap
         r_factor = r / from[0]
         g_factor = g / from[1]
         b_factor = b / from[2]
-  
+
         adjusted_r = (to[0] * r_factor).clamp(0, 255)
         adjusted_g = (to[1] * g_factor).clamp(0, 255)
         adjusted_b = (to[2] * b_factor).clamp(0, 255)
         set_pixel(x, y, Color.new(adjusted_r.to_i, adjusted_g.to_i, adjusted_b.to_i, color.alpha))
       end
     end
-  end  
+  end
 
   def hue_clear(dex_number, name)
     if isFusion(dex_number)
@@ -67,12 +67,12 @@ class Bitmap
     end
 
     return unless Dir.exist?(shiny_directory)
-  
+
     # browse files in shiny_directory
     Dir.foreach(shiny_directory) do |file|
       next if file == "." || file == ".." # Ignorer les entrées spéciales
       file_path = File.join(shiny_directory, file)
-  
+
       # delete files whose name contains "name"
       if File.file?(file_path) && file.include?(name)
         File.delete(file_path)
@@ -88,20 +88,19 @@ class Bitmap
     else
       shiny_directory = "Graphics/Battlers/Shiny/#{dex_number}"
     end
-  
+
     return unless Dir.exist?(shiny_directory)
-  
+
     Dir.entries(shiny_directory).each do |file|
       next unless file.include?(name) && file.end_with?(".png")
-  
+
       old_path = "#{shiny_directory}/#{file}"
       new_file = file.sub(name, newname)
       new_path = "#{shiny_directory}/#{new_file}"
-  
+
       File.rename(old_path, new_path)
     end
   end
-
 
   def hue_changecolors(dex_number, bodyShiny, headShiny, alt = "")
     if isFusion(dex_number)
@@ -119,19 +118,17 @@ class Bitmap
     # Determine the destination folders
     shiny_file_path += alt + "_bodyShiny" if bodyShiny
     shiny_file_path += alt + "_headShiny" if headShiny
-    shiny_file_path += alt +".png"
+    shiny_file_path += alt + ".png"
     if File.exist?(shiny_file_path)
       return
     end
-  
 
-  
     offset = offsets.compact.max_by { |o| o.keys.count }
     return unless offset
     onetime = true
     offset.keys.each do |version|
       value = offset&.dig(version)
-  
+
       if value.is_a?(String) && onetime
         onetime = false
         hue_customcolor(GameData::Species.calculateCustomShinyHueOffset(dex_number, bodyShiny, headShiny))
@@ -143,6 +140,7 @@ class Bitmap
     end
   end
 end
+
 #===============================================================================
 class AnimatedBitmap
   attr_reader :path
@@ -201,7 +199,7 @@ class AnimatedBitmap
   def shiftCustomColors(rules)
     @bitmap.bitmap.hue_customcolor(rules)
   end
-  
+
   def shiftAllColors(dex_number, bodyShiny, headShiny)
     # pratically the same as hue_changecolors but for the animated bitmap
     if isFusion(dex_number)
@@ -215,7 +213,7 @@ class AnimatedBitmap
       shiny_file_path = "#{shiny_directory}/#{dex_number}"
       offsets = [SHINY_COLOR_OFFSETS[dex_number]]
     end
-    
+
     # Determine the destination folders
     shiny_file_path += "_bodyShiny" if bodyShiny
     shiny_file_path += "_headShiny" if headShiny
@@ -224,15 +222,13 @@ class AnimatedBitmap
       @bitmap.bitmap = Bitmap.new(shiny_file_path)
       return
     end
-  
 
-  
     offset = offsets.compact.max_by { |o| o.keys.count }
     return unless offset
     onetime = true
     offset.keys.each do |version|
       value = offset&.dig(version)
-  
+
       if value.is_a?(String) && onetime
         onetime = false
         shiftCustomColors(GameData::Species.calculateCustomShinyHueOffset(dex_number, bodyShiny, headShiny))
@@ -243,7 +239,6 @@ class AnimatedBitmap
       end
     end
   end
-  
 
   def [](index)
     @bitmap[index]

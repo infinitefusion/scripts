@@ -22,19 +22,19 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      @id               = hash[:id]
-      @id_number        = hash[:id_number]   || -1
-      @real_name        = hash[:name]        || "Unnamed"
-      @function_code    = hash[:function_code]
-      @base_damage      = hash[:base_damage]
-      @type             = hash[:type]
-      @category         = hash[:category]
-      @accuracy         = hash[:accuracy]
-      @total_pp         = hash[:total_pp]
-      @effect_chance    = hash[:effect_chance]
-      @target           = hash[:target]
-      @priority         = hash[:priority]
-      @flags            = hash[:flags]
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @real_name = hash[:name] || "Unnamed"
+      @function_code = hash[:function_code]
+      @base_damage = hash[:base_damage]
+      @type = hash[:type]
+      @category = hash[:category]
+      @accuracy = hash[:accuracy]
+      @total_pp = hash[:total_pp]
+      @effect_chance = hash[:effect_chance]
+      @target = hash[:target]
+      @priority = hash[:priority]
+      @flags = hash[:flags]
       @real_description = hash[:description] || "???"
     end
 
@@ -74,12 +74,12 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbGetMoveData(move_id, move_data_type = -1)
-  Deprecation.warn_method('pbGetMoveData', 'v20', 'GameData::Move.get(move_id)')
+  Deprecation.warn_method("pbGetMoveData", "v20", "GameData::Move.get(move_id)")
   return GameData::Move.get(move_id)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbIsHiddenMove?(move)
-  Deprecation.warn_method('pbIsHiddenMove?', 'v20', 'GameData::Move.get(move).hidden_move?')
+  Deprecation.warn_method("pbIsHiddenMove?", "v20", "GameData::Move.get(move).hidden_move?")
   return GameData::Move.get(move).hidden_move?
 end

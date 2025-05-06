@@ -62,12 +62,11 @@ def unlock_card_background(id)
 end
 
 def getDisplayedName(card_id)
-  return card_id.downcase.gsub('_', ' ').gsub('flags/', 'Team ').split.map(&:capitalize).join(' ')
+  return card_id.downcase.gsub("_", " ").gsub("flags/", "Team ").split.map(&:capitalize).join(" ")
 end
 
-
 def purchaseCardBackground(price = 1000)
-  $Trainer.unlocked_card_backgrounds = [] if ! $Trainer.unlocked_card_backgrounds
+  $Trainer.unlocked_card_backgrounds = [] if !$Trainer.unlocked_card_backgrounds
   purchasable_cards = []
   current_city = pbGet(VAR_CURRENT_MART)
   current_city = :PEWTER if !current_city.is_a?(Symbol)

@@ -1,12 +1,11 @@
 module SwitchFinder
-
   def self.search_switch_trigger(switch_id)
     results = []
     mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
     mapinfos.each_key do |map_id|
       map = load_data(sprintf("Data/Map%03d.rxdata", map_id))
       map.events.each_value do |event|
-        event.pages.each do |page,index|
+        event.pages.each do |page, index|
           # Check conditions for each page
           if page.condition.switch1_id == switch_id || page.condition.switch2_id == switch_id
             results.push("Map #{map_id}, Event #{event.id} (#{event.x},#{event.y}), Trigger for page #{index}")
@@ -23,7 +22,6 @@ module SwitchFinder
     end
     echoln "Switch #{switch_id} found:" + results.to_s
   end
-
 
   def self.search_switch_anyUse(switch_id)
     results = []
@@ -90,7 +88,6 @@ module SwitchFinder
     return results
   end
 
-
   def self.find_unused_switches(total_switches)
     unused_switches = []
 
@@ -111,16 +108,14 @@ module SwitchFinder
 
     echoln "#{unused_switches.length} unused switches found. Exported to unused_switches.txt."
   end
-
 end
 
 # Example usage: Replace 100 with the switch ID you want to search
 # SwitchFinder.search_switch(100)
 
-
 def search_event_scripts(target_string)
   results = []
-  for map_id in 1..999  # Adjust based on your game's max map ID
+  for map_id in 1..999 # Adjust based on your game's max map ID
     map_filename = sprintf("Data/Map%03d.rxdata", map_id)
     next unless File.exist?(map_filename)  # Skip if map file doesn't exist
 
@@ -132,13 +127,13 @@ def search_event_scripts(target_string)
         next unless page.list  # Skip pages with no commands
 
         page.list.each_with_index do |command, cmd_index|
-          if command.code == 355 || command.code == 655  # Check script command (multi-line)
+          if command.code == 355 || command.code == 655 # Check script command (multi-line)
             if command.parameters[0].include?(target_string)
               results << {
                 map_id: map_id,
                 event_id: event_id,
                 page_index: page_index + 1,
-                command_index: cmd_index + 1
+                command_index: cmd_index + 1,
               }
             end
           end
@@ -156,9 +151,6 @@ def search_event_scripts(target_string)
     end
   end
 end
-
-
-
 
 def print_map_tiles
   # Define output file path
@@ -185,7 +177,4 @@ def print_map_tiles
   end
 
   echoln("Tile IDs exported to #{file_path}")
-
-
 end
-

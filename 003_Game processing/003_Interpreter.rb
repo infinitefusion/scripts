@@ -12,7 +12,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def initialize(depth = 0, main = false)
     @depth = depth
-    @main  = main
+    @main = main
     if depth > 100
       print("Common event call has exceeded maximum limit.")
       exit
@@ -22,20 +22,21 @@ class Interpreter
 
   def inspect
     str = super.chop
-    str << format(' @event_id: %d>', @event_id)
+    str << format(" @event_id: %d>", @event_id)
     return str
   end
 
   def clear
-    @map_id             = 0       # map ID when starting up
-    @event_id           = 0       # event ID
-    @message_waiting    = false   # waiting for message to end
+    @map_id = 0       # map ID when starting up
+    @event_id = 0       # event ID
+    @message_waiting = false   # waiting for message to end
     @move_route_waiting = false   # waiting for move completion
-    @wait_count         = 0       # wait count
-    @child_interpreter  = nil     # child interpreter
-    @branch             = {}      # branch data
-    @buttonInput        = false
+    @wait_count = 0       # wait count
+    @child_interpreter = nil     # child interpreter
+    @branch = {}      # branch data
+    @buttonInput = false
   end
+
   #-----------------------------------------------------------------------------
   # * Event Setup
   #     list     : list of event commands
@@ -61,7 +62,7 @@ class Interpreter
     # Check all map events for one that wants to start, and set it up
     for event in $game_map.events.values
       next if !event.starting
-      if event.trigger < 3   # Isn't autorun or parallel processing
+      if event.trigger < 3 # Isn't autorun or parallel processing
         event.lock
         event.clear_starting
       end
@@ -79,6 +80,7 @@ class Interpreter
   def running?
     return @list != nil
   end
+
   #-----------------------------------------------------------------------------
   # * Frame Update
   #-----------------------------------------------------------------------------
@@ -86,7 +88,7 @@ class Interpreter
     @loop_count = 0
     loop do
       @loop_count += 1
-      if @loop_count > 100   # Call Graphics.update for freeze prevention
+      if @loop_count > 100 # Call Graphics.update for freeze prevention
         Graphics.update
         @loop_count = 0
       end
@@ -129,6 +131,7 @@ class Interpreter
       @index += 1
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Execute script
   #-----------------------------------------------------------------------------
@@ -165,7 +168,7 @@ class Interpreter
       message += "\r\n***Full script:\r\n#{script}\r\n"
       if event && $game_map
         map_name = ($game_map.name rescue nil) || "???"
-        err  = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name}):\r\n"
+        err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name}):\r\n"
         err += "#{message}\r\n#{s}"
         if e.is_a?(Hangup)
           $EVENTHANGUPMSG = err
@@ -189,18 +192,19 @@ class Interpreter
       raise err
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Get Character
   #     parameter : parameter
   #-----------------------------------------------------------------------------
   def get_character(parameter = 0)
     case parameter
-    when -1   # player
+    when -1 # player
       return $game_player
-    when 0    # this event
+    when 0 # this event
       events = $game_map.events
       return (events) ? events[@event_id] : nil
-    else      # specific event
+    else # specific event
       events = $game_map.events
       return (events) ? events[parameter] : nil
     end
@@ -217,18 +221,21 @@ class Interpreter
   def get_event(parameter)
     return get_character(parameter)
   end
+
   #-----------------------------------------------------------------------------
   # * Freezes all events on the map (for use at the beginning of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalLock
     $game_map.events.values.each { |event| event.minilock }
   end
+
   #-----------------------------------------------------------------------------
   # * Unfreezes all events on the map (for use at the end of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalUnlock
     $game_map.events.values.each { |event| event.unlock }
   end
+
   #-----------------------------------------------------------------------------
   # * Gets the next index in the interpreter, ignoring certain commands between messages
   #-----------------------------------------------------------------------------
@@ -238,13 +245,13 @@ class Interpreter
     loop do
       return i if i >= @list.length - 1
       case @list[i].code
-      when 118, 108, 408   # Label, Comment
+      when 118, 108, 408 # Label, Comment
         i += 1
-      when 413             # Repeat Above
+      when 413 # Repeat Above
         i = pbRepeatAbove(i)
-      when 113             # Break Loop
+      when 113 # Break Loop
         i = pbBreakLoop(i)
-      when 119             # Jump to Label
+      when 119 # Jump to Label
         newI = pbJumpToLabel(i, @list[i].parameters[0])
         i = (newI > i) ? newI : i + 1
       else
@@ -281,6 +288,7 @@ class Interpreter
       temp_index += 1
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Various methods to be used in a script event command.
   #-----------------------------------------------------------------------------
@@ -297,7 +305,7 @@ class Interpreter
       if $game_map.events[@event_id].name[/cuttree/i]
         pbSmashThisEvent()
       end
-        $game_map.events[@event_id].erase
+      $game_map.events[@event_id].erase
       $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
     end
     @index += 1
@@ -324,7 +332,7 @@ class Interpreter
   end
 
   # Sets another event's self switch (eg. pbSetSelfSwitch(20, "A", true) ).
-    def pbSetSelfSwitch(eventid, switch_name, value, mapid = -1)
+  def pbSetSelfSwitch(eventid, switch_name, value, mapid = -1)
     mapid = @map_id if mapid < 0
     old_value = $game_self_switches[[mapid, eventid, switch_name]]
     $game_self_switches[[mapid, eventid, switch_name]] = value
@@ -336,11 +344,13 @@ class Interpreter
   def tsOff?(c)
     return get_self.tsOff?(c)
   end
+
   alias isTempSwitchOff? tsOff?
 
   def tsOn?(c)
     return get_self.tsOn?(c)
   end
+
   alias isTempSwitchOn? tsOn?
 
   def setTempSwitchOn(c)
@@ -389,8 +399,8 @@ class Interpreter
   # Used in boulder events. Allows an event to be pushed.
   def pbPushThisEvent
     event = get_self
-    old_x  = event.x
-    old_y  = event.y
+    old_x = event.x
+    old_y = event.y
     # Apply strict version of passable, which treats tiles that are passable
     # only from certain directions as fully impassible
     # ^why?? - no
@@ -444,7 +454,7 @@ class Interpreter
     item = GameData::Item.get(item).id
     $game_temp.mart_prices[item] = [-1, -1] if !$game_temp.mart_prices[item]
     $game_temp.mart_prices[item][0] = buy_price if buy_price > 0
-    if sell_price >= 0   # 0=can't sell
+    if sell_price >= 0 # 0=can't sell
       $game_temp.mart_prices[item][1] = sell_price * 2
     else
       $game_temp.mart_prices[item][1] = buy_price if buy_price > 0

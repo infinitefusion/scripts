@@ -1,6 +1,5 @@
 class ClothesShopPresenter < PokemonMartScreen
   def pbChooseBuyItem
-
   end
 
   def initialize(scene, stock, adapter = nil, versions = false)
@@ -8,11 +7,10 @@ class ClothesShopPresenter < PokemonMartScreen
     @use_versions = versions
   end
 
-  def putOnClothes(item,end_scene=true)
+  def putOnClothes(item, end_scene = true)
     @adapter.putOnOutfit(item) if item
     @scene.pbEndBuyScene if end_scene
   end
-
 
   def dyeClothes()
     original_color = $Trainer.clothes_color
@@ -20,7 +18,7 @@ class ClothesShopPresenter < PokemonMartScreen
     previous_input = 0
     ret = false
     while (true)
-      choice = pbShowCommands(nil, options, options.length, previous_input,200)
+      choice = pbShowCommands(nil, options, options.length, previous_input, 200)
       previous_input = choice
       case choice
       when 0 #NEXT
@@ -47,19 +45,18 @@ class ClothesShopPresenter < PokemonMartScreen
     return ret
   end
 
-
   # returns true if should stay in the menu
   def playerClothesActionsMenu(item)
     cmd_wear = "Wear"
     cmd_dye = "Dye Kit"
     options = []
     options << cmd_wear
-    options << cmd_dye  if $PokemonBag.pbHasItem?(:CLOTHESDYEKIT)
+    options << cmd_dye if $PokemonBag.pbHasItem?(:CLOTHESDYEKIT)
     options << "Cancel"
     choice = pbMessage("What would you like to do?", options, -1)
 
     if options[choice] == cmd_wear
-      putOnClothes(item,false)
+      putOnClothes(item, false)
       $Trainer.clothes_color = @adapter.get_dye_color(item.id)
       return true
     elsif options[choice] == cmd_dye
@@ -80,8 +77,8 @@ class ClothesShopPresenter < PokemonMartScreen
     cmd_confirm = "Set outfit"
     cmd_discard = "Discard changes"
     cmd_cancel = "Cancel"
-    options = [cmd_discard,cmd_confirm,cmd_cancel]
-    choice = pbMessage("You have unsaved changes!",options,3)
+    options = [cmd_discard, cmd_confirm, cmd_cancel]
+    choice = pbMessage("You have unsaved changes!", options, 3)
     case options[choice]
     when cmd_confirm
       @adapter.putOnSelectedOutfit
@@ -108,7 +105,6 @@ class ClothesShopPresenter < PokemonMartScreen
         break
         next
       end
-
 
       if !@adapter.isShop?
         if @adapter.is_a?(ClothesMartAdapter)
@@ -159,5 +155,4 @@ class ClothesShopPresenter < PokemonMartScreen
     end
     @scene.pbEndBuyScene
   end
-
 end

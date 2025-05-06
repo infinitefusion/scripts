@@ -12,6 +12,7 @@ class Game_Switches
     echoln caller
     @data = []
   end
+
   #-----------------------------------------------------------------------------
   # * Get Switch
   #     switch_id : switch ID
@@ -20,6 +21,7 @@ class Game_Switches
     return @data[switch_id] if switch_id <= 5000 && @data[switch_id] != nil
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Set Switch
   #     switch_id : switch ID

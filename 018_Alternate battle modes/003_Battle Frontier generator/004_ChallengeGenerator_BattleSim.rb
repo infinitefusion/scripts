@@ -49,7 +49,7 @@ class RuledTeam
     (@totalGames || 0) + self.games
   end
 
-  def addMatch(other,score)
+  def addMatch(other, score)
     @history.addMatch(other.ratingData, score)
   end
 
@@ -88,10 +88,10 @@ class SingleMatch
   attr_reader :kValue
 
   def initialize(opponentRating, opponentDev, score, kValue = 16)
-    @opponentRating    = opponentRating
+    @opponentRating = opponentRating
     @opponentDeviation = opponentDev
-    @score             = score   # -1=draw, 0=lose, 1=win
-    @kValue            = kValue
+    @score = score   # -1=draw, 0=lose, 1=win
+    @kValue = kValue
   end
 end
 
@@ -102,7 +102,7 @@ class MatchHistory
   include Enumerable
 
   def initialize(thisPlayer)
-    @matches    = []
+    @matches = []
     @thisPlayer = thisPlayer
   end
 
@@ -137,15 +137,15 @@ class PlayerRatingElo
   K_VALUE = 16
 
   def initialize
-    @rating          = 1600.0
-    @deviation       = 0
-    @volatility      = 0
+    @rating = 1600.0
+    @deviation = 0
+    @volatility = 0
     @estimatedRating = nil
   end
 
   def winChancePercent
     return @estimatedRating if @estimatedRating
-    x = (1 + 10.0**((@rating - 1600.0) / 400.0))
+    x = (1 + 10.0 ** ((@rating - 1600.0) / 400.0))
     @estimatedRating = (x == 0 ? 1.0 : 1.0 / x)
     return @estimatedRating
   end
@@ -155,7 +155,7 @@ class PlayerRatingElo
     stake = 0
     matches.length.times do
       score = (match.score == -1) ? 0.5 : match.score
-      e = (1 + 10.0**((@rating - match.opponentRating) / 400.0))
+      e = (1 + 10.0 ** ((@rating - match.opponentRating) / 400.0))
       stake += match.kValue * (score - e)
     end
     @rating += stake
@@ -171,9 +171,9 @@ class PlayerRating
   attr_reader :rating
 
   def initialize
-    @rating          = 1500.0
-    @deviation       = 350.0
-    @volatility      = 0.9
+    @rating = 1500.0
+    @deviation = 350.0
+    @volatility = 0.9
     @estimatedRating = nil
   end
 
@@ -184,14 +184,14 @@ class PlayerRating
       otherRating = 1500.0
       otherDeviation = 350.0
       s = Math.sqrt(100000.0 + @deviation * @deviation + otherDeviation * otherDeviation)
-      g = 10.0**((otherRating - @rating) * 0.79 / s)
+      g = 10.0 ** ((otherRating - @rating) * 0.79 / s)
       @estimatedRating = (1.0 / (1.0 + g)) * 100.0   # Percent chance that I win against opponent
     else
       # GLIXARE method
       rds = @deviation * @deviation
       sqr = Math.sqrt(15.905694331435 * (rds + 221781.21786254))
       inner = (1500.0 - @rating) * Math::PI / sqr
-      @estimatedRating = (10000.0 / (1.0 + (10.0**inner)) + 0.5) / 100.0
+      @estimatedRating = (10000.0 / (1.0 + (10.0 ** inner)) + 0.5) / 100.0
     end
     return @estimatedRating
   end
@@ -285,7 +285,7 @@ class PlayerRating
     squVariance = variance + variance
     squDevplusVar = squDeviation + variance
     x0 = a
-    100.times {   # Up to 100 iterations to avoid potentially infinite loops
+    100.times { # Up to 100 iterations to avoid potentially infinite loops
       e = Math.exp(x0)
       d = squDevplusVar + e
       squD = d * d
@@ -342,7 +342,7 @@ def pbDecideWinnerScore(party0, party1, rating)
       next if !move
       for j in 0...party1.length
         score += pbDecideWinnerEffectiveness(move.id,
-           types1[j], types2[j], abilities[j], [-16, -8, 0, 4, 12, 20])
+                                             types1[j], types2[j], abilities[j], [-16, -8, 0, 4, 12, 20])
       end
     end
     basestatsum = baseStatTotal(party0[i].species)
@@ -420,10 +420,10 @@ def pbRuledBattle(team1, team2, rule)
       p.item = items2[i]
     end
   end
-  if decision == 1   # Team 1 wins
+  if decision == 1 # Team 1 wins
     team1.addMatch(team2, 1)
     team2.addMatch(team1, 0)
-  elsif decision == 2   # Team 2 wins
+  elsif decision == 2 # Team 2 wins
     team1.addMatch(team2, 0)
     team2.addMatch(team1, 1)
   else

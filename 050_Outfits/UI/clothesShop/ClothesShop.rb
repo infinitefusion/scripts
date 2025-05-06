@@ -1,4 +1,4 @@
-def genericOutfitsShopMenu(stock = [], itemType = nil, versions = false, isShop=true, message=nil)
+def genericOutfitsShopMenu(stock = [], itemType = nil, versions = false, isShop = true, message = nil)
   commands = []
   commands[cmdBuy = commands.length] = _INTL("Buy")
   commands[cmdQuit = commands.length] = _INTL("Quit")
@@ -18,8 +18,6 @@ def genericOutfitsShopMenu(stock = [], itemType = nil, versions = false, isShop=
   end
 end
 
-
-
 def getPresenter(itemType, view, stock, adapter, versions)
   case itemType
   when :HAIR
@@ -29,12 +27,12 @@ def getPresenter(itemType, view, stock, adapter, versions)
   end
 end
 
-def getAdapter(itemType, stock, isShop, is_secondary=false)
+def getAdapter(itemType, stock, isShop, is_secondary = false)
   case itemType
   when :CLOTHES
     return ClothesMartAdapter.new(stock, isShop)
   when :HAT
-    return HatsMartAdapter.new(stock, isShop,is_secondary)
+    return HatsMartAdapter.new(stock, isShop, is_secondary)
   when :HAIR
     return HairMartAdapter.new(stock, isShop)
   end
@@ -42,25 +40,25 @@ end
 
 def list_all_possible_outfits() end
 
-def clothesShop(outfits_list = [], free=false,customMessage=nil)
+def clothesShop(outfits_list = [], free = false, customMessage = nil)
   stock = []
   outfits_list.each { |outfit_id|
     outfit = get_clothes_by_id(outfit_id)
     stock << outfit if outfit
   }
-  genericOutfitsShopMenu(stock, :CLOTHES,false,!free,customMessage)
+  genericOutfitsShopMenu(stock, :CLOTHES, false, !free, customMessage)
 end
 
-def hatShop(outfits_list = [], free=false, customMessage=nil)
+def hatShop(outfits_list = [], free = false, customMessage = nil)
   stock = []
   outfits_list.each { |outfit_id|
     outfit = get_hat_by_id(outfit_id)
     stock << outfit if outfit
   }
-  genericOutfitsShopMenu(stock, :HAT,false,!free,customMessage)
+  genericOutfitsShopMenu(stock, :HAT, false, !free, customMessage)
 end
 
-def hairShop(outfits_list = [],free=false, customMessage=nil)
+def hairShop(outfits_list = [], free = false, customMessage = nil)
   currentHair = getSimplifiedHairIdFromFullID($Trainer.hair)
   stock = [:SWAP_COLOR]
   #always add current hairstyle as first option (in case the player just wants to swap the color)
@@ -70,7 +68,7 @@ def hairShop(outfits_list = [],free=false, customMessage=nil)
     outfit = get_hair_by_id(outfit_id)
     stock << outfit if outfit
   }
-  genericOutfitsShopMenu(stock, :HAIR, true,!free,customMessage)
+  genericOutfitsShopMenu(stock, :HAIR, true, !free, customMessage)
 end
 
 def switchHatsPosition()
@@ -90,7 +88,7 @@ end
 SWAP_HAT_POSITIONS_CAPTION = "Switch hats position"
 
 #is_secondary only used for hats
-def openSelectOutfitMenu(stock = [], itemType =nil, is_secondary=false)
+def openSelectOutfitMenu(stock = [], itemType = nil, is_secondary = false)
   adapter = getAdapter(itemType, stock, false, is_secondary)
   view = getView(itemType)
   presenter = ClothesShopPresenter.new(view, stock, adapter)

@@ -4,13 +4,13 @@ class OnlineWondertrade
     return if givenPokemon == nil
     queryBody = buildWondertradeQueryJson(givenPokemon)
     begin
-    response = HTTPLite.post_body(Settings::WONDERTRADE_BASE_URL + "/wondertrade", queryBody, "application/json")
-    if response[:status] == 200
-      body = HTTPLite::JSON.parse(response[:body])
-      doTrade(body)
-    else
-      pbMessage("Could not find a trading partner...")
-    end
+      response = HTTPLite.post_body(Settings::WONDERTRADE_BASE_URL + "/wondertrade", queryBody, "application/json")
+      if response[:status] == 200
+        body = HTTPLite::JSON.parse(response[:body])
+        doTrade(body)
+      else
+        pbMessage("Could not find a trading partner...")
+      end
     rescue MKXPError
       pbMessage("There was an error while sending your Pokémon...")
     end
@@ -30,19 +30,19 @@ class OnlineWondertrade
     is_debug_shiny = receivedData["debug_shiny"]
 
     newpoke = pbStartTrade(pbGet(1), receivedPokemonSpecies, receivedPokemonName, receivedPokemonTrainerName, receivedPokemonTrainerGender, true) # Starts the trade
-    newpoke.owner=Pokemon::Owner.new(receivedPokemonTrainerId.to_i,receivedPokemonOT,2,2)
-    newpoke.level=receivedPokemonLevel
+    newpoke.owner = Pokemon::Owner.new(receivedPokemonTrainerId.to_i, receivedPokemonOT, 2, 2)
+    newpoke.level = receivedPokemonLevel
 
     if is_head_shiny || is_body_shiny
-      newpoke.shiny=true
-      newpoke.head_shiny=is_head_shiny
+      newpoke.shiny = true
+      newpoke.head_shiny = is_head_shiny
       newpoke.body_shiny = is_body_shiny
       if is_debug_shiny
-        newpoke.debug_shiny=false
-        newpoke.natural_shiny=true
+        newpoke.debug_shiny = false
+        newpoke.natural_shiny = true
       else
-        newpoke.debug_shiny=true
-        newpoke.natural_shiny=false
+        newpoke.debug_shiny = true
+        newpoke.natural_shiny = false
       end
     end
     newpoke.calc_stats
@@ -51,12 +51,13 @@ class OnlineWondertrade
   def selectPokemonToGive
     pbChoosePokemon(1, 2, # Choose eligable pokemon
                     proc {
-                      |poke| !poke.egg? &&
-                        !(poke.isShadow?) &&
-                        poke.isFusion? &&
-                        customSpriteExistsSpecies(poke.species) #&&
-                      #  !poke.debug_shiny
-                    })
+      |poke|
+      !poke.egg? &&
+        !(poke.isShadow?) &&
+        poke.isFusion? &&
+        customSpriteExistsSpecies(poke.species) #&&
+      #  !poke.debug_shiny
+    })
     poke = $Trainer.party[pbGet(1)]
 
     if pbConfirmMessage(_INTL("Trade {1} away?", poke.name))
@@ -64,7 +65,6 @@ class OnlineWondertrade
     end
     return nil
   end
-
 
   # @param [Pokemon] givenPokemon
   def buildWondertradeQueryJson(givenPokemon)
@@ -87,5 +87,4 @@ class OnlineWondertrade
     }
     return HTTPLite::JSON.stringify(postData)
   end
-
 end

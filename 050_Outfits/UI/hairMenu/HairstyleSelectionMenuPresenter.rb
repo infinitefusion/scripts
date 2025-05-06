@@ -2,7 +2,7 @@ class HairstyleSelectionMenuPresenter
   attr_accessor :options
   attr_reader :current_index
 
-  OPTION_STYLE = 'Hairstyle'
+  OPTION_STYLE = "Hairstyle"
   OPTION_BASE_COLOR = "Base color"
   OPTION_DYE = "Dye"
 
@@ -23,7 +23,7 @@ class HairstyleSelectionMenuPresenter
     @hair_version = hairstyle_split[1] if hairstyle_split[1]
     @hairColor = $Trainer.hair_color
 
-    @available_styles= $Trainer.unlocked_hairstyles
+    @available_styles = $Trainer.unlocked_hairstyles
     @selected_hairstyle_index = 0
 
     echoln @available_styles
@@ -72,9 +72,8 @@ class HairstyleSelectionMenuPresenter
     return DEFAULT_NAMES[@gender]
   end
 
-
   def applyAllSelectedValues
-    $Trainer.hair = getFullHairId(@hairstyle,@hair_version)
+    $Trainer.hair = getFullHairId(@hairstyle, @hair_version)
     $Trainer.hair_color = @hairColor
   end
 
@@ -136,8 +135,8 @@ class HairstyleSelectionMenuPresenter
     pbSEPlay("GUI sel cursor", 80, 100)
     selected_option = @options[current_index]
     case selected_option
-    when OPTION_STYLE then
-      setHairstyle(@selected_hairstyle_index,incr)
+    when OPTION_STYLE
+      setHairstyle(@selected_hairstyle_index, incr)
     end
 
     # case selected_option
@@ -153,12 +152,10 @@ class HairstyleSelectionMenuPresenter
     updateTrainerPreview()
   end
 
-
-
   def setHairstyle(current_index, incr)
     @selected_hairstyle_index += incr
     @selected_hairstyle_index = 0 if @selected_hairstyle_index > @available_styles.length
-    @selected_hairstyle_index = @available_styles.length-1 if @selected_hairstyle_index < 0
+    @selected_hairstyle_index = @available_styles.length - 1 if @selected_hairstyle_index < 0
 
     @hairstyle = @available_styles[@selected_hairstyle_index]
 
@@ -180,8 +177,8 @@ class HairstyleSelectionMenuPresenter
 
   def applyHair()
     hairstyle = @hairstyle
-    hair_version =@hair_version
-    hairId = getFullHairId(hairstyle,hair_version)
+    hair_version = @hair_version
+    hairId = getFullHairId(hairstyle, hair_version)
     $Trainer.hair = hairId
   end
 end

@@ -5,7 +5,7 @@ class Outfit
   attr_accessor :tags
   attr_accessor :price
 
-  def initialize(id, name, description = '',price=0, tags = [])
+  def initialize(id, name, description = "", price = 0, tags = [])
     @id = id
     @name = name
     @description = description

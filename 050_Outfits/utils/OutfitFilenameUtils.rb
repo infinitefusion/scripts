@@ -26,7 +26,7 @@ def get_clothes_sets_list_path()
   return Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_CLOTHES_FOLDER
 end
 
-def getOverworldOutfitFilename(outfit_id, action="walk")
+def getOverworldOutfitFilename(outfit_id, action = "walk")
   base_path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_CLOTHES_FOLDER
   dynamic_path = _INTL("/{1}/", outfit_id)
   filename = _INTL(Settings::PLAYER_CLOTHES_FOLDER + "_{1}_{2}", action, outfit_id)
@@ -45,7 +45,6 @@ def get_hair_sets_list_path()
   return Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_HAIR_FOLDER
 end
 
-
 def getSimplifiedHairIdFromFullID(full_id)
   split_id = getSplitHairFilenameAndVersionFromID(full_id)
   return split_id[1] if split_id.length > 1
@@ -61,38 +60,36 @@ end
 # Output: ["1","red"]
 def getSplitHairFilenameAndVersionFromID(hairstyle_id)
   return "" if !hairstyle_id
-  hairstyle_id= hairstyle_id.to_s
+  hairstyle_id = hairstyle_id.to_s
   return hairstyle_id.split("_")
 end
 
-def getFullHairId(hairstyle,version)
-  return _INTL("{1}_{2}",version,hairstyle)
-
+def getFullHairId(hairstyle, version)
+  return _INTL("{1}_{2}", version, hairstyle)
 end
 
 def getOverworldHairFilename(hairstyle_id)
   hairstyle_split = getSplitHairFilenameAndVersionFromID(hairstyle_id)
-  name= hairstyle_split[-1]
-  version= hairstyle_split[-2]
+  name = hairstyle_split[-1]
+  version = hairstyle_split[-2]
 
   base_path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_HAIR_FOLDER
   dynamic_path = _INTL("/{1}/", name)
-  filename = _INTL(Settings::PLAYER_HAIR_FOLDER + "_{1}_{2}",version, name)
+  filename = _INTL(Settings::PLAYER_HAIR_FOLDER + "_{1}_{2}", version, name)
   full_path = base_path + dynamic_path + filename
   return full_path
 end
 
 def getTrainerSpriteHairFilename(hairstyle_id)
   return "" if !hairstyle_id
-  hairstyle_id= hairstyle_id.to_s
-  hairstyle_split= hairstyle_id.split("_")
-  name= hairstyle_split[-1]
-  version= hairstyle_split[-2]
-
+  hairstyle_id = hairstyle_id.to_s
+  hairstyle_split = hairstyle_id.split("_")
+  name = hairstyle_split[-1]
+  version = hairstyle_split[-2]
 
   base_path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_HAIR_FOLDER
   dynamic_path = _INTL("/{1}/", name)
-  filename = _INTL(Settings::PLAYER_HAIR_FOLDER + "_trainer_{1}_{2}",version, name)
+  filename = _INTL(Settings::PLAYER_HAIR_FOLDER + "_trainer_{1}_{2}", version, name)
   full_path = base_path + dynamic_path + filename
   return full_path
 end

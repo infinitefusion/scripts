@@ -4,7 +4,7 @@ class PokeBattle_Scene
   #=============================================================================
   def pbBattleIntroAnimation
     # Make everything appear
-    introAnim = BattleIntroAnimation.new(@sprites,@viewport,@battle)
+    introAnim = BattleIntroAnimation.new(@sprites, @viewport, @battle)
     loop do
       introAnim.update
       pbUpdate
@@ -19,8 +19,8 @@ class PokeBattle_Scene
       #       entrance animation. Be sure to set it up like a Pokémon entrance
       #       animation, i.e. add them to @animations so that they can play out
       #       while party lineups appear and messages show.
-      pbShowPartyLineup(0,true)
-      pbShowPartyLineup(1,true)
+      pbShowPartyLineup(0, true)
+      pbShowPartyLineup(1, true)
       return
     end
     # Wild battle: play wild Pokémon's intro animations (including cry), show
@@ -28,33 +28,33 @@ class PokeBattle_Scene
     # shiny animation(s)
     # Set up data box animation
     for i in 0...@battle.sideSizes[1]
-      idxBattler = 2*i+1
+      idxBattler = 2 * i + 1
       next if !@battle.battlers[idxBattler]
-      dataBoxAnim = DataBoxAppearAnimation.new(@sprites,@viewport,idxBattler)
+      dataBoxAnim = DataBoxAppearAnimation.new(@sprites, @viewport, idxBattler)
       @animations.push(dataBoxAnim)
     end
     # Set up wild Pokémon returning to normal colour and playing intro
     # animations (including cry)
-    @animations.push(BattleIntroAnimation2.new(@sprites,@viewport,@battle.sideSizes[1]))
+    @animations.push(BattleIntroAnimation2.new(@sprites, @viewport, @battle.sideSizes[1]))
     # Play all the animations
     while inPartyAnimation?; pbUpdate; end
     # Show shiny animation for wild Pokémon
     if @battle.showAnims
       for i in 0...@battle.sideSizes[1]
-        idxBattler = 2*i+1
+        idxBattler = 2 * i + 1
 
-          #hidden ability animation
+        #hidden ability animation
         if @battle.battlers[idxBattler].hasHiddenAbility?
-          pbCommonAnimation("StatUp",@battle.battlers[idxBattler])
+          pbCommonAnimation("StatUp", @battle.battlers[idxBattler])
           if @battle.is_a?(PokeBattle_Battle)
-            @battle.pbShowAbilitySplash(@battle.battlers[idxBattler],true)
+            @battle.pbShowAbilitySplash(@battle.battlers[idxBattler], true)
             @battle.pbHideAbilitySplash(@battle.battlers[idxBattler])
           end
         end
 
         #shiny animation
         next if !@battle.battlers[idxBattler] || !@battle.battlers[idxBattler].shiny?
-        pbCommonAnimation("Shiny",@battle.battlers[idxBattler])
+        pbCommonAnimation("Shiny", @battle.battlers[idxBattler])
       end
     end
   end
@@ -62,9 +62,9 @@ class PokeBattle_Scene
   #=============================================================================
   # Animates a party lineup appearing for the given side
   #=============================================================================
-  def pbShowPartyLineup(side,fullAnim=false)
-    @animations.push(LineupAppearAnimation.new(@sprites,@viewport,
-       side,@battle.pbParty(side),@battle.pbPartyStarts(side),fullAnim))
+  def pbShowPartyLineup(side, fullAnim = false)
+    @animations.push(LineupAppearAnimation.new(@sprites, @viewport,
+                                               side, @battle.pbParty(side), @battle.pbPartyStarts(side), fullAnim))
     if !fullAnim
       while inPartyAnimation?; pbUpdate; end
     end
@@ -77,7 +77,7 @@ class PokeBattle_Scene
   #=============================================================================
   def pbShowOpponent(idxTrainer)
     # Set up trainer appearing animation
-    appearAnim = TrainerAppearAnimation.new(@sprites,@viewport,idxTrainer)
+    appearAnim = TrainerAppearAnimation.new(@sprites, @viewport, idxTrainer)
     @animations.push(appearAnim)
     # Play the animation
     while inPartyAnimation?; pbUpdate; end
@@ -89,8 +89,8 @@ class PokeBattle_Scene
   # animation for it if relevant.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
   #=============================================================================
-  def pbSendOutBattlers(sendOuts,startBattle=false)
-    return if sendOuts.length==0
+  def pbSendOutBattlers(sendOuts, startBattle = false)
+    return if sendOuts.length == 0
     # If party balls are still appearing, wait for them to finish showing up, as
     # the FadeAnimation will make them disappear.
     while inPartyAnimation?; pbUpdate; end
@@ -98,29 +98,29 @@ class PokeBattle_Scene
     # Make all trainers and party lineups disappear (player-side trainers may
     # animate throwing a Poké Ball)
     if @battle.opposes?(sendOuts[0][0])
-      fadeAnim = TrainerFadeAnimation.new(@sprites,@viewport,startBattle)
+      fadeAnim = TrainerFadeAnimation.new(@sprites, @viewport, startBattle)
     else
-      fadeAnim = PlayerFadeAnimation.new(@sprites,@viewport,startBattle)
+      fadeAnim = PlayerFadeAnimation.new(@sprites, @viewport, startBattle)
     end
     # For each battler being sent out, set the battler's sprite and create two
     # animations (the Poké Ball moving and battler appearing from it, and its
     # data box appearing)
     sendOutAnims = []
-    sendOuts.each_with_index do |b,i|
+    sendOuts.each_with_index do |b, i|
       pkmn = @battle.battlers[b[0]].effects[PBEffects::Illusion] || b[1]
-      pbChangePokemon(b[0],pkmn)
+      pbChangePokemon(b[0], pkmn)
       pbRefresh
       if @battle.opposes?(b[0])
-        sendOutAnim = PokeballTrainerSendOutAnimation.new(@sprites,@viewport,
-           @battle.pbGetOwnerIndexFromBattlerIndex(b[0])+1,
-           @battle.battlers[b[0]],startBattle,i)
+        sendOutAnim = PokeballTrainerSendOutAnimation.new(@sprites, @viewport,
+                                                          @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
+                                                          @battle.battlers[b[0]], startBattle, i)
       else
-        sendOutAnim = PokeballPlayerSendOutAnimation.new(@sprites,@viewport,
-           @battle.pbGetOwnerIndexFromBattlerIndex(b[0])+1,
-           @battle.battlers[b[0]],startBattle,i)
+        sendOutAnim = PokeballPlayerSendOutAnimation.new(@sprites, @viewport,
+                                                         @battle.pbGetOwnerIndexFromBattlerIndex(b[0]) + 1,
+                                                         @battle.battlers[b[0]], startBattle, i)
       end
-      dataBoxAnim = DataBoxAppearAnimation.new(@sprites,@viewport,b[0])
-      sendOutAnims.push([sendOutAnim,dataBoxAnim,false])
+      dataBoxAnim = DataBoxAppearAnimation.new(@sprites, @viewport, b[0])
+      sendOutAnims.push([sendOutAnim, dataBoxAnim, false])
     end
     # Play all animations
     loop do
@@ -141,9 +141,9 @@ class PokeBattle_Scene
     # Play shininess animations for shiny Pokémon
     sendOuts.each do |b|
       next if !@battle.showAnims ||
-        if @battle.battlers[b[0]].shiny? || @battle.battlers[b[0]].glitter?
-          pbCommonAnimation("Shiny",@battle.battlers[b[0]])
-        end
+              if @battle.battlers[b[0]].shiny? || @battle.battlers[b[0]].glitter?
+                pbCommonAnimation("Shiny", @battle.battlers[b[0]])
+              end
     end
   end
 
@@ -153,7 +153,7 @@ class PokeBattle_Scene
   def pbRecall(idxBattler)
     @briefMessage = false
     # Recall animation
-    recallAnim = BattlerRecallAnimation.new(@sprites,@viewport,idxBattler)
+    recallAnim = BattlerRecallAnimation.new(@sprites, @viewport, idxBattler)
     loop do
       recallAnim.update if recallAnim
       pbUpdate
@@ -161,7 +161,7 @@ class PokeBattle_Scene
     end
     recallAnim.dispose
     # Data box disappear animation
-    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites,@viewport,idxBattler)
+    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites, @viewport, idxBattler)
     loop do
       dataBoxAnim.update
       pbUpdate
@@ -187,13 +187,11 @@ class PokeBattle_Scene
   #   abilitySplashAnim.dispose
   # end
 
-
-
   def pbHideAbilitySplash(battler)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-    side = battler.index%2
+    side = battler.index % 2
     return if !@sprites["abilityBar_#{side}"].visible
-    abilitySplashAnim = AbilitySplashDisappearAnimation.new(@sprites,@viewport,side)
+    abilitySplashAnim = AbilitySplashDisappearAnimation.new(@sprites, @viewport, side)
     loop do
       abilitySplashAnim.update
       pbUpdate
@@ -212,23 +210,23 @@ class PokeBattle_Scene
   #=============================================================================
   # Shows a HP-changing common animation and animates a data box's HP bar.
   # Called by def pbReduceHP, def pbRecoverHP.
-  def pbHPChanged(battler,oldHP,showAnim=false)
+  def pbHPChanged(battler, oldHP, showAnim = false)
     @briefMessage = false
-    if battler.hp>oldHP
-      pbCommonAnimation("HealthUp",battler) if showAnim && @battle.showAnims
-    elsif battler.hp<oldHP
-      pbCommonAnimation("HealthDown",battler) if showAnim && @battle.showAnims
+    if battler.hp > oldHP
+      pbCommonAnimation("HealthUp", battler) if showAnim && @battle.showAnims
+    elsif battler.hp < oldHP
+      pbCommonAnimation("HealthDown", battler) if showAnim && @battle.showAnims
     end
-    @sprites["dataBox_#{battler.index}"].animateHP(oldHP,battler.hp,battler.totalhp)
+    @sprites["dataBox_#{battler.index}"].animateHP(oldHP, battler.hp, battler.totalhp)
     while @sprites["dataBox_#{battler.index}"].animatingHP
       pbUpdate
     end
   end
 
-  def pbDamageAnimation(battler,effectiveness=0)
+  def pbDamageAnimation(battler, effectiveness = 0)
     @briefMessage = false
     # Damage animation
-    damageAnim = BattlerDamageAnimation.new(@sprites,@viewport,battler.index,effectiveness)
+    damageAnim = BattlerDamageAnimation.new(@sprites, @viewport, battler.index, effectiveness)
     loop do
       damageAnim.update
       pbUpdate
@@ -245,9 +243,9 @@ class PokeBattle_Scene
     # Set up animations
     damageAnims = []
     targets.each do |t|
-      anim = BattlerDamageAnimation.new(@sprites,@viewport,t[0].index,t[2])
+      anim = BattlerDamageAnimation.new(@sprites, @viewport, t[0].index, t[2])
       damageAnims.push(anim)
-      @sprites["dataBox_#{t[0].index}"].animateHP(t[1],t[0].hp,t[0].totalhp)
+      @sprites["dataBox_#{t[0].index}"].animateHP(t[1], t[0].hp, t[0].totalhp)
     end
     # Update loop
     loop do
@@ -274,28 +272,30 @@ class PokeBattle_Scene
   #=============================================================================
   # Animates a data box's Exp bar
   #=============================================================================
-  def pbEXPBar(battler,startExp,endExp,tempExp1,tempExp2)
+  def pbEXPBar(battler, startExp, endExp, tempExp1, tempExp2)
     return if startExp > endExp
     return if !battler
-    startExpLevel = tempExp1-startExp
-    endExpLevel   = tempExp2-startExp
-    expRange      = endExp-startExp
+    startExpLevel = tempExp1 - startExp
+    endExpLevel = tempExp2 - startExp
+    expRange = endExp - startExp
     dataBox = @sprites["dataBox_#{battler.index}"]
-    dataBox.animateExp(startExpLevel,endExpLevel,expRange)
+    dataBox.animateExp(startExpLevel, endExpLevel, expRange)
     while dataBox.animatingExp; pbUpdate; end
   end
 
   #=============================================================================
   # Shows stats windows upon a Pokémon levelling up
   #=============================================================================
-  def pbLevelUp(pkmn,_battler,oldTotalHP,oldAttack,oldDefense,oldSpAtk,oldSpDef,oldSpeed)
+  def pbLevelUp(pkmn, _battler, oldTotalHP, oldAttack, oldDefense, oldSpAtk, oldSpDef, oldSpeed)
     pbTopRightWindow(
-       _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-       pkmn.totalhp-oldTotalHP,pkmn.attack-oldAttack,pkmn.defense-oldDefense,
-       pkmn.spatk-oldSpAtk,pkmn.spdef-oldSpDef,pkmn.speed-oldSpeed))
+      _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
+            pkmn.totalhp - oldTotalHP, pkmn.attack - oldAttack, pkmn.defense - oldDefense,
+            pkmn.spatk - oldSpAtk, pkmn.spdef - oldSpDef, pkmn.speed - oldSpeed)
+    )
     pbTopRightWindow(
-       _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp,pkmn.attack,pkmn.defense,pkmn.spatk,pkmn.spdef,pkmn.speed))
+      _INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+            pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed)
+    )
   end
 
   #=============================================================================
@@ -304,8 +304,8 @@ class PokeBattle_Scene
   def pbFaintBattler(battler)
     @briefMessage = false
     # Pokémon plays cry and drops down, data box disappears
-    faintAnim   = BattlerFaintAnimation.new(@sprites,@viewport,battler.index,@battle)
-    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites,@viewport,battler.index)
+    faintAnim = BattlerFaintAnimation.new(@sprites, @viewport, battler.index, @battle)
+    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites, @viewport, battler.index)
     loop do
       if !showFaintingAnimation(battler)
         faintAnim.animDone = true
@@ -329,10 +329,10 @@ class PokeBattle_Scene
   #=============================================================================
   # Animates throwing a Poké Ball at a Pokémon in an attempt to catch it
   #=============================================================================
-  def pbThrow(ball,shakes,critical,targetBattler,showPlayer=false)
+  def pbThrow(ball, shakes, critical, targetBattler, showPlayer = false)
     @briefMessage = false
-    captureAnim = PokeballThrowCaptureAnimation.new(@sprites,@viewport,
-       ball,shakes,critical,@battle.battlers[targetBattler],showPlayer)
+    captureAnim = PokeballThrowCaptureAnimation.new(@sprites, @viewport,
+                                                    ball, shakes, critical, @battle.battlers[targetBattler], showPlayer)
     loop do
       captureAnim.update
       pbUpdate
@@ -348,7 +348,7 @@ class PokeBattle_Scene
     i = 0
     loop do
       pbUpdate
-      break if i>=Graphics.frame_rate*3.5   # 3.5 seconds
+      break if i >= Graphics.frame_rate * 3.5   # 3.5 seconds
       i += 1
     end
     pbMEStop
@@ -360,20 +360,20 @@ class PokeBattle_Scene
     ball = @sprites["captureBall"]
     return if !ball
     # Data box disappear animation
-    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites,@viewport,idxBattler)
+    dataBoxAnim = DataBoxDisappearAnimation.new(@sprites, @viewport, idxBattler)
     loop do
       dataBoxAnim.update
-      ball.opacity -= 12*20/Graphics.frame_rate if ball.opacity>0
+      ball.opacity -= 12 * 20 / Graphics.frame_rate if ball.opacity > 0
       pbUpdate
-      break if dataBoxAnim.animDone? && ball.opacity<=0
+      break if dataBoxAnim.animDone? && ball.opacity <= 0
     end
     dataBoxAnim.dispose
   end
 
-  def pbThrowAndDeflect(ball,idxBattler)
+  def pbThrowAndDeflect(ball, idxBattler)
     @briefMessage = false
-    throwAnim = PokeballThrowDeflectAnimation.new(@sprites,@viewport,
-       ball,@battle.battlers[idxBattler])
+    throwAnim = PokeballThrowDeflectAnimation.new(@sprites, @viewport,
+                                                  ball, @battle.battlers[idxBattler])
     loop do
       throwAnim.update
       pbUpdate
@@ -408,17 +408,17 @@ class PokeBattle_Scene
   #=============================================================================
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
-  def pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum=0)
+  def pbFindMoveAnimDetails(move2anim, moveID, idxUser, hitNum = 0)
     id_number = GameData::Move.get(moveID).id_number
     noFlip = false
-    if (idxUser&1)==0   # On player's side
+    if (idxUser & 1) == 0 # On player's side
       anim = move2anim[0][id_number]
-    else                # On opposing side
+    else # On opposing side
       anim = move2anim[1][id_number]
       noFlip = true if anim
       anim = move2anim[0][id_number] if !anim
     end
-    return [anim+hitNum,noFlip] if anim
+    return [anim + hitNum, noFlip] if anim
     return nil
   end
 
@@ -443,24 +443,24 @@ class PokeBattle_Scene
       # [one target physical, one target special, user status,
       #  multiple targets physical, multiple targets special, non-user status]
       typeDefaultAnim = {
-        :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :EXPLOSION,  :SWIFT,        :TAILWHIP],
-        :FIGHTING => [:MACHPUNCH,    :AURASPHERE,   :DETECT,      nil,         nil,           nil],
-        :FLYING   => [:WINGATTACK,   :GUST,         :ROOST,       nil,         :AIRCUTTER,    :FEATHERDANCE],
-        :POISON   => [:POISONSTING,  :SLUDGE,       :ACIDARMOR,   nil,         :ACID,         :POISONPOWDER],
-        :GROUND   => [:SANDTOMB,     :MUDSLAP,      nil,          :EARTHQUAKE, :EARTHPOWER,   :MUDSPORT],
-        :ROCK     => [:ROCKTHROW,    :POWERGEM,     :ROCKPOLISH,  :ROCKSLIDE,  nil,           :SANDSTORM],
-        :BUG      => [:TWINEEDLE,    :BUGBUZZ,      :QUIVERDANCE, nil,         :STRUGGLEBUG,  :STRINGSHOT],
-        :GHOST    => [:LICK,         :SHADOWBALL,   :GRUDGE,      nil,         nil,           :CONFUSERAY],
-        :STEEL    => [:IRONHEAD,     :MIRRORSHOT,   :IRONDEFENSE, nil,         nil,           :METALSOUND],
-        :FIRE     => [:FIREPUNCH,    :EMBER,        :SUNNYDAY,    nil,         :INCINERATE,   :WILLOWISP],
-        :WATER    => [:CRABHAMMER,   :WATERGUN,     :AQUARING,    nil,         :SURF,         :WATERSPORT],
-        :GRASS    => [:VINEWHIP,     :MEGADRAIN,    :COTTONGUARD, :RAZORLEAF,  nil,           :SPORE],
-        :ELECTRIC => [:THUNDERPUNCH, :THUNDERSHOCK, :CHARGE,      nil,         :DISCHARGE,    :THUNDERWAVE],
-        :PSYCHIC  => [:ZENHEADBUTT,  :CONFUSION,    :CALMMIND,    nil,         :SYNCHRONOISE, :MIRACLEEYE],
-        :ICE      => [:ICEPUNCH,     :ICEBEAM,      :MIST,        nil,         :POWDERSNOW,   :HAIL],
-        :DRAGON   => [:DRAGONCLAW,   :DRAGONRAGE,   :DRAGONDANCE, nil,         :TWISTER,      nil],
-        :DARK     => [:PURSUIT,      :DARKPULSE,    :HONECLAWS,   nil,         :SNARL,        :EMBARGO],
-        :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :SWIFT,        :SWEETKISS]
+        :NORMAL => [:TACKLE, :SONICBOOM, :DEFENSECURL, :EXPLOSION, :SWIFT, :TAILWHIP],
+        :FIGHTING => [:MACHPUNCH, :AURASPHERE, :DETECT, nil, nil, nil],
+        :FLYING => [:WINGATTACK, :GUST, :ROOST, nil, :AIRCUTTER, :FEATHERDANCE],
+        :POISON => [:POISONSTING, :SLUDGE, :ACIDARMOR, nil, :ACID, :POISONPOWDER],
+        :GROUND => [:SANDTOMB, :MUDSLAP, nil, :EARTHQUAKE, :EARTHPOWER, :MUDSPORT],
+        :ROCK => [:ROCKTHROW, :POWERGEM, :ROCKPOLISH, :ROCKSLIDE, nil, :SANDSTORM],
+        :BUG => [:TWINEEDLE, :BUGBUZZ, :QUIVERDANCE, nil, :STRUGGLEBUG, :STRINGSHOT],
+        :GHOST => [:LICK, :SHADOWBALL, :GRUDGE, nil, nil, :CONFUSERAY],
+        :STEEL => [:IRONHEAD, :MIRRORSHOT, :IRONDEFENSE, nil, nil, :METALSOUND],
+        :FIRE => [:FIREPUNCH, :EMBER, :SUNNYDAY, nil, :INCINERATE, :WILLOWISP],
+        :WATER => [:CRABHAMMER, :WATERGUN, :AQUARING, nil, :SURF, :WATERSPORT],
+        :GRASS => [:VINEWHIP, :MEGADRAIN, :COTTONGUARD, :RAZORLEAF, nil, :SPORE],
+        :ELECTRIC => [:THUNDERPUNCH, :THUNDERSHOCK, :CHARGE, nil, :DISCHARGE, :THUNDERWAVE],
+        :PSYCHIC => [:ZENHEADBUTT, :CONFUSION, :CALMMIND, nil, :SYNCHRONOISE, :MIRACLEEYE],
+        :ICE => [:ICEPUNCH, :ICEBEAM, :MIST, nil, :POWDERSNOW, :HAIL],
+        :DRAGON => [:DRAGONCLAW, :DRAGONRAGE, :DRAGONDANCE, nil, :TWISTER, nil],
+        :DARK => [:PURSUIT, :DARKPULSE, :HONECLAWS, nil, :SNARL, :EMBARGO],
+        :FAIRY => [:TACKLE, :FAIRYWIND, :MOONLIGHT, nil, :SWIFT, :SWEETKISS],
       }
       if typeDefaultAnim[moveType]
         anims = typeDefaultAnim[moveType]
@@ -488,42 +488,41 @@ class PokeBattle_Scene
   # Plays a move/common animation
   #=============================================================================
   # Plays a move animation.
-  def pbAnimation(moveID,user,targets,hitNum=0)
-    animID = pbFindMoveAnimation(moveID,user.index,hitNum)
+  def pbAnimation(moveID, user, targets, hitNum = 0)
+    animID = pbFindMoveAnimation(moveID, user.index, hitNum)
     return if !animID
     anim = animID[0]
     target = (targets && targets.is_a?(Array)) ? targets[0] : targets
     animations = pbLoadBattleAnimations
     return if !animations
     pbSaveShadows {
-      if animID[1]   # On opposing side and using OppMove animation
-        pbAnimationCore(animations[anim],target,user,true)
-      else           # On player's side, and/or using Move animation
-        pbAnimationCore(animations[anim],user,target)
+      if animID[1] # On opposing side and using OppMove animation
+        pbAnimationCore(animations[anim], target, user, true)
+      else # On player's side, and/or using Move animation
+        pbAnimationCore(animations[anim], user, target)
       end
     }
   end
 
   # Plays a common animation.
-  def pbCommonAnimation(animName,user=nil,target=nil)
+  def pbCommonAnimation(animName, user = nil, target = nil)
     return if nil_or_empty?(animName)
     target = target[0] if target && target.is_a?(Array)
     animations = pbLoadBattleAnimations
     return if !animations
     animations.each do |a|
-      next if !a || a.name!="Common:"+animName
-      pbAnimationCore(a,user,(target!=nil) ? target : user)
+      next if !a || a.name != "Common:" + animName
+      pbAnimationCore(a, user, (target != nil) ? target : user)
       return
     end
   end
 
-  def pbAnimationCore(animation,user,target,oppMove=false)
+  def pbAnimationCore(animation, user, target, oppMove = false)
     return if !animation
     @briefMessage = false
 
-    userSprite   = (user) ? @sprites["pokemon_#{user.index}"] : nil
+    userSprite = (user) ? @sprites["pokemon_#{user.index}"] : nil
     targetSprite = (target) ? @sprites["pokemon_#{target.index}"] : nil
-
 
     # Remember the original positions of Pokémon sprites
     oldUserX = (userSprite) ? userSprite.x : 0
@@ -531,7 +530,7 @@ class PokeBattle_Scene
     oldTargetX = (targetSprite) ? targetSprite.x : oldUserX
     oldTargetY = (targetSprite) ? targetSprite.y : oldUserY
     # Create the animation player
-    animPlayer = PBAnimationPlayerX.new(animation,user,target,self,oppMove)
+    animPlayer = PBAnimationPlayerX.new(animation, user, target, self, oppMove)
     # Apply a transformation to the animation based on where the user and target
     # actually are. Get the centres of each sprite.
     userHeight = (userSprite && userSprite.bitmap && !userSprite.bitmap.disposed?) ? userSprite.bitmap.height : 128
@@ -541,10 +540,11 @@ class PokeBattle_Scene
       targetHeight = userHeight
     end
     animPlayer.setLineTransform(
-       PokeBattle_SceneConstants::FOCUSUSER_X,PokeBattle_SceneConstants::FOCUSUSER_Y,
-       PokeBattle_SceneConstants::FOCUSTARGET_X,PokeBattle_SceneConstants::FOCUSTARGET_Y,
-       oldUserX,oldUserY-userHeight/2,
-       oldTargetX,oldTargetY-targetHeight/2)
+      PokeBattle_SceneConstants::FOCUSUSER_X, PokeBattle_SceneConstants::FOCUSUSER_Y,
+      PokeBattle_SceneConstants::FOCUSTARGET_X, PokeBattle_SceneConstants::FOCUSTARGET_Y,
+      oldUserX, oldUserY - userHeight / 2,
+      oldTargetX, oldTargetY - targetHeight / 2
+    )
     # Play the animation
     animPlayer.start
     loop do

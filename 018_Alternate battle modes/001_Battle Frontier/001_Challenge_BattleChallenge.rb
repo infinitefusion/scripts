@@ -4,9 +4,9 @@
 class BattleChallenge
   attr_reader :currentChallenge
 
-  BattleTowerID   = 0
-  BattlePalaceID  = 1
-  BattleArenaID   = 2
+  BattleTowerID = 0
+  BattlePalaceID = 1
+  BattleArenaID = 2
   BattleFactoryID = 3
 
   def initialize
@@ -20,8 +20,8 @@ class BattleChallenge
     @numRounds = numrounds
     @rules = rules
     register(id, id[/double/], 3,
-       id[/^factory/] ? BattleFactoryID : BattleTowerID,
-       id[/open$/] ? 1 : 0)
+             id[/^factory/] ? BattleFactoryID : BattleTowerID,
+             id[/open$/] ? 1 : 0)
     pbWriteCup(id, rules)
   end
 
@@ -52,15 +52,15 @@ class BattleChallenge
     when BattleArenaID
       rules.setBattleType(BattleArena.new)
       doublebattle = false
-    else   # Factory works the same as Tower
+    else # Factory works the same as Tower
       rules.setBattleType(BattleTower.new)
     end
     # Set standard rules and maximum level
     case mode
-    when 1      # Open Level
+    when 1 # Open Level
       rules.setRuleset(StandardRules.new(numPokemon, GameData::GrowthRate.max_level))
       rules.setLevelAdjustment(OpenLevelAdjustment.new(30))
-    when 2   # Battle Tent
+    when 2 # Battle Tent
       rules.setRuleset(StandardRules.new(numPokemon, GameData::GrowthRate.max_level))
       rules.setLevelAdjustment(OpenLevelAdjustment.new(60))
     else
@@ -98,9 +98,9 @@ class BattleChallenge
     opponent = pbGenerateBattleTrainer(self.nextTrainer, self.rules)
     bttrainers = pbGetBTTrainers(@id)
     trainerdata = bttrainers[self.nextTrainer]
-    ret = pbOrganizedBattleEx(opponent,self.rules,
-       pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
-       pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
+    ret = pbOrganizedBattleEx(opponent, self.rules,
+                              pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
+                              pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
     return ret
   end
 
@@ -116,18 +116,18 @@ class BattleChallenge
     return @bc.resting
   end
 
-  def extra;        @bc.extraData;    end
-  def decision;     @bc.decision;     end
-  def wins;         @bc.wins;         end
-  def swaps;        @bc.swaps;        end
+  def extra; @bc.extraData; end
+  def decision; @bc.decision; end
+  def wins; @bc.wins; end
+  def swaps; @bc.swaps; end
   def battleNumber; @bc.battleNumber; end
-  def nextTrainer;  @bc.nextTrainer;  end
-  def pbGoOn;       @bc.pbGoOn;       end
-  def pbAddWin;     @bc.pbAddWin;     end
-  def pbCancel;     @bc.pbCancel;     end
-  def pbRest;       @bc.pbRest;       end
+  def nextTrainer; @bc.nextTrainer; end
+  def pbGoOn; @bc.pbGoOn; end
+  def pbAddWin; @bc.pbAddWin; end
+  def pbCancel; @bc.pbCancel; end
+  def pbRest; @bc.pbRest; end
   def pbMatchOver?; @bc.pbMatchOver?; end
-  def pbGoToStart;  @bc.pbGoToStart;  end
+  def pbGoToStart; @bc.pbGoToStart; end
 
   def setDecision(value)
     @bc.decision = value
@@ -178,15 +178,15 @@ end
 #
 #===============================================================================
 class BattleChallengeData
-  attr_reader   :battleNumber
-  attr_reader   :numRounds
-  attr_reader   :party
-  attr_reader   :inProgress
-  attr_reader   :resting
-  attr_reader   :wins
-  attr_reader   :swaps
+  attr_reader :battleNumber
+  attr_reader :numRounds
+  attr_reader :party
+  attr_reader :inProgress
+  attr_reader :resting
+  attr_reader :wins
+  attr_reader :swaps
   attr_accessor :decision
-  attr_reader   :extraData
+  attr_reader :extraData
 
   def initialize
     reset
@@ -206,13 +206,13 @@ class BattleChallengeData
   end
 
   def pbStart(t, numRounds)
-    @inProgress   = true
-    @resting      = false
-    @decision     = 0
-    @swaps        = t.currentSwaps
-    @wins         = t.currentWins
+    @inProgress = true
+    @resting = false
+    @decision = 0
+    @swaps = t.currentSwaps
+    @wins = t.currentWins
     @battleNumber = 1
-    @trainers     = []
+    @trainers = []
     raise _INTL("Number of rounds is 0 or less.") if numRounds <= 0
     @numRounds = numRounds
     # Get all the trainers for the next set of battles
@@ -233,10 +233,10 @@ class BattleChallengeData
 
   def pbGoToStart
     if $scene.is_a?(Scene_Map)
-      $game_temp.player_transferring  = true
-      $game_temp.player_new_map_id    = @start[0]
-      $game_temp.player_new_x         = @start[1]
-      $game_temp.player_new_y         = @start[2]
+      $game_temp.player_transferring = true
+      $game_temp.player_new_map_id = @start[0]
+      $game_temp.player_new_x = @start[1]
+      $game_temp.player_new_y = @start[2]
       $game_temp.player_new_direction = 8
       $scene.transfer_player
     end
@@ -290,23 +290,23 @@ class BattleChallengeData
   private
 
   def reset
-    @inProgress   = false
-    @resting      = false
-    @start        = nil
-    @decision     = 0
-    @wins         = 0
-    @swaps        = 0
+    @inProgress = false
+    @resting = false
+    @start = nil
+    @decision = 0
+    @wins = 0
+    @swaps = 0
     @battleNumber = 0
-    @trainers     = []
-    @oldParty     = nil
-    @party        = nil
-    @extraData    = nil
+    @trainers = []
+    @oldParty = nil
+    @party = nil
+    @extraData = nil
   end
 
   def pbSaveInProgress
-    oldmapid     = $game_map.map_id
-    oldx         = $game_player.x
-    oldy         = $game_player.y
+    oldmapid = $game_map.map_id
+    oldx = $game_player.x
+    oldy = $game_player.y
     olddirection = $game_player.direction
     $game_map.map_id = @start[0]
     $game_player.moveto2(@start[1], @start[2])
@@ -328,35 +328,35 @@ class BattleChallengeType
   attr_accessor :currentSwaps
   attr_accessor :previousSwaps
   attr_accessor :maxSwaps
-  attr_reader   :doublebattle
-  attr_reader   :numPokemon
-  attr_reader   :battletype
-  attr_reader   :mode
+  attr_reader :doublebattle
+  attr_reader :numPokemon
+  attr_reader :battletype
+  attr_reader :mode
 
   def initialize
-    @previousWins  = 0
-    @maxWins       = 0
-    @currentWins   = 0
-    @currentSwaps  = 0
+    @previousWins = 0
+    @maxWins = 0
+    @currentWins = 0
+    @currentSwaps = 0
     @previousSwaps = 0
-    @maxSwaps      = 0
+    @maxSwaps = 0
   end
 
   def saveWins(challenge)
-    if challenge.decision == 0     # if undecided
-      @currentWins  = 0
+    if challenge.decision == 0 # if undecided
+      @currentWins = 0
       @currentSwaps = 0
     else
-      if challenge.decision == 1   # if won
-        @currentWins  = challenge.wins
+      if challenge.decision == 1 # if won
+        @currentWins = challenge.wins
         @currentSwaps = challenge.swaps
-      else                       # if lost
-        @currentWins  = 0
+      else # if lost
+        @currentWins = 0
         @currentSwaps = 0
       end
-      @maxWins       = [@maxWins, challenge.wins].max
-      @previousWins  = challenge.wins
-      @maxSwaps      = [@maxSwaps, challenge.swaps].max
+      @maxWins = [@maxWins, challenge.wins].max
+      @previousWins = challenge.wins
+      @maxSwaps = [@maxSwaps, challenge.swaps].max
       @previousSwaps = challenge.swaps
     end
   end
@@ -366,7 +366,8 @@ end
 # Battle Factory data
 #===============================================================================
 class BattleFactoryData
-  INITIAL_BST=350
+  INITIAL_BST = 350
+
   def initialize(bcdata)
     @bcdata = bcdata
   end
@@ -377,8 +378,9 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[@trainerid]
     @opponent = NPCTrainer.new(
-       pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
-       trainerdata[0])
+      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      trainerdata[0]
+    )
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps, @rentals)
     @opponent.party = opponentPkmn.shuffle[0, 3]
   end
@@ -399,10 +401,11 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[trainerid]
     @opponent = NPCTrainer.new(
-       pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
-       trainerdata[0])
+      pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+      trainerdata[0]
+    )
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps,
-       [].concat(@rentals).concat(@oldopponent))
+                                          [].concat(@rentals).concat(@oldopponent))
     @opponent.party = opponentPkmn.shuffle[0, 3]
   end
 
@@ -422,7 +425,7 @@ class BattleFactoryData
     bttrainers = pbGetBTTrainers(pbBattleChallenge.currentChallenge)
     trainerdata = bttrainers[@trainerid]
     return pbOrganizedBattleEx(@opponent, challenge.rules,
-       pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
-       pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
+                               pbGetMessageFromHash(MessageTypes::EndSpeechLose, trainerdata[4]),
+                               pbGetMessageFromHash(MessageTypes::EndSpeechWin, trainerdata[3]))
   end
 end

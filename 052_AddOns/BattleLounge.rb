@@ -4,74 +4,74 @@ end
 
 def get_egg_group_from_id(id)
   case id
-  when 0;
+  when 0
     return nil
-  when 1;
+  when 1
     return :Monster
-  when 2;
+  when 2
     return :Water1
-  when 3;
+  when 3
     return :Bug
-  when 4;
+  when 4
     return :Flying
-  when 5;
+  when 5
     return :Field
-  when 6;
+  when 6
     return :Fairy
-  when 7;
+  when 7
     return :Grass
-  when 8;
+  when 8
     return :Humanlike
-  when 9;
+  when 9
     return :Water3
-  when 10;
+  when 10
     return :Mineral
-  when 11;
+  when 11
     return :Amorphous
-  when 12;
+  when 12
     return :Water2
-  when 13;
+  when 13
     return :Ditto
-  when 14;
+  when 14
     return :Dragon
-  when 15;
+  when 15
     return :Undiscovered
   end
 end
 
 def get_egg_group_name(id)
   case id
-  when 0;
+  when 0
     return nil
-  when 1;
+  when 1
     return "Monster Pokémon"
-  when 2;
+  when 2
     return :"Aquatic Pokémon"
-  when 3;
+  when 3
     return :"Bug Pokémon"
-  when 4;
+  when 4
     return :"Bird Pokémon"
-  when 5;
+  when 5
     return :"Land Pokémon"
-  when 6;
+  when 6
     return :"Cute Pokémon"
-  when 7;
+  when 7
     return :"Plant Pokémon"
-  when 8;
+  when 8
     return :"Human-like Pokémon"
-  when 9;
+  when 9
     return :"Aquatic Pokémon"
-  when 10;
+  when 10
     return :"Mineral Pokémon"
-  when 11;
+  when 11
     return :"Blob Pokémon"
-  when 12;
+  when 12
     return :"Fish Pokémon"
-  when 13;
+  when 13
     return :"Ditto"
-  when 14;
+  when 14
     return :"Dragon Pokémon"
-  when 15;
+  when 15
     return :"Legendary Pokémon"
   end
 end
@@ -95,10 +95,10 @@ def get_random_battle_lounge_egg_group
   return group
 end
 
-GENERIC_PRIZES_MULTI = [:HEARTSCALE, :HEARTSCALE,:HEARTSCALE,:HEARTSCALE,:HEARTSCALE,
+GENERIC_PRIZES_MULTI = [:HEARTSCALE, :HEARTSCALE, :HEARTSCALE, :HEARTSCALE, :HEARTSCALE,
                         :LEMONADE, :PERFECTBALL, :TRADEBALL,
                         :GENDERBALL, :ABILITYBALL, :VIRUSBALL, :SHINYBALL]
-GENERIC_PRIZES_SINGLE = [:RARECANDY, :RARECANDY,:RARECANDY, :PPUP, :EJECTBUTTON, :FOCUSBAND, :FOCUSSASH,
+GENERIC_PRIZES_SINGLE = [:RARECANDY, :RARECANDY, :RARECANDY, :PPUP, :EJECTBUTTON, :FOCUSBAND, :FOCUSSASH,
                          :RESETURGE, :ABILITYURGE, :ITEMURGE, :ITEMDROP, :HPUP, :INCUBATOR, :LUCKYEGG]
 MONSTER_PRIZES = [:RAREBONE, :LAGGINGTAIL, :RAZORFANG, :RAZORCLAW, :GRIPCLAW, :MANKEYPAW]
 WATER_PRIZES = [:MYSTICWATER, :BIGPEARL, :SHELLBELL]
@@ -122,33 +122,32 @@ def get_random_battle_lounge_prize(group_type)
     return type.sample
   else
     case get_egg_group_from_id(group_type)
-    when :Monster;
+    when :Monster
       return MONSTER_PRIZES.sample
-    when :Water1, :Water2, :Water3;
+    when :Water1, :Water2, :Water3
       return WATER_PRIZES.sample
-    when :Bug;
+    when :Bug
       return BUG_PRIZES.sample
-    when :Flying;
+    when :Flying
       return FLYING_PRIZES.sample
-    when :Field;
+    when :Field
       return FIELD_PRIZES.sample
-    when :Fairy;
+    when :Fairy
       return FAIRY_PRIZES.sample
-    when :Grass;
+    when :Grass
       return GRASS_PRIZES.sample
-    when :Mineral;
+    when :Mineral
       return MINERAL_PRIZES.sample
-    when :Humanlike;
+    when :Humanlike
       return HUMAN_PRIZES.sample
-    when :Amorphous;
+    when :Amorphous
       return AMORPHOUS_PRIZES.sample
-    when :Dragon;
+    when :Dragon
       return DRAGON_PRIZES.sample
-    when :Undiscovered;
+    when :Undiscovered
       return UNDISCOVERED_PRIZES.sample
     end
   end
-
 end
 
 def generateSameEggGroupFusionsTeam(eggGroup_id)
@@ -183,24 +182,23 @@ def pokemonIsPartLegendary(species)
   return listLegendaryPokemonIds().include?(head) || listLegendaryPokemonIds().include?(body)
 end
 
-
-def generateRandomFusionFromPokemon(dexNum, onlyCustomSprites = false, allowLegendaries=true)
+def generateRandomFusionFromPokemon(dexNum, onlyCustomSprites = false, allowLegendaries = true)
   excluded = allowLegendaries ? [] : listLegendaryPokemonIds()
   customsList = getCustomSpeciesList(downloadAllowed?())
-  i=0
+  i = 0
   while i < customsList.length
     comparedPoke = customsList.sample
     next if excluded.include?(comparedPoke)
     if Kernel.isPartPokemon(comparedPoke, dexNum)
       return comparedPoke
     end
-    i+=1
+    i += 1
   end
   return 1
 end
 
-def getRandomBasePokemon(includeLegendaries = false,maxNb=NB_POKEMON)
-  legendaries =listLegendaryPokemonIds()
+def getRandomBasePokemon(includeLegendaries = false, maxNb = NB_POKEMON)
+  legendaries = listLegendaryPokemonIds()
   poke = rand(maxNb + 1)
   return poke if includeLegendaries
   while legendaries.include?(poke)
@@ -214,7 +212,7 @@ def getAllPokemonWithBase(dexNum)
   return [25]
 end
 
-def getCustomSpeciesListForPokemon(dexNum,allowLegendaries=true)
+def getCustomSpeciesListForPokemon(dexNum, allowLegendaries = true)
   excluded = allowLegendaries ? [] : listLegendaryPokemonIds()
   customsList = getCustomSpeciesList(downloadAllowed?())
   speciesList = []
@@ -223,7 +221,6 @@ def getCustomSpeciesListForPokemon(dexNum,allowLegendaries=true)
     if Kernel.isPartPokemon(comparedPoke, dexNum)
       speciesList << comparedPoke
     end
-
   end
   if speciesList.length == 0
     speciesList << dexNum

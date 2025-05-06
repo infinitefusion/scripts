@@ -53,54 +53,52 @@ class Sprite_SurfBase
     return AnimatedBitmap.new(path)
   end
 
-
-      # case species.shape
-      # when :Head
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_Head" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_Head" if type == :SURF
-      # when :Serpentine
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Finned
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :HeadArms
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :HeadBase
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :BipedalTail
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :HeadLegs
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Quadruped
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Winged
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Multiped
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :MultiBody
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Bipedal
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :MultiWinged
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # when :Insectoid
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
-      # else
-      #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_01"
-      # end
-
+  # case species.shape
+  # when :Head
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_Head" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_Head" if type == :SURF
+  # when :Serpentine
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Finned
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :HeadArms
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :HeadBase
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :BipedalTail
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :HeadLegs
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Quadruped
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Winged
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Multiped
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :MultiBody
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Bipedal
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :MultiWinged
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # when :Insectoid
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_HeadBase" if type == :DIVE
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "surfmon_HeadBase" if type == :SURF
+  # else
+  #   path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_SURFBASE_FOLDER + "divemon_01"
+  # end
 
   def update
     return if disposed?

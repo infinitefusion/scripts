@@ -2,14 +2,14 @@
 # Edits the terrain tags of tiles in tilesets.
 #===============================================================================
 class PokemonTilesetScene
-  TILE_SIZE          = 32   # in pixels
-  TILES_PER_ROW      = 8
-  TILESET_WIDTH      = TILES_PER_ROW * TILE_SIZE
+  TILE_SIZE = 32   # in pixels
+  TILES_PER_ROW = 8
+  TILESET_WIDTH = TILES_PER_ROW * TILE_SIZE
   TILES_PER_AUTOTILE = 48
-  TILESET_START_ID   = TILES_PER_ROW * TILES_PER_AUTOTILE
-  CURSOR_COLOR       = Color.new(255, 0, 0)
-  TEXT_COLOR         = Color.new(80, 80, 80)
-  TEXT_SHADOW_COLOR  = Color.new(192, 192, 192)
+  TILESET_START_ID = TILES_PER_ROW * TILES_PER_AUTOTILE
+  CURSOR_COLOR = Color.new(255, 0, 0)
+  TEXT_COLOR = Color.new(80, 80, 80)
+  TEXT_SHADOW_COLOR = Color.new(192, 192, 192)
 
   def initialize
     @tilesets_data = load_data("Data/Tilesets.rxdata")
@@ -17,8 +17,9 @@ class PokemonTilesetScene
     @viewport.z = 99999
     @sprites = {}
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-       _INTL("Tileset Editor\r\nA/S: SCROLL\r\nZ: MENU"),
-       TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport)
+      _INTL("Tileset Editor\r\nA/S: SCROLL\r\nZ: MENU"),
+      TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport
+    )
     @sprites["tileset"] = BitmapSprite.new(TILESET_WIDTH, Graphics.height, @viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -74,7 +75,7 @@ class PokemonTilesetScene
       for xx in 0...TILES_PER_ROW
         id_x_offset = (autotile_row) ? xx * TILES_PER_AUTOTILE : xx
         @tilehelper.bltTile(@sprites["tileset"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE,
-           id_y_offset + id_x_offset)
+                            id_y_offset + id_x_offset)
       end
     end
   end
@@ -94,10 +95,10 @@ class PokemonTilesetScene
     # Draw cursor
     cursor_x = @x * TILE_SIZE
     cursor_y = (@y - @top_y) * TILE_SIZE
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y,                 TILE_SIZE, 4, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y,                 4, TILE_SIZE, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x,                 cursor_y + TILE_SIZE - 4, TILE_SIZE, 4, CURSOR_COLOR)
-    @sprites["overlay"].bitmap.fill_rect(cursor_x + TILE_SIZE - 4, cursor_y,                 4, TILE_SIZE, CURSOR_COLOR)
+    @sprites["overlay"].bitmap.fill_rect(cursor_x, cursor_y, TILE_SIZE, 4, CURSOR_COLOR)
+    @sprites["overlay"].bitmap.fill_rect(cursor_x, cursor_y, 4, TILE_SIZE, CURSOR_COLOR)
+    @sprites["overlay"].bitmap.fill_rect(cursor_x, cursor_y + TILE_SIZE - 4, TILE_SIZE, 4, CURSOR_COLOR)
+    @sprites["overlay"].bitmap.fill_rect(cursor_x + TILE_SIZE - 4, cursor_y, 4, TILE_SIZE, CURSOR_COLOR)
     # Draw information about selected tile on right side
     draw_tile_details
   end
@@ -110,10 +111,10 @@ class PokemonTilesetScene
     # Draw tile (at 200% size)
     @tilehelper.bltSmallTile(overlay, tile_x, tile_y, TILE_SIZE * 2, TILE_SIZE * 2, tile_id)
     # Draw box around tile image
-    overlay.fill_rect(tile_x - 1,             tile_y - 1,             TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,             tile_y - 1,             1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x - 1,             tile_y + TILE_SIZE * 2, TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
-    overlay.fill_rect(tile_x + TILE_SIZE * 2, tile_y - 1,             1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1, tile_y - 1, TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1, tile_y - 1, 1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x - 1, tile_y + TILE_SIZE * 2, TILE_SIZE * 2 + 2, 1, Color.new(255, 255, 255))
+    overlay.fill_rect(tile_x + TILE_SIZE * 2, tile_y - 1, 1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
     # Write terrain tag info about selected tile
     terrain_tag = @tileset.terrain_tags[tile_id] || 0
     if GameData::TerrainTag.exists?(terrain_tag)
@@ -123,7 +124,7 @@ class PokemonTilesetScene
     end
     textpos = [
       [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
-      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -182,10 +183,10 @@ class PokemonTilesetScene
         update_cursor_position(0, @visible_height)
       elsif Input.trigger?(Input::ACTION)
         commands = [
-           _INTL("Go to bottom"),
-           _INTL("Go to top"),
-           _INTL("Change tileset"),
-           _INTL("Cancel")
+          _INTL("Go to bottom"),
+          _INTL("Go to top"),
+          _INTL("Change tileset"),
+          _INTL("Cancel"),
         ]
         case pbShowCommands(nil, commands, -1)
         when 0

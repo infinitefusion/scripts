@@ -384,9 +384,9 @@ def useFavoriteOutfit()
     switchToFavoriteOutfit()
   elsif options[choice] == cmd_mark_favorite
     pbSEPlay("shiny", 80, 100)
-    $Trainer.favorite_clothes= $Trainer.clothes
+    $Trainer.favorite_clothes = $Trainer.clothes
     $Trainer.favorite_hat = $Trainer.hat
-    $Trainer.favorite_hat2=$Trainer.hat2
+    $Trainer.favorite_hat2 = $Trainer.hat2
     pbMessage(_INTL("Your favorite outfit was updated!"))
   end
 end
@@ -407,13 +407,11 @@ def switchToFavoriteOutfit()
       end
       playOutfitChangeAnimation()
       putOnClothes($Trainer.last_worn_outfit, true) #if $Trainer.favorite_clothes
-      putOnHat($Trainer.last_worn_hat, true,false) #if $Trainer.favorite_hat
-      putOnHat($Trainer.last_worn_hat2, true,true) #if $Trainer.favorite_hat2
-
+      putOnHat($Trainer.last_worn_hat, true, false) #if $Trainer.favorite_hat
+      putOnHat($Trainer.last_worn_hat2, true, true) #if $Trainer.favorite_hat2
     else
       return 0
     end
-
   else
     if (Kernel.pbConfirmMessage("Put on your favorite outfit?"))
       echoln "favorite clothes: #{$Trainer.favorite_clothes}, favorite hat: #{$Trainer.favorite_hat}, favorite hat2: #{$Trainer.favorite_hat2}"
@@ -473,7 +471,6 @@ def useStrangePlant
   else
     Kernel.pbMessage(_INTL("It had no effect"))
   end
-
 end
 
 # DREAMMIRROR
@@ -527,8 +524,8 @@ end
 
 def getEvolvedSpecies(pokemon)
   return pbCheckEvolutionEx(pokemon) { |pokemon, evonib, level, poke|
-    next pbMiniCheckEvolution(pokemon, evonib, level, poke, true)
-  }
+           next pbMiniCheckEvolution(pokemon, evonib, level, poke, true)
+         }
 end
 
 #(copie de fixEvolutionOverflow dans FusionScene)
@@ -551,9 +548,8 @@ def getCorrectEvolvedSpecies(pokemon)
     for form in pbGetEvolvedFormData(pokemon.species)
       newspecies = form[2]
     end
-    return newspecies;
+    return newspecies
   end
-
 end
 
 #########################
@@ -626,7 +622,7 @@ ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
 })
 
 def reverseFusion(pokemon)
-  if pokemon.owner.name  == "RENTAL"
+  if pokemon.owner.name == "RENTAL"
     pbMessage(_INTL("You cannot reverse a rental pokémon!"))
     return
   end
@@ -852,7 +848,6 @@ ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
 })
 
 def returnItemsToBag(pokemon, poke2)
-
   it1 = pokemon.item
   it2 = poke2.item
   if it1 != nil
@@ -990,7 +985,6 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
     scene.pbRefresh
   }
   next true
-
 })
 #
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
@@ -1385,9 +1379,8 @@ def getCorrectEvolvedSpecies(pokemon)
     for form in pbGetEvolvedFormData(pokemon.species)
       newspecies = form[2]
     end
-    return newspecies;
+    return newspecies
   end
-
 end
 
 #########################
@@ -1479,7 +1472,6 @@ def pbDNASplicing(pokemon, scene, item = :DNASPLICERS)
             pbBGMPlay(playingBGM)
             return true
           end
-
         elsif pokemon == poke2
           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
           return false
@@ -1552,7 +1544,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
     scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
     return false
   end
-  if pokemon.owner.name  == "RENTAL"
+  if pokemon.owner.name == "RENTAL"
     scene.pbDisplay(_INTL("You cannot unfuse a rental pokémon!"))
     return
   end
@@ -1570,7 +1562,6 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
     if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
       keepInParty = 0
       if $Trainer.party.length >= 6 && !pcPosition
-
         message = "Your party is full! Keep which Pokémon in party?"
         message = "Your party is full! Keep which Pokémon in party? The other will be released." if isOnPinkanIsland()
         scene.pbDisplay(_INTL(message))
@@ -1725,7 +1716,6 @@ ItemHandlers::UseOnPokemon.add(:SUPERSPLICERS, proc { |item, pokemon, scene|
 })
 
 def returnItemsToBag(pokemon, poke2)
-
   it1 = pokemon.item
   it2 = poke2.item
 
@@ -2042,7 +2032,7 @@ ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
     315, 316, 317, 318, 328, 343, # Elite Four
     776, 777, 778, 779, 780, 781, 782, 783, 784, # Mt. Silver
     722, 723, 724, 720, # Dream sequence
-    304, 306, 307 # Victory road
+    304, 306, 307, # Victory road
   ]
   if blacklisted_maps.include?($game_map.map_id)
     Kernel.pbMessage("There doesn't seem to be any network coverage here...")

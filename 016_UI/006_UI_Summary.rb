@@ -351,7 +351,7 @@ class PokemonSummary_Scene
       [pagename, 26, 10, 0, base, shadow],
       [@pokemon.name, 46, 56, 0, base, shadow],
       [@pokemon.level.to_s, 46, 86, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Item"), 66, 312, 0, base, shadow]
+      [_INTL("Item"), 66, 312, 0, base, shadow],
     ]
     # Write the held item's name
     if @pokemon.hasItem?
@@ -371,15 +371,15 @@ class PokemonSummary_Scene
     drawMarkings(overlay, 84, 292)
     # Draw page-specific information
     case page
-    when 1 then
+    when 1
       drawPageOne
-    when 2 then
+    when 2
       drawPageTwo
-    when 3 then
+    when 3
       drawPageThree
-    when 4 then
+    when 4
       drawPageFour
-    when 5 then
+    when 5
       drawPageFive
     end
   end
@@ -412,7 +412,7 @@ class PokemonSummary_Scene
       shadowfract = @pokemon.heart_gauge.to_f / Pokemon::HEART_GAUGE_SIZE
       imagepos = [
         ["Graphics/Pictures/Summary/overlay_shadow", 224, 240],
-        ["Graphics/Pictures/Summary/overlay_shadowbar", 242, 280, 0, 0, (shadowfract * 248).floor, -1]
+        ["Graphics/Pictures/Summary/overlay_shadowbar", 242, 280, 0, 0, (shadowfract * 248).floor, -1],
       ]
       pbDrawImagePositions(overlay, imagepos)
     end
@@ -423,7 +423,7 @@ class PokemonSummary_Scene
       [@pokemon.speciesName, 435, species_y, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Type"), 238, type_y, 0, base, shadow],
       [_INTL("OT"), 238, ot_y, 0, base, shadow],
-      # [_INTL("ID No."), 238, id_no_y, 0, base, shadow],
+    # [_INTL("ID No."), 238, id_no_y, 0, base, shadow],
     ]
     if @pokemon.isFusion?
       headName = getPokemon(@pokemon.species_data.get_head_species).name
@@ -438,7 +438,6 @@ class PokemonSummary_Scene
       dexnum = GameData::Species.get(@pokemon.species).id_number
       textpos << [_INTL("Dex No"), 238, fusion_head_y, 0, base, shadow]
       textpos << [sprintf("%03d", dexnum), 435, fusion_head_y, 2, dexNumBase, dexNumShadow]
-
     end
 
     # # Write the Regional/National Dex number
@@ -519,7 +518,7 @@ class PokemonSummary_Scene
       w = @pokemon.exp_fraction * 128
       w = ((w / 2).round) * 2
       pbDrawImagePositions(overlay, [
-        ["Graphics/Pictures/Summary/overlay_exp", 362, 372, 0, 0, w, 6]
+        ["Graphics/Pictures/Summary/overlay_exp", 362, 372, 0, 0, w, 6],
       ])
     end
   end
@@ -545,7 +544,7 @@ class PokemonSummary_Scene
     textpos = [
       [_INTL("TRAINER MEMO"), 26, 10, 0, base, shadow],
       [@pokemon.name, 46, 56, 0, base, shadow],
-      [_INTL("Item"), 66, 312, 0, base, shadow]
+      [_INTL("Item"), 66, 312, 0, base, shadow],
     ]
     # Write the held item's name
     if @pokemon.hasItem?
@@ -611,8 +610,7 @@ class PokemonSummary_Scene
                _INTL("Egg received."),
                _INTL("Traded at Lv. {1}.", @pokemon.obtain_level),
                "",
-               _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)
-    ][@pokemon.obtain_method]
+               _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)][@pokemon.obtain_method]
     memo += sprintf("<c3=404040,B0B0B0>%s\n", mettext) if mettext && mettext != ""
     # If Pokémon was hatched, write when and where it hatched
     if @pokemon.obtain_method == 1
@@ -672,7 +670,7 @@ class PokemonSummary_Scene
                    _INTL("Alert to sounds."),
                    _INTL("Impetuous and silly."),
                    _INTL("Somewhat of a clown."),
-                   _INTL("Quick to flee.")]
+                   _INTL("Quick to flee.")],
       }
       memo += sprintf("<c3=404040,B0B0B0>%s\n", characteristics[best_stat][best_iv % 5])
     end
@@ -707,7 +705,7 @@ class PokemonSummary_Scene
       [sprintf("%d", @pokemon.spdef), 456, 210, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
       [_INTL("Speed"), 248, 242, 0, base, statshadows[:SPEED]],
       [sprintf("%d", @pokemon.speed), 456, 242, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-      [_INTL("Ability"), 224, 278, 0, base, shadow]
+      [_INTL("Ability"), 224, 278, 0, base, shadow],
     ]
     # Draw ability name and description
     ability = @pokemon.ability
@@ -737,7 +735,7 @@ class PokemonSummary_Scene
       hpzone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor
       hpzone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor
       imagepos = [
-        ["Graphics/Pictures/Summary/overlay_hp", 360, 110, 0, hpzone * 6, w, 6]
+        ["Graphics/Pictures/Summary/overlay_hp", 360, 110, 0, hpzone * 6, w, 6],
       ]
       pbDrawImagePositions(overlay, imagepos)
     end
@@ -771,11 +769,11 @@ class PokemonSummary_Scene
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, 0, moveBase, moveShadow])
           ppfraction = 0
-          if move.pp == 0;
+          if move.pp == 0
             ppfraction = 3
-          elsif move.pp * 4 <= move.total_pp;
+          elsif move.pp * 4 <= move.total_pp
             ppfraction = 2
-          elsif move.pp * 2 <= move.total_pp;
+          elsif move.pp * 2 <= move.total_pp
             ppfraction = 1
           end
           textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, 1, ppBase[ppfraction], ppShadow[ppfraction]])
@@ -817,7 +815,7 @@ class PokemonSummary_Scene
       [_INTL("MOVES"), 26, 10, 0, base, shadow],
       [_INTL("CATEGORY"), 20, 116, 0, base, shadow],
       [_INTL("POWER"), 20, 148, 0, base, shadow],
-      [_INTL("ACCURACY"), 20, 180, 0, base, shadow]
+      [_INTL("ACCURACY"), 20, 180, 0, base, shadow],
     ]
     imagepos = []
     # Write move names, types and PP amounts for each known move
@@ -837,11 +835,11 @@ class PokemonSummary_Scene
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, 0, moveBase, moveShadow])
           ppfraction = 0
-          if move.pp == 0;
+          if move.pp == 0
             ppfraction = 3
-          elsif move.pp * 4 <= move.total_pp;
+          elsif move.pp * 4 <= move.total_pp
             ppfraction = 2
-          elsif move.pp * 2 <= move.total_pp;
+          elsif move.pp * 2 <= move.total_pp
             ppfraction = 1
           end
           textpos.push([sprintf("%d/%d", move.pp, move.total_pp), 460, yPos + 32, 1, ppBase[ppfraction], ppShadow[ppfraction]])
@@ -882,9 +880,9 @@ class PokemonSummary_Scene
     textpos = []
     # Write power and accuracy values for selected move
     case selected_move.base_damage
-    when 0 then
+    when 0
       textpos.push(["---", 216, 148, 1, base, shadow]) # Status move
-    when 1 then
+    when 1
       textpos.push(["???", 216, 148, 1, base, shadow]) # Variable power move
     else
       textpos.push([selected_move.base_damage.to_s, 216, 148, 1, base, shadow])
@@ -957,12 +955,12 @@ class PokemonSummary_Scene
     desc = ribbonid ? GameData::Ribbon.get(ribbonid).description : ""
     # Draw the description box
     imagepos = [
-      ["Graphics/Pictures/Summary/overlay_ribbon", 8, 280]
+      ["Graphics/Pictures/Summary/overlay_ribbon", 8, 280],
     ]
     pbDrawImagePositions(overlay, imagepos)
     # Draw name of selected ribbon
     textpos = [
-      [name, 18, 280, 0, nameBase, nameShadow]
+      [name, 18, 280, 0, nameBase, nameShadow],
     ]
     pbDrawTextPositions(overlay, textpos)
     # Draw selected ribbon's description
@@ -1182,7 +1180,7 @@ class PokemonSummary_Scene
         textpos = [
           [_INTL("Mark {1}", pokemon.name), 366, 90, 2, base, shadow],
           [_INTL("OK"), 366, 242, 2, base, shadow],
-          [_INTL("Cancel"), 366, 292, 2, base, shadow]
+          [_INTL("Cancel"), 366, 292, 2, base, shadow],
         ]
         pbDrawTextPositions(@sprites["markingoverlay"].bitmap, textpos)
         redraw = false
@@ -1224,25 +1222,25 @@ class PokemonSummary_Scene
           redraw = true
         end
       elsif Input.trigger?(Input::UP)
-        if index == 7;
+        if index == 7
           index = 6
-        elsif index == 6;
+        elsif index == 6
           index = 4
-        elsif index < 3;
+        elsif index < 3
           index = 7
         else
-          ; index -= 3
+          index -= 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::DOWN)
-        if index == 7;
+        if index == 7
           index = 1
-        elsif index == 6;
+        elsif index == 6
           index = 7
-        elsif index >= 3;
+        elsif index >= 3
           index = 6
         else
-          ; index += 3
+          index += 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::LEFT)
@@ -1321,9 +1319,9 @@ class PokemonSummary_Scene
   def pbOpenHatScreenSummary(pokemon)
     #oldsprites = pbFadeOutAndHide(@sprites)
     x_pos = -8 #todo: Set as relative position instead of hardcoded value
-    y_pos = 94#
+    y_pos = 94 #
 
-    scene = PokemonHatView.new(x_pos,y_pos,false)
+    scene = PokemonHatView.new(x_pos, y_pos, false)
     screen = PokemonHatPresenter.new(scene, pokemon)
     screen.pbStartScreen()
     yield if block_given?
@@ -1334,28 +1332,29 @@ class PokemonSummary_Scene
     echoln pokemon.hat
     cmd = 0
     msg = "What should you do?"
-      loop do
-        cmd = pbShowCommands([
-          _INTL("Put on hat"),
-          _INTL("Remove hat"),
-          _INTL("Back")])
-        break if cmd == -1
-        if cmd == 0   #Put on hat
-          @sprites["pokemon"].visible=false
-          pbOpenHatScreenSummary(pokemon)
-          @sprites["pokemon"].visible=true
-          pbDisplay(_INTL("{1} put on a hat!",pokemon.name))
-          #@sprites["pokemon"].visible=false
-  
-        elsif cmd == 1 #remove hat
-          if pbConfirm(_INTL("Remove {1}'s hat?",pokemon.name))
-            pokemon.hat=nil
-            pbDisplay(_INTL("{1}'s hat was removed",pokemon.name))
-          end
-        else
-          break
+    loop do
+      cmd = pbShowCommands([
+        _INTL("Put on hat"),
+        _INTL("Remove hat"),
+        _INTL("Back"),
+      ])
+      break if cmd == -1
+      if cmd == 0 #Put on hat
+        @sprites["pokemon"].visible = false
+        pbOpenHatScreenSummary(pokemon)
+        @sprites["pokemon"].visible = true
+        pbDisplay(_INTL("{1} put on a hat!", pokemon.name))
+        #@sprites["pokemon"].visible=false
+
+      elsif cmd == 1 #remove hat
+        if pbConfirm(_INTL("Remove {1}'s hat?", pokemon.name))
+          pokemon.hat = nil
+          pbDisplay(_INTL("{1}'s hat was removed", pokemon.name))
         end
-        pbChangePokemon()
+      else
+        break
+      end
+      pbChangePokemon()
     end
   end
 

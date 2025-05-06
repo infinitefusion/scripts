@@ -18,9 +18,9 @@ module GameData
     def self.save; end
 
     def initialize(hash)
-      @id        = hash[:id]
+      @id = hash[:id]
       @id_number = hash[:id_number] || -1
-      @real_name = hash[:name]      || "Unnamed"
+      @real_name = hash[:name] || "Unnamed"
     end
 
     # @return [String] the translated name of this body shape
@@ -33,85 +33,85 @@ end
 #===============================================================================
 
 GameData::BodyShape.register({
-  :id        => :Head,
+  :id => :Head,
   :id_number => 1,
-  :name      => _INTL("Head")
+  :name => _INTL("Head"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Serpentine,
+  :id => :Serpentine,
   :id_number => 2,
-  :name      => _INTL("Serpentine")
+  :name => _INTL("Serpentine"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Finned,
+  :id => :Finned,
   :id_number => 3,
-  :name      => _INTL("Finned")
+  :name => _INTL("Finned"),
 })
 
 GameData::BodyShape.register({
-  :id        => :HeadArms,
+  :id => :HeadArms,
   :id_number => 4,
-  :name      => _INTL("Head and arms")
+  :name => _INTL("Head and arms"),
 })
 
 GameData::BodyShape.register({
-  :id        => :HeadBase,
+  :id => :HeadBase,
   :id_number => 5,
-  :name      => _INTL("Head and base")
+  :name => _INTL("Head and base"),
 })
 
 GameData::BodyShape.register({
-  :id        => :BipedalTail,
+  :id => :BipedalTail,
   :id_number => 6,
-  :name      => _INTL("Bipedal with tail")
+  :name => _INTL("Bipedal with tail"),
 })
 
 GameData::BodyShape.register({
-  :id        => :HeadLegs,
+  :id => :HeadLegs,
   :id_number => 7,
-  :name      => _INTL("Head and legs")
+  :name => _INTL("Head and legs"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Quadruped,
+  :id => :Quadruped,
   :id_number => 8,
-  :name      => _INTL("Quadruped")
+  :name => _INTL("Quadruped"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Winged,
+  :id => :Winged,
   :id_number => 9,
-  :name      => _INTL("Winged")
+  :name => _INTL("Winged"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Multiped,
+  :id => :Multiped,
   :id_number => 10,
-  :name      => _INTL("Multiped")
+  :name => _INTL("Multiped"),
 })
 
 GameData::BodyShape.register({
-  :id        => :MultiBody,
+  :id => :MultiBody,
   :id_number => 11,
-  :name      => _INTL("Multi Body")
+  :name => _INTL("Multi Body"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Bipedal,
+  :id => :Bipedal,
   :id_number => 12,
-  :name      => _INTL("Bipedal")
+  :name => _INTL("Bipedal"),
 })
 
 GameData::BodyShape.register({
-  :id        => :MultiWinged,
+  :id => :MultiWinged,
   :id_number => 13,
-  :name      => _INTL("Multi Winged")
+  :name => _INTL("Multi Winged"),
 })
 
 GameData::BodyShape.register({
-  :id        => :Insectoid,
+  :id => :Insectoid,
   :id_number => 14,
-  :name      => _INTL("Insectoid")
+  :name => _INTL("Insectoid"),
 })

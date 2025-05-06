@@ -97,7 +97,6 @@ def pbRepel(item, steps)
   return 3
 end
 
-
 ItemHandlers::UseInField.add(:FUSIONREPEL, proc { |item|
   $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = true
   $game_switches[SWITCH_USED_AN_INCENSE] = true
@@ -119,16 +118,16 @@ ItemHandlers::UseInField.add(:MAXREPEL, proc { |item|
 Events.onStepTaken += proc {
   if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice # Shouldn't count down if on ice
     $PokemonGlobal.repel -= 1
-    if $PokemonGlobal.repel <= 0 && ! $PokemonGlobal.tempRepel
+    if $PokemonGlobal.repel <= 0 && !$PokemonGlobal.tempRepel
       isIncense = $game_switches[SWITCH_USED_AN_INCENSE]
       $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = false
       $game_switches[SWITCH_USED_AN_INCENSE] = false
-      itemName= isIncense ? "incense" : "repellent"
+      itemName = isIncense ? "incense" : "repellent"
       if $PokemonBag.pbHasItem?(:REPEL) ||
-        $PokemonBag.pbHasItem?(:SUPERREPEL) ||
-        $PokemonBag.pbHasItem?(:MAXREPEL) ||
-        $PokemonBag.pbHasItem?(:FUSIONREPEL)
-        if pbConfirmMessage(_INTL("The {1}'s effect wore off! Would you like to use another one?",itemName))
+         $PokemonBag.pbHasItem?(:SUPERREPEL) ||
+         $PokemonBag.pbHasItem?(:MAXREPEL) ||
+         $PokemonBag.pbHasItem?(:FUSIONREPEL)
+        if pbConfirmMessage(_INTL("The {1}'s effect wore off! Would you like to use another one?", itemName))
           ret = nil
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
@@ -140,7 +139,7 @@ Events.onStepTaken += proc {
           pbUseItem($PokemonBag, ret) if ret
         end
       else
-        pbMessage(_INTL("The {1}'s effect wore off!",itemName))
+        pbMessage(_INTL("The {1}'s effect wore off!", itemName))
       end
     end
   end
@@ -148,7 +147,7 @@ Events.onStepTaken += proc {
 
 ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
   pbUseItemMessage(item)
-  message = $PokemonMap.blackFluteUsed ? "Wild Pokemon will no longer be repelled.": "Wild Pokémon will be repelled."
+  message = $PokemonMap.blackFluteUsed ? "Wild Pokemon will no longer be repelled." : "Wild Pokémon will be repelled."
   pbMessage(_INTL(message))
   $PokemonMap.blackFluteUsed = !$PokemonMap.blackFluteUsed
   $PokemonMap.whiteFluteUsed = false
@@ -157,7 +156,7 @@ ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
 
 ItemHandlers::UseInField.add(:WHITEFLUTE, proc { |item|
   pbUseItemMessage(item)
-  message = $PokemonMap.whiteFluteUsed ? "Wild Pokemon will no longer be lured.": "Wild Pokémon will be lured."
+  message = $PokemonMap.whiteFluteUsed ? "Wild Pokemon will no longer be lured." : "Wild Pokémon will be lured."
   pbMessage(_INTL(message))
   $PokemonMap.whiteFluteUsed = !$PokemonMap.whiteFluteUsed
   $PokemonMap.blackFluteUsed = false
@@ -306,13 +305,13 @@ ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
         direction = (offsetY < 0) ? 8 : 2
       end
       case direction
-      when 2 then
+      when 2
         $game_player.turn_down
-      when 4 then
+      when 4
         $game_player.turn_left
-      when 6 then
+      when 6
         $game_player.turn_right
-      when 8 then
+      when 8
         $game_player.turn_up
       end
       pbWait(Graphics.frame_rate * 3 / 10)
@@ -355,28 +354,27 @@ ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
 # No need to add more code for new ones.
 ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolution_stone? },
                                  proc { |item, pkmn, scene|
-                                   if pkmn.shadowPokemon?
-                                     scene.pbDisplay(_INTL("It won't have any effect."))
-                                     next false
-                                   end
-                                   newspecies = pkmn.check_evolution_on_use_item(item)
-                                   if newspecies
-                                     pbFadeOutInWithMusic {
-                                       evo = PokemonEvolutionScene.new
-                                       evo.pbStartScreen(pkmn, newspecies)
-                                       evo.pbEvolution(false)
-                                       evo.pbEndScreen
-                                       if scene.is_a?(PokemonPartyScreen)
-                                         scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
-                                         scene.pbRefresh
-                                       end
-                                     }
-                                     next true
-                                   end
-                                   scene.pbDisplay(_INTL("It won't have any effect."))
-                                   next false
-                                 }
-)
+  if pkmn.shadowPokemon?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  newspecies = pkmn.check_evolution_on_use_item(item)
+  if newspecies
+    pbFadeOutInWithMusic {
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn, newspecies)
+      evo.pbEvolution(false)
+      evo.pbEndScreen
+      if scene.is_a?(PokemonPartyScreen)
+        scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
+        scene.pbRefresh
+      end
+    }
+    next true
+  end
+  scene.pbDisplay(_INTL("It won't have any effect."))
+  next false
+})
 
 ItemHandlers::UseOnPokemon.add(:POTION, proc { |item, pkmn, scene|
   next pbHPItem(pkmn, 20, scene)
@@ -788,7 +786,7 @@ ItemHandlers::UseOnPokemon.add(:SWIFTWING, proc { |item, pkmn, scene|
 
 def can_use_rare_candy(pkmn)
   return false if pkmn.level >= GameData::GrowthRate.max_level || pkmn.shadowPokemon?
-  return false if $PokemonSystem.level_caps==1 && pokemonExceedsLevelCap(pkmn)
+  return false if $PokemonSystem.level_caps == 1 && pokemonExceedsLevelCap(pkmn)
   return true
 end
 
@@ -797,7 +795,7 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pbSet(VAR_STAT_RARE_CANDY,pbGet(VAR_STAT_RARE_CANDY)+1)
+  pbSet(VAR_STAT_RARE_CANDY, pbGet(VAR_STAT_RARE_CANDY) + 1)
   pbChangeLevel(pkmn, pkmn.level + 1, scene)
   scene.pbHardRefresh
   next true
@@ -805,55 +803,55 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, pkmn, scene|
 
 ItemHandlers::UseOnPokemon.add(:POMEGBERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :HP, [
-    _INTL("{1} adores you! Its base HP fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base HP can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base HP fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base HP fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base HP can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base HP fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:KELPSYBERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :ATTACK, [
-    _INTL("{1} adores you! Its base Attack fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base Attack can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base Attack fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base Attack fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base Attack can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base Attack fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:QUALOTBERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :DEFENSE, [
-    _INTL("{1} adores you! Its base Defense fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base Defense can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base Defense fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base Defense fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base Defense can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base Defense fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:HONDEWBERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPECIAL_ATTACK, [
-    _INTL("{1} adores you! Its base Special Attack fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base Special Attack can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base Special Attack fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base Special Attack fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base Special Attack can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base Special Attack fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:GREPABERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPECIAL_DEFENSE, [
-    _INTL("{1} adores you! Its base Special Defense fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base Special Defense can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base Special Defense fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base Special Defense fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base Special Defense can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base Special Defense fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:TAMATOBERRY, proc { |item, pkmn, scene|
   next pbRaiseHappinessAndLowerEV(pkmn, scene, :SPEED, [
-    _INTL("{1} adores you! Its base Speed fell!", pkmn.name),
-    _INTL("{1} became more friendly. Its base Speed can't go lower.", pkmn.name),
-    _INTL("{1} became more friendly. However, its base Speed fell!", pkmn.name)
-  ])
+         _INTL("{1} adores you! Its base Speed fell!", pkmn.name),
+         _INTL("{1} became more friendly. Its base Speed can't go lower.", pkmn.name),
+         _INTL("{1} became more friendly. However, its base Speed fell!", pkmn.name),
+       ])
 })
 
 ItemHandlers::UseOnPokemon.add(:GRACIDEA, proc { |item, pkmn, scene|
   if !pkmn.isSpecies?(:SHAYMIN) || pkmn.form != 0 ||
-    pkmn.status == :FROZEN || PBDayNight.isNight?
+     pkmn.status == :FROZEN || PBDayNight.isNight?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -930,8 +928,8 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR, proc { |item, pkmn, scene|
 
 ItemHandlers::UseOnPokemon.add(:REVEALGLASS, proc { |item, pkmn, scene|
   if !pkmn.isSpecies?(:TORNADUS) &&
-    !pkmn.isSpecies?(:THUNDURUS) &&
-    !pkmn.isSpecies?(:LANDORUS)
+     !pkmn.isSpecies?(:THUNDURUS) &&
+     !pkmn.isSpecies?(:LANDORUS)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -1080,13 +1078,12 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE, proc { |item, pkmn, scene|
     pkmn.ability = GameData::Ability.get((newabil == 0) ? abil1 : abil2).id
 
     #pkmn.ability = GameData::Ability.get((newabil == 0) ? abil1 : abil2).id
-	  scene.pbHardRefresh
+    scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1}'s Ability changed to {2}!", pkmn.name, newabilname))
     next true
   end
   next false
 })
-
 
 # ItemHandlers::UseInField.add(:REGITABLET, proc { |item|
 #   pbCommonEvent(COMMON_EVENT_REGI_TABLET)

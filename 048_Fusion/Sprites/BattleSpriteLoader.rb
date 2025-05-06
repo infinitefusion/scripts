@@ -65,7 +65,7 @@ class BattleSpriteLoader
     end
   end
 
-  def obtain_fusion_pif_sprite(head_id,body_id)
+  def obtain_fusion_pif_sprite(head_id, body_id)
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
     pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     #pif_sprite.dump_info if pif_sprite
@@ -82,16 +82,15 @@ class BattleSpriteLoader
     return pif_sprite
   end
 
-
   def load_fusion_sprite(head_id, body_id)
-    pif_sprite = obtain_fusion_pif_sprite(head_id,body_id)
+    pif_sprite = obtain_fusion_pif_sprite(head_id, body_id)
     if pif_sprite.local_path
       return AnimatedBitmap.new(pif_sprite.local_path)
     end
     extractor = get_sprite_extractor_instance(pif_sprite.type)
     loaded_sprite = extractor.load_sprite(pif_sprite, @download_allowed)
     if !loaded_sprite
-      loaded_sprite = handle_unloaded_sprites(extractor,pif_sprite)
+      loaded_sprite = handle_unloaded_sprites(extractor, pif_sprite)
     end
     return loaded_sprite
   end
@@ -109,24 +108,23 @@ class BattleSpriteLoader
     extractor = get_sprite_extractor_instance(pif_sprite.type)
     loaded_sprite = extractor.load_sprite(pif_sprite)
     if !loaded_sprite
-      loaded_sprite = handle_unloaded_sprites(extractor,pif_sprite)
+      loaded_sprite = handle_unloaded_sprites(extractor, pif_sprite)
     end
     return loaded_sprite
   end
 
-  def handle_unloaded_sprites(extractor,pif_sprite)
-    if(extractor.is_a?(CustomSpriteExtracter)) #Custom failed to load, load an autogen (which should always be there)
+  def handle_unloaded_sprites(extractor, pif_sprite)
+    if (extractor.is_a?(CustomSpriteExtracter)) #Custom failed to load, load an autogen (which should always be there)
       new_extractor = get_sprite_extractor_instance(:AUTOGEN)
       return new_extractor.load_sprite(pif_sprite)
     else
-      $Trainer.seen_qmarks_sprite=true if $Trainer
+      $Trainer.seen_qmarks_sprite = true if $Trainer
       #If autogen or base sprite aren't able to load a sprite then we have nothing else to load -> show a ? instead.
       return AnimatedBitmap.new(Settings::DEFAULT_SPRITE_PATH)
     end
   end
 
-
-    #Always loaded from local individual sprites
+  #Always loaded from local individual sprites
   def load_triple_fusion_sprite(dex_number)
     sprite_path = getSpecialSpriteName(dex_number)
     return AnimatedBitmap.new(sprite_path)
@@ -174,11 +172,11 @@ class BattleSpriteLoader
 
   def select_new_pif_fusion_sprite(head_id, body_id)
     species_symbol = "B#{body_id}H#{head_id}".to_sym
-    spritename = get_fusion_spritename(head_id,body_id)
+    spritename = get_fusion_spritename(head_id, body_id)
     customSpritesList = $game_temp.custom_sprites_list[species_symbol]
     alt_letter = ""
     if customSpritesList
-      alt_letter = get_random_alt_letter_for_custom(head_id,body_id,true)
+      alt_letter = get_random_alt_letter_for_custom(head_id, body_id, true)
       type = :CUSTOM
       type = :AUTOGEN if !alt_letter
     else
@@ -207,55 +205,55 @@ class BattleSpriteLoader
     when Settings::ZAPMOLCUNO_NB + 2
       return sprintf(base_path + "243.244.245")
     when Settings::ZAPMOLCUNO_NB + 3
-      return sprintf(base_path +"340.341.342")
+      return sprintf(base_path + "340.341.342")
     when Settings::ZAPMOLCUNO_NB + 4
-      return sprintf(base_path +"343.344.345")
+      return sprintf(base_path + "343.344.345")
     when Settings::ZAPMOLCUNO_NB + 5
-      return sprintf(base_path +"349.350.351")
+      return sprintf(base_path + "349.350.351")
     when Settings::ZAPMOLCUNO_NB + 6
-      return sprintf(base_path +"151.251.381")
+      return sprintf(base_path + "151.251.381")
     when Settings::ZAPMOLCUNO_NB + 11
-      return sprintf(base_path +"150.348.380")
+      return sprintf(base_path + "150.348.380")
       #starters
     when Settings::ZAPMOLCUNO_NB + 7
-      return sprintf(base_path +"3.6.9")
+      return sprintf(base_path + "3.6.9")
     when Settings::ZAPMOLCUNO_NB + 8
-      return sprintf(base_path +"154.157.160")
+      return sprintf(base_path + "154.157.160")
     when Settings::ZAPMOLCUNO_NB + 9
-      return sprintf(base_path +"278.281.284")
+      return sprintf(base_path + "278.281.284")
     when Settings::ZAPMOLCUNO_NB + 10
-      return sprintf(base_path +"318.321.324")
+      return sprintf(base_path + "318.321.324")
       #starters prevos
     when Settings::ZAPMOLCUNO_NB + 12
-      return sprintf(base_path +"1.4.7")
+      return sprintf(base_path + "1.4.7")
     when Settings::ZAPMOLCUNO_NB + 13
-      return sprintf(base_path +"2.5.8")
+      return sprintf(base_path + "2.5.8")
     when Settings::ZAPMOLCUNO_NB + 14
-      return sprintf(base_path +"152.155.158")
+      return sprintf(base_path + "152.155.158")
     when Settings::ZAPMOLCUNO_NB + 15
-      return sprintf(base_path +"153.156.159")
+      return sprintf(base_path + "153.156.159")
     when Settings::ZAPMOLCUNO_NB + 16
-      return sprintf(base_path +"276.279.282")
+      return sprintf(base_path + "276.279.282")
     when Settings::ZAPMOLCUNO_NB + 17
-      return sprintf(base_path +"277.280.283")
+      return sprintf(base_path + "277.280.283")
     when Settings::ZAPMOLCUNO_NB + 18
-      return sprintf(base_path +"316.319.322")
+      return sprintf(base_path + "316.319.322")
     when Settings::ZAPMOLCUNO_NB + 19
-      return sprintf(base_path +"317.320.323")
+      return sprintf(base_path + "317.320.323")
     when Settings::ZAPMOLCUNO_NB + 20 #birdBoss Left
-      return sprintf(base_path +"invisible")
+      return sprintf(base_path + "invisible")
     when Settings::ZAPMOLCUNO_NB + 21 #birdBoss middle
       return sprintf(base_path + "144.145.146")
     when Settings::ZAPMOLCUNO_NB + 22 #birdBoss right
-      return sprintf(base_path +"invisible")
+      return sprintf(base_path + "invisible")
     when Settings::ZAPMOLCUNO_NB + 23 #sinnohboss left
-      return sprintf(base_path +"invisible")
+      return sprintf(base_path + "invisible")
     when Settings::ZAPMOLCUNO_NB + 24 #sinnohboss middle
-      return sprintf(base_path +"343.344.345")
+      return sprintf(base_path + "343.344.345")
     when Settings::ZAPMOLCUNO_NB + 25 #sinnohboss right
-      return sprintf(base_path +"invisible")
+      return sprintf(base_path + "invisible")
     when Settings::ZAPMOLCUNO_NB + 25 #cardboard
-      return sprintf(base_path +"invisible")
+      return sprintf(base_path + "invisible")
     when Settings::ZAPMOLCUNO_NB + 26 #cardboard
       return sprintf(base_path + "cardboard")
     when Settings::ZAPMOLCUNO_NB + 27 #Triple regi

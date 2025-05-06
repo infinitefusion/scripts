@@ -9,12 +9,12 @@ class Sprite_Shadow < RPG::Sprite
 
   def initialize(viewport, character = nil, params = [])
     super(viewport)
-    @source       = params[0]
-    @anglemin     = (params.size > 1) ? params[1] : 0
-    @anglemax     = (params.size > 2) ? params[2] : 0
+    @source = params[0]
+    @anglemin = (params.size > 1) ? params[1] : 0
+    @anglemax = (params.size > 2) ? params[2] : 0
     @self_opacity = (params.size > 4) ? params[4] : 100
-    @distancemax  = (params.size > 3) ? params[3] : 350
-    @character    = character
+    @distancemax = (params.size > 3) ? params[3] : 350
+    @character = character
     update
   end
 
@@ -32,9 +32,9 @@ class Sprite_Shadow < RPG::Sprite
     if @tile_id != @character.tile_id ||
        @character_name != @character.character_name ||
        @character_hue != @character.character_hue
-      @tile_id        = @character.tile_id
+      @tile_id = @character.tile_id
       @character_name = @character.character_name
-      @character_hue  = @character.character_hue
+      @character_hue = @character.character_hue
       @chbitmap&.dispose
       if @tile_id >= 384
         @chbitmap = pbGetTileBitmap(@character.map.tileset_name,
@@ -45,7 +45,7 @@ class Sprite_Shadow < RPG::Sprite
         self.ox = 16
         self.oy = 32
       else
-        @chbitmap = AnimatedBitmap.new('Graphics/Characters/' + @character.character_name,
+        @chbitmap = AnimatedBitmap.new("Graphics/Characters/" + @character.character_name,
                                        @character.character_hue)
         @cw = @chbitmap.width / 4
         @ch = @chbitmap.height / 4
@@ -88,7 +88,7 @@ class Sprite_Shadow < RPG::Sprite
     @deltax = ScreenPosHelper.pbScreenX(@source) - self.x
     @deltay = ScreenPosHelper.pbScreenY(@source) - self.y
     self.color = Color.new(0, 0, 0)
-    @distance = ((@deltax**2) + (@deltay**2))
+    @distance = ((@deltax ** 2) + (@deltay ** 2))
     self.opacity = @self_opacity * 13_000 / ((@distance * 370 / @distancemax) + 6000)
     self.angle = 57.3 * Math.atan2(@deltax, @deltay)
     @angle_trigo = self.angle + 90
@@ -105,19 +105,17 @@ class Sprite_Shadow < RPG::Sprite
     end
   end
 
-  def in_range?(element, object, range)   # From Near's Anti Lag Script, edited
+  def in_range?(element, object, range) # From Near's Anti Lag Script, edited
     elemScreenX = ScreenPosHelper.pbScreenX(element)
     elemScreenY = ScreenPosHelper.pbScreenY(element)
-    objScreenX  = ScreenPosHelper.pbScreenX(object)
-    objScreenY  = ScreenPosHelper.pbScreenY(object)
+    objScreenX = ScreenPosHelper.pbScreenX(object)
+    objScreenY = ScreenPosHelper.pbScreenY(object)
     x = (elemScreenX - objScreenX) * (elemScreenX - objScreenX)
     y = (elemScreenY - objScreenY) * (elemScreenY - objScreenY)
     r = x + y
     return r <= range * range
   end
 end
-
-
 
 #===================================================
 # ? CLASS Sprite_Character edit
@@ -161,16 +159,12 @@ class Sprite_Character < RPG::Sprite
   end
 end
 
-
-
 #===================================================
 # ? CLASS Game_Event edit
 #===================================================
 class Game_Event
   attr_accessor :id
 end
-
-
 
 #===================================================
 # ? CLASS Spriteset_Map edit
@@ -201,8 +195,6 @@ class Spriteset_Map
     $scene.spritesetGlobal.playersprite.setShadows(map, @shadows)
   end
 end
-
-
 
 #===================================================
 # ? XPML Definition, by Rataime, using ideas from Near Fantastica

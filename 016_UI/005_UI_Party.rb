@@ -152,27 +152,24 @@ class PokemonPartyBlankPanel < SpriteWrapper
   end
 
   def selected
-    return false;
+    return false
   end
 
   def selected=(value)
-    ;
   end
 
   def preselected
-    return false;
+    return false
   end
 
   def preselected=(value)
-    ;
   end
 
   def switching
-    return false;
+    return false
   end
 
   def switching=(value)
-    ;
   end
 
   def refresh; end
@@ -310,7 +307,7 @@ class PokemonPartyPanel < SpriteWrapper
   end
 
   def hp
-    return @pokemon.hp;
+    return @pokemon.hp
   end
 
   def refresh
@@ -319,22 +316,22 @@ class PokemonPartyPanel < SpriteWrapper
     @refreshing = true
     if @panelbgsprite && !@panelbgsprite.disposed?
       if self.selected
-        if self.preselected;
+        if self.preselected
           @panelbgsprite.changeBitmap("swapsel2")
-        elsif @switching;
+        elsif @switching
           @panelbgsprite.changeBitmap("swapsel")
-        elsif @pokemon.fainted?;
+        elsif @pokemon.fainted?
           @panelbgsprite.changeBitmap("faintedsel")
         else
-          ; @panelbgsprite.changeBitmap("ablesel")
+          @panelbgsprite.changeBitmap("ablesel")
         end
       else
-        if self.preselected;
+        if self.preselected
           @panelbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?;
+        elsif @pokemon.fainted?
           @panelbgsprite.changeBitmap("fainted")
         else
-          ; @panelbgsprite.changeBitmap("able")
+          @panelbgsprite.changeBitmap("able")
         end
       end
       @panelbgsprite.x = self.x
@@ -344,12 +341,12 @@ class PokemonPartyPanel < SpriteWrapper
     if @hpbgsprite && !@hpbgsprite.disposed?
       @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length > 0))
       if @hpbgsprite.visible
-        if self.preselected || (self.selected && @switching);
+        if self.preselected || (self.selected && @switching)
           @hpbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?;
+        elsif @pokemon.fainted?
           @hpbgsprite.changeBitmap("fainted")
         else
-          ; @hpbgsprite.changeBitmap("able")
+          @hpbgsprite.changeBitmap("able")
         end
         @hpbgsprite.x = self.x + 96
         @hpbgsprite.y = self.y + 50
@@ -436,17 +433,18 @@ class PokemonPartyPanel < SpriteWrapper
       # Draw level text
       if !@pokemon.egg?
         pbDrawImagePositions(@overlaysprite.bitmap, [[
-                                                       "Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14]])
+          "Graphics/Pictures/Party/overlay_lv", 20, 70, 0, 0, 22, 14,
+        ]])
         pbSetSmallFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap, [
-          [@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor]
+          [@pokemon.level.to_s, 42, 57, 0, basecolor, shadowcolor],
         ])
       end
       # Draw annotation text
       if @text && @text.length > 0
         pbSetSystemFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap, [
-          [@text, 96, 52, 0, basecolor, shadowcolor]
+          [@text, 96, 52, 0, basecolor, shadowcolor],
         ])
       end
     end
@@ -468,6 +466,7 @@ end
 #===============================================================================
 class PokemonParty_Scene
   attr_accessor :viewport
+
   def pbStartScene(party, starthelptext, annotations = nil, multiselect = false)
     @sprites = {}
     @party = party
@@ -1015,7 +1014,7 @@ class PokemonPartyScreen
     @scene.pbAnnotate(nil)
   end
 
-  def pbPokemonMultipleEntryScreenEx(ruleset,ableProc=nil)
+  def pbPokemonMultipleEntryScreenEx(ruleset, ableProc = nil)
     annot = []
     statuses = []
     ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("BANNED")]
@@ -1033,10 +1032,8 @@ class PokemonPartyScreen
     ret = nil
     addedEntry = false
     for i in 0...@party.length
-      statuses[i] = (ruleset.isPokemonValid?(@party[i],ableProc)) ? 1 : 2
+      statuses[i] = (ruleset.isPokemonValid?(@party[i], ableProc)) ? 1 : 2
     end
-
-
 
     for i in 0...@party.length
       annot[i] = ordinals[statuses[i]]
@@ -1067,8 +1064,8 @@ class PokemonPartyScreen
       addedEntry = false
       if pkmnid == Settings::MAX_PARTY_SIZE # Confirm was chosen
         ret = []
-        for i in realorder;
-          ret.push(@party[i]);
+        for i in realorder
+          ret.push(@party[i])
         end
         error = []
         break if ruleset.isValid?(ret, error)
@@ -1123,7 +1120,8 @@ class PokemonPartyScreen
                         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."), annot)
     loop do
       @scene.pbSetHelpText(
-        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel.")
+      )
       pkmnid = @scene.pbChoosePokemon
       break if pkmnid < 0
       if !eligibility[pkmnid] && !allowIneligible
@@ -1151,7 +1149,8 @@ class PokemonPartyScreen
                         (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."), annot)
     loop do
       @scene.pbSetHelpText(
-        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
+        (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel.")
+      )
       pkmnid = @scene.pbChoosePokemon
       break if pkmnid < 0
       if !eligibility[pkmnid] && !allowIneligible
@@ -1165,7 +1164,6 @@ class PokemonPartyScreen
     return ret
   end
 
-
   def pbPokemonHat(pokemon)
     cmd = 0
     msg = "What should you do?"
@@ -1173,16 +1171,17 @@ class PokemonPartyScreen
       cmd = @scene.pbShowCommands(msg, [
         _INTL("Put on hat"),
         _INTL("Remove hat"),
-        _INTL("Back")], cmd)
+        _INTL("Back"),
+      ], cmd)
       echoln cmd
       break if cmd == -1
-      if cmd == 0   #Put on hat
+      if cmd == 0 #Put on hat
         @scene.pbOpenHatScreen(pokemon)
-        pbDisplay(_INTL("{1} put on a hat!",pokemon.name))
+        pbDisplay(_INTL("{1} put on a hat!", pokemon.name))
       elsif cmd == 1 #remove hat
-        if pbConfirm(_INTL("Remove {1}'s hat?",pokemon.name))
-          pokemon.hat=nil
-          pbDisplay(_INTL("{1}'s hat was removed",pokemon.name))
+        if pbConfirm(_INTL("Remove {1}'s hat?", pokemon.name))
+          pokemon.hat = nil
+          pbDisplay(_INTL("{1}'s hat was removed", pokemon.name))
         end
       else
         break
@@ -1208,7 +1207,7 @@ class PokemonPartyScreen
     end
 
     if move_ids.empty?
-      pbMessage(_INTL("{1} has no moves to remember!",pokemon.name))
+      pbMessage(_INTL("{1} has no moves to remember!", pokemon.name))
       return false
     end
 
@@ -1226,6 +1225,7 @@ class PokemonPartyScreen
     }
     return retval
   end
+
   def pbPokemonRename(pkmn, pkmnid)
     cmd = 0
     loop do
@@ -1234,7 +1234,8 @@ class PokemonPartyScreen
              _INTL("{1} has no nickname.", speciesname)][pkmn.name == speciesname ? 1 : 0]
       cmd = @scene.pbShowCommands(msg, [
         _INTL("Rename"),
-        _INTL("Back")], cmd)
+        _INTL("Back"),
+      ], cmd)
       # Break
       if cmd == -1
         break
@@ -1285,7 +1286,7 @@ class PokemonPartyScreen
         # Check for hidden moves and add any that were found
         pkmn.moves.each_with_index do |m, i|
           if [:MILKDRINK, :SOFTBOILED].include?(m.id) ||
-            HiddenMoveHandlers.hasHandler(m.id)
+             HiddenMoveHandlers.hasHandler(m.id)
             commands[cmdMoves[i] = commands.length] = [m.name, 1]
           end
         end
@@ -1401,7 +1402,7 @@ class PokemonPartyScreen
         itemcommands[cmdGiveItem = itemcommands.length] = _INTL("Give")
         itemcommands[cmdTakeItem = itemcommands.length] = _INTL("Take") if pkmn.hasItem?
         itemcommands[cmdMoveItem = itemcommands.length] = _INTL("Move") if pkmn.hasItem? &&
-          !GameData::Item.get(pkmn.item).is_mail?
+                                                                           !GameData::Item.get(pkmn.item).is_mail?
         itemcommands[itemcommands.length] = _INTL("Cancel")
         command = @scene.pbShowCommands(_INTL("Do what with an item?"), itemcommands)
         if cmdUseItem >= 0 && command == cmdUseItem # Use

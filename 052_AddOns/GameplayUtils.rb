@@ -21,7 +21,6 @@ def oricorioEventPickFlower(flower_color)
     pbSEPlay("MiningAllFound")
     pbMessage(_INTL("{1} picked some of the blue flowers.", $Trainer.name))
   end
-
 end
 
 def changeOricorioFlower(form = 1)
@@ -56,12 +55,12 @@ def changeOricorioFlower(form = 1)
   if pbConfirmMessage(message)
     pbChoosePokemon(1, 2,
                     proc { |poke|
-                      !poke.egg? &&
-                        (Kernel.isPartPokemon(poke, :ORICORIO_1) ||
-                          Kernel.isPartPokemon(poke, :ORICORIO_2) ||
-                          Kernel.isPartPokemon(poke, :ORICORIO_3) ||
-                          Kernel.isPartPokemon(poke, :ORICORIO_4))
-                    })
+      !poke.egg? &&
+        (Kernel.isPartPokemon(poke, :ORICORIO_1) ||
+         Kernel.isPartPokemon(poke, :ORICORIO_2) ||
+         Kernel.isPartPokemon(poke, :ORICORIO_3) ||
+         Kernel.isPartPokemon(poke, :ORICORIO_4))
+    })
     if (pbGet(1) != -1)
       poke = $Trainer.party[pbGet(1)]
       if changeOricorioForm(poke, form)
@@ -123,9 +122,7 @@ def fossilsGuyBattle(level = 20, end_message = "")
                       :SUPERNERD,
                       team,
                       level,
-                      end_message
-  )
-
+                      end_message)
 end
 
 def getFossilsGuyTeam(level)
@@ -151,7 +148,6 @@ def getFossilsGuyTeam(level)
   if $game_switches[SWITCH_PICKED_LILEEP_FOSSIL]
     fossils << :ANORITH if level < fossils_evolution_level_1
     fossils << :ARMALDO if level >= fossils_evolution_level_1
-
   elsif $game_switches[SWITCH_PICKED_ANORITH_FOSSIL]
     fossils << :LILEEP if level < fossils_evolution_level_1
     fossils << :CRADILY if level >= fossils_evolution_level_1
@@ -160,7 +156,6 @@ def getFossilsGuyTeam(level)
   if $game_switches[SWITCH_PICKED_ARMOR_FOSSIL]
     fossils << :CRANIDOS if level < fossils_evolution_level_2
     fossils << :RAMPARDOS if level >= fossils_evolution_level_2
-
   elsif $game_switches[SWITCH_PICKED_SKULL_FOSSIL]
     fossils << :SHIELDON if level < fossils_evolution_level_2
     fossils << :BASTIODON if level >= fossils_evolution_level_2
@@ -580,8 +575,8 @@ def getMtMoonDirection()
                490, # Route 3
                303, # indigo plateau
                145, # Route 26
-               147, # Route 27
-  ]
+               147 # Route 27
+]
   maps_south = [
     8, # Route 24
     9, # Route 25
@@ -593,7 +588,7 @@ def getMtMoonDirection()
     1, # cerulean
     495, # route 9
     351, # route 9
-    10 # cerulean cape
+    10, # cerulean cape
   ]
   return 2 if maps_south.include?($game_map.map_id)
   return 4 if maps_west.include?($game_map.map_id)
@@ -678,11 +673,10 @@ def registeel_ice_reset_switches()
 end
 
 def regirock_steel_move_boulder()
-
   switches_position = [
     [16, 21], [18, 21], [20, 21], [22, 21],
     [16, 23], [22, 23],
-    [16, 25], [18, 25], [20, 25], [22, 25]
+    [16, 25], [18, 25], [20, 25], [22, 25],
   ]
   boulder_event = get_self
   old_x = boulder_event.x
@@ -739,6 +733,7 @@ def getPlayerDefaultName(gender)
     return Settings::GAME_ID == :IF_HOENN ? "May" : "Green"
   end
 end
+
 def getDefaultClothes(gender)
   if gender == GENDER_MALE
     return Settings::GAME_ID == :IF_HOENN ? CLOTHES_BRENDAN : DEFAULT_OUTFIT_MALE
@@ -746,6 +741,7 @@ def getDefaultClothes(gender)
     return Settings::GAME_ID == :IF_HOENN ? CLOTHES_MAY : DEFAULT_OUTFIT_FEMALE
   end
 end
+
 def getDefaultHat(gender)
   if gender == GENDER_MALE
     return Settings::GAME_ID == :IF_HOENN ? HAT_BRENDAN : DEFAULT_OUTFIT_MALE
@@ -780,7 +776,6 @@ def setupStartingOutfit()
     $Trainer.unlock_clothes(default_clothes_female, true)
     $Trainer.unlock_hat(default_hat_female, true)
     $Trainer.hair = "3_" + default_hair_female if !$Trainer.hair # when migrating old savefiles
-
   elsif gender == GENDER_MALE
     $Trainer.unlock_clothes(default_clothes_male, true)
     $Trainer.unlock_hat(default_hat_male, true)
@@ -945,21 +940,21 @@ end
 #@formatter:off
 def get_constellation_variable(pokemon)
   case pokemon
-  when :IVYSAUR;
+  when :IVYSAUR
     return VAR_CONSTELLATION_IVYSAUR
-  when :WARTORTLE;
+  when :WARTORTLE
     return VAR_CONSTELLATION_WARTORTLE
-  when :ARCANINE;
+  when :ARCANINE
     return VAR_CONSTELLATION_ARCANINE
-  when :MACHOKE;
+  when :MACHOKE
     return VAR_CONSTELLATION_MACHOKE
-  when :RAPIDASH;
+  when :RAPIDASH
     return VAR_CONSTELLATION_RAPIDASH
-  when :GYARADOS;
+  when :GYARADOS
     return VAR_CONSTELLATION_GYARADOS
-  when :ARTICUNO;
+  when :ARTICUNO
     return VAR_CONSTELLATION_ARTICUNO
-  when :MEW;
+  when :MEW
     return VAR_CONSTELLATION_MEW
     # when :POLITOED;   return  VAR_CONSTELLATION_POLITOED
     # when :URSARING;   return  VAR_CONSTELLATION_URSARING
@@ -982,7 +977,7 @@ def promptCaughtPokemonAction(pokemon)
   return promptKeepOrRelease(pokemon) if isOnPinkanIsland() && !$game_switches[SWITCH_PINKAN_FINISHED]
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
-                        [_INTL("Add to your party"), _INTL("Store to PC"),], 2)
+                        [_INTL("Add to your party"), _INTL("Store to PC")], 2)
     echoln ("command " + command.to_s)
     case command
     when 0 # SWAP
@@ -997,14 +992,13 @@ def promptCaughtPokemonAction(pokemon)
       pickedOption = true
     end
   end
-
 end
 
 def promptKeepOrRelease(pokemon)
   pickedOption = false
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
-                        [_INTL("Release a party member"), _INTL("Release this #{pokemon.name}"),], 2)
+                        [_INTL("Release a party member"), _INTL("Release this #{pokemon.name}")], 2)
     echoln ("command " + command.to_s)
     case command
     when 0 # SWAP
@@ -1021,9 +1015,9 @@ end
 def swapCaughtPokemon(caughtPokemon)
   pbChoosePokemon(1, 2,
                   proc { |poke|
-                    !poke.egg? &&
-                      !(poke.isShadow? rescue false)
-                  })
+    !poke.egg? &&
+      !(poke.isShadow? rescue false)
+  })
   index = pbGet(1)
   return false if index == -1
   $PokemonStorage.pbStoreCaught($Trainer.party[index])
@@ -1039,9 +1033,9 @@ end
 def swapReleaseCaughtPokemon(caughtPokemon)
   pbChoosePokemon(1, 2,
                   proc { |poke|
-                    !poke.egg? &&
-                      !(poke.isShadow? rescue false)
-                  })
+    !poke.egg? &&
+      !(poke.isShadow? rescue false)
+  })
   index = pbGet(1)
   return false if index == -1
   releasedPokemon = $Trainer.party[index]
@@ -1090,7 +1084,6 @@ end
 # - Wish
 # - Water Pulse
 def exportFusedPokemonForShowdown(pokemon)
-
   if pokemon.species_data.is_a?(GameData::FusedSpecies)
     head_pokemon_species = pokemon.species_data.head_pokemon
     species_name = head_pokemon_species.name
@@ -1123,16 +1116,16 @@ def exportFusedPokemonForShowdown(pokemon)
   move4 = _INTL("- {1}", GameData::Move.get(pokemon.moves[3].id).real_name) if pokemon.moves[3]
 
   ret = nameLine + "\n" +
-    abilityLine + "\n" +
-    levelLine + "\n" +
-    fusionLine +
-    evsLine + "\n" +
-    natureLine + "\n" +
-    ivsLine + "\n" +
-    move1 + "\n" +
-    move2 + "\n" +
-    move3 + "\n" +
-    move4 + "\n"
+        abilityLine + "\n" +
+        levelLine + "\n" +
+        fusionLine +
+        evsLine + "\n" +
+        natureLine + "\n" +
+        ivsLine + "\n" +
+        move1 + "\n" +
+        move2 + "\n" +
+        move3 + "\n" +
+        move4 + "\n"
 
   return ret
 end
@@ -1168,7 +1161,7 @@ def addWaterCausticsEffect(fog_name = "caustic1", opacity = 16)
   $game_map.fog_sx = 2
   $game_map.fog_sy = 2
 
-  $game_map.setFog2(fog_name, -3, 0, opacity,)
+  $game_map.setFog2(fog_name, -3, 0, opacity)
 end
 
 def stopWaterCausticsEffect()
@@ -1277,7 +1270,7 @@ end
 def idleHatEvent(hatId, time, switchToActivate = nil)
   map = $game_map.map_id
   i = 0
-  while i < (time / 5) do
+  while i < (time / 5)
     # /5 because we update 5 times per second
     return if $game_map.map_id != map
     i += 1
@@ -1373,7 +1366,6 @@ def exit_pokemart()
     $game_map.autoplay
     $game_map.refresh
   }
-
 end
 
 def pokemart_clothes_shop(current_city = nil, include_defaults = true)
@@ -1386,7 +1378,8 @@ def pokemart_clothes_shop(current_city = nil, include_defaults = true)
     baseOptions = include_defaults,
     additionalIds = [],
     additionalTags = [current_city_tag],
-    filterOutTags = [])
+    filterOutTags = []
+  )
   clothesShop(list)
 end
 
@@ -1399,7 +1392,8 @@ def pokemart_hat_shop(include_defaults = true)
     baseOptions = include_defaults,
     additionalIds = [],
     additionalTags = [current_city_tag],
-    filterOutTags = [])
+    filterOutTags = []
+  )
 
   hatShop(list)
 end
@@ -1407,58 +1401,57 @@ end
 def get_mart_exclusive_items(city)
   items_list = []
   case city
-  when :PEWTER;
+  when :PEWTER
     items_list = [:ROCKGEM, :NESTBALL]
-  when :VIRIDIAN;
+  when :VIRIDIAN
     items_list = []
-  when :CERULEAN;
+  when :CERULEAN
     items_list = [:WATERGEM, :NETBALL, :PRETTYWING]
-  when :VERMILLION;
+  when :VERMILLION
     items_list = [:LOVEBALL, :ELECTRICGEM]
-  when :LAVENDER;
+  when :LAVENDER
     items_list = [:GHOSTGEM, :DARKGEM, :DUSKBALL]
-  when :CELADON;
-    items_list = [:GRASSGEM, :FLYINGGEM, :QUICKBALL, :TIMERBALL,]
-  when :FUCHSIA;
+  when :CELADON
+    items_list = [:GRASSGEM, :FLYINGGEM, :QUICKBALL, :TIMERBALL]
+  when :FUCHSIA
     items_list = [:POISONGEM, :REPEATBALL]
-  when :SAFFRON;
+  when :SAFFRON
     items_list = [:PSYCHICGEM, :FIGHTINGGEM, :FRIENDBALL]
-  when :CINNABAR;
+  when :CINNABAR
     items_list = [:FIREGEM, :ICEGEM, :HEAVYBALL]
-  when :CRIMSON;
+  when :CRIMSON
     items_list = [:DRAGONGEM, :LEVELBALL]
-  when :GOLDENROD;
+  when :GOLDENROD
     items_list = [:EVERSTONE, :MOONSTONE, :SUNSTONE, :DUSKSTONE, :DAWNSTONE, :SHINYSTONE]
-  when :AZALEA;
+  when :AZALEA
     items_list = [:BUGGEM]
-  when :VIOLET;
+  when :VIOLET
     items_list = [:FLYINGGEM, :STATUSBALL]
-  when :BLACKTHORN;
+  when :BLACKTHORN
     items_list = [:DRAGONGEM, :CANDYBALL]
-  when :CHERRYGROVE;
+  when :CHERRYGROVE
     items_list = [:BUGGEM, :PUREBALL]
-  when :MAHOGANY;
+  when :MAHOGANY
     items_list = []
-  when :ECRUTEAK;
+  when :ECRUTEAK
     items_list = [:GHOSTGEM, :DARKGEM]
-  when :OLIVINE;
+  when :OLIVINE
     items_list = []
-  when :CIANWOOD;
+  when :CIANWOOD
     items_list = []
-  when :KNOTISLAND;
+  when :KNOTISLAND
     items_list = []
-  when :BOONISLAND;
+  when :BOONISLAND
     items_list = []
-  when :KINISLAND;
+  when :KINISLAND
     items_list = []
-  when :CHRONOISLAND;
+  when :CHRONOISLAND
     items_list = []
   end
   return items_list
 end
 
 def calculate_pokemon_weight(pokemon, nerf = 0)
-
   base_weight = pokemon.weight
   ivs = []
   pokemon.iv.each { |iv|
@@ -1500,12 +1493,10 @@ def generate_weight_contest_entries(species, level, resultsVariable, nerf = 0)
   echoln new_weights
   echoln "(nerfed by -#{nerf})"
   pbSet(resultsVariable, new_weights.max)
-
 end
 
 # todo: implement
 def getMappedKeyFor(internalKey)
-
   keybinding_fileName = "keybindings.mkxp1"
   path = System.data_directory + keybinding_fileName
 
@@ -1760,9 +1751,7 @@ def qmarkMaskCheck()
   end
 end
 
-
-def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
-
+def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
   commands = []
   command_hats = "Hats Dye Kit ($#{hats_kit_price})"
   command_clothes = "Clothes Dye Kit ($#{clothes_kit_price})"
@@ -1773,27 +1762,27 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
   commands << command_cancel
 
   if commands.length <= 1
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!")
 
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("You can use them at any time when you change clothes.")
     return
   end
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("\\GWelcome! Are you interested in dyeing your outfits different colours?")
 
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!")
 
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?")
 
-  choice = optionsMenu(commands,commands.length)
+  choice = optionsMenu(commands, commands.length)
   case commands[choice]
   when command_hats
     if $Trainer.money < hats_kit_price
-      pbCallBub(2,@event_id)
+      pbCallBub(2, @event_id)
       pbMessage("Oh, you don't have enough money...")
       return
     end
@@ -1801,11 +1790,11 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
     $Trainer.money -= hats_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:HATSDYEKIT)
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\GHere you go! Have fun dyeing your hats!")
   when command_clothes
     if $Trainer.money < clothes_kit_price
-      pbCallBub(2,@event_id)
+      pbCallBub(2, @event_id)
       pbMessage("Oh, you don't have enough money...")
       return
     end
@@ -1813,33 +1802,32 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
     $Trainer.money -= clothes_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:CLOTHESDYEKIT)
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\GHere you go! Have fun dyeing your clothes!")
   end
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes.")
 end
 
-def giveJigglypuffScribbles(possible_versions = [1,2,3,4])
+def giveJigglypuffScribbles(possible_versions = [1, 2, 3, 4])
   selected_scribbles_version = possible_versions.sample
   case selected_scribbles_version
   when 1
-    scribbles_id= HAT_SCRIBBLES1
+    scribbles_id = HAT_SCRIBBLES1
   when 2
-    scribbles_id= HAT_SCRIBBLES2
+    scribbles_id = HAT_SCRIBBLES2
   when 3
-    scribbles_id= HAT_SCRIBBLES3
+    scribbles_id = HAT_SCRIBBLES3
   when 4
-    scribbles_id= HAT_SCRIBBLES4
+    scribbles_id = HAT_SCRIBBLES4
   end
   return if !scribbles_id
 
   if !hasHat?(scribbles_id)
     $Trainer.unlocked_hats << scribbles_id
   end
-  putOnHat(scribbles_id,true,true)
+  putOnHat(scribbles_id, true, true)
 end
-
 
 def player_near_event?(map_id, event_id, radius)
   return false if map_id != $game_map.map_id
@@ -1850,8 +1838,3 @@ def player_near_event?(map_id, event_id, radius)
   distance = Math.sqrt(dx * dx + dy * dy)
   return distance <= radius
 end
-
-
-
-
-

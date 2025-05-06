@@ -46,55 +46,54 @@
 #===============================================================================
 
 module PokemonSelection
-  def self.rules(min=1, max=6, canCancel=false, acceptFainted=false)
-    ret=PokemonChallengeRules.new
+  def self.rules(min = 1, max = 6, canCancel = false, acceptFainted = false)
+    ret = PokemonChallengeRules.new
     # ret.setLevelAdjustment(OpenLevelAdjustment.new(PBExperience::MAXLEVEL))
-     ret.addPokemonRule(AblePokemonRestriction.new) if !acceptFainted
-     ret.ruleset.setNumberRange(min,max)
+    ret.addPokemonRule(AblePokemonRestriction.new) if !acceptFainted
+    ret.ruleset.setNumberRange(min, max)
     return ret
   end
 
-  def self.hasValidTeam?(min=1, max=6, canCancel=false, acceptFainted=false)
-    pbBattleChallenge.set("pokemonSelectionRules",7,self.rules(min,max))
-    ret=pbHasEligible?
+  def self.hasValidTeam?(min = 1, max = 6, canCancel = false, acceptFainted = false)
+    pbBattleChallenge.set("pokemonSelectionRules", 7, self.rules(min, max))
+    ret = pbHasEligible?
     pbBattleChallenge.pbCancel
     return ret
   end
 
-  def self.choose(min=1, max=6, canCancel=false, acceptFainted=false, ableproc=nil)
+  def self.choose(min = 1, max = 6, canCancel = false, acceptFainted = false, ableproc = nil)
     if $PokemonGlobal.pokemonSelectionOriginalParty
       PokemonSelection.restore
       echoln "Can't choose a new party until restore the old one"
     end
-    validPartyChosen=false
-    pbBattleChallenge.set("pokemonSelectionRules",7,self.rules(min,max))
+    validPartyChosen = false
+    pbBattleChallenge.set("pokemonSelectionRules", 7, self.rules(min, max))
     loop do
       pbEntryScreen(ableproc)
-      validPartyChosen=(pbBattleChallenge.getParty!=nil)
-      break if(canCancel || validPartyChosen)
+      validPartyChosen = (pbBattleChallenge.getParty != nil)
+      break if (canCancel || validPartyChosen)
       Kernel.pbMessage(_INTL("Choose a Pokémon."))
     end
     if validPartyChosen
       # If the party size is the same, it is only an order change
-      if($Trainer.party.size != pbBattleChallenge.getParty.size)
-        $PokemonGlobal.pokemonSelectionOriginalParty=$Trainer.party
+      if ($Trainer.party.size != pbBattleChallenge.getParty.size)
+        $PokemonGlobal.pokemonSelectionOriginalParty = $Trainer.party
       end
-      $Trainer.party=pbBattleChallenge.getParty
+      $Trainer.party = pbBattleChallenge.getParty
     end
     pbBattleChallenge.pbCancel
     return validPartyChosen
   end
 
   def self.saveParty()
-    $PokemonGlobal.pokemonSelectionOriginalParty=$Trainer.party
+    $PokemonGlobal.pokemonSelectionOriginalParty = $Trainer.party
   end
 
-
   def self.restore(*args)
-    hasSavedTeam=($PokemonGlobal.pokemonSelectionOriginalParty!=nil)
+    hasSavedTeam = ($PokemonGlobal.pokemonSelectionOriginalParty != nil)
     if hasSavedTeam
-      $Trainer.party=$PokemonGlobal.pokemonSelectionOriginalParty
-      $PokemonGlobal.pokemonSelectionOriginalParty=nil
+      $Trainer.party = $PokemonGlobal.pokemonSelectionOriginalParty
+      $PokemonGlobal.pokemonSelectionOriginalParty = nil
     end
     return hasSavedTeam
   end
@@ -102,22 +101,22 @@ end
 
 class PokemonRuleSet # Redefined to fix a bug
   def hasValidTeam?(team)
-    if !team || team.length<self.minTeamLength
+    if !team || team.length < self.minTeamLength
       return false
     end
-    teamNumber=[self.maxLength,team.length].min
-    validPokemon=[]
+    teamNumber = [self.maxLength, team.length].min
+    validPokemon = []
     for pokemon in team
       if isPokemonValid?(pokemon)
         validPokemon.push(pokemon)
       end
     end
     #if validPokemon.length<teamNumber # original
-    if validPokemon.length<self.minLength # fixed
+    if validPokemon.length < self.minLength # fixed
       return false
     end
-    if @teamRules.length>0
-      pbEachCombination(team,teamNumber){|comb|
+    if @teamRules.length > 0
+      pbEachCombination(team, teamNumber) { |comb|
         if isValid?(comb)
           return true
         end
@@ -133,5 +132,4 @@ class BattleChallenge; def getParty; return @bc.party; end; end
 class PokemonGlobalMetadata
   attr_accessor :pokemonSelectionOriginalParty
   attr_accessor :pokemonSelectionOriginalBag
-
 end

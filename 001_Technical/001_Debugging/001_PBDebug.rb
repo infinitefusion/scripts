@@ -9,15 +9,15 @@ module PBDebug
       PBDebug.log("**Exception: #{$!.message}")
       PBDebug.log("#{$!.backtrace.inspect}")
       PBDebug.log("")
-#      if $INTERNAL
-        pbPrintException($!)
-#      end
+      #      if $INTERNAL
+      pbPrintException($!)
+      #      end
       PBDebug.flush
     end
   end
 
   def self.flush
-    if $DEBUG && $INTERNAL && @@log.length>0
+    if $DEBUG && $INTERNAL && @@log.length > 0
       File.open("Data/debuglog.txt", "a+b") { |f| f.write("#{@@log}") }
     end
     @@log.clear
@@ -26,9 +26,9 @@ module PBDebug
   def self.log(msg)
     if $DEBUG && $INTERNAL
       @@log.push("#{msg}\r\n")
-#      if @@log.length>1024
-        PBDebug.flush
-#      end
+      #      if @@log.length>1024
+      PBDebug.flush
+      #      end
     end
   end
 

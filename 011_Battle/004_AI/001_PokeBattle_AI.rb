@@ -9,13 +9,11 @@
 #       the trainer's base money value.
 module PBTrainerAI
   # Minimum skill level to be in each AI category.
-  def self.minimumSkill; return 1;   end
-  def self.mediumSkill;  return 32;  end
-  def self.highSkill;    return 48;  end
-  def self.bestSkill;    return 100; end
+  def self.minimumSkill; return 1; end
+  def self.mediumSkill; return 32; end
+  def self.highSkill; return 48; end
+  def self.bestSkill; return 100; end
 end
-
-
 
 class PokeBattle_AI
   def initialize(battle)
@@ -26,22 +24,22 @@ class PokeBattle_AI
 
   def pbStdDev(choices)
     sum = 0
-    n   = 0
+    n = 0
     choices.each do |c|
       sum += c[1]
-      n   += 1
+      n += 1
     end
-    return 0 if n<2
-    mean = sum.to_f/n.to_f
+    return 0 if n < 2
+    mean = sum.to_f / n.to_f
     varianceTimesN = 0
     choices.each do |c|
-      next if c[1]<=0
-      deviation = c[1].to_f-mean
-      varianceTimesN += deviation*deviation
+      next if c[1] <= 0
+      deviation = c[1].to_f - mean
+      varianceTimesN += deviation * deviation
     end
     # Using population standard deviation
     # [(n-1) makes it a sample std dev, would be 0 with only 1 sample]
-    return Math.sqrt(varianceTimesN/n)
+    return Math.sqrt(varianceTimesN / n)
   end
 
   #=============================================================================
@@ -49,7 +47,7 @@ class PokeBattle_AI
   #=============================================================================
   def pbEnemyShouldMegaEvolve?(idxBattler)
     battler = @battle.battlers[idxBattler]
-    if @battle.pbCanMegaEvolve?(idxBattler)   # Simple "always should if possible"
+    if @battle.pbCanMegaEvolve?(idxBattler) # Simple "always should if possible"
       PBDebug.log("[AI] #{battler.pbThis} (#{idxBattler}) will Mega Evolve")
       return true
     end

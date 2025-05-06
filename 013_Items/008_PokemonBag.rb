@@ -10,14 +10,14 @@ class PokemonBag
   end
 
   def self.numPockets
-    return self.pocketNames.length-1
+    return self.pocketNames.length - 1
   end
 
   def initialize
-    @descending_sort=false
+    @descending_sort = false
     @lastpocket = 1
-    @pockets    = []
-    @choices    = []
+    @pockets = []
+    @choices = []
     for i in 0..PokemonBag.numPockets
       @pockets[i] = []
       @choices[i] = 0
@@ -99,7 +99,7 @@ class PokemonBag
   end
 
   # Sets the index of the current selected item in the pocket
-  def setChoice(pocket,value)
+  def setChoice(pocket, value)
     if pocket <= 0 || pocket > PokemonBag.numPockets
       raise ArgumentError.new(_INTL("Invalid pocket: {1}", pocket.inspect))
     end
@@ -135,7 +135,8 @@ class PokemonBag
     maxsize = maxPocketSize(pocket)
     maxsize = @pockets[pocket].length + 1 if maxsize < 0
     return ItemStorageHelper.pbCanStore?(
-       @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty)
+             @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty
+           )
   end
 
   def pbStoreItem(item, qty = 1)
@@ -144,7 +145,8 @@ class PokemonBag
     maxsize = maxPocketSize(pocket)
     maxsize = @pockets[pocket].length + 1 if maxsize < 0
     return ItemStorageHelper.pbStoreItem(
-       @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty, true)
+             @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty, true
+           )
   end
 
   def pbStoreAllOrNone(item, qty = 1)
@@ -217,7 +219,7 @@ class PokemonBag
   end
 
   def saveBagAndClear()
-    $PokemonGlobal.pokemonSelectionOriginalBag= @pockets.map(&:dup)
+    $PokemonGlobal.pokemonSelectionOriginalBag = @pockets.map(&:dup)
     echoln $PokemonGlobal.pokemonSelectionOriginalBag
     clear()
   end
@@ -229,15 +231,13 @@ class PokemonBag
   end
 end
 
-
-
 #===============================================================================
 # The PC item storage object, which actually contains all the items
 #===============================================================================
 class PCItemStorage
   attr_reader :items
 
-  MAX_SIZE     = 999   # Number of different slots in storage
+  MAX_SIZE = 999   # Number of different slots in storage
   MAX_PER_SLOT = 999   # Max. number of items per slot
 
   def initialize
@@ -290,8 +290,6 @@ class PCItemStorage
     return ItemStorageHelper.pbDeleteItem(@items, item, qty)
   end
 end
-
-
 
 #===============================================================================
 # Implements methods that act on arrays of items.  Each element in an item
@@ -368,13 +366,7 @@ module ItemStorageHelper
     end
     return false
   end
-
-
-
-
 end
-
-
 
 #===============================================================================
 # Shortcut methods

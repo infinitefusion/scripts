@@ -53,13 +53,13 @@ def swapToNextHairVersion()
   lastVersion = findLastHairVersion(hair_style)
   newVersion = lastVersion if newVersion <= 0
   newVersion = 1 if newVersion > lastVersion
-  $Trainer.hair = getFullHairId(hair_style,newVersion)
+  $Trainer.hair = getFullHairId(hair_style, newVersion)
 end
 
 def selectHairColor
   original_color = $Trainer.hair_color
   original_hair = $Trainer.hair
-  $game_switches[SWITCH_SELECTING_CLOTHES]=true
+  $game_switches[SWITCH_SELECTING_CLOTHES] = true
   $game_map.update
   display_outfit_preview()
   hat = $Trainer.hat
@@ -109,13 +109,12 @@ def selectHairColor
   end
   hide_outfit_preview()
   $Trainer.hat = hat
-  $game_switches[SWITCH_SELECTING_CLOTHES]=false
+  $game_switches[SWITCH_SELECTING_CLOTHES] = false
   $game_map.update
   return ret
-
 end
 
-def selectHatColor(secondary_hat=false)
+def selectHatColor(secondary_hat = false)
   original_color = secondary_hat ? $Trainer.hat2_color : $Trainer.hat_color
   display_outfit_preview()
   commands = ["Shift up", "Shift down", "Reset", "Confirm", "Never Mind"]
@@ -126,12 +125,12 @@ def selectHatColor(secondary_hat=false)
     case choice
     when 0 #NEXT
       pbSEPlay("GUI storage pick up", 80, 100)
-      shiftHatColor(10,secondary_hat)
+      shiftHatColor(10, secondary_hat)
       display_outfit_preview
       ret = true
     when 1 #PREVIOUS
       pbSEPlay("GUI storage pick up", 80, 100)
-      shiftHatColor(-10,secondary_hat)
+      shiftHatColor(-10, secondary_hat)
       display_outfit_preview
       ret = true
     when 2 #Reset
@@ -224,7 +223,6 @@ end
 
 def spinCharacter
   pbSEPlay("GUI party switch", 80, 100)
-
 end
 
 def selectClothes(all_unlocked = false)

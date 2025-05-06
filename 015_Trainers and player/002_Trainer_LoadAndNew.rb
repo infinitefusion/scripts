@@ -55,12 +55,12 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
       :trainer_type => tr_type,
       :name => tr_name,
       :version => tr_version,
-      :pokemon => []
+      :pokemon => [],
     }
     party.each do |pkmn|
       trainer_hash[:pokemon].push({
                                     :species => pkmn[0],
-                                    :level => pkmn[1]
+                                    :level => pkmn[1],
                                   })
     end
     # Add trainer's data to records

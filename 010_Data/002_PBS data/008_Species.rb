@@ -108,7 +108,7 @@ module GameData
         "BattlerEnemyY" => [0, "i"],
         "BattlerAltitude" => [0, "i"],
         "BattlerShadowX" => [0, "i"],
-        "BattlerShadowSize" => [0, "u"]
+        "BattlerShadowSize" => [0, "u"],
       }
       if compiling_forms
         ret["PokedexForm"] = [0, "u"]
@@ -180,16 +180,17 @@ module GameData
       @front_sprite_altitude = hash[:front_sprite_altitude] || 0
       @shadow_x = hash[:shadow_x] || 0
       @shadow_size = hash[:shadow_size] || 2
-      @alwaysUseGeneratedSprite=false
+      @alwaysUseGeneratedSprite = false
     end
 
     def set_always_use_generated_sprite(useGeneratedSprite)
-      @alwaysUseGeneratedSprite=useGeneratedSprite
+      @alwaysUseGeneratedSprite = useGeneratedSprite
     end
 
     def always_use_generated
       return @alwaysUseGeneratedSprite
     end
+
     # @return [String] the translated name of this species
     def name
       return @real_name
@@ -221,6 +222,7 @@ module GameData
     def is_triple_fusion
       return @id_number >= Settings::ZAPMOLCUNO_NB
     end
+
     def get_body_species
       return @species
     end
@@ -241,7 +243,7 @@ module GameData
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
-      front_sprite_y = self.is_fusion ? GameData::Species.get(getBodyID(@id_number)).front_sprite_y: @front_sprite_y
+      front_sprite_y = self.is_fusion ? GameData::Species.get(getBodyID(@id_number)).front_sprite_y : @front_sprite_y
 
       if shadow
         if (index & 1) == 1 # Foe Pokémon
@@ -364,81 +366,81 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesData(species, form = 0, species_data_type = -1)
-  Deprecation.warn_method('pbGetSpeciesData', 'v20', 'GameData::Species.get_species_form(species, form).something')
+  Deprecation.warn_method("pbGetSpeciesData", "v20", "GameData::Species.get_species_form(species, form).something")
   return GameData::Species.get_species_form(species, form)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesEggMoves(species, form = 0)
-  Deprecation.warn_method('pbGetSpeciesEggMoves', 'v20', 'GameData::Species.get_species_form(species, form).egg_moves')
+  Deprecation.warn_method("pbGetSpeciesEggMoves", "v20", "GameData::Species.get_species_form(species, form).egg_moves")
   return GameData::Species.get_species_form(species, form).egg_moves
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesMoveset(species, form = 0)
-  Deprecation.warn_method('pbGetSpeciesMoveset', 'v20', 'GameData::Species.get_species_form(species, form).moves')
+  Deprecation.warn_method("pbGetSpeciesMoveset", "v20", "GameData::Species.get_species_form(species, form).moves")
   return GameData::Species.get_species_form(species, form).moves
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbGetEvolutionData(species)
-  Deprecation.warn_method('pbGetEvolutionData', 'v20', 'GameData::Species.get(species).evolutions')
+  Deprecation.warn_method("pbGetEvolutionData", "v20", "GameData::Species.get(species).evolutions")
   return GameData::Species.get(species).evolutions
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbApplyBattlerMetricsToSprite(sprite, index, species_data, shadow = false, metrics = nil)
-  Deprecation.warn_method('pbApplyBattlerMetricsToSprite', 'v20', 'GameData::Species.get(species).apply_metrics_to_sprite')
+  Deprecation.warn_method("pbApplyBattlerMetricsToSprite", "v20", "GameData::Species.get(species).apply_metrics_to_sprite")
   GameData::Species.get(species).apply_metrics_to_sprite(sprite, index, shadow)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def showShadow?(species)
-  Deprecation.warn_method('showShadow?', 'v20', 'GameData::Species.get(species).shows_shadow?')
+  Deprecation.warn_method("showShadow?", "v20", "GameData::Species.get(species).shows_shadow?")
   return GameData::Species.get(species).shows_shadow?
 end
 
 # @deprecated Use {GameData#Species#get_evolutions} instead. This alias is slated to be removed in v20.
 def pbGetEvolvedFormData(species, exclude_invalid = false)
-  Deprecation.warn_method('pbGetEvolvedFormData', 'v20', 'GameData::Species.get(species).get_evolutions')
+  Deprecation.warn_method("pbGetEvolvedFormData", "v20", "GameData::Species.get(species).get_evolutions")
   return GameData::Species.get(species).get_evolutions(exclude_invalid)
 end
 
 # @deprecated Use {GameData#Species#get_family_evolutions} instead. This alias is slated to be removed in v20.
 def pbGetEvolutionFamilyData(species)
   # Unused
-  Deprecation.warn_method('pbGetEvolutionFamilyData', 'v20', 'GameData::Species.get(species).get_family_evolutions')
+  Deprecation.warn_method("pbGetEvolutionFamilyData", "v20", "GameData::Species.get(species).get_family_evolutions")
   return GameData::Species.get(species).get_family_evolutions
 end
 
 # @deprecated Use {GameData#Species#get_previous_species} instead. This alias is slated to be removed in v20.
 def pbGetPreviousForm(species)
   # Unused
-  Deprecation.warn_method('pbGetPreviousForm', 'v20', 'GameData::Species.get(species).get_previous_species')
+  Deprecation.warn_method("pbGetPreviousForm", "v20", "GameData::Species.get(species).get_previous_species")
   return GameData::Species.get(species).get_previous_species
 end
 
 # @deprecated Use {GameData#Species#get_baby_species} instead. This alias is slated to be removed in v20.
 def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
-  Deprecation.warn_method('pbGetBabySpecies', 'v20', 'GameData::Species.get(species).get_baby_species')
+  Deprecation.warn_method("pbGetBabySpecies", "v20", "GameData::Species.get(species).get_baby_species")
   return GameData::Species.get(species).get_baby_species(check_items, item1, item2)
 end
 
 # @deprecated Use {GameData#Species#family_evolutions_have_method?} instead. This alias is slated to be removed in v20.
 def pbCheckEvolutionFamilyForMethod(species, method, param = nil)
   # Unused
-  Deprecation.warn_method('pbCheckEvolutionFamilyForMethod', 'v20', 'GameData::Species.get(species).family_evolutions_have_method?(method)')
+  Deprecation.warn_method("pbCheckEvolutionFamilyForMethod", "v20", "GameData::Species.get(species).family_evolutions_have_method?(method)")
   return GameData::Species.get(species).family_evolutions_have_method?(method, param)
 end
 
 # @deprecated Use {GameData#Species#family_item_evolutions_use_item?} instead. This alias is slated to be removed in v20.
 def pbCheckEvolutionFamilyForItemMethodItem(species, param = nil)
-  Deprecation.warn_method('pbCheckEvolutionFamilyForItemMethodItem', 'v20', 'GameData::Species.get(species).family_item_evolutions_use_item?(item)')
+  Deprecation.warn_method("pbCheckEvolutionFamilyForItemMethodItem", "v20", "GameData::Species.get(species).family_item_evolutions_use_item?(item)")
   return GameData::Species.get(species).family_item_evolutions_use_item?(param)
 end
 
 # @deprecated Use {GameData#Species#minimum_level} instead. This alias is slated to be removed in v20.
 def pbGetMinimumLevel(species)
-  Deprecation.warn_method('pbGetMinimumLevel', 'v20', 'GameData::Species.get(species).minimum_level')
+  Deprecation.warn_method("pbGetMinimumLevel", "v20", "GameData::Species.get(species).minimum_level")
   return GameData::Species.get(species).minimum_level
 end

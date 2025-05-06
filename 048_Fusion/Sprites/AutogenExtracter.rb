@@ -35,6 +35,7 @@ class AutogenExtracter < PIFSpriteExtracter
   def get_resize_scale
     return 3
   end
+
   #
   #   # Check cache before loading from disk
   #   sprite_bitmap = @@spritesheet_cache.fetch(pif_sprite) do

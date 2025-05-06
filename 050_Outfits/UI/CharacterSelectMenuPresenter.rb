@@ -2,7 +2,7 @@ class CharacterSelectMenuPresenter
   attr_accessor :options
   attr_reader :current_index
 
-  OPTION_NAME = 'Name'
+  OPTION_NAME = "Name"
   OPTION_AGE = "Age"
   OPTION_GENDER = "Gender"
   OPTION_HAIR = "Hair"
@@ -75,7 +75,7 @@ class CharacterSelectMenuPresenter
     when OPTION_NAME
       pbSEPlay("GUI summary change page", 80, 100)
       @name = pbEnterPlayerName(_INTL("Enter your name"), 0, Settings::MAX_PLAYER_NAME_SIZE)
-      @name = getDefaultName() if @name == ''
+      @name = getDefaultName() if @name == ""
       pbSEPlay("GUI trainer card open", 80, 100)
       updateDisplayedName(current_index)
       applyHair() #for easter egg lol
@@ -175,13 +175,13 @@ class CharacterSelectMenuPresenter
     pbSEPlay("GUI sel cursor", 80, 100)
     selected_option = @options[current_index]
     case selected_option
-    when OPTION_GENDER then
+    when OPTION_GENDER
       setGender(current_index, incr)
-    when OPTION_HAIR then
+    when OPTION_HAIR
       setHairColor(current_index, incr)
-    when OPTION_SKIN then
+    when OPTION_SKIN
       setSkinColor(current_index, incr)
-    when OPTION_AGE then
+    when OPTION_AGE
       setAge(current_index, incr)
     end
     updateTrainerPreview()
@@ -225,7 +225,6 @@ class CharacterSelectMenuPresenter
     @hairstyle = HAIR_RIVAL if @name == "Gary" && @gender == 1
     @hairstyle = HAIR_BROCK if @name == "Brock" && @gender == 1
     @hairstyle = HAIR_MISTY1 if @name == "Misty" && @gender == 0
-
   end
 
   def applyGender(gender_index)
@@ -242,7 +241,6 @@ class CharacterSelectMenuPresenter
   end
 
   def get_outfit_id_from_index(gender_index)
-
     if gender_index == 1 #Male
       return getD
     else
@@ -272,5 +270,4 @@ class CharacterSelectMenuPresenter
     setSkinColor(skinIndex, 0)
     updateTrainerPreview()
   end
-
 end

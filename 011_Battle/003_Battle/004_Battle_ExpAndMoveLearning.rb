@@ -89,7 +89,6 @@ class PokeBattle_Battle
     end
   end
 
-
   def pbGainExpOne(idxParty, defeatedBattler, numPartic, expShare, expAll, showMessages = true)
     pkmn = pbParty(0)[idxParty] # The Pokémon gaining EVs from defeatedBattler
     growth_rate = pkmn.growth_rate
@@ -138,8 +137,8 @@ class PokeBattle_Battle
     end
     # Foreign Pokémon gain more Exp
     isOutsider = (pkmn.owner.id != pbPlayer.id ||
-      (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language)) ||
-      pkmn.isSelfFusion? #also self fusions
+                  (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language)) ||
+                 pkmn.isSelfFusion? #also self fusions
     if isOutsider
       if pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language
         exp = (exp * 1.7).floor
@@ -155,13 +154,10 @@ class PokeBattle_Battle
     exp = i if i >= 0
     # Make sure Exp doesn't exceed the maximum
 
-    exp = 0 if $PokemonSystem.level_caps==1 && pokemonExceedsLevelCap(pkmn)
+    exp = 0 if $PokemonSystem.level_caps == 1 && pokemonExceedsLevelCap(pkmn)
 
     expFinal = growth_rate.add_exp(pkmn.exp, exp)
     expGained = expFinal - pkmn.exp
-
-
-
 
     return if expGained <= 0
     # "Exp gained" message
@@ -174,7 +170,7 @@ class PokeBattle_Battle
     end
     curLevel = pkmn.level
     newLevel = growth_rate.level_from_exp(expFinal)
-    dontAnimate=false
+    dontAnimate = false
     if newLevel < curLevel
       dontAnimate = true
       # debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
@@ -198,18 +194,14 @@ class PokeBattle_Battle
       tempExp2 = (levelMaxExp < expFinal) ? levelMaxExp : expFinal
       pkmn.exp = tempExp2
 
-
-
       if pkmn.isFusion?
         if pkmn.exp_gained_since_fused == nil
           pkmn.exp_gained_since_fused = expGained
         else
           pkmn.exp_gained_since_fused += expGained
         end
-
       end
       @scene.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2) if !dontAnimate
-
 
       tempExp1 = tempExp2
       curLevel += 1

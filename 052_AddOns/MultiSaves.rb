@@ -52,7 +52,7 @@ end
 def loadDateSpecificChanges()
   current_date = Time.new
   if (current_date.day == 1 && current_date.month == 4)
-    $Trainer.hat2=HAT_CLOWN if $Trainer.unlocked_hats.include?(HAT_CLOWN)
+    $Trainer.hat2 = HAT_CLOWN if $Trainer.unlocked_hats.include?(HAT_CLOWN)
   end
 end
 
@@ -83,28 +83,28 @@ module SaveData
   # You can rename these slots or change the amount of them
   # They change the actual save file names though, so it would take some extra work to use the translation system on them.
   AUTO_SLOTS = [
-    'Auto 1',
-    'Auto 2'
+    "Auto 1",
+    "Auto 2",
   ]
   MANUAL_SLOTS = [
-    'File A',
-    'File B',
-    'File C',
-    'File D',
-    'File E',
-    'File F',
-    'File G',
-    'File H'
+    "File A",
+    "File B",
+    "File C",
+    "File D",
+    "File E",
+    "File F",
+    "File G",
+    "File H",
   ]
 
   # For compatibility with games saved without this plugin
-  OLD_SAVE_SLOT = 'Game'
+  OLD_SAVE_SLOT = "Game"
 
   SAVE_DIR = if File.directory?(System.data_directory)
-               System.data_directory
-             else
-               '.'
-             end
+      System.data_directory
+    else
+      "."
+    end
 
   def self.each_slot
     (AUTO_SLOTS + MANUAL_SLOTS).each { |f| yield f }
@@ -196,12 +196,12 @@ module SaveData
   # already exists in {MANUAL_SLOTS[0]}.
   def self.move_old_windows_save
     return if self.exists?
-    game_title = System.game_title.gsub(/[^\w ]/, '_')
-    home = ENV['HOME'] || ENV['HOMEPATH']
+    game_title = System.game_title.gsub(/[^\w ]/, "_")
+    home = ENV["HOME"] || ENV["HOMEPATH"]
     return if home.nil?
-    old_location = File.join(home, 'Saved Games', game_title)
+    old_location = File.join(home, "Saved Games", game_title)
     return unless File.directory?(old_location)
-    old_file = File.join(old_location, 'Game.rxdata')
+    old_file = File.join(old_location, "Game.rxdata")
     return unless File.file?(old_file)
     File.move(old_file, MANUAL_SLOTS[0])
   end
@@ -214,15 +214,15 @@ module SaveData
     validate save_data => Hash
     conversions_to_run = self.get_conversions(save_data)
     return false if conversions_to_run.none?
-    File.open(SaveData.get_backup_file_path, 'wb') { |f| Marshal.dump(save_data, f) }
+    File.open(SaveData.get_backup_file_path, "wb") { |f| Marshal.dump(save_data, f) }
     echoln "Backed up save to #{SaveData.get_backup_file_path}"
     echoln "Running #{conversions_to_run.length} conversions..."
     conversions_to_run.each do |conversion|
       echo "#{conversion.title}..."
       conversion.run(save_data)
-      echoln ' done.'
+      echoln " done."
     end
-    echoln '' if conversions_to_run.length > 0
+    echoln "" if conversions_to_run.length > 0
     save_data[:essentials_version] = Essentials::VERSION
     save_data[:game_version] = Settings::GAME_VERSION
     return true
@@ -289,7 +289,6 @@ class PokemonLoad_Scene
     @sprites["cmdwindow"].viewport = @viewport
     @sprites["cmdwindow"].visible = false
   end
-
 end
 
 #===============================================================================
@@ -400,21 +399,19 @@ class PokemonLoadScreen
           $updated_spritesheets = []
           pbMessage("Data files updated. New sprites will now be downloaded as you play!")
         end
-    }
-      end
+      }
+    end
   end
 
   def reset_updated_spritesheets_cache()
     echoln "resetting updated spritesheets list"
     begin
-      File.open(Settings::UPDATED_SPRITESHEETS_CACHE, 'w') { |file| file.truncate(0) }
+      File.open(Settings::UPDATED_SPRITESHEETS_CACHE, "w") { |file| file.truncate(0) }
       echoln "File reset successfully."
     rescue => e
       echoln "Failed to reset file: #{e.message}"
     end
   end
-
-
 
   def preload_party(trainer)
     spriteLoader = BattleSpriteLoader.new
@@ -488,20 +485,20 @@ class PokemonLoadScreen
       if show_continue
         commands[cmd_continue = commands.length] = "#{@selected_file}"
         if @save_data[:player].mystery_gift_unlocked
-          commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift') # Honestly I have no idea how to make Mystery Gift work well with this.
+          commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift") # Honestly I have no idea how to make Mystery Gift work well with this.
         end
       end
 
-      commands[cmd_new_game = commands.length] = _INTL('New Game')
+      commands[cmd_new_game = commands.length] = _INTL("New Game")
       if new_game_plus
-        commands[cmd_new_game_plus = commands.length] = _INTL('New Game +')
+        commands[cmd_new_game_plus = commands.length] = _INTL("New Game +")
       end
-      commands[cmd_options = commands.length] = _INTL('Options')
-      commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES.length >= 2
-      commands[cmd_discord = commands.length] = _INTL('Discord')
-      commands[cmd_wiki = commands.length] = _INTL('Wiki')
-      commands[cmd_debug = commands.length] = _INTL('Debug') if $DEBUG
-      commands[cmd_quit = commands.length] = _INTL('Quit Game')
+      commands[cmd_options = commands.length] = _INTL("Options")
+      commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES.length >= 2
+      commands[cmd_discord = commands.length] = _INTL("Discord")
+      commands[cmd_wiki = commands.length] = _INTL("Wiki")
+      commands[cmd_debug = commands.length] = _INTL("Debug") if $DEBUG
+      commands[cmd_quit = commands.length] = _INTL("Quit Game")
       cmd_left = -3
       cmd_right = -2
 
@@ -559,10 +556,10 @@ class PokemonLoadScreen
         when cmd_language
           @scene.pbEndScene
           $PokemonSystem.language = pbChooseLanguage
-          pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+          pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
           if show_continue
             @save_data[:pokemon_system] = $PokemonSystem
-            File.open(SaveData.get_full_path(@selected_file), 'wb') { |file| Marshal.dump(@save_data, file) }
+            File.open(SaveData.get_full_path(@selected_file), "wb") { |file| Marshal.dump(@save_data, file) }
           end
           $scene = pbCallTitle
           return
@@ -629,11 +626,11 @@ class PokemonSaveScreen
       choices = [
         _INTL("Save to #{$Trainer.save_slot}"),
         _INTL("Save to another slot"),
-        _INTL("Don't save")
+        _INTL("Don't save"),
       ]
-      opt = pbMessage(_INTL('Would you like to save the game?'), choices, 3)
+      opt = pbMessage(_INTL("Would you like to save the game?"), choices, 3)
       if opt == 0
-        pbSEPlay('GUI save choice')
+        pbSEPlay("GUI save choice")
         ret = doSave($Trainer.save_slot)
       elsif opt == 1
         pbPlayDecisionSE
@@ -657,8 +654,8 @@ class PokemonSaveScreen
       slot = SaveData::MANUAL_SLOTS[index]
       # Confirm if slot not empty
       if !File.file?(SaveData.get_full_path(slot)) ||
-        pbConfirmMessageSerious(_INTL("Are you sure you want to overwrite the save in #{slot}?")) # If the slot names were changed this grammar might need adjustment.
-        pbSEPlay('GUI save choice')
+         pbConfirmMessageSerious(_INTL("Are you sure you want to overwrite the save in #{slot}?")) # If the slot names were changed this grammar might need adjustment.
+        pbSEPlay("GUI save choice")
         ret = doSave(slot)
       end
     end
@@ -742,8 +739,8 @@ class PokemonSaveScreen
     end
 
     return "<c3=3050C8,D0D0C8>#{datetime_str}</c3>" + # blue
-      "<ac><c3=209808,90F090>#{map_str}</c3></ac>" + # green
-      "#{elapsed_str}"
+             "<ac><c3=209808,90F090>#{map_str}</c3></ac>" + # green
+             "#{elapsed_str}"
   end
 end
 
@@ -782,7 +779,6 @@ module Game
       $Trainer.unlocked_hats = ngp_trainer.unlocked_hats
       $Trainer.unlocked_clothes = ngp_trainer.unlocked_clothes
     end
-
   end
 
   # Loads bootup data from save file (if it exists) or creates bootup data (if
@@ -805,40 +801,40 @@ module Game
     # Set language (and choose language if there is no save file)
     if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+      pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end
 
   def self.backup_savefile(save_path, slot)
     begin
-    backup_dir = File.join(File.dirname(save_path), "backups")
-    Dir.mkdir(backup_dir) if !Dir.exist?(backup_dir)
+      backup_dir = File.join(File.dirname(save_path), "backups")
+      Dir.mkdir(backup_dir) if !Dir.exist?(backup_dir)
 
-    backup_slot_dir = File.join(File.dirname(save_path), "backups/#{slot}")
-    Dir.mkdir(backup_slot_dir) if !Dir.exist?(backup_slot_dir)
+      backup_slot_dir = File.join(File.dirname(save_path), "backups/#{slot}")
+      Dir.mkdir(backup_slot_dir) if !Dir.exist?(backup_slot_dir)
 
-    # Manage rolling backups
-    if File.exist?(save_path)
-      # Generate a timestamped backup name
-      timestamp = Time.now.strftime("%Y%m%d%H%M%S")
-      backup_file = File.join(backup_slot_dir, "#{slot}_#{timestamp}.rxdata")
+      # Manage rolling backups
+      if File.exist?(save_path)
+        # Generate a timestamped backup name
+        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+        backup_file = File.join(backup_slot_dir, "#{slot}_#{timestamp}.rxdata")
 
-      # Copy the save file manually
-      File.open(save_path, 'rb') do |source|
-        File.open(backup_file, 'wb') do |dest|
-          dest.write(source.read)
+        # Copy the save file manually
+        File.open(save_path, "rb") do |source|
+          File.open(backup_file, "wb") do |dest|
+            dest.write(source.read)
+          end
+        end
+
+        # Clean up old backups
+        backups = Dir.get(backup_slot_dir, "*.rxdata")
+        # Keep only the latest N backups
+        if backups.length > Settings::SAVEFILE_NB_BACKUPS
+          excess_backups = backups[0...(backups.length - Settings::SAVEFILE_NB_BACKUPS)]
+          echoln excess_backups
+          excess_backups.each { |old_backup| File.delete(old_backup) }
         end
       end
-
-      # Clean up old backups
-      backups = Dir.get(backup_slot_dir, "*.rxdata")
-      # Keep only the latest N backups
-      if backups.length > Settings::SAVEFILE_NB_BACKUPS
-        excess_backups = backups[0...(backups.length - Settings::SAVEFILE_NB_BACKUPS)]
-        echoln excess_backups
-        excess_backups.each { |old_backup| File.delete(old_backup) }
-      end
-    end
     rescue => e
       echoln ("There was an error while creating a backup savefile.")
       echoln("Error: #{e.message}")
@@ -900,8 +896,8 @@ end
 # Lol who needs the FileUtils gem?
 # This is the implementation from the original pbEmergencySave.
 def file_copy(src, dst)
-  File.open(src, 'rb') do |r|
-    File.open(dst, 'wb') do |w|
+  File.open(src, "rb") do |r|
+    File.open(dst, "wb") do |w|
       while s = r.read(4096)
         w.write s
       end

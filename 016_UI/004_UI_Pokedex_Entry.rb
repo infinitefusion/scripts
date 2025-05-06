@@ -205,7 +205,6 @@ class PokemonPokedexInfo_Scene
       @sprites["previousSprite"].visible = false
     end
 
-
     # species_data = pbGetSpeciesData(@species)
     species_data = GameData::Species.get_species_form(@species, @form)
     if @pokemon != nil
@@ -288,16 +287,16 @@ class PokemonPokedexInfo_Scene
     hide_all_selected_windows
     # Draw page-specific information
     case page
-    when 1 then
+    when 1
       drawPageInfo
-    when 2 then
+    when 2
       drawPageArea
-    when 3 then
+    when 3
       drawPageForms
     end
   end
 
-  def drawPageInfo(reloading=false)
+  def drawPageInfo(reloading = false)
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_info"))
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
@@ -310,7 +309,6 @@ class PokemonPokedexInfo_Scene
       #imagepos.push([sprintf("Graphics/Pictures/shiny"), 2, 134])
     elsif @isShiny
       addShinyStarsToGraphicsArray(imagepos, 220, 82, @isBody_Shiny, @isHead_Shiny, false, nil, nil, 32, 32, false, false, true, true)
-
     end
     if @brief
       imagepos.push([_INTL("Graphics/Pictures/Pokedex/overlay_info"), 0, 0])
@@ -327,14 +325,14 @@ class PokemonPokedexInfo_Scene
     textpos = [
       [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
        246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
-       [_INTL("Height"), 314, 152, 0, base, shadow],
-       [_INTL("Weight"), 314, 184, 0, base, shadow]
-     ]
-     if $Trainer.owned?(@species)
-       # Write the category
-       textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
-       # Write the height and weight
-       height = species_data.height
+      [_INTL("Height"), 314, 152, 0, base, shadow],
+      [_INTL("Weight"), 314, 184, 0, base, shadow],
+    ]
+    if $Trainer.owned?(@species)
+      # Write the category
+      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
+      # Write the height and weight
+      height = species_data.height
       weight = species_data.weight
       if System.user_language[3..4] == "US" # If the user is in the United States
         inches = (height / 0.254).round
@@ -389,8 +387,7 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
-
-  def   drawEntryText(overlay, species_data, reloading=false)
+  def drawEntryText(overlay, species_data, reloading = false)
     baseColor = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     shadowCustom = Color.new(160, 200, 150)
@@ -467,7 +464,7 @@ class PokemonPokedexInfo_Scene
 
   def getCustomEntryText(species_data)
     spriteLoader = BattleSpriteLoader.new
-    pif_sprite=spriteLoader.get_pif_sprite_from_species(species_data)
+    pif_sprite = spriteLoader.get_pif_sprite_from_species(species_data)
     return nil if pif_sprite.type != :CUSTOM
     possibleCustomEntries = getCustomDexEntry(pif_sprite)
     if possibleCustomEntries && possibleCustomEntries.length > 0
@@ -499,7 +496,7 @@ class PokemonPokedexInfo_Scene
 
       # Ensure the file exists, if not, create it
       unless File.exist?(Settings::AI_DEX_ENTRIES_PATH)
-        File.write(Settings::AI_DEX_ENTRIES_PATH, '{}')
+        File.write(Settings::AI_DEX_ENTRIES_PATH, "{}")
       end
 
       json_data = File.read(Settings::AI_DEX_ENTRIES_PATH)
@@ -566,7 +563,7 @@ class PokemonPokedexInfo_Scene
       showpoint = true
       for loc in @mapdata[@region][2]
         showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
-          loc[7] && !$game_switches[loc[7]]
+                             loc[7] && !$game_switches[loc[7]]
       end
       next if !showpoint
       mapsize = map_metadata.town_map_size
@@ -614,7 +611,7 @@ class PokemonPokedexInfo_Scene
     textpos = []
     if points.length == 0
       pbDrawImagePositions(overlay, [
-        [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188]
+        [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"), 108, 188],
       ])
       textpos.push([_INTL("Area unknown"), Graphics.width / 2, Graphics.height / 2 - 6, 2, base, shadow])
     end
@@ -801,7 +798,6 @@ class PokemonPokedexInfo_Scene
   def pbSelectSpritesSceneBrief
     pbChooseAlt(true)
   end
-
 end
 
 #===============================================================================

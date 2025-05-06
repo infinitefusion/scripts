@@ -48,10 +48,10 @@ end
 
 def equals(other_pif_sprite)
   return @type == other_pif_sprite.type &&
-    @head_id == other_pif_sprite.head_id &&
-    @body_id == other_pif_sprite.body_id &&
-    @alt_letter == other_pif_sprite.alt_letter &&
-    @local_path == other_pif_sprite.local_path
+           @head_id == other_pif_sprite.head_id &&
+           @body_id == other_pif_sprite.body_id &&
+           @alt_letter == other_pif_sprite.alt_letter &&
+           @local_path == other_pif_sprite.local_path
 end
 
 # little hack for old methods that expect a filename for a sprite
@@ -85,8 +85,6 @@ def self.from_spritename(spritename, type)
   obj
 end
 
-
-
 def new_pif_sprite_from_dex_num(type, dexNum, alt_letter)
   body_id = getBodyID(dexNum)
   head_id = getHeadID(dexNum, body_id)
@@ -100,7 +98,6 @@ def pif_sprite_from_spritename(spritename, autogen = false)
     head_id = $1.to_i # Head (e.g., "1" in "1.2.png")
     body_id = $2.to_i # Body (e.g., "2" in "1.2.png")
     alt_letter = $3 # Optional trailing letter (e.g., "a" in "1.2a.png")
-
   elsif spritename =~ /^(\d+)([a-zA-Z]*)$/ # One number with optional letters
     type = :BASE
     head_id = $1.to_i # Head (e.g., "1" in "1.png")

@@ -36,30 +36,29 @@ class Game_Temp
   #-----------------------------------------------------------------------------
   def initialize
     @message_window_showing = false
-    @common_event_id        = 0
-    @in_battle              = false
-    @battle_abort           = false
-    @battleback_name        = ''
-    @in_menu                = false
-    @menu_beep              = false
-    @menu_calling           = false
-    @debug_calling          = false
-    @player_transferring    = false
-    @player_new_map_id      = 0
-    @player_new_x           = 0
-    @player_new_y           = 0
-    @player_new_direction   = 0
-    @transition_processing  = false
-    @transition_name        = ""
-    @to_title               = false
-    @fadestate              = 0
-    @background_bitmap      = nil
+    @common_event_id = 0
+    @in_battle = false
+    @battle_abort = false
+    @battleback_name = ""
+    @in_menu = false
+    @menu_beep = false
+    @menu_calling = false
+    @debug_calling = false
+    @player_transferring = false
+    @player_new_map_id = 0
+    @player_new_x = 0
+    @player_new_y = 0
+    @player_new_direction = 0
+    @transition_processing = false
+    @transition_name = ""
+    @to_title = false
+    @fadestate = 0
+    @background_bitmap = nil
     @message_window_showing = false
-    @transition_processing  = false
-    @mart_prices            = {}
-    @custom_sprites_list    ={}
-    @base_sprites_list    ={}
-
+    @transition_processing = false
+    @mart_prices = {}
+    @custom_sprites_list = {}
+    @base_sprites_list = {}
   end
 
   def clear_mart_prices

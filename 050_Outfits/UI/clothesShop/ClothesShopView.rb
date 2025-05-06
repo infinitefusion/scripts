@@ -1,5 +1,4 @@
 class ClothesShopView < PokemonMart_Scene
-
   def initialize(currency_name = "Money")
     @currency_name = currency_name
   end
@@ -20,23 +19,22 @@ class ClothesShopView < PokemonMart_Scene
     @sprites["moneywindow"].visible = false if !@adapter.isShop?
 
     Kernel.pbDisplayText(@adapter.toggleText, 80, 200, 99999) if @adapter.toggleText
-
   end
 
-  def select_specific_item(scroll_to_item_id,go_to_end_of_list_if_nil=false)
+  def select_specific_item(scroll_to_item_id, go_to_end_of_list_if_nil = false)
     itemwindow = @sprites["itemwindow"]
     if !scroll_to_item_id && go_to_end_of_list_if_nil
-      itemwindow.index=@adapter.items.length-1
+      itemwindow.index = @adapter.items.length - 1
       itemwindow.refresh
     end
-    i=0
+    i = 0
     for item in @adapter.items
       next if !item.is_a?(Outfit)
       if item.id == scroll_to_item_id
-        itemwindow.index=i
+        itemwindow.index = i
         itemwindow.refresh
       end
-      i+=1
+      i += 1
     end
   end
 
@@ -104,7 +102,7 @@ class ClothesShopView < PokemonMart_Scene
   end
 
   def updatePreviewWindow
-    itemwindow= @sprites["itemwindow"]
+    itemwindow = @sprites["itemwindow"]
     @adapter.updateTrainerPreview(itemwindow.item, @sprites["trainerPreview"])
   end
 
@@ -159,6 +157,7 @@ class ClothesShopView < PokemonMart_Scene
     updateTrainerPreview()
     return nil
   end
+
   def onItemClick(itemwindow)
     if itemwindow.item.is_a?(Symbol)
       @adapter.doSpecialItemAction(itemwindow.item)
@@ -201,5 +200,4 @@ class ClothesShopView < PokemonMart_Scene
     # Scroll left after showing screen
     scroll_back_map()
   end
-
 end

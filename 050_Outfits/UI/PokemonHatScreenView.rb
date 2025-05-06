@@ -9,12 +9,10 @@ class PokemonHatView
     @x_pos = x_pos ? x_pos : WINDOW_POS_X
     @y_pos = y_pos ? y_pos : WINDOW_POS_Y
     @windowed = windowed
-
   end
 
   def init_window(presenter)
     @presenter = presenter
-
 
     presenter.initialize_bitmap()
     pokemon_bitmap = presenter.getPokemonHatBitmap()
@@ -29,11 +27,10 @@ class PokemonHatView
     @sprites = {}
 
     initialize_arrows()
-
   end
 
   def getWindowWidth()
-    return @previewwindow.width/2
+    return @previewwindow.width / 2
   end
 
   def initialize_arrows()
@@ -47,27 +44,24 @@ class PokemonHatView
     @sprites["uparrow"].x = middle_horizontal
     @sprites["uparrow"].y = middle_vertical - width_vertical
     @sprites["uparrow"].z = 100
-    @sprites["uparrow"].visible=true
-
+    @sprites["uparrow"].visible = true
 
     @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/downarrow", 8, 28, 40, 2, @viewport)
     @sprites["downarrow"].x = middle_horizontal
     @sprites["downarrow"].y = middle_vertical + width_vertical
 
     @sprites["leftarrow"] = AnimatedSprite.new("Graphics/Pictures/leftarrow", 8, 40, 28, 2, @viewport)
-    @sprites["leftarrow"].x = middle_horizontal - width_horizontal -10
+    @sprites["leftarrow"].x = middle_horizontal - width_horizontal - 10
     @sprites["leftarrow"].y = middle_vertical
-
 
     @sprites["rightarrow"] = AnimatedSprite.new("Graphics/Pictures/rightarrow", 8, 40, 28, 2, @viewport)
     @sprites["rightarrow"].x = middle_horizontal + width_horizontal
     @sprites["rightarrow"].y = middle_vertical
 
-    @sprites["uparrow"].visible=false
-    @sprites["downarrow"].visible=false
-    @sprites["leftarrow"].visible=false
-    @sprites["rightarrow"].visible=false
-
+    @sprites["uparrow"].visible = false
+    @sprites["downarrow"].visible = false
+    @sprites["leftarrow"].visible = false
+    @sprites["rightarrow"].visible = false
   end
 
   def update_window_position()
@@ -78,16 +72,16 @@ class PokemonHatView
   #TODO
   def display_select_arrows
     hide_move_arrows
-    @sprites["rightarrow"].visible=true
-    @sprites["leftarrow"].visible=true
+    @sprites["rightarrow"].visible = true
+    @sprites["leftarrow"].visible = true
 
     @sprites["rightarrow"].play
     @sprites["leftarrow"].play
   end
 
   def hide_select_arrows
-    @sprites["rightarrow"].visible=false
-    @sprites["leftarrow"].visible=false
+    @sprites["rightarrow"].visible = false
+    @sprites["leftarrow"].visible = false
     @sprites["rightarrow"].stop
     @sprites["leftarrow"].stop
     @sprites["rightarrow"].reset
@@ -96,10 +90,10 @@ class PokemonHatView
 
   def display_move_arrows
     hide_move_arrows
-    @sprites["rightarrow"].visible=true
-    @sprites["leftarrow"].visible=true
-    @sprites["uparrow"].visible=true
-    @sprites["downarrow"].visible=true
+    @sprites["rightarrow"].visible = true
+    @sprites["leftarrow"].visible = true
+    @sprites["uparrow"].visible = true
+    @sprites["downarrow"].visible = true
 
     @sprites["rightarrow"].play
     @sprites["leftarrow"].play
@@ -108,10 +102,10 @@ class PokemonHatView
   end
 
   def hide_move_arrows
-    @sprites["rightarrow"].visible=false
-    @sprites["leftarrow"].visible=false
-    @sprites["uparrow"].visible=false
-    @sprites["downarrow"].visible=false
+    @sprites["rightarrow"].visible = false
+    @sprites["leftarrow"].visible = false
+    @sprites["uparrow"].visible = false
+    @sprites["downarrow"].visible = false
 
     @sprites["rightarrow"].stop
     @sprites["leftarrow"].stop

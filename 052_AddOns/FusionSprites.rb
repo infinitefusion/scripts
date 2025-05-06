@@ -55,7 +55,7 @@ module GameData
       result = []
       valid_format_rgb = /^\d+ \d+ \d+\.\d+ \d+ \d+$/ # Format RGB classique
       valid_format_hex = /^#([0-9a-fA-F]{6})\.#([0-9a-fA-F]{6})$/ # Format hexadécimal
-    
+
       ids = []
       if dex_number <= NB_POKEMON
         ids << dex_number
@@ -63,7 +63,7 @@ module GameData
         ids << getBodyID(dex_number) if bodyShiny
         ids << getHeadID(dex_number, ids[0]) if headShiny
       end
-    
+
       ids.each do |id|
         offsets = SHINY_COLOR_OFFSETS[id]
         next unless offsets

@@ -14,20 +14,20 @@ module Compiler
   def write_town_map
     mapdata = pbLoadTownMapData
     return if !mapdata
-    File.open("PBS/townmap.txt","wb") { |f|
+    File.open("PBS/townmap.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       for i in 0...mapdata.length
         map = mapdata[i]
         next if !map
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n",i))
-        rname = pbGetMessage(MessageTypes::RegionNames,i)
+        f.write(sprintf("[%d]\r\n", i))
+        rname = pbGetMessage(MessageTypes::RegionNames, i)
         f.write(sprintf("Name = %s\r\nFilename = %s\r\n",
-          (rname && rname!="") ? rname : _INTL("Unnamed"),
-          csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
+                        (rname && rname != "") ? rname : _INTL("Unnamed"),
+                        csvQuote((map[1].is_a?(Array)) ? map[1][0] : map[1])))
         for loc in map[2]
           f.write("Point = ")
-          pbWriteCsvRecord(loc,f,[nil,"uussUUUU"])
+          pbWriteCsvRecord(loc, f, [nil, "uussUUUU"])
           f.write("\r\n")
         end
       end
@@ -72,7 +72,7 @@ module Compiler
     conndata = load_data("Data/map_connections.dat")
     return if !conndata
     mapinfos = pbLoadMapInfos
-    File.open("PBS/connections.txt","wb") { |f|
+    File.open("PBS/connections.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for conn in conndata
@@ -80,12 +80,12 @@ module Compiler
           # Skip if map no longer exists
           next if !mapinfos[conn[0]] || !mapinfos[conn[3]]
           f.write(sprintf("# %s (%d) - %s (%d)\r\n",
-          (mapinfos[conn[0]]) ? mapinfos[conn[0]].name : "???", conn[0],
-          (mapinfos[conn[3]]) ? mapinfos[conn[3]].name : "???", conn[3]))
+                          (mapinfos[conn[0]]) ? mapinfos[conn[0]].name : "???", conn[0],
+                          (mapinfos[conn[3]]) ? mapinfos[conn[3]].name : "???", conn[3]))
         end
         if conn[1].is_a?(String) || conn[4].is_a?(String)
           f.write(sprintf("%d,%s,%d,%d,%s,%d", conn[0], conn[1], conn[2],
-            conn[3], conn[4], conn[5]))
+                          conn[3], conn[4], conn[5]))
         else
           ret = normalize_connection(conn)
           f.write(get_connection_text(ret[0], ret[1], ret[2], ret[3], ret[4], ret[5]))
@@ -160,11 +160,10 @@ module Compiler
       f.write("\#-------------------------------\r\n")
       GameData::Ability.each do |a|
         f.write(sprintf("%d,%s,%s,%s\r\n",
-          a.id_number,
-          csvQuote(a.id.to_s),
-          csvQuote(a.real_name),
-          csvQuoteAlways(a.real_description)
-        ))
+                        a.id_number,
+                        csvQuote(a.id.to_s),
+                        csvQuote(a.real_name),
+                        csvQuoteAlways(a.real_description)))
       end
     }
     Graphics.update
@@ -183,21 +182,20 @@ module Compiler
           f.write("\#-------------------------------\r\n")
         end
         f.write(sprintf("%d,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s\r\n",
-          m.id_number,
-          csvQuote(m.id.to_s),
-          csvQuote(m.real_name),
-          csvQuote(m.function_code),
-          m.base_damage,
-          m.type.to_s,
-          ["Physical", "Special", "Status"][m.category],
-          m.accuracy,
-          m.total_pp,
-          m.effect_chance,
-          m.target,
-          m.priority,
-          csvQuote(m.flags),
-          csvQuoteAlways(m.real_description)
-        ))
+                        m.id_number,
+                        csvQuote(m.id.to_s),
+                        csvQuote(m.real_name),
+                        csvQuote(m.function_code),
+                        m.base_damage,
+                        m.type.to_s,
+                        ["Physical", "Special", "Status"][m.category],
+                        m.accuracy,
+                        m.total_pp,
+                        m.effect_chance,
+                        m.target,
+                        m.priority,
+                        csvQuote(m.flags),
+                        csvQuoteAlways(m.real_description)))
       end
     }
     Graphics.update
@@ -219,18 +217,17 @@ module Compiler
         sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d\r\n"
         sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n" if move_name != ""
         f.write(sprintf(sprintf_text,
-          i.id_number,
-          csvQuote(i.id.to_s),
-          csvQuote(i.real_name),
-          csvQuote(i.real_name_plural),
-          i.pocket,
-          i.price,
-          csvQuoteAlways(i.real_description),
-          i.field_use,
-          i.battle_use,
-          i.type,
-          csvQuote(move_name)
-        ))
+                        i.id_number,
+                        csvQuote(i.id.to_s),
+                        csvQuote(i.real_name),
+                        csvQuote(i.real_name_plural),
+                        i.pocket,
+                        i.price,
+                        csvQuoteAlways(i.real_description),
+                        i.field_use,
+                        i.battle_use,
+                        i.type,
+                        csvQuote(move_name)))
       end
     }
     Graphics.update
@@ -245,12 +242,11 @@ module Compiler
       f.write("\#-------------------------------\r\n")
       GameData::BerryPlant.each do |bp|
         f.write(sprintf("%s = %d,%d,%d,%d\r\n",
-          csvQuote(bp.id.to_s),
-          bp.hours_per_stage,
-          bp.drying_per_hour,
-          bp.minimum_yield,
-          bp.maximum_yield
-        ))
+                        csvQuote(bp.id.to_s),
+                        bp.hours_per_stage,
+                        bp.drying_per_hour,
+                        bp.minimum_yield,
+                        bp.maximum_yield))
       end
     }
     Graphics.update
@@ -512,11 +508,10 @@ module Compiler
       f.write("\#-------------------------------\r\n")
       GameData::Ribbon.each do |r|
         f.write(sprintf("%d,%s,%s,%s\r\n",
-          r.id_number,
-          csvQuote(r.id.to_s),
-          csvQuote(r.real_name),
-          csvQuoteAlways(r.real_description)
-        ))
+                        r.id_number,
+                        csvQuote(r.id.to_s),
+                        csvQuote(r.real_name),
+                        csvQuoteAlways(r.real_description)))
       end
     }
     Graphics.update
@@ -566,17 +561,16 @@ module Compiler
       f.write("\#-------------------------------\r\n")
       GameData::TrainerType.each do |t|
         f.write(sprintf("%d,%s,%s,%d,%s,%s,%s,%s,%s,%s\r\n",
-          t.id_number,
-          csvQuote(t.id.to_s),
-          csvQuote(t.real_name),
-          t.base_money,
-          csvQuote(t.battle_BGM),
-          csvQuote(t.victory_ME),
-          csvQuote(t.intro_ME),
-          ["Male", "Female", "Mixed"][t.gender],
-          (t.skill_level == t.base_money) ? "" : t.skill_level.to_s,
-          csvQuote(t.skill_code)
-        ))
+                        t.id_number,
+                        csvQuote(t.id.to_s),
+                        csvQuote(t.real_name),
+                        t.base_money,
+                        csvQuote(t.battle_BGM),
+                        csvQuote(t.victory_ME),
+                        csvQuote(t.intro_ME),
+                        ["Male", "Female", "Mixed"][t.gender],
+                        (t.skill_level == t.base_money) ? "" : t.skill_level.to_s,
+                        csvQuote(t.skill_code)))
       end
     }
     Graphics.update
@@ -637,16 +631,16 @@ module Compiler
   def write_trainer_lists
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
     return if !trainerlists
-    File.open("PBS/trainerlists.txt","wb") { |f|
+    File.open("PBS/trainerlists.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       for tr in trainerlists
         f.write("\#-------------------------------\r\n")
-        f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]")+"\r\n")
-        f.write("Trainers = "+tr[3]+"\r\n")
-        f.write("Pokemon = "+tr[4]+"\r\n")
-        f.write("Challenges = "+tr[2].join(",")+"\r\n") if !tr[5]
-        write_battle_tower_trainers(tr[0],"PBS/"+tr[3])
-        write_battle_tower_pokemon(tr[1],"PBS/"+tr[4])
+        f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]") + "\r\n")
+        f.write("Trainers = " + tr[3] + "\r\n")
+        f.write("Pokemon = " + tr[4] + "\r\n")
+        f.write("Challenges = " + tr[2].join(",") + "\r\n") if !tr[5]
+        write_battle_tower_trainers(tr[0], "PBS/" + tr[3])
+        write_battle_tower_pokemon(tr[1], "PBS/" + tr[4])
       end
     }
     Graphics.update
@@ -658,30 +652,30 @@ module Compiler
   def write_battle_tower_trainers(bttrainers, filename)
     return if !bttrainers || !filename
     btTrainersRequiredTypes = {
-      "Type"          => [0, "e", nil],   # Specifies a trainer
-      "Name"          => [1, "s"],
-      "BeginSpeech"   => [2, "s"],
-      "EndSpeechWin"  => [3, "s"],
+      "Type" => [0, "e", nil],   # Specifies a trainer
+      "Name" => [1, "s"],
+      "BeginSpeech" => [2, "s"],
+      "EndSpeechWin" => [3, "s"],
       "EndSpeechLose" => [4, "s"],
-      "PokemonNos"    => [5, "*u"]
+      "PokemonNos" => [5, "*u"],
     }
-    File.open(filename,"wb") { |f|
+    File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
       for i in 0...bttrainers.length
         next if !bttrainers[i]
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%03d]\r\n",i))
+        f.write(sprintf("[%03d]\r\n", i))
         for key in btTrainersRequiredTypes.keys
           schema = btTrainersRequiredTypes[key]
           record = bttrainers[i][schema[0]]
-          next if record==nil
-          f.write(sprintf("%s = ",key))
-          if key=="Type"
+          next if record == nil
+          f.write(sprintf("%s = ", key))
+          if key == "Type"
             f.write(record.to_s)
-          elsif key=="PokemonNos"
+          elsif key == "PokemonNos"
             f.write(record.join(","))   # pbWriteCsvRecord somehow won't work here
           else
-            pbWriteCsvRecord(record,f,schema)
+            pbWriteCsvRecord(record, f, schema)
           end
           f.write(sprintf("\r\n"))
         end
@@ -693,21 +687,21 @@ module Compiler
   #=============================================================================
   # Save Battle Tower Pokémon data to PBS file
   #=============================================================================
-  def write_battle_tower_pokemon(btpokemon,filename)
+  def write_battle_tower_pokemon(btpokemon, filename)
     return if !btpokemon || !filename
     species = {}
-    moves   = {}
-    items   = {}
+    moves = {}
+    items = {}
     natures = {}
     evs = {
-      :HP              => "HP",
-      :ATTACK          => "ATK",
-      :DEFENSE         => "DEF",
-      :SPECIAL_ATTACK  => "SA",
+      :HP => "HP",
+      :ATTACK => "ATK",
+      :DEFENSE => "DEF",
+      :SPECIAL_ATTACK => "SA",
       :SPECIAL_DEFENSE => "SD",
-      :SPEED           => "SPD"
+      :SPEED => "SPD",
     }
-    File.open(filename,"wb") { |f|
+    File.open(filename, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for i in 0...btpokemon.length
@@ -749,7 +743,7 @@ module Compiler
       f.write("[000]\r\n")
       metadata = GameData::Metadata.get
       schema = GameData::Metadata::SCHEMA
-      keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
       for key in keys
         record = metadata.property_from_string(key)
         next if record.nil?
@@ -760,7 +754,7 @@ module Compiler
       # Write map metadata
       map_infos = pbLoadMapInfos
       schema = GameData::MapMetadata::SCHEMA
-      keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
       GameData::MapMetadata.each do |map_data|
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%03d]\r\n", map_data.id))

@@ -64,7 +64,7 @@ end
 #===============================================================================
 # Giving Pokémon to the player (will send to storage if party is full)
 #===============================================================================
-def pbAddPokemon(pkmn, level = 1, see_form = true, dontRandomize=false, variableToSave=nil)
+def pbAddPokemon(pkmn, level = 1, see_form = true, dontRandomize = false, variableToSave = nil)
   return false if !pkmn
   if pbBoxesFull?
     pbMessage(_INTL("There's no more room for Pokémon!\1"))
@@ -72,16 +72,14 @@ def pbAddPokemon(pkmn, level = 1, see_form = true, dontRandomize=false, variable
     return false
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  tryRandomizeGiftPokemon(pkmn,dontRandomize)
+  tryRandomizeGiftPokemon(pkmn, dontRandomize)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[20]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
   $Trainer.pokedex.register(pkmn) if see_form
-  pbSet(variableToSave,pkmn) if variableToSave
+  pbSet(variableToSave, pkmn) if variableToSave
   return true
 end
-
-
 
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
@@ -101,7 +99,7 @@ def pbAddPokemonSilentShiny(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   pkmn.headShiny = true
-  pkmn.natural_shiny=true
+  pkmn.natural_shiny = true
   $Trainer.pokedex.register(pkmn) if see_form
   $Trainer.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
@@ -116,10 +114,10 @@ end
 #===============================================================================
 # Giving Pokémon/eggs to the player (can only add to party)
 #===============================================================================
-def pbAddToParty(pkmn, level = 1, see_form = true, dontRandomize=false)
+def pbAddToParty(pkmn, level = 1, see_form = true, dontRandomize = false)
   return false if !pkmn || $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  tryRandomizeGiftPokemon(pkmn,dontRandomize)
+  tryRandomizeGiftPokemon(pkmn, dontRandomize)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
@@ -161,12 +159,12 @@ def pbGenerateEgg(pkmn, text = "")
   return false if !pkmn #|| $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, Settings::EGG_LEVEL) if !pkmn.is_a?(Pokemon)
   # Set egg's details
-  pkmn.name           = _INTL("Egg")
+  pkmn.name = _INTL("Egg")
   pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
-  pkmn.obtain_text    = text
+  pkmn.obtain_text = text
   pkmn.calc_stats
   # Add egg to party
-  if $Trainer.party.length<6
+  if $Trainer.party.length < 6
     $Trainer.party[$Trainer.party.length] = pkmn
   else
     $PokemonStorage.pbStoreCaught(pkmn)
@@ -174,6 +172,7 @@ def pbGenerateEgg(pkmn, text = "")
   end
   return true
 end
+
 alias pbAddEgg pbGenerateEgg
 alias pbGenEgg pbGenerateEgg
 
@@ -255,22 +254,7 @@ def pbSize(pkmn)
   n = (pkmn.personalID >> 8) & 0xFF
   s = (((ativ ^ dfiv) * hpiv) ^ m) * 256 + (((saiv ^ sdiv) * spiv) ^ n)
   xyz = []
-  if s < 10;       xyz = [ 290,   1,     0]
-  elsif s < 110;   xyz = [ 300,   1,    10]
-  elsif s < 310;   xyz = [ 400,   2,   110]
-  elsif s < 710;   xyz = [ 500,   4,   310]
-  elsif s < 2710;  xyz = [ 600,  20,   710]
-  elsif s < 7710;  xyz = [ 700,  50,  2710]
-  elsif s < 17710; xyz = [ 800, 100,  7710]
-  elsif s < 32710; xyz = [ 900, 150, 17710]
-  elsif s < 47710; xyz = [1000, 150, 32710]
-  elsif s < 57710; xyz = [1100, 100, 47710]
-  elsif s < 62710; xyz = [1200,  50, 57710]
-  elsif s < 64710; xyz = [1300,  20, 62710]
-  elsif s < 65210; xyz = [1400,   5, 64710]
-  elsif s < 65410; xyz = [1500,   2, 65210]
-  else;            xyz = [1700,   1, 65510]
-  end
+  if s < 10; xyz = [290, 1, 0] elsif s < 110; xyz = [300, 1, 10] elsif s < 310; xyz = [400, 2, 110] elsif s < 710; xyz = [500, 4, 310] elsif s < 2710; xyz = [600, 20, 710] elsif s < 7710; xyz = [700, 50, 2710] elsif s < 17710; xyz = [800, 100, 7710] elsif s < 32710; xyz = [900, 150, 17710] elsif s < 47710; xyz = [1000, 150, 32710] elsif s < 57710; xyz = [1100, 100, 47710] elsif s < 62710; xyz = [1200, 50, 57710] elsif s < 64710; xyz = [1300, 20, 62710] elsif s < 65210; xyz = [1400, 5, 64710] elsif s < 65410; xyz = [1500, 2, 65210] else; xyz = [1700, 1, 65510] end
   return (((s - xyz[2]) / xyz[1] + xyz[0]).floor * baseheight / 10).floor
 end
 

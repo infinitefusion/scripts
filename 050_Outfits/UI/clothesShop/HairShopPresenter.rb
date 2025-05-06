@@ -1,13 +1,11 @@
 class HairShopPresenter < PokemonMartScreen
   def pbChooseBuyItem
-
   end
 
-  def initialize(scene, stock, adapter = nil, versions=false)
-    super(scene,stock,adapter)
+  def initialize(scene, stock, adapter = nil, versions = false)
+    super(scene, stock, adapter)
     @use_versions = versions
   end
-
 
   def pbBuyScreen
     @scene.pbStartBuyScene(@stock, @adapter)
@@ -23,7 +21,6 @@ class HairShopPresenter < PokemonMartScreen
           return
         end
         next
-
       end
 
       itemname = @adapter.getDisplayName(item)
@@ -64,5 +61,4 @@ class HairShopPresenter < PokemonMartScreen
   def isWornItem?(item)
     super
   end
-
 end

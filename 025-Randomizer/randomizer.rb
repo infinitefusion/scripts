@@ -22,7 +22,6 @@ class PokemonGlobalMetadata
     @psuedoBSTHash = nil
     @randomItemsHash = nil
     @randomTMsHash = nil
-
   end
 end
 
@@ -75,7 +74,7 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
     includeLegendaries = $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES]
     current_species = GameData::Species.get(i).id
     random_poke_species = GameData::Species.get(random_poke).id
-    while (random_poke_bst <= min_bst_allowed || random_poke_bst >= max_bst_allowed) || !legendaryOk(current_species,random_poke_species,includeLegendaries)
+    while (random_poke_bst <= min_bst_allowed || random_poke_bst >= max_bst_allowed) || !legendaryOk(current_species, random_poke_species, includeLegendaries)
       random_poke = poke_list.sample
       random_poke_species = GameData::Species.get(random_poke).id
       #todo: right now, the main function uses dex numbers, but the legendaryOK check needs the ids.
@@ -94,9 +93,9 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
   return bst_hash
 end
 
-def is_legendary(dex_num,printInfo=false)
+def is_legendary(dex_num, printInfo = false)
   pokemon_id = getPokemon(dex_num).id
-  is_legendary = is_fusion_of_any(pokemon_id,LEGENDARIES_LIST)
+  is_legendary = is_fusion_of_any(pokemon_id, LEGENDARIES_LIST)
 
   #echoln "#{pokemon_id} is legendary? : #{is_legendary}"
   #echoln _INTL("{1} ({2}) {3}",dex_num,pokemon_id,is_legendary) if printInfo
@@ -106,7 +105,7 @@ end
 def show_shuffle_progress(i)
   if i % 2 == 0
     n = (i.to_f / NB_POKEMON) * 100
-    Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^", sprintf('%.2f', n), NB_POKEMON))
+    Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^", sprintf("%.2f", n), NB_POKEMON))
   end
 end
 
@@ -266,7 +265,7 @@ end
 # Here is a cheap workaround lol
 def getBaseStatsFormattedForRandomizer(dex_num)
   statsArray = []
-  stats =  GameData::Species.get(dex_num).base_stats
+  stats = GameData::Species.get(dex_num).base_stats
   statsArray << stats[:HP]
   statsArray << stats[:ATTACK]
   statsArray << stats[:DEFENSE]
@@ -350,7 +349,7 @@ end
 def obtainRandomizedStarter(starterIndex)
   case starterIndex
   when 0
-    dexNumber =1
+    dexNumber = 1
   when 1
     dexNumber = 4
   else

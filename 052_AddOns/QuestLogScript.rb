@@ -38,7 +38,7 @@ class Quest
 end
 
 def pbColor(color)
-  # Mix your own colors: http://www.rapidtables.com/web/color/RGB_Color.htm  
+  # Mix your own colors: http://www.rapidtables.com/web/color/RGB_Color.htm
   return Color.new(0, 0, 0) if color == :BLACK
   return Color.new(255, 115, 115) if color == :LIGHTRED
   return Color.new(245, 11, 11) if color == :RED
@@ -66,10 +66,9 @@ def pbColor(color)
   return Color.new(63, 6, 121) if color == :DARKPURPLE
   return Color.new(113, 16, 209) if color == :PURPLE
   return Color.new(219, 183, 37) if color == :ORANGE
-  return Color.new(255, 255, 255,0) if color == :INVISIBLE
+  return Color.new(255, 255, 255, 0) if color == :INVISIBLE
   return Color.new(255, 255, 255)
 end
-
 
 HotelQuestColor = :GOLD
 FieldQuestColor = :PURPLE
@@ -91,11 +90,10 @@ QUESTS = {
   "pokemart_kalos" => Quest.new(38, "Kalos Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Kalos region.", QuestBranchHotels, "traveler_kalos", "Saffron City", HotelQuestColor),
   "pokemart_alola" => Quest.new(62, "Alola Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Alola region.", QuestBranchHotels, "traveler_alola", "Cinnabar Island", HotelQuestColor),
 
-
   #Pewter hotel
   "pewter_1" => Quest.new("pewter_1", "Mushroom Gathering", "A lady in Pewter City wants you to bring her 3 TinyMushroom from Viridian Forest to make a stew.", QuestBranchHotels, "BW (74)", "Pewter City", HotelQuestColor),
-  "pewter_2" =>Quest.new("pewter_2", "Lost Medicine", "A youngster in Pewter City needs your help to find a lost Revive. He lost it by sitting on a bench somewhere in Pewter City.", QuestBranchHotels, "BW (19)", "Pewter City", HotelQuestColor),
-  "pewter_3" =>Quest.new("pewter_3", "Bug Evolution ", "A Bug Catcher in Pewter City wants you to show him a fully-evolved Bug Pokémon.", QuestBranchHotels, "BWBugCatcher_male", "Pewter City", HotelQuestColor),
+  "pewter_2" => Quest.new("pewter_2", "Lost Medicine", "A youngster in Pewter City needs your help to find a lost Revive. He lost it by sitting on a bench somewhere in Pewter City.", QuestBranchHotels, "BW (19)", "Pewter City", HotelQuestColor),
+  "pewter_3" => Quest.new("pewter_3", "Bug Evolution ", "A Bug Catcher in Pewter City wants you to show him a fully-evolved Bug Pokémon.", QuestBranchHotels, "BWBugCatcher_male", "Pewter City", HotelQuestColor),
   "pewter_field_1" => Quest.new("pewter_field_1", "Nectar garden", "An old man wants you to bring differently colored flowers for the city's garden.", QuestBranchField, "BW (039)", "Pewter City", FieldQuestColor),
   "pewter_field_2" => Quest.new("pewter_field_2", "I Choose You!", "A Pikachu in the PokéMart has lost its official Pokémon League Hat. Find one and give it to the Pikachu!", QuestBranchField, "YOUNGSTER_LeagueHat", "Pewter City", FieldQuestColor),
   "pewter_field_3" => Quest.new("pewter_field_3", "Prehistoric Amber!", "Meetup with a scientist in Viridian Forest to look for prehistoric amber.", QuestBranchField, "BW (82)", "Pewter City", FieldQuestColor),
@@ -146,7 +144,7 @@ QUESTS = {
   "cinnabar_3" => Quest.new("cinnabar_3", "Stolen artifact", "Recover a stolen vase from a burglar in the Pokémon Mansion", QuestBranchHotels, "BW (21)", "Cinnabar Island", HotelQuestColor),
 
   #Goldenrod City
-  "goldenrod_1" => Quest.new( "goldenrod_1", "Safari Souvenir!", "Bring back a souvenir from the Fuchsia City Safari Zone", QuestBranchHotels, "BW (28)", "Goldenrod City", HotelQuestColor),
+  "goldenrod_1" => Quest.new("goldenrod_1", "Safari Souvenir!", "Bring back a souvenir from the Fuchsia City Safari Zone", QuestBranchHotels, "BW (28)", "Goldenrod City", HotelQuestColor),
   "goldenrod_2" => Quest.new("goldenrod_2", "The Cursed Forest", "A child wants you to find a floating tree stump in Ilex Forest. What could she be talking about?", QuestBranchHotels, "BW109", "Goldenrod City", HotelQuestColor),
 
   "goldenrod_police_1" => Quest.new("goldenrod_police_1", "Undercover police work!", "Go see the police in Goldenrod City to help them with an important police operation.", QuestBranchField, "BW (80)", "Goldenrod City", FieldQuestColor),
@@ -157,7 +155,7 @@ QUESTS = {
   "violet_2" => Quest.new("violet_2", "Find Slowpoke's Tail!", "Find a SlowpokeTail in some flowers, somewhere around Violet City!", QuestBranchHotels, "BW (19)", "Violet City", HotelQuestColor),
 
   #Blackthorn City
-  "blackthorn_1" => Quest.new( "blackthorn_1", "Dragon Evolution", "A Dragon Tamer in Blackthorn City wants you to show her a fully-evolved Dragon Pokémon.", QuestBranchHotels, "BW014", "Blackthorn City", HotelQuestColor),
+  "blackthorn_1" => Quest.new("blackthorn_1", "Dragon Evolution", "A Dragon Tamer in Blackthorn City wants you to show her a fully-evolved Dragon Pokémon.", QuestBranchHotels, "BW014", "Blackthorn City", HotelQuestColor),
   "blackthorn_2" => Quest.new("blackthorn_2", "Sunken Treasure!", "Find an old memorabilia on a sunken ship near Cinnabar Island.", QuestBranchHotels, "BW (28)", "Blackthorn City", HotelQuestColor),
   "blackthorn_3" => Quest.new("blackthorn_3", "The Largest Carp", "A fisherman wants you to fish up a Magikarp that's exceptionally high-level at Dragon's Den.", QuestBranchHotels, "BW (71)", "Blackthorn City", HotelQuestColor),
 
@@ -181,15 +179,14 @@ QUESTS = {
   "legendary_necrozma_6" => Quest.new("legendary_necrozma_6", "The long night (Part 5)", "You found a strange fruit that appears to be related to the mysterious darkness. Go see professor Oak to have it analyzed.", QuestBranchLegendary, "BW029", "Safari Zone", LegendaryQuestColor),
   "legendary_necrozma_7" => Quest.new("legendary_necrozma_7", "The long night (Part 6)", "The strange plant you found appears to glow in the mysterious darkness that now covers the entire region. Try to follow the glow to find out the source of the disturbance.", QuestBranchLegendary, "BW-oak", "Pallet Town", LegendaryQuestColor),
 
-
   "legendary_meloetta_1" => Quest.new("legendary_meloetta_1", "A legendary band (Part 1)", "The singer of a band in Saffron City wants you to help them recruit a drummer. They think they've heard some drumming around Crimson City...", QuestBranchLegendary, "BW107", "Saffron City", LegendaryQuestColor),
   "legendary_meloetta_2" => Quest.new("legendary_meloetta_2", "A legendary band (Part 2)", "The drummer from a legendary Pokéband wants you to find its former bandmates. The band manager talked about two former guitarists...", QuestBranchLegendary, "band_drummer", "Saffron City", LegendaryQuestColor),
   "legendary_meloetta_3" => Quest.new("legendary_meloetta_3", "A legendary band (Part 3)", "The drummer from a legendary Pokéband wants you to find its former bandmates. There are rumors about strange music that was heard around the region.", QuestBranchLegendary, "band_drummer", "Saffron City", LegendaryQuestColor),
   "legendary_meloetta_4" => Quest.new("legendary_meloetta_4", "A legendary band (Part 4)", "You assembled the full band! Come watch the show on Saturday night.", QuestBranchLegendary, "BW117", "Saffron City", LegendaryQuestColor),
 
   "legendary_cresselia_1" => Quest.new(61, "Mysterious Lunar feathers", "A mysterious entity asked you to collect Lunar Feathers for them. It said that they will come at night to tell you where to look. Whoever that may be...", QuestBranchLegendary, "lunarFeather", "Lavender Town", LegendaryQuestColor),
-  #removed
-  #11 => Quest.new(11, "Powering the Lighthouse", "Catch some Voltorb to power up the lighthouse", QuestBranchHotels, "BW (43)", "Vermillion City", HotelQuestColor),
+#removed
+#11 => Quest.new(11, "Powering the Lighthouse", "Catch some Voltorb to power up the lighthouse", QuestBranchHotels, "BW (43)", "Vermillion City", HotelQuestColor),
 
 }
 
@@ -197,22 +194,21 @@ class PokeBattle_Trainer
   attr_accessor :quests
 end
 
-
-def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
+def pbAcceptNewQuest(id, bubblePosition = 20, show_description = true)
   return if isQuestAlreadyAccepted?(id)
   $game_variables[96] += 1 #nb. quests accepted
   $game_variables[97] += 1 #nb. quests active
 
   title = QUESTS[id].name
   description = QUESTS[id].desc
-  showNewQuestMessage(title,description,show_description)
+  showNewQuestMessage(title, description, show_description)
   character_sprite = get_spritecharacter_for_event(@event_id)
   character_sprite.removeQuestIcon if character_sprite
 
   pbAddQuest(id)
 end
 
-def showNewQuestMessage(title,description, show_description)
+def showNewQuestMessage(title, description, show_description)
   pbMEPlay("Voltorb Flip Win")
 
   pbCallBub(3)
@@ -228,12 +224,10 @@ def isQuestAlreadyAccepted?(id)
   $Trainer.quests.any? { |quest| quest.id.to_s == id.to_s }
 end
 
-
-def finishQuest(id, silent=false)
+def finishQuest(id, silent = false)
   return if pbCompletedQuest?(id)
   pbMEPlay("Register phone") if !silent
   Kernel.pbMessage("\\C[6]Quest completed!") if !silent
-
 
   $game_variables[VAR_KARMA] += 1 # karma
   $game_variables[VAR_NB_QUEST_ACTIVE] -= 1 #nb. quests active
@@ -337,7 +331,6 @@ class Questlog
     @completed = []
     @ongoing = []
 
-
     fix_broken_TR_quests()
     for q in $Trainer.quests
       @ongoing << q if !q.completed && @ongoing.include?(q)
@@ -387,7 +380,6 @@ class Questlog
     end
     pbUpdate
   end
-
 
   def pbUpdate
     @frame = 0
@@ -491,7 +483,6 @@ class Questlog
         @sprites["main"].opacity += 32
         @sprites["char"].opacity += 32 if i > 1
       end
-
     elsif page == 1
       @page = 1
       @sprites["bg2"] = IconSprite.new(0, 0, @viewport)
@@ -518,7 +509,7 @@ class Questlog
       pbDrawOutlineText(@text2, 188, -94, 512, 384, quest.location, Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 188, -62, 512, 384, "Quest received at:", Color.new(255, 255, 255), Color.new(0, 0, 0))
       time = quest.time.to_s
-      txt = time.split(' ')[1] + " " + time.split(' ')[2] + ", " + time.split(' ')[3].split(':')[0] + ":" + time.split(' ')[3].split(':')[1] rescue "?????"
+      txt = time.split(" ")[1] + " " + time.split(" ")[2] + ", " + time.split(" ")[3].split(":")[0] + ":" + time.split(" ")[3].split(":")[1] rescue "?????"
       pbDrawOutlineText(@text2, 188, -36, 512, 384, txt, Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 188, -4, 512, 384, "Quest received from:", Color.new(255, 255, 255), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 188, 22, 512, 384, quest.npc, Color.new(255, 172, 115), Color.new(0, 0, 0))
@@ -545,7 +536,6 @@ class Questlog
       @sprites["main"].x = 0
       @main.clear if @main
     else
-
       @page = 0
       @sprites["bg1"] = IconSprite.new(0, 0, @viewport)
       @sprites["bg1"].setBitmap("Graphics/Pictures/EQI/quest_page1")
@@ -1017,19 +1007,16 @@ def pbSynchronizeQuestLog()
   #Kin
   pbSetQuest(40, true) if $game_self_switches[[565, 9, "A"]]
   pbSetQuest(41, true) if $game_self_switches[[565, 10, "A"]]
-
 end
 
-
-
-def showQuestStatistics(eventId,includeRocketQuests=false)
+def showQuestStatistics(eventId, includeRocketQuests = false)
   quests_accepted = []
-  quests_in_progress=[]
-  quests_completed=[]
-  $Trainer.quests=[] if !$Trainer.quests
+  quests_in_progress = []
+  quests_completed = []
+  $Trainer.quests = [] if !$Trainer.quests
   for quest in $Trainer.quests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
-    quests_accepted<<quest
+    quests_accepted << quest
     if quest.completed
       quests_completed << quest
     else
@@ -1044,8 +1031,8 @@ def showQuestStatistics(eventId,includeRocketQuests=false)
   pbMessage("In-progress: \\C[1]#{quests_in_progress.length}")
 end
 
-def get_completed_quests(includeRocketQuests=false)
-  quests_completed=[]
+def get_completed_quests(includeRocketQuests = false)
+  quests_completed = []
   for quest in $Trainer.quests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
     quests_completed << quest if quest.completed
@@ -1056,7 +1043,7 @@ end
 def getQuestReward(eventId)
   $PokemonGlobal.questRewardsObtained = [] if !$PokemonGlobal.questRewardsObtained
   nb_quests_completed = get_completed_quests(false).length #pbGet(VAR_STAT_QUESTS_COMPLETED)
-  pbSet(VAR_STAT_QUESTS_COMPLETED,nb_quests_completed)
+  pbSet(VAR_STAT_QUESTS_COMPLETED, nb_quests_completed)
   rewards_to_give = []
   for reward in QUEST_REWARDS
     rewards_to_give << reward if nb_quests_completed >= reward.nb_quests && !$PokemonGlobal.questRewardsObtained.include?(reward.item)
@@ -1068,7 +1055,6 @@ def getQuestReward(eventId)
 
   for reward in rewards_to_give
     echoln reward.item
-
   end
   #Give rewards
   for reward in rewards_to_give
@@ -1087,7 +1073,6 @@ def getQuestReward(eventId)
     next_reward = get_next_quest_reward
     nb_to_next_reward = next_reward.nb_quests - nb_quests_completed
   end
-
 
   pbCallBub(2, eventId)
   if nb_to_next_reward <= 0

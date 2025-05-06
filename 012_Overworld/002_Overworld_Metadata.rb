@@ -61,72 +61,72 @@ class PokemonGlobalMetadata
 
   def initialize
     # Movement
-    @bicycle              = false
-    @surfing              = false
-    @diving               = false
-    @sliding              = false
-    @fishing              = false
+    @bicycle = false
+    @surfing = false
+    @diving = false
+    @sliding = false
+    @fishing = false
     # Player data
-    @startTime            = Time.now
-    @stepcount            = 0
-    @pcItemStorage        = nil
-    @mailbox              = nil
-    @phoneNumbers         = []
-    @phoneTime            = 0
-    @partner              = nil
-    @creditsPlayed        = false
+    @startTime = Time.now
+    @stepcount = 0
+    @pcItemStorage = nil
+    @mailbox = nil
+    @phoneNumbers = []
+    @phoneTime = 0
+    @partner = nil
+    @creditsPlayed = false
     # Pokédex
-    numRegions            = pbLoadRegionalDexes.length
-    @pokedexDex           = (numRegions==0) ? -1 : 0
-    @pokedexIndex         = []
-    @pokedexMode          = 0
-    for i in 0...numRegions+1     # National Dex isn't a region, but is included
-      @pokedexIndex[i]    = 0
+    numRegions = pbLoadRegionalDexes.length
+    @pokedexDex = (numRegions == 0) ? -1 : 0
+    @pokedexIndex = []
+    @pokedexMode = 0
+    for i in 0...numRegions + 1 # National Dex isn't a region, but is included
+      @pokedexIndex[i] = 0
     end
     # Day Care
-    @daycare              = [[nil,0],[nil,0]]
-    @daycareEgg           = false
-    @daycareEggSteps      = 0
+    @daycare = [[nil, 0], [nil, 0]]
+    @daycareEgg = false
+    @daycareEggSteps = 0
     # Special battle modes
-    @safariState          = nil
-    @bugContestState      = nil
-    @challenge            = nil
-    @lastbattle           = nil
+    @safariState = nil
+    @bugContestState = nil
+    @challenge = nil
+    @lastbattle = nil
     # Events
-    @eventvars            = {}
+    @eventvars = {}
     # Affecting the map
-    @bridge               = 0
-    @repel                = 0
-    @tempRepel            = false
-    @flashused            = false
-    @encounter_version    = 0
+    @bridge = 0
+    @repel = 0
+    @tempRepel = false
+    @flashused = false
+    @encounter_version = 0
     # Map transfers
-    @healingSpot          = nil
-    @escapePoint          = []
-    @pokecenterMapId      = -1
-    @pokecenterX          = -1
-    @pokecenterY          = -1
-    @pokecenterDirection  = -1
+    @healingSpot = nil
+    @escapePoint = []
+    @pokecenterMapId = -1
+    @pokecenterX = -1
+    @pokecenterY = -1
+    @pokecenterDirection = -1
     # Movement history
-    @visitedMaps          = []
-    @mapTrail             = []
+    @visitedMaps = []
+    @mapTrail = []
     # Counters
-    @happinessSteps       = 0
-    @pokerusTime          = nil
+    @happinessSteps = 0
+    @pokerusTime = nil
     # Save file
-    @safesave             = false
+    @safesave = false
     @questRewardsObtained = []
   end
 
   # @deprecated Use {Player#character_ID} instead. This alias is slated to be removed in v20.
   def playerID
-    Deprecation.warn_method('PokemonGlobalMetadata#playerID', 'v20', '$Trainer.character_ID')
+    Deprecation.warn_method("PokemonGlobalMetadata#playerID", "v20", "$Trainer.character_ID")
     return @playerID || $Trainer.character_ID
   end
 
   # @deprecated Use {Player#character_ID=} instead. This alias is slated to be removed in v20.
   def playerID=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#playerID=', 'v20', '$Trainer.character_ID=')
+    Deprecation.warn_method("PokemonGlobalMetadata#playerID=", "v20", "$Trainer.character_ID=")
     if value.nil?
       @playerID = value   # For setting to nil by a save data conversion
     else
@@ -136,13 +136,13 @@ class PokemonGlobalMetadata
 
   # @deprecated Use {Player#coins} instead. This alias is slated to be removed in v20.
   def coins
-    Deprecation.warn_method('PokemonGlobalMetadata#coins', 'v20', '$Trainer.coins')
+    Deprecation.warn_method("PokemonGlobalMetadata#coins", "v20", "$Trainer.coins")
     return @coins || $Trainer.coins
   end
 
   # @deprecated Use {Player#coins=} instead. This alias is slated to be removed in v20.
   def coins=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#coins=', 'v20', '$Trainer.coins=')
+    Deprecation.warn_method("PokemonGlobalMetadata#coins=", "v20", "$Trainer.coins=")
     if value.nil?
       @coins = value   # For setting to nil by a save data conversion
     else
@@ -152,13 +152,13 @@ class PokemonGlobalMetadata
 
   # @deprecated Use {Player#soot} instead. This alias is slated to be removed in v20.
   def sootsack
-    Deprecation.warn_method('PokemonGlobalMetadata#sootsack', 'v20', '$Trainer.soot')
+    Deprecation.warn_method("PokemonGlobalMetadata#sootsack", "v20", "$Trainer.soot")
     return @sootsack || $Trainer.soot
   end
 
   # @deprecated Use {Player#soot=} instead. This alias is slated to be removed in v20.
   def sootsack=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#sootsack=', 'v20', '$Trainer.soot=')
+    Deprecation.warn_method("PokemonGlobalMetadata#sootsack=", "v20", "$Trainer.soot=")
     if value.nil?
       @sootsack = value   # For setting to nil by a save data conversion
     else
@@ -168,13 +168,13 @@ class PokemonGlobalMetadata
 
   # @deprecated Use {Player#has_running_shoes} instead. This alias is slated to be removed in v20.
   def runningShoes
-    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes', 'v20', '$Trainer.has_running_shoes')
+    Deprecation.warn_method("PokemonGlobalMetadata#runningShoes", "v20", "$Trainer.has_running_shoes")
     return (!@runningShoes.nil?) ? @runningShoes : $Trainer.has_running_shoes
   end
 
   # @deprecated Use {Player#has_running_shoes=} instead. This alias is slated to be removed in v20.
   def runningShoes=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes=', 'v20', '$Trainer.has_running_shoes=')
+    Deprecation.warn_method("PokemonGlobalMetadata#runningShoes=", "v20", "$Trainer.has_running_shoes=")
     if value.nil?
       @runningShoes = value   # For setting to nil by a save data conversion
     else
@@ -184,13 +184,13 @@ class PokemonGlobalMetadata
 
   # @deprecated Use {Player#seen_storage_creator} instead. This alias is slated to be removed in v20.
   def seenStorageCreator
-    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator', 'v20', '$Trainer.seen_storage_creator')
+    Deprecation.warn_method("PokemonGlobalMetadata#seenStorageCreator", "v20", "$Trainer.seen_storage_creator")
     return (!@seenStorageCreator.nil?) ? @seenStorageCreator : $Trainer.seen_storage_creator
   end
 
   # @deprecated Use {Player#seen_storage_creator=} instead. This alias is slated to be removed in v20.
   def seenStorageCreator=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator=', 'v20', '$Trainer.seen_storage_creator=')
+    Deprecation.warn_method("PokemonGlobalMetadata#seenStorageCreator=", "v20", "$Trainer.seen_storage_creator=")
     if value.nil?
       @seenStorageCreator = value   # For setting to nil by a save data conversion
     else
@@ -198,8 +198,6 @@ class PokemonGlobalMetadata
     end
   end
 end
-
-
 
 #===============================================================================
 # This class keeps track of erased and moved events so their position
@@ -218,35 +216,35 @@ class PokemonMapMetadata
   end
 
   def clear
-    @erasedEvents   = {}
-    @movedEvents    = {}
-    @strengthUsed   = false
+    @erasedEvents = {}
+    @movedEvents = {}
+    @strengthUsed = false
     @blackFluteUsed = false
     @whiteFluteUsed = false
   end
 
   def addErasedEvent(eventID)
-    key = [$game_map.map_id,eventID]
+    key = [$game_map.map_id, eventID]
     @erasedEvents[key] = true
   end
 
   def addMovedEvent(eventID)
-    key               = [$game_map.map_id,eventID]
-    event             = $game_map.events[eventID] if eventID.is_a?(Integer)
-    @movedEvents[key] = [event.x,event.y,event.direction,event.through] if event
+    key = [$game_map.map_id, eventID]
+    event = $game_map.events[eventID] if eventID.is_a?(Integer)
+    @movedEvents[key] = [event.x, event.y, event.direction, event.through] if event
   end
 
   def updateMap
     for i in @erasedEvents
-      if i[0][0]==$game_map.map_id && i[1]
+      if i[0][0] == $game_map.map_id && i[1]
         event = $game_map.events[i[0][1]]
         event.erase if event
       end
     end
     for i in @movedEvents
-      if i[0][0]==$game_map.map_id && i[1]
+      if i[0][0] == $game_map.map_id && i[1]
         next if !$game_map.events[i[0][1]]
-        $game_map.events[i[0][1]].moveto(i[1][0],i[1][1])
+        $game_map.events[i[0][1]].moveto(i[1][0], i[1][1])
         case i[1][2]
         when 2 then $game_map.events[i[0][1]].turn_down
         when 4 then $game_map.events[i[0][1]].turn_left
@@ -254,14 +252,12 @@ class PokemonMapMetadata
         when 8 then $game_map.events[i[0][1]].turn_up
         end
       end
-      if i[1][3]!=nil
+      if i[1][3] != nil
         $game_map.events[i[0][1]].through = i[1][3]
       end
     end
   end
 end
-
-
 
 #===============================================================================
 # Temporary data which is not saved and which is erased when a game restarts.
@@ -281,11 +277,11 @@ class PokemonTemp
   attr_accessor :forceSingleBattle
 
   def initialize
-    @menuLastChoice         = 0
-    @keyItemCalling         = false
+    @menuLastChoice = 0
+    @keyItemCalling = false
     @hiddenMoveEventCalling = false
-    @begunNewGame           = false
-    @miniupdate             = false
-    @forceSingleBattle      = false
+    @begunNewGame = false
+    @miniupdate = false
+    @forceSingleBattle = false
   end
 end

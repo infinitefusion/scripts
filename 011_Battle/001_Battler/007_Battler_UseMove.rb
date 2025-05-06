@@ -6,7 +6,7 @@ class PokeBattle_Battler
     return false if fainted?
     # Wild roaming Pokémon always flee if possible
     if tryFlee && @battle.wildBattle? && opposes? &&
-      @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
+       @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
       pbSEPlay("Battle flee")
       @battle.pbDisplay(_INTL("{1} fled from battle!", pbThis))
@@ -108,7 +108,7 @@ class PokeBattle_Battler
   def pbEndTurn(_choice)
     @lastRoundMoved = @battle.turnCount # Done something this round
     if !@effects[PBEffects::ChoiceBand] &&
-      hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+       hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
       if @lastMoveUsed && pbHasMove?(@lastMoveUsed)
         @effects[PBEffects::ChoiceBand] = @lastMoveUsed
       elsif @lastRegularMoveUsed && pbHasMove?(@lastRegularMoveUsed)
@@ -173,7 +173,7 @@ class PokeBattle_Battler
       choice[2] = PokeBattle_Move.from_pokemon_move(@battle, Pokemon::Move.new(@currentMove))
       specialUsage = true
     elsif @effects[PBEffects::Encore] > 0 && choice[1] >= 0 &&
-      @battle.pbCanShowCommands?(@index)
+          @battle.pbCanShowCommands?(@index)
       idxEncoredMove = pbEncoredMoveIndex
       if idxEncoredMove >= 0 && @battle.pbCanChooseMove?(@index, idxEncoredMove, false)
         if choice[1] != idxEncoredMove # Change move if battler was Encored mid-round
@@ -409,7 +409,7 @@ class PokeBattle_Battler
             b.effects[PBEffects::MagicCoat] = false
             break
           elsif b.hasActiveAbility?(:MAGICBOUNCE) && !@battle.moldBreaker &&
-            !b.effects[PBEffects::MagicBounce]
+                !b.effects[PBEffects::MagicBounce]
             magicBouncer = b.index
             b.effects[PBEffects::MagicBounce] = true
             break
@@ -536,8 +536,8 @@ class PokeBattle_Battler
     end
     # Dancer
     if !@effects[PBEffects::Dancer] && !user.lastMoveFailed && realNumHits > 0 &&
-      !move.snatched && magicCoater < 0 && @battle.pbCheckGlobalAbility(:DANCER) &&
-      move.danceMove?
+       !move.snatched && magicCoater < 0 && @battle.pbCheckGlobalAbility(:DANCER) &&
+       move.danceMove?
       dancers = []
       @battle.pbPriority(true).each do |b|
         dancers.push(b) if b.index != user.index && b.hasActiveAbility?(:DANCER)
@@ -580,7 +580,6 @@ class PokeBattle_Battler
       user.attack, user.defense = user.defense, user.attack
       user.spatk, user.spdef = user.spdef, user.spatk
 
-
       #changeForm(1,:AEGISLASH)
 
       @battle.pbDisplay(_INTL("{1} changed to Sword Mode!", pbThis))
@@ -599,23 +598,20 @@ class PokeBattle_Battler
     GameData::Species.sprite_filename(pokemon.dexNum)
   end
 
-
   def playChangeFormAnimation(animation = "UltraBurst2")
     @battle.scene.pbChangePokemon(self, @pokemon)
     @battle.scene.pbCommonAnimation(animation, self)
     @battle.scene.pbRefreshOne(@index)
   end
 
-  def changeSpecies(pokemon, speciesToReplace,newSpecies, animation = "UltraBurst2")
+  def changeSpecies(pokemon, speciesToReplace, newSpecies, animation = "UltraBurst2")
     if pokemon.isFusion?()
-      replaceFusionSpecies(pokemon,speciesToReplace,newSpecies)
+      replaceFusionSpecies(pokemon, speciesToReplace, newSpecies)
     else
-      changeSpeciesSpecific(pokemon,newSpecies)
+      changeSpeciesSpecific(pokemon, newSpecies)
     end
     playChangeFormAnimation(animation)
   end
-
-
 
   # def changeUnfusedSpecies(pokemon, newSpecies, animation = "UltraBurst2")
   #
@@ -623,11 +619,10 @@ class PokeBattle_Battler
 
   #For meloetta form change
 
-  def changeFormSpecies(oldForm, newForm,animation = "UltraBurst2")
-    @pokemon.changeFormSpecies(oldForm,newForm)
+  def changeFormSpecies(oldForm, newForm, animation = "UltraBurst2")
+    @pokemon.changeFormSpecies(oldForm, newForm)
     playChangeFormAnimation(animation)
   end
-
 
   def changeForm(newForm, formChangingSpecies, animation = "UltraBurst2")
     spriteform_body = newForm if @pokemon.hasBodyOf?(formChangingSpecies)
@@ -640,7 +635,7 @@ class PokeBattle_Battler
       new_form_has_custom = customSpriteExistsForm(@pokemon.species, spriteform_head, spriteform_body)
       should_change_sprite = (current_form_has_custom && new_form_has_custom) || !current_form_has_custom
     else
-      should_change_sprite=true
+      should_change_sprite = true
     end
 
     if should_change_sprite

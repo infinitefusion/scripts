@@ -22,7 +22,7 @@ HELD_ITEMS = [:AIRBALLOON, :BRIGHTPOWDER, :EVIOLITE, :FLOATSTONE, :DESTINYKNOT, 
 
 INVALID_ITEMS = [:COVERFOSSIL, :PLUMEFOSSIL, :ACCURACYUP, :DAMAGEUP, :ANCIENTSTONE, :ODDKEYSTONE_FULL,
                  :DEVOLUTIONSPRAY, :INVISIBALL]
-RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS,:POKEBALL, :DYNAMITE, :PINKANBERRY]
+RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS, :POKEBALL, :DYNAMITE, :PINKANBERRY]
 
 def getRandomGivenTM(item)
   return item if item == nil
@@ -90,8 +90,8 @@ def pbGetRandomItem(item_id)
   return item if !($game_switches[SWITCH_RANDOM_ITEMS] || $game_switches[SWITCH_RANDOM_TMS])
   if $game_switches[SWITCH_RANDOM_ITEMS_MAPPED]
     return getMappedRandomItem(item)
-  # elsif $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
-  #   return getDynamicRandomItem(item)
+    # elsif $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
+    #   return getDynamicRandomItem(item)
   end
   return item
 end
@@ -123,4 +123,3 @@ def pbGetRandomTM()
   end
   return newItem
 end
-

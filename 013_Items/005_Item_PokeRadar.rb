@@ -5,7 +5,6 @@ end
 class PokemonTemp
   attr_accessor :pokeradar # [species, level, chain count, grasses (x,y,ring,rarity)]
   attr_accessor :pokeradar_ui # [species, level, chain count, grasses (x,y,ring,rarity)]
-
 end
 
 ################################################################################
@@ -56,8 +55,8 @@ def pbUsePokeRadar
   pbWait(20)
   pbPokeRadarHighlightGrass
   if $PokemonGlobal.repel <= 0
-    $PokemonGlobal.repel=10
-    $PokemonGlobal.tempRepel=true
+    $PokemonGlobal.repel = 10
+    $PokemonGlobal.tempRepel = true
   end
   return true
 end
@@ -106,9 +105,9 @@ end
 
 def pbPokeRadarCancel
   if $PokemonGlobal.tempRepel
-    $PokemonGlobal.repel=0
+    $PokemonGlobal.repel = 0
   end
-  $PokemonGlobal.tempRepel=false
+  $PokemonGlobal.tempRepel = false
 
   if $PokemonTemp.pokeradar_ui != nil
     $PokemonTemp.pokeradar_ui.dispose
@@ -116,8 +115,6 @@ def pbPokeRadarCancel
   end
   $PokemonTemp.pokeradar = nil
 end
-
-
 
 def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false)
   return [] if encounterType == nil
@@ -150,9 +147,9 @@ end
 def canEncounterRarePokemon(unseenPokemon)
   terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
   return unseenPokemon.length == 0 &&
-    $PokemonEncounters.has_normal_land_encounters? &&
-    terrain.land_wild_encounters &&
-    terrain.shows_grass_rustle
+           $PokemonEncounters.has_normal_land_encounters? &&
+           terrain.land_wild_encounters &&
+           terrain.shows_grass_rustle
 end
 
 def pbPokeRadarHighlightGrass(showmessage = true)
@@ -175,7 +172,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
     end
     # Add tile to grasses array if it's a valid grass tile
     if x >= 0 && x < $game_map.width &&
-      y >= 0 && y < $game_map.height
+       y >= 0 && y < $game_map.height
       terrain = $game_map.terrain_tag(x, y)
       if terrain.land_wild_encounters && terrain.shows_grass_rustle
         # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
@@ -235,7 +232,7 @@ def pbPokeRadarGetEncounter(rarity = 0)
       array.push(enc) if enc[0] == map && GameData::Species.exists?(enc[2])
     end
     # If there are any exclusives, first have a chance of encountering those
-    if array.length > 0 && listPokemonInCurrentRoute($PokemonEncounters.encounter_type, false, true).length==0
+    if array.length > 0 && listPokemonInCurrentRoute($PokemonEncounters.encounter_type, false, true).length == 0
       rnd = rand(100)
       array.each do |enc|
         rnd -= enc[1]
@@ -254,7 +251,7 @@ end
 ################################################################################
 EncounterModifier.register(proc { |encounter|
   if GameData::EncounterType.get($PokemonTemp.encounterType).type != :land ||
-    $PokemonGlobal.partner # $PokemonGlobal.bicycle || $PokemonGlobal.partner
+     $PokemonGlobal.partner # $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel
     next encounter
   end
@@ -284,7 +281,7 @@ EncounterModifier.register(proc { |encounter|
     end
   else
     # Encounter triggered by stepping in non-rustling grass
-    pbPokeRadarCancel if encounter  && $PokemonGlobal.repel <= 0
+    pbPokeRadarCancel if encounter && $PokemonGlobal.repel <= 0
   end
   next encounter
 })
@@ -318,7 +315,7 @@ Events.onWildBattleEnd += proc { |_sender, e|
 
 Events.onStepTaken += proc { |_sender, _e|
   if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery > 0 &&
-    !$PokemonTemp.pokeradar
+     !$PokemonTemp.pokeradar
     $PokemonGlobal.pokeradarBattery -= 1
   end
   terrain = $game_map.terrain_tag($game_player.x, $game_player.y)
@@ -341,5 +338,3 @@ ItemHandlers::UseInField.add(:POKERADAR, proc { |item|
 ItemHandlers::UseFromBag.add(:POKERADAR, proc { |item|
   next (pbCanUsePokeRadar?) ? 2 : 0
 })
-
-

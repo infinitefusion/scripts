@@ -11,7 +11,7 @@ def list_all_numeric_folders(directory_path)
   # Filter out only the directories whose names are numeric (excluding "." and "..")
   numeric_folders = entries.select do |entry|
     full_path = File.join(directory_path, entry)
-    File.directory?(full_path) && entry != '.' && entry != '..' && entry.match?(/^\d+$/)
+    File.directory?(full_path) && entry != "." && entry != ".." && entry.match?(/^\d+$/)
   end
 
   # Convert the folder names to integers and store in an array
@@ -66,7 +66,7 @@ def setHairColor(hue_shift)
   refreshPlayerOutfit()
 end
 
-def shiftHatColor(incr,secondary_hat=false)
+def shiftHatColor(incr, secondary_hat = false)
   if secondary_hat
     $Trainer.hat2_color = 0 if !$Trainer.hat2_color
     $Trainer.hat2_color += incr
@@ -115,23 +115,23 @@ def getEasterEggHeldItem()
   return "secrets/WALLET" if [432, 433, 434, 435, 436, 292].include?(map) #dept. store
   return "secrets/ALARMCLOCK" if [43, 48, 67, 68, 69, 70, 71, 73].include?(map) #Player room
   return "SAFARIBALL" if [445, 484, 485, 486, 107, 487, 488, 717, 82, 75, 74].include?(map) #Safari Zone
-  return "secrets/WISP" if [401,402,403,467,468,469].include?(map) #Pokemon Tower
+  return "secrets/WISP" if [401, 402, 403, 467, 468, 469].include?(map) #Pokemon Tower
   return "secrets/SKULL" if [400].include?(map) #Pokemon Tower ground floor
-  return "secrets/ROCK" if [349,350,800,].include?(map) #Rock Tunnel
-  return "secrets/MAGIKARP" if [394,471,189,].include?(map) #Fishing huts
-  return "secrets/AZUREFLUTE" if [694,].include?(map) && $PokemonBag.pbQuantity(:AZUREFLUTE)>=1 #Ice Mountain peak
-  return "secrets/BIGSODA" if [436,].include?(map) && $PokemonBag.pbQuantity(:SODAPOP)>=1 #Celadon dept. store top
-  return "secrets/EGG" if [13,406,214,].include?(map) #Day care
-  return "secrets/STICK" if [266,].include?(map) #Ilex forest
-  return "secrets/BANANA" if [600,].include?(map) #Bond Bridge
-  return "secrets/BERRY" if [619,620,].include?(map) #Berry forest
+  return "secrets/ROCK" if [349, 350, 800].include?(map) #Rock Tunnel
+  return "secrets/MAGIKARP" if [394, 471, 189].include?(map) #Fishing huts
+  return "secrets/AZUREFLUTE" if [694].include?(map) && $PokemonBag.pbQuantity(:AZUREFLUTE) >= 1 #Ice Mountain peak
+  return "secrets/BIGSODA" if [436].include?(map) && $PokemonBag.pbQuantity(:SODAPOP) >= 1 #Celadon dept. store top
+  return "secrets/EGG" if [13, 406, 214].include?(map) #Day care
+  return "secrets/STICK" if [266].include?(map) #Ilex forest
+  return "secrets/BANANA" if [600].include?(map) #Bond Bridge
+  return "secrets/BERRY" if [619, 620].include?(map) #Berry forest
   return "secrets/COIN" if [357].include?(map) #Pokemart
   return "secrets/LATTE" if [406].include?(map) #Celadon Café
 
   return nil
 end
 
-def getCurrentPokeball(allowEasterEgg=true)
+def getCurrentPokeball(allowEasterEgg = true)
   otherItem = getEasterEggHeldItem() if allowEasterEgg
   return otherItem if otherItem
   firstPokemon = $Trainer.party[0]
@@ -141,17 +141,16 @@ end
 
 def generate_front_trainer_sprite_bitmap_from_appearance(trainerAppearance)
   echoln trainerAppearance.hat
-  return generate_front_trainer_sprite_bitmap(false,nil,trainerAppearance.clothes,trainerAppearance.hat,trainerAppearance.hat2,
-                                              trainerAppearance.hair,trainerAppearance.skin_color,
-                                              trainerAppearance.hair_color,trainerAppearance.hat_color,trainerAppearance.clothes_color,
+  return generate_front_trainer_sprite_bitmap(false, nil, trainerAppearance.clothes, trainerAppearance.hat, trainerAppearance.hat2,
+                                              trainerAppearance.hair, trainerAppearance.skin_color,
+                                              trainerAppearance.hair_color, trainerAppearance.hat_color, trainerAppearance.clothes_color,
                                               trainerAppearance.hat2_color)
 end
 
-def generate_front_trainer_sprite_bitmap(allowEasterEgg=true, pokeball = nil,
-                                         clothes_id = nil, hat_id = nil, hat2_id=nil, hair_id = nil,
+def generate_front_trainer_sprite_bitmap(allowEasterEgg = true, pokeball = nil,
+                                         clothes_id = nil, hat_id = nil, hat2_id = nil, hair_id = nil,
                                          skin_tone_id = nil, hair_color = nil, hat_color = nil, clothes_color = nil,
                                          hat2_color = nil)
-
   clothes_id = $Trainer.clothes if !clothes_id
   hat_id = $Trainer.hat if !hat_id
   hat2_id = $Trainer.hat2 if !hat2_id
@@ -217,7 +216,7 @@ def generate_front_trainer_sprite_bitmap(allowEasterEgg=true, pokeball = nil,
   return baseBitmap
 end
 
-def generateNPCClothedBitmapStatic(trainerAppearance,action = "walk")
+def generateNPCClothedBitmapStatic(trainerAppearance, action = "walk")
   baseBitmapFilename = getBaseOverworldSpriteFilename(action, trainerAppearance.skin_color)
   baseSprite = AnimatedBitmap.new(baseBitmapFilename)
 
@@ -226,13 +225,11 @@ def generateNPCClothedBitmapStatic(trainerAppearance,action = "walk")
 
   hairFilename = getOverworldHairFilename(trainerAppearance.hair)
 
-
   #Clothes
   clothes_color_shift = trainerAppearance.clothes_color || 0
   clothesBitmap = AnimatedBitmap.new(outfitFilename, clothes_color_shift).bitmap if pbResolveBitmap(outfitFilename)
   baseBitmap.blt(0, 0, clothesBitmap, clothesBitmap.rect)
   #clothesBitmap.dispose
-
 
   #Hair
   hair_color_shift = trainerAppearance.hair_color || 0
@@ -248,7 +245,6 @@ def generateNPCClothedBitmapStatic(trainerAppearance,action = "walk")
 
   hatBitmapWrapper = AnimatedBitmap.new(hatFilename, hat_color_shift) if pbResolveBitmap(hatFilename)
   hat2BitmapWrapper = AnimatedBitmap.new(hat2Filename, hat2_color_shift) if pbResolveBitmap(hat2Filename)
-
 
   if hat2BitmapWrapper
     frame_count = 4 # Assuming 4 frames for hair animation; adjust as needed
@@ -400,10 +396,3 @@ def hide_outfit_preview()
   $PokemonTemp.trainer_preview.erase() if $PokemonTemp.trainer_preview
   $PokemonTemp.trainer_preview = nil
 end
-
-
-
-
-
-
-

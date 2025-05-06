@@ -44,7 +44,6 @@ It is up to you to use it how you wish, credits will be appreciated.
 # These are just names taken from a generator, add custom or change to
 # whatever you desire.
 
-
 def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
   # for i in 0...except.length # Gets ID of pokemon in exception array
   #   except[i]=getID(PBSpecies,except[i]) if !except[i].is_a?(Integer)
@@ -58,11 +57,12 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
   rare = premiumWonderTrade
   chosen = pbChoosePokemon(1, 2, # Choose eligable pokemon
                            proc {
-                             |poke| !poke.egg? && !(poke.isShadow?) && # No Eggs, No Shadow Pokemon
-                               (poke.level >= lvl) && !(except.include?(poke.species)) # None under "lvl", no exceptions.
-                           })
+    |poke|
+    !poke.egg? && !(poke.isShadow?) && # No Eggs, No Shadow Pokemon
+      (poke.level >= lvl) && !(except.include?(poke.species)) # None under "lvl", no exceptions.
+  })
   poke = $Trainer.party[pbGet(1)]
-  if !pbConfirmMessage(_INTL("Trade {1} away?",poke.name))
+  if !pbConfirmMessage(_INTL("Trade {1} away?", poke.name))
     return
   end
 
@@ -88,9 +88,9 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       # Redo the loop if the species is an exception.
       species = 0 if checkifBlacklisted(species, except2) && !ignoreExcept #except2.include?(species)
       #Redo loop if above BST
-      bstLimit = chosenBST + bonus# + $game_variables[120]
+      bstLimit = chosenBST + bonus # + $game_variables[120]
       if !premiumWonderTrade
-        bstLimit-=50
+        bstLimit -= 50
       end
       species = 0 if bst > bstLimit
       if species > 0 && premiumWonderTrade
@@ -126,7 +126,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       $game_variables[VAR_STANDARD_WONDERTRADE_LEFT] -= 1
     end
     tname = getSpriterCreditForDexNumber(species)
-    tname = randTrainerNames[rand(randTrainerNames.size)] if ! tname
+    tname = randTrainerNames[rand(randTrainerNames.size)] if !tname
     newpoke = pbStartTrade(pbGet(1), species, pname, tname, 0, true) # Starts the trade
     #lower level by 1 to prevent abuse
     if poke.level > 25
@@ -179,7 +179,6 @@ end
 def calcBaseStats(species)
   return calcBaseStatsSum(species)
 end
-
 
 def calcBaseStatsSum(species)
   stats = GameData::Species.get(species).base_stats

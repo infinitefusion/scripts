@@ -1,12 +1,11 @@
-
-EXPORT_EXCEPT_MAP_IDS= [768,722,723,724,720,809,816]
+EXPORT_EXCEPT_MAP_IDS = [768, 722, 723, 724, 720, 809, 816]
 
 def exportAllMaps
   for id in 817..830
     begin
       MapExporter.export(id, [:Events]) if !EXPORT_EXCEPT_MAP_IDS.include?(id)
     rescue
-      echo "error in " +(id.to_s) +"\n"
+      echo "error in " + (id.to_s) + "\n"
     end
   end
 end
@@ -16,11 +15,10 @@ def exportSpecificMaps(maps_to_export)
     begin
       MapExporter.export(id, [:Events])
     rescue
-      echo "error in " +(id.to_s) +"\n"
+      echo "error in " + (id.to_s) + "\n"
     end
   end
 end
-
 
 module MapExporter
   @@map = nil
@@ -68,13 +66,13 @@ module MapExporter
   def draw_all_events(options)
     include_player = options.include?(:Player) && $game_map.map_id == @@map.map_id
     include_dep = options.include?(:DependentEvents) && $game_map.map_id == @@map.map_id
-    include_event = true#options.include?(:Events)
+    include_event = true #options.include?(:Events)
     return false if !(include_player || include_dep || include_event)
     for y in 0...@@map.height
       for x in 0...@@map.width
         event = nil
         if include_event
-          event_hash = @@map.events.select {|_,e| e.x == x && e.y == y && !e.always_on_top }
+          event_hash = @@map.events.select { |_, e| e.x == x && e.y == y && !e.always_on_top }
           event = event_hash.values.first if !event_hash.empty?
         end
         event = $game_player if !event && include_player && $game_player.x == x && $game_player.y == y && !$game_player.always_on_top
@@ -111,7 +109,7 @@ module MapExporter
       for x in 0...@@map.width
         event = nil
         if include_event
-          event_hash = @@map.events.select {|_,e| e.x == x && e.y == y && e.always_on_top }
+          event_hash = @@map.events.select { |_, e| e.x == x && e.y == y && e.always_on_top }
           event = event_hash.values.first if !event_hash.empty?
         end
         event = $game_player if !event && include_player && $game_player.x == x && $game_player.y == y && $game_player.always_on_top
@@ -134,7 +132,7 @@ module MapExporter
         dep = false
         event = nil
         if include_event
-          event_hash = @@map.events.select {|_,e| e.x == x && e.y == y }
+          event_hash = @@map.events.select { |_, e| e.x == x && e.y == y }
           event = event_hash.values.first if !event_hash.empty?
         end
         event = $game_player if !event && include_player && $game_player.x == x && $game_player.y == y
@@ -228,23 +226,23 @@ module MapExporter
       temp_bmp.dispose
       hued = true
     else
-      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "#{event.character_name}") rescue Bitmap.new(32,32)
+      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "#{event.character_name}") rescue Bitmap.new(32, 32)
     end
     if bmp
       bmp = bmp.clone
       bmp.hue_change(event.character_hue) if event.character_hue != 0 && !hued
-      final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH)/2) - bmp.width / 8
+      final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH) / 2) - bmp.width / 8
       final_y = (event.y + 1) * Game_Map::TILE_HEIGHT - bmp.height / 4 + (event.bob_height)
       final_y += 16 if event.character_name[/offset/i]
       draw_event_shadow(event) if defined?(OWShadowSettings)
       draw_surf_base(event) if event == $game_player
       if !tile_bmp
-        ex = (bmp.width/4) * event.pattern
-        ey = (bmp.height/4) * (event.direction/2 - 1)
+        ex = (bmp.width / 4) * event.pattern
+        ey = (bmp.height / 4) * (event.direction / 2 - 1)
         rect = Rect.new(ex, ey, bmp.width / 4, bmp.height / 4)
       else
-        final_x +=  (bmp.width/8 - ((event.width * Game_Map::TILE_WIDTH)/2))
-        final_y += (bmp.height/4) - (Game_Map::TILE_HEIGHT * event.height)
+        final_x += (bmp.width / 8 - ((event.width * Game_Map::TILE_WIDTH) / 2))
+        final_y += (bmp.height / 4) - (Game_Map::TILE_HEIGHT * event.height)
         rect = Rect.new(0, 0, bmp.width, bmp.height)
       end
       @@bitmap.blt(final_x, final_y, bmp, rect, event.opacity)
@@ -255,14 +253,14 @@ module MapExporter
 
   def draw_event_shadow(event)
     if OWShadowSettings::CASE_SENSITIVE_BLACKLISTS
-      remove = true if OWShadowSettings::SHADOWLESS_CHARACTER_NAME.any?{|e| event.character_name[/#{e}/]}
-      remove = true if event != $game_player && OWShadowSettings::SHADOWLESS_EVENT_NAME.any? {|e| event.name[/#{e}/]}
+      remove = true if OWShadowSettings::SHADOWLESS_CHARACTER_NAME.any? { |e| event.character_name[/#{e}/] }
+      remove = true if event != $game_player && OWShadowSettings::SHADOWLESS_EVENT_NAME.any? { |e| event.name[/#{e}/] }
     else
-      remove = true if OWShadowSettings::SHADOWLESS_CHARACTER_NAME.any?{|e| event.character_name[/#{e}/i]}
-      remove = true if event != $game_player && OWShadowSettings::SHADOWLESS_EVENT_NAME.any? {|e| event.name[/#{e}/i]}
+      remove = true if OWShadowSettings::SHADOWLESS_CHARACTER_NAME.any? { |e| event.character_name[/#{e}/i] }
+      remove = true if event != $game_player && OWShadowSettings::SHADOWLESS_EVENT_NAME.any? { |e| event.name[/#{e}/i] }
     end
     terrain = @@map.terrain_tag(event.x, event.y)
-    remove = true if OWShadowSettings::SHADOWLESS_TERRAIN_NAME.any? {|e| terrain == e} if terrain
+    remove = true if OWShadowSettings::SHADOWLESS_TERRAIN_NAME.any? { |e| terrain == e } if terrain
     if !(nil_or_empty?(event.character_name) || event.transparent || remove)
       if event == $game_player
         shadow_name = OWShadowSettings::PLAYER_SHADOW_FILENAME
@@ -271,7 +269,7 @@ module MapExporter
       end
       shadow_name = OWShadowSettings::DEFAULT_SHADOW_FILENAME if nil_or_empty?(shadow_name)
       shadow_bmp = RPG::Cache.load_bitmap("Graphics/Characters/Shadows/", "#{shadow_name}")
-      shadow_x =  (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH)/2) - shadow_bmp.width/2
+      shadow_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH) / 2) - shadow_bmp.width / 2
       shadow_y = (event.y + 1) * Game_Map::TILE_HEIGHT - shadow_bmp.height + 2
       @@bitmap.blt(shadow_x, shadow_y, shadow_bmp, Rect.new(0, 0, shadow_bmp.width, shadow_bmp.height), event.opacity)
       shadow_bmp.dispose
@@ -284,7 +282,7 @@ module MapExporter
       bmp = pbGetTileBitmap(@@map.tileset_name, event.tile_id, event.character_hue, event.width, event.height)
       tile_bmp = true
     else
-      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "#{event.character_name}") rescue Bitmap.new(32,32)
+      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "#{event.character_name}") rescue Bitmap.new(32, 32)
     end
     if bmp
       bmp = bmp.clone
@@ -302,25 +300,25 @@ module MapExporter
         end
       end
       if height
-        final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH)/2) - bmp.width/8
+        final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH) / 2) - bmp.width / 8
         final_y = (event.y + 1) * Game_Map::TILE_HEIGHT - 3 - (event.bob_height)
         final_y -= 32 if event.character_name[/offset/i]
         if !tile_bmp
-          ex = (bmp.width/4) * event.pattern
-          ey = (bmp.height/4) * (event.direction/2 - 1)
-          rect = Rect.new(ex, ey, bmp.width/4, bmp.height/4)
+          ex = (bmp.width / 4) * event.pattern
+          ey = (bmp.height / 4) * (event.direction / 2 - 1)
+          rect = Rect.new(ex, ey, bmp.width / 4, bmp.height / 4)
         else
-          final_x += (bmp.width/8 - ((event.width * Game_Map::TILE_WIDTH)/2))
+          final_x += (bmp.width / 8 - ((event.width * Game_Map::TILE_WIDTH) / 2))
           rect = Rect.new(0, 0, bmp.width, bmp.height)
         end
         if height > 0
-          new_bmp = colorize_and_flip_bitmap(bmp, Color.new(48,96,160), 255, rect)
+          new_bmp = colorize_and_flip_bitmap(bmp, Color.new(48, 96, 160), 255, rect)
           opacity = event.opacity
         else
-          new_bmp = colorize_and_flip_bitmap(bmp, Color.new(224,224,224), 96, rect)
-          opacity = event.opacity*3/4
+          new_bmp = colorize_and_flip_bitmap(bmp, Color.new(224, 224, 224), 96, rect)
+          opacity = event.opacity * 3 / 4
         end
-        offset =  [1.0, 0.95, 1.0, 1.05][(Graphics.frame_count%40)/10]
+        offset = [1.0, 0.95, 1.0, 1.05][(Graphics.frame_count % 40) / 10]
         @@bitmap.stretch_blt(Rect.new(final_x, final_y, (new_bmp.width * offset), new_bmp.height), new_bmp, Rect.new(0, 0, new_bmp.width, new_bmp.height), opacity)
         new_bmp.dispose
       end
@@ -333,20 +331,20 @@ module MapExporter
     return if !$PokemonGlobal.surfing && !$PokemonGlobal.diving
     bmp = nil
     if $PokemonGlobal.surfing
-      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "base_surf") rescue Bitmap.new(32,32)
+      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "base_surf") rescue Bitmap.new(32, 32)
     elsif $PokemonGlobal.diving
-      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "base_dive") rescue Bitmap.new(32,32)
+      bmp = RPG::Cache.load_bitmap("Graphics/Characters/", "base_dive") rescue Bitmap.new(32, 32)
     end
     return if !bmp
-    sx = event.pattern_surf * bmp.width/4
-    sy = ((event.direction - 2)/2) * bmp.height/4
-    final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH)/2) - bmp.width/8
+    sx = event.pattern_surf * bmp.width / 4
+    sy = ((event.direction - 2) / 2) * bmp.height / 4
+    final_x = (event.x * Game_Map::TILE_WIDTH) + ((event.width * Game_Map::TILE_WIDTH) / 2) - bmp.width / 8
     final_y = (event.y + 1) * Game_Map::TILE_HEIGHT - bmp.height / 4 + 16 + (event.bob_height)
-    @@bitmap.blt(final_x, final_y, bmp, Rect.new(sx,sy, bmp.width/4, bmp.height/4), event.opacity)
+    @@bitmap.blt(final_x, final_y, bmp, Rect.new(sx, sy, bmp.width / 4, bmp.height / 4), event.opacity)
   end
 
   def draw_fog
-    fog_bmp = create_tiled_bitmap("Graphics/Fogs/#{@@map.fog_name}", @@map.fog_hue, @@map.fog_zoom/100.0)
+    fog_bmp = create_tiled_bitmap("Graphics/Fogs/#{@@map.fog_name}", @@map.fog_hue, @@map.fog_zoom / 100.0)
     @@bitmap.blt(0, 0, fog_bmp, Rect.new(0, 0, fog_bmp.width, fog_bmp.height), @@map.fog_opacity)
     fog_bmp.dispose
   end
@@ -359,7 +357,7 @@ module MapExporter
 
   def draw_watermark(options)
     return if !options.include?(:GameName) && !options.include?(:MapName)
-    map_name  = nil_or_empty?(@@map.name)? pbGetMapNameFromId(@@map.map_id) : @@map.name
+    map_name = nil_or_empty?(@@map.name) ? pbGetMapNameFromId(@@map.map_id) : @@map.name
     game_name = System.game_title
     base_color = Color.new(248, 248, 248)
     shadow_color = Color.new(64, 64, 64)
@@ -390,7 +388,7 @@ module MapExporter
   def save_map_image
     Dir.mkdir("Exported Maps/") if !safeExists?("Exported Maps/")
     filestart = Time.now.strftime("[%Y-%m-%d %H-%M]")
-    map_name  = nil_or_empty?(@@map.name)? pbGetMapNameFromId(@@map.map_id) : @@map.name
+    map_name = nil_or_empty?(@@map.name) ? pbGetMapNameFromId(@@map.map_id) : @@map.name
     filename = sprintf("%03d - #{map_name} #{filestart}", @@map.map_id)
     min_exists = 0
     if safeExists?("Exported Maps/" + filename + ".png")
@@ -404,7 +402,7 @@ module MapExporter
     @@bitmap.to_file("Exported Maps/" + filename + ".png")
     @@bitmap.dispose
     @@bitmap = nil
-    @@map    = nil
+    @@map = nil
     @@helper = nil
   end
 
@@ -430,14 +428,14 @@ module MapExporter
   end
 
   def get_name_scale
-    scale = @@map.width/3
-    d = [0, -1 , -2,  2, 1, 0, -1, -2,  2, 1][scale%10]
-    scale = (scale + d)/10.0
+    scale = @@map.width / 3
+    d = [0, -1, -2, 2, 1, 0, -1, -2, 2, 1][scale % 10]
+    scale = (scale + d) / 10.0
     return (scale < 1.0) ? 1.0 : scale
   end
 
   def colorize_and_flip_bitmap(bitmap, color, alpha = 255, rect = nil)
-    blankcolor  = bitmap.get_pixel(0,0)
+    blankcolor = bitmap.get_pixel(0, 0)
     new_bmp = Bitmap.new(rect.width, rect.height)
     temp_bmp = Bitmap.new(rect.width, rect.height)
     temp_bmp.blt(0, 0, bitmap, rect)
@@ -450,13 +448,13 @@ module MapExporter
     end
     temp_bmp.dispose
     shadowcolor = (color ? color : blankcolor)
-    colorlayer  = Bitmap.new(new_bmp.width, new_bmp.height)
+    colorlayer = Bitmap.new(new_bmp.width, new_bmp.height)
     colorlayer.fill_rect(colorlayer.rect, shadowcolor)
     new_bmp.blt(0, 0, colorlayer, colorlayer.rect, alpha)
-    shadowcolor = new_bmp.get_pixel(0,0)
+    shadowcolor = new_bmp.get_pixel(0, 0)
     for x in 0...new_bmp.width
       for y in 0...new_bmp.height
-        if new_bmp.get_pixel(x,y) == shadowcolor
+        if new_bmp.get_pixel(x, y) == shadowcolor
           new_bmp.set_pixel(x, y, blankcolor)
         end
       end
@@ -483,13 +481,13 @@ module MapExporter
             when 0
               next if !options.include?(:Panorama)
               @@map.panorama_name = command.parameters[1] if !nil_or_empty?(@@map.panorama_name)
-              @@map.panorama_hue  = command.parameters[2] if @@map.panorama_hue <= 0
+              @@map.panorama_hue = command.parameters[2] if @@map.panorama_hue <= 0
             when 1
               next if !options.include?(:Fog)
-              @@map.fog_name    = command.parameters[1] if nil_or_empty?(@@map.fog_name)
-              @@map.fog_hue     = command.parameters[2] if @@map.fog_hue <= 0
+              @@map.fog_name = command.parameters[1] if nil_or_empty?(@@map.fog_name)
+              @@map.fog_hue = command.parameters[2] if @@map.fog_hue <= 0
               @@map.fog_opacity = command.parameters[3] if @@map.fog_opacity < command.parameters[3]
-              @@map.fog_zoom    = command.parameters[5]
+              @@map.fog_zoom = command.parameters[5]
             end
           elsif command.code == 205
             next if !options.include?(:Fog)

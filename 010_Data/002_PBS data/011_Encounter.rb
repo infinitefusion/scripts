@@ -59,11 +59,11 @@ module GameData
     end
 
     def initialize(hash)
-      @id           = hash[:id]
-      @map          = hash[:map]
-      @version      = hash[:version]      || 0
+      @id = hash[:id]
+      @map = hash[:map]
+      @version = hash[:version] || 0
       @step_chances = hash[:step_chances]
-      @types        = hash[:types]        || {}
+      @types = hash[:types] || {}
     end
   end
 end
@@ -73,6 +73,6 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbLoadEncountersData
-  Deprecation.warn_method('pbLoadEncountersData', 'v20', 'GameData::Encounter.get(map_id, version)')
+  Deprecation.warn_method("pbLoadEncountersData", "v20", "GameData::Encounter.get(map_id, version)")
   return nil
 end

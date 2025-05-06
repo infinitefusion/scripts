@@ -1,7 +1,7 @@
 def map_sprites_by_artist
   creditsMap = Hash.new
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
-    row = line.split(',')
+    row = line.split(",")
     spritename = row[0]
     if row[1]
       artist = row[1].chomp
@@ -18,7 +18,7 @@ def get_top_artists(nb_names = 100)
   name_counts = Hash.new(0)
 
   File.readlines(filename).each do |line|
-    name = line.strip.split(',')[1]
+    name = line.strip.split(",")[1]
     name_counts[name] += 1
   end
 
@@ -106,7 +106,7 @@ def list_all_spriters_with_min_nb_of_sprites(minNbSprites)
   spriters_hash = Hash.new(0)
 
   File.readlines(filename).each do |line|
-    name = line.strip.split(',')[1]
+    name = line.strip.split(",")[1]
     if name
       spriters_hash[name] += 1
     end
@@ -125,7 +125,7 @@ def list_all_spriters()
   filename = Settings::CREDITS_FILE_PATH
   names_list = []
   File.readlines(filename).each do |line|
-    name = line.strip.split(',')[1]
+    name = line.strip.split(",")[1]
     if !names_list.include?(name)
       names_list << name
     end
@@ -148,8 +148,9 @@ def generateCurrentGalleryBattle(level = nil, number_of_pokemon = 3)
 
   selected_battlers_idx = possible_battlers.sample(number_of_pokemon)
   party = []
-  selected_battlers_idx.each { |species| 00
-  party << Pokemon.new(species, level)
+  selected_battlers_idx.each { |species|
+    00
+    party << Pokemon.new(species, level)
   }
 
   custom_appearance = generate_appearance_from_name(spriter_name)
@@ -159,10 +160,7 @@ def generateCurrentGalleryBattle(level = nil, number_of_pokemon = 3)
                       level,
                       pick_spriter_losing_dialog(spriter_name),
                       pick_trainer_sprite(spriter_name),
-  custom_appearance
-
-  )
-
+                      custom_appearance)
 end
 
 def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, saveSpritesInVariable = 2, saveAllArtistSpritesInVariable = 3, artistName = nil)
@@ -182,7 +180,7 @@ def generateArtGallery(nbSpritesDisplayed = 6, saveArtistNameInVariable = 1, sav
       featuredSprites << pif_sprite_from_spritename(sprite_name)
     end
     echoln featuredSprites
-    pbSet(saveArtistNameInVariable, File.basename(featuredArtist, '#*'))
+    pbSet(saveArtistNameInVariable, File.basename(featuredArtist, "#*"))
     pbSet(saveSpritesInVariable, featuredSprites)
     pbSet(saveAllArtistSpritesInVariable, creditsMap[featuredArtist])
     return featuredSprites
@@ -195,8 +193,8 @@ FLAGS_PATH = "Graphics/Pictures/Trainer Card/backgrounds/flags/"
 def select_daily_team_flags()
   eligible_flags = []
   all_flags = Dir.entries(FLAGS_PATH)
-                 .select { |file| file.end_with?('_FLAG.png') }
-                 .map { |file| file.sub('_FLAG.png', '') }
+                 .select { |file| file.end_with?("_FLAG.png") }
+                 .map { |file| file.sub("_FLAG.png", "") }
   for flag in all_flags
     if GameData::Species.get(flag.to_sym)
       eligible_flags << flag
@@ -257,7 +255,7 @@ def display_specific_pokemon_statistics()
   species_sprites = list_all_sprite_credits_for_pokemon(species)
   unique_sprites = filter_unique_sprites_nb_for_pokemon(species_sprites)
   percent = (unique_sprites.length.to_f / (NB_POKEMON * 2)) * 100
-  pbMessage "#{species.real_name} completion: \\C[1]#{sprintf('%.2f', percent)}%\\C[0]"
+  pbMessage "#{species.real_name} completion: \\C[1]#{sprintf("%.2f", percent)}%\\C[0]"
 
   contributors_string = ""
   top_contributors = get_top_contributors_for_pokemon(species_sprites, 5)
@@ -288,14 +286,14 @@ def display_team_flag_statistics(species)
     unique_sprites_nb = unique_sprites.length.to_f
     family_unique_sprites_nb << unique_sprites_nb
     percent = (unique_sprites.length.to_f / (NB_POKEMON * 2)) * 100
-    pbMessage "#{species.real_name} completion: \\C[1]#{sprintf('%.2f', percent)}%\\C[0]" if evolution_line.length > 1
+    pbMessage "#{species.real_name} completion: \\C[1]#{sprintf("%.2f", percent)}%\\C[0]" if evolution_line.length > 1
   end
   overall_total = 0
   family_unique_sprites_nb.each { |nb|
     overall_total += nb
   }
-  overall_percent = (overall_total / ((NB_POKEMON * 2)*family_unique_sprites_nb.length))*100
-  pbMessage "Team #{flag_pokemon_name} overall completion: \\C[3]#{sprintf('%.2f', overall_percent)}%\\C[0]"
+  overall_percent = (overall_total / ((NB_POKEMON * 2) * family_unique_sprites_nb.length)) * 100
+  pbMessage "Team #{flag_pokemon_name} overall completion: \\C[3]#{sprintf("%.2f", overall_percent)}%\\C[0]"
 
   family_line_sprites = {}
   for pokemon_sprites in all_sprites
@@ -310,7 +308,6 @@ def display_team_flag_statistics(species)
     contributors_string += "<br>" unless index == top_contributors.length - 1
   end
   pbMessage("Team #{flag_pokemon_name} top contributors:<br>#{contributors_string}")
-
 end
 
 def filter_unique_sprites_nb_for_pokemon(species_sprites)
@@ -338,7 +335,7 @@ def display_special_banner()
   pbMessage("A banner honoring the 500,000 members of the community who have come together to inspire countless others.")
   pbWait(10)
   percent = get_total_completion_percent()
-  pbMessage("All Pokémon completion: \\C[1]#{sprintf('%.2f', percent)}%")
+  pbMessage("All Pokémon completion: \\C[1]#{sprintf("%.2f", percent)}%")
 
   prompt_flag_purchase(flag_id, flag_name, price)
   $game_screen.pictures[flag_image_id].erase
@@ -346,7 +343,7 @@ def display_special_banner()
 end
 
 def prompt_flag_purchase(flag_id, flag_name, price)
-  $Trainer.unlocked_card_backgrounds = [] if ! $Trainer.unlocked_card_backgrounds
+  $Trainer.unlocked_card_backgrounds = [] if !$Trainer.unlocked_card_backgrounds
   if !$Trainer.unlocked_card_backgrounds.include?(flag_id) && $Trainer.money >= price
     pbWait(20)
     if pbConfirmMessage("\\GWould you to purchase the \\C[1]#{flag_name}\\C[0] flag as a background for your \\C[1]Trainer Card\\C[0] for $#{price}?")
@@ -382,7 +379,7 @@ def list_all_sprite_credits_for_pokemon(species)
   sprites = {}
   filename = Settings::CREDITS_FILE_PATH
   File.readlines(filename).each do |line|
-    split_line = line.strip.split(',')
+    split_line = line.strip.split(",")
     sprite = split_line[0]
     match = sprite.match(/(\d+)\.(\d+)/)
     next unless match # Skip if no match is found
@@ -413,11 +410,10 @@ def displayGalleryFrame(frame)
   displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
   $game_screen.pictures[frame_image_id].erase
   $game_screen.pictures[bg_image_id].erase
-
 end
 
 def format_artist_name(full_name)
-  return File.basename(full_name, '#*')
+  return File.basename(full_name, "#*")
 end
 
 def getRandomSpriteArtist(creditsMap = nil, minimumNumberOfSprites = 10, giveUpAfterX = 50)
@@ -432,7 +428,7 @@ end
 
 def getSpriteCredits(spriteName)
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
-    row = line.split(',')
+    row = line.split(",")
     if row[0] == (spriteName)
       return row[1]
     end
@@ -465,7 +461,6 @@ def format_names_for_game_credits()
   end
   return formatted
 end
-
 
 def get_spritename_from_path(file_path, includeExtension = false)
   filename_with_extension = File.basename(file_path)

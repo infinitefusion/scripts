@@ -60,6 +60,7 @@ end
 
 class PokeBattle_Battle
   CONST_BST_RANGE = 25 #unused. $game_variables[197] a la place
+
   def randomize_opponent_party(party)
     for pokemon in party
       next if !pokemon
@@ -86,11 +87,11 @@ class PokeBattle_Battle
     for m in party
       next if !m
       case playerChoice
-      when 0 then
+      when 0
         newspecies = starter2 * NB_POKEMON + starter3
-      when 1 then
+      when 1
         newspecies = starter1 * NB_POKEMON + starter3
-      when 2 then
+      when 2
         newspecies = starter1 * NB_POKEMON + starter2
       else
       end
@@ -120,15 +121,14 @@ end
 # end
 #
 
-def legendaryOk(oldspecies,newspecies,includeLegendaries)
+def legendaryOk(oldspecies, newspecies, includeLegendaries)
   oldSpeciesIsLegendary = is_legendary(oldspecies)
-  if oldSpeciesIsLegendary  #legendaries always randomize to legendaries
+  if oldSpeciesIsLegendary #legendaries always randomize to legendaries
     return is_legendary(newspecies)
   else
     return true if includeLegendaries
     return !is_legendary(newspecies)
   end
-
 end
 
 def bstNotOk(newspecies, oldPokemonSpecies, bst_range = 50)
@@ -241,7 +241,6 @@ def Kernel.sumGameStats()
   stringStats << "\nDestroyed " << $game_variables[VAR_STAT_NB_SANDCASTLES].to_s << " sandcastles"
   stringStats << "\nReported " << $game_variables[VAR_NB_CRIMES_REPORTED].to_s << " crimes" if $game_variables[VAR_NB_CRIMES_REPORTED] > 0
 
-
   if $game_variables[VAR_STAT_GAMBLER_WINS] > 0 || $game_variables[VAR_STAT_GAMBLER_LOSSES] > 0
     stringStats << "\nWon $" << $game_variables[VAR_STAT_GAMBLER_WINS].to_s << " against gamblers"
     stringStats << "\nLost $" << $game_variables[VAR_STAT_GAMBLER_LOSSES].to_s << " against gamblers"
@@ -272,13 +271,13 @@ def Kernel.pbRandomizeTM()
   end
 end
 
-def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries=true)
+def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries = true)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
   newspecies_dex = rand(maxDexNumber - 1) + 1
   i = 0
-  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
+  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex, newspecies_dex, includeLegendaries))
     newspecies_dex = rand(maxDexNumber - 1) + 1
     i += 1
     if i % 10 == 0
@@ -288,7 +287,7 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
   return newspecies_dex
 end
 
-def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false,includeLegendaries=true)
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false, includeLegendaries = true)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
@@ -296,7 +295,7 @@ def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRiv
   n = 0
   newspecies_dex = customSpeciesList[i]
 
-  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
+  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex, newspecies_dex, includeLegendaries))
     i = rand(customSpeciesList.length - 1) #+1
     newspecies_dex = customSpeciesList[i]
     n += 1
@@ -345,7 +344,7 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
     i += 1
     if i % 2 == 0
       n = (i.to_f / trainers.length) * 100
-      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^", sprintf('%.2f', n), PBSpecies.maxValue))
+      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^", sprintf("%.2f", n), PBSpecies.maxValue))
     end
   end
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
@@ -442,7 +441,6 @@ def getCustomSpeciesList(allowOnline = true, redownload_file = false)
       if fused && (fused <= maxDexNumber && fused > 0)
         speciesList << fused
       end
-
     end
   end
 
@@ -450,20 +448,18 @@ def getCustomSpeciesList(allowOnline = true, redownload_file = false)
   #   if redownload_file && Kernel.pbConfirmMessage(_INTL("Not enough local sprites found.  Attempt to fetch list from the internet?"))
   #     updateOnlineCustomSpritesFile
   #   end
-    #try to get list from github
-    online_list = list_online_custom_sprites(true)
-    return speciesList if !online_list
-    species_id_list = []
-    for file in online_list
-      dexnum = getDexNumFromFilename(file)
-      species_id_list << dexnum if dexnum && dexnum <= maxDexNumber && dexnum > 0
-    end
-    return species_id_list
-    #end
+  #try to get list from github
+  online_list = list_online_custom_sprites(true)
+  return speciesList if !online_list
+  species_id_list = []
+  for file in online_list
+    dexnum = getDexNumFromFilename(file)
+    species_id_list << dexnum if dexnum && dexnum <= maxDexNumber && dexnum > 0
+  end
+  return species_id_list
+  #end
   return speciesList
 end
-
-
 
 def is_file_alt(file)
   filename = file.split(".")[0]
@@ -482,7 +478,6 @@ def getDexNumFromFilename(filename)
   rescue
     return nil
   end
-
 end
 
 # def getCustomSpeciesList()
@@ -534,7 +529,7 @@ def Kernel.gymLeaderRematchHint()
     "Chuck is a martial arts pro. I've seen him train with Saffron City's dojo master back in the days.",
     "Morty is a mysterious man. He's been known to be one of the few people who dare enter Pokémon Tower at night.",
     "Pryce is an ice-type expert who has been around for a long time. He used to train in the Ice Tunnel between Mahogany Town and Blackthorn City before it froze over.",
-    "Jasmine is on vacation in the Sevii Islands. She likes to rise up early to explore around the islands when no one's around."
+    "Jasmine is on vacation in the Sevii Islands. She likes to rise up early to explore around the islands when no one's around.",
   ]
   arr = []
   n = 0
@@ -544,7 +539,7 @@ def Kernel.gymLeaderRematchHint()
     end
     n += 1
   end
-  arr.push(508); arr.push(509); arr.push(510); arr.push(511);
+  arr.push(508); arr.push(509); arr.push(510); arr.push(511)
   n += 4
 
   if arr.length > 0

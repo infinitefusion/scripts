@@ -6,16 +6,16 @@ class PokeBattle_Battle
   def pbAttackPhasePriorityChangeMessages
     pbPriority.each do |b|
       if b.effects[PBEffects::PriorityAbility] && b.abilityActive?
-        BattleHandlers.triggerPriorityBracketUseAbility(b.ability,b,self)
+        BattleHandlers.triggerPriorityBracketUseAbility(b.ability, b, self)
       elsif b.effects[PBEffects::PriorityItem] && b.itemActive?
-        BattleHandlers.triggerPriorityBracketUseItem(b.item,b,self)
+        BattleHandlers.triggerPriorityBracketUseItem(b.item, b, self)
       end
     end
   end
 
   def pbAttackPhaseCall
     pbPriority.each do |b|
-      next unless @choices[b.index][0]==:Call && !b.fainted?
+      next unless @choices[b.index][0] == :Call && !b.fainted?
       b.lastMoveFailed = false   # Counts as a successful move for Stomping Tantrum
       pbCall(b.index)
     end
@@ -25,31 +25,31 @@ class PokeBattle_Battle
     @switching = true
     pbPriority.each do |b|
       next if b.fainted? || !b.opposes?(idxSwitcher)   # Shouldn't hit an ally
-      next if b.movedThisRound? || !pbChoseMoveFunctionCode?(b.index,"088")   # Pursuit
+      next if b.movedThisRound? || !pbChoseMoveFunctionCode?(b.index, "088")   # Pursuit
       # Check whether Pursuit can be used
-      next unless pbMoveCanTarget?(b.index,idxSwitcher,@choices[b.index][2].pbTarget(b))
-      next unless pbCanChooseMove?(b.index,@choices[b.index][1],false)
+      next unless pbMoveCanTarget?(b.index, idxSwitcher, @choices[b.index][2].pbTarget(b))
+      next unless pbCanChooseMove?(b.index, @choices[b.index][1], false)
       next if b.status == :SLEEP || b.status == :FROZEN
-      next if b.effects[PBEffects::SkyDrop]>=0
+      next if b.effects[PBEffects::SkyDrop] >= 0
       next if b.hasActiveAbility?(:TRUANT) && b.effects[PBEffects::Truant]
       # Mega Evolve
       if !wildBattle? || !b.opposes?
         owner = pbGetOwnerIndexFromBattlerIndex(b.index)
-        pbMegaEvolve(b.index) if @megaEvolution[b.idxOwnSide][owner]==b.index
+        pbMegaEvolve(b.index) if @megaEvolution[b.idxOwnSide][owner] == b.index
       end
       # Use Pursuit
       @choices[b.index][3] = idxSwitcher   # Change Pursuit's target
-      if b.pbProcessTurn(@choices[b.index],false)
+      if b.pbProcessTurn(@choices[b.index], false)
         b.effects[PBEffects::Pursuit] = true
       end
-      break if @decision>0 || @battlers[idxSwitcher].fainted?
+      break if @decision > 0 || @battlers[idxSwitcher].fainted?
     end
     @switching = false
   end
 
   def pbAttackPhaseSwitch
     pbPriority.each do |b|
-      next unless @choices[b.index][0]==:SwitchOut && !b.fainted?
+      next unless @choices[b.index][0] == :SwitchOut && !b.fainted?
       idxNewPkmn = @choices[b.index][1]   # Party index of Pokémon to switch to
       b.lastMoveFailed = false   # Counts as a successful move for Stomping Tantrum
       @lastMoveUser = b.index
@@ -57,9 +57,9 @@ class PokeBattle_Battle
       pbMessageOnRecall(b)
       # Pursuit interrupts switching
       pbPursuit(b.index)
-      return if @decision>0
+      return if @decision > 0
       # Switch Pokémon
-      pbRecallAndReplace(b.index,idxNewPkmn)
+      pbRecallAndReplace(b.index, idxNewPkmn)
       b.pbEffectsOnSwitchIn(true)
     end
   end
@@ -71,13 +71,13 @@ class PokeBattle_Battle
       item = @choices[b.index][1]
       next if !item
       case GameData::Item.get(item).battle_use
-      when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
+      when 1, 2, 6, 7 # Use on Pokémon/Pokémon's move
         pbUseItemOnPokemon(item, @choices[b.index][2], b) if @choices[b.index][2] >= 0
-      when 3, 8         # Use on battler
+      when 3, 8 # Use on battler
         pbUseItemOnBattler(item, @choices[b.index][2], b)
-      when 4, 9         # Use Poké Ball
+      when 4, 9 # Use Poké Ball
         pbUsePokeBallInBattle(item, @choices[b.index][2], b)
-      when 5, 10        # Use directly
+      when 5, 10 # Use directly
         pbUseItemInBattle(item, @choices[b.index][2], b)
       else
         next
@@ -90,9 +90,9 @@ class PokeBattle_Battle
   def pbAttackPhaseMegaEvolution
     pbPriority.each do |b|
       next if wildBattle? && b.opposes?
-      next unless @choices[b.index][0]==:UseMove && !b.fainted?
+      next unless @choices[b.index][0] == :UseMove && !b.fainted?
       owner = pbGetOwnerIndexFromBattlerIndex(b.index)
-      next if @megaEvolution[b.idxOwnSide][owner]!=b.index
+      next if @megaEvolution[b.idxOwnSide][owner] != b.index
       pbMegaEvolve(b.index)
     end
   end
@@ -100,7 +100,7 @@ class PokeBattle_Battle
   def pbAttackPhaseMoves
     # Show charging messages (Focus Punch)
     pbPriority.each do |b|
-      next unless @choices[b.index][0]==:UseMove && !b.fainted?
+      next unless @choices[b.index][0] == :UseMove && !b.fainted?
       next if b.movedThisRound?
       @choices[b.index][2].pbDisplayChargeMessage(b)
     end
@@ -111,22 +111,22 @@ class PokeBattle_Battle
       advance = false
       priority.each do |b|
         next unless b.effects[PBEffects::MoveNext] && !b.fainted?
-        next unless @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
+        next unless @choices[b.index][0] == :UseMove || @choices[b.index][0] == :Shift
         next if b.movedThisRound?
         advance = b.pbProcessTurn(@choices[b.index])
         break if advance
       end
-      return if @decision>0
+      return if @decision > 0
       next if advance
       # Regular priority order
       priority.each do |b|
-        next if b.effects[PBEffects::Quash]>0 || b.fainted?
-        next unless @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
+        next if b.effects[PBEffects::Quash] > 0 || b.fainted?
+        next unless @choices[b.index][0] == :UseMove || @choices[b.index][0] == :Shift
         next if b.movedThisRound?
         advance = b.pbProcessTurn(@choices[b.index])
         break if advance
       end
-      return if @decision>0
+      return if @decision > 0
       next if advance
       # Quashed
       quashLevel = 0
@@ -134,21 +134,21 @@ class PokeBattle_Battle
         quashLevel += 1
         moreQuash = false
         priority.each do |b|
-          moreQuash = true if b.effects[PBEffects::Quash]>quashLevel
-          next unless b.effects[PBEffects::Quash]==quashLevel && !b.fainted?
-          next unless @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
+          moreQuash = true if b.effects[PBEffects::Quash] > quashLevel
+          next unless b.effects[PBEffects::Quash] == quashLevel && !b.fainted?
+          next unless @choices[b.index][0] == :UseMove || @choices[b.index][0] == :Shift
           next if b.movedThisRound?
           advance = b.pbProcessTurn(@choices[b.index])
           break
         end
         break if advance || !moreQuash
       end
-      return if @decision>0
+      return if @decision > 0
       next if advance
       # Check for all done
       priority.each do |b|
         if !b.fainted? && !b.movedThisRound?
-          advance = true if @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
+          advance = true if @choices[b.index][0] == :UseMove || @choices[b.index][0] == :Shift
         end
         break if advance
       end
@@ -164,15 +164,15 @@ class PokeBattle_Battle
   def pbAttackPhase
     @scene.pbBeginAttackPhase
     # Reset certain effects
-    @battlers.each_with_index do |b,i|
+    @battlers.each_with_index do |b, i|
       next if !b
       b.turnCount += 1 if !b.fainted?
       @successStates[i].clear
-      if @choices[i][0]!=:UseMove && @choices[i][0]!=:Shift && @choices[i][0]!=:SwitchOut
+      if @choices[i][0] != :UseMove && @choices[i][0] != :Shift && @choices[i][0] != :SwitchOut
         b.effects[PBEffects::DestinyBond] = false
-        b.effects[PBEffects::Grudge]      = false
+        b.effects[PBEffects::Grudge] = false
       end
-      b.effects[PBEffects::Rage] = false if !pbChoseMoveFunctionCode?(i,"093")   # Rage
+      b.effects[PBEffects::Rage] = false if !pbChoseMoveFunctionCode?(i, "093")   # Rage
     end
     PBDebug.log("")
     # Calculate move order for this round
@@ -181,9 +181,9 @@ class PokeBattle_Battle
     pbAttackPhasePriorityChangeMessages
     pbAttackPhaseCall
     pbAttackPhaseSwitch
-    return if @decision>0
+    return if @decision > 0
     pbAttackPhaseItems
-    return if @decision>0
+    return if @decision > 0
     pbAttackPhaseMegaEvolution
     pbAttackPhaseMoves
   end

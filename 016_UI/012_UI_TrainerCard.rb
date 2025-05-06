@@ -40,7 +40,7 @@ class PokemonTrainerCard_Scene
     else
       @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card")
     end
-    @sprites["card"].z=-100
+    @sprites["card"].z = -100
   end
 
   def promptSwapBackground()
@@ -86,7 +86,7 @@ class PokemonTrainerCard_Scene
       [_INTL("Time"), 34, 202, 0, baseColor, shadowColor],
       [time, 302, 202, 1, baseColor, shadowColor],
       [_INTL("Started"), 34, 250, 0, baseColor, shadowColor],
-      [starttime, 302, 250, 1, baseColor, shadowColor]
+      [starttime, 302, 250, 1, baseColor, shadowColor],
     ]
     pbDrawTextPositions(overlay, textPositions)
     x = 72

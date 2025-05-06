@@ -22,7 +22,7 @@ module GameData
     def self.save; end
 
     def initialize(hash)
-      @id        = hash[:id]
+      @id = hash[:id]
       @id_number = hash[:id_number]
       @real_name = hash[:name] || "Unnamed"
       @animation = hash[:animation]
@@ -38,42 +38,42 @@ end
 #===============================================================================
 
 GameData::Status.register({
-  :id        => :NONE,
+  :id => :NONE,
   :id_number => 0,
-  :name      => _INTL("None")
+  :name => _INTL("None"),
 })
 
 GameData::Status.register({
-  :id        => :SLEEP,
+  :id => :SLEEP,
   :id_number => 1,
-  :name      => _INTL("Sleep"),
-  :animation => "Sleep"
+  :name => _INTL("Sleep"),
+  :animation => "Sleep",
 })
 
 GameData::Status.register({
-  :id        => :POISON,
+  :id => :POISON,
   :id_number => 2,
-  :name      => _INTL("Poison"),
-  :animation => "Poison"
+  :name => _INTL("Poison"),
+  :animation => "Poison",
 })
 
 GameData::Status.register({
-  :id        => :BURN,
+  :id => :BURN,
   :id_number => 3,
-  :name      => _INTL("Burn"),
-  :animation => "Burn"
+  :name => _INTL("Burn"),
+  :animation => "Burn",
 })
 
 GameData::Status.register({
-  :id        => :PARALYSIS,
+  :id => :PARALYSIS,
   :id_number => 4,
-  :name      => _INTL("Paralysis"),
-  :animation => "Paralysis"
+  :name => _INTL("Paralysis"),
+  :animation => "Paralysis",
 })
 
 GameData::Status.register({
-  :id        => :FROZEN,
+  :id => :FROZEN,
   :id_number => 5,
-  :name      => _INTL("Frozen"),
-  :animation => "Frozen"
+  :name => _INTL("Frozen"),
+  :animation => "Frozen",
 })

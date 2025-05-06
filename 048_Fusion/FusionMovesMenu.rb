@@ -13,26 +13,23 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     @move3 = @poke1.moves[2]
     @move4 = @poke1.moves[3]
 
+    @index1 = 0
+    @index2 = 0
+    @index3 = 0
+    @index4 = 0
 
-    @index1=0
-    @index2=0
-    @index3=0
-    @index4=0
-
-
-    @selBaseColor = Color.new(48,96,216)
-    @selShadowColor = Color.new(32,32,32)
+    @selBaseColor = Color.new(48, 96, 216)
+    @selShadowColor = Color.new(32, 32, 32)
   end
 
   def initUIElements
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL(""), 0, 0, Graphics.width, 64, @viewport)
+      _INTL(""), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["textbox"] = pbCreateMessageWindow
     @sprites["textbox"].letterbyletter = false
     pbSetSystemFont(@sprites["textbox"].contents)
   end
-
-
 
   def pbStartScene(inloadscreen = false)
     super
@@ -48,7 +45,8 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       @sprites["option"][i] = (@PokemonOptions[i].get || 0)
     end
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL("Select moves"), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("Select moves"), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["title"].setSkin("Graphics/Windowskins/invisible")
     @sprites["option"].setSkin("Graphics/Windowskins/invisible")
     @sprites["textbox"].setSkin("Graphics/Windowskins/invisible")
@@ -78,9 +76,9 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     accuracy = move.accuracy == 0 ? "100" : move.accuracy.to_s
     pp = move.total_pp.to_s
     if !move
-      damage="-"
-      accuracy="-"
-      pp="-"
+      damage = "-"
+      accuracy = "-"
+      pp = "-"
     end
 
     textpos = [
@@ -94,7 +92,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       [_INTL("{1}%", accuracy), 140, 180, 0, value_base_color, value_shadow_color],
 
       [_INTL("PP"), 20, 212, 0, label_base_color, label_shadow_color], #move.total_pp
-      [_INTL("{1}", pp), 140, 212, 0, value_base_color, value_shadow_color] #move.total_pp
+      [_INTL("{1}", pp), 140, 212, 0, value_base_color, value_shadow_color], #move.total_pp
 
     ]
     imagepos = []
@@ -105,12 +103,11 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     imagepos.push(["Graphics/Pictures/types", 120, 94, 0, type_number * 28, 64, 28]) #248
     imagepos.push(["Graphics/Pictures/category", 120, 124, 0, category * 28, 64, 28])
     if !move
-      imagepos=[]
+      imagepos = []
     end
     @sprites["overlay"].bitmap.clear
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
     pbDrawImagePositions(@sprites["overlay"].bitmap, imagepos)
-
   end
 
   def draw_pokemon_type
@@ -139,7 +136,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
   end
 
   def getDefaultDescription
-    return  _INTL("No move selected")
+    return _INTL("No move selected")
   end
 
   def getMoveForIndex(index)
@@ -178,27 +175,23 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       EnumOption.new(_INTL(""), [_INTL(getMoveName(@poke1.moves[0])), _INTL(getMoveName(@poke2.moves[0]))],
                      proc { 0 },
                      proc { |value|
-                       @move1 = value == 0 ? @poke1.moves[0] : @poke2.moves[0]
-                     }, [getMoveDescription(@poke1.moves[0]), getMoveDescription(@poke2.moves[0])]
-      ),
+        @move1 = value == 0 ? @poke1.moves[0] : @poke2.moves[0]
+      }, [getMoveDescription(@poke1.moves[0]), getMoveDescription(@poke2.moves[0])]),
       EnumOption.new(_INTL(""), [_INTL(getMoveName(@poke1.moves[1])), _INTL(getMoveName(@poke2.moves[1]))],
                      proc { 0 },
                      proc { |value|
-                       @move2 = value == 0 ? @poke1.moves[1] : @poke2.moves[1]
-                     }, [getMoveDescription(@poke1.moves[1]), getMoveDescription(@poke2.moves[1])]
-      ),
+        @move2 = value == 0 ? @poke1.moves[1] : @poke2.moves[1]
+      }, [getMoveDescription(@poke1.moves[1]), getMoveDescription(@poke2.moves[1])]),
       EnumOption.new(_INTL(""), [_INTL(getMoveName(@poke1.moves[2])), _INTL(getMoveName(@poke2.moves[2]))],
                      proc { 0 },
                      proc { |value|
-                       @move3 = value == 0 ? @poke1.moves[2] : @poke2.moves[2]
-                     }, [getMoveDescription(@poke1.moves[2]), getMoveDescription(@poke2.moves[2])]
-      ),
+        @move3 = value == 0 ? @poke1.moves[2] : @poke2.moves[2]
+      }, [getMoveDescription(@poke1.moves[2]), getMoveDescription(@poke2.moves[2])]),
       EnumOption.new(_INTL(""), [_INTL(getMoveName(@poke1.moves[3])), _INTL(getMoveName(@poke2.moves[3]))],
                      proc { 0 },
                      proc { |value|
-                       @move4 = value == 0 ? @poke1.moves[3] : @poke2.moves[3]
-                     }, [getMoveDescription(@poke1.moves[3]), getMoveDescription(@poke2.moves[3])]
-      )
+        @move4 = value == 0 ? @poke1.moves[3] : @poke2.moves[3]
+      }, [getMoveDescription(@poke1.moves[3]), getMoveDescription(@poke2.moves[3])]),
     ]
     return options
   end
@@ -209,32 +202,30 @@ class FusionMovesOptionsScene < PokemonOption_Scene
 
   def initOptionsWindow
     optionsWindow = Window_PokemonOptionFusionMoves.new(@PokemonOptions, 0,
-                                             @sprites["title"].height, Graphics.width,
-                                             Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
+                                                        @sprites["title"].height, Graphics.width,
+                                                        Graphics.height - @sprites["title"].height - @sprites["textbox"].height)
     optionsWindow.viewport = @viewport
     optionsWindow.visible = true
     return optionsWindow
   end
-
 end
-
 
 class Window_PokemonOptionFusionMoves < Window_PokemonOption
   def initialize(options, x, y, width, height)
     super
-    @mustUpdateOptions=true
-    @mustUpdateDescription=true
-    @confirmed=false
+    @mustUpdateOptions = true
+    @mustUpdateDescription = true
+    @confirmed = false
   end
 
-  def drawCursor(index,rect)
-    if self.index==index
-      pbCopyBitmap(self.contents, @selarrow.bitmap,rect.x+175,rect.y)
+  def drawCursor(index, rect)
+    if self.index == index
+      pbCopyBitmap(self.contents, @selarrow.bitmap, rect.x + 175, rect.y)
     end
-    return Rect.new(rect.x+16,rect.y,rect.width-16,rect.height)
+    return Rect.new(rect.x + 16, rect.y, rect.width - 16, rect.height)
   end
 
-    def dont_draw_item(index)
+  def dont_draw_item(index)
     return index == @options.length
   end
 end

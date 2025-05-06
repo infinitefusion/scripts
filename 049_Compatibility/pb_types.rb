@@ -3,5 +3,4 @@ class PBTypes
   def PBTypes.getName(index)
     return GameData::Type.get(index).real_name
   end
-
 end

@@ -6,22 +6,22 @@
 def pbBattleChallengeTrainer(win_count, bttrainers)
   # This table's start points and lengths are based on a bttrainers size of 300.
   # They are scaled based on the actual size of bttrainers later.
-  table = [   # Each value is [minimum win count, range start point, range length]
-     [ 0,   0, 100],   # 0-100
-     [ 6,  80,  40],   # 80-120
-     [ 7,  80,  40],   # 80-120
-     [13, 120,  20],   # 120-140
-     [14, 100,  40],   # 100-140
-     [20, 140,  20],   # 140-160
-     [21, 120,  40],   # 120-160
-     [27, 160,  20],   # 160-180
-     [28, 140,  40],   # 140-180
-     [34, 180,  20],   # 180-200
-     [35, 160,  40],   # 160-200
-     [41, 200,  20],   # 200-220
-     [42, 180,  40],   # 180-220
-     [48, 220,  40],   # 220-260
-     [49, 200, 100]    # 200-300 - This line is used for all higher win_counts
+  table = [ # Each value is [minimum win count, range start point, range length]
+    [0, 0, 100],   # 0-100
+    [6, 80, 40],   # 80-120
+    [7, 80, 40],   # 80-120
+    [13, 120, 20],   # 120-140
+    [14, 100, 40],   # 100-140
+    [20, 140, 20],   # 140-160
+    [21, 120, 40],   # 120-160
+    [27, 160, 20],   # 160-180
+    [28, 140, 40],   # 140-180
+    [34, 180, 20],   # 180-200
+    [35, 160, 40],   # 160-200
+    [41, 200, 20],   # 200-220
+    [42, 180, 40],   # 180-220
+    [48, 220, 40],   # 220-260
+    [49, 200, 100],    # 200-300 - This line is used for all higher win_counts
   ]
   slot = nil
   table.each { |val| slot = val if val[0] <= win_count && (!slot || slot[0] < val[0]) }
@@ -43,8 +43,9 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   # Create the trainer
   trainerdata = bttrainers[idxTrainer]
   opponent = NPCTrainer.new(
-     pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
-     trainerdata[0])
+    pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
+    trainerdata[0]
+  )
   # Determine how many IVs the trainer's Pokémon will have
   indvalues = 31
   indvalues = 21 if idxTrainer < 220
@@ -61,7 +62,7 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   if pokemonnumbers.length <= rules.ruleset.suggestedNumber
     for n in pokemonnumbers
       rndpoke = btpokemon[n]
-      pkmn = rndpoke.createPokemon(rndpoke,level, indvalues, opponent)
+      pkmn = rndpoke.createPokemon(rndpoke, level, indvalues, opponent)
       opponent.party.push(pkmn)
     end
     return opponent
@@ -74,9 +75,9 @@ def pbGenerateBattleTrainer(idxTrainer, rules)
   loop do
     opponent.party.clear
     while opponent.party.length < rules.ruleset.suggestedNumber
-      rndpoke = getRandomPokemonSpecies(btpokemon,minBst,maxBst)
+      rndpoke = getRandomPokemonSpecies(btpokemon, minBst, maxBst)
 
-      opponent.party.push(createPokemon(rndpoke,level, indvalues, nil))
+      opponent.party.push(createPokemon(rndpoke, level, indvalues, nil))
     end
     break if rules.ruleset.isValid?(opponent.party)
   end
@@ -98,27 +99,27 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
   # This table's start point and end point values are based on a btpokemon size
   # of 881. They are scaled based on the actual size of btpokemon.
   # Group 1 is 0 - 173. Group 2 is 174 - 371. Group 3 is 372 - 881.
-  if level == GameData::GrowthRate.max_level   # Open Level (Level 100)
+  if level == GameData::GrowthRate.max_level # Open Level (Level 100)
     table = [
-       [372, 491],   # Group 3 (first quarter)
-       [492, 610],   # Group 3 (second quarter)
-       [611, 729],   # Group 3 (third quarter)
-       [730, 849],   # Group 3 (fourth quarter)
-       [372, 881],   # All of Group 3
-       [372, 881],   # All of Group 3
-       [372, 881],   # All of Group 3
-       [372, 881]    # This line is used for all higher sets (all of Group 3)
+      [372, 491],   # Group 3 (first quarter)
+      [492, 610],   # Group 3 (second quarter)
+      [611, 729],   # Group 3 (third quarter)
+      [730, 849],   # Group 3 (fourth quarter)
+      [372, 881],   # All of Group 3
+      [372, 881],   # All of Group 3
+      [372, 881],   # All of Group 3
+      [372, 881],    # This line is used for all higher sets (all of Group 3)
     ]
   else
     table = [
-       [  0, 173],   # Group 1
-       [174, 272],   # Group 2 (first half)
-       [273, 371],   # Group 2 (second half)
-       [372, 491],   # Group 3 (first quarter)
-       [492, 610],   # Group 3 (second quarter)
-       [611, 729],   # Group 3 (third quarter)
-       [730, 849],   # Group 3 (fourth quarter)
-       [372, 881]    # This line is used for all higher sets (all of Group 3)
+      [0, 173],   # Group 1
+      [174, 272],   # Group 2 (first half)
+      [273, 371],   # Group 2 (second half)
+      [372, 491],   # Group 3 (first quarter)
+      [492, 610],   # Group 3 (second quarter)
+      [611, 729],   # Group 3 (third quarter)
+      [730, 849],   # Group 3 (fourth quarter)
+      [372, 881],    # This line is used for all higher sets (all of Group 3)
     ]
   end
   pokemonNumbers[0] = table[set][0] * btpokemon.length / 881
@@ -132,13 +133,13 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
   # Choose a threshold, which is the number of Pokémon with the lower IV out of
   # the two chosen above. The higher the swap_count, the lower this threshold
   # (i.e. the more Pokémon will have the higher IV).
-  thresholds = [   # Each value is [minimum swap count, threshold value]
-    [ 0, 6],
+  thresholds = [ # Each value is [minimum swap count, threshold value]
+    [0, 6],
     [15, 5],
     [22, 4],
     [29, 3],
     [36, 2],
-    [43, 1]
+    [43, 1],
   ]
   thresholds.each { |val| iv_threshold = val[1] if swap_count >= val[0] }
   # Randomly choose Pokémon from the range to fill the party with
@@ -156,14 +157,13 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
       rnd = pokemonNumbers[0] + rand(pokemonNumbers[1] - pokemonNumbers[0] + 1)
       rndpoke = btpokemon[rnd]
       indvalue = (party.length < iv_threshold) ? ivs[0] : ivs[1]
-      party.push(createPokemon(rndpoke,level, indvalue, nil))
+      party.push(createPokemon(rndpoke, level, indvalue, nil))
     end
     break if rules.ruleset.isValid?([].concat(party).concat(rentals))
   end
   rules.ruleset.setNumberRange(old_min, old_max)
   return party
 end
-
 
 def createPokemon(species, level, iv, trainer)
   pkmn = Pokemon.new(species, level, trainer)
@@ -174,15 +174,14 @@ def createPokemon(species, level, iv, trainer)
 end
 
 #list is a list of dex numbers of possible choices
-def getRandomPokemonSpecies(list=[],minBST=0,maxBST=1000)
+def getRandomPokemonSpecies(list = [], minBST = 0, maxBST = 1000)
   if list == []
     list = listAllPokemon
   end
-  bst=-1
+  bst = -1
   while (bst < minBST || bst > maxBST)
     chosenPokemon = list.sample
     bst = calcBaseStatsSum(chosenPokemon)
   end
   return chosenPokemon
 end
-

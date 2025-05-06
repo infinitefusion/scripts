@@ -13,12 +13,12 @@ def update_global_hats_list()
 
   # Iterate through the JSON data and create Hat objects
   hat_data.each do |data|
-    tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
+    tags = data["tags"] ? data["tags"].split(",").map(&:strip) : []
     hat = Hat.new(
-      data['id'],
-      data['name'],
-      data['description'],
-      data['price'],
+      data["id"],
+      data["name"],
+      data["description"],
+      data["price"],
       tags
     )
     $PokemonGlobal.hats_data[hat.id] = hat
@@ -34,12 +34,12 @@ def update_global_hairstyles_list()
 
   # Iterate through the JSON data and create Hat objects
   hair_data.each do |data|
-    tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
+    tags = data["tags"] ? data["tags"].split(",").map(&:strip) : []
     hair = Hairstyle.new(
-      data['id'],
-      data['name'],
-      data['description'],
-      data['price'],
+      data["id"],
+      data["name"],
+      data["description"],
+      data["price"],
       tags
     )
     $PokemonGlobal.hairstyles_data[hair.id] = hair
@@ -55,12 +55,12 @@ def update_global_clothes_list()
 
   # Iterate through the JSON data and create Hat objects
   outfits_data.each do |data|
-    tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
+    tags = data["tags"] ? data["tags"].split(",").map(&:strip) : []
     outfit = Clothes.new(
-      data['id'],
-      data['name'],
-      data['description'],
-      data['price'],
+      data["id"],
+      data["name"],
+      data["description"],
+      data["price"],
       tags
     )
     $PokemonGlobal.clothes_data[outfit.id] = outfit
@@ -72,4 +72,3 @@ def update_global_outfit_lists()
   update_global_hairstyles_list
   update_global_clothes_list
 end
-

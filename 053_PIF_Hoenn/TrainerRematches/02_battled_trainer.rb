@@ -3,77 +3,77 @@
 class BattledTrainer
   TRAINER_CLASS_FAVORITE_TYPES =
     {
-      AROMALADY:      [:GRASS, :FAIRY],
-      BEAUTY:         [:FAIRY, :WATER, :NORMAL, :GRASS],
-      BIKER:          [:POISON, :DARK],
-      BIRDKEEPER:     [:FLYING, :NORMAL],
-      BUGCATCHER:     [:BUG],
-      BURGLAR:        [:FIRE, :DARK],
-      CHANNELER:      [:GHOST, :PSYCHIC],
-      CUEBALL:        [:FIGHTING],
-      ENGINEER:       [:ELECTRIC, :STEEL],
-      FISHERMAN:      [:WATER],
-      GAMBLER:        [:NORMAL, :PSYCHIC],
-      GENTLEMAN:      [:NORMAL, :STEEL],
-      HIKER:          [:ROCK, :GROUND],
-      JUGGLER:        [:PSYCHIC, :GHOST],
-      LADY:           [:FAIRY, :NORMAL],
-      PAINTER:        [:NORMAL, :PSYCHIC],
-      POKEMANIAC:     [:DRAGON, :GROUND],
+      AROMALADY: [:GRASS, :FAIRY],
+      BEAUTY: [:FAIRY, :WATER, :NORMAL, :GRASS],
+      BIKER: [:POISON, :DARK],
+      BIRDKEEPER: [:FLYING, :NORMAL],
+      BUGCATCHER: [:BUG],
+      BURGLAR: [:FIRE, :DARK],
+      CHANNELER: [:GHOST, :PSYCHIC],
+      CUEBALL: [:FIGHTING],
+      ENGINEER: [:ELECTRIC, :STEEL],
+      FISHERMAN: [:WATER],
+      GAMBLER: [:NORMAL, :PSYCHIC],
+      GENTLEMAN: [:NORMAL, :STEEL],
+      HIKER: [:ROCK, :GROUND],
+      JUGGLER: [:PSYCHIC, :GHOST],
+      LADY: [:FAIRY, :NORMAL],
+      PAINTER: [:NORMAL, :PSYCHIC],
+      POKEMANIAC: [:DRAGON, :GROUND],
       POKEMONBREEDER: [:NORMAL, :GRASS],
-      PROFESSOR:      [:NORMAL, :PSYCHIC],
-      ROCKER:         [:ELECTRIC, :FIRE],
-      RUINMANIAC:     [:GROUND, :ROCK],
-      SAILOR:         [:WATER, :FIGHTING],
-      SCIENTIST:      [:ELECTRIC, :STEEL, :POISON],
-      SUPERNERD:      [:ELECTRIC, :PSYCHIC, :STEEL],
-      TAMER:          [:NORMAL, :DARK],
-      BLACKBELT:      [:FIGHTING],
-      CRUSHGIRL:      [:FIGHTING],
-      CAMPER:         [:BUG, :NORMAL, :GRASS],
-      PICNICKER:      [:GRASS, :NORMAL],
-      COOLTRAINER_M:  [:DRAGON, :STEEL, :FIRE],
-      COOLTRAINER_F:  [:ICE, :PSYCHIC, :FAIRY],
-      YOUNGSTER:      [:NORMAL, :BUG],
-      LASS:           [:NORMAL, :FAIRY],
+      PROFESSOR: [:NORMAL, :PSYCHIC],
+      ROCKER: [:ELECTRIC, :FIRE],
+      RUINMANIAC: [:GROUND, :ROCK],
+      SAILOR: [:WATER, :FIGHTING],
+      SCIENTIST: [:ELECTRIC, :STEEL, :POISON],
+      SUPERNERD: [:ELECTRIC, :PSYCHIC, :STEEL],
+      TAMER: [:NORMAL, :DARK],
+      BLACKBELT: [:FIGHTING],
+      CRUSHGIRL: [:FIGHTING],
+      CAMPER: [:BUG, :NORMAL, :GRASS],
+      PICNICKER: [:GRASS, :NORMAL],
+      COOLTRAINER_M: [:DRAGON, :STEEL, :FIRE],
+      COOLTRAINER_F: [:ICE, :PSYCHIC, :FAIRY],
+      YOUNGSTER: [:NORMAL, :BUG],
+      LASS: [:NORMAL, :FAIRY],
       POKEMONRANGER_M: [:GRASS, :GROUND],
       POKEMONRANGER_F: [:GRASS, :WATER],
-      PSYCHIC_M:      [:PSYCHIC, :GHOST],
-      PSYCHIC_F:      [:PSYCHIC, :FAIRY],
-      SWIMMER_M:      [:WATER],
-      SWIMMER_F:      [:WATER, :ICE],
-      SWIMMER2_M:     [:WATER],
-      SWIMMER2_F:     [:WATER],
-      TUBER_M:        [:WATER],
-      TUBER_F:        [:WATER],
-      TUBER2_M:       [:WATER],
-      TUBER2_F:       [:WATER],
-      COOLCOUPLE:     [:FIRE, :ICE],
-      CRUSHKIN:       [:FIGHTING],
-      SISANDBRO:      [:WATER, :GROUND],
-      TWINS:          [:FAIRY, :NORMAL],
-      YOUNGCOUPLE:    [:NORMAL, :PSYCHIC],
-      SOCIALITE:      [:FAIRY, :NORMAL],
-      BUGCATCHER_F:   [:BUG],
-      ROUGHNECK:      [:DARK, :FIGHTING],
-      TEACHER:        [:PSYCHIC, :NORMAL],
-      PRESCHOOLER_M:  [:NORMAL],
-      PRESCHOOLER_F:  [:FAIRY, :NORMAL],
-      HAUNTEDGIRL_YOUNG:  [:GHOST],
-      HAUNTEDGIRL:        [:GHOST, :DARK],
-      CLOWN:          [:PSYCHIC, :FAIRY],
-      NURSE:          [:NORMAL, :FAIRY],
-      WORKER:         [:STEEL, :GROUND],
+      PSYCHIC_M: [:PSYCHIC, :GHOST],
+      PSYCHIC_F: [:PSYCHIC, :FAIRY],
+      SWIMMER_M: [:WATER],
+      SWIMMER_F: [:WATER, :ICE],
+      SWIMMER2_M: [:WATER],
+      SWIMMER2_F: [:WATER],
+      TUBER_M: [:WATER],
+      TUBER_F: [:WATER],
+      TUBER2_M: [:WATER],
+      TUBER2_F: [:WATER],
+      COOLCOUPLE: [:FIRE, :ICE],
+      CRUSHKIN: [:FIGHTING],
+      SISANDBRO: [:WATER, :GROUND],
+      TWINS: [:FAIRY, :NORMAL],
+      YOUNGCOUPLE: [:NORMAL, :PSYCHIC],
+      SOCIALITE: [:FAIRY, :NORMAL],
+      BUGCATCHER_F: [:BUG],
+      ROUGHNECK: [:DARK, :FIGHTING],
+      TEACHER: [:PSYCHIC, :NORMAL],
+      PRESCHOOLER_M: [:NORMAL],
+      PRESCHOOLER_F: [:FAIRY, :NORMAL],
+      HAUNTEDGIRL_YOUNG: [:GHOST],
+      HAUNTEDGIRL: [:GHOST, :DARK],
+      CLOWN: [:PSYCHIC, :FAIRY],
+      NURSE: [:NORMAL, :FAIRY],
+      WORKER: [:STEEL, :GROUND],
       COOLTRAINER_M2: [:FIGHTING, :STEEL],
       COOLTRAINER_F2: [:PSYCHIC, :ICE],
-      FARMER:         [:GRASS, :GROUND, :NORMAL],
-      PYROMANIAC:     [:FIRE],
-      KIMONOGIRL:     [:FAIRY, :PSYCHIC, :GHOST],
-      SAGE:           [:PSYCHIC, :GHOST],
-      PLAYER:         [:ICE, :FIGHTING],
-      POLICE:         [:DARK, :FIGHTING],
-      SKIER_F:        [:ICE],
-      DELIVERYMAN:  [:NORMAL],
+      FARMER: [:GRASS, :GROUND, :NORMAL],
+      PYROMANIAC: [:FIRE],
+      KIMONOGIRL: [:FAIRY, :PSYCHIC, :GHOST],
+      SAGE: [:PSYCHIC, :GHOST],
+      PLAYER: [:ICE, :FIGHTING],
+      POLICE: [:DARK, :FIGHTING],
+      SKIER_F: [:ICE],
+      DELIVERYMAN: [:NORMAL],
     }
 
   DELAY_BETWEEN_NPC_TRADES = 180 #In seconds (3 minutes)
@@ -95,7 +95,6 @@ class BattledTrainer
   #Healing items that are in that list can be used by the trainer in rematches
   #
   attr_accessor :foundItems
-
 
   attr_accessor :nb_rematches
 
@@ -120,7 +119,7 @@ class BattledTrainer
   attr_accessor :previous_random_events
   attr_accessor :has_pending_action
 
-  def initialize(trainerType,trainerName,trainerVersion)
+  def initialize(trainerType, trainerName, trainerVersion)
     @trainerType = trainerType
     @trainerName = trainerName
     @currentTeam = loadOriginalTrainerTeam(trainerVersion)
@@ -129,8 +128,8 @@ class BattledTrainer
     @currentStatus = :IDLE
     @previous_status = :IDLE
     @previous_trade_timestamp = Time.now
-    @previous_random_events =[]
-    @has_pending_action=false
+    @previous_random_events = []
+    @has_pending_action = false
     @favorite_type = pick_favorite_type(trainerType)
   end
 
@@ -143,7 +142,7 @@ class BattledTrainer
   end
 
   def set_pending_action(value)
-    @has_pending_action=value
+    @has_pending_action = value
   end
 
   def log_evolution_event(unevolved_pokemon_species, evolved_pokemon_species)
@@ -159,9 +158,9 @@ class BattledTrainer
   def log_fusion_event(body_pokemon_species, head_pokemon_species, fused_pokemon_species)
     echoln "NPC trainer #{@trainerName} fused #{body_pokemon_species} and #{head_pokemon_species}!"
     event = BattledTrainerRandomEvent.new(:FUSE)
-    event.fusion_body_pokemon =body_pokemon_species
-    event.fusion_head_pokemon =head_pokemon_species
-    event.fusion_fused_pokemon =fused_pokemon_species
+    event.fusion_body_pokemon = body_pokemon_species
+    event.fusion_head_pokemon = head_pokemon_species
+    event.fusion_fused_pokemon = fused_pokemon_species
     @previous_random_events = [] unless @previous_random_events
     @previous_random_events << event
   end
@@ -191,29 +190,29 @@ class BattledTrainer
     event = BattledTrainerRandomEvent.new(:CATCH)
     event.caught_pokemon = new_pokemon_species
     @previous_random_events = [] unless @previous_random_events
-    @previous_random_events <<  event
+    @previous_random_events << event
   end
 
   def clear_previous_random_events()
     @previous_random_events = []
   end
 
-  def loadOriginalTrainer(trainerVersion=0)
-    return pbLoadTrainer(@trainerType,@trainerName,trainerVersion)
+  def loadOriginalTrainer(trainerVersion = 0)
+    return pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
   end
 
-  def loadOriginalTrainerTeam(trainerVersion=0)
-    original_trainer = pbLoadTrainer(@trainerType,@trainerName,trainerVersion)
+  def loadOriginalTrainerTeam(trainerVersion = 0)
+    original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
     echoln "Loading Trainer #{@trainerType}"
     current_party = []
     original_trainer.party.each do |partyMember|
       echoln "PartyMember: #{partyMember}"
       if partyMember.is_a?(Pokemon)
         current_party << partyMember
-      elsif partyMember.is_a?(Array)  #normally always gonna be this
+      elsif partyMember.is_a?(Array) #normally always gonna be this
         pokemon_species = partyMember[0]
         pokemon_level = partyMember[1]
-        current_party << Pokemon.new(pokemon_species,pokemon_level)
+        current_party << Pokemon.new(pokemon_species, pokemon_level)
       else
         echoln "Could not add Pokemon #{partyMember} to rematchable trainer's party."
       end

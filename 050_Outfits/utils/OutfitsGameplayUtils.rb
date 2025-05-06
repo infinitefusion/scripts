@@ -6,7 +6,7 @@ def obtainNewClothes(outfit_id)
   return obtainClothes(outfit_id)
 end
 
-def obtainHat(outfit_id,secondary=false)
+def obtainHat(outfit_id, secondary = false)
   echoln "obtained new hat: " + outfit_id
   outfit = get_hat_by_id(outfit_id)
   if !outfit
@@ -50,7 +50,7 @@ def obtainNewHairstyle(full_outfit_id)
 end
 
 def putOnClothes(outfit_id, silent = false)
-  $Trainer.dyed_clothes= {} if ! $Trainer.dyed_clothes
+  $Trainer.dyed_clothes = {} if !$Trainer.dyed_clothes
   $Trainer.last_worn_outfit = $Trainer.clothes
   outfit = get_clothes_by_id(outfit_id)
   $Trainer.clothes = outfit_id
@@ -67,12 +67,12 @@ def putOnClothes(outfit_id, silent = false)
   putOnOutfitMessage(outfit) if !silent
 end
 
-def putOnHat(outfit_id, silent = false, is_secondary=false)
-  $Trainer.dyed_hats= {} if ! $Trainer.dyed_hats
-  $Trainer.set_last_worn_hat($Trainer.hat,is_secondary)
+def putOnHat(outfit_id, silent = false, is_secondary = false)
+  $Trainer.dyed_hats = {} if !$Trainer.dyed_hats
+  $Trainer.set_last_worn_hat($Trainer.hat, is_secondary)
   outfit = get_hat_by_id(outfit_id)
 
-  $Trainer.set_hat(outfit_id,is_secondary)
+  $Trainer.set_hat(outfit_id, is_secondary)
 
   dye_color = $Trainer.dyed_hats[outfit_id]
   if dye_color
@@ -86,7 +86,6 @@ def putOnHat(outfit_id, silent = false, is_secondary=false)
   $game_map.refreshPlayerOutfit()
   putOnOutfitMessage(outfit) if !silent
 end
-
 
 def putOnHairFullId(full_outfit_id)
   outfit_id = getSplitHairFilenameAndVersionFromID(full_outfit_id)[1]
@@ -287,7 +286,7 @@ def setEventAppearance(event_id, trainerAppearance)
 end
 
 def getPlayerAppearance()
-  return TrainerAppearance.new($Trainer.skin_tone,$Trainer.hat,$Trainer.clothes, $Trainer.hair,
+  return TrainerAppearance.new($Trainer.skin_tone, $Trainer.hat, $Trainer.clothes, $Trainer.hair,
                                $Trainer.hair_color, $Trainer.clothes_color, $Trainer.hat_color)
 end
 
@@ -296,22 +295,21 @@ def randomizePlayerOutfitUnlocked()
   $Trainer.hat2 = $Trainer.unlocked_hats.sample
   $Trainer.clothes = $Trainer.unlocked_clothes.sample
 
-  dye_hat = rand(2)==0
-  dye_hat2 = rand(2)==0
-  dye_clothes = rand(2)==0
-  dye_hair = rand(2)==0
-  $Trainer.hat2 = nil if rand(3)==0
+  dye_hat = rand(2) == 0
+  dye_hat2 = rand(2) == 0
+  dye_clothes = rand(2) == 0
+  dye_hair = rand(2) == 0
+  $Trainer.hat2 = nil if rand(3) == 0
 
   $Trainer.hat_color = dye_hat ? rand(255) : 0
   $Trainer.hat2_color = dye_hat2 ? rand(255) : 0
 
   $Trainer.clothes_color = dye_clothes ? rand(255) : 0
-  $Trainer.hair_color =  dye_hair ? rand(255) : 0
+  $Trainer.hair_color = dye_hair ? rand(255) : 0
 
   hair_id = $PokemonGlobal.hairstyles_data.keys.sample
-  hair_color = [1,2,3,4].sample
-  $Trainer.hair = getFullHairId(hair_id,hair_color)
-
+  hair_color = [1, 2, 3, 4].sample
+  $Trainer.hair = getFullHairId(hair_id, hair_color)
 end
 
 def convert_letter_to_number(letter, max_number = nil)
@@ -321,10 +319,9 @@ def convert_letter_to_number(letter, max_number = nil)
   return base_value % max_number
 end
 
-
 def generate_appearance_from_name(name)
   name_seed_length = 13
-  max_dye_color=360
+  max_dye_color = 360
 
   seed = name[0, name_seed_length] # Truncate if longer than 8
   seed += seed[0, name_seed_length - seed.length] while seed.length < name_seed_length # Repeat first characters if shorter
@@ -335,76 +332,74 @@ def generate_appearance_from_name(name)
   clothes_list = $PokemonGlobal.clothes_data.keys
   hairstyles_list = $PokemonGlobal.hairstyles_data.keys
 
-  hat = hats_list[convert_letter_to_number(seed[0],hats_list.length)]
-  hat_color = convert_letter_to_number(seed[1],max_dye_color)
-  hat2_color = convert_letter_to_number(seed[2],max_dye_color)
+  hat = hats_list[convert_letter_to_number(seed[0], hats_list.length)]
+  hat_color = convert_letter_to_number(seed[1], max_dye_color)
+  hat2_color = convert_letter_to_number(seed[2], max_dye_color)
   hat_color = 0 if convert_letter_to_number(seed[2]) % 2 == 0 #1/2 chance of no dyed hat
 
-  hat2 = hats_list[convert_letter_to_number(seed[10],hats_list.length)]
+  hat2 = hats_list[convert_letter_to_number(seed[10], hats_list.length)]
   hat2_color = 0 if convert_letter_to_number(seed[11]) % 2 == 0 #1/2 chance of no dyed ha
   hat2 = "" if convert_letter_to_number(seed[12]) % 2 == 0 #1/2 chance of no 2nd hat
 
-  clothes = clothes_list[convert_letter_to_number(seed[3],clothes_list.length)]
-  clothes_color = convert_letter_to_number(seed[4],max_dye_color)
+  clothes = clothes_list[convert_letter_to_number(seed[3], clothes_list.length)]
+  clothes_color = convert_letter_to_number(seed[4], max_dye_color)
   clothes_color = 0 if convert_letter_to_number(seed[5]) % 2 == 0 #1/2 chance of no dyed clothes
 
-  hair_base = hairstyles_list[convert_letter_to_number(seed[6],hairstyles_list.length)]
-  hair_number = [1,2,3,4][convert_letter_to_number(seed[7],3)]
+  hair_base = hairstyles_list[convert_letter_to_number(seed[6], hairstyles_list.length)]
+  hair_number = [1, 2, 3, 4][convert_letter_to_number(seed[7], 3)]
   echoln "hair_number: #{hair_number}"
 
-  hair=getFullHairId(hair_base,hair_number)
-  hair_color = convert_letter_to_number(seed[8],max_dye_color)
+  hair = getFullHairId(hair_base, hair_number)
+  hair_color = convert_letter_to_number(seed[8], max_dye_color)
   hair_color = 0 if convert_letter_to_number(seed[9]) % 2 == 0 #1/2 chance of no dyed hair
 
   echoln hair_color
   echoln clothes_color
   echoln hat_color
 
-  skin_tone = [1,2,3,4,5,6][convert_letter_to_number(seed[10],5)]
-  return TrainerAppearance.new(skin_tone,hat,clothes, hair,
+  skin_tone = [1, 2, 3, 4, 5, 6][convert_letter_to_number(seed[10], 5)]
+  return TrainerAppearance.new(skin_tone, hat, clothes, hair,
                                hair_color, clothes_color, hat_color,
-                               hat2,hat2_color)
-
+                               hat2, hat2_color)
 end
 
 def get_random_appearance()
   hat = $PokemonGlobal.hats_data.keys.sample
   hat2 = $PokemonGlobal.hats_data.keys.sample
-  hat2 = nil if(rand(3)==0)
+  hat2 = nil if (rand(3) == 0)
 
   clothes = $PokemonGlobal.clothes_data.keys.sample
-  hat_color = rand(2)==0 ? rand(255) : 0
-  hat2_color = rand(2)==0 ? rand(255) : 0
+  hat_color = rand(2) == 0 ? rand(255) : 0
+  hat2_color = rand(2) == 0 ? rand(255) : 0
 
-  clothes_color = rand(2)==0 ? rand(255) : 0
-  hair_color =  rand(2)==0 ? rand(255) : 0
+  clothes_color = rand(2) == 0 ? rand(255) : 0
+  hair_color = rand(2) == 0 ? rand(255) : 0
 
   hair_id = $PokemonGlobal.hairstyles_data.keys.sample
-  hair_color = [1,2,3,4].sample
-  skin_tone = [1,2,3,4,5,6].sample
-  hair = getFullHairId(hair_id,hair_color)
+  hair_color = [1, 2, 3, 4].sample
+  skin_tone = [1, 2, 3, 4, 5, 6].sample
+  hair = getFullHairId(hair_id, hair_color)
 
-  return TrainerAppearance.new(skin_tone,hat,clothes, hair,
-                               hair_color, clothes_color, hat_color,hat2)
+  return TrainerAppearance.new(skin_tone, hat, clothes, hair,
+                               hair_color, clothes_color, hat_color, hat2)
 end
 
 def randomizePlayerOutfit()
   $Trainer.hat = $PokemonGlobal.hats_data.keys.sample
   $Trainer.hat2 = $PokemonGlobal.hats_data.keys.sample
-  $Trainer.hat2 = nil if(rand(3)==0)
+  $Trainer.hat2 = nil if (rand(3) == 0)
 
   $Trainer.clothes = $PokemonGlobal.clothes_data.keys.sample
-  $Trainer.hat_color = rand(2)==0 ? rand(255) : 0
-  $Trainer.hat2_color = rand(2)==0 ? rand(255) : 0
+  $Trainer.hat_color = rand(2) == 0 ? rand(255) : 0
+  $Trainer.hat2_color = rand(2) == 0 ? rand(255) : 0
 
-  $Trainer.clothes_color = rand(2)==0 ? rand(255) : 0
-  $Trainer.hair_color =  rand(2)==0 ? rand(255) : 0
+  $Trainer.clothes_color = rand(2) == 0 ? rand(255) : 0
+  $Trainer.hair_color = rand(2) == 0 ? rand(255) : 0
 
   hair_id = $PokemonGlobal.hairstyles_data.keys.sample
-  hair_color = [1,2,3,4].sample
-  $Trainer.skin_tone = [1,2,3,4,5,6].sample
-  $Trainer.hair = getFullHairId(hair_id,hair_color)
-
+  hair_color = [1, 2, 3, 4].sample
+  $Trainer.skin_tone = [1, 2, 3, 4, 5, 6].sample
+  $Trainer.hair = getFullHairId(hair_id, hair_color)
 end
 
 def canPutHatOnPokemon(pokemon)

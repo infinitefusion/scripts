@@ -166,12 +166,12 @@ class PokemonPauseMenu
           #   @scene.pbRefresh
           # }
           # else
-            pbFadeOutIn {
-              scene = PokemonPokedexMenu_Scene.new
-              screen = PokemonPokedexMenuScreen.new(scene)
-              screen.pbStartScreen
-              @scene.pbRefresh
-            }
+          pbFadeOutIn {
+            scene = PokemonPokedexMenu_Scene.new
+            screen = PokemonPokedexMenuScreen.new(scene)
+            screen.pbStartScreen
+            @scene.pbRefresh
+          }
           # end
         end
       elsif cmdPokemon >= 0 && command == cmdPokemon
@@ -221,7 +221,6 @@ class PokemonPauseMenu
       elsif cmdOutfit && cmdOutfit >= 0 && command == cmdOutfit
         @scene.pbHideMenu
         pbCommonEvent(COMMON_EVENT_OUTFIT)
-
       elsif cmdQuit >= 0 && command == cmdQuit
         @scene.pbHideMenu
         if pbInSafari?

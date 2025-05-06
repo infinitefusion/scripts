@@ -170,12 +170,12 @@ module PluginManager
   # Registers a plugin and tests its dependencies and incompatibilities.
   #-----------------------------------------------------------------------------
   def self.register(options)
-    name         = nil
-    version      = nil
-    link         = nil
+    name = nil
+    version = nil
+    link = nil
     dependencies = nil
-    incompats    = nil
-    credits      = []
+    incompats = nil
+    credits = []
     order = [:name, :version, :link, :dependencies, :incompatibilities, :credits]
     # Ensure it first reads the plugin's name, which is used in error reporting,
     # by sorting the keys
@@ -189,7 +189,7 @@ module PluginManager
     for key in keys
       value = options[key]
       case key
-      when :name   # Plugin name
+      when :name # Plugin name
         if nil_or_empty?(value)
           self.error("Plugin name must be a non-empty string.")
         end
@@ -197,27 +197,27 @@ module PluginManager
           self.error("A plugin called '#{value}' already exists.")
         end
         name = value
-      when :version   # Plugin version
+      when :version # Plugin version
         if nil_or_empty?(value)
           self.error("Plugin version must be a string.")
         end
         version = value
-      when :link   # Plugin website
+      when :link # Plugin website
         if nil_or_empty?(value)
           self.error("Plugin link must be a non-empty string.")
         end
         link = value
-      when :dependencies   # Plugin dependencies
+      when :dependencies # Plugin dependencies
         dependencies = value
         dependencies = [dependencies] if !dependencies.is_a?(Array) || !dependencies[0].is_a?(Array)
         for dep in value
-          if dep.is_a?(String)   # "plugin name"
+          if dep.is_a?(String) # "plugin name"
             if !self.installed?(dep)
               self.error("Plugin '#{name}' requires plugin '#{dep}' to be installed above it.")
             end
           elsif dep.is_a?(Array)
             case dep.size
-            when 1   # ["plugin name"]
+            when 1 # ["plugin name"]
               if dep[0].is_a?(String)
                 dep_name = dep[0]
                 if !self.installed?(dep_name)
@@ -226,26 +226,26 @@ module PluginManager
               else
                 self.error("Expected the plugin name as a string, but got #{dep[0].inspect}.")
               end
-            when 2   # ["plugin name", "version"]
+            when 2 # ["plugin name", "version"]
               if dep[0].is_a?(Symbol)
                 self.error("A plugin version comparator symbol was given but no version was given.")
               elsif dep[0].is_a?(String) && dep[1].is_a?(String)
-                dep_name    = dep[0]
+                dep_name = dep[0]
                 dep_version = dep[1]
                 next if self.installed?(dep_name, dep_version)
-                if self.installed?(dep_name)   # Have plugin but lower version
+                if self.installed?(dep_name) # Have plugin but lower version
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} or higher, " +
                         "but the installed version is #{self.version(dep_name)}."
                   if dep_link = self.link(dep_name)
                     msg += "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
-                else   # Don't have plugin
+                else # Don't have plugin
                   self.error("Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} " +
-                      "or higher to be installed above it.")
+                             "or higher to be installed above it.")
                 end
               end
-            when 3   # [:optional/:exact/:optional_exact, "plugin name", "version"]
+            when 3 # [:optional/:exact/:optional_exact, "plugin name", "version"]
               if !dep[0].is_a?(Symbol)
                 self.error("Expected first dependency argument to be a symbol, but got #{dep[0].inspect}.")
               end
@@ -255,11 +255,11 @@ module PluginManager
               if !dep[2].is_a?(String)
                 self.error("Expected third dependency argument to be the plugin version, but got #{dep[2].inspect}.")
               end
-              dep_arg     = dep[0]
-              dep_name    = dep[1]
+              dep_arg = dep[0]
+              dep_name = dep[1]
               dep_version = dep[2]
-              optional    = false
-              exact       = false
+              optional = false
+              exact = false
               case dep_arg
               when :optional
                 optional = true
@@ -273,7 +273,7 @@ module PluginManager
                            ":optional, :exact or :optional_exact, but got #{dep_arg.inspect}.")
               end
               if optional
-                if self.installed?(dep_name) &&   # Have plugin but lower version
+                if self.installed?(dep_name) && # Have plugin but lower version
                    !self.installed?(dep_name, dep_version, exact)
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}', if installed, to be version #{dep_version}"
                   msg << " or higher" if !exact
@@ -284,7 +284,7 @@ module PluginManager
                   self.error(msg)
                 end
               elsif !self.installed?(dep_name, dep_version, exact)
-                if self.installed?(dep_name)   # Have plugin but lower version
+                if self.installed?(dep_name) # Have plugin but lower version
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' to be version #{dep_version}"
                   msg << " or later" if !exact
                   msg << ", but the installed version was #{self.version(dep_name)}."
@@ -292,7 +292,7 @@ module PluginManager
                     msg << "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."
                   end
                   self.error(msg)
-                else   # Don't have plugin
+                else # Don't have plugin
                   msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} "
                   msg << "or later" if !exact
                   msg << "to be installed above it."
@@ -302,7 +302,7 @@ module PluginManager
             end
           end
         end
-      when :incompatibilities   # Plugin incompatibilities
+      when :incompatibilities # Plugin incompatibilities
         incompats = value
         incompats = [incompats] if !incompats.is_a?(Array)
         for incompat in incompats
@@ -341,7 +341,7 @@ module PluginManager
       :link => link,
       :dependencies => dependencies,
       :incompatibilities => incompats,
-      :credits => credits
+      :credits => credits,
     }
   end
   #-----------------------------------------------------------------------------
@@ -414,7 +414,7 @@ module PluginManager
     d2 = v2.split("")
     d2.insert(0, "0") if d2[0] == "."          # Turn ".123" into "0.123"
     while d2[-1] == "."; d2 = d2[0..-2]; end   # Turn "123." into "123"
-    for i in 0...[d1.size, d2.size].max   # Compare each digit in turn
+    for i in 0...[d1.size, d2.size].max # Compare each digit in turn
       c1 = d1[i]
       c2 = d2[i]
       if c1
@@ -432,7 +432,7 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.pluginErrorMsg(name, script)
     # begin message formatting
-    message  = "[Infinite Fusion version #{Settings::GAME_VERSION_NUMBER}]\r\n"
+    message = "[Infinite Fusion version #{Settings::GAME_VERSION_NUMBER}]\r\n"
     message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
     message += "Error in Plugin [#{name}]:\r\n"
     message += "#{$!.class} occurred.\r\n"
@@ -487,37 +487,37 @@ module PluginManager
         raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}", FileLineData.linereport)
       end
       property = $~[1].upcase
-      data = $~[2].split(',')
+      data = $~[2].split(",")
       data.each_with_index { |value, i| data[i] = value.strip }
       # begin formatting data hash
       case property
-      when 'REQUIRES'
+      when "REQUIRES"
         meta[:dependencies] = [] if !meta[:dependencies]
-        if data.length < 2   # No version given, just push name of plugin dependency
+        if data.length < 2 # No version given, just push name of plugin dependency
           meta[:dependencies].push(data[0])
           next
-        elsif data.length == 2   # Push name and version of plugin dependency
+        elsif data.length == 2 # Push name and version of plugin dependency
           meta[:dependencies].push([data[0], data[1]])
-        else   # Push dependency type, name and version of plugin dependency
+        else # Push dependency type, name and version of plugin dependency
           meta[:dependencies].push([data[2].downcase.to_sym, data[0], data[1]])
         end
-      when 'EXACT'
+      when "EXACT"
         next if data.length < 2   # Exact dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:exact, data[0], data[1]])
-      when 'OPTIONAL'
+      when "OPTIONAL"
         next if data.length < 2   # Optional dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:optional, data[0], data[1]])
-      when 'CONFLICTS'
+      when "CONFLICTS"
         meta[:incompatibilities] = [] if !meta[:incompatibilities]
         data.each { |value| meta[:incompatibilities].push(value) if value && !value.empty? }
-      when 'SCRIPTS'
+      when "SCRIPTS"
         meta[:scripts] = [] if !meta[:scripts]
         data.each { |scr| meta[:scripts].push(scr) }
-      when 'CREDITS'
+      when "CREDITS"
         meta[:credits] = data
-      when 'LINK', 'WEBSITE'
+      when "LINK", "WEBSITE"
         meta[:link] = data[0]
       else
         meta[property.downcase.to_sym] = data[0]
@@ -645,7 +645,7 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echo 'Compiling plugin scripts...'
+    echo "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -656,7 +656,7 @@ module PluginManager
       dat = [o, meta, []]
       # iterate through each file to deflate
       for file in plugins[o][:scripts]
-        File.open("#{plugins[o][:dir]}/#{file}", 'rb') do |f|
+        File.open("#{plugins[o][:dir]}/#{file}", "rb") do |f|
           dat[2].push([file, Zlib::Deflate.deflate(f.read)])
         end
       end
@@ -664,11 +664,11 @@ module PluginManager
       scripts.push(dat)
     end
     # save to main `PluginScripts.rxdata` file
-    File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
+    File.open("Data/PluginScripts.rxdata", "wb") { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    echoln ' done.'
-    echoln ''
+    echoln " done."
+    echoln ""
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
@@ -693,20 +693,20 @@ module PluginManager
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        sname = scr[0].gsub("\\","/").split("/")[-1]
+        sname = scr[0].gsub("\\", "/").split("/")[-1]
         fname = "[#{name}] #{sname}"
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
           echoln "Loaded plugin: #{name}" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
-        rescue Exception   # format error message to display
+        rescue Exception # format error message to display
           self.pluginErrorMsg(name, sname)
           Kernel.exit! true
         end
       end
     end
-    echoln '' if !echoed_plugins.empty?
+    echoln "" if !echoed_plugins.empty?
   end
   #-----------------------------------------------------------------------------
 end

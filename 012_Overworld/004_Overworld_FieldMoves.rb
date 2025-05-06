@@ -7,15 +7,15 @@ module HiddenMoveHandlers
   UseMove = MoveHandlerHash.new
 
   def self.addCanUseMove(item, proc)
-    ; CanUseMove.add(item, proc);
+    CanUseMove.add(item, proc)
   end
 
   def self.addConfirmUseMove(item, proc)
-    ; ConfirmUseMove.add(item, proc);
+    ConfirmUseMove.add(item, proc)
   end
 
   def self.addUseMove(item, proc)
-    ; UseMove.add(item, proc);
+    UseMove.add(item, proc)
   end
 
   def self.hasHandler(item)
@@ -95,7 +95,8 @@ def pbHiddenMoveAnimation(pokemon)
   interp = RectInterpolator.new(
     Rect.new(0, Graphics.height / 2, Graphics.width, 0),
     Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
-    Graphics.frame_rate / 4)
+    Graphics.frame_rate / 4
+  )
   ptinterp = nil
   phase = 1
   frames = 0
@@ -114,7 +115,8 @@ def pbHiddenMoveAnimation(pokemon)
         ptinterp = PointInterpolator.new(
           Graphics.width + (sprite.bitmap.width / 2), bg.bitmap.height / 2,
           Graphics.width / 2, bg.bitmap.height / 2,
-          Graphics.frame_rate * 4 / 10)
+          Graphics.frame_rate * 4 / 10
+        )
       end
     when 2 # Slide Pokémon sprite in from right to centre
       ptinterp.update
@@ -133,7 +135,8 @@ def pbHiddenMoveAnimation(pokemon)
         ptinterp = PointInterpolator.new(
           Graphics.width / 2, bg.bitmap.height / 2,
           -(sprite.bitmap.width / 2), bg.bitmap.height / 2,
-          Graphics.frame_rate * 4 / 10)
+          Graphics.frame_rate * 4 / 10
+        )
         frames = 0
       end
     when 4 # Slide Pokémon sprite off from centre to left
@@ -146,7 +149,8 @@ def pbHiddenMoveAnimation(pokemon)
         interp = RectInterpolator.new(
           Rect.new(0, (Graphics.height - bg.bitmap.height) / 2, Graphics.width, bg.bitmap.height),
           Rect.new(0, Graphics.height / 2, Graphics.width, 0),
-          Graphics.frame_rate / 4)
+          Graphics.frame_rate / 4
+        )
       end
     when 5 # Shrink viewport height from full to zero
       interp.update
@@ -244,7 +248,7 @@ def pbSmashEvent(event)
     PBMoveRoute::TurnRight,
     PBMoveRoute::Wait, 2,
     PBMoveRoute::TurnUp,
-    PBMoveRoute::Wait, 2
+    PBMoveRoute::Wait, 2,
   ])
   pbWait(Graphics.frame_rate * 4 / 10)
   event.erase
@@ -339,12 +343,12 @@ def pbDive
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     if movefinder
-      $Trainer.surfing_pokemon= getSpecies(movefinder.species)
+      $Trainer.surfing_pokemon = getSpecies(movefinder.species)
 
       echoln movefinder.species
       echoln getSpecies(movefinder.species)
     else
-      $Trainer.surfing_pokemon=nil
+      $Trainer.surfing_pokemon = nil
     end
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -413,7 +417,7 @@ def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
     $PokemonGlobal.diving = true
     $PokemonGlobal.surfing = false
     pbUpdateVehicle
-    $scene.transfer_player(false )
+    $scene.transfer_player(false)
     addWaterCausticsEffect()
 
     $game_map.autoplay
@@ -430,7 +434,7 @@ Events.onAction += proc { |_sender, _e|
       break
     end
     if surface_map_id &&
-      $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+       $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       #$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_surf
       pbSurfacing
     end
@@ -449,13 +453,13 @@ HiddenMoveHandlers::CanUseMove.add(:DIVE, proc { |move, pkmn, showmsg|
       break
     end
     if !surface_map_id ||
-      !$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+       !$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
   else
     if !GameData::MapMetadata.exists?($game_map.map_id) ||
-      !GameData::MapMetadata.get($game_map.map_id).dive_map_id
+       !GameData::MapMetadata.get($game_map.map_id).dive_map_id
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
@@ -505,7 +509,7 @@ HiddenMoveHandlers::UseMove.add(:DIVE, proc { |move, pokemon|
 HiddenMoveHandlers::CanUseMove.add(:FLASH, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLASH, showmsg)
   if !GameData::MapMetadata.exists?($game_map.map_id) ||
-    !(GameData::MapMetadata.get($game_map.map_id).dark_map || darknessEffectOnCurrentMap())
+     !(GameData::MapMetadata.get($game_map.map_id).dark_map || darknessEffectOnCurrentMap())
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -558,7 +562,7 @@ def pbCanUseFly(showmsg)
     return false
   end
   if !GameData::MapMetadata.exists?($game_map.map_id) ||
-    !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+     !GameData::MapMetadata.get($game_map.map_id).outdoor_map
     pbMessage(_INTL("Can't use that here.")) if showmsg
     return false
   end
@@ -596,11 +600,11 @@ def pbHeadbuttEffect(event = nil)
   a = (a * 2 / 5) % 10 # Even 2x as likely as odd, 0 is 1.5x as likely as odd
   b = $Trainer.public_ID % 10 # Practically equal odds of each value
   chance = 1 # ~50%
-  if a == b;
+  if a == b
     chance = 8 # 10%
-  elsif a > b && (a - b).abs < 5;
+  elsif a > b && (a - b).abs < 5
     chance = 5 # ~30.3%
-  elsif a < b && (a - b).abs > 5;
+  elsif a < b && (a - b).abs > 5
     chance = 5 # ~9.7%
   end
   if rand(10) >= chance
@@ -648,7 +652,7 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:RELICSONG, proc { |move, pokemon, showmsg|
-  if  !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))
+  if !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))
     pbMessage(_INTL("It won't have any effect")) if showmsg
     next false
   end
@@ -687,8 +691,8 @@ def changeMeloettaForm(pokemon)
     pbMessage(_INTL("{1} changed form!", pokemon.name))
   else
     if is_meloetta_P
-    replaceFusionSpecies(pokemon, :MELOETTA_P, :MELOETTA_A)
-    pbMessage(_INTL("{1} changed to the Aria form!", pokemon.name))
+      replaceFusionSpecies(pokemon, :MELOETTA_P, :MELOETTA_A)
+      pbMessage(_INTL("{1} changed to the Aria form!", pokemon.name))
     end
     if is_meloetta_A
       replaceFusionSpecies(pokemon, :MELOETTA_A, :MELOETTA_P)
@@ -836,12 +840,12 @@ def pbSurf
   return false
 end
 
-def pbStartSurfing(speciesID=nil)
+def pbStartSurfing(speciesID = nil)
   pbCancelVehicles
   if speciesID
-    $Trainer.surfing_pokemon=getSpecies(speciesID)
+    $Trainer.surfing_pokemon = getSpecies(speciesID)
   else
-    $Trainer.surfing_pokemon=nil
+    $Trainer.surfing_pokemon = nil
   end
   $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
@@ -868,7 +872,6 @@ def pbEndSurf(_xOffset, _yOffset)
     end
     $PokemonTemp.surfJump = nil
     return true
-
   end
   return false
 end
@@ -891,7 +894,7 @@ end
 Events.onAction += proc { |_sender, _e|
   next if $PokemonGlobal.surfing
   next if GameData::MapMetadata.exists?($game_map.map_id) &&
-    GameData::MapMetadata.get($game_map.map_id).always_bicycle
+          GameData::MapMetadata.get($game_map.map_id).always_bicycle
   next if !$game_player.pbFacingTerrainTag.can_surf_freely
   pbSurf
 }
@@ -908,7 +911,6 @@ Events.onAction += proc { |_sender, _e|
   end
   if $game_player.pbFacingTerrainTag.flowerYellow
     if $game_switches[SWITCH_ORICORIO_QUEST_IN_PROGRESS]
-
     else
       changeOricorioFlower(2)
     end
@@ -955,12 +957,12 @@ HiddenMoveHandlers::CanUseMove.add(:SURF, proc { |move, pkmn, showmsg|
     next false
   end
   if GameData::MapMetadata.exists?($game_map.map_id) &&
-    GameData::MapMetadata.get($game_map.map_id).always_bicycle
+     GameData::MapMetadata.get($game_map.map_id).always_bicycle
     pbMessage(_INTL("Let's enjoy cycling!")) if showmsg
     next false
   end
   if !$game_player.pbFacingTerrainTag.can_surf_freely ||
-    !$game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
+     !$game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
     pbMessage(_INTL("No surfing here!")) if showmsg
     next false
   end
@@ -1012,7 +1014,7 @@ def pbSweetScent
   viewport.dispose
   enctype = $PokemonEncounters.encounter_type
   if enctype || !$PokemonEncounters.encounter_possible_here? ||
-    !pbEncounter(enctype)
+     !pbEncounter(enctype)
     pbMessage(_INTL("There appears to be nothing here..."))
   end
 end

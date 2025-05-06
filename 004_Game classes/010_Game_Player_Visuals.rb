@@ -1,5 +1,5 @@
 class Game_Player < Game_Character
-  @@bobFrameSpeed = 1.0/15
+  @@bobFrameSpeed = 1.0 / 15
 
   def fullPattern
     case self.direction
@@ -11,11 +11,11 @@ class Game_Player < Game_Character
     return 0
   end
 
-  def setDefaultCharName(chname,pattern,lockpattern=false)
-    return if pattern<0 || pattern>=16
+  def setDefaultCharName(chname, pattern, lockpattern = false)
+    return if pattern < 0 || pattern >= 16
     @defaultCharacterName = chname
-    @direction = [2,4,6,8][pattern/4]
-    @pattern = pattern%4
+    @direction = [2, 4, 6, 8][pattern / 4]
+    @pattern = pattern % 4
     @lock_pattern = lockpattern
   end
 
@@ -25,8 +25,8 @@ class Game_Player < Game_Character
                     pbMapInterpreterRunning?
     input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::ACTION)
     return input && $Trainer.has_running_shoes && !jumping? &&
-       !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
-       !$PokemonGlobal.bicycle && !$game_player.pbTerrainTag.must_walk
+             !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
+             !$PokemonGlobal.bicycle && !$game_player.pbTerrainTag.must_walk
   end
 
   def pbIsRunning?
@@ -35,19 +35,18 @@ class Game_Player < Game_Character
 
   def character_name
     @defaultCharacterName = "" if !@defaultCharacterName
-    return @defaultCharacterName if @defaultCharacterName!=""
-    if !@move_route_forcing && $Trainer.character_ID>=0
+    return @defaultCharacterName if @defaultCharacterName != ""
+    if !@move_route_forcing && $Trainer.character_ID >= 0
       meta = GameData::Metadata.get_player($Trainer.character_ID)
       if meta && !$PokemonGlobal.bicycle && !$PokemonGlobal.diving && !$PokemonGlobal.surfing
         charset = 1   # Display normal character sprite
 
-
         player_is_moving = moving?
-        if pbCanRun? && (player_is_moving || @wasmoving) && Input.dir4!=0 && meta[4] && meta[4]!=""
+        if pbCanRun? && (player_is_moving || @wasmoving) && Input.dir4 != 0 && meta[4] && meta[4] != ""
           charset = 4   # Display running character sprite
         end
 
-        newCharName = pbGetPlayerCharset(meta,charset)
+        newCharName = pbGetPlayerCharset(meta, charset)
 
         if newCharName
           # echoln caller
@@ -63,9 +62,6 @@ class Game_Player < Game_Character
           # echoln charset
           # echoln ""
         end
-
-
-
 
         @character_name = newCharName if newCharName
         @wasmoving = player_is_moving
@@ -92,17 +88,16 @@ class Game_Player < Game_Character
 
   def update_pattern
     if $PokemonGlobal.surfing || $PokemonGlobal.diving
-      p = ((Graphics.frame_count%60)*@@bobFrameSpeed).floor
+      p = ((Graphics.frame_count % 60) * @@bobFrameSpeed).floor
       @pattern = p if !@lock_pattern
       @pattern_surf = p
-      @bob_height = (p>=2) ? 2 : 0
+      @bob_height = (p >= 2) ? 2 : 0
     else
       @bob_height = 0
       super
     end
   end
 end
-
 
 =begin
 class Game_Character

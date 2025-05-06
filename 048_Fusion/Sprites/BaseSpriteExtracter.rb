@@ -10,6 +10,7 @@ class BaseSpriteExtracter < PIFSpriteExtracter
   SPRITE_SIZE = 96 # Original sprite size
   NB_COLUMNS_BASESPRITES = 10
   SHEET_WIDTH = SPRITE_SIZE * NB_COLUMNS_BASESPRITES # 2880 pixels wide spritesheet
+
   def load_bitmap_from_spritesheet(pif_sprite)
     alt_letter = pif_sprite.alt_letter
     spritesheet_file = getSpritesheetPath(pif_sprite)
@@ -30,7 +31,7 @@ class BaseSpriteExtracter < PIFSpriteExtracter
     letters = letters.downcase # Ensure input is case-insensitive
     index = 0
     letters.each_char do |char|
-      index = index * 26 + (char.ord - 'a'.ord + 1)
+      index = index * 26 + (char.ord - "a".ord + 1)
     end
     #echoln "index: #{index}"
     return index
@@ -48,7 +49,7 @@ class BaseSpriteExtracter < PIFSpriteExtracter
   def should_update_spritesheet?(pif_sprite)
     return false if !$updated_spritesheets
     return false if !downloadAllowed?()
-    return false if requestRateExceeded?(Settings::CUSTOMSPRITES_RATE_LOG_FILE,Settings::CUSTOMSPRITES_ENTRIES_RATE_TIME_WINDOW,Settings::CUSTOMSPRITES_RATE_MAX_NB_REQUESTS,false)
+    return false if requestRateExceeded?(Settings::CUSTOMSPRITES_RATE_LOG_FILE, Settings::CUSTOMSPRITES_ENTRIES_RATE_TIME_WINDOW, Settings::CUSTOMSPRITES_RATE_MAX_NB_REQUESTS, false)
     spritesheet_file = getSpritesheetPath(pif_sprite)
     return true if !pbResolveBitmap(spritesheet_file)
 

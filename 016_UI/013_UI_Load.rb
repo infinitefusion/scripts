@@ -4,14 +4,14 @@
 class PokemonLoadPanel < SpriteWrapper
   attr_reader :selected
 
-  TEXTCOLOR             = Color.new(232,232,232)
-  TEXTSHADOWCOLOR       = Color.new(136,136,136)
-  MALETEXTCOLOR         = Color.new(56,160,248)
-  MALETEXTSHADOWCOLOR   = Color.new(56,104,168)
-  FEMALETEXTCOLOR       = Color.new(240,72,88)
-  FEMALETEXTSHADOWCOLOR = Color.new(160,64,64)
+  TEXTCOLOR = Color.new(232, 232, 232)
+  TEXTSHADOWCOLOR = Color.new(136, 136, 136)
+  MALETEXTCOLOR = Color.new(56, 160, 248)
+  MALETEXTSHADOWCOLOR = Color.new(56, 104, 168)
+  FEMALETEXTCOLOR = Color.new(240, 72, 88)
+  FEMALETEXTSHADOWCOLOR = Color.new(160, 64, 64)
 
-  def initialize(index,title,isContinue,trainer,framecount,mapid,viewport=nil)
+  def initialize(index, title, isContinue, trainer, framecount, mapid, viewport = nil)
     super(viewport)
     @index = index
     @title = title
@@ -19,7 +19,7 @@ class PokemonLoadPanel < SpriteWrapper
     @trainer = trainer
     @totalsec = (framecount || 0) / Graphics.frame_rate
     @mapid = mapid
-    @selected = (index==0)
+    @selected = (index == 0)
     @bgbitmap = AnimatedBitmap.new("Graphics/Pictures/loadPanels")
     @refreshBitmap = true
     @refreshing = false
@@ -33,7 +33,7 @@ class PokemonLoadPanel < SpriteWrapper
   end
 
   def selected=(value)
-    return if @selected==value
+    return if @selected == value
     @selected = value
     @refreshBitmap = true
     refresh
@@ -49,50 +49,50 @@ class PokemonLoadPanel < SpriteWrapper
     return if disposed?
     @refreshing = true
     if !self.bitmap || self.bitmap.disposed?
-      self.bitmap = BitmapWrapper.new(@bgbitmap.width,111*2)
+      self.bitmap = BitmapWrapper.new(@bgbitmap.width, 111 * 2)
       pbSetSystemFont(self.bitmap)
     end
     if @refreshBitmap
       @refreshBitmap = false
       self.bitmap.clear if self.bitmap
       if @isContinue
-        self.bitmap.blt(0,0,@bgbitmap.bitmap,Rect.new(0,(@selected) ? 111*2 : 0,@bgbitmap.width,111*2))
+        self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, (@selected) ? 111 * 2 : 0, @bgbitmap.width, 111 * 2))
       else
-        self.bitmap.blt(0,0,@bgbitmap.bitmap,Rect.new(0,111*2*2+((@selected) ? 23*2 : 0),@bgbitmap.width,23*2))
+        self.bitmap.blt(0, 0, @bgbitmap.bitmap, Rect.new(0, 111 * 2 * 2 + ((@selected) ? 23 * 2 : 0), @bgbitmap.width, 23 * 2))
       end
       textpos = []
       if @isContinue
-        textpos.push([@title,16*2,2*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Badges:"),16*2,53*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.badge_count.to_s,103*2,53*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@title, 16 * 2, 2 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([_INTL("Badges:"), 16 * 2, 53 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([@trainer.badge_count.to_s, 103 * 2, 53 * 2, 1, TEXTCOLOR, TEXTSHADOWCOLOR])
         # textpos.push([_INTL("Pokédex:"),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         # textpos.push([@trainer.pokedex.seen_count.to_s,103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
 
-        textpos.push([_INTL(getDisplayDifficultyFromIndex(@trainer.lowest_difficulty)),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([getGameModeFromIndex(@trainer.game_mode),103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([_INTL(getDisplayDifficultyFromIndex(@trainer.lowest_difficulty)), 16 * 2, 69 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
+        textpos.push([getGameModeFromIndex(@trainer.game_mode), 103 * 2, 69 * 2, 1, TEXTCOLOR, TEXTSHADOWCOLOR])
 
-        textpos.push([_INTL("Time:"),16*2,85*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([_INTL("Time:"), 16 * 2, 85 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
         hour = @totalsec / 60 / 60
-        min  = @totalsec / 60 % 60
-        if hour>0
-          textpos.push([_INTL("{1}h {2}m",hour,min),103*2,85*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        min = @totalsec / 60 % 60
+        if hour > 0
+          textpos.push([_INTL("{1}h {2}m", hour, min), 103 * 2, 85 * 2, 1, TEXTCOLOR, TEXTSHADOWCOLOR])
         else
-          textpos.push([_INTL("{1}m",min),103*2,85*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+          textpos.push([_INTL("{1}m", min), 103 * 2, 85 * 2, 1, TEXTCOLOR, TEXTSHADOWCOLOR])
         end
         if @trainer.male?
-          textpos.push([@trainer.name,56*2,29*2,0,MALETEXTCOLOR,MALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 56 * 2, 29 * 2, 0, MALETEXTCOLOR, MALETEXTSHADOWCOLOR])
         elsif @trainer.female?
-          textpos.push([@trainer.name,56*2,29*2,0,FEMALETEXTCOLOR,FEMALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 56 * 2, 29 * 2, 0, FEMALETEXTCOLOR, FEMALETEXTSHADOWCOLOR])
         else
-          textpos.push([@trainer.name,56*2,29*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+          textpos.push([@trainer.name, 56 * 2, 29 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
         end
         mapname = pbGetMapNameFromId(@mapid)
-        mapname.gsub!(/\\PN/,@trainer.name)
-        textpos.push([mapname,193*2,2*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        mapname.gsub!(/\\PN/, @trainer.name)
+        textpos.push([mapname, 193 * 2, 2 * 2, 1, TEXTCOLOR, TEXTSHADOWCOLOR])
       else
-        textpos.push([@title,16*2,1*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@title, 16 * 2, 1 * 2, 0, TEXTCOLOR, TEXTSHADOWCOLOR])
       end
-      pbDrawTextPositions(self.bitmap,textpos)
+      pbDrawTextPositions(self.bitmap, textpos)
     end
     @refreshing = false
   end
@@ -107,19 +107,19 @@ class PokemonLoad_Scene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99998
-    addBackgroundOrColoredPlane(@sprites,"background","loadbg",Color.new(248,248,248),@viewport)
-    y = 16*2
+    addBackgroundOrColoredPlane(@sprites, "background", "loadbg", Color.new(248, 248, 248), @viewport)
+    y = 16 * 2
     for i in 0...commands.length
-      @sprites["panel#{i}"] = PokemonLoadPanel.new(i,commands[i],
-         (show_continue) ? (i==0) : false,trainer,frame_count,map_id,@viewport)
-      @sprites["panel#{i}"].x = 24*2
+      @sprites["panel#{i}"] = PokemonLoadPanel.new(i, commands[i],
+                                                   (show_continue) ? (i == 0) : false, trainer, frame_count, map_id, @viewport)
+      @sprites["panel#{i}"].x = 24 * 2
       @sprites["panel#{i}"].y = y
       @sprites["panel#{i}"].pbRefresh
-      y += (show_continue && i==0) ? 112*2 : 24*2
+      y += (show_continue && i == 0) ? 112 * 2 : 24 * 2
     end
     @sprites["cmdwindow"] = Window_CommandPokemon.new([])
     @sprites["cmdwindow"].viewport = @viewport
-    @sprites["cmdwindow"].visible  = false
+    @sprites["cmdwindow"].visible = false
   end
 
   def pbStartScene2
@@ -128,39 +128,39 @@ class PokemonLoad_Scene
 
   def pbStartDeleteScene
     @sprites = {}
-    @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+    @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99998
-    addBackgroundOrColoredPlane(@sprites,"background","loadbg",Color.new(248,248,248),@viewport)
+    addBackgroundOrColoredPlane(@sprites, "background", "loadbg", Color.new(248, 248, 248), @viewport)
   end
 
   def pbUpdate
     oldi = @sprites["cmdwindow"].index rescue 0
     pbUpdateSpriteHash(@sprites)
     newi = @sprites["cmdwindow"].index rescue 0
-    if oldi!=newi
+    if oldi != newi
       @sprites["panel#{oldi}"].selected = false
       @sprites["panel#{oldi}"].pbRefresh
       @sprites["panel#{newi}"].selected = true
       @sprites["panel#{newi}"].pbRefresh
-      while @sprites["panel#{newi}"].y>Graphics.height-40*2
+      while @sprites["panel#{newi}"].y > Graphics.height - 40 * 2
         for i in 0...@commands.length
-          @sprites["panel#{i}"].y -= 24*2
+          @sprites["panel#{i}"].y -= 24 * 2
         end
         for i in 0...6
           break if !@sprites["party#{i}"]
-          @sprites["party#{i}"].y -= 24*2
+          @sprites["party#{i}"].y -= 24 * 2
         end
-        @sprites["player"].y -= 24*2 if @sprites["player"]
+        @sprites["player"].y -= 24 * 2 if @sprites["player"]
       end
-      while @sprites["panel#{newi}"].y<16*2
+      while @sprites["panel#{newi}"].y < 16 * 2
         for i in 0...@commands.length
-          @sprites["panel#{i}"].y += 24*2
+          @sprites["panel#{i}"].y += 24 * 2
         end
         for i in 0...6
           break if !@sprites["party#{i}"]
-          @sprites["party#{i}"].y += 24*2
+          @sprites["party#{i}"].y += 24 * 2
         end
-        @sprites["player"].y += 24*2 if @sprites["player"]
+        @sprites["player"].y += 24 * 2 if @sprites["player"]
       end
     end
   end
@@ -169,19 +169,19 @@ class PokemonLoad_Scene
     return if !trainer || !trainer.party
     meta = GameData::Metadata.get_player(trainer.character_ID)
     if meta
-      filename = pbGetPlayerCharset(meta,1,trainer,true)
-      @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport,trainer)
-      charwidth  = @sprites["player"].bitmap.width
+      filename = pbGetPlayerCharset(meta, 1, trainer, true)
+      @sprites["player"] = TrainerWalkingCharSprite.new(filename, @viewport, trainer)
+      charwidth = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height
-      @sprites["player"].x        = 56*2-charwidth/8
-      @sprites["player"].y        = 56*2-charheight/8
-      @sprites["player"].src_rect = Rect.new(0,0,charwidth/4,charheight/4)
+      @sprites["player"].x = 56 * 2 - charwidth / 8
+      @sprites["player"].y = 56 * 2 - charheight / 8
+      @sprites["player"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
     end
     for i in 0...trainer.party.length
-      @sprites["party#{i}"] = PokemonIconSprite.new(trainer.party[i],@viewport)
+      @sprites["party#{i}"] = PokemonIconSprite.new(trainer.party[i], @viewport)
       @sprites["party#{i}"].setOffset(PictureOrigin::Center)
-      @sprites["party#{i}"].x = (167+33*(i%2))*2
-      @sprites["party#{i}"].y = (56+25*(i/2))*2
+      @sprites["party#{i}"].x = (167 + 33 * (i % 2)) * 2
+      @sprites["party#{i}"].y = (56 + 25 * (i / 2)) * 2
       @sprites["party#{i}"].z = 99999
     end
   end
@@ -228,9 +228,9 @@ class PokemonLoadScreen
   def load_save_file(file_path)
     save_data = SaveData.read_from_file(file_path)
     unless SaveData.valid?(save_data)
-      if File.file?(file_path + '.bak')
-        pbMessage(_INTL('The save file is corrupt. A backup will be loaded.'))
-        save_data = load_save_file(file_path + '.bak')
+      if File.file?(file_path + ".bak")
+        pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
+        save_data = load_save_file(file_path + ".bak")
       else
         self.prompt_save_deletion
         return {}
@@ -242,12 +242,12 @@ class PokemonLoadScreen
   # Called if all save data is invalid.
   # Prompts the player to delete the save files.
   def prompt_save_deletion
-    pbMessage(_INTL('The save file is corrupt, or is incompatible with this game.'))
+    pbMessage(_INTL("The save file is corrupt, or is incompatible with this game."))
     exit unless pbConfirmMessageSerious(
-      _INTL('Do you want to delete the save file and start anew?')
+      _INTL("Do you want to delete the save file and start anew?")
     )
     self.delete_save_data
-    $game_system   = Game_System.new
+    $game_system = Game_System.new
     $PokemonSystem = PokemonSystem.new
   end
 
@@ -272,23 +272,22 @@ class PokemonLoadScreen
   def delete_save_data
     begin
       SaveData.delete_file
-      pbMessage(_INTL('The saved data was deleted.'))
+      pbMessage(_INTL("The saved data was deleted."))
     rescue SystemCallError
-      pbMessage(_INTL('All saved data could not be deleted.'))
+      pbMessage(_INTL("All saved data could not be deleted."))
     end
   end
-
 
   #todo
   def copyKeybindings
     #return
     keybinding_path = "Data/"
-    keybinding_fileName="keybindings.mkxp1"
+    keybinding_fileName = "keybindings.mkxp1"
 
-    srcPath = keybinding_path+keybinding_fileName
+    srcPath = keybinding_path + keybinding_fileName
     destPath = System.data_directory + keybinding_fileName
     if !File.file?(destPath)
-      File.copy(srcPath,destPath)
+      File.copy(srcPath, destPath)
       print("New default controls for controllers were copied. Please re-launch the game to enable them.")
     end
   end
@@ -296,29 +295,29 @@ class PokemonLoadScreen
   def pbStartLoadScreen
     copyKeybindings()
     commands = []
-    cmd_continue     = -1
-    cmd_new_game     = -1
-    cmd_options      = -1
-    cmd_language     = -1
+    cmd_continue = -1
+    cmd_new_game = -1
+    cmd_options = -1
+    cmd_language = -1
     cmd_mystery_gift = -1
-    cmd_debug        = -1
-    cmd_quit         = -1
+    cmd_debug = -1
+    cmd_quit = -1
     show_continue = !@save_data.empty?
     new_game_plus = show_continue && (@save_data[:player].new_game_plus_unlocked || $DEBUG)
     if show_continue
-      commands[cmd_continue = commands.length] = _INTL('Continue')
+      commands[cmd_continue = commands.length] = _INTL("Continue")
       if @save_data[:player].mystery_gift_unlocked
-        commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift')
+        commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift")
       end
     end
-    commands[cmd_new_game = commands.length]  = _INTL('New Game')
+    commands[cmd_new_game = commands.length] = _INTL("New Game")
     if new_game_plus
-      commands[cmd_new_game_plus = commands.length]  = _INTL('New Game +')
+      commands[cmd_new_game_plus = commands.length] = _INTL("New Game +")
     end
-    commands[cmd_options = commands.length]   = _INTL('Options')
-    commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
-    commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
-    commands[cmd_quit = commands.length]      = _INTL('Quit Game')
+    commands[cmd_options = commands.length] = _INTL("Options")
+    commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES.length >= 2
+    commands[cmd_debug = commands.length] = _INTL("Debug") if $DEBUG
+    commands[cmd_quit = commands.length] = _INTL("Quit Game")
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
     @scene.pbStartScene(commands, show_continue, @save_data[:player],
                         @save_data[:frame_count] || 0, map_id)
@@ -338,8 +337,8 @@ class PokemonLoadScreen
         return
       when cmd_new_game_plus
         @scene.pbEndScene
-        Game.start_new(@save_data[:bag],@save_data[:storage_system],@save_data[:player])
-        @save_data[:player].new_game_plus_unlocked=true
+        Game.start_new(@save_data[:bag], @save_data[:storage_system], @save_data[:player])
+        @save_data[:player].new_game_plus_unlocked = true
         return
       when cmd_mystery_gift
         pbFadeOutIn { pbDownloadMysteryGift(@save_data[:player]) }
@@ -352,10 +351,10 @@ class PokemonLoadScreen
       when cmd_language
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+        pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
         if show_continue
           @save_data[:pokemon_system] = $PokemonSystem
-          File.open(SaveData::FILE_PATH, 'wb') { |file| Marshal.dump(@save_data, file) }
+          File.open(SaveData::FILE_PATH, "wb") { |file| Marshal.dump(@save_data, file) }
         end
         $scene = pbCallTitle
         return

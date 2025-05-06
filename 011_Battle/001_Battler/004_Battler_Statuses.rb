@@ -9,32 +9,32 @@ class PokeBattle_Battler
   #       "counts as having that status", which includes Comatose which can't be
   #       cured.
   def pbHasStatus?(checkStatus)
-    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability,self,checkStatus)
+    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability, self, checkStatus)
       return true
     end
-    return @status==checkStatus
+    return @status == checkStatus
   end
 
   def pbHasAnyStatus?
-    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability,self,nil)
+    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability, self, nil)
       return true
     end
     return @status != :NONE
   end
 
-  def pbCanInflictStatus?(newStatus,user,showMessages,move=nil,ignoreStatus=false)
+  def pbCanInflictStatus?(newStatus, user, showMessages, move = nil, ignoreStatus = false)
     return false if fainted?
-    selfInflicted = (user && user.index==@index)
+    selfInflicted = (user && user.index == @index)
     # Already have that status problem
-    if self.status==newStatus && !ignoreStatus
+    if self.status == newStatus && !ignoreStatus
       if showMessages
         msg = ""
         case self.status
-        when :SLEEP     then msg = _INTL("{1} is already asleep!", pbThis)
-        when :POISON    then msg = _INTL("{1} is already poisoned!", pbThis)
-        when :BURN      then msg = _INTL("{1} already has a burn!", pbThis)
+        when :SLEEP then msg = _INTL("{1} is already asleep!", pbThis)
+        when :POISON then msg = _INTL("{1} is already poisoned!", pbThis)
+        when :BURN then msg = _INTL("{1} already has a burn!", pbThis)
         when :PARALYSIS then msg = _INTL("{1} is already paralyzed!", pbThis)
-        when :FROZEN    then msg = _INTL("{1} is already frozen solid!", pbThis)
+        when :FROZEN then msg = _INTL("{1} is already frozen solid!", pbThis)
         end
         @battle.pbDisplay(msg)
       end
@@ -42,18 +42,18 @@ class PokeBattle_Battler
     end
     # Trying to replace a status problem with another one
     if self.status != :NONE && !ignoreStatus && !selfInflicted
-      @battle.pbDisplay(_INTL("It doesn't affect {1}...",pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true))) if showMessages
       return false
     end
     # Trying to inflict a status problem on a Pokémon behind a substitute
-    if @effects[PBEffects::Substitute]>0 && !(move && move.ignoresSubstitute?(user)) &&
+    if @effects[PBEffects::Substitute] > 0 && !(move && move.ignoresSubstitute?(user)) &&
        !selfInflicted
-      @battle.pbDisplay(_INTL("It doesn't affect {1}...",pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true))) if showMessages
       return false
     end
     # Weather immunity
     if newStatus == :FROZEN && [:Sun, :HarshSun].include?(@battle.pbWeather)
-      @battle.pbDisplay(_INTL("It doesn't affect {1}...",pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true))) if showMessages
       return false
     end
     # Terrains immunity
@@ -62,19 +62,19 @@ class PokeBattle_Battler
       when :Electric
         if newStatus == :SLEEP
           @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!",
-             pbThis(true))) if showMessages
+                                  pbThis(true))) if showMessages
           return false
         end
       when :Misty
-        @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!",pbThis(true))) if showMessages
+        @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
         return false
       end
     end
     # Uproar immunity
     if newStatus == :SLEEP && !(hasActiveAbility?(:SOUNDPROOF) && !@battle.moldBreaker)
       @battle.eachBattler do |b|
-        next if b.effects[PBEffects::Uproar]==0
-        @battle.pbDisplay(_INTL("But the uproar kept {1} awake!",pbThis(true))) if showMessages
+        next if b.effects[PBEffects::Uproar] == 0
+        @battle.pbDisplay(_INTL("But the uproar kept {1} awake!", pbThis(true))) if showMessages
         return false
       end
     end
@@ -96,20 +96,20 @@ class PokeBattle_Battler
       hasImmuneType |= pbHasType?(:ICE)
     end
     if hasImmuneType
-      @battle.pbDisplay(_INTL("It doesn't affect {1}...",pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true))) if showMessages
       return false
     end
     # Ability immunity
     immuneByAbility = false; immAlly = nil
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability,self,newStatus)
+    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability, self, newStatus)
       immuneByAbility = true
     elsif selfInflicted || !@battle.moldBreaker
-      if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
+      if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability, self, newStatus)
         immuneByAbility = true
       else
         eachAlly do |b|
           next if !b.abilityActive?
-          next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
+          next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability, self, newStatus)
           immuneByAbility = true
           immAlly = b
           break
@@ -122,37 +122,37 @@ class PokeBattle_Battler
         msg = ""
         if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           case newStatus
-          when :SLEEP     then msg = _INTL("{1} stays awake!", pbThis)
-          when :POISON    then msg = _INTL("{1} cannot be poisoned!", pbThis)
-          when :BURN      then msg = _INTL("{1} cannot be burned!", pbThis)
+          when :SLEEP then msg = _INTL("{1} stays awake!", pbThis)
+          when :POISON then msg = _INTL("{1} cannot be poisoned!", pbThis)
+          when :BURN then msg = _INTL("{1} cannot be burned!", pbThis)
           when :PARALYSIS then msg = _INTL("{1} cannot be paralyzed!", pbThis)
-          when :FROZEN    then msg = _INTL("{1} cannot be frozen solid!", pbThis)
+          when :FROZEN then msg = _INTL("{1} cannot be frozen solid!", pbThis)
           end
         elsif immAlly
           case newStatus
           when :SLEEP
             msg = _INTL("{1} stays awake because of {2}'s {3}!",
-               pbThis,immAlly.pbThis(true),immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :POISON
             msg = _INTL("{1} cannot be poisoned because of {2}'s {3}!",
-               pbThis,immAlly.pbThis(true),immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :BURN
             msg = _INTL("{1} cannot be burned because of {2}'s {3}!",
-               pbThis,immAlly.pbThis(true),immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :PARALYSIS
             msg = _INTL("{1} cannot be paralyzed because of {2}'s {3}!",
-               pbThis,immAlly.pbThis(true),immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           when :FROZEN
             msg = _INTL("{1} cannot be frozen solid because of {2}'s {3}!",
-               pbThis,immAlly.pbThis(true),immAlly.abilityName)
+                        pbThis, immAlly.pbThis(true), immAlly.abilityName)
           end
         else
           case newStatus
-          when :SLEEP     then msg = _INTL("{1} stays awake because of its {2}!", pbThis, abilityName)
-          when :POISON    then msg = _INTL("{1}'s {2} prevents poisoning!", pbThis, abilityName)
-          when :BURN      then msg = _INTL("{1}'s {2} prevents burns!", pbThis, abilityName)
+          when :SLEEP then msg = _INTL("{1} stays awake because of its {2}!", pbThis, abilityName)
+          when :POISON then msg = _INTL("{1}'s {2} prevents poisoning!", pbThis, abilityName)
+          when :BURN then msg = _INTL("{1}'s {2} prevents burns!", pbThis, abilityName)
           when :PARALYSIS then msg = _INTL("{1}'s {2} prevents paralysis!", pbThis, abilityName)
-          when :FROZEN    then msg = _INTL("{1}'s {2} prevents freezing!", pbThis, abilityName)
+          when :FROZEN then msg = _INTL("{1}'s {2} prevents freezing!", pbThis, abilityName)
           end
         end
         @battle.pbDisplay(msg)
@@ -161,15 +161,15 @@ class PokeBattle_Battler
       return false
     end
     # Safeguard immunity
-    if pbOwnSide.effects[PBEffects::Safeguard]>0 && !selfInflicted && move &&
+    if pbOwnSide.effects[PBEffects::Safeguard] > 0 && !selfInflicted && move &&
        !(user && user.hasActiveAbility?(:INFILTRATOR))
-      @battle.pbDisplay(_INTL("{1}'s team is protected by Safeguard!",pbThis)) if showMessages
+      @battle.pbDisplay(_INTL("{1}'s team is protected by Safeguard!", pbThis)) if showMessages
       return false
     end
     return true
   end
 
-  def pbCanSynchronizeStatus?(newStatus,target)
+  def pbCanSynchronizeStatus?(newStatus, target)
     return false if fainted?
     # Trying to replace a status problem with another one
     return false if self.status != :NONE
@@ -191,19 +191,19 @@ class PokeBattle_Battler
     end
     return false if hasImmuneType
     # Ability immunity
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability,self,newStatus)
+    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability, self, newStatus)
       return false
     end
-    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
+    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability, self, newStatus)
       return false
     end
     eachAlly do |b|
       next if !b.abilityActive?
-      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
+      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability, self, newStatus)
       return false
     end
     # Safeguard immunity
-    if pbOwnSide.effects[PBEffects::Safeguard]>0 &&
+    if pbOwnSide.effects[PBEffects::Safeguard] > 0 &&
        !(user && user.hasActiveAbility?(:INFILTRATOR))
       return false
     end
@@ -213,9 +213,9 @@ class PokeBattle_Battler
   #=============================================================================
   # Generalised infliction of status problem
   #=============================================================================
-  def pbInflictStatus(newStatus,newStatusCount=0,msg=nil,user=nil)
+  def pbInflictStatus(newStatus, newStatusCount = 0, msg = nil, user = nil)
     # Inflict the new status
-    self.status      = newStatus
+    self.status = newStatus
     self.statusCount = newStatusCount
     @effects[PBEffects::Toxic] = 0
     # Show animation
@@ -233,7 +233,7 @@ class PokeBattle_Battler
       when :SLEEP
         @battle.pbDisplay(_INTL("{1} fell asleep!", pbThis))
       when :POISON
-        if newStatusCount>0
+        if newStatusCount > 0
           @battle.pbDisplay(_INTL("{1} was badly poisoned!", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} was poisoned!", pbThis))
@@ -251,7 +251,7 @@ class PokeBattle_Battler
     pbCheckFormOnStatusChange
     # Synchronize
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatusInflicted(self.ability,self,user,newStatus)
+      BattleHandlers.triggerAbilityOnStatusInflicted(self.ability, self, user, newStatus)
     end
     # Status cures
     pbItemStatusCureCheck
@@ -285,7 +285,7 @@ class PokeBattle_Battler
     end
     if !hasActiveAbility?(:SOUNDPROOF)
       @battle.eachBattler do |b|
-        return false if b.effects[PBEffects::Uproar]>0
+        return false if b.effects[PBEffects::Uproar] > 0
       end
     end
     if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability, self, :SLEEP)
@@ -305,7 +305,7 @@ class PokeBattle_Battler
     # NOTE: Bulbapedia claims that Safeguard shouldn't prevent sleep due to
     #       drowsiness. I disagree with this too. Compare with the other sided
     #       effects Misty/Electric Terrain, which do prevent it.
-    return false if pbOwnSide.effects[PBEffects::Safeguard]>0
+    return false if pbOwnSide.effects[PBEffects::Safeguard] > 0
     return true
   end
 
@@ -421,16 +421,16 @@ class PokeBattle_Battler
     PBDebug.log("[Status continues] #{pbThis}'s sleep count is #{@statusCount}") if self.status == :SLEEP
   end
 
-  def pbCureStatus(showMessages=true)
+  def pbCureStatus(showMessages = true)
     oldStatus = status
     self.status = :NONE
     if showMessages
       case oldStatus
-      when :SLEEP     then @battle.pbDisplay(_INTL("{1} woke up!", pbThis))
-      when :POISON    then @battle.pbDisplay(_INTL("{1} was cured of its poisoning.", pbThis))
-      when :BURN      then @battle.pbDisplay(_INTL("{1}'s burn was healed.", pbThis))
+      when :SLEEP then @battle.pbDisplay(_INTL("{1} woke up!", pbThis))
+      when :POISON then @battle.pbDisplay(_INTL("{1} was cured of its poisoning.", pbThis))
+      when :BURN then @battle.pbDisplay(_INTL("{1}'s burn was healed.", pbThis))
       when :PARALYSIS then @battle.pbDisplay(_INTL("{1} was cured of paralysis.", pbThis))
-      when :FROZEN    then @battle.pbDisplay(_INTL("{1} thawed out!", pbThis))
+      when :FROZEN then @battle.pbDisplay(_INTL("{1} thawed out!", pbThis))
       end
     end
     PBDebug.log("[Status change] #{pbThis}'s status was cured") if !showMessages
@@ -439,20 +439,20 @@ class PokeBattle_Battler
   #=============================================================================
   # Confusion
   #=============================================================================
-  def pbCanConfuse?(user=nil,showMessages=true,move=nil,selfInflicted=false)
+  def pbCanConfuse?(user = nil, showMessages = true, move = nil, selfInflicted = false)
     return false if fainted?
-    if @effects[PBEffects::Confusion]>0
-      @battle.pbDisplay(_INTL("{1} is already confused.",pbThis)) if showMessages
+    if @effects[PBEffects::Confusion] > 0
+      @battle.pbDisplay(_INTL("{1} is already confused.", pbThis)) if showMessages
       return false
     end
-    if @effects[PBEffects::Substitute]>0 && !(move && move.ignoresSubstitute?(user)) &&
+    if @effects[PBEffects::Substitute] > 0 && !(move && move.ignoresSubstitute?(user)) &&
        !selfInflicted
       @battle.pbDisplay(_INTL("But it failed!")) if showMessages
       return false
     end
     # Terrains immunity
     if affectedByTerrain? && @battle.field.terrain == :Misty
-      @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!",pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
       return false
     end
     if selfInflicted || !@battle.moldBreaker
@@ -460,31 +460,31 @@ class PokeBattle_Battler
         if showMessages
           @battle.pbShowAbilitySplash(self)
           if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-            @battle.pbDisplay(_INTL("{1} doesn't become confused!",pbThis))
+            @battle.pbDisplay(_INTL("{1} doesn't become confused!", pbThis))
           else
-            @battle.pbDisplay(_INTL("{1}'s {2} prevents confusion!",pbThis,abilityName))
+            @battle.pbDisplay(_INTL("{1}'s {2} prevents confusion!", pbThis, abilityName))
           end
           @battle.pbHideAbilitySplash(self)
         end
         return false
       end
     end
-    if pbOwnSide.effects[PBEffects::Safeguard]>0 && !selfInflicted &&
+    if pbOwnSide.effects[PBEffects::Safeguard] > 0 && !selfInflicted &&
        !(user && user.hasActiveAbility?(:INFILTRATOR))
-      @battle.pbDisplay(_INTL("{1}'s team is protected by Safeguard!",pbThis)) if showMessages
+      @battle.pbDisplay(_INTL("{1}'s team is protected by Safeguard!", pbThis)) if showMessages
       return false
     end
     return true
   end
 
   def pbCanConfuseSelf?(showMessages)
-    return pbCanConfuse?(nil,showMessages,nil,true)
+    return pbCanConfuse?(nil, showMessages, nil, true)
   end
 
-  def pbConfuse(msg=nil)
+  def pbConfuse(msg = nil)
     @effects[PBEffects::Confusion] = pbConfusionDuration
-    @battle.pbCommonAnimation("Confusion",self)
-    msg = _INTL("{1} became confused!",pbThis) if nil_or_empty?(msg)
+    @battle.pbCommonAnimation("Confusion", self)
+    msg = _INTL("{1} became confused!", pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     PBDebug.log("[Lingering effect] #{pbThis}'s confusion count is #{@effects[PBEffects::Confusion]}")
     # Confusion cures
@@ -492,8 +492,8 @@ class PokeBattle_Battler
     pbAbilityStatusCureCheck
   end
 
-  def pbConfusionDuration(duration=-1)
-    duration = 2+@battle.pbRandom(4) if duration<=0
+  def pbConfusionDuration(duration = -1)
+    duration = 2 + @battle.pbRandom(4) if duration <= 0
     return duration
   end
 
@@ -504,27 +504,27 @@ class PokeBattle_Battler
   #=============================================================================
   # Attraction
   #=============================================================================
-  def pbCanAttract?(user,showMessages=true)
+  def pbCanAttract?(user, showMessages = true)
     return false if fainted?
     return false if !user || user.fainted?
-    if @effects[PBEffects::Attract]>=0
-      @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMessages
+    if @effects[PBEffects::Attract] >= 0
+      @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages
       return false
     end
     agender = user.gender
     ogender = gender
-    if agender==2 || ogender==2 || agender==ogender
-      @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMessages
+    if agender == 2 || ogender == 2 || agender == ogender
+      @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages
       return false
     end
     if !@battle.moldBreaker
-      if hasActiveAbility?([:AROMAVEIL,:OBLIVIOUS])
+      if hasActiveAbility?([:AROMAVEIL, :OBLIVIOUS])
         if showMessages
           @battle.pbShowAbilitySplash(self)
           if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-            @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
+            @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
           else
-            @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!",pbThis,abilityName))
+            @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", pbThis, abilityName))
           end
           @battle.pbHideAbilitySplash(self)
         end
@@ -535,9 +535,9 @@ class PokeBattle_Battler
           if showMessages
             @battle.pbShowAbilitySplash(self)
             if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-              @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
+              @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
             else
-              @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!",b.pbThis,b.abilityName))
+              @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", b.pbThis, b.abilityName))
             end
             @battle.pbHideAbilitySplash(self)
           end
@@ -548,14 +548,14 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbAttract(user,msg=nil)
+  def pbAttract(user, msg = nil)
     @effects[PBEffects::Attract] = user.index
-    @battle.pbCommonAnimation("Attract",self)
-    msg = _INTL("{1} fell in love!",pbThis) if nil_or_empty?(msg)
+    @battle.pbCommonAnimation("Attract", self)
+    msg = _INTL("{1} fell in love!", pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     # Destiny Knot
-    if hasActiveItem?(:DESTINYKNOT) && user.pbCanAttract?(self,false)
-      user.pbAttract(self,_INTL("{1} fell in love from the {2}!",user.pbThis(true),itemName))
+    if hasActiveItem?(:DESTINYKNOT) && user.pbCanAttract?(self, false)
+      user.pbAttract(self, _INTL("{1} fell in love from the {2}!", user.pbThis(true), itemName))
     end
     # Attraction cures
     pbItemStatusCureCheck
@@ -569,7 +569,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Flinching
   #=============================================================================
-  def pbFlinch(_user=nil)
+  def pbFlinch(_user = nil)
     return if hasActiveAbility?(:INNERFOCUS) && !@battle.moldBreaker
     @effects[PBEffects::Flinch] = true
   end

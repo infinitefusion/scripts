@@ -99,7 +99,6 @@ def pbCheckPokemonIconFiles(speciesID, egg = false, dna = false)
   return pbResolveBitmap("Graphics/Icons/iconDNA.png")
 end
 
-
 def getPokemon(dexNum)
   if dexNum.is_a?(Integer)
     if dexNum > NB_POKEMON
@@ -131,7 +130,6 @@ def getAbilityIndexFromID(abilityID, fusedPokemon)
   return 0
 end
 
-
 # dir_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED
 # indexFolders = Dir.entries(dir_path).select do |entry|
 #   entry_number = entry.to_i
@@ -151,10 +149,8 @@ end
 # return getPokemonSpeciesFromSprite(selectedSprite)
 #end
 
-
-
 def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx = nil, srcy = nil, width = nil, height = nil, showSecondStarUnder = false, showSecondStarAbove = false, showSecondStarAfter = false, centraliseStar = false)
-  # for having custom stars on debug and better moving options 
+  # for having custom stars on debug and better moving options
   color = nil
   if !(shinyBody && shinyHead)
     if debugShiny
@@ -358,9 +354,7 @@ def isKalosPokemon(species)
     [327, 328, 329, 339, 371, 372, 417, 418,
      425, 426, 438, 439, 440, 441, 444, 445, 446,
      456, 461, 462, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487,
-     489, 490, 491, 492, 500,
-
-    ]
+     489, 490, 491, 492, 500]
   return list.include?(dexNum) || list.include?(head_dex) || list.include?(body_dex)
 end
 
@@ -422,8 +416,6 @@ def pbBitmap(path)
   return bmp
 end
 
-
-
 def reverseFusionSpecies(species)
   dexId = getDexNumberForSpecies(species)
   return species if dexId <= NB_POKEMON
@@ -454,7 +446,6 @@ def Kernel.getItemNamesAsString(list)
   return strList
 end
 
-
 def get_default_moves_at_level(species, level)
   moveset = GameData::Species.get(species).moves
   knowable_moves = []
@@ -482,8 +473,8 @@ def find_newer_available_version
 end
 
 def is_higher_version(gameVersion, latestVersion)
-  gameVersion_parts = gameVersion.split('.').map(&:to_i)
-  latestVersion_parts = latestVersion.split('.').map(&:to_i)
+  gameVersion_parts = gameVersion.split(".").map(&:to_i)
+  latestVersion_parts = latestVersion.split(".").map(&:to_i)
 
   # Compare each part of the version numbers from left to right
   gameVersion_parts.each_with_index do |part, i|

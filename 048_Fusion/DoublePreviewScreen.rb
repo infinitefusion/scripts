@@ -1,17 +1,16 @@
 class DoublePreviewScreen
-  SELECT_ARROW_X_LEFT= 100
-  SELECT_ARROW_X_RIGHT= 350
-  SELECT_ARROW_X_CANCEL= 230
+  SELECT_ARROW_X_LEFT = 100
+  SELECT_ARROW_X_RIGHT = 350
+  SELECT_ARROW_X_CANCEL = 230
 
-  SELECT_ARROW_Y_SELECT= 0
-  SELECT_ARROW_Y_CANCEL= 210
+  SELECT_ARROW_Y_SELECT = 0
+  SELECT_ARROW_Y_CANCEL = 210
   ARROW_GRAPHICS_PATH = "Graphics/Pictures/selHand"
   CANCEL_BUTTON_PATH = "Graphics/Pictures/previewScreen_Cancel"
   BACKGROUND_PATH = "Graphics/Pictures/shadeFull_"
 
-
-  CANCEL_BUTTON_X= 140
-  CANCEL_BUTTON_Y= 260
+  CANCEL_BUTTON_X = 140
+  CANCEL_BUTTON_Y = 260
 
   def initialize(species_left, species_right)
     @species_left = species_left
@@ -24,8 +23,8 @@ class DoublePreviewScreen
     @draw_level = nil
     @draw_sprite_info = nil
     @selected = 0
-    @last_post=0
-    @sprites      = {}
+    @last_post = 0
+    @sprites = {}
 
     initializeBackground
     initializeSelectArrow
@@ -36,10 +35,9 @@ class DoublePreviewScreen
     return BACKGROUND_PATH
   end
 
-
   def getSelection
     selected = startSelection
-    @sprites["cancel"].visible=false
+    @sprites["cancel"].visible = false
     #@sprites["arrow"].visible=false
 
     #todo: il y a un fuck en quelque part.... en attendant ca marche inversé ici
@@ -112,10 +110,10 @@ class DoublePreviewScreen
     bitmap = GameData::Species.front_sprite_bitmap(dexNumber)
     bitmap.shiftAllColors(dexNumber, bodyShiny, headShiny)
     bitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
-    pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_pokemon,body_pokemon)
+    pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_pokemon, body_pokemon)
     #hasCustom = picturePath.include?("CustomBattlers")
     #hasCustom = customSpriteExistsBase(body_pokemon,head_pokemon)
-    hasCustom = customSpriteExists(body_pokemon,head_pokemon)
+    hasCustom = customSpriteExists(body_pokemon, head_pokemon)
     previewwindow = PictureWindow.new(bitmap)
     previewwindow.x = x
     previewwindow.y = y
@@ -135,14 +133,12 @@ class DoublePreviewScreen
     return previewwindow
   end
 
-
   def drawFusionInformation(fusedDexNum, level, x = 0)
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @typewindows << drawPokemonType(fusedDexNum, viewport, x + 55, 220) if @draw_types
-    drawFusionPreviewText(viewport, "Lv. " + level.to_s, x + 80, 40,) if @draw_level
-    drawSpriteInfoIcons(getPokemon(fusedDexNum),viewport) if @draw_sprite_info
+    drawFusionPreviewText(viewport, "Lv. " + level.to_s, x + 80, 40) if @draw_level
+    drawSpriteInfoIcons(getPokemon(fusedDexNum), viewport) if @draw_sprite_info
   end
-
 
   def initializeSelectArrow
     @sprites["arrow"] = IconSprite.new(0, 0, @viewport)
@@ -151,7 +147,6 @@ class DoublePreviewScreen
     @sprites["arrow"].y = SELECT_ARROW_Y_SELECT
     @sprites["arrow"].z = 100001
   end
-
 
   def initializeCancelButton()
     @sprites["cancel"] = IconSprite.new(0, 0, @viewport)
@@ -194,7 +189,6 @@ class DoublePreviewScreen
       typeWindow.dispose
     end
     pbDisposeSpriteHash(@sprites)
-
   end
 
   def drawPokemonType(pokemon_id, viewport, x_pos = 192, y_pos = 264)
@@ -216,5 +210,4 @@ class DoublePreviewScreen
     end
     return viewport
   end
-
 end

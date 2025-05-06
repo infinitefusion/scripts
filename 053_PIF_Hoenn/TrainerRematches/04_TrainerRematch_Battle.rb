@@ -8,7 +8,7 @@
 # e.g. If the player uses a stronger Pokemon in the battle, the NPC will get more experience
 # as a result
 #
-def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
+def makeRebattledTrainerTeamGainExp(trainer, playerWon = true)
   return if !trainer
   updated_team = []
 
@@ -33,7 +33,7 @@ def evolveRebattledTrainerPokemon(trainer)
   for pokemon in trainer.currentTeam
     evolution_species = pokemon.check_evolution_on_level_up(false)
     if evolution_species
-      trainer.log_evolution_event(pokemon.species,evolution_species)
+      trainer.log_evolution_event(pokemon.species, evolution_species)
       trainer.set_pending_action(true)
       pokemon.species = evolution_species if evolution_species
     end
@@ -54,15 +54,16 @@ end
 def doNPCTrainerRematch(trainer)
   return generateTrainerRematch(trainer)
 end
+
 def generateTrainerRematch(trainer)
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
 
-  loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
-  if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
-    updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
+  loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch : "..."
+  if customTrainerBattle(trainer.trainerName, trainer.trainerType, trainer.currentTeam, nil, loseDialog)
+    updated_trainer = makeRebattledTrainerTeamGainExp(trainer, true)
     updated_trainer = healRebattledTrainerPokemon(updated_trainer)
   else
-    updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
+    updated_trainer = makeRebattledTrainerTeamGainExp(trainer, false)
   end
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
@@ -72,7 +73,7 @@ end
 def showPrerematchDialog()
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id,map_id)
+  trainer = getRebattledTrainer(event.id, map_id)
   return "" if trainer.nil?
 
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
@@ -84,11 +85,11 @@ def showPrerematchDialog()
 
     if previous_random_event
       event_message_map = {
-        CATCH:   trainer_data.preRematchText_caught,
-        EVOLVE:  trainer_data.preRematchText_evolved,
-        FUSE:    trainer_data.preRematchText_fused,
-        UNFUSE:  trainer_data.preRematchText_unfused,
-        REVERSE: trainer_data.preRematchText_reversed
+        CATCH: trainer_data.preRematchText_caught,
+        EVOLVE: trainer_data.preRematchText_evolved,
+        FUSE: trainer_data.preRematchText_fused,
+        UNFUSE: trainer_data.preRematchText_unfused,
+        REVERSE: trainer_data.preRematchText_reversed,
       }
 
       message_text = event_message_map[previous_random_event.eventType] || trainer_data.preRematchText
@@ -113,9 +114,8 @@ def showPrerematchDialog()
   if message_text
     split_messages = message_text.split("<br>")
     split_messages.each do |msg|
-      pbCallBub(2,event.id)
+      pbCallBub(2, event.id)
       pbMessage(msg)
     end
   end
-
 end

@@ -30,7 +30,7 @@ module PBDayNight
     Tone.new(-15, -60, -10, 20), # Day/evening
     Tone.new(-40, -75, 5, 40), # Night
     Tone.new(-70, -90, 15, 55), # Night
-    Tone.new(-70, -90, 15, 55) # Night
+    Tone.new(-70, -90, 15, 55), # Night
   ]
   @cachedTone = nil
   @dayNightToneLastUpdate = nil
@@ -84,7 +84,7 @@ module PBDayNight
     @cachedTone = Tone.new(0, 0, 0) if !@cachedTone
     return @cachedTone if !Settings::TIME_SHADING
     if !@dayNightToneLastUpdate ||
-      Graphics.frame_count - @dayNightToneLastUpdate >= Graphics.frame_rate * 30
+       Graphics.frame_count - @dayNightToneLastUpdate >= Graphics.frame_rate * 30
       getToneInternal
       @dayNightToneLastUpdate = Graphics.frame_count
     end
@@ -108,7 +108,7 @@ module PBDayNight
 
     nexthourtone = PBDayNight::HourlyTones[(hour + 1) % 24]
 
-    darkness_tone =  Tone.new(-80, -100, 05, 55)
+    darkness_tone = Tone.new(-80, -100, 05, 55)
     if $game_switches[SWITCH_KANTO_DARKNESS] || darknessEffectOnCurrentMap()
       tone = darkness_tone
       nexthourtone = darkness_tone
@@ -126,7 +126,7 @@ end
 def pbDayNightTint(object)
   return if !$scene.is_a?(Scene_Map)
   if Settings::TIME_SHADING && GameData::MapMetadata.exists?($game_map.map_id) &&
-    GameData::MapMetadata.get($game_map.map_id).outdoor_map
+     GameData::MapMetadata.get($game_map.map_id).outdoor_map
     tone = PBDayNight.getTone
     object.tone.set(tone.red, tone.green, tone.blue, tone.gray)
   else
@@ -157,7 +157,8 @@ def moonphase(time = nil)
     16.6109562298125,
     20.3022798364375,
     23.9936034430625,
-    27.6849270496875]
+    27.6849270496875,
+  ]
   yy = time.year - ((12 - time.mon) / 10.0).floor
   j = (365.25 * (4712 + yy)).floor + (((time.mon + 9) % 12) * 30.6 + 0.5).floor + time.day + 59
   j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2299160
@@ -186,7 +187,7 @@ def zodiac(month, day)
     11, 22, 12, 21, # Sagittarius
     12, 22, 1, 19, # Capricorn
     1, 20, 2, 18, # Aquarius
-    2, 19, 3, 20 # Pisces
+    2, 19, 3, 20, # Pisces
   ]
   for i in 0...12
     return i if month == time[i * 4] && day >= time[i * 4 + 1]
@@ -229,7 +230,8 @@ def pbIsWeekday(wdayVariable, *arg)
       _INTL("Wednesday"),
       _INTL("Thursday"),
       _INTL("Friday"),
-      _INTL("Saturday")][wday]
+      _INTL("Saturday"),
+    ][wday]
     $game_map.need_refresh = true if $game_map
   end
   return ret
@@ -301,33 +303,34 @@ def pbIsSeason(seasonVariable, *arg)
       _INTL("Spring"),
       _INTL("Summer"),
       _INTL("Autumn"),
-      _INTL("Winter")][thisseason]
+      _INTL("Winter"),
+    ][thisseason]
     $game_map.need_refresh = true if $game_map
   end
   return ret
 end
 
 def pbIsSpring
-  return pbIsSeason(0, 0);
+  return pbIsSeason(0, 0)
 end
 
 # Jan, May, Sep
 def pbIsSummer
-  return pbIsSeason(0, 1);
+  return pbIsSeason(0, 1)
 end
 
 # Feb, Jun, Oct
 def pbIsAutumn
-  return pbIsSeason(0, 2);
+  return pbIsSeason(0, 2)
 end
 
 # Mar, Jul, Nov
 def pbIsFall
-  return pbIsAutumn;
+  return pbIsAutumn
 end
 
 def pbIsWinter
-  return pbIsSeason(0, 3);
+  return pbIsSeason(0, 3)
 end
 
 # Apr, Aug, Dec

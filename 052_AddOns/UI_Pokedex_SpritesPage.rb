@@ -1,7 +1,6 @@
 class PokemonPokedexInfo_Scene < Bitmap # need it for applied hue
   #todo add indicator to show which one is the main sprite -
   # also maybe add an indicator in main list for when a sprite has available alts
-
   Y_POSITION_SMALL = 40 #90
   Y_POSITION_BIG = 60
   X_POSITION_PREVIOUS = -30 #20
@@ -368,7 +367,7 @@ class PokemonPokedexInfo_Scene < Bitmap # need it for applied hue
           pbMessage("This sprite is already the displayed sprite")
         end
       else
-        message = 'Would you like to use this sprite instead of the current sprite?'
+        message = "Would you like to use this sprite instead of the current sprite?"
         if pbConfirmMessage(_INTL(message))
           # reset shiny sprite for having the new one
           if @sprites["selectedSprite"] && @sprites["selectedSprite"].bitmap
@@ -380,7 +379,7 @@ class PokemonPokedexInfo_Scene < Bitmap # need it for applied hue
               @sprites["selectedSprite"].bitmap.hue_clear(getDexNumberForSpecies(@species), "")
             end
           end
-  
+
           # Appeler swap_main_sprite si tout est valide
           swap_main_sprite() if @selected_pif_sprite
           return true

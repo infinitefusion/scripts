@@ -37,25 +37,23 @@ class Player < Trainer
 
   attr_accessor :surfing_pokemon
 
-
   attr_accessor :card_background
   attr_accessor :unlocked_card_backgrounds
 
   attr_accessor :seen_qmarks_sprite
 
-
   # @return [Array<Boolean>] the player's Gym Badges (true if owned)
   attr_accessor :badges
   # @return [Integer] the player's money
-  attr_reader   :money
+  attr_reader :money
   # @return [Integer] the player's Game Corner coins
-  attr_reader   :coins
+  attr_reader :coins
   # @return [Integer] the player's battle points
-  attr_reader   :battle_points
+  attr_reader :battle_points
   # @return [Integer] the player's soot
-  attr_reader   :soot
+  attr_reader :soot
   # @return [Pokedex] the player's Pokédex
-  attr_reader   :pokedex
+  attr_reader :pokedex
   # @return [Boolean] whether the Pokédex has been obtained
   attr_accessor :has_pokedex
   # @return [Boolean] whether the Pokégear has been obtained
@@ -71,6 +69,7 @@ class Player < Trainer
   attr_accessor :beat_league
   attr_accessor :new_game_plus_unlocked
   attr_accessor :new_game_plus
+
   def trainer_type
     if @trainer_type.is_a?(Integer)
       @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
@@ -96,20 +95,17 @@ class Player < Trainer
     return @last_worn_outfit
   end
 
-
-  def last_worn_hat(is_secondary=false)
+  def last_worn_hat(is_secondary = false)
     return is_secondary ? @last_worn_hat2 : @last_worn_hat
   end
 
-
-  def set_last_worn_hat(value, is_secondary=false)
+  def set_last_worn_hat(value, is_secondary = false)
     if is_secondary
       @last_worn_hat = value
     else
       @last_worn_hat = value
     end
   end
-
 
   def last_worn_hat2
     return @last_worn_hat2
@@ -123,49 +119,48 @@ class Player < Trainer
   end
 
   def outfit=(value)
-    @outfit=value
+    @outfit = value
   end
 
-  def favorite_hat(is_secondary=false)
-    return is_secondary ?  @favorite_hat2 : @favorite_hat
+  def favorite_hat(is_secondary = false)
+    return is_secondary ? @favorite_hat2 : @favorite_hat
   end
-
 
   #todo change to set_favorite_hat(value,is_secondary=false)
-  def set_favorite_hat(value,is_secondary=false)
+  def set_favorite_hat(value, is_secondary = false)
     if is_secondary
-      @favorite_hat=value
+      @favorite_hat = value
     else
-      @favorite_hat2=value
+      @favorite_hat2 = value
     end
   end
 
-  def hat_color(is_secondary=false)
+  def hat_color(is_secondary = false)
     return is_secondary ? @hat2_color : @hat_color
   end
-  def hat(is_secondary=false)
+
+  def hat(is_secondary = false)
     return is_secondary ? @hat2 : @hat
   end
 
-  def set_hat(value, is_secondary=false)
+  def set_hat(value, is_secondary = false)
     if value.is_a?(Symbol)
       value = HATS[value].id
     end
     if is_secondary
-      @hat2= value
+      @hat2 = value
     else
-      @hat=value
+      @hat = value
     end
     refreshPlayerOutfit()
   end
-
 
   #todo : refactor to always use set_hat instead
   def hat=(value)
     if value.is_a?(Symbol)
       value = HATS[value].id
     end
-    @hat=value
+    @hat = value
     refreshPlayerOutfit()
   end
 
@@ -174,7 +169,7 @@ class Player < Trainer
     if value.is_a?(Symbol)
       value = HATS[value].id
     end
-    @hat2=value
+    @hat2 = value
     refreshPlayerOutfit()
   end
 
@@ -182,7 +177,7 @@ class Player < Trainer
     if value.is_a?(Symbol)
       value = HAIRSTYLES[value].id
     end
-    @hair=value
+    @hair = value
     refreshPlayerOutfit()
   end
 
@@ -190,47 +185,46 @@ class Player < Trainer
     if value.is_a?(Symbol)
       value = OUTFITS[value].id
     end
-    @clothes=value
+    @clothes = value
     refreshPlayerOutfit()
   end
 
   def clothes_color=(value)
-    @clothes_color=value
-    $Trainer.dyed_clothes= {} if !$Trainer.dyed_clothes
+    @clothes_color = value
+    $Trainer.dyed_clothes = {} if !$Trainer.dyed_clothes
     $Trainer.dyed_clothes[@clothes] = value if value
     refreshPlayerOutfit()
   end
 
-  def set_hat_color(value, is_secondary=false)
+  def set_hat_color(value, is_secondary = false)
     if is_secondary
-      @hat2_color=value
+      @hat2_color = value
     else
-      @hat_color=value
+      @hat_color = value
     end
-    $Trainer.dyed_hats= {} if !$Trainer.dyed_hats
+    $Trainer.dyed_hats = {} if !$Trainer.dyed_hats
     worn_hat = is_secondary ? @hat2 : @hat
     $Trainer.dyed_hats[worn_hat] = value if value
     refreshPlayerOutfit()
   end
 
-
   def hat_color=(value)
-    @hat_color=value
-    $Trainer.dyed_hats= {} if !$Trainer.dyed_hats
+    @hat_color = value
+    $Trainer.dyed_hats = {} if !$Trainer.dyed_hats
     worn_hat = @hat
     $Trainer.dyed_hats[worn_hat] = value if value
     refreshPlayerOutfit()
   end
 
   def hat2_color=(value)
-    @hat2_color=value
-    $Trainer.dyed_hats= {} if !$Trainer.dyed_hats
+    @hat2_color = value
+    $Trainer.dyed_hats = {} if !$Trainer.dyed_hats
     worn_hat = @hat2
     $Trainer.dyed_hats[worn_hat] = value if value
     refreshPlayerOutfit()
   end
 
-  def unlock_clothes(outfitID,silent=false)
+  def unlock_clothes(outfitID, silent = false)
     update_global_clothes_list()
     outfit = $PokemonGlobal.clothes_data[outfitID]
     @unlocked_clothes = [] if !@unlocked_clothes
@@ -238,27 +232,26 @@ class Player < Trainer
 
     if !silent
       filename = getTrainerSpriteOutfitFilename(outfitID)
-      name= outfit ? outfit.name : outfitID
-      unlock_outfit_animation(filename,name)
+      name = outfit ? outfit.name : outfitID
+      unlock_outfit_animation(filename, name)
     end
   end
 
-  def unlock_hat(hatID,silent=false)
+  def unlock_hat(hatID, silent = false)
     update_global_hats_list()
 
     hat = $PokemonGlobal.hats_data[hatID]
     @unlocked_hats = [] if !@unlocked_hats
     @unlocked_hats << hatID if !@unlocked_hats.include?(hatID)
 
-
     if !silent
       filename = getTrainerSpriteHatFilename(hatID)
-      name= hat ? hat.name : hatID
-      unlock_outfit_animation(filename,name)
+      name = hat ? hat.name : hatID
+      unlock_outfit_animation(filename, name)
     end
   end
 
-  def unlock_hair(hairID,silent=false)
+  def unlock_hair(hairID, silent = false)
     update_global_hairstyles_list()
 
     hairstyle = $PokemonGlobal.hairstyles_data[hairID]
@@ -270,16 +263,16 @@ class Player < Trainer
 
     if !silent
       filename = getTrainerSpriteHairFilename("2_" + hairID)
-      name= hairstyle ? hairstyle.name : hairID
-      unlock_outfit_animation(filename,name)
+      name = hairstyle ? hairstyle.name : hairID
+      unlock_outfit_animation(filename, name)
     end
   end
 
-  def unlock_outfit_animation(filepath,name,color=2)
+  def unlock_outfit_animation(filepath, name, color = 2)
     outfit_preview = PictureWindow.new(filepath)
-    outfit_preview.x = Graphics.width/4
-    musicEffect= "Key item get"
-    pbMessage(_INTL("{1} obtained \\C[{2}]{3}\\C[0]!\\me[{4}]",$Trainer.name,color,name,musicEffect))
+    outfit_preview.x = Graphics.width / 4
+    musicEffect = "Key item get"
+    pbMessage(_INTL("{1} obtained \\C[{2}]{3}\\C[0]!\\me[{4}]", $Trainer.name, color, name, musicEffect))
     outfit_preview.dispose
   end
 
@@ -287,9 +280,8 @@ class Player < Trainer
     @surfing_pokemon = species
   end
 
-
   def skin_tone=(value)
-    @skin_tone=value
+    @skin_tone = value
     $scene.reset_player_sprite
     #$scene.spritesetGlobal.playersprite.updateCharacterBitmap
   end
@@ -297,9 +289,11 @@ class Player < Trainer
   def beat_league=(value)
     @beat_league = value
   end
+
   def new_game_plus_unlocked=(value)
     @new_game_plus_unlocked = value
   end
+
   # Sets the player's Battle Points amount. It can not exceed
   # {Settings::MAX_BATTLE_POINTS}.
   # @param value [Integer] new Battle Points value
@@ -320,10 +314,10 @@ class Player < Trainer
     return @badges.count { |badge| badge == true }
   end
 
-
   def new_game_plus=(value)
     @new_game_plus = value
   end
+
   #=============================================================================
 
   # (see Pokedex#seen?)
@@ -347,30 +341,30 @@ class Player < Trainer
 
   def initialize(name, trainer_type)
     super
-    @character_ID          = -1
-    @outfit                = 0
-    @hat                   = 0
-    @hat2                  = 0
+    @character_ID = -1
+    @outfit = 0
+    @hat = 0
+    @hat2 = 0
 
-    @hair                  = 0
-    @clothes               = 0
-    @hair_color            = 0
-    @skin_tone             = 0
-    @badges                = [false] * 8
-    @money                 = Settings::INITIAL_MONEY
-    @coins                 = 0
-    @battle_points         = 0
-    @soot                  = 0
-    @pokedex               = Pokedex.new
-    @has_pokedex           = false
-    @has_pokegear          = false
-    @has_running_shoes     = false
-    @seen_storage_creator  = false
+    @hair = 0
+    @clothes = 0
+    @hair_color = 0
+    @skin_tone = 0
+    @badges = [false] * 8
+    @money = Settings::INITIAL_MONEY
+    @coins = 0
+    @battle_points = 0
+    @soot = 0
+    @pokedex = Pokedex.new
+    @has_pokedex = false
+    @has_pokegear = false
+    @has_running_shoes = false
+    @seen_storage_creator = false
     @mystery_gift_unlocked = false
-    @mystery_gifts         = []
-    @beat_league             =  false
-    @new_game_plus_unlocked  =  false
-    @new_game_plus         = false
+    @mystery_gifts = []
+    @beat_league = false
+    @new_game_plus_unlocked = false
+    @new_game_plus = false
     @surfing_pokemon = nil
     @last_worn_outfit = nil
     @last_worn_hat = nil
@@ -380,7 +374,7 @@ class Player < Trainer
     @dyed_clothes = {}
 
     @favorite_hat = nil
-    @favorite_hat2 =nil
+    @favorite_hat2 = nil
     @favorite_clothes = nil
 
     @card_background = Settings::DEFAULT_TRAINER_CARD_BG

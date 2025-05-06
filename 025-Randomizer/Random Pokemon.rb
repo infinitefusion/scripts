@@ -3,7 +3,7 @@
 # By Umbreon
 ################################################################################
 # Used for a randomized pokemon challenge mainly.
-# 
+#
 # By randomized, I mean EVERY pokemon will be random, even interacted pokemon
 #   like legendaries. (You may easily disable the randomizer for certain
 #    situations like legendary battles and starter selecting.)

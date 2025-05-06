@@ -9,17 +9,17 @@ class Game_Picture
   #-----------------------------------------------------------------------------
   # * Public Instance Variables
   #-----------------------------------------------------------------------------
-  attr_reader   :number                   # picture number
-  attr_accessor  :name                     # file name
-  attr_reader   :origin                   # starting point
-  attr_reader   :x                        # x-coordinate
-  attr_reader   :y                        # y-coordinate
-  attr_accessor   :zoom_x                   # x directional zoom rate
-  attr_accessor   :zoom_y                   # y directional zoom rate
-  attr_accessor   :opacity                  # opacity level
-  attr_reader   :blend_type               # blend method
-  attr_reader   :tone                     # color tone
-  attr_reader   :angle                    # rotation angle
+  attr_reader :number                   # picture number
+  attr_accessor :name                     # file name
+  attr_reader :origin                   # starting point
+  attr_reader :x                        # x-coordinate
+  attr_reader :y                        # y-coordinate
+  attr_accessor :zoom_x                   # x directional zoom rate
+  attr_accessor :zoom_y                   # y directional zoom rate
+  attr_accessor :opacity                  # opacity level
+  attr_reader :blend_type               # blend method
+  attr_reader :tone                     # color tone
+  attr_reader :angle                    # rotation angle
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #     number : picture number
@@ -46,6 +46,7 @@ class Game_Picture
     @angle = 0
     @rotate_speed = 0
   end
+
   #-----------------------------------------------------------------------------
   # * Show Picture
   #     name       : file name
@@ -57,7 +58,7 @@ class Game_Picture
   #     opacity    : opacity level
   #     blend_type : blend method
   #-----------------------------------------------------------------------------
-  def show(name, origin, x, y, zoom_x=100, zoom_y=100, opacity=255, blend_type=0)
+  def show(name, origin, x, y, zoom_x = 100, zoom_y = 100, opacity = 255, blend_type = 0)
     @name = name
     @origin = origin
     @x = x.to_f
@@ -78,6 +79,7 @@ class Game_Picture
     @angle = 0
     @rotate_speed = 0
   end
+
   #-----------------------------------------------------------------------------
   # * Move Picture
   #     duration   : time
@@ -90,15 +92,16 @@ class Game_Picture
   #     blend_type : blend method
   #-----------------------------------------------------------------------------
   def move(duration, origin, x, y, zoom_x, zoom_y, opacity, blend_type)
-    @duration       = duration
-    @origin         = origin
-    @target_x       = x.to_f
-    @target_y       = y.to_f
-    @target_zoom_x  = zoom_x.to_f
-    @target_zoom_y  = zoom_y.to_f
+    @duration = duration
+    @origin = origin
+    @target_x = x.to_f
+    @target_y = y.to_f
+    @target_zoom_x = zoom_x.to_f
+    @target_zoom_y = zoom_y.to_f
     @target_opacity = opacity.to_f
-    @blend_type     = blend_type ? blend_type : 0
+    @blend_type = blend_type ? blend_type : 0
   end
+
   #-----------------------------------------------------------------------------
   # * Change Rotation Speed
   #     speed : rotation speed
@@ -106,6 +109,7 @@ class Game_Picture
   def rotate(speed)
     @rotate_speed = speed
   end
+
   #-----------------------------------------------------------------------------
   # * Start Change of Color Tone
   #     tone     : color tone
@@ -118,12 +122,14 @@ class Game_Picture
       @tone = @tone_target.clone
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Erase Picture
   #-----------------------------------------------------------------------------
   def erase
     @name = ""
   end
+
   #-----------------------------------------------------------------------------
   # * Frame Update
   #-----------------------------------------------------------------------------

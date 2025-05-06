@@ -3,14 +3,15 @@
 #===============================================================================
 class Pokemon
   attr_accessor :shadow
-  attr_writer   :heart_gauge
-  attr_writer   :hyper_mode
+  attr_writer :heart_gauge
+  attr_writer :hyper_mode
   attr_accessor :saved_exp
   attr_accessor :saved_ev
   attr_accessor :shadow_moves
   HEART_GAUGE_SIZE = 3840
 
   alias :__shadow_expeq :exp=
+
   def exp=(value)
     if shadowPokemon?
       @saved_exp += value - @exp
@@ -20,6 +21,7 @@ class Pokemon
   end
 
   alias :__shadow_hpeq :hp=
+
   def hp=(value)
     __shadow_hpeq(value)
     @hyper_mode = false if @hp <= 0
@@ -43,6 +45,7 @@ class Pokemon
   def shadowPokemon?
     return @shadow && @heart_gauge && @heart_gauge >= 0
   end
+
   alias isShadow? shadowPokemon?
 
   def hyper_mode
@@ -50,11 +53,11 @@ class Pokemon
   end
 
   def makeShadow
-    @shadow       = true
-    @heart_gauge  = HEART_GAUGE_SIZE
-    @hyper_mode   = false
-    @saved_exp    = 0
-    @saved_ev     = {}
+    @shadow = true
+    @heart_gauge = HEART_GAUGE_SIZE
+    @hyper_mode = false
+    @saved_exp = 0
+    @saved_ev = {}
     GameData::Stat.each_main { |s| @saved_ev[s.id] = 0 }
     @shadow_moves = []
     # Retrieve Shadow moveset for this Pokémon
@@ -112,7 +115,7 @@ class Pokemon
   def replace_moves(new_moves)
     new_moves.each do |move|
       next if !move || !GameData::Move.exists?(move) || hasMove?(move)
-      if numMoves < Pokemon::MAX_MOVES   # Has an empty slot; just learn move
+      if numMoves < Pokemon::MAX_MOVES # Has an empty slot; just learn move
         learn_move(move)
         next
       end
@@ -149,6 +152,7 @@ class Pokemon
   end
 
   alias :__shadow_clone :clone
+
   def clone
     ret = __shadow_clone
     if @saved_ev

@@ -10,7 +10,7 @@ Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
   if $game_switches[Settings::SHINY_WILD_POKEMON_SWITCH]
     pokemon.shiny = true
-    pokemon.debug_shiny=true
+    pokemon.debug_shiny = true
   end
 }
 
@@ -39,7 +39,6 @@ Events.onWildPokemonCreate += proc { |_sender, e|
 #    YOUR CODE HERE
 #  end
 #}
-
 
 #NECROZMA BATTLE
 Events.onWildPokemonCreate += proc { |_sender, e|

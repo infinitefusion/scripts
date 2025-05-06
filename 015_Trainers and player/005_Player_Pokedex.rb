@@ -7,7 +7,7 @@ class Player < Trainer
 
     def inspect
       str = super.chop
-      str << format(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
+      str << format(" seen: %d, owned: %d>", self.seen_count, self.owned_count)
       return str
     end
 
@@ -115,7 +115,6 @@ class Player < Trainer
     end
 
     def verify_dex_is_correct_length(current_dex)
-
       expected_length = 509 + 2
       return current_dex.length == expected_length
     end
@@ -140,8 +139,8 @@ class Player < Trainer
       return if species_id.nil?
       @seen_triple[species_id] = true
     end
-	
-	def set_seen(species, should_refresh_dexes = true)
+
+    def set_seen(species, should_refresh_dexes = true)
       try_resync_pokedex()
       dexNum = getDexNumberForSpecies(species)
       if isTripleFusion(dexNum)
@@ -153,8 +152,8 @@ class Player < Trainer
       end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
-	
-	def set_unseen_fusion(species)
+
+    def set_unseen_fusion(species)
       bodyId = getBodyID(species)
       headId = getHeadID(species, bodyId)
       @seen_fusion[headId][bodyId] = false
@@ -175,8 +174,7 @@ class Player < Trainer
       @seen_triple[species_id] = false
     end
 
-
-	def set_unseen(species, should_refresh_dexes = true)
+    def set_unseen(species, should_refresh_dexes = true)
       try_resync_pokedex()
       dexNum = getDexNumberForSpecies(species)
       if isTripleFusion(dexNum)
@@ -188,8 +186,6 @@ class Player < Trainer
       end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
-
-    
 
     # @param species [Symbol, GameData::Species] species to check
     # @return [Boolean] whether the species is seen
@@ -308,9 +304,8 @@ class Player < Trainer
       end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
-	
-	
-	def set_unowned_fusion(species)
+
+    def set_unowned_fusion(species)
       try_resync_pokedex()
       bodyId = getBodyID(species)
       headId = getHeadID(species, bodyId)
@@ -425,8 +420,7 @@ class Player < Trainer
       # p @owned_standard.length
 
       return @owned_standard == nil || @owned_fusion == nil || @owned_triple == nil ||
-        !verify_dex_is_correct_length(@owned_standard) || !verify_dex_is_correct_length(@seen_fusion)
-
+               !verify_dex_is_correct_length(@owned_standard) || !verify_dex_is_correct_length(@seen_fusion)
     end
 
     #todo:

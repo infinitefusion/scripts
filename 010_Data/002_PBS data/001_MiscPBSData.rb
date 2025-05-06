@@ -13,13 +13,13 @@ end
 
 def pbClearData
   if $PokemonTemp
-    $PokemonTemp.townMapData           = nil
-    $PokemonTemp.phoneData             = nil
+    $PokemonTemp.townMapData = nil
+    $PokemonTemp.phoneData = nil
     $PokemonTemp.speciesShadowMovesets = nil
-    $PokemonTemp.regionalDexes         = nil
-    $PokemonTemp.battleAnims           = nil
-    $PokemonTemp.moveToAnim            = nil
-    $PokemonTemp.mapInfos              = nil
+    $PokemonTemp.regionalDexes = nil
+    $PokemonTemp.battleAnims = nil
+    $PokemonTemp.moveToAnim = nil
+    $PokemonTemp.mapInfos = nil
   end
   MapFactoryHelper.clear
   $PokemonEncounters.setup($game_map.map_id) if $game_map && $PokemonEncounters

@@ -1,23 +1,21 @@
 class PokemonTemp
   def pbClearSilhouetteEvents()
     echoln @tempEvents
-    @tempEvents.keys.each {|map_id|
-      map = $MapFactory.getMap(map_id,false)
+    @tempEvents.keys.each { |map_id|
+      map = $MapFactory.getMap(map_id, false)
       @tempEvents[map_id].each { |event|
         #this deletes the event after a small fadeout
         $game_self_switches[[map_id, event.id, "B"]] = true if map.events[event.id]
       }
     }
-    @tempEvents={}
-    @silhouetteDirection=nil
+    @tempEvents = {}
+    @silhouetteDirection = nil
   end
 end
-
 
 def isNightmareEffect()
   return $game_switches[SWITCH_NIGHTMARE_EFFECT] && PBDayNight.isNight?
 end
-
 
 # def playNightmareEffect()
 #   frame=1
@@ -45,11 +43,11 @@ Events.onStepTaken += proc { |sender, e|
   next if !$scene.is_a?(Scene_Map)
   next if !isNightmareEffect()
   steps_constant_offset = 40
-  steps_chance=100
-  minimum_steps=10
+  steps_chance = 100
+  minimum_steps = 10
 
-  steps_nb = rand(steps_chance)+pbGet(VAR_KARMA)+steps_constant_offset
-  steps_nb = minimum_steps if steps_nb<minimum_steps
+  steps_nb = rand(steps_chance) + pbGet(VAR_KARMA) + steps_constant_offset
+  steps_nb = minimum_steps if steps_nb < minimum_steps
   next if $PokemonGlobal.stepcount % steps_nb != 0
   next if !isOutdoor()
   $PokemonTemp.pbClearSilhouetteEvents
@@ -60,8 +58,7 @@ Events.onMapChange += proc { |sender, e|
   $PokemonTemp.pbClearTempEvents()
 }
 
-
-def getRandomPositionOnPerimeter(width, height, center_x, center_y, variance=0,edge=nil)
+def getRandomPositionOnPerimeter(width, height, center_x, center_y, variance = 0, edge = nil)
   half_width = width / 2.0
   half_height = height / 2.0
 
@@ -93,8 +90,6 @@ end
 #   pbCommonEvent(COMMON_EVENT_SILHOUETTE)
 # end
 
-
-
 #
 # Faces the same way as player
 # Disappears as soon as player takes a step in same direction as event
@@ -108,8 +103,8 @@ end
 def generate_silhouette_event(id)
   $game_self_switches[[MAP_TEMPLATE_EVENTS, TEMPLATE_EVENT_SILHOUETTE, "A"]] = false
   $game_self_switches[[MAP_TEMPLATE_EVENTS, TEMPLATE_EVENT_SILHOUETTE, "B"]] = false
-  template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events[TEMPLATE_EVENT_SILHOUETTE]
-  new_event= template_event.event.dup
+  template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS, false).events[TEMPLATE_EVENT_SILHOUETTE]
+  new_event = template_event.event.dup
   new_event.name = "temp_silhouette"
   new_event.id = id
   return new_event
@@ -135,13 +130,12 @@ def spawnSilhouette()
   $PokemonTemp.silhouetteDirection = direction
   $game_map.events[key_id] = gameEvent
 
-
   gameEvent.moveto(x, y)
   #-------------------------------------------------------------------------
   #updating the sprites
 
   sprite = Sprite_Character.new(Spriteset_Map.viewport, $game_map.events[key_id])
-   $scene.spritesets[$game_map.map_id] = Spriteset_Map.new($game_map) if $scene.spritesets[$game_map.map_id] == nil
-   $scene.spritesets[$game_map.map_id].character_sprites.push(sprite)
+  $scene.spritesets[$game_map.map_id] = Spriteset_Map.new($game_map) if $scene.spritesets[$game_map.map_id] == nil
+  $scene.spritesets[$game_map.map_id].character_sprites.push(sprite)
   #$PokemonTemp.addTempEvent($game_map.map_id, gameEvent)
 end

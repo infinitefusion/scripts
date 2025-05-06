@@ -17,7 +17,7 @@ class Trainer
   def inspect
     str = super.chop
     party_str = @party.map { |p| p.species_data.species }.inspect
-    str << format(' %s @party=%s>', self.full_name, party_str)
+    str << format(" %s @party=%s>", self.full_name, party_str)
     return str
   end
 
@@ -49,34 +49,34 @@ class Trainer
   #=============================================================================
 
   def trainer_type_name
-    return GameData::TrainerType.get(@trainer_type).name;
+    return GameData::TrainerType.get(@trainer_type).name
   end
 
   def base_money
-    return GameData::TrainerType.get(@trainer_type).base_money;
+    return GameData::TrainerType.get(@trainer_type).base_money
   end
 
   def gender
-    return GameData::TrainerType.get(@trainer_type).gender;
+    return GameData::TrainerType.get(@trainer_type).gender
   end
 
   def male?
-    return GameData::TrainerType.get(@trainer_type).male?;
+    return GameData::TrainerType.get(@trainer_type).male?
   end
 
   def female?
-    return GameData::TrainerType.get(@trainer_type).female?;
+    return GameData::TrainerType.get(@trainer_type).female?
   end
 
   def skill_level
     if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
       return 100
     end
-    return GameData::TrainerType.get(@trainer_type).skill_level;
+    return GameData::TrainerType.get(@trainer_type).skill_level
   end
 
   def skill_code
-    return GameData::TrainerType.get(@trainer_type).skill_code;
+    return GameData::TrainerType.get(@trainer_type).skill_code
   end
 
   def has_skill_code?(code)
@@ -110,8 +110,7 @@ class Trainer
     return ret
   end
 
-  def
-  highest_level_pokemon_in_party
+  def highest_level_pokemon_in_party
     max_level = 0
     for pokemon in @party
       if pokemon.level > max_level
@@ -213,7 +212,7 @@ class Trainer
 
   #=============================================================================
 
-  def initialize(name, trainer_type, sprite_override=nil, custom_appearance=nil)
+  def initialize(name, trainer_type, sprite_override = nil, custom_appearance = nil)
     @trainer_type = GameData::TrainerType.get(trainer_type).id
     @name = name
     @id = rand(2 ** 16) | rand(2 ** 16) << 16
@@ -221,9 +220,9 @@ class Trainer
     @party = []
     @sprite_override = sprite_override
     @custom_appearance = custom_appearance
-    @lowest_difficulty=2  #On hard by default, lowered whenever the player selects another difficulty
-    @selected_difficulty=2  #On hard by default, lowered whenever the player selects another difficulty
-    @game_mode =0  #classic
+    @lowest_difficulty = 2  #On hard by default, lowered whenever the player selects another difficulty
+    @selected_difficulty = 2  #On hard by default, lowered whenever the player selects another difficulty
+    @game_mode = 0  #classic
   end
 end
 
@@ -233,11 +232,10 @@ end
 class NPCTrainer < Trainer
   attr_accessor :items
   attr_accessor :lose_text
-  def initialize(name, trainer_type, sprite_override=nil,custom_appearance=nil)
+
+  def initialize(name, trainer_type, sprite_override = nil, custom_appearance = nil)
     super
     @items = []
     @lose_text = nil
   end
-
-
 end
