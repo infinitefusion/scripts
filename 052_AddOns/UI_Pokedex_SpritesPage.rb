@@ -230,8 +230,6 @@ class PokemonPokedexInfo_Scene
   def showSpriteCredits(filename, generated_sprite = false)
     @creditsOverlay.dispose
 
-    x = Graphics.width / 2 - 75
-    y = Graphics.height - 60
     spritename = File.basename(filename, '.*')
 
     if !generated_sprite
@@ -244,10 +242,16 @@ class PokemonPokedexInfo_Scene
     discord_name = "Imported sprite" if @selected_pif_sprite.local_path
     author_name = File.basename(discord_name, '#*')
 
+    x = Graphics.width / 2
     label_base_color = Color.new(248, 248, 248)
     label_shadow_color = Color.new(104, 104, 104)
     @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
-    textpos = [[author_name, x, y, 0, label_base_color, label_shadow_color]]
+    split_name = splitSpriteCredits(author_name, @creditsOverlay, @creditsOverlay.width - 20)
+    line_height = @creditsOverlay.text_size(author_name).height
+    textpos = split_name.each_with_index.map { |name, index|
+      y = (Graphics.height - 60) + (line_height * ((index + 1) - ((split_name.length.to_f + 1) / 2)))
+      [name, x, y, 2, label_base_color, label_shadow_color]
+    }
     pbDrawTextPositions(@creditsOverlay, textpos)
   end
 
