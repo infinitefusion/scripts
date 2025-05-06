@@ -1,6 +1,83 @@
 # frozen_string_literal: true
 
 class BattledTrainer
+  TRAINER_CLASS_FAVORITE_TYPES =
+    {
+      AROMALADY:      [:GRASS, :FAIRY],
+      BEAUTY:         [:FAIRY, :WATER, :NORMAL, :GRASS],
+      BIKER:          [:POISON, :DARK],
+      BIRDKEEPER:     [:FLYING, :NORMAL],
+      BUGCATCHER:     [:BUG],
+      BURGLAR:        [:FIRE, :DARK],
+      CHANNELER:      [:GHOST, :PSYCHIC],
+      CUEBALL:        [:FIGHTING],
+      ENGINEER:       [:ELECTRIC, :STEEL],
+      FISHERMAN:      [:WATER],
+      GAMBLER:        [:NORMAL, :PSYCHIC],
+      GENTLEMAN:      [:NORMAL, :STEEL],
+      HIKER:          [:ROCK, :GROUND],
+      JUGGLER:        [:PSYCHIC, :GHOST],
+      LADY:           [:FAIRY, :NORMAL],
+      PAINTER:        [:NORMAL, :PSYCHIC],
+      POKEMANIAC:     [:DRAGON, :GROUND],
+      POKEMONBREEDER: [:NORMAL, :GRASS],
+      PROFESSOR:      [:NORMAL, :PSYCHIC],
+      ROCKER:         [:ELECTRIC, :FIRE],
+      RUINMANIAC:     [:GROUND, :ROCK],
+      SAILOR:         [:WATER, :FIGHTING],
+      SCIENTIST:      [:ELECTRIC, :STEEL, :POISON],
+      SUPERNERD:      [:ELECTRIC, :PSYCHIC, :STEEL],
+      TAMER:          [:NORMAL, :DARK],
+      BLACKBELT:      [:FIGHTING],
+      CRUSHGIRL:      [:FIGHTING],
+      CAMPER:         [:BUG, :NORMAL, :GRASS],
+      PICNICKER:      [:GRASS, :NORMAL],
+      COOLTRAINER_M:  [:DRAGON, :STEEL, :FIRE],
+      COOLTRAINER_F:  [:ICE, :PSYCHIC, :FAIRY],
+      YOUNGSTER:      [:NORMAL, :BUG],
+      LASS:           [:NORMAL, :FAIRY],
+      POKEMONRANGER_M: [:GRASS, :GROUND],
+      POKEMONRANGER_F: [:GRASS, :WATER],
+      PSYCHIC_M:      [:PSYCHIC, :GHOST],
+      PSYCHIC_F:      [:PSYCHIC, :FAIRY],
+      SWIMMER_M:      [:WATER],
+      SWIMMER_F:      [:WATER, :ICE],
+      SWIMMER2_M:     [:WATER],
+      SWIMMER2_F:     [:WATER],
+      TUBER_M:        [:WATER],
+      TUBER_F:        [:WATER],
+      TUBER2_M:       [:WATER],
+      TUBER2_F:       [:WATER],
+      COOLCOUPLE:     [:FIRE, :ICE],
+      CRUSHKIN:       [:FIGHTING],
+      SISANDBRO:      [:WATER, :GROUND],
+      TWINS:          [:FAIRY, :NORMAL],
+      YOUNGCOUPLE:    [:NORMAL, :PSYCHIC],
+      SOCIALITE:      [:FAIRY, :NORMAL],
+      BUGCATCHER_F:   [:BUG],
+      ROUGHNECK:      [:DARK, :FIGHTING],
+      TEACHER:        [:PSYCHIC, :NORMAL],
+      PRESCHOOLER_M:  [:NORMAL],
+      PRESCHOOLER_F:  [:FAIRY, :NORMAL],
+      HAUNTEDGIRL_YOUNG:  [:GHOST],
+      HAUNTEDGIRL:        [:GHOST, :DARK],
+      CLOWN:          [:PSYCHIC, :FAIRY],
+      NURSE:          [:NORMAL, :FAIRY],
+      WORKER:         [:STEEL, :GROUND],
+      COOLTRAINER_M2: [:FIGHTING, :STEEL],
+      COOLTRAINER_F2: [:PSYCHIC, :ICE],
+      FARMER:         [:GRASS, :GROUND, :NORMAL],
+      PYROMANIAC:     [:FIRE],
+      KIMONOGIRL:     [:FAIRY, :PSYCHIC, :GHOST],
+      SAGE:           [:PSYCHIC, :GHOST],
+      PLAYER:         [:ICE, :FIGHTING],
+      POLICE:         [:DARK, :FIGHTING],
+      SKIER_F:        [:ICE],
+      DELIVERYMAN:  [:NORMAL],
+    }
+
+  DELAY_BETWEEN_NPC_TRADES = 180 #In seconds (3 minutes)
+
   attr_accessor :trainerType
   attr_accessor :trainerName
 
@@ -34,8 +111,9 @@ class BattledTrainer
   # :ITEM -> Trainer has an item they want to give the player
   attr_accessor :current_status
   attr_accessor :previous_status
-  attr_accessor :previous_action_timestamp
+  attr_accessor :previous_trade_timestamp
 
+  attr_accessor :favorite_type
   attr_accessor :favorite_pokemon #Used for generating trade offers. Should be set from trainer.txt (todo)
   #If empty, then trade offers ask for a Pokemon of a type depending on the trainer's class
 
@@ -50,9 +128,18 @@ class BattledTrainer
     @nb_rematches = 0
     @currentStatus = :IDLE
     @previous_status = :IDLE
-    @previous_action_timestamp = Time.now
+    @previous_trade_timestamp = Time.now
     @previous_random_events =[]
     @has_pending_action=false
+    @favorite_type = pick_favorite_type(trainerType)
+  end
+
+  def pick_favorite_type(trainer_type)
+    if TRAINER_CLASS_FAVORITE_TYPES.has_key?(trainer_type)
+      return TRAINER_CLASS_FAVORITE_TYPES[trainer_type].sample
+    else
+      return :NORMAL
+    end
   end
 
   def set_pending_action(value)
@@ -135,8 +222,13 @@ class BattledTrainer
     return current_party
   end
 
-  def getTimeSinceLastAction()
-    return Time.now - @previous_action_timestamp
+  def getTimeSinceLastTrade()
+    @previous_trade_timestamp ||= Time.now - DELAY_BETWEEN_NPC_TRADES
+    return Time.now - @previous_trade_timestamp
+  end
+
+  def isNextTradeReady?()
+    return getTimeSinceLastTrade < DELAY_BETWEEN_NPC_TRADES
   end
 
   def list_team_unfused_pokemon

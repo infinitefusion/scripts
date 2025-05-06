@@ -51,7 +51,9 @@ def healRebattledTrainerPokemon(trainer)
   return trainer
 end
 
-
+def doNPCTrainerRematch(trainer)
+  return generateTrainerRematch(trainer)
+end
 def generateTrainerRematch(trainer)
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
 

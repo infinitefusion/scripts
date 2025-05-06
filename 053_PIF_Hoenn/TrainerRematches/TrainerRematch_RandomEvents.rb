@@ -28,7 +28,7 @@ def applyTrainerRandomEvents(trainer)
     [:CATCH,   3],
     [:FUSE,    6],
     [:REVERSE, 1],
-    [:UNFUSE,  2]
+    [:UNFUSE,  20]
   ]
 
   # Create a flat array of events based on weight
@@ -141,6 +141,11 @@ def unfuse_random_team_pokemon(trainer)
   return trainer if eligible_pokemon.length < 1
   return trainer if trainer.currentTeam.length > 5
   pokemon_to_unfuse = eligible_pokemon.sample
+
+  echoln pokemon_to_unfuse.owner.name
+  echoln trainer.trainerName
+  return trainer if pokemon_to_unfuse.owner.name != trainer.trainerName
+
   body_pokemon = get_body_id_from_symbol(pokemon_to_unfuse.species)
   head_pokemon = get_head_id_from_symbol(pokemon_to_unfuse.species)
 

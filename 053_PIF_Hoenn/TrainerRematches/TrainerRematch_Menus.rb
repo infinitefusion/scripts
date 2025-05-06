@@ -41,9 +41,9 @@ def doPostBattleAction(actionType)
   return if !trainer
   case actionType
   when :BATTLE
-    trainer = generateTrainerRematch(trainer)
+    trainer = doNPCTrainerRematch(trainer)
   when :TRADE
-    trainer = generateTrainerTradeOffer(trainer)
+    trainer = doNPCTrainerTrade(trainer)
   end
   updateRebattledTrainer(event.id,map_id,trainer)
 
