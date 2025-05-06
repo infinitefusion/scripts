@@ -13,13 +13,11 @@ module GameData
       return ret
     end
 
-
-
     def self.sprite_bitmap_from_pokemon_id(id, back = false, shiny = false, bodyShiny = false, headShiny = false)
       if back
-        ret = self.back_sprite_bitmap(id,  shiny, bodyShiny, headShiny)
+        ret = self.back_sprite_bitmap(id, shiny, bodyShiny, headShiny)
       else
-        ret = self.front_sprite_bitmap(id,  shiny, bodyShiny, headShiny)
+        ret = self.front_sprite_bitmap(id, shiny, bodyShiny, headShiny)
       end
       return ret
     end
@@ -29,28 +27,72 @@ module GameData
     ADDITIONAL_OFFSET_WHEN_TOO_CLOSE = 40
     MINIMUM_DEX_DIF = 20
 
-    def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false)
+    def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false, color = :c1)
       if dex_number <= NB_POKEMON
-        if SHINY_COLOR_OFFSETS[dex_number]
-          return SHINY_COLOR_OFFSETS[dex_number]
+        if SHINY_COLOR_OFFSETS[dex_number]&.dig(color)
+          return SHINY_COLOR_OFFSETS[dex_number]&.dig(color)
         end
         body_number = dex_number
         head_number = dex_number
-
       else
         body_number = getBodyID(dex_number)
         head_number = getHeadID(dex_number, body_number)
       end
-      if isBodyShiny && isHeadShiny && SHINY_COLOR_OFFSETS[body_number] && SHINY_COLOR_OFFSETS[head_number]
-        offset = SHINY_COLOR_OFFSETS[body_number] + SHINY_COLOR_OFFSETS[head_number]
-      elsif isHeadShiny && SHINY_COLOR_OFFSETS[head_number]
-        offset = SHINY_COLOR_OFFSETS[head_number]
-      elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]
-        offset = SHINY_COLOR_OFFSETS[body_number]
+      if isBodyShiny && isHeadShiny && SHINY_COLOR_OFFSETS[body_number]&.dig(color) && SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[body_number]&.dig(color) + SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+      elsif isHeadShiny && SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+      elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[body_number]&.dig(color)
       else
+        return 0 if color != :v1
         offset = calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny, isHeadShiny)
       end
       return offset
+    end
+
+    def self.calculateCustomShinyHueOffset(dex_number, bodyShiny, headShiny)
+      result = []
+      valid_format_rgb = /^\d+ \d+ \d+\.\d+ \d+ \d+$/ # Format RGB classique
+      valid_format_hex = /^#([0-9a-fA-F]{6})\.#([0-9a-fA-F]{6})$/ # Format hexadécimal
+    
+      ids = []
+      if dex_number <= NB_POKEMON
+        ids << dex_number
+      else
+        ids << getBodyID(dex_number) if bodyShiny
+        ids << getHeadID(dex_number, ids[0]) if headShiny
+      end
+    
+      ids.each do |id|
+        offsets = SHINY_COLOR_OFFSETS[id]
+        next unless offsets
+        color_to_stay = 0
+        offsets.each_value do |value|
+          color_to_stay += 1
+          if value.is_a?(String)
+            if value.match?(valid_format_rgb)
+              from_rgb, to_rgb = value.split(".").map { |rgb| rgb.split.map(&:to_i) }
+              next if from_rgb == to_rgb && bodyShiny && headShiny && color_to_stay > 4 # for always having black is black white is white gray is gray...
+              result << value
+            elsif value.match?(valid_format_hex)
+              from_hex, to_hex = value.split(".")
+              from_rgb = hex_to_rgb(from_hex)
+              to_rgb = hex_to_rgb(to_hex)
+              next if from_rgb == to_rgb && bodyShiny && headShiny && getBodyID(dex_number) != getHeadID(dex_number, getBodyID(dex_number)) && color_to_stay > 4  # for always having black is black white is white gray is gray...
+              result << "#{from_rgb.join(" ")}.#{to_rgb.join(" ")}"
+            end
+          end
+        end
+      end
+      result.empty? ? "nil" : result.join("|")
+    end
+    def self.hex_to_rgb(hex)
+      hex = hex.delete("#")
+      r = hex[0..1].to_i(16)
+      g = hex[2..3].to_i(16)
+      b = hex[4..5].to_i(16)
+      [r, g, b]
     end
 
     def self.calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny = false, isHeadShiny = false)
@@ -74,11 +116,9 @@ module GameData
     end
 
     def self.getAutogenSprite(head_id, body_id)
-
     end
 
-
-  # species can be either a number, a Species objet of a symbol
+    # species can be either a number, a Species objet of a symbol
     def self.front_sprite_bitmap(species, isShiny = false, bodyShiny = false, headShiny = false)
       dex_number = getDexNumberForSpecies(species)
       if species.is_a?(Species)
@@ -89,7 +129,7 @@ module GameData
       if isFusion(dex_number)
         body_id = getBodyID(dex_number)
         head_id = getHeadID(dex_number, body_id)
-        sprite = spriteLoader.load_fusion_sprite(head_id,body_id)
+        sprite = spriteLoader.load_fusion_sprite(head_id, body_id)
       else
         if isTripleFusion?(dex_number)
           sprite = spriteLoader.load_triple_fusion_sprite(dex_number)
@@ -98,15 +138,10 @@ module GameData
         end
       end
       if isShiny
-        sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
+        sprite.shiftAllColors(dex_number, bodyShiny, headShiny)
       end
       return sprite
     end
-
-
-
-
-
 
     # def self.front_sprite_bitmap(dex_number, isShiny = false, bodyShiny = false, headShiny = false)
     #   # body_id = getBodyID(dex_number)
@@ -132,8 +167,8 @@ module GameData
       #   sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
       # end
       # return sprite
-      sprite = self.front_sprite_bitmap(dex_number,isShiny,bodyShiny,headShiny)
-      return sprite#.mirror
+      sprite = self.front_sprite_bitmap(dex_number, isShiny, bodyShiny, headShiny)
+      return sprite #.mirror
     end
 
     def self.egg_sprite_bitmap(dex_number, form = nil)
@@ -143,43 +178,41 @@ module GameData
   end
 end
 
-
-    # def self.sprite_filename(dex_number)
-    #   #dex_number = GameData::NAT_DEX_MAPPING[dex_number] ? GameData::NAT_DEX_MAPPING[dex_number] : dex_number
-    #   if dex_number.is_a?(GameData::Species)
-    #     dex_number = dex_number.id_number
-    #   end
-    #   if dex_number.is_a?(Symbol)
-    #     dex_number = getDexNumberForSpecies(dex_number)
-    #   end
-    #   return nil if dex_number == nil
-    #   if dex_number <= Settings::NB_POKEMON
-    #     return get_unfused_sprite_path(dex_number)
-    #   else
-    #     if dex_number >= Settings::ZAPMOLCUNO_NB
-    #       specialPath = getSpecialSpriteName(dex_number)
-    #       return pbResolveBitmap(specialPath)
-    #       head_id = nil
-    #     else
-    #       body_id = getBodyID(dex_number)
-    #       head_id = getHeadID(dex_number, body_id)
-    #       return get_fusion_sprite_path(head_id, body_id)
-    #       # folder = head_id.to_s
-    #       # filename = sprintf("%s.%s.png", head_id, body_id)
-    #     end
-    #   end
-    #   # customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
-    #   # customPath = download_custom_sprite(head_id,body_id)
-    #   #
-    #   # species = getSpecies(dex_number)
-    #   # use_custom = customPath && !species.always_use_generated
-    #   # if use_custom
-    #   #   return customPath
-    #   # end
-    #   # #return Settings::BATTLERS_FOLDER + folder + "/" + filename
-    #   # return download_autogen_sprite(head_id,body_id)
-    # end
-
+# def self.sprite_filename(dex_number)
+#   #dex_number = GameData::NAT_DEX_MAPPING[dex_number] ? GameData::NAT_DEX_MAPPING[dex_number] : dex_number
+#   if dex_number.is_a?(GameData::Species)
+#     dex_number = dex_number.id_number
+#   end
+#   if dex_number.is_a?(Symbol)
+#     dex_number = getDexNumberForSpecies(dex_number)
+#   end
+#   return nil if dex_number == nil
+#   if dex_number <= Settings::NB_POKEMON
+#     return get_unfused_sprite_path(dex_number)
+#   else
+#     if dex_number >= Settings::ZAPMOLCUNO_NB
+#       specialPath = getSpecialSpriteName(dex_number)
+#       return pbResolveBitmap(specialPath)
+#       head_id = nil
+#     else
+#       body_id = getBodyID(dex_number)
+#       head_id = getHeadID(dex_number, body_id)
+#       return get_fusion_sprite_path(head_id, body_id)
+#       # folder = head_id.to_s
+#       # filename = sprintf("%s.%s.png", head_id, body_id)
+#     end
+#   end
+#   # customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
+#   # customPath = download_custom_sprite(head_id,body_id)
+#   #
+#   # species = getSpecies(dex_number)
+#   # use_custom = customPath && !species.always_use_generated
+#   # if use_custom
+#   #   return customPath
+#   # end
+#   # #return Settings::BATTLERS_FOLDER + folder + "/" + filename
+#   # return download_autogen_sprite(head_id,body_id)
+# end
 
 # def get_unfused_sprite_path(dex_number_id, localOnly = false)
 #   dex_number = dex_number_id.to_s
@@ -230,7 +263,7 @@ end
 def add_to_autogen_cache(pokemon_id, sprite_name)
   return if !$PokemonGlobal
   return if !$PokemonGlobal.autogen_sprites_cache
-  $PokemonGlobal.autogen_sprites_cache[pokemon_id]=sprite_name
+  $PokemonGlobal.autogen_sprites_cache[pokemon_id] = sprite_name
 end
 
 class PokemonGlobalMetadata
@@ -312,7 +345,6 @@ end
 
 def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  echoln spriteName
   if onlyMain
     alts_list = list_main_sprites_letters(spriteName)
     return nil if alts_list.empty?
@@ -327,11 +359,11 @@ end
 def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
   spriteName = _INTL("{1}", dex_num)
   if onlyMain
-    letters_list= list_main_sprites_letters(spriteName)
+    letters_list = list_main_sprites_letters(spriteName)
   else
-    letters_list= list_all_sprites_letters(spriteName)
+    letters_list = list_all_sprites_letters(spriteName)
   end
-  letters_list << ""  #add main sprite
+  letters_list << ""  # add main sprite
   return letters_list.sample
 end
 
@@ -342,7 +374,7 @@ def list_main_sprites_letters(spriteName)
     main_sprites << key if value == "main"
   end
 
-  #add temp sprites if no main sprites found
+  # add temp sprites if no main sprites found
   if main_sprites.empty?
     all_sprites.each do |key, value|
       main_sprites << key if value == "temp"
@@ -351,7 +383,7 @@ def list_main_sprites_letters(spriteName)
   return main_sprites
 end
 
-def list_all_sprites_letters_head_body(head_id,body_id)
+def list_all_sprites_letters_head_body(head_id, body_id)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
   all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
   letters = []
@@ -378,13 +410,12 @@ def list_alt_sprite_letters(spriteName)
   end
 end
 
-
 #ex: "1" -> "main"
 #    "1a" -> "alt"
 def map_alt_sprite_letters_for_pokemon(spriteName)
   alt_sprites = {}
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
-    row = line.split(',')
+    row = line.split(",")
     sprite_name = row[0]
     if sprite_name.start_with?(spriteName)
       if sprite_name.length > spriteName.length #alt letter
@@ -393,9 +424,9 @@ def map_alt_sprite_letters_for_pokemon(spriteName)
           main_or_alt = row[2] ? row[2] : nil
           alt_sprites[letter] = main_or_alt
         end
-      else  #letterless
-      main_or_alt = row[2] ? row[2].gsub("\n","") : nil
-      alt_sprites[""] = main_or_alt
+      else #letterless
+        main_or_alt = row[2] ? row[2].gsub("\n", "") : nil
+        alt_sprites[""] = main_or_alt
       end
     end
   end
