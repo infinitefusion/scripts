@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class HatShopView < ClothesShopView
-
   def initialize(currency_name = "Money")
     @currency_name = currency_name
   end
-
 
   def pbStartBuyOrSellScene(buying, stock, adapter)
     super(buying, stock, adapter)
@@ -28,7 +26,7 @@ class HatShopView < ClothesShopView
   def switchItemVersion(itemwindow)
     @adapter.switchVersion(itemwindow.item, 1)
     new_selected_hat = @adapter.is_secondary_hat ? $Trainer.hat2 : $Trainer.hat
-    select_specific_item(new_selected_hat,true)
+    select_specific_item(new_selected_hat, true)
     updateTrainerPreview()
   end
 
@@ -42,26 +40,25 @@ class HatShopView < ClothesShopView
     other_hat = @adapter.is_secondary_hat ? $Trainer.hat : $Trainer.hat2
     if !selected_item.is_a?(Hat)
       if @adapter.is_secondary_hat
-        @sprites["wornHat_layer2"].bitmap=nil
+        @sprites["wornHat_layer2"].bitmap = nil
       else
-        @sprites["wornHat_layer1"].bitmap=nil
+        @sprites["wornHat_layer1"].bitmap = nil
       end
     end
     if !other_hat.is_a?(Hat)
       if @adapter.is_secondary_hat
-        @sprites["wornHat_layer1"].bitmap=nil
+        @sprites["wornHat_layer1"].bitmap = nil
       else
-        @sprites["wornHat_layer2"].bitmap=nil
+        @sprites["wornHat_layer2"].bitmap = nil
       end
     end
-
   end
-  def displayLayerIcons(selected_item=nil)
+
+  def displayLayerIcons(selected_item = nil)
     handleHatlessLayerIcons(selected_item)
 
     hat1Filename = getOverworldHatFilename($Trainer.hat)
     hat2Filename = getOverworldHatFilename($Trainer.hat2)
-
 
     hat_color_shift = $Trainer.dyed_hats[$Trainer.hat]
     hat2_color_shift = $Trainer.dyed_hats[$Trainer.hat2]
@@ -72,19 +69,17 @@ class HatShopView < ClothesShopView
     @sprites["wornHat_layer1"].bitmap = hatBitmapWrapper.bitmap if hatBitmapWrapper
     @sprites["wornHat_layer2"].bitmap = hat2BitmapWrapper.bitmap if hat2BitmapWrapper
 
-    frame_width=80
-    frame_height=80
+    frame_width = 80
+    frame_height = 80
 
     @sprites["wornHat_layer1"].src_rect.set(0, 0, frame_width, frame_height) if hatBitmapWrapper
     @sprites["wornHat_layer2"].src_rect.set(0, 0, frame_width, frame_height) if hat2BitmapWrapper
   end
 
-
   def updateSelectedLayerGraphicsVisibility()
     @sprites["hatLayer_selected1"].visible = !@adapter.is_secondary_hat
     @sprites["hatLayer_selected2"].visible = @adapter.is_secondary_hat
   end
-
 
   def displayNewItem(itemwindow)
     item = itemwindow.item
@@ -106,5 +101,4 @@ class HatShopView < ClothesShopView
     super
     updateSelectedLayerGraphicsVisibility
   end
-
 end

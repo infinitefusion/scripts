@@ -1,11 +1,9 @@
-
 #[FRAME1 [x,y]],[FRAME2 [x,y], etc.]
 #
 # exact number of pixels that the sprite needs to be moved for each frame
 # add 2 pixels on even frames
 module Outfit_Offsets
   BASE_OFFSET = [[0, 0], [0, 0], [0, 0], [0, 0]]
-
 
   RUN_OFFSETS_DOWN = [[0, 2], [0, 6], [0, 2], [0, 6]]
   RUN_OFFSETS_LEFT = [[-2, -2], [-2, -2], [-2, -2], [-2, -2]]

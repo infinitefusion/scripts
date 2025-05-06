@@ -12,9 +12,9 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      @id               = hash[:id]
-      @id_number        = hash[:id_number]   || -1
-      @real_name        = hash[:name]        || "Unnamed"
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @real_name = hash[:name] || "Unnamed"
       @real_description = hash[:description] || "???"
     end
 

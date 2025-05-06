@@ -22,11 +22,10 @@
 #   end
 # end
 
-
 class AbilitySplashDisappearAnimation < PokeBattle_Animation
-  def initialize(sprites,viewport,side)
+  def initialize(sprites, viewport, side)
     @side = side
-    super(sprites,viewport)
+    super(sprites, viewport)
   end
 
   def createProcesses
@@ -34,19 +33,19 @@ class AbilitySplashDisappearAnimation < PokeBattle_Animation
     bar = addSprite(@sprites["abilityBar_#{@side}"])
     bar2 = addSprite(@sprites["ability2Bar_#{@side}"]) if @sprites["ability2Bar_#{@side}"]
 
-    dir = (@side==0) ? -1 : 1
-    bar.moveDelta(0,8,dir*Graphics.width/2,0)
-    bar2.moveDelta(0,8,dir*Graphics.width/2,0) if bar2
+    dir = (@side == 0) ? -1 : 1
+    bar.moveDelta(0, 8, dir * Graphics.width / 2, 0)
+    bar2.moveDelta(0, 8, dir * Graphics.width / 2, 0) if bar2
 
-    bar.setVisible(8,false)
-    bar2.setVisible(8,false) if bar2
+    bar.setVisible(8, false)
+    bar2.setVisible(8, false) if bar2
   end
 end
 
 class PokeBattle_Scene
-  def pbShowAbilitySplash(battler,secondAbility=false, abilityName=nil)
+  def pbShowAbilitySplash(battler, secondAbility = false, abilityName = nil)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-    side = battler.index%2
+    side = battler.index % 2
     if secondAbility
       pbHideAbilitySplash(battler) if @sprites["ability2Bar_#{side}"].visible
     else
@@ -57,11 +56,10 @@ class PokeBattle_Scene
       @sprites["ability2Bar_#{side}"].ability_name = abilityName if secondAbility
     end
 
-
     @sprites["abilityBar_#{side}"].battler = battler
     @sprites["ability2Bar_#{side}"].battler = battler if @sprites["ability2Bar_#{side}"]
 
-    abilitySplashAnim = AbilitySplashAppearAnimation.new(@sprites,@viewport,side,secondAbility)
+    abilitySplashAnim = AbilitySplashAppearAnimation.new(@sprites, @viewport, side, secondAbility)
     loop do
       abilitySplashAnim.update
       pbUpdate
@@ -72,59 +70,51 @@ class PokeBattle_Scene
 end
 
 class PokeBattle_Battle
-
-  def pbShowSecondaryAbilitySplash(battler,delay=false,logTrigger=true)
+  def pbShowSecondaryAbilitySplash(battler, delay = false, logTrigger = true)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-    @scene.pbShowAbilitySplash(battler,true)
+    @scene.pbShowAbilitySplash(battler, true)
     if delay
       Graphics.frame_rate.times { @scene.pbUpdate }   # 1 second
     end
   end
 
-  def pbShowPrimaryAbilitySplash(battler,delay=false,logTrigger=true)
+  def pbShowPrimaryAbilitySplash(battler, delay = false, logTrigger = true)
     return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-    @scene.pbShowAbilitySplash(battler,false)
+    @scene.pbShowAbilitySplash(battler, false)
     if delay
       Graphics.frame_rate.times { @scene.pbUpdate }   # 1 second
     end
   end
-
 end
-
-
 
 class FusionSelectOptionsScene < PokemonOption_Scene
   def pbGetOptions(inloadscreen = false)
-
     options = []
     if shouldSelectNickname
       options << EnumOption.new(_INTL("Nickname"), [_INTL(@pokemon1.name), _INTL(@pokemon2.name)],
                                 proc { 0 },
                                 proc { |value|
-                                  if value ==0
-                                    @nickname = @pokemon1.name
-                                  else
-                                    @nickname = @pokemon2.name
-                                  end
-                                }, "Select the Pokémon's nickname")
+        if value == 0
+          @nickname = @pokemon1.name
+        else
+          @nickname = @pokemon2.name
+        end
+      }, "Select the Pokémon's nickname")
     end
 
     if @abilityList != nil
       options << EnumOption.new(_INTL("Ability"), [_INTL(getAbilityName(@abilityList[0])), _INTL(getAbilityName(@abilityList[1]))],
                                 proc { 0 },
                                 proc { |value|
-                                  @selectedAbility=@abilityList[value]
-                                }, [getAbilityDescription(@abilityList[0]), getAbilityDescription(@abilityList[1])]
-      )
+        @selectedAbility = @abilityList[value]
+      }, [getAbilityDescription(@abilityList[0]), getAbilityDescription(@abilityList[1])])
     end
 
     options << EnumOption.new(_INTL("Nature"), [_INTL(getNatureName(@natureList[0])), _INTL(getNatureName(@natureList[1]))],
                               proc { 0 },
                               proc { |value|
-                                @selectedNature=@natureList[value]
-                              }, [getNatureDescription(@natureList[0]), getNatureDescription(@natureList[1])]
-    )
+      @selectedNature = @natureList[value]
+    }, [getNatureDescription(@natureList[0]), getNatureDescription(@natureList[1])])
     return options
   end
 end
-

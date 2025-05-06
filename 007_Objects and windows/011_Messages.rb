@@ -572,7 +572,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   linecount = (Graphics.height > 400) ? 3 : 2
   ### Text replacement
   text.gsub!(/\\sign\[([^\]]*)\]/i) { # \sign[something] gets turned into
-  next "\\op\\cl\\ts[]\\w[" + $1 + "]" # \op\cl\ts[]\w[something]
+    next "\\op\\cl\\ts[]\\w[" + $1 + "]" # \op\cl\ts[]\w[something]
   }
   text.gsub!(/\\\\/, "\5")
   text.gsub!(/\\1/, "\1")
@@ -623,7 +623,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   end
   colortag = ""
   if $game_system && $game_system.respond_to?("message_frame") &&
-    $game_system.message_frame != 0
+     $game_system.message_frame != 0
     colortag = getSkinColor(msgwindow.windowskin, 0, true)
   else
     colortag = getSkinColor(msgwindow.windowskin, 0, isDarkSkin)
@@ -737,7 +737,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
           #path = obtainPokemonSpritePath(body, head, true) if isFusion
 
           spriteLoader = BattleSpriteLoader.new
-          facewindow = isFusion ? PictureWindow.new(spriteLoader.load_fusion_sprite(head,body)) : PictureWindow.new(spriteLoader.load_base_sprite(head))
+          facewindow = isFusion ? PictureWindow.new(spriteLoader.load_fusion_sprite(head, body)) : PictureWindow.new(spriteLoader.load_base_sprite(head))
           pbPositionNearMsgWindow(facewindow, msgwindow, :left)
           facewindow.viewport = msgwindow.viewport
           facewindow.z = msgwindow.z
@@ -864,8 +864,8 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
   if commands
     ret = pbMessageDisplay(msgwindow, message, true,
                            proc { |msgwindow|
-                             next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
-                           }, &block)
+      next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+    }, &block)
   else
     pbMessageDisplay(msgwindow, message, &block)
   end
@@ -880,8 +880,8 @@ def pbMessageNoSound(message, commands = nil, cmdIfCancel = 0, skin = nil, defau
   if commands
     ret = pbMessageDisplayNoSound(msgwindow, message, true,
                                   proc { |msgwindow|
-                                    next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
-                                  }, &block)
+      next Kernel.pbShowCommands(msgwindow, commands, cmdIfCancel, defaultCmd, &block)
+    }, &block)
   else
     pbMessageDisplay(msgwindow, message, &block)
   end
@@ -902,16 +902,15 @@ def pbMessageChooseNumber(message, params, &block)
   msgwindow = pbCreateMessageWindow(nil, params.messageSkin)
   ret = pbMessageDisplay(msgwindow, message, true,
                          proc { |msgwindow|
-                           next pbChooseNumber(msgwindow, params, &block)
-                         }, &block)
+    next pbChooseNumber(msgwindow, params, &block)
+  }, &block)
   pbDisposeMessageWindow(msgwindow)
   return ret
 end
 
-
-def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0, x_offset=nil, y_offset=nil)
+def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0, x_offset = nil, y_offset = nil)
   return 0 if !commands
-  $PokemonTemp.speechbubble_arrow.visible =false if $PokemonTemp.speechbubble_arrow && !$PokemonTemp.speechbubble_arrow.disposed?
+  $PokemonTemp.speechbubble_arrow.visible = false if $PokemonTemp.speechbubble_arrow && !$PokemonTemp.speechbubble_arrow.disposed?
   if defaultCmd == 0 && ($game_variables && $game_variables[VAR_COMMAND_WINDOW_INDEX] != 0)
     defaultCmd = $game_variables[VAR_COMMAND_WINDOW_INDEX]
   end
@@ -1050,8 +1049,8 @@ def pbMessageFreeText(message, currenttext, passwordbox, maxlength, width = 240,
   msgwindow = pbCreateMessageWindow
   retval = pbMessageDisplay(msgwindow, message, true,
                             proc { |msgwindow|
-                              next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
-                            }, &block)
+    next pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width, &block)
+  }, &block)
   pbDisposeMessageWindow(msgwindow)
   return retval
 end

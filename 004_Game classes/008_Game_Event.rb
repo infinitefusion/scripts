@@ -1,34 +1,34 @@
 class Game_Event < Game_Character
-  attr_reader   :map_id
-  attr_reader   :trigger
-  attr_reader   :list
-  attr_reader   :starting
-  attr_reader   :tempSwitches   # Temporary self-switches
+  attr_reader :map_id
+  attr_reader :trigger
+  attr_reader :list
+  attr_reader :starting
+  attr_reader :tempSwitches   # Temporary self-switches
   attr_accessor :need_refresh
 
-  def initialize(map_id, event, map=nil)
+  def initialize(map_id, event, map = nil)
     super(map)
-    @map_id       = map_id
-    @event        = event
-    @id           = @event.id
-    @original_x   = @event.x
-    @original_y   = @event.y
+    @map_id = map_id
+    @event = event
+    @id = @event.id
+    @original_x = @event.x
+    @original_y = @event.y
     if @event.name[/size\((\d+),(\d+)\)/i]
       @width = $~[1].to_i
       @height = $~[2].to_i
     end
-    @erased       = false
-    @starting     = false
+    @erased = false
+    @starting = false
     @need_refresh = false
     @route_erased = false
-    @through      = true
-    @to_update    = true
+    @through = true
+    @to_update = true
     @tempSwitches = {}
     moveto(@event.x, @event.y) if map
     refresh
   end
 
-  def id;   return @event.id;   end
+  def id; return @event.id; end
   def name; return @event.name; end
 
   def set_starting
@@ -54,7 +54,7 @@ class Game_Event < Game_Character
   end
 
   def tsOn?(c)
-    return @tempSwitches && @tempSwitches[c]==true
+    return @tempSwitches && @tempSwitches[c] == true
   end
 
   def tsOff?(c)
@@ -62,17 +62,17 @@ class Game_Event < Game_Character
   end
 
   def setTempSwitchOn(c)
-    @tempSwitches[c]=true
+    @tempSwitches[c] = true
     refresh
   end
 
   def setTempSwitchOff(c)
-    @tempSwitches[c]=false
+    @tempSwitches[c] = false
     refresh
   end
 
   def isOff?(c)
-    return !$game_self_switches[[@map_id,@event.id,c]]
+    return !$game_self_switches[[@map_id, @event.id, c]]
   end
 
   def switchIsOn?(id)
@@ -87,31 +87,31 @@ class Game_Event < Game_Character
 
   def variable
     return nil if !$PokemonGlobal.eventvars
-    return $PokemonGlobal.eventvars[[@map_id,@event.id]]
+    return $PokemonGlobal.eventvars[[@map_id, @event.id]]
   end
 
   def setVariable(variable)
-    $PokemonGlobal.eventvars[[@map_id,@event.id]]=variable
+    $PokemonGlobal.eventvars[[@map_id, @event.id]] = variable
   end
 
   def varAsInt
     return 0 if !$PokemonGlobal.eventvars
-    return $PokemonGlobal.eventvars[[@map_id,@event.id]].to_i
+    return $PokemonGlobal.eventvars[[@map_id, @event.id]].to_i
   end
 
-  def expired?(secs=86400)
-    ontime=self.variable
-    time=pbGetTimeNow
-    return ontime && (time.to_i>ontime+secs)
+  def expired?(secs = 86400)
+    ontime = self.variable
+    time = pbGetTimeNow
+    return ontime && (time.to_i > ontime + secs)
   end
 
-  def expiredDays?(days=1)
-    ontime=self.variable.to_i
+  def expiredDays?(days = 1)
+    ontime = self.variable.to_i
     return false if !ontime
-    now=pbGetTimeNow
-    elapsed=(now.to_i-ontime)/86400
-    elapsed+=1 if (now.to_i-ontime)%86400>(now.hour*3600+now.min*60+now.sec)
-    return elapsed>=days
+    now = pbGetTimeNow
+    elapsed = (now.to_i - ontime) / 86400
+    elapsed += 1 if (now.to_i - ontime) % 86400 > (now.hour * 3600 + now.min * 60 + now.sec)
+    return elapsed >= days
   end
 
   def cooledDown?(seconds)
@@ -130,7 +130,6 @@ class Game_Event < Game_Character
     return @map_id == $game_map.map_id && at_coordinate?($game_player.x, $game_player.y)
   end
 
-
   def over_trigger?
     return false if @character_name != "" && !@through
     return false if @event.name[/hiddenitem/i]
@@ -144,7 +143,7 @@ class Game_Event < Game_Character
     return if $game_system.map_interpreter.running? || @starting
     if @event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
-      if @trigger==2 && pbEventCanReachPlayer?(self,$game_player,distance)
+      if @trigger == 2 && pbEventCanReachPlayer?(self, $game_player, distance)
         start if !jumping? && !over_trigger?
       end
     end
@@ -169,11 +168,11 @@ class Game_Event < Game_Character
   end
 
   def check_event_trigger_auto
-    if @trigger == 2      # Event touch
+    if @trigger == 2 # Event touch
       if at_coordinate?($game_player.x, $game_player.y)
         start if !jumping? && over_trigger?
       end
-    elsif @trigger == 3   # Autorun
+    elsif @trigger == 3 # Autorun
       start
     end
   end
@@ -198,59 +197,59 @@ class Game_Event < Game_Character
     @page = new_page
     clear_starting
     if @page == nil
-      @tile_id        = 0
+      @tile_id = 0
       @character_name = ""
-      @character_hue  = 0
-      @move_type      = 0
-      @through        = true
-      @trigger        = nil
-      @list           = nil
-      @interpreter    = nil
+      @character_hue = 0
+      @move_type = 0
+      @through = true
+      @trigger = nil
+      @list = nil
+      @interpreter = nil
       return
     end
-    @tile_id              = @page.graphic.tile_id
-    @character_name       = @page.graphic.character_name
-    @character_hue        = @page.graphic.character_hue
+    @tile_id = @page.graphic.tile_id
+    @character_name = @page.graphic.character_name
+    @character_hue = @page.graphic.character_hue
     if @original_direction != @page.graphic.direction
-      @direction          = @page.graphic.direction
+      @direction = @page.graphic.direction
       @original_direction = @direction
-      @prelock_direction  = 0
+      @prelock_direction = 0
     end
     if @original_pattern != @page.graphic.pattern
-      @pattern            = @page.graphic.pattern
-      @original_pattern   = @pattern
+      @pattern = @page.graphic.pattern
+      @original_pattern = @pattern
     end
-    @opacity              = @page.graphic.opacity
-    @blend_type           = @page.graphic.blend_type
-    @move_type            = @page.move_type
-    self.move_speed       = @page.move_speed
-    self.move_frequency   = @page.move_frequency
-    @move_route           = (@route_erased) ? RPG::MoveRoute.new : @page.move_route
-    @move_route_index     = 0
-    @move_route_forcing   = false
-    @walk_anime           = @page.walk_anime
-    @step_anime           = @page.step_anime
-    @direction_fix        = @page.direction_fix
-    @through              = @page.through
-    @always_on_top        = @page.always_on_top
+    @opacity = @page.graphic.opacity
+    @blend_type = @page.graphic.blend_type
+    @move_type = @page.move_type
+    self.move_speed = @page.move_speed
+    self.move_frequency = @page.move_frequency
+    @move_route = (@route_erased) ? RPG::MoveRoute.new : @page.move_route
+    @move_route_index = 0
+    @move_route_forcing = false
+    @walk_anime = @page.walk_anime
+    @step_anime = @page.step_anime
+    @direction_fix = @page.direction_fix
+    @through = @page.through
+    @always_on_top = @page.always_on_top
     calculate_bush_depth
-    @trigger              = @page.trigger
-    @list                 = @page.list
-    @interpreter          = nil
-    if @trigger == 4   # Parallel Process
-      @interpreter        = Interpreter.new
+    @trigger = @page.trigger
+    @list = @page.list
+    @interpreter = nil
+    if @trigger == 4 # Parallel Process
+      @interpreter = Interpreter.new
     end
     check_event_trigger_auto
   end
 
-  def should_update?(recalc=false)
+  def should_update?(recalc = false)
     return @to_update if !recalc
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing
     return true if @event.name[/update/i]
     range = 2   # Number of tiles
-    return false if self.screen_x - @sprite_size[0]/2 > Graphics.width + range * Game_Map::TILE_WIDTH
-    return false if self.screen_x + @sprite_size[0]/2 < -range * Game_Map::TILE_WIDTH
+    return false if self.screen_x - @sprite_size[0] / 2 > Graphics.width + range * Game_Map::TILE_WIDTH
+    return false if self.screen_x + @sprite_size[0] / 2 < -range * Game_Map::TILE_WIDTH
     return false if self.screen_y_ground - @sprite_size[1] > Graphics.height + range * Game_Map::TILE_HEIGHT
     return false if self.screen_y_ground < -range * Game_Map::TILE_HEIGHT
     return true
@@ -280,6 +279,4 @@ class Game_Event < Game_Character
   def active?
     return !@erased && @page != nil
   end
-
-
 end

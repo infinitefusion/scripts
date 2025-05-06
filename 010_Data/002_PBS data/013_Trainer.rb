@@ -9,7 +9,6 @@ module GameData
     attr_reader :real_lose_text
     attr_reader :pokemon
 
-
     attr_accessor :loseText_rematch
     attr_accessor :preRematchText
     attr_accessor :preRematchText_caught
@@ -48,7 +47,6 @@ module GameData
       "PreRematchText_fused" => [:preRematchText_fused, "s"],
       "PreRematchText_unfused" => [:preRematchText_unfused, "s"],
       "PreRematchText_reversed" => [:preRematchText_reversed, "s"],
-
 
     }
 
@@ -114,7 +112,7 @@ module GameData
       end
 
       @loseText_rematch = hash[:loseText_rematch] || @real_lose_text
-      @preRematchText  = hash[:preRematchText] || "Are you up for a rematch? Or maybe you want to trade..."
+      @preRematchText = hash[:preRematchText] || "Are you up for a rematch? Or maybe you want to trade..."
       @preRematchText_caught = hash[:preRematchText_caught] || @preRematchText
       @preRematchText_evolved = hash[:preRematchText_evolved] || @preRematchText
       @preRematchText_fused = hash[:preRematchText_fused] || @preRematchText
@@ -264,7 +262,6 @@ module GameData
         return replace_species_to_randomized_gym(species, trainerId, pokemonIndex)
       end
       return replace_species_to_randomized_regular(species, trainerId, pokemonIndex)
-
     end
 
     def replaceSingleSpeciesModeIfApplicable(species)
@@ -437,6 +434,6 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbGetTrainerData(tr_type, tr_name, tr_version = 0)
-  Deprecation.warn_method('pbGetTrainerData', 'v20', 'GameData::Trainer.get(tr_type, tr_name, tr_version)')
+  Deprecation.warn_method("pbGetTrainerData", "v20", "GameData::Trainer.get(tr_type, tr_name, tr_version)")
   return GameData::Trainer.get(tr_type, tr_name, tr_version)
 end

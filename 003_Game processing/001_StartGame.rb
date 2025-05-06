@@ -2,22 +2,21 @@
 module Game
   # Initializes various global variables and loads the game data.
 
-
   def self.initialize
     $PokemonTemp = PokemonTemp.new
     $game_temp = Game_Temp.new
     $game_system = Game_System.new
-    $data_animations = load_data('Data/Animations.rxdata')
-    $data_tilesets = load_data('Data/Tilesets.rxdata')
-    $data_common_events = load_data('Data/CommonEvents.rxdata')
-    $data_system = load_data('Data/System.rxdata')
+    $data_animations = load_data("Data/Animations.rxdata")
+    $data_tilesets = load_data("Data/Tilesets.rxdata")
+    $data_common_events = load_data("Data/CommonEvents.rxdata")
+    $data_system = load_data("Data/System.rxdata")
     pbLoadBattleAnimations
     load_sprites_list_caches()
     $updated_spritesheets = load_updated_spritesheets()
     GameData.load_all
-    map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
+    map_file = format("Data/Map%03d.rxdata", $data_system.start_map_id)
     if $data_system.start_map_id == 0 || !pbRgssExists?(map_file)
-      raise _INTL('No starting position was set in the map editor.')
+      raise _INTL("No starting position was set in the map editor.")
     end
   end
 
@@ -107,7 +106,7 @@ module Game
     # Set language (and choose language if there is no save file)
     if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+      pbLoadMessages("Data/" + Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end
 
@@ -122,21 +121,20 @@ module Game
       for pokemon in box.pokemon
         if pokemon != nil
           if !pokemon.egg?
-            pokemon.exp_when_fused_head=nil
-            pokemon.exp_when_fused_body=nil
-            pokemon.exp_gained_since_fused=nil
+            pokemon.exp_when_fused_head = nil
+            pokemon.exp_when_fused_body = nil
+            pokemon.exp_gained_since_fused = nil
             pokemon.level = 5
 
             echoln pokemon.owner.id
             pokemon.owner.id = $Trainer.id
-            pokemon.ot=$Trainer.name
+            pokemon.ot = $Trainer.name
             pokemon.obtain_method = 0
             pokemon.species = GameData::Species.get(pokemon.species).get_baby_species(false)
             $Trainer.pokedex.set_seen(pokemon.species)
             $Trainer.pokedex.set_owned(pokemon.species)
             pokemon.reset_moves
             pokemon.calc_stats
-
           end
         end
       end
@@ -165,7 +163,6 @@ module Game
   # Called when starting a new game. Initializes global variables
   # and transfers the player into the map scene.
   def self.start_new(ngp_bag = nil, ngp_storage = nil, ngp_trainer = nil)
-
     if $game_map && $game_map.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
@@ -216,13 +213,13 @@ module Game
         $MapFactory.setup($game_map.map_id)
       rescue Errno::ENOENT
         if $DEBUG
-          pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
+          pbMessage(_INTL("Map {1} was not found.", $game_map.map_id))
           map = pbWarpToMapList
           exit unless map
           $MapFactory.setup(map[0])
           $game_player.moveto(map[1], map[2])
         else
-          raise _INTL('The map was not found. The game cannot continue.')
+          raise _INTL("The map was not found. The game cannot continue.")
         end
       end
       $game_player.center($game_player.x, $game_player.y)
@@ -230,7 +227,7 @@ module Game
       $MapFactory.setMapChanged($game_map.map_id)
     end
     if $game_map.events.nil?
-      raise _INTL('The map is corrupt. The game cannot continue.')
+      raise _INTL("The map is corrupt. The game cannot continue.")
     end
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)

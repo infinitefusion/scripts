@@ -17,9 +17,9 @@ class Game_Player < Game_Character
 
   def initialize(*arg)
     super(*arg)
-    @lastdir=0
-    @lastdirframe=0
-    @bump_se=0
+    @lastdir = 0
+    @lastdirframe = 0
+    @bump_se = 0
   end
 
   def map
@@ -28,13 +28,13 @@ class Game_Player < Game_Character
   end
 
   def pbHasDependentEvents?
-    return $PokemonGlobal.dependentEvents.length>0
+    return $PokemonGlobal.dependentEvents.length > 0
   end
 
   def bump_into_object
-    return if @bump_se && @bump_se>0
+    return if @bump_se && @bump_se > 0
     pbSEPlay("Player bump")
-    @bump_se = Graphics.frame_rate/2
+    @bump_se = Graphics.frame_rate / 2
   end
 
   def move_generic(dir, turn_enabled = true)
@@ -68,7 +68,7 @@ class Game_Player < Game_Character
     end
   end
 
-  def pbTriggeredTrainerEvents(triggers,checkIfRunning=true)
+  def pbTriggeredTrainerEvents(triggers, checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -77,7 +77,7 @@ class Game_Player < Game_Character
       next if !event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventCanReachPlayer?(event,self,distance) && triggers.include?(event.trigger)
+      if pbEventCanReachPlayer?(event, self, distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
         result.push(event) if !event.jumping? && !event.over_trigger?
       end
@@ -85,7 +85,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  def pbTriggeredCounterEvents(triggers,checkIfRunning=true)
+  def pbTriggeredCounterEvents(triggers, checkIfRunning = true)
     result = []
     # If event is running
     return result if checkIfRunning && $game_system.map_interpreter.running?
@@ -94,7 +94,7 @@ class Game_Player < Game_Character
       next if !event.name[/counter\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventFacesPlayer?(event,self,distance) && triggers.include?(event.trigger)
+      if pbEventFacesPlayer?(event, self, distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
         result.push(event) if !event.jumping? && !event.over_trigger?
       end
@@ -107,7 +107,7 @@ class Game_Player < Game_Character
   def pbCheckEventTriggerFromDistance(triggers)
     ret = pbTriggeredTrainerEvents(triggers)
     ret.concat(pbTriggeredCounterEvents(triggers))
-    return false if ret.length==0
+    return false if ret.length == 0
     for event in ret
       event.start
     end
@@ -119,7 +119,7 @@ class Game_Player < Game_Character
     return $game_map.terrain_tag(@x, @y, countBridge)
   end
 
-  def pbFacingEvent(ignoreInterpreter=false)
+  def pbFacingEvent(ignoreInterpreter = false)
     return nil if $game_system.map_interpreter.running? && !ignoreInterpreter
     # Check the tile in front of the player for events
     new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
@@ -144,8 +144,6 @@ class Game_Player < Game_Character
     end
     return nil
   end
-
-
 
   #-----------------------------------------------------------------------------
   # * Passable Determinants
@@ -177,12 +175,12 @@ class Game_Player < Game_Character
     self.map.display_y = y * Game_Map::REAL_RES_Y - SCREEN_CENTER_Y
   end
 
-
   def isCentered()
     x_centered = self.map.display_x == x * Game_Map::REAL_RES_X - SCREEN_CENTER_X
     y_centered = self.map.display_y == y * Game_Map::REAL_RES_Y - SCREEN_CENTER_Y
     return x_centered && y_centered
   end
+
   #-----------------------------------------------------------------------------
   # * Move to Designated Position
   #     x : x-coordinate
@@ -211,7 +209,7 @@ class Game_Player < Game_Character
   # * Refresh
   #-----------------------------------------------------------------------------
   def refresh
-    @opacity    = 255
+    @opacity = 255
     @blend_type = 0
   end
 
@@ -295,10 +293,10 @@ class Game_Player < Game_Character
       next if !event.at_coordinate?(@x + x_offset, @y + y_offset)
       if event.name[/trainer\((\d+)\)/i]
         distance = $~[1].to_i
-        next if !pbEventCanReachPlayer?(event,self,distance)
+        next if !pbEventCanReachPlayer?(event, self, distance)
       elsif event.name[/counter\((\d+)\)/i]
         distance = $~[1].to_i
-        next if !pbEventFacesPlayer?(event,self,distance)
+        next if !pbEventFacesPlayer?(event, self, distance)
       end
       # If starting determinant is front event (other than jumping)
       next if event.jumping? || event.over_trigger?
@@ -319,12 +317,12 @@ class Game_Player < Game_Character
     # Update dependent events
     $PokemonTemp.dependentEvents.updateDependentEvents
     # Count down the time between allowed bump sounds
-    @bump_se -= 1 if @bump_se && @bump_se>0
+    @bump_se -= 1 if @bump_se && @bump_se > 0
     # Finish up dismounting from surfing
     if $PokemonTemp.endSurf && !moving?
       pbCancelVehicles
       $PokemonTemp.surfJump = nil
-      $PokemonTemp.endSurf  = false
+      $PokemonTemp.endSurf = false
     end
     update_event_triggering
   end
@@ -353,7 +351,7 @@ class Game_Player < Game_Character
     end
     # Record last direction input
     @lastdirframe = Graphics.frame_count if dir != @lastdir
-    @lastdir      = dir
+    @lastdir = dir
   end
 
   # Center player on-screen
@@ -370,7 +368,7 @@ class Game_Player < Game_Character
       $PokemonTemp.dependentEvents.pbTurnDependentEvents
       result = pbCheckEventTriggerFromDistance([2])
       # Event determinant is via touch of same position event
-      result |= check_event_trigger_here([1,2])
+      result |= check_event_trigger_here([1, 2])
       # No events triggered, try other event triggers upon finishing a step
       pbOnStepTaken(result)
     end
@@ -378,14 +376,12 @@ class Game_Player < Game_Character
     if Input.trigger?(Input::USE) && !$PokemonTemp.miniupdate
       # Same position and front event determinant
       check_event_trigger_here([0])
-      check_event_trigger_there([0,2])
+      check_event_trigger_there([0, 2])
     end
   end
 end
 
-
-
-def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
+def pbGetPlayerCharset(meta, charset, trainer = nil, force = false)
   trainer = $Trainer if !trainer
   outfit = (trainer) ? trainer.outfit : 0
   if $game_player && $game_player.charsetData && !force
@@ -393,7 +389,7 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
                   $game_player.charsetData[1] == charset &&
                   $game_player.charsetData[2] == outfit
   end
-  $game_player.charsetData = [$Trainer.character_ID,charset,outfit] if $game_player
+  $game_player.charsetData = [$Trainer.character_ID, charset, outfit] if $game_player
   ret = meta[charset]
   ret = meta[1] if nil_or_empty?(ret)
   # if pbResolveBitmap("Graphics/Characters/player/"+ret+"_"+outfit.to_s)
@@ -406,18 +402,18 @@ def pbUpdateVehicle
   meta = GameData::Metadata.get_player($Trainer.character_ID)
   if meta
     charset = 1                                 # Regular graphic
-    if $PokemonGlobal.diving;     charset = 5   # Diving graphic
-    elsif $PokemonGlobal.surfing; charset = 3   # Surfing graphic
-    elsif $PokemonGlobal.bicycle; charset = 2   # Bicycle graphic
-    end
-    newCharName = pbGetPlayerCharset(meta,charset)
+    if $PokemonGlobal.diving; charset = 5 # Diving graphic
+      elsif $PokemonGlobal.surfing; charset = 3 # Surfing graphic
+      elsif $PokemonGlobal.bicycle; charset = 2 # Bicycle graphic
+      end
+    newCharName = pbGetPlayerCharset(meta, charset)
     $game_player.character_name = newCharName if newCharName
   end
 end
 
-def pbCancelVehicles(destination=nil)
+def pbCancelVehicles(destination = nil)
   $PokemonGlobal.surfing = false
-  $PokemonGlobal.diving  = false
+  $PokemonGlobal.diving = false
   $PokemonGlobal.bicycle = false if !destination || !pbCanUseBike?(destination)
   pbUpdateVehicle
 end

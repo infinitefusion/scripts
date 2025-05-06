@@ -7,159 +7,159 @@ class SpriteWrapper
   end
 
   def dispose
-    @sprite.dispose;
+    @sprite.dispose
   end
 
   def disposed?
-    return @sprite.disposed?;
+    return @sprite.disposed?
   end
 
   def viewport
-    return @sprite.viewport;
+    return @sprite.viewport
   end
 
   def flash(color, duration)
-    ; return @sprite.flash(color, duration);
+    return @sprite.flash(color, duration)
   end
 
   def update
-    return @sprite.update;
+    return @sprite.update
   end
 
   def x
-    @sprite.x;
+    @sprite.x
   end
 
   def x=(value)
-    ; @sprite.x = value;
+    @sprite.x = value
   end
 
   def y
-    @sprite.y;
+    @sprite.y
   end
 
   def y=(value)
-    ; @sprite.y = value;
+    @sprite.y = value
   end
 
   def bitmap
-    @sprite.bitmap;
+    @sprite.bitmap
   end
 
   def bitmap=(value)
-    ; @sprite.bitmap = value;
+    @sprite.bitmap = value
   end
 
   def src_rect
-    @sprite.src_rect;
+    @sprite.src_rect
   end
 
   def src_rect=(value)
-    ; @sprite.src_rect = value;
+    @sprite.src_rect = value
   end
 
   def visible
-    @sprite.visible;
+    @sprite.visible
   end
 
   def visible=(value)
-    ; @sprite.visible = value;
+    @sprite.visible = value
   end
 
   def z
-    @sprite.z;
+    @sprite.z
   end
 
   def z=(value)
-    ; @sprite.z = value;
+    @sprite.z = value
   end
 
   def ox
-    @sprite.ox;
+    @sprite.ox
   end
 
   def ox=(value)
-    ; @sprite.ox = value;
+    @sprite.ox = value
   end
 
   def oy
-    @sprite.oy;
+    @sprite.oy
   end
 
   def oy=(value)
-    ; @sprite.oy = value;
+    @sprite.oy = value
   end
 
   def zoom_x
-    @sprite.zoom_x;
+    @sprite.zoom_x
   end
 
   def zoom_x=(value)
-    ; @sprite.zoom_x = value;
+    @sprite.zoom_x = value
   end
 
   def zoom_y
-    @sprite.zoom_y;
+    @sprite.zoom_y
   end
 
   def zoom_y=(value)
-    ; @sprite.zoom_y = value;
+    @sprite.zoom_y = value
   end
 
   def angle
-    @sprite.angle;
+    @sprite.angle
   end
 
   def angle=(value)
-    ; @sprite.angle = value;
+    @sprite.angle = value
   end
 
   def mirror
-    @sprite.mirror;
+    @sprite.mirror
   end
 
   def mirror=(value)
-    ; @sprite.mirror = value;
+    @sprite.mirror = value
   end
 
   def bush_depth
-    @sprite.bush_depth;
+    @sprite.bush_depth
   end
 
   def bush_depth=(value)
-    ; @sprite.bush_depth = value;
+    @sprite.bush_depth = value
   end
 
   def opacity
-    @sprite.opacity;
+    @sprite.opacity
   end
 
   def opacity=(value)
-    ; @sprite.opacity = value;
+    @sprite.opacity = value
   end
 
   def blend_type
-    @sprite.blend_type;
+    @sprite.blend_type
   end
 
   def blend_type=(value)
-    ; @sprite.blend_type = value;
+    @sprite.blend_type = value
   end
 
   def color
-    @sprite.color;
+    @sprite.color
   end
 
   def color=(value)
-    ; @sprite.color = value;
+    @sprite.color = value
   end
 
   def tone
-    @sprite.tone;
+    @sprite.tone
   end
 
   def tone=(value)
-    ; @sprite.tone = value;
+    @sprite.tone = value
   end
 
   def viewport=(value)
@@ -337,7 +337,7 @@ class AnimatedSprite < SpriteWrapper
   end
 
   def reset
-    @frame=0
+    @frame = 0
     @realframes = 0
   end
 
@@ -359,6 +359,7 @@ end
 #===============================================================================
 class IconSprite < SpriteWrapper
   attr_reader :name
+
   def initialize(*args)
     if args.length == 0
       super(nil)
@@ -402,7 +403,7 @@ class IconSprite < SpriteWrapper
   end
 
   def setColor(r = 0, g = 0, b = 0, a = 255)
-    @_iconbitmap.pbSetColor(r,g,b,a)
+    @_iconbitmap.pbSetColor(r, g, b, a)
   end
 
   # Sets the icon's filename.
@@ -441,8 +442,6 @@ class IconSprite < SpriteWrapper
       self.src_rect = oldrc
     end
   end
-
-
 end
 
 #===============================================================================
@@ -479,8 +478,8 @@ class ChangelingSprite < SpriteWrapper
 
   def dispose
     return if disposed?
-    for bm in @bitmaps.values;
-      bm.dispose;
+    for bm in @bitmaps.values
+      bm.dispose
     end
     @bitmaps.clear
     super
@@ -488,8 +487,8 @@ class ChangelingSprite < SpriteWrapper
 
   def update
     return if disposed?
-    for bm in @bitmaps.values;
-      bm.update;
+    for bm in @bitmaps.values
+      bm.update
     end
     self.bitmap = (@currentBitmap) ? @currentBitmap.bitmap : nil
   end

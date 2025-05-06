@@ -5,7 +5,7 @@ class CommandMenuList
   attr_accessor :currentList
 
   def initialize
-    @commands    = []
+    @commands = []
     @currentList = "main"
   end
 
@@ -78,12 +78,12 @@ def pbDebugMenu(show_all = true)
   sprites["textbox"].letterbyletter = false
   sprites["cmdwindow"] = Window_CommandPokemonEx.new(commands.list)
   cmdwindow = sprites["cmdwindow"]
-  cmdwindow.x        = 0
-  cmdwindow.y        = 0
-  cmdwindow.width    = Graphics.width
-  cmdwindow.height   = Graphics.height - sprites["textbox"].height
+  cmdwindow.x = 0
+  cmdwindow.y = 0
+  cmdwindow.width = Graphics.width
+  cmdwindow.height = Graphics.height - sprites["textbox"].height
   cmdwindow.viewport = viewport
-  cmdwindow.visible  = true
+  cmdwindow.visible = true
   sprites["textbox"].text = commands.getDesc(cmdwindow.index)
   pbFadeInAndShow(sprites)
   ret = -1

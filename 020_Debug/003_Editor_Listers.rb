@@ -4,27 +4,27 @@
 def pbListWindow(cmds, width = Graphics.width / 2)
   list = Window_CommandPokemon.newWithSize(cmds, 0, 0, width, Graphics.height)
   list.setAllowArrowsJump(true)
-  list.index     = 0
+  list.index = 0
   list.rowHeight = 24
   pbSetSmallFont(list.contents)
   list.refresh
   return list
 end
 
-def pbListScreen(title,lister)
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+def pbListScreen(title, lister)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   list = pbListWindow([])
   list.viewport = viewport
-  list.z        = 2
+  list.z = 2
   title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+                                                    Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands
   selindex = lister.startIndex
-  if commands.length==0
+  if commands.length == 0
     value = lister.value(-1)
     lister.dispose
     title.dispose
@@ -33,12 +33,12 @@ def pbListScreen(title,lister)
     return value
   end
   list.commands = commands
-  list.index    = selindex
+  list.index = selindex
   loop do
     Graphics.update
     Input.update
     list.update
-    if list.index!=selectedmap
+    if list.index != selectedmap
       lister.refresh(list.index)
       selectedmap = list.index
     end
@@ -58,20 +58,20 @@ def pbListScreen(title,lister)
   return value
 end
 
-def pbListScreenBlock(title,lister)
+def pbListScreenBlock(title, lister)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
-  list.z        = 2
+  list.z = 2
   title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+                                                    Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands
   selindex = lister.startIndex
-  if commands.length==0
+  if commands.length == 0
     value = lister.value(-1)
     lister.dispose
     title.dispose
@@ -85,14 +85,14 @@ def pbListScreenBlock(title,lister)
     Graphics.update
     Input.update
     list.update
-    if list.index!=selectedmap
+    if list.index != selectedmap
       lister.refresh(list.index)
       selectedmap = list.index
     end
     if Input.trigger?(Input::ACTION)
       yield(Input::ACTION, lister.value(selectedmap))
       list.commands = lister.commands
-      if list.index==list.commands.length
+      if list.index == list.commands.length
         list.index = list.commands.length
       end
       lister.refresh(list.index)
@@ -101,7 +101,7 @@ def pbListScreenBlock(title,lister)
     elsif Input.trigger?(Input::USE)
       yield(Input::USE, lister.value(selectedmap))
       list.commands = lister.commands
-      if list.index==list.commands.length
+      if list.index == list.commands.length
         list.index = list.commands.length
       end
       lister.refresh(list.index)
@@ -118,12 +118,12 @@ end
 #
 #===============================================================================
 class GraphicsLister
-  def initialize(folder,selection)
-    @sprite = IconSprite.new(0,0)
+  def initialize(folder, selection)
+    @sprite = IconSprite.new(0, 0)
     @sprite.bitmap = nil
-    @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
-    @sprite.z      = 2
+    @sprite.x = Graphics.width * 3 / 4
+    @sprite.y = (Graphics.height - 64) / 2 + 64
+    @sprite.z = 2
     @folder = folder
     @selection = selection
     @commands = []
@@ -150,35 +150,35 @@ class GraphicsLister
       Dir.glob("*.PNG") { |f| @commands.push(f) }
       Dir.glob("*.gif") { |f| @commands.push(f) }
       Dir.glob("*.GIF") { |f| @commands.push(f) }
-#      Dir.glob("*.jpg") { |f| @commands.push(f) }
-#      Dir.glob("*.JPG") { |f| @commands.push(f) }
-#      Dir.glob("*.jpeg") { |f| @commands.push(f) }
-#      Dir.glob("*.JPEG") { |f| @commands.push(f) }
-#      Dir.glob("*.bmp") { |f| @commands.push(f) }
-#      Dir.glob("*.BMP") { |f| @commands.push(f) }
+      #      Dir.glob("*.jpg") { |f| @commands.push(f) }
+      #      Dir.glob("*.JPG") { |f| @commands.push(f) }
+      #      Dir.glob("*.jpeg") { |f| @commands.push(f) }
+      #      Dir.glob("*.JPEG") { |f| @commands.push(f) }
+      #      Dir.glob("*.bmp") { |f| @commands.push(f) }
+      #      Dir.glob("*.BMP") { |f| @commands.push(f) }
     }
     @commands.sort!
     @commands.length.times do |i|
-      @index = i if @commands[i]==@selection
+      @index = i if @commands[i] == @selection
     end
-    pbMessage(_INTL("There are no files.")) if @commands.length==0
+    pbMessage(_INTL("There are no files.")) if @commands.length == 0
     return @commands
   end
 
   def value(index)
-    return (index<0) ? "" : @commands[index]
+    return (index < 0) ? "" : @commands[index]
   end
 
   def refresh(index)
-    return if index<0
-    @sprite.setBitmap(@folder+@commands[index])
+    return if index < 0
+    @sprite.setBitmap(@folder + @commands[index])
     sprite_width = @sprite.bitmap.width
     sprite_height = @sprite.bitmap.height
-    @sprite.ox = sprite_width/2
-    @sprite.oy = sprite_height/2
-    scale_x = (Graphics.width/2).to_f/sprite_width
-    scale_y = (Graphics.height-64).to_f/sprite_height
-    if scale_x<1.0 || scale_y<1.0
+    @sprite.ox = sprite_width / 2
+    @sprite.oy = sprite_height / 2
+    scale_x = (Graphics.width / 2).to_f / sprite_width
+    scale_y = (Graphics.height - 64).to_f / sprite_height
+    if scale_x < 1.0 || scale_y < 1.0
       min_scale = [scale_x, scale_y].min
       @sprite.zoom_x = @sprite.zoom_y = min_scale
     else
@@ -191,7 +191,7 @@ end
 #
 #===============================================================================
 class MusicFileLister
-  def initialize(bgm,setting)
+  def initialize(bgm, setting)
     @oldbgm = getPlayingBGM
     @commands = []
     @bgm = bgm
@@ -235,22 +235,22 @@ class MusicFileLister
     }
     @commands.sort!
     @commands.length.times do |i|
-      @index = i if @commands[i]==@setting
+      @index = i if @commands[i] == @setting
     end
-    pbMessage(_INTL("There are no files.")) if @commands.length==0
+    pbMessage(_INTL("There are no files.")) if @commands.length == 0
     return @commands
   end
 
   def value(index)
-    return (index<0) ? "" : @commands[index]
+    return (index < 0) ? "" : @commands[index]
   end
 
   def refresh(index)
-    return if index<0
+    return if index < 0
     if @bgm
       pbPlayBGM(@commands[index])
     else
-      pbPlayBGM("../../Audio/ME/"+@commands[index])
+      pbPlayBGM("../../Audio/ME/" + @commands[index])
     end
   end
 end
@@ -259,18 +259,18 @@ end
 #
 #===============================================================================
 class MapLister
-  def initialize(selmap,addGlobal=false)
+  def initialize(selmap, addGlobal = false)
     @sprite = SpriteWrapper.new
     @sprite.bitmap = nil
-    @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
-    @sprite.z      = -2
+    @sprite.x = Graphics.width * 3 / 4
+    @sprite.y = (Graphics.height - 64) / 2 + 64
+    @sprite.z = -2
     @commands = []
     @maps = pbMapTree
     @addGlobalOffset = (addGlobal) ? 1 : 0
     @index = 0
     for i in 0...@maps.length
-      @index = i+@addGlobalOffset if @maps[i][0]==selmap
+      @index = i + @addGlobalOffset if @maps[i][0] == selmap
     end
   end
 
@@ -289,29 +289,29 @@ class MapLister
 
   def commands
     @commands.clear
-    if @addGlobalOffset==1
+    if @addGlobalOffset == 1
       @commands.push(_INTL("[GLOBAL]"))
     end
     for i in 0...@maps.length
-      @commands.push(sprintf("%s%03d %s",("  "*@maps[i][2]),@maps[i][0],@maps[i][1]))
+      @commands.push(sprintf("%s%03d %s", ("  " * @maps[i][2]), @maps[i][0], @maps[i][1]))
     end
     return @commands
   end
 
   def value(index)
-    if @addGlobalOffset==1
-      return 0 if index==0
+    if @addGlobalOffset == 1
+      return 0 if index == 0
     end
-    return (index<0) ? -1 : @maps[index-@addGlobalOffset][0]
+    return (index < 0) ? -1 : @maps[index - @addGlobalOffset][0]
   end
 
   def refresh(index)
     @sprite.bitmap.dispose if @sprite.bitmap
-    return if index<0
-    return if index==0 && @addGlobalOffset==1
-    @sprite.bitmap = createMinimap(@maps[index-@addGlobalOffset][0])
-    @sprite.ox = @sprite.bitmap.width/2
-    @sprite.oy = @sprite.bitmap.height/2
+    return if index < 0
+    return if index == 0 && @addGlobalOffset == 1
+    @sprite.bitmap = createMinimap(@maps[index - @addGlobalOffset][0])
+    @sprite.ox = @sprite.bitmap.width / 2
+    @sprite.oy = @sprite.bitmap.height / 2
   end
 end
 
@@ -334,7 +334,7 @@ class SpeciesLister
     return @index
   end
 
-  def commands   # Sorted alphabetically
+  def commands # Sorted alphabetically
     @commands.clear
     @ids.clear
     cmds = []
@@ -392,7 +392,7 @@ class ItemLister
     return @index
   end
 
-  def commands   # Sorted alphabetically
+  def commands # Sorted alphabetically
     @commands.clear
     @ids.clear
     cmds = []
@@ -501,11 +501,11 @@ end
 #
 #===============================================================================
 class TrainerBattleLister
-  def initialize(selection,includeNew)
+  def initialize(selection, includeNew)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
     @sprite.z = 2
     @pkmnList = Window_UnformattedTextPokemon.newWithSize("",
-      Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64)
+                                                          Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64)
     @pkmnList.z = 3
     @selection = selection
     @commands = []
@@ -521,7 +521,7 @@ class TrainerBattleLister
   end
 
   def setViewport(viewport)
-    @sprite.viewport   = viewport
+    @sprite.viewport = viewport
     @pkmnList.viewport = viewport
   end
 
@@ -554,12 +554,12 @@ class TrainerBattleLister
     for t in cmds
       if t[3] > 0
         @commands.push(_INTL("{1} {2} ({3}) x{4}",
-           GameData::TrainerType.get(t[1]).name, t[2], t[3],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2], t[3],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       else
         @commands.push(_INTL("{1} {2} x{3}",
-           GameData::TrainerType.get(t[1]).name, t[2],
-           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
+                             GameData::TrainerType.get(t[1]).name, t[2],
+                             GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       end
       @ids.push([t[1], t[2], t[3]])
     end
@@ -603,7 +603,7 @@ class TrainerBattleLister
       end
     end
     @pkmnList.text = text
-    @pkmnList.resizeHeightToFit(text,Graphics.width / 2)
+    @pkmnList.resizeHeightToFit(text, Graphics.width / 2)
     @pkmnList.y = Graphics.height - @pkmnList.height
   end
 end

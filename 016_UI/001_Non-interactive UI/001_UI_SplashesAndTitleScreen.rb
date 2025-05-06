@@ -1,14 +1,14 @@
 class IntroEventScene < EventScene
   # Splash screen images that appear for a few seconds and then disappear.
-  SPLASH_IMAGES         = ['splash1']
+  SPLASH_IMAGES = ["splash1"]
   # The main title screen background image.
-  TITLE_BG_IMAGE        = 'title'
-  TITLE_START_IMAGE     = 'start'
-  TITLE_START_IMAGE_X   = 0
-  TITLE_START_IMAGE_Y   = 322
-  SECONDS_PER_SPLASH    = 2
+  TITLE_BG_IMAGE = "title"
+  TITLE_START_IMAGE = "start"
+  TITLE_START_IMAGE_X = 0
+  TITLE_START_IMAGE_Y = 322
+  SECONDS_PER_SPLASH = 2
   TICKS_PER_ENTER_FLASH = 40   # 20 ticks per second
-  FADE_TICKS            = 8    # 20 ticks per second
+  FADE_TICKS = 8    # 20 ticks per second
 
   def initialize(viewport = nil)
     super(viewport)
@@ -109,8 +109,6 @@ class IntroEventScene < EventScene
     end
   end
 end
-
-
 
 class Scene_Intro
   def main

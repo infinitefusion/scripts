@@ -3,11 +3,9 @@ class Game_Temp
   attr_accessor :waterfall_sprites
   attr_accessor :splash_sprites
   attr_accessor :splash_coords
-
-
 end
 
-def generate_dynamic_waterfall(starting_x_position, waterfall_top_y, thickness=1)
+def generate_dynamic_waterfall(starting_x_position, waterfall_top_y, thickness = 1)
   map_height = $game_map.height - 8
   echoln map_height
 
@@ -54,7 +52,7 @@ def generate_dynamic_waterfall(starting_x_position, waterfall_top_y, thickness=1
         end
 
         #currents section
-        if y > CIANWOOD_WATERFALL_EDGE+10
+        if y > CIANWOOD_WATERFALL_EDGE + 10
           if !$game_map.passable?(x, y + 1, DIRECTION_DOWN)
             splash_coords << [x, y + 1] if y + 1 < $game_map.height
             break
@@ -111,7 +109,7 @@ def draw_waterfall_layer
     sprite.y = y * tile_size
 
     sprite.bitmap = Bitmap.new(tile_size, tile_size)
-    source_rect = Rect.new(waterfall_tile_id * tile_size,0, tile_size, tile_size)  # Frame 0
+    source_rect = Rect.new(waterfall_tile_id * tile_size, 0, tile_size, tile_size)  # Frame 0
     sprite.bitmap.blt(0, 0, tileset, source_rect)
 
     # Store metadata for animation
@@ -130,7 +128,7 @@ def draw_waterfall_layer
     sprite.y = y * tile_size
 
     sprite.bitmap = Bitmap.new(tile_size, tile_size)
-    source_rect = Rect.new(splash_tile_id * tile_size,1, tile_size, tile_size)  # Splash frame 0
+    source_rect = Rect.new(splash_tile_id * tile_size, 1, tile_size, tile_size)  # Splash frame 0
     sprite.bitmap.blt(0, 0, tileset, source_rect)
 
     # Store metadata for splash animation
@@ -142,13 +140,9 @@ def draw_waterfall_layer
   end
 end
 
-
-
-
-CIANWOOD_BOULDER_IDS = [2,3,5,6,
-                        4 ]#chuck head
-CIANWOOD_WATERFALL_EDGE =19
-
+CIANWOOD_BOULDER_IDS = [2, 3, 5, 6,
+                        4] #chuck head
+CIANWOOD_WATERFALL_EDGE = 19
 
 def player_on_temp_waterfall?
   return false if !$game_temp.temp_waterfall
@@ -165,14 +159,9 @@ def player_on_temp_waterfall?
   return $game_temp.temp_waterfall.any? { |x, y, _| x == $game_player.x && y == $game_player.y }
 end
 
-
-
-
-
-
-
 class Spriteset_Map
   alias_method :cianwood_waterfall_update, :update
+
   def update
     cianwood_waterfall_update
 
@@ -193,7 +182,7 @@ class Spriteset_Map
 
         tileset_x = (autotile_id * 4 + animation_frame) * tile_size
         tileset_y = tile_y >= waterfall_edge ? tile_size : 0
-        source_rect = Rect.new(tileset_x,tileset_y, tile_size, tile_size)
+        source_rect = Rect.new(tileset_x, tileset_y, tile_size, tile_size)
 
         sprite.bitmap.clear
         sprite.bitmap.blt(0, 0, tileset, source_rect)

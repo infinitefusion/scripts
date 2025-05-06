@@ -67,15 +67,15 @@ end
 
 def pbArrangeByTier(pokemonlist, rule)
   tiers = [
-     withRestr(rule,   0, 500, 0),
-     withRestr(rule, 380, 500, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 400, 555, 0),
-     withRestr(rule, 580, 680, 1),
-     withRestr(rule, 500, 680, 0),
-     withRestr(rule, 580, 680, 2)
+    withRestr(rule, 0, 500, 0),
+    withRestr(rule, 380, 500, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 400, 555, 0),
+    withRestr(rule, 580, 680, 1),
+    withRestr(rule, 500, 680, 0),
+    withRestr(rule, 580, 680, 2),
   ]
   tierPokemon = []
   tiers.length.times do
@@ -212,9 +212,9 @@ def pbGenerateChallenge(rule, tag)
         for j in 0...teams[i].length
           party.push(teams[i][j])
         end
-        teams[i] = RuledTeam.new(party,rule)
+        teams[i] = RuledTeam.new(party, rule)
       elsif teams[i].rating < toolowrating
-        teams[i] = RuledTeam.new(party,rule)
+        teams[i] = RuledTeam.new(party, rule)
       end
       i += 1
     end
@@ -296,10 +296,10 @@ def pbWriteCup(id, rules)
   cmd = 0
   if trlists.length != 0
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
-       [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
+                    [_INTL("NO"), _INTL("YES, USE EXISTING"), _INTL("YES, USE NEW")], 1)
   else
     cmd = pbMessage(_INTL("Generate Pokémon teams for this challenge?"),
-       [_INTL("YES"), _INTL("NO")], 2)
+                    [_INTL("YES"), _INTL("NO")], 2)
     if cmd == 0
       cmd = 2
     elsif cmd == 1
@@ -307,7 +307,7 @@ def pbWriteCup(id, rules)
     end
   end
   return if cmd == 0   # No
-  if cmd == 1   # Yes, use existing
+  if cmd == 1 # Yes, use existing
     cmd = pbMessage(_INTL("Choose a challenge."), list, -1)
     if cmd >= 0
       pbMessage(_INTL("This challenge will use the Pokémon list from {1}.", list[cmd]))
@@ -323,7 +323,7 @@ def pbWriteCup(id, rules)
       Compiler.write_trainer_lists
     end
     return
-  elsif cmd == 2   # Yes, use new
+  elsif cmd == 2 # Yes, use new
     return if !pbConfirmMessage(_INTL("This may take a long time. Are you sure?"))
     mw = pbCreateMessageWindow
     t = Time.now

@@ -1,4 +1,3 @@
-
 def isWearingTeamRocketOutfit()
   return false if !$game_switches[SWITCH_JOINED_TEAM_ROCKET]
   return (isWearingClothes(CLOTHES_TEAM_ROCKET_MALE) || isWearingClothes(CLOTHES_TEAM_ROCKET_FEMALE)) && isWearingHat(HAT_TEAM_ROCKET)
@@ -8,20 +7,20 @@ def isWearingFavoriteOutfit()
   favorites = {
     hat: $Trainer.favorite_hat,
     hat2: $Trainer.favorite_hat2,
-    clothes: $Trainer.favorite_clothes
+    clothes: $Trainer.favorite_clothes,
   }
   favorites.select! { |item, favorite| !favorite.nil? }
   return false if favorites.empty?
   return favorites.all? do |item, favorite|
-    case item
-    when :hat
-      $Trainer.hat == favorite
-    when :hat2
-      $Trainer.hat2 == favorite
-    when :clothes
-      $Trainer.clothes == favorite
-    end
-  end
+           case item
+           when :hat
+             $Trainer.hat == favorite
+           when :hat2
+             $Trainer.hat2 == favorite
+           when :clothes
+             $Trainer.clothes == favorite
+           end
+         end
 end
 
 def obtainRocketOutfit()
@@ -47,7 +46,7 @@ def acceptTRQuest(id, show_description = true)
   showNewTRMissionMessage(title, description, show_description)
   addRocketQuest(id)
 end
-  
+
 def addRocketQuest(id)
   $Trainer.quests = [] if $Trainer.quests.class == NilClass
   quest = TR_QUESTS[id]
@@ -89,7 +88,7 @@ TR_QUESTS = {
 
   "tr_celadon_1" => Quest.new("tr_celadon_1", "Supplying the new grunts", "Catch 4 Pokémon with Rocket Balls in the outskirts of Celadon City.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
   "tr_celadon_2" => Quest.new("tr_celadon_2", "Interception!", "Intercept the TMs shipment to the Celadon Store and pose as the delivery person to deliver fake TMs.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_3" => Quest.new( "tr_celadon_3", "Pokémon Collector", "Go meet a Pokémon collector on Route 22, near Viridian City and get his rare Pokémon.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
+  "tr_celadon_3" => Quest.new("tr_celadon_3", "Pokémon Collector", "Go meet a Pokémon collector on Route 22, near Viridian City and get his rare Pokémon.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
   "tr_celadon_4" => Quest.new("tr_celadon_4", "Operation Shutdown", "The Team Rocket HQ is being raided! Regroup with the rest of the grunts in Goldenrod Tunnel!", QuestBranchRocket, "rocket_archer", "Goldenrod City", TRQuestColor),
 
   "tr_pinkan" => Quest.new("tr_pinkan", "Pinkan Island!", "Help Team Rocket with a heist on a Pokémon nature preserve!", QuestBranchRocket, "rocket_archer", "Goldenrod City", TRQuestColor),
@@ -110,7 +109,7 @@ def calculateSuspicionLevel(answersSoFar, uncertain_answers)
     [:BEAST, :WATER, :CERULEAN, :DAWN], #suicune
     [:BEAST, :WATER, :CERULEAN, :NIGHT], #suicune
     [:FISH, :WATER, :CERULEAN, :NIGHT], #suicune
-    [:FISH, :WATER, :CERULEAN, :DAWN] #suicune
+    [:FISH, :WATER, :CERULEAN, :DAWN], #suicune
   ]
 
   min_suspicion_score = Float::INFINITY
@@ -233,8 +232,8 @@ def sellPokemon(event_id)
   end
   pbChoosePokemon(1, 2,
                   proc { |poke|
-                    !poke.egg?
-                  })
+    !poke.egg?
+  })
   chosenIndex = pbGet(1)
   chosenPokemon = $Trainer.party[chosenIndex]
 
@@ -321,29 +320,30 @@ end
 
 def updatePinkanBerryDisplay()
   return if !isOnPinkanIsland()
-  berry_image_width=25
+  berry_image_width = 25
 
   clear_all_images()
   pbSEPlay("GUI storage pick up", 80, 100)
   nbPinkanBerries = $PokemonBag.pbQuantity(:PINKANBERRY)
   for i in 1..nbPinkanBerries
-    x_pos=i*berry_image_width
-    y_pos=0
-    $game_screen.pictures[i].show("pinkanberryui",0,x_pos,y_pos)
+    x_pos = i * berry_image_width
+    y_pos = 0
+    $game_screen.pictures[i].show("pinkanberryui", 0, x_pos, y_pos)
   end
 end
 
 PINKAN_ISLAND_MAP = 51
-PINKAN_ISLAND_START_ROCKET = [11,25]
-PINKAN_ISLAND_START_POLICE = [20,55]
+PINKAN_ISLAND_START_ROCKET = [11, 25]
+PINKAN_ISLAND_START_POLICE = [20, 55]
+
 def pinkanIslandWarpToStart()
-  $game_temp.player_new_map_id    = PINKAN_ISLAND_MAP
+  $game_temp.player_new_map_id = PINKAN_ISLAND_MAP
   if $game_switches[SWITCH_PINKAN_SIDE_ROCKET]
-    $game_temp.player_new_x         = PINKAN_ISLAND_START_ROCKET[0]
-    $game_temp.player_new_y         = PINKAN_ISLAND_START_ROCKET[1]
+    $game_temp.player_new_x = PINKAN_ISLAND_START_ROCKET[0]
+    $game_temp.player_new_y = PINKAN_ISLAND_START_ROCKET[1]
   else
-    $game_temp.player_new_x         = PINKAN_ISLAND_START_POLICE[0]
-    $game_temp.player_new_y         = PINKAN_ISLAND_START_POLICE[1]
+    $game_temp.player_new_x = PINKAN_ISLAND_START_POLICE[0]
+    $game_temp.player_new_y = PINKAN_ISLAND_START_POLICE[1]
   end
   $scene.transfer_player if $scene.is_a?(Scene_Map)
   $game_map.refresh
@@ -362,14 +362,14 @@ def pinkanAddAllCaughtPinkanPokemon()
 end
 
 def resetPinkanIsland()
-  $game_switches[SWITCH_BLOCK_PINKAN_WHISTLE]=false
-  $game_switches[SWITCH_LEAVING_PINKAN_ISLAND]=false
-  $game_switches[SWITCH_PINKAN_SIDE_POLICE]=false
-  $game_switches[SWITCH_PINKAN_SIDE_ROCKET]=false
-  $game_switches[SWITCH_PINKAN_FINISHED]=false
+  $game_switches[SWITCH_BLOCK_PINKAN_WHISTLE] = false
+  $game_switches[SWITCH_LEAVING_PINKAN_ISLAND] = false
+  $game_switches[SWITCH_PINKAN_SIDE_POLICE] = false
+  $game_switches[SWITCH_PINKAN_SIDE_ROCKET] = false
+  $game_switches[SWITCH_PINKAN_FINISHED] = false
 
   for map_id in Settings::PINKAN_ISLAND_MAPS
-    map = $MapFactory.getMap(map_id,false)
+    map = $MapFactory.getMap(map_id, false)
     for event in map.events.values
       $game_self_switches[[map_id, event.id, "A"]] = false
       $game_self_switches[[map_id, event.id, "B"]] = false

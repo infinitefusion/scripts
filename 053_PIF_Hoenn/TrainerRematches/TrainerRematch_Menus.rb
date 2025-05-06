@@ -1,33 +1,10 @@
-
-
-
-
-
 #####
 # Util methods
 #####
 
-
-
-
-
-
-
-
 ####
 # Methods to be called from events
 ####
-
-
-
-
-
-
-
-
-
-
-
 
 #actionType :
 # :BATTLE
@@ -35,7 +12,7 @@
 def doPostBattleAction(actionType)
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id,map_id)
+  trainer = getRebattledTrainer(event.id, map_id)
   trainer.clear_previous_random_events()
 
   return if !trainer
@@ -45,16 +22,8 @@ def doPostBattleAction(actionType)
   when :TRADE
     trainer = doNPCTrainerTrade(trainer)
   end
-  updateRebattledTrainer(event.id,map_id,trainer)
-
+  updateRebattledTrainer(event.id, map_id, trainer)
 end
-
-
-
-
-
-
-
 
 #party: array of pokemon team
 # [[:SPECIES,level], ... ]
@@ -80,10 +49,10 @@ def postBattleActionsMenu()
 
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id,map_id)
+  trainer = getRebattledTrainer(event.id, map_id)
   trainer = applyTrainerRandomEvents(trainer)
   showPrerematchDialog
-  choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
+  choice = optionsMenu(options, options.find_index(cancelCommand), options.find_index(cancelCommand))
 
   case options[choice]
   when rematchCommand
@@ -93,17 +62,16 @@ def postBattleActionsMenu()
   when updateTeamDebugCommand
     echoln("")
     echoln "---------------"
-    makeRebattledTrainerTeamGainExp(trainer,true)
+    makeRebattledTrainerTeamGainExp(trainer, true)
     evolveRebattledTrainerPokemon(trainer)
     applyTrainerRandomEvents(trainer)
   when resetTrainerDebugCommand
-    resetTrainerRebattle(event.id,map_id)
+    resetTrainerRebattle(event.id, map_id)
   when printTrainerTeamDebugCommand
-    trainer = getRebattledTrainer(event.id,map_id)
+    trainer = getRebattledTrainer(event.id, map_id)
     printNPCTrainerCurrentTeam(trainer)
   when cancelCommand
   else
     return
   end
 end
-

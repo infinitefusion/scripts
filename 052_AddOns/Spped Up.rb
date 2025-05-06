@@ -1,4 +1,3 @@
-
 #==============================================================================#
 #                         Better Fast-forward Mode                             #
 #                                   v1.0                                       #
@@ -24,12 +23,11 @@ PluginManager.register({
                          :name => "Better Fast-forward Mode",
                          :version => "1.1",
                          :credits => "Marin",
-                         :link => "https://reliccastle.com/resources/151/"
+                         :link => "https://reliccastle.com/resources/151/",
                        })
 
 # When the user clicks F, it'll pick the next number in this array.
-SPEEDUP_STAGES = [1,2,3]
-
+SPEEDUP_STAGES = [1, 2, 3]
 
 def pbAllowSpeedup
   $CanToggle = true
@@ -60,8 +58,8 @@ module Graphics
     else
       speedStage = 1
       if Input.press?(Input::AUX1) && $CanToggle
-        $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed==0
-        speedStage=$PokemonSystem.speedup_speed+1
+        $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed == 0
+        speedStage = $PokemonSystem.speedup_speed + 1
       end
     end
     return unless $frame % speedStage == 0

@@ -11,6 +11,7 @@ class Game_Variables
   def initialize
     @data = []
   end
+
   #-----------------------------------------------------------------------------
   # * Get Variable
   #     variable_id : variable ID
@@ -19,6 +20,7 @@ class Game_Variables
     return @data[variable_id] if variable_id <= 5000 && !@data[variable_id].nil?
     return 0
   end
+
   #-----------------------------------------------------------------------------
   # * Set Variable
   #     variable_id : variable ID

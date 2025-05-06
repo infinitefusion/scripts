@@ -14,7 +14,7 @@ module GameData
     def self.save; end
 
     def initialize(hash)
-      @id        = hash[:id]
+      @id = hash[:id]
       @real_name = hash[:name] || "Unnamed"
       @animation = hash[:animation]
     end
@@ -29,30 +29,30 @@ end
 #===============================================================================
 
 GameData::BattleTerrain.register({
-  :id   => :None,
-  :name => _INTL("None")
+  :id => :None,
+  :name => _INTL("None"),
 })
 
 GameData::BattleTerrain.register({
-  :id        => :Electric,
-  :name      => _INTL("Electric"),
-  :animation => "ElectricTerrain"
+  :id => :Electric,
+  :name => _INTL("Electric"),
+  :animation => "ElectricTerrain",
 })
 
 GameData::BattleTerrain.register({
-  :id        => :Grassy,
-  :name      => _INTL("Grassy"),
-  :animation => "GrassyTerrain"
+  :id => :Grassy,
+  :name => _INTL("Grassy"),
+  :animation => "GrassyTerrain",
 })
 
 GameData::BattleTerrain.register({
-  :id        => :Misty,
-  :name      => _INTL("Misty"),
-  :animation => "MistyTerrain"
+  :id => :Misty,
+  :name => _INTL("Misty"),
+  :animation => "MistyTerrain",
 })
 
 GameData::BattleTerrain.register({
-  :id        => :Psychic,
-  :name      => _INTL("Psychic"),
-  :animation => "PsychicTerrain"
+  :id => :Psychic,
+  :name => _INTL("Psychic"),
+  :animation => "PsychicTerrain",
 })

@@ -53,7 +53,7 @@ module GameData
 
     def self.player_front_sprite_filename(tr_type)
       #outfit = ($Trainer) ? $Trainer.outfit : 0
-      outfit=0
+      outfit = 0
       return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit))
     end
 
@@ -63,7 +63,7 @@ module GameData
 
     def self.player_back_sprite_filename(tr_type)
       #outfit = ($Trainer) ? $Trainer.outfit : 0
-      outfit=0
+      outfit = 0
       return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit), "_back")
     end
 
@@ -77,16 +77,16 @@ module GameData
     end
 
     def initialize(hash)
-      @id          = hash[:id]
-      @id_number   = hash[:id_number]   || -1
-      @real_name   = hash[:name]        || "Unnamed"
-      @base_money  = hash[:base_money]  || 30
-      @battle_BGM  = hash[:battle_BGM]
-      @victory_ME  = hash[:victory_ME]
-      @intro_ME    = hash[:intro_ME]
-      @gender      = hash[:gender]      || 2
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @real_name = hash[:name] || "Unnamed"
+      @base_money = hash[:base_money] || 30
+      @battle_BGM = hash[:battle_BGM]
+      @victory_ME = hash[:victory_ME]
+      @intro_ME = hash[:intro_ME]
+      @gender = hash[:gender] || 2
       @skill_level = hash[:skill_level] || @base_money
-      @skill_code  = hash[:skill_code]
+      @skill_code = hash[:skill_code]
     end
 
     # @return [String] the translated name of this trainer type
@@ -94,7 +94,7 @@ module GameData
       return pbGetMessage(MessageTypes::TrainerTypes, @id_number)
     end
 
-    def male?;   return @gender == 0; end
+    def male?; return @gender == 0; end
     def female?; return @gender == 1; end
   end
 end
@@ -104,54 +104,54 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbGetTrainerTypeData(tr_type)
-  Deprecation.warn_method('pbGetTrainerTypeData', 'v20', 'GameData::TrainerType.get(trainer_type)')
+  Deprecation.warn_method("pbGetTrainerTypeData", "v20", "GameData::TrainerType.get(trainer_type)")
   return GameData::TrainerType.get(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
-def pbTrainerCharFile(tr_type)   # Used by the phone
-  Deprecation.warn_method('pbTrainerCharFile', 'v20', 'GameData::TrainerType.charset_filename(trainer_type)')
+def pbTrainerCharFile(tr_type) # Used by the phone
+  Deprecation.warn_method("pbTrainerCharFile", "v20", "GameData::TrainerType.charset_filename(trainer_type)")
   return GameData::TrainerType.charset_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
-def pbTrainerCharNameFile(tr_type)   # Used by Battle Frontier and compiler
-  Deprecation.warn_method('pbTrainerCharNameFile', 'v20', 'GameData::TrainerType.charset_filename_brief(trainer_type)')
+def pbTrainerCharNameFile(tr_type) # Used by Battle Frontier and compiler
+  Deprecation.warn_method("pbTrainerCharNameFile", "v20", "GameData::TrainerType.charset_filename_brief(trainer_type)")
   return GameData::TrainerType.charset_filename_brief(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbTrainerSpriteFile(tr_type)
-  Deprecation.warn_method('pbTrainerSpriteFile', 'v20', 'GameData::TrainerType.front_sprite_filename(trainer_type)')
+  Deprecation.warn_method("pbTrainerSpriteFile", "v20", "GameData::TrainerType.front_sprite_filename(trainer_type)")
   return GameData::TrainerType.front_sprite_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbTrainerSpriteBackFile(tr_type)
-  Deprecation.warn_method('pbTrainerSpriteBackFile', 'v20', 'GameData::TrainerType.back_sprite_filename(trainer_type)')
+  Deprecation.warn_method("pbTrainerSpriteBackFile", "v20", "GameData::TrainerType.back_sprite_filename(trainer_type)")
   return GameData::TrainerType.back_sprite_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbPlayerSpriteFile(tr_type)
-  Deprecation.warn_method('pbPlayerSpriteFile', 'v20', 'GameData::TrainerType.player_front_sprite_filename(trainer_type)')
+  Deprecation.warn_method("pbPlayerSpriteFile", "v20", "GameData::TrainerType.player_front_sprite_filename(trainer_type)")
   return GameData::TrainerType.player_front_sprite_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbPlayerSpriteBackFile(tr_type)
-  Deprecation.warn_method('pbPlayerSpriteBackFile', 'v20', 'GameData::TrainerType.player_back_sprite_filename(trainer_type)')
+  Deprecation.warn_method("pbPlayerSpriteBackFile", "v20", "GameData::TrainerType.player_back_sprite_filename(trainer_type)")
   return GameData::TrainerType.player_back_sprite_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbTrainerHeadFile(tr_type)
-  Deprecation.warn_method('pbTrainerHeadFile', 'v20', 'GameData::TrainerType.map_icon_filename(trainer_type)')
+  Deprecation.warn_method("pbTrainerHeadFile", "v20", "GameData::TrainerType.map_icon_filename(trainer_type)")
   return GameData::TrainerType.map_icon_filename(tr_type)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbPlayerHeadFile(tr_type)
-  Deprecation.warn_method('pbPlayerHeadFile', 'v20', 'GameData::TrainerType.player_map_icon_filename(trainer_type)')
+  Deprecation.warn_method("pbPlayerHeadFile", "v20", "GameData::TrainerType.player_map_icon_filename(trainer_type)")
   return GameData::TrainerType.player_map_icon_filename(tr_type)
 end

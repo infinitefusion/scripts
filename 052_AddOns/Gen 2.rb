@@ -2,9 +2,8 @@
 #La méthode   def pbCheckEvolution(pokemon,item=0)
 #dans PokemonFusion (class PokemonFusionScene)
 #a été modifiée et pour une raison ou une autre ca marche
-#pas quand on la copie ici. 
+#pas quand on la copie ici.
 #Donc NE PAS OUBLIER DE LE COPIER AVEC
-
 
 ############################
 #   MODIFIED CODE SECTION  #
@@ -14,8 +13,9 @@
 #         PokemonFusion
 #
 
-NB_POKEMON = Settings::NB_POKEMON#809#420 #351  #aussi CONST_NB_POKE
+NB_POKEMON = Settings::NB_POKEMON #809#420 #351  #aussi CONST_NB_POKE
 CONST_NB_POKE = NB_POKEMON
+
 def pbPokemonBitmapFile(species)
   # Used by the Pokédex
   # Load normal bitmap
@@ -39,7 +39,6 @@ def pbPokemonBitmapFile(species)
   return ret
 end
 
-
 def pbLoadPokemonBitmap(pokemon, species, back = false)
   #species est utilisé par elitebattle mais ca sert a rien
   return pbLoadPokemonBitmapSpecies(pokemon, pokemon.species, back)
@@ -60,7 +59,6 @@ def getEggBitmapPath(pokemon)
   end
   return bitmapFileName
 end
-
 
 def pbLoadPokemonBitmapSpecies(pokemon, species, back = false, scale = POKEMONSPRITESCALE)
   ret = nil
@@ -107,12 +105,11 @@ BATTLERSPATH = "Battlers"
 def GetSpritePath(poke1, poke2, isFused)
   #Check if custom exists
   spritename = GetSpriteName(poke1, poke2, isFused)
-  pathCustom = sprintf("Graphics/%s/indexed/%s/%s.png", DOSSIERCUSTOMSPRITES,poke2, spritename)
+  pathCustom = sprintf("Graphics/%s/indexed/%s/%s.png", DOSSIERCUSTOMSPRITES, poke2, spritename)
   pathReg = sprintf("Graphics/%s/%s/%s.png", BATTLERSPATH, poke2, spritename)
   path = pbResolveBitmap(pathCustom) && $game_variables[196] == 0 ? pathCustom : pathReg
   return path
 end
-
 
 def GetSpritePathForced(poke1, poke2, isFused)
   #Check if custom exists
@@ -123,7 +120,6 @@ def GetSpritePathForced(poke1, poke2, isFused)
   return path
 end
 
-
 def GetSpriteName(poke1, poke2, isFused)
   ret = isFused ? sprintf("%d.%d", poke2, poke1) : sprintf("%d", poke2) rescue nil
   return ret
@@ -131,7 +127,6 @@ end
 
 #in: pokemon number
 def Kernel.isPartPokemon(src, target)
-
   src = getDexNumberForSpecies(src)
   target = getDexNumberForSpecies(target)
   return true if src == target
@@ -142,7 +137,7 @@ def Kernel.isPartPokemon(src, target)
 end
 
 ##EDITED HERE
-#Retourne le pokemon de base 
+#Retourne le pokemon de base
 #param1 = int
 #param2 = true pour body, false pour head
 #return int du pokemon de base
@@ -176,18 +171,18 @@ def convertAllPokemon()
   Kernel.pbMessage(_INTL("In order to play this version, your Pokémon need to be converted to their new Pokédex numbers. "))
   Kernel.pbMessage(_INTL("If you were playing Randomized mode, the trainers and wild Pokémon will also need to be reshuffled."))
 
-
   if (Kernel.pbConfirmMessage(_INTL("Convert your Pokémon?")))
 
     #get previous version
     msgwindow = Kernel.pbCreateMessageWindow(nil)
     msgwindow.text = "What is the last version of the game you played?"
     choice = Kernel.pbShowCommands(msgwindow, [
-        "4.7        (September 2020)",
-        "4.5-4.6.2        (2019-2020)",
-        "4.2-4.4           (2019)",
-        "4.0-4.1           (2018-2019)",
-        "3.x or earlier (2015-2018)"], -1)
+      "4.7        (September 2020)",
+      "4.5-4.6.2        (2019-2020)",
+      "4.2-4.4           (2019)",
+      "4.0-4.1           (2018-2019)",
+      "3.x or earlier (2015-2018)",
+    ], -1)
     case choice
     when 0
       prev_total = 381
@@ -240,9 +235,7 @@ def convertAllPokemon()
       range = pbGet(197) == nil ? 25 : pbGet(197)
       Kernel.pbShuffleDex(range, 1)
     end
-
   end
-
 end
 
 def convertTripleFusion(species, prev_max_value)
@@ -267,7 +260,6 @@ def convertTripleFusion(species, prev_max_value)
   return nil
 end
 
-
 def convertTrainers()
   if ($game_switches[SWITCH_RANDOM_TRAINERS])
     Kernel.pbShuffleTrainers()
@@ -275,7 +267,6 @@ def convertTrainers()
 end
 
 def convertAllPokemonManually()
-
   if (Kernel.pbConfirmMessage(_INTL("When you last played the game, where there any gen 2 Pokémon?")))
     #4.0
     prev_total = 315
@@ -298,5 +289,3 @@ def convertPokemon(prev_total = 275)
     end
   }
 end
-
-

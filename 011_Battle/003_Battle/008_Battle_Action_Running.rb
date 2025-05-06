@@ -8,18 +8,18 @@ class PokeBattle_Battle
     return false if !@canRun && !battler.opposes?
     return true if battler.pbHasType?(:GHOST) && Settings::MORE_TYPE_EFFECTS
     return true if battler.abilityActive? &&
-                   BattleHandlers.triggerRunFromBattleAbility(battler.ability,battler)
+                   BattleHandlers.triggerRunFromBattleAbility(battler.ability, battler)
     return true if battler.itemActive? &&
-                   BattleHandlers.triggerRunFromBattleItem(battler.item,battler)
-    return false if battler.effects[PBEffects::Trapping]>0 ||
-                    battler.effects[PBEffects::MeanLook]>=0 ||
+                   BattleHandlers.triggerRunFromBattleItem(battler.item, battler)
+    return false if battler.effects[PBEffects::Trapping] > 0 ||
+                    battler.effects[PBEffects::MeanLook] >= 0 ||
                     battler.effects[PBEffects::Ingrain] ||
-                    @field.effects[PBEffects::FairyLock]>0
+                    @field.effects[PBEffects::FairyLock] > 0
     eachOtherSideBattler(idxBattler) do |b|
       return false if b.abilityActive? &&
-                      BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
+                      BattleHandlers.triggerTrappingTargetAbility(b.ability, battler, b, self)
       return false if b.itemActive? &&
-                      BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
+                      BattleHandlers.triggerTrappingTargetItem(b.item, battler, b, self)
     end
     return true
   end
@@ -30,7 +30,7 @@ class PokeBattle_Battle
   #  1: Succeeded at fleeing, battle will end
   # duringBattle is true for replacing a fainted Pokémon during the End Of Round
   # phase, and false for choosing the Run command.
-  def pbRun(idxBattler,duringBattle=false)
+  def pbRun(idxBattler, duringBattle = false)
     battler = @battlers[idxBattler]
     if battler.opposes?
       return 0 if trainerBattle?
@@ -52,13 +52,13 @@ class PokeBattle_Battle
       elsif @internalBattle
         if pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
           pbSEPlay("Battle flee")
-          pbDisplay(_INTL("{1} forfeited the match!",self.pbPlayer.name))
+          pbDisplay(_INTL("{1} forfeited the match!", self.pbPlayer.name))
           @decision = 2
           return 1
         end
       elsif pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
         pbSEPlay("Battle flee")
-        pbDisplay(_INTL("{1} forfeited the match!",self.pbPlayer.name))
+        pbDisplay(_INTL("{1} forfeited the match!", self.pbPlayer.name))
         @decision = 3
         return 1
       end
@@ -84,8 +84,8 @@ class PokeBattle_Battle
       end
       # Abilities that guarantee escape
       if battler.abilityActive?
-        if BattleHandlers.triggerRunFromBattleAbility(battler.ability,battler)
-          pbShowAbilitySplash(battler,true)
+        if BattleHandlers.triggerRunFromBattleAbility(battler.ability, battler)
+          pbShowAbilitySplash(battler, true)
           pbHideAbilitySplash(battler)
           pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("You got away safely!"))
@@ -95,34 +95,34 @@ class PokeBattle_Battle
       end
       # Held items that guarantee escape
       if battler.itemActive?
-        if BattleHandlers.triggerRunFromBattleItem(battler.item,battler)
+        if BattleHandlers.triggerRunFromBattleItem(battler.item, battler)
           pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("{1} fled using its {2}!",
-             battler.pbThis,battler.itemName))
+                                battler.pbThis, battler.itemName))
           @decision = 3
           return 1
         end
       end
       # Other certain trapping effects
-      if battler.effects[PBEffects::Trapping]>0 ||
-         battler.effects[PBEffects::MeanLook]>=0 ||
+      if battler.effects[PBEffects::Trapping] > 0 ||
+         battler.effects[PBEffects::MeanLook] >= 0 ||
          battler.effects[PBEffects::Ingrain] ||
-         @field.effects[PBEffects::FairyLock]>0
+         @field.effects[PBEffects::FairyLock] > 0
         pbDisplayPaused(_INTL("You can't escape!"))
         return 0
       end
       # Trapping abilities/items
       eachOtherSideBattler(idxBattler) do |b|
         next if !b.abilityActive?
-        if BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
-          pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.abilityName))
+        if BattleHandlers.triggerTrappingTargetAbility(b.ability, battler, b, self)
+          pbDisplayPaused(_INTL("{1} prevents escape with {2}!", b.pbThis, b.abilityName))
           return 0
         end
       end
       eachOtherSideBattler(idxBattler) do |b|
         next if !b.itemActive?
-        if BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
-          pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.itemName))
+        if BattleHandlers.triggerTrappingTargetItem(b.item, battler, b, self)
+          pbDisplayPaused(_INTL("{1} prevents escape with {2}!", b.pbThis, b.itemName))
           return 0
         end
       end
@@ -135,16 +135,16 @@ class PokeBattle_Battle
     speedEnemy = 1
     eachOtherSideBattler(idxBattler) do |b|
       speed = b.speed
-      speedEnemy = speed if speedEnemy<speed
+      speedEnemy = speed if speedEnemy < speed
     end
     # Compare speeds and perform fleeing calculation
-    if speedPlayer>speedEnemy
+    if speedPlayer > speedEnemy
       rate = 256
     else
-      rate = (speedPlayer*128)/speedEnemy
-      rate += @runCommand*30
+      rate = (speedPlayer * 128) / speedEnemy
+      rate += @runCommand * 30
     end
-    if rate>=256 || @battleAI.pbAIRandom(256)<rate
+    if rate >= 256 || @battleAI.pbAIRandom(256) < rate
       pbSEPlay("Battle flee")
       pbDisplayPaused(_INTL("You got away safely!"))
       @decision = 3

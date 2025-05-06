@@ -169,15 +169,15 @@ class Sprite_Character < RPG::Sprite
   end
 
   def updateCharacterBitmap
-    AnimatedBitmap.new('Graphics/Characters/' + @character_name, @character_hue)
+    AnimatedBitmap.new("Graphics/Characters/" + @character_name, @character_hue)
   end
 
   def should_update?
     return @tile_id != @character.tile_id ||
-      @character_name != @character.character_name ||
-      @character_hue != @character.character_hue ||
-      @oldbushdepth != @character.bush_depth ||
-      @manual_refresh
+             @character_name != @character.character_name ||
+             @character_hue != @character.character_hue ||
+             @oldbushdepth != @character.bush_depth ||
+             @manual_refresh
   end
 
   def refreshOutfit()
@@ -217,7 +217,7 @@ class Sprite_Character < RPG::Sprite
         @charbitmap = updateCharacterBitmap()
         @charbitmap = @bitmap_override.clone if @bitmap_override
 
-        RPG::Cache.retain('Graphics/Characters/', @character_name, @character_hue) if @charbitmapAnimated = true
+        RPG::Cache.retain("Graphics/Characters/", @character_name, @character_hue) if @charbitmapAnimated = true
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
         #@spriteoffset = @character_name[/offset/i]

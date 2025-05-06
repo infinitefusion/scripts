@@ -57,7 +57,7 @@ RandTrainerNames_male = [
   "James",
   "Michael",
   "Boris",
-  "Vladimir"
+  "Vladimir",
 ]
 
 RandTrainerNames_female = [
@@ -123,7 +123,7 @@ RandTrainerNames_female = [
   "Betty",
   "Julia",
   "Michelle",
-  "Kathy"
+  "Kathy",
 ]
 
 RandTrainerNames_others = [
@@ -1066,5 +1066,5 @@ RandPokeNick = [
   "Thorns",
   "Xillo",
   "Froggywoggy",
-  "wawa"
+  "wawa",
 ]

@@ -5,14 +5,14 @@ class PokemonEncounters
   attr_reader :step_count
 
   def initialize
-    @step_chances       = {}
-    @encounter_tables   = {}
+    @step_chances = {}
+    @encounter_tables = {}
     @chance_accumulator = 0
   end
 
   def setup(map_ID)
-    @step_count       = 0
-    @step_chances     = {}
+    @step_count = 0
+    @step_chances = {}
     @encounter_tables = {}
     encounter_data = getEncounterMode().get(map_ID, $PokemonGlobal.encounter_version)
     encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version) if !encounter_data
@@ -23,13 +23,12 @@ class PokemonEncounters
   end
 
   def getEncounterMode()
-
     mode = GameData::Encounter
     if $game_switches && $game_switches[SWITCH_MODERN_MODE]
       mode = GameData::EncounterModern
     end
     if $game_switches && $game_switches[SWITCH_RANDOM_WILD] && $game_switches[SWITCH_RANDOM_WILD_AREA]
-      mode= GameData::EncounterRandom
+      mode = GameData::EncounterRandom
     end
     echoln mode
     return mode
@@ -149,7 +148,7 @@ class PokemonEncounters
       when :PUREINCENSE
         encounter_chance *= 2.0 / 3
         min_steps_needed *= 4 / 3.0
-      else   # Ignore ability effects if an item effect applies
+      else # Ignore ability effects if an item effect applies
         case first_pkmn.ability_id
         when :STENCH, :WHITESMOKE, :QUICKFEET
           encounter_chance /= 2
@@ -259,7 +258,7 @@ class PokemonEncounters
     terrain_tag = $game_map.terrain_tag($game_player.x, $game_player.y)
     if $PokemonGlobal.surfing
       ret = find_valid_encounter_type_for_time(:Water, time)
-    else   # Land/Cave (can have both in the same map)
+    else # Land/Cave (can have both in the same map)
       if has_land_encounters? && $game_map.terrain_tag($game_player.x, $game_player.y).land_wild_encounters
         ret = :BugContest if pbInBugContest? && has_encounter_type?(:BugContest)
         baseType = :Land  #default grass
@@ -381,19 +380,13 @@ class PokemonEncounters
     return [encounter[1], level]
   end
 
-
-
   def listPossibleEncounters(enctype)
     if !enctype
       raise ArgumentError.new(_INTL("Encounter type out of range"))
     end
     return @encounter_tables[enctype]
   end
-
-
 end
-
-
 
 #===============================================================================
 #
@@ -401,26 +394,26 @@ end
 # Creates and returns a Pokémon based on the given species and level.
 # Applies wild Pokémon modifiers (wild held item, shiny chance modifiers,
 # Pokérus, gender/nature forcing because of player's lead Pokémon).
-def pbGenerateWildPokemon(species,level,isRoamer=false)
-  genwildpoke = Pokemon.new(species,level)
+def pbGenerateWildPokemon(species, level, isRoamer = false)
+  genwildpoke = Pokemon.new(species, level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
   first_pkmn = $Trainer.first_pokemon
-  chances = [50,5,1]
-  chances = [60,20,5] if first_pkmn && first_pkmn.hasAbility?(:COMPOUNDEYES)
+  chances = [50, 5, 1]
+  chances = [60, 20, 5] if first_pkmn && first_pkmn.hasAbility?(:COMPOUNDEYES)
   itemrnd = rand(100)
-  if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
+  if (items[0] == items[1] && items[1] == items[2]) || itemrnd < chances[0]
     genwildpoke.item = items[0]
-  elsif itemrnd<(chances[0]+chances[1])
+  elsif itemrnd < (chances[0] + chances[1])
     genwildpoke.item = items[1]
-  elsif itemrnd<(chances[0]+chances[1]+chances[2])
+  elsif itemrnd < (chances[0] + chances[1] + chances[2])
     genwildpoke.item = items[2]
   end
   # Shiny Charm makes shiny Pokémon more likely to generate
   if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
-    2.times do   # 3 times as likely
+    2.times do # 3 times as likely
       break if genwildpoke.shiny?
-      genwildpoke.personalID = rand(2**16) | rand(2**16) << 16
+      genwildpoke.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
     end
   end
   # Give Pokérus
@@ -430,16 +423,16 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   if first_pkmn
     if first_pkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
       if first_pkmn.male?
-        (rand(3)<2) ? genwildpoke.makeFemale : genwildpoke.makeMale
+        (rand(3) < 2) ? genwildpoke.makeFemale : genwildpoke.makeMale
       elsif first_pkmn.female?
-        (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
+        (rand(3) < 2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif first_pkmn.hasAbility?(:SYNCHRONIZE)
-      genwildpoke.nature = first_pkmn.nature if !isRoamer && rand(100)<50
+      genwildpoke.nature = first_pkmn.nature if !isRoamer && rand(100) < 50
     end
   end
   # Trigger events that may alter the generated Pokémon further
-  Events.onWildPokemonCreate.trigger(nil,genwildpoke)
+  Events.onWildPokemonCreate.trigger(nil, genwildpoke)
   return genwildpoke
 end
 
@@ -458,7 +451,7 @@ def pbEncounter(enc_type)
   else
     pbWildBattle(encounter1[0], encounter1[1])
   end
-	$PokemonTemp.encounterType = nil
+  $PokemonTemp.encounterType = nil
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd
   return true

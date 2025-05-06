@@ -832,11 +832,11 @@ class SpriteHash
   end
 
   def length
-    return self.size;
+    return self.size
   end
 
   def count
-    return self.size;
+    return self.size
   end
 
   # Returns the amount of keys in the hash
@@ -1012,11 +1012,11 @@ class ByteWriter
 
   def self.to_bytes(int)
     return [
-      (int >> 24) & 0xFF,
-      (int >> 16) & 0xFF,
-      (int >> 8) & 0xFF,
-      int & 0xFF
-    ]
+             (int >> 24) & 0xFF,
+             (int >> 16) & 0xFF,
+             (int >> 8) & 0xFF,
+             int & 0xFF,
+           ]
   end
 end
 
@@ -1081,7 +1081,6 @@ class Bitmap
     f.close
     return nil
   end
-
 end
 
 # Stand-alone methods
@@ -1256,7 +1255,6 @@ end
 #     p_msg(msg, title, :question)
 #   end
 #
-
 
 #
 # else

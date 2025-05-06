@@ -97,7 +97,7 @@ class PokemonMartAdapter
     return nil
   end
 
-  def doSpecialItemAction(specialType,itemId=nil)
+  def doSpecialItemAction(specialType, itemId = nil)
     return nil
   end
 
@@ -108,8 +108,6 @@ class PokemonMartAdapter
   def getSpecialItemShadowColor(specialType)
     return nil
   end
-
-
 end
 
 #===============================================================================
@@ -188,7 +186,6 @@ class SellAdapter
   def getShadowColorOverride(item)
     return @adapter.getShadowColorOverride(item)
   end
-
 end
 
 #===============================================================================
@@ -504,64 +501,64 @@ class PokemonMart_Scene
     itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
     using(numwindow = Window_AdvancedTextPokemon.new("")) { # Showing number of items
-    qty = @adapter.getQuantity(item)
-    using(inbagwindow = Window_AdvancedTextPokemon.new("")) { # Showing quantity in bag
-    pbPrepareWindow(numwindow)
-    pbPrepareWindow(inbagwindow)
-    numwindow.viewport = @viewport
-    numwindow.width = 224
-    numwindow.height = 64
-    numwindow.baseColor = Color.new(88, 88, 80)
-    numwindow.shadowColor = Color.new(168, 184, 184)
-    inbagwindow.visible = @buying
-    inbagwindow.viewport = @viewport
-    inbagwindow.width = 190
-    inbagwindow.height = 64
-    inbagwindow.baseColor = Color.new(88, 88, 80)
-    inbagwindow.shadowColor = Color.new(168, 184, 184)
-    inbagwindow.text = _INTL("In Bag:<r>{1}  ", qty)
-    numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-    pbBottomRight(numwindow)
-    numwindow.y -= helpwindow.height
-    pbBottomLeft(inbagwindow)
-    inbagwindow.y -= helpwindow.height
-    loop do
-      Graphics.update
-      Input.update
-      numwindow.update
-      inbagwindow.update
-      self.update
-      if Input.repeat?(Input::LEFT)
-        pbPlayCursorSE
-        curnumber -= 10
-        curnumber = 1 if curnumber < 1
+      qty = @adapter.getQuantity(item)
+      using(inbagwindow = Window_AdvancedTextPokemon.new("")) { # Showing quantity in bag
+        pbPrepareWindow(numwindow)
+        pbPrepareWindow(inbagwindow)
+        numwindow.viewport = @viewport
+        numwindow.width = 224
+        numwindow.height = 64
+        numwindow.baseColor = Color.new(88, 88, 80)
+        numwindow.shadowColor = Color.new(168, 184, 184)
+        inbagwindow.visible = @buying
+        inbagwindow.viewport = @viewport
+        inbagwindow.width = 190
+        inbagwindow.height = 64
+        inbagwindow.baseColor = Color.new(88, 88, 80)
+        inbagwindow.shadowColor = Color.new(168, 184, 184)
+        inbagwindow.text = _INTL("In Bag:<r>{1}  ", qty)
         numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::RIGHT)
-        pbPlayCursorSE
-        curnumber += 10
-        curnumber = maximum if curnumber > maximum
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::UP)
-        pbPlayCursorSE
-        curnumber += 1
-        curnumber = 1 if curnumber > maximum
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::DOWN)
-        pbPlayCursorSE
-        curnumber -= 1
-        curnumber = maximum if curnumber < 1
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
-        ret = curnumber
-        break
-      elsif Input.trigger?(Input::BACK)
-        pbPlayCancelSE
-        ret = 0
-        break
-      end
-    end
-    }
+        pbBottomRight(numwindow)
+        numwindow.y -= helpwindow.height
+        pbBottomLeft(inbagwindow)
+        inbagwindow.y -= helpwindow.height
+        loop do
+          Graphics.update
+          Input.update
+          numwindow.update
+          inbagwindow.update
+          self.update
+          if Input.repeat?(Input::LEFT)
+            pbPlayCursorSE
+            curnumber -= 10
+            curnumber = 1 if curnumber < 1
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::RIGHT)
+            pbPlayCursorSE
+            curnumber += 10
+            curnumber = maximum if curnumber > maximum
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::UP)
+            pbPlayCursorSE
+            curnumber += 1
+            curnumber = 1 if curnumber > maximum
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::DOWN)
+            pbPlayCursorSE
+            curnumber -= 1
+            curnumber = maximum if curnumber < 1
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.trigger?(Input::USE)
+            pbPlayDecisionSE
+            ret = curnumber
+            break
+          elsif Input.trigger?(Input::BACK)
+            pbPlayCancelSE
+            ret = 0
+            break
+          end
+        end
+      }
     }
     helpwindow.visible = false
     return ret
@@ -652,7 +649,8 @@ class PokemonMartScreen
         maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
         maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity = @scene.pbChooseNumber(
-          _INTL("{1}? Certainly. How many would you like?", itemname), item, maxafford)
+          _INTL("{1}? Certainly. How many would you like?", itemname), item, maxafford
+        )
         next if quantity == 0
         price *= quantity
         if !pbConfirm(_INTL("{1}, and you want {2}. That will be ${3}. OK?",
@@ -713,7 +711,8 @@ class PokemonMartScreen
       @scene.pbShowMoney
       if qty > 1
         qty = @scene.pbChooseNumber(
-          _INTL("{1}? How many would you like to sell?", itemname), item, qty)
+          _INTL("{1}? How many would you like to sell?", itemname), item, qty
+        )
       end
       if qty == 0
         @scene.pbHideMoney
@@ -773,7 +772,8 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
   commands[cmdQuit = commands.length] = _INTL("Quit")
   cmd = pbMessage(
     speech ? speech : _INTL("Welcome! How may I serve you?"),
-    commands, cmdQuit + 1)
+    commands, cmdQuit + 1
+  )
   loop do
     if cmdBuy >= 0 && cmd == cmdBuy
       scene = PokemonMart_Scene.new

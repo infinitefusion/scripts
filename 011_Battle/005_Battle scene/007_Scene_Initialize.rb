@@ -98,9 +98,9 @@ class PokeBattle_Scene
   def getBackdropTimeSuffix()
     @battle.time = 2 if darknessEffectOnCurrentMap()
     case @battle.time
-    when 1 then
+    when 1
       time = "eve"
-    when 2 then
+    when 2
       time = "night"
     end
     return time
@@ -108,13 +108,13 @@ class PokeBattle_Scene
 
   def getBackdropBasePath(type)
     case type
-    when :BACKGROUND then
+    when :BACKGROUND
       base_path = "Graphics/Battlebacks/battlebg/"
-    when :ENEMYBASE then
+    when :ENEMYBASE
       base_path = "Graphics/Battlebacks/enemybase/"
-    when :PLAYERBASE then
+    when :PLAYERBASE
       base_path = "Graphics/Battlebacks/playerbase/"
-    when :MESSAGE then
+    when :MESSAGE
       base_path = "Graphics/Battlebacks/"
     end
     return base_path
@@ -124,15 +124,14 @@ class PokeBattle_Scene
     time = getBackdropTimeSuffix()
     base_path = getBackdropBasePath(backdrop_type)
     default_name = base_path + filename
-    time_adjusted_name = _INTL("{1}{2}_{3}",base_path,filename,time)
+    time_adjusted_name = _INTL("{1}{2}_{3}", base_path, filename, time)
     if pbResolveBitmap(time_adjusted_name)
       return time_adjusted_name
     end
     return default_name
   end
 
-
-  def apply_backdrop_graphics(battleBG,playerBase,enemyBase,messageBG)
+  def apply_backdrop_graphics(battleBG, playerBase, enemyBase, messageBG)
     bg = pbAddSprite("battle_bg", 0, 0, battleBG, @viewport)
     bg.z = 0
     bg = pbAddSprite("battle_bg2", -Graphics.width, 0, battleBG, @viewport)
@@ -154,34 +153,35 @@ class PokeBattle_Scene
 
   DEFAULT_BACKGROUND_NAME = "indoora"
   DEFAULT_MESSAGE_NAME = "default_message"
+
   def pbCreateBackdropSprites
     background_name = @battle.backdrop ? @battle.backdrop.downcase : DEFAULT_BACKGROUND_NAME
     battlebase_name = @battle.backdropBase ? @battle.backdropBase.downcase : background_name
     message_name = background_name + "_message"
 
-    battleBG =getBackdropSpriteFullPath(background_name, :BACKGROUND)
-    playerBase =getBackdropSpriteFullPath(battlebase_name, :PLAYERBASE)
-    enemyBase =getBackdropSpriteFullPath(battlebase_name, :ENEMYBASE)
-    messageBG =getBackdropSpriteFullPath(message_name, :MESSAGE)
+    battleBG = getBackdropSpriteFullPath(background_name, :BACKGROUND)
+    playerBase = getBackdropSpriteFullPath(battlebase_name, :PLAYERBASE)
+    enemyBase = getBackdropSpriteFullPath(battlebase_name, :ENEMYBASE)
+    messageBG = getBackdropSpriteFullPath(message_name, :MESSAGE)
     if !pbResolveBitmap(messageBG)
       messageBG = "Graphics/Battlebacks/default_message"
     end
-    apply_backdrop_graphics(battleBG,playerBase,enemyBase,messageBG)
+    apply_backdrop_graphics(battleBG, playerBase, enemyBase, messageBG)
   end
 
   def pbCreateTrainerBackSprite(idxTrainer, trainerType, numTrainers = 1)
     x = 100
     y = 410
 
-    sprite = IconSprite.new(x,y,@viewport)
+    sprite = IconSprite.new(x, y, @viewport)
 
     allowEasterEggPokeball = pbInSafari? #Never allow except in Safari Zone - add more conditions if needed
     sprite.setBitmapDirectly(generate_front_trainer_sprite_bitmap(allowEasterEggPokeball))
-    sprite.zoom_x=2
-    sprite.zoom_y=2
-    sprite.z=100 + idxTrainer
+    sprite.zoom_x = 2
+    sprite.zoom_y = 2
+    sprite.z = 100 + idxTrainer
 
-    sprite.mirror =true
+    sprite.mirror = true
     @sprites["player_#{idxTrainer + 1}"] = sprite
     return sprite
 
@@ -207,7 +207,7 @@ class PokeBattle_Scene
     # trainer.oy = trainer.bitmap.height
   end
 
-  def pbCreateTrainerFrontSprite(idxTrainer, trainerType, numTrainers = 1, sprite_override = nil, custom_appearance=nil)
+  def pbCreateTrainerFrontSprite(idxTrainer, trainerType, numTrainers = 1, sprite_override = nil, custom_appearance = nil)
     trainerFile = GameData::TrainerType.front_sprite_filename(trainerType)
     trainerFile = sprite_override if sprite_override
 

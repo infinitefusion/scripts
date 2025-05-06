@@ -107,27 +107,27 @@ class Game_Map
   end
 
   def width
-    return @map.width;
+    return @map.width
   end
 
   def height
-    return @map.height;
+    return @map.height
   end
 
   def encounter_list
-    return @map.encounter_list;
+    return @map.encounter_list
   end
 
   def encounter_step
-    return @map.encounter_step;
+    return @map.encounter_step
   end
 
   def data
-    return @map.data;
+    return @map.data
   end
 
-  def tileset_id;
-    return @map.tileset_id;
+  def tileset_id
+    return @map.tileset_id
   end
 
   def name
@@ -153,20 +153,19 @@ class Game_Map
     end
   end
 
-  def setFog2(filename,sx=0,sy=0,opacity=32)
-    @fog2_sx=sx
-    @fog2_sy=-sy
+  def setFog2(filename, sx = 0, sy = 0, opacity = 32)
+    @fog2_sx = sx
+    @fog2_sy = -sy
     @fog2_opacity = opacity
     $scene.spriteset.setFog2(filename)
   end
 
   def eraseFog2()
-    @fog2_sx=0
-    @fog2_sy=-0
+    @fog2_sx = 0
+    @fog2_sy = -0
     @fog2_opacity = 0
     $scene.spriteset.disposeFog2()
   end
-
 
   #-----------------------------------------------------------------------------
   # * Plays background music
@@ -323,7 +322,7 @@ class Game_Map
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
-        $PokemonGlobal.bridge > 0
+                      $PokemonGlobal.bridge > 0
       return true if @passages[tile_id] & 0x40 == 0x40
     end
     return false
@@ -472,13 +471,13 @@ class Game_Map
       distance = (1 << @scroll_speed) * 40.0 / Graphics.frame_rate
       distance = @scroll_rest if distance > @scroll_rest
       case @scroll_direction
-      when 2 then
+      when 2
         scroll_down(distance)
-      when 4 then
+      when 4
         scroll_left(distance)
-      when 6 then
+      when 6
         scroll_right(distance)
-      when 8 then
+      when 8
         scroll_up(distance)
       end
       @scroll_rest -= distance
@@ -521,13 +520,13 @@ end
 def pbScrollMap(direction, distance, speed)
   if speed == 0
     case direction
-    when 2 then
+    when 2
       $game_map.scroll_down(distance * Game_Map::REAL_RES_Y)
-    when 4 then
+    when 4
       $game_map.scroll_left(distance * Game_Map::REAL_RES_X)
-    when 6 then
+    when 6
       $game_map.scroll_right(distance * Game_Map::REAL_RES_X)
-    when 8 then
+    when 8
       $game_map.scroll_up(distance * Game_Map::REAL_RES_Y)
     end
   else

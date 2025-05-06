@@ -150,7 +150,7 @@ class HallOfFame_Scene
     $PokemonGlobal.hallOfFame.push(entryData)
     $PokemonGlobal.hallOfFameLastNumber += 1
     $PokemonGlobal.hallOfFame.delete_at(0) if HALLLIMIT > -1 &&
-    $PokemonGlobal.hallOfFame.size > HALLLIMIT
+                                              $PokemonGlobal.hallOfFame.size > HALLLIMIT
   end
 
   # Return the x/y point position in screen for battler index number
@@ -359,7 +359,7 @@ class HallOfFame_Scene
       [_INTL("Lv. {1}", pokemon.egg? ? "?" : pokemon.level),
        64, Graphics.height - 54, 0, BASECOLOR, SHADOWCOLOR],
       [_INTL("IDNo.{1}", pokemon.egg? ? "?????" : idno),
-       Graphics.width - 192, Graphics.height - 54, 2, BASECOLOR, SHADOWCOLOR]
+       Graphics.width - 192, Graphics.height - 54, 2, BASECOLOR, SHADOWCOLOR],
     ]
     if (hallNumber > -1)
       textPositions.push([_INTL("Hall of Fame No."), Graphics.width / 2 - 104, -6, 0, BASECOLOR, SHADOWCOLOR])
@@ -388,7 +388,7 @@ class HallOfFame_Scene
     mode = $PokemonGlobal.hallOfFame[@hallIndex][:MODE]
     difficulty = $PokemonGlobal.hallOfFame[@hallIndex][:DIFFICULTY]
 
-    writeDate(overlay, 120, Graphics.height - 50,date) if date
+    writeDate(overlay, 120, Graphics.height - 50, date) if date
     writeGameMode(overlay, (Graphics.width / 2) + 100, Graphics.height - 50, mode, difficulty) if mode && difficulty
   end
 
@@ -561,7 +561,7 @@ class HallOfFame_Scene
     @hallEntry[@battlerIndex].play_cry
     setPokemonSpritesOpacity(@battlerIndex, OPACITY)
     hallNumber = $PokemonGlobal.hallOfFameLastNumber + @hallIndex -
-      $PokemonGlobal.hallOfFame.size + 1
+                 $PokemonGlobal.hallOfFame.size + 1
     writePokemonData(@hallEntry[@battlerIndex], hallNumber)
     return true
   end

@@ -246,11 +246,9 @@ module GameData
         end
         suffix = suffix.capitalize if prefix.end_with?(" ")
         return prefix + suffix
-
       rescue
         print("species with error: " + @species.to_s)
       end
-
     end
 
     def calculate_evolutions()
@@ -302,8 +300,7 @@ module GameData
       begin
         file_path = Settings::POKEDEX_ENTRIES_PATH
         json_data = File.read(file_path)
-        all_body_entries  = HTTPLite::JSON.parse(json_data)
-
+        all_body_entries = HTTPLite::JSON.parse(json_data)
 
         body_entry = all_body_entries[@body_pokemon.id_number.to_s].sample
         body_entry = body_entry.gsub(/#{@body_pokemon.real_name}/i, @real_name)
@@ -398,6 +395,5 @@ module GameData
     def combine_arrays(array1, array2)
       return array1 + array2
     end
-
   end
 end

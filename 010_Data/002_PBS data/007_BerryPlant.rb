@@ -16,12 +16,12 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      @id              = hash[:id]
-      @id_number       = hash[:id_number]   || -1
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
       @hours_per_stage = hash[:hours_per_stage] || 3
       @drying_per_hour = hash[:drying_per_hour] || 15
-      @minimum_yield   = hash[:minimum_yield] || 2
-      @maximum_yield   = hash[:maximum_yield] || 5
+      @minimum_yield = hash[:minimum_yield] || 2
+      @maximum_yield = hash[:maximum_yield] || 5
     end
   end
 end
@@ -31,6 +31,6 @@ end
 #===============================================================================
 # @deprecated This alias is slated to be removed in v20.
 def pbGetBerryPlantData(item)
-  Deprecation.warn_method('pbGetBerryPlantData', 'v20', 'GameData::BerryPlant.get(item)')
+  Deprecation.warn_method("pbGetBerryPlantData", "v20", "GameData::BerryPlant.get(item)")
   return GameData::BerryPlant.get(item)
 end

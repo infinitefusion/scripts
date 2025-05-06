@@ -74,7 +74,6 @@ module PokeBattle_BattleCommon
       if $game_switches[AUTOSAVE_CATCH_SWITCH]
         Kernel.tryAutosave()
       end
-
     end
     @caughtPokemon.clear
   end
@@ -222,8 +221,6 @@ module PokeBattle_BattleCommon
     else
       catch_rate /= 10
     end
-
-
 
     # First half of the shakes calculation
     a = battler.totalhp

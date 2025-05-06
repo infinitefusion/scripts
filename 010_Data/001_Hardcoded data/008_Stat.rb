@@ -38,12 +38,12 @@ module GameData
     end
 
     def initialize(hash)
-      @id              = hash[:id]
-      @id_number       = hash[:id_number]  || -1
-      @real_name       = hash[:name]       || "Unnamed"
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @real_name = hash[:name] || "Unnamed"
       @real_name_brief = hash[:name_brief] || "None"
-      @type            = hash[:type]       || :none
-      @pbs_order       = hash[:pbs_order]  || -1
+      @type = hash[:type] || :none
+      @pbs_order = hash[:pbs_order] || -1
     end
 
     # @return [String] the translated name of this stat
@@ -61,71 +61,71 @@ end
 #===============================================================================
 
 GameData::Stat.register({
-  :id         => :HP,
-  :id_number  => 0,
-  :name       => _INTL("HP"),
+  :id => :HP,
+  :id_number => 0,
+  :name => _INTL("HP"),
   :name_brief => _INTL("HP"),
-  :type       => :main,
-  :pbs_order  => 0
+  :type => :main,
+  :pbs_order => 0,
 })
 
 GameData::Stat.register({
-  :id         => :ATTACK,
-  :id_number  => 1,
-  :name       => _INTL("Attack"),
+  :id => :ATTACK,
+  :id_number => 1,
+  :name => _INTL("Attack"),
   :name_brief => _INTL("Atk"),
-  :type       => :main_battle,
-  :pbs_order  => 1
+  :type => :main_battle,
+  :pbs_order => 1,
 })
 
 GameData::Stat.register({
-  :id         => :DEFENSE,
-  :id_number  => 2,
-  :name       => _INTL("Defense"),
+  :id => :DEFENSE,
+  :id_number => 2,
+  :name => _INTL("Defense"),
   :name_brief => _INTL("Def"),
-  :type       => :main_battle,
-  :pbs_order  => 2
+  :type => :main_battle,
+  :pbs_order => 2,
 })
 
 GameData::Stat.register({
-  :id         => :SPECIAL_ATTACK,
-  :id_number  => 3,
-  :name       => _INTL("Special Attack"),
+  :id => :SPECIAL_ATTACK,
+  :id_number => 3,
+  :name => _INTL("Special Attack"),
   :name_brief => _INTL("SpAtk"),
-  :type       => :main_battle,
-  :pbs_order  => 4
+  :type => :main_battle,
+  :pbs_order => 4,
 })
 
 GameData::Stat.register({
-  :id         => :SPECIAL_DEFENSE,
-  :id_number  => 4,
-  :name       => _INTL("Special Defense"),
+  :id => :SPECIAL_DEFENSE,
+  :id_number => 4,
+  :name => _INTL("Special Defense"),
   :name_brief => _INTL("SpDef"),
-  :type       => :main_battle,
-  :pbs_order  => 5
+  :type => :main_battle,
+  :pbs_order => 5,
 })
 
 GameData::Stat.register({
-  :id         => :SPEED,
-  :id_number  => 5,
-  :name       => _INTL("Speed"),
+  :id => :SPEED,
+  :id_number => 5,
+  :name => _INTL("Speed"),
   :name_brief => _INTL("Spd"),
-  :type       => :main_battle,
-  :pbs_order  => 3
+  :type => :main_battle,
+  :pbs_order => 3,
 })
 
 GameData::Stat.register({
-  :id         => :ACCURACY,
-  :id_number  => 6,
-  :name       => _INTL("accuracy"),
+  :id => :ACCURACY,
+  :id_number => 6,
+  :name => _INTL("accuracy"),
   :name_brief => _INTL("Acc"),
-  :type       => :battle
+  :type => :battle,
 })
 
 GameData::Stat.register({
-  :id         => :EVASION,
-  :id_number  => 7,
-  :name       => _INTL("evasiveness"),
+  :id => :EVASION,
+  :id_number => 7,
+  :name => _INTL("evasiveness"),
   :name_brief => _INTL("Eva"),
-  :type       => :battle
+  :type => :battle,
 })

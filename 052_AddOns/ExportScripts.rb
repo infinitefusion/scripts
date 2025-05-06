@@ -11,7 +11,7 @@ def export_music_use_map()
       music_hash[bgm_name] = Array.new(1, formatted_value)
     end
   end
-  export_hash_to_csv(music_hash,"music_export.csv")
+  export_hash_to_csv(music_hash, "music_export.csv")
 end
 
 def export_hash_to_csv(hash, file_path)
@@ -34,5 +34,3 @@ def export_hash_to_csv(hash, file_path)
   # Close the file
   file.close
 end
-
-

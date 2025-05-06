@@ -35,19 +35,19 @@
 #==============================================================================
 class Scene_Credits
   # Backgrounds to show in credits. Found in Graphics/Titles/ folder
-  BACKGROUNDS_LIST       = ["credits1", "credits2", "credits3", "credits4", "credits5"]
-  BGM                    = "Credits"
-  SCROLL_SPEED           = 62   # Pixels per second , ajuster pour fitter avec la musique
+  BACKGROUNDS_LIST = ["credits1", "credits2", "credits3", "credits4", "credits5"]
+  BGM = "Credits"
+  SCROLL_SPEED = 62   # Pixels per second , ajuster pour fitter avec la musique
   SECONDS_PER_BACKGROUND = 4
-  TEXT_OUTLINE_COLOR     = Color.new(0, 0, 128, 255)
-  TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
-  TEXT_SHADOW_COLOR      = Color.new(0, 0, 0, 100)
+  TEXT_OUTLINE_COLOR = Color.new(0, 0, 128, 255)
+  TEXT_BASE_COLOR = Color.new(255, 255, 255, 255)
+  TEXT_SHADOW_COLOR = Color.new(0, 0, 0, 100)
   NB_SPRITES_TO_PRELOAD = 30
 
   TOTAL_NB_FRAMES = 4000 #set manually, depends on music length
 
-  FUSION_SPRITES_MAX_OPACITY=200
-  NB_FRAMES_AT_MAX_OPACITY=30
+  FUSION_SPRITES_MAX_OPACITY = 200
+  NB_FRAMES_AT_MAX_OPACITY = 30
 
   # This next piece of code is the credits.
   # Start Editing
@@ -170,7 +170,7 @@ Affiliated with Game Freak
 This is a non-profit fan-made game.
 No copyright infringements intended.
 _END_
-# Stop Editing
+  # Stop Editing
 
   def main
     endCredits() if $PokemonSystem.on_mobile
@@ -238,24 +238,24 @@ _END_
             linewidth = Graphics.width / 2 - 20
           end
           credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32 + 8, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, j * 32 + 8, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_OUTLINE_COLOR
           credit_bitmap.draw_text(xpos + 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 - 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, j * 32 - 2, linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos - 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32,     linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32,     linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, j * 32, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, j * 32, linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos + 2, j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 + 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, j * 32 + 2, linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos - 2, j * 32 + 2, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_BASE_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32,     linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos, j * 32, linewidth, 32, line[k], align)
         end
       end
       credit_sprite = Sprite.new(text_viewport)
       credit_sprite.bitmap = credit_bitmap
-      credit_sprite.z      = 9998
-      credit_sprite.oy     = @realOY - @bitmap_height * i
+      credit_sprite.z = 9998
+      credit_sprite.oy = @realOY - @bitmap_height * i
       @credit_sprites[i] = credit_sprite
     end
     #-------------------------------
@@ -334,14 +334,14 @@ _END_
     #@background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
     # # Go to next slide
     @frames_counter = 0 if !@frames_counter
-    @frames_counter+=1
+    @frames_counter += 1
 
-    stopShowingSprites = @frames_counter >= (TOTAL_NB_FRAMES-300)
+    stopShowingSprites = @frames_counter >= (TOTAL_NB_FRAMES - 300)
     pbBGSStop if @frames_counter > TOTAL_NB_FRAMES
 
     spriteLoader = BattleSpriteLoader.new
     if @counter >= SECONDS_PER_BACKGROUND && @customSpritesList.length > 0 && !stopShowingSprites
-      @sprites_counter=0
+      @sprites_counter = 0
       randomSprite = @customSpritesList.sample
       @customSpritesList.delete(randomSprite)
       @background_sprite.setBitmapDirectly(spriteLoader.load_pif_sprite(randomSprite))
@@ -349,22 +349,20 @@ _END_
       @background_sprite.y = rand(0..200)
       @counter -= SECONDS_PER_BACKGROUND
       @background_sprite.opacity = 50
-      @fadingIn=true
+      @fadingIn = true
     end
     if @fadingIn
       if @background_sprite.opacity < FUSION_SPRITES_MAX_OPACITY
-        @background_sprite.opacity +=5
+        @background_sprite.opacity += 5
       else
-        @fadingIn=false
+        @fadingIn = false
       end
-
     else
       @sprites_counter += 1
       if @sprites_counter >= NB_FRAMES_AT_MAX_OPACITY
-        @background_sprite.opacity-=3
+        @background_sprite.opacity -= 3
       end
     end
-
 
     return if cancel?
     return if last?

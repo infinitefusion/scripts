@@ -31,7 +31,7 @@ class SpritesBitmapCache
   end
 
   #Keys format: AUTOGEN_B12H12_a
-  def add(pif_sprite,bitmap)
+  def add(pif_sprite, bitmap)
     sprite_key = get_cache_key(pif_sprite)
     echoln "adding key #{sprite_key} to cache"
     @@cache[sprite_key] = bitmap.clone

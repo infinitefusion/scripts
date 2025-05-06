@@ -71,13 +71,13 @@ class PokeBattle_Battler
   def pbCheckDamageAbsorption(user, target)
     # Substitute will take the damage
     if target.effects[PBEffects::Substitute] > 0 && !ignoresSubstitute?(user) &&
-      (!user || user.index != target.index)
+       (!user || user.index != target.index)
       target.damageState.substitute = true
       return
     end
     # Disguise will take the damage
     if !@battle.moldBreaker && target.isFusionOf(:MIMIKYU) &&
-      target.form == 0 && (target.ability == :DISGUISE || target.ability2 == :DISGUISE)
+       target.form == 0 && (target.ability == :DISGUISE || target.ability2 == :DISGUISE)
       target.damageState.disguise = true
       return
     end
@@ -100,7 +100,7 @@ class PokeBattle_Battler
         choices = []
         @battle.eachOtherSideBattler(@index) do |b|
           next if b.ungainableAbility? ||
-            [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
+                  [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
           choices.push(b)
         end
         if choices.length > 0
@@ -119,16 +119,12 @@ class PokeBattle_Battler
 
   def displayOpponentDoubleAbilities()
     @battle.eachOtherSideBattler(@index) do |battler|
-      @battle.pbShowPrimaryAbilitySplash(battler,true)
-      @battle.pbShowSecondaryAbilitySplash(battler,true) if battler.isFusion?()
-       @battle.pbHideAbilitySplash(battler)
+      @battle.pbShowPrimaryAbilitySplash(battler, true)
+      @battle.pbShowSecondaryAbilitySplash(battler, true) if battler.isFusion?()
+      @battle.pbHideAbilitySplash(battler)
     end
   end
-
 end
-
-
-
 
 class Pokemon
   attr_writer :ability_index
@@ -166,7 +162,6 @@ class Pokemon
     return if value && !GameData::Ability.exists?(value)
     @ability2 = (value) ? GameData::Ability.get(value).id : value
   end
-
 
   def ability_id
     if !@ability
@@ -208,23 +203,18 @@ class Pokemon
   def adjustHPForWonderGuard(stats)
     return self.ability == :WONDERGUARD ? 1 : stats[:HP] || ($game_switches[SWITCH_DOUBLE_ABILITIES] && self.ability2 == :WONDERGUARD)
   end
-
 end
 
-
-
 class PokemonFusionScene
-
-  def pbChooseAbility(ability1Id,ability2Id)
+  def pbChooseAbility(ability1Id, ability2Id)
     ability1 = GameData::Ability.get(ability1Id)
     ability2 = GameData::Ability.get(ability2Id)
     availableNatures = []
     availableNatures << @pokemon1.nature
     availableNatures << @pokemon2.nature
 
-    setAbilityAndNatureAndNickname([ability1,ability2], availableNatures)
+    setAbilityAndNatureAndNickname([ability1, ability2], availableNatures)
   end
-
 
   def setAbilityAndNatureAndNickname(abilitiesList, naturesList)
     clearUIForMoves
@@ -245,7 +235,7 @@ class PokemonFusionScene
       @pokemon1.head_original_ability_index = @pokemon2.ability_index
 
       @pokemon1.ability = selectedAbility
-      @pokemon1.ability_index = getAbilityIndexFromID(selectedAbility.id,@pokemon1)
+      @pokemon1.ability_index = getAbilityIndexFromID(selectedAbility.id, @pokemon1)
     end
 
     @pokemon1.nature = scene.selectedNature
@@ -253,7 +243,4 @@ class PokemonFusionScene
       @pokemon1.name = scene.nickname
     end
   end
-
 end
-
-

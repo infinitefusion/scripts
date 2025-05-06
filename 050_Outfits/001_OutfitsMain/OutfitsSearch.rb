@@ -22,7 +22,7 @@ end
 
 def filter_clothes_only_not_owned(clothes_ids_list)
   filtered_list = []
-  clothes_ids_list.each do|clothe_id|
+  clothes_ids_list.each do |clothe_id|
     filtered_list << clothe_id if !$Trainer.unlocked_clothes.include?(clothe_id)
   end
   return filtered_list
@@ -30,23 +30,22 @@ end
 
 def filter_clothes_only_owned(clothes_ids_list)
   filtered_list = []
-  clothes_ids_list.each do|clothe_id|
+  clothes_ids_list.each do |clothe_id|
     filtered_list << clothe_id if $Trainer.unlocked_clothes.include?(clothe_id)
   end
   return filtered_list
 end
 
-
 #HATS
 
-def search_hats(matching_tags = [],excluding_tags=[], only_unlocked = false)
+def search_hats(matching_tags = [], excluding_tags = [], only_unlocked = false)
   update_global_outfit_lists()
   selector = OutfitSelector.new
 
   full_data_list = $PokemonGlobal.hats_data
   existing_files_list = selector.parse_hats_folder()
   unlocked_list = $Trainer.unlocked_hats
-  return search_outfits_by_tag(full_data_list, matching_tags, existing_files_list, unlocked_list, only_unlocked,excluding_tags)
+  return search_outfits_by_tag(full_data_list, matching_tags, existing_files_list, unlocked_list, only_unlocked, excluding_tags)
 end
 
 def filter_hats(filter_tags = [], only_unlocked = false)
@@ -61,7 +60,7 @@ end
 
 def filter_hats_only_not_owned(hats_ids_list)
   filtered_list = []
-  hats_ids_list.each do|hat_id|
+  hats_ids_list.each do |hat_id|
     filtered_list << hat_id if !$Trainer.unlocked_hats.include?(hat_id)
   end
   return filtered_list
@@ -69,13 +68,11 @@ end
 
 def filter_hats_only_owned(hats_ids_list)
   filtered_list = []
-  hats_ids_list.each do|hat_id|
+  hats_ids_list.each do |hat_id|
     filtered_list << hat_id if $Trainer.unlocked_hats.include?(hat_id)
   end
   return filtered_list
 end
-
-
 
 #HAIRSTYLES
 
@@ -88,7 +85,7 @@ def search_hairstyles(matching_tags = [], only_unlocked = false)
   return search_outfits_by_tag(full_data_list, matching_tags, existing_files_list, [], false)
 end
 
-def filter_out_hairstyles(filter_tags = [],base_list = [],require_unlocked=false)
+def filter_out_hairstyles(filter_tags = [], base_list = [], require_unlocked = false)
   update_global_outfit_lists()
   selector = OutfitSelector.new
 
@@ -97,13 +94,10 @@ def filter_out_hairstyles(filter_tags = [],base_list = [],require_unlocked=false
   return exclude_outfits_by_tag(data_list, filter_tags, existing_files_list, base_list, false)
 end
 
-
-
-
 # Generic searching methods
 
 #Get outfits that have ANY of the tags
-def search_outfits_by_tag(outfits_map, matching_tags = [], physical_files_list = [], unlocked_list = [], require_unlocked = false, excluding_tags=[])
+def search_outfits_by_tag(outfits_map, matching_tags = [], physical_files_list = [], unlocked_list = [], require_unlocked = false, excluding_tags = [])
   filtered_list = []
   outfits_map.each do |outfit_id, outfit|
     next if outfit.tags.any? { |tag| excluding_tags.include?(tag) }
@@ -140,14 +134,13 @@ def exclude_outfits_by_tag(outfits_map, filter_tags = [], physical_files_list = 
   return filtered_list
 end
 
-
 def outfit_is_valid?(outfit_id, physical_files_list, unlocked_list, require_unlocked)
   return false if require_unlocked && !unlocked_list.include?(outfit_id)
   return physical_files_list.include?(outfit_id)
 end
 
-def add_tags(tags_list=[])
-  newTag=pbEnterText("add tag",0,10)
+def add_tags(tags_list = [])
+  newTag = pbEnterText("add tag", 0, 10)
   return tags_list if newTag.length == 0
   tags_list << newTag
   return tags_list
@@ -168,8 +161,7 @@ def get_hair_by_id(id)
   return $PokemonGlobal.hairstyles_data.has_key?(id) ? $PokemonGlobal.hairstyles_data[id] : nil
 end
 
-
-def generate_clothes_choice(baseOptions=true,additionalIds=[],additionalTags=[],filterOutTags=[])
+def generate_clothes_choice(baseOptions = true, additionalIds = [], additionalTags = [], filterOutTags = [])
   list = []
   list += additionalIds
   list += search_clothes(additionalTags)
@@ -180,12 +172,12 @@ def generate_clothes_choice(baseOptions=true,additionalIds=[],additionalTags=[],
   return list
 end
 
-
-CITY_OUTFIT_TAGS= [
-  "pewter","cerulean","vermillion","lavender","celadon","fuchsia","cinnabar",
-  "crimson","goldenrod","azalea", "violet", "blackthorn", "mahogany", "ecruteak",
-  "olivine","cianwood", "kin"
+CITY_OUTFIT_TAGS = [
+  "pewter", "cerulean", "vermillion", "lavender", "celadon", "fuchsia", "cinnabar",
+  "crimson", "goldenrod", "azalea", "violet", "blackthorn", "mahogany", "ecruteak",
+  "olivine", "cianwood", "kin",
 ]
+
 def list_city_exclusive_clothes()
   tags_list = CITY_OUTFIT_TAGS
   echoln search_clothes(tags_list)

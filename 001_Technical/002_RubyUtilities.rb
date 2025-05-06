@@ -23,7 +23,7 @@ end
 #===============================================================================
 class String
   def starts_with_vowel?
-    return ['a', 'e', 'i', 'o', 'u'].include?(self[0, 1].downcase)
+    return ["a", "e", "i", "o", "u"].include?(self[0, 1].downcase)
   end
 
   def first(n = 1)
@@ -88,8 +88,8 @@ end
 # class Array
 #===============================================================================
 class Array
-  def ^(other)   # xor of two arrays
-    return (self|other) - (self&other)
+  def ^(other) # xor of two arrays
+    return (self | other) - (self & other)
   end
 
   def swap(val1, val2)
@@ -120,6 +120,7 @@ end
 
 class << Kernel
   alias oldRand rand unless method_defined?(:oldRand)
+
   def rand(a = nil, b = nil)
     if a.is_a?(Range)
       lo = a.min

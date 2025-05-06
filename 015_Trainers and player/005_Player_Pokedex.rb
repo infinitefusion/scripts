@@ -7,7 +7,7 @@ class Player < Trainer
 
     def inspect
       str = super.chop
-      str << format(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
+      str << format(" seen: %d, owned: %d>", self.seen_count, self.owned_count)
       return str
     end
 
@@ -115,7 +115,6 @@ class Player < Trainer
     end
 
     def verify_dex_is_correct_length(current_dex)
-
       expected_length = 509 + 2
       return current_dex.length == expected_length
     end
@@ -150,6 +149,40 @@ class Player < Trainer
         set_seen_fusion(species)
       else
         set_seen_normalDex(species)
+      end
+      self.refresh_accessible_dexes if should_refresh_dexes
+    end
+
+    def set_unseen_fusion(species)
+      bodyId = getBodyID(species)
+      headId = getHeadID(species, bodyId)
+      @seen_fusion[headId][bodyId] = false
+    end
+
+    def set_unseen_normalDex(species)
+      dex_num = getDexNumberForSpecies(species)
+      @seen_standard[dex_num] = false
+    end
+
+    def set_unseen_triple(species)
+      if species.is_a?(Pokemon)
+        species_id = species.species
+      else
+        species_id = GameData::Species.try_get(species)&.species
+      end
+      return if species_id.nil?
+      @seen_triple[species_id] = false
+    end
+
+    def set_unseen(species, should_refresh_dexes = true)
+      try_resync_pokedex()
+      dexNum = getDexNumberForSpecies(species)
+      if isTripleFusion(dexNum)
+        set_unseen_triple(species)
+      elsif isFusion(dexNum)
+        set_unseen_fusion(species)
+      else
+        set_unseen_normalDex(species)
       end
       self.refresh_accessible_dexes if should_refresh_dexes
     end
@@ -272,6 +305,36 @@ class Player < Trainer
       self.refresh_accessible_dexes if should_refresh_dexes
     end
 
+    def set_unowned_fusion(species)
+      try_resync_pokedex()
+      bodyId = getBodyID(species)
+      headId = getHeadID(species, bodyId)
+      @owned_fusion[headId][bodyId] = false
+    end
+
+    def set_unowned_triple(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @owned_triple[species_id] = false
+    end
+
+    def set_unowned_normalDex(species)
+      try_resync_pokedex()
+      @owned_standard[getDexNumberForSpecies(species)] = false
+    end
+
+    def set_unowned(species, should_refresh_dexes = true)
+      dexNum = getDexNumberForSpecies(species)
+      if isTripleFusion(dexNum)
+        set_unowned_triple(species)
+      elsif isFusion(dexNum)
+        set_unowned_fusion(species)
+      else
+        set_unowned_normalDex(species)
+      end
+      self.refresh_accessible_dexes if should_refresh_dexes
+    end
+
     # Sets the given species as owned in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as owned
     def set_shadow_pokemon_owned(species)
@@ -357,8 +420,7 @@ class Player < Trainer
       # p @owned_standard.length
 
       return @owned_standard == nil || @owned_fusion == nil || @owned_triple == nil ||
-        !verify_dex_is_correct_length(@owned_standard) || !verify_dex_is_correct_length(@seen_fusion)
-
+               !verify_dex_is_correct_length(@owned_standard) || !verify_dex_is_correct_length(@seen_fusion)
     end
 
     #todo:

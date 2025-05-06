@@ -12,20 +12,20 @@ class PhoneDatabase
   attr_accessor :trainers
 
   def initialize
-    @generics         = []
-    @greetings        = []
+    @generics = []
+    @greetings = []
     @greetingsMorning = []
     @greetingsEvening = []
-    @bodies1          = []
-    @bodies2          = []
-    @battleRequests   = []
-    @trainers         = []
+    @bodies1 = []
+    @bodies2 = []
+    @battleRequests = []
+    @trainers = []
   end
 end
 
 module PhoneMsgType
-  Generic       = 0
-  Greeting      = 1
-  Body          = 2
+  Generic = 0
+  Greeting = 1
+  Body = 2
   BattleRequest = 3
 end

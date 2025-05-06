@@ -11,18 +11,18 @@ CLOTHES_EMERALD = "emeraldSPE"
 CLOTHES_PIKACHU_ONESIE = "pikaonesie"
 
 CLOTHES_GLITCH = "glitzerset"
-CLOTHES_BREEDER="PKMBreeder"
+CLOTHES_BREEDER = "PKMBreeder"
 
-CLOTHES_FOSSIL_M ="sado"
-CLOTHES_FOSSIL_F ="sada"
+CLOTHES_FOSSIL_M = "sado"
+CLOTHES_FOSSIL_F = "sada"
 
-CLOTHES_TREVENANT= "trevenantforestkingcloak"
+CLOTHES_TREVENANT = "trevenantforestkingcloak"
 
 CLOTHES_WAITRESS = "maid"
 CLOTHES_WAITER = "butler"
 
-CLOTHES_LASS_YELLOW ="lass"
-CLOTHES_LASS_BLUE ="lass2"
+CLOTHES_LASS_YELLOW = "lass"
+CLOTHES_LASS_BLUE = "lass2"
 
 DEFAULT_OUTFIT_MALE = "red"
 DEFAULT_OUTFIT_FEMALE = "leaf"
@@ -65,17 +65,17 @@ HAT_SANTA = "santa"
 HAT_QMARKS = "glitzerset"
 HAT_SUDOWOODO = "sudowoodohorns"
 
-HAT_TREVENANT="trevenantforestkingcrown"
+HAT_TREVENANT = "trevenantforestkingcrown"
 
 HAT_CLOWN = "clownnose"
 
-HAT_BREEDER_1="breedervisor"
-HAT_BREEDER_2="breederbandana"
-HAT_BREEDER_2_2="PKMBreeder"
+HAT_BREEDER_1 = "breedervisor"
+HAT_BREEDER_2 = "breederbandana"
+HAT_BREEDER_2_2 = "PKMBreeder"
 
-HAT_BREEDER_3="egg"
+HAT_BREEDER_3 = "egg"
 
-HAT_BREEDEROUTFIT="PKMBreeder"
+HAT_BREEDEROUTFIT = "PKMBreeder"
 
 HAT_WAITRESS = "maid"
 
@@ -114,7 +114,6 @@ HAT_GYM_REWARD_14 = "prycemask"
 HAT_GYM_REWARD_15 = "mortyHeadband"
 HAT_GYM_REWARD_16 = "magnemitepin"
 
-
 #Hairstyles
 HAIR_RED = "red"
 HAIR_LEAF = "leaf"
@@ -146,11 +145,11 @@ HAIR_JASMINE = "jasmine" #does not exist yet
 
 HAIR_HOOH = "ho-oh"
 HAIR_CRESSELIA = "lunarbob"
-HAIR_LYCANROC="lycanrocshorthair"
-HAIR_HAPPINY="happinysuit"
-HAIR_LATIAS="SpecialLatias"
-HAIR_GARDEVOIR="gardevoir"
-HAIR_EEVEE="eeveetail"
+HAIR_LYCANROC = "lycanrocshorthair"
+HAIR_HAPPINY = "happinysuit"
+HAIR_LATIAS = "SpecialLatias"
+HAIR_GARDEVOIR = "gardevoir"
+HAIR_EEVEE = "eeveetail"
 
 HAIR_BRENDAN = "buzzcut"
 HAIR_MAY = "may"

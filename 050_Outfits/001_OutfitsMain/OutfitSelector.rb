@@ -6,9 +6,8 @@ class OutfitSelector
   def initialize()
     @clothes_list = parse_clothes_folder()
     @hats_list = parse_hats_folder()
-    @hairstyles_list =parse_hairstyles_folder()
+    @hairstyles_list = parse_hairstyles_folder()
   end
-
 
   def parse_clothes_folder
     return list_folders(get_clothes_sets_list_path())
@@ -22,7 +21,7 @@ class OutfitSelector
     return list_folders(get_hair_sets_list_path())
   end
 
-  def generate_hats_choice(baseOptions=true,additionalIds=[],additionalTags=[],filterOutTags=[])
+  def generate_hats_choice(baseOptions = true, additionalIds = [], additionalTags = [], filterOutTags = [])
     list = []
     list += additionalIds
     list += search_hats(additionalTags)
@@ -33,7 +32,7 @@ class OutfitSelector
     return list
   end
 
-  def generate_clothes_choice(baseOptions=true,additionalIds=[],additionalTags=[],filterOutTags=[])
+  def generate_clothes_choice(baseOptions = true, additionalIds = [], additionalTags = [], filterOutTags = [])
     list = []
     list += additionalIds
     list += search_clothes(additionalTags)
@@ -44,7 +43,7 @@ class OutfitSelector
     return list
   end
 
-  def generate_hairstyle_choice(baseOptions=true,additionalIds=[],additionalTags=[],filterOutTags=[])
+  def generate_hairstyle_choice(baseOptions = true, additionalIds = [], additionalTags = [], filterOutTags = [])
     list = []
     list += additionalIds
     list += search_hairstyles(additionalTags)
@@ -83,9 +82,9 @@ class OutfitSelector
   end
 
   def parse_hairstyles_folder
-    hairstyle_types= list_folders(get_hair_sets_list_path())
+    hairstyle_types = list_folders(get_hair_sets_list_path())
     max_versions_number = 10
-    list= []
+    list = []
     for hairstyle in hairstyle_types
       for i in 1..max_versions_number
         type = i.to_s + "_" + hairstyle
@@ -99,12 +98,11 @@ class OutfitSelector
   end
 
   def list_folders(path)
-    entries= Dir.entries(path)
-    return entries.select { |entry| File.directory?(File.join(path, entry)) && entry != '.' && entry != '..' }
+    entries = Dir.entries(path)
+    return entries.select { |entry| File.directory?(File.join(path, entry)) && entry != "." && entry != ".." }
   end
 
-
-  def filter_unlocked_outfits(outfits_list,unlocked_outfits)
+  def filter_unlocked_outfits(outfits_list, unlocked_outfits)
     available_outfits = []
     outfits_list.each do |outfit|
       available_outfits << outfit if unlocked_outfits.include?(outfit)
@@ -112,17 +110,16 @@ class OutfitSelector
     return available_outfits
   end
 
-
-  def selectNextOutfit(currentOutfit, incr, outfits_list, versions = [], allowNone = true, prefix_filter = nil,unlockedOutfits=[],everythingUnlocked=false)
+  def selectNextOutfit(currentOutfit, incr, outfits_list, versions = [], allowNone = true, prefix_filter = nil, unlockedOutfits = [], everythingUnlocked = false)
     available_outfits = []
     available_outfits = outfits_list if everythingUnlocked
     available_outfits << "" if allowNone
-    available_outfits += filter_unlocked_outfits(outfits_list,unlockedOutfits) if !everythingUnlocked
+    available_outfits += filter_unlocked_outfits(outfits_list, unlockedOutfits) if !everythingUnlocked
     #available_outfits += list_available_outfits(directory, versions, unlockedOutfits, prefix_filter) #unlockedOutfits = nil for all outfits unlocked
     last_outfit = available_outfits[-1]
 
     current_outfit_index = get_current_outfit_position(currentOutfit, available_outfits)
-    next_outfit_index = current_outfit_index +incr
+    next_outfit_index = current_outfit_index + incr
 
     nextOutfit = available_outfits[next_outfit_index]
     nextOutfit = last_outfit if next_outfit_index < 0
@@ -133,42 +130,36 @@ class OutfitSelector
     return currentOutfit
   end
 
-  def changeToNextClothes(incr,all_unlocked=false)
+  def changeToNextClothes(incr, all_unlocked = false)
     $Trainer.unlocked_clothes = [] if !$Trainer.unlocked_clothes
-
 
     currentOutfit = $Trainer.clothes
     currentOutfit = 0 if !currentOutfit
-    nextOutfit = selectNextOutfit(currentOutfit, incr, @clothes_list, [], false,nil,$Trainer.unlocked_clothes,all_unlocked)
+    nextOutfit = selectNextOutfit(currentOutfit, incr, @clothes_list, [], false, nil, $Trainer.unlocked_clothes, all_unlocked)
     $Trainer.clothes = nextOutfit
     $Trainer.clothes_color = 0
     echoln $Trainer.clothes
-
   end
 
-  def changeToNextHat(incr,all_unlocked=false)
+  def changeToNextHat(incr, all_unlocked = false)
     $Trainer.unlocked_hats = [] if !$Trainer.unlocked_hats
 
     currentHat = $Trainer.hat
     currentHat = 0 if !currentHat
-    nextOutfit = selectNextOutfit(currentHat, incr, @hats_list, [], true, "hat",$Trainer.unlocked_hats,all_unlocked)
+    nextOutfit = selectNextOutfit(currentHat, incr, @hats_list, [], true, "hat", $Trainer.unlocked_hats, all_unlocked)
     $Trainer.hat = nextOutfit
     $Trainer.hat_color = 0
     echoln $Trainer.hat
-
   end
 
-  def changeToNextHairstyle(incr,all_unlocked=false)
+  def changeToNextHairstyle(incr, all_unlocked = false)
     $Trainer.unlocked_hairstyles = [] if !$Trainer.unlocked_hairstyles
 
     currentHair = $Trainer.hair
     currentHair = 0 if !currentHair
-    nextOutfit = selectNextOutfit(currentHair, incr, @hairstyles_list, ["a", "b", "c", "d"], true,nil,$Trainer.unlocked_hairstyles,all_unlocked)
+    nextOutfit = selectNextOutfit(currentHair, incr, @hairstyles_list, ["a", "b", "c", "d"], true, nil, $Trainer.unlocked_hairstyles, all_unlocked)
     $Trainer.hair_color = 0
     $Trainer.hair = nextOutfit
     echoln $Trainer.hair
-
   end
-
-
 end

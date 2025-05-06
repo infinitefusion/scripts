@@ -4,10 +4,10 @@
 class PokemonRuleSet
   def initialize(number = 0)
     @pokemonRules = []
-    @teamRules    = []
-    @subsetRules  = []
-    @minLength    = 1
-    @number       = number
+    @teamRules = []
+    @subsetRules = []
+    @minLength = 1
+    @number = number
   end
 
   def copy
@@ -31,6 +31,7 @@ class PokemonRuleSet
   def maxLength
     return (@number < 0) ? Settings::MAX_PARTY_SIZE : @number
   end
+
   alias number maxLength
 
   def minTeamLength
@@ -123,7 +124,7 @@ class PokemonRuleSet
     return self
   end
 
-  def isPokemonValid?(pkmn,ableProc=nil)
+  def isPokemonValid?(pkmn, ableProc = nil)
     return false if !pkmn
     if ableProc
       return false if !ableProc.call(pkmn)

@@ -12,13 +12,12 @@ SCREENSTYLE = 1
 # 2 - R/S/E
 
 class Scene_Intro
-
   alias main_old main
 
   def playIntroCinematic
     intro_frames_path = "Graphics\\Pictures\\Intro\\INTRO-%03d"
     intro_bgm = "INTRO_music_cries"
-    intro_movie = Movie.new(intro_frames_path,intro_bgm,230,true)
+    intro_movie = Movie.new(intro_frames_path, intro_bgm, 230, true)
     intro_movie.playInViewPort(@viewport)
   end
 
@@ -26,7 +25,6 @@ class Scene_Intro
     Graphics.transition(0)
     # Cycles through the intro pictures
     @skip = false
-
 
     playIntroCinematic
     # Selects title screen style
@@ -116,19 +114,18 @@ end
 
 def continueKeyPressed?()
   return Input.trigger?(Input::USE) ||
-    Input.trigger?(Input::ACTION) ||
-    Input.trigger?(Input::BACK) ||
-    Input.trigger?(Input::SPECIAL)
+           Input.trigger?(Input::ACTION) ||
+           Input.trigger?(Input::BACK) ||
+           Input.trigger?(Input::SPECIAL)
 end
+
 #===============================================================================
 # Styled to look like the FRLG games
 #===============================================================================
 class GenOneStyle
-
   def initialize
     #Kernel.pbDisplayText("Keybindings: F1", 80, 0, 99999)
     #Kernel.pbDisplayText("Version " + Settings::GAME_VERSION_NUMBER, 254, 308, 99999)
-
 
     @maxPoke = 140 #1st gen, pas de legend la premiere fois, graduellement plus de poke
     @customPokeList = getCustomSpeciesList(false)
@@ -143,8 +140,8 @@ class GenOneStyle
     #   path_s2 = get_unfused_sprite_path(randpoke_head,true)
     #   path_f = get_fusion_sprite_path(randpoke_body, randpoke_head,true)
 
-      @prevPoke1 = random_fusion_body
-      @prevPoke2 = random_fusion_head
+    @prevPoke1 = random_fusion_body
+    @prevPoke2 = random_fusion_head
     #end
     @spriteLoader = BattleSpriteLoader.new
 
@@ -180,7 +177,7 @@ class GenOneStyle
     @sprites["logo"] = Sprite.new(@viewport)
     @sprites["logo"].bitmap = pbBitmap("Graphics/Titles/PokemonInfiniteFusionLogo_Main_25")
     @sprites["logo"].tone = Tone.new(255, 255, 255, 255)
-    @sprites["logo"].x = (Graphics.width/2)-125
+    @sprites["logo"].x = (Graphics.width / 2) - 125
     @sprites["logo"].y = 0
 
     @sprites["logo"].opacity = 0
@@ -189,7 +186,7 @@ class GenOneStyle
     @sprites["logo_bg"] = Sprite.new(@viewport)
     @sprites["logo_bg"].bitmap = pbBitmap("Graphics/Titles/PokemonInfiniteFusionLogo_Back_25")
     @sprites["logo_bg"].tone = Tone.new(255, 255, 255, 255)
-    @sprites["logo_bg"].x = (Graphics.width/2)-125
+    @sprites["logo_bg"].x = (Graphics.width / 2) - 125
     @sprites["logo_bg"].y = 0
 
     @sprites["logo_bg"].opacity = 0
@@ -198,12 +195,11 @@ class GenOneStyle
     #@sprites["bg2"].bitmap=pbBitmap("Graphics/Titles/gen1_bg_litup")
     #@sprites["bg2"].opacity=0
 
-    @sprites["start"]=Sprite.new(@viewport)
-    @sprites["start"].bitmap=pbBitmap("Graphics/Titles/intro_pressKey2")
-    @sprites["start"].x=125
-    @sprites["start"].y=350
-    @sprites["start"].opacity=0
-
+    @sprites["start"] = Sprite.new(@viewport)
+    @sprites["start"].bitmap = pbBitmap("Graphics/Titles/intro_pressKey2")
+    @sprites["start"].x = 125
+    @sprites["start"].y = 350
+    @sprites["start"].opacity = 0
 
     @sprites["effect"] = AnimatedPlane.new(@viewport)
     @sprites["effect"].bitmap = pbBitmap("Graphics/Titles/gen1_effect")
@@ -264,7 +260,6 @@ class GenOneStyle
     @sprites["star"].opacity = 0
     @sprites["star"].x = -50
     @sprites["star"].y = 0
-
   end
 
   def intro
@@ -273,7 +268,6 @@ class GenOneStyle
     end
     wait(32)
     64.times do
-
       @sprites["2poke"].opacity += 4
       @sprites["poke"].opacity += 4
       wait(1)
@@ -289,8 +283,6 @@ class GenOneStyle
     end
     wait(8)
     showUIElements()
-
-
 
     @sprites["poke"].tone = Tone.new(0, 0, 0, 0)
     @sprites["2poke"].tone = Tone.new(0, 0, 0, 0)
@@ -317,9 +309,8 @@ class GenOneStyle
     @sprites["2poke2"].opacity = 255
     @sprites["start"].opacity = 200
 
-    Kernel.pbDisplayText("v." + Settings::GAME_VERSION_NUMBER, 455, 5, 99999,pbColor(:WHITE),pbColor(:INVISIBLE))
+    Kernel.pbDisplayText("v." + Settings::GAME_VERSION_NUMBER, 455, 5, 99999, pbColor(:WHITE), pbColor(:INVISIBLE))
   end
-
 
   TONE_INCR = 15
 
@@ -337,7 +328,6 @@ class GenOneStyle
     @sprites["fpoke"].opacity = 0
     @sprites["poke"].x = @sprites["poke"].x - 1
     @sprites["2poke"].x = @sprites["2poke"].x + 1
-
   end
 
   def update_selector_position()
@@ -350,7 +340,7 @@ class GenOneStyle
         @sprites["selector"].opacity = 100
       end
     else
-      @sprites["selector"].opacity=0
+      @sprites["selector"].opacity = 0
     end
 
     if @selector_pos == 0
@@ -414,7 +404,6 @@ class GenOneStyle
     @sprites["fpoke"].opacity -= 10
     @sprites["effect"].ox += @speed
 
-
     updatePressStartAnimation(@currentFrame)
 
     if @currentFrame >= @totalFrames
@@ -422,23 +411,24 @@ class GenOneStyle
     end
   end
 
+  PRESS_START_OPACITY_DIFF = 2
+  PRESS_START_ANIMATION_TIME = 60
 
-  PRESS_START_OPACITY_DIFF=2
-  PRESS_START_ANIMATION_TIME=60
   def updatePressStartAnimation(currentFrame)
-    return if @sprites["start"].opacity==0
-    @start_opacity_diff=PRESS_START_OPACITY_DIFF if !@start_opacity_diff
+    return if @sprites["start"].opacity == 0
+    @start_opacity_diff = PRESS_START_OPACITY_DIFF if !@start_opacity_diff
     @sprites["start"].opacity += @start_opacity_diff
     @sprites["logo_bg"].opacity -= @start_opacity_diff
 
     if currentFrame % PRESS_START_ANIMATION_TIME == 0
-      if @start_opacity_diff <0
+      if @start_opacity_diff < 0
         @start_opacity_diff = PRESS_START_OPACITY_DIFF
       else
         @start_opacity_diff = 0 - PRESS_START_OPACITY_DIFF
       end
     end
   end
+
   #new version
   # def getFusedPath(randpoke1, randpoke2)
   #   # path = rand(2) == 0 ? get_fusion_sprite_path(randpoke_body, randpoke_head,true) : get_fusion_sprite_path(randpoke_head, randpoke_body,true)
@@ -491,5 +481,3 @@ def wait(frames)
     end
   end
 end
-
-

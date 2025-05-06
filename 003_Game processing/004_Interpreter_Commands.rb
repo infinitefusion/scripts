@@ -114,13 +114,14 @@ class Interpreter
     when 353 then return command_353   # Game Over
     when 354 then return command_354   # Return to Title Screen
     when 355 then return command_355   # Script
-    else          return true          # Other
+    else return true          # Other
     end
   end
 
   def command_dummy
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * End Event
   #-----------------------------------------------------------------------------
@@ -131,6 +132,7 @@ class Interpreter
       $game_map.events[@event_id].unlock
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Command Skip
   #-----------------------------------------------------------------------------
@@ -141,6 +143,7 @@ class Interpreter
       @index += 1
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Command If
   #-----------------------------------------------------------------------------
@@ -151,33 +154,34 @@ class Interpreter
     end
     return command_skip
   end
+
   #-----------------------------------------------------------------------------
   # * Show Text
   #-----------------------------------------------------------------------------
   def command_101
     return false if $game_temp.message_window_showing
-    message     = @list[@index].parameters[0]
+    message = @list[@index].parameters[0]
     message_end = ""
-    commands                = nil
-    number_input_variable   = nil
+    commands = nil
+    number_input_variable = nil
     number_input_max_digits = nil
     # Check the next command(s) for things to add on to this text
     loop do
       next_index = pbNextIndex(@index)
       case @list[next_index].code
-      when 401   # Continuation of 101 Show Text
+      when 401 # Continuation of 101 Show Text
         text = @list[next_index].parameters[0]
         message += " " if text != "" && message[message.length - 1, 1] != " "
         message += text
         @index = next_index
         next
-      when 101   # Show Text
+      when 101 # Show Text
         message_end = "\1"
-      when 102   # Show Choices
+      when 102 # Show Choices
         commands = @list[next_index].parameters
         @index = next_index
-      when 103   # Input Number
-        number_input_variable   = @list[next_index].parameters[0]
+      when 103 # Input Number
+        number_input_variable = @list[next_index].parameters[0]
         number_input_max_digits = @list[next_index].parameters[1]
         @index = next_index
       end
@@ -206,6 +210,7 @@ class Interpreter
     @message_waiting = false
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Show Choices
   #-----------------------------------------------------------------------------
@@ -217,6 +222,7 @@ class Interpreter
     Input.update   # Must call Input.update again to avoid extra triggers
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * When [**]
   #-----------------------------------------------------------------------------
@@ -227,6 +233,7 @@ class Interpreter
     end
     return command_skip
   end
+
   #-----------------------------------------------------------------------------
   # * When Cancel
   #-----------------------------------------------------------------------------
@@ -237,6 +244,7 @@ class Interpreter
     end
     return command_skip
   end
+
   #-----------------------------------------------------------------------------
   # * Input Number
   #-----------------------------------------------------------------------------
@@ -251,15 +259,17 @@ class Interpreter
     @message_waiting = false
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Text Options
   #-----------------------------------------------------------------------------
   def command_104
     return false if $game_temp.message_window_showing
     $game_system.message_position = @parameters[0]
-    $game_system.message_frame    = @parameters[1]
+    $game_system.message_frame = @parameters[1]
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Button Input Processing
   #-----------------------------------------------------------------------------
@@ -297,6 +307,7 @@ class Interpreter
     @index += 1
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Wait
   #-----------------------------------------------------------------------------
@@ -304,20 +315,21 @@ class Interpreter
     @wait_count = @parameters[0] * Graphics.frame_rate / 20
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Conditional Branch
   #-----------------------------------------------------------------------------
   def command_111
     result = false
     case @parameters[0]
-    when 0   # switch
+    when 0 # switch
       switch_name = $data_system.switches[@parameters[1]]
       if switch_name && switch_name[/^s\:/]
         result = (eval($~.post_match) == (@parameters[2] == 0))
       else
         result = ($game_switches[@parameters[1]] == (@parameters[2] == 0))
       end
-    when 1   # variable
+    when 1 # variable
       value1 = $game_variables[@parameters[1]]
       value2 = (@parameters[2] == 0) ? @parameters[3] : $game_variables[@parameters[3]]
       case @parameters[4]
@@ -328,27 +340,27 @@ class Interpreter
       when 4 then result = (value1 < value2)
       when 5 then result = (value1 != value2)
       end
-    when 2   # self switch
+    when 2 # self switch
       if @event_id > 0
         key = [$game_map.map_id, @event_id, @parameters[1]]
         result = ($game_self_switches[key] == (@parameters[2] == 0))
       end
-    when 3   # timer
+    when 3 # timer
       if $game_system.timer_working
         sec = $game_system.timer / Graphics.frame_rate
         result = (@parameters[2] == 0) ? (sec >= @parameters[1]) : (sec <= @parameters[1])
       end
-#    when 4, 5   # actor, enemy
-    when 6   # character
+      #    when 4, 5   # actor, enemy
+    when 6 # character
       character = get_character(@parameters[1])
       result = (character.direction == @parameters[2]) if character
-    when 7   # gold
+    when 7 # gold
       gold = $Trainer.money
       result = (@parameters[2] == 0) ? (gold >= @parameters[1]) : (gold <= @parameters[1])
-#    when 8, 9, 10   # item, weapon, armor
-    when 11   # button
+      #    when 8, 9, 10   # item, weapon, armor
+    when 11 # button
       result = Input.press?(@parameters[1])
-    when 12   # script
+    when 12 # script
       result = execute_script(@parameters[1])
     end
     # Store result in hash
@@ -359,22 +371,25 @@ class Interpreter
     end
     return command_skip
   end
+
   #-----------------------------------------------------------------------------
   # * Else
   #-----------------------------------------------------------------------------
   def command_411
-    if @branch[@list[@index].indent] == false   # Could be nil, so intentionally checks for false
+    if @branch[@list[@index].indent] == false # Could be nil, so intentionally checks for false
       @branch.delete(@list[@index].indent)
       return true
     end
     return command_skip
   end
+
   #-----------------------------------------------------------------------------
   # * Loop
   #-----------------------------------------------------------------------------
   def command_112
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Repeat Above
   #-----------------------------------------------------------------------------
@@ -385,6 +400,7 @@ class Interpreter
       return true if @list[@index].indent == indent
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Break Loop
   #-----------------------------------------------------------------------------
@@ -401,6 +417,7 @@ class Interpreter
       end
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Exit Event Processing
   #-----------------------------------------------------------------------------
@@ -408,6 +425,7 @@ class Interpreter
     command_end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Erase Event
   #-----------------------------------------------------------------------------
@@ -419,6 +437,7 @@ class Interpreter
     @index += 1
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Call Common Event
   #-----------------------------------------------------------------------------
@@ -430,12 +449,14 @@ class Interpreter
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Label
   #-----------------------------------------------------------------------------
   def command_118
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Jump to Label
   #-----------------------------------------------------------------------------
@@ -454,6 +475,7 @@ class Interpreter
       temp_index += 1
     end
   end
+
   #-----------------------------------------------------------------------------
   # * Control Switches
   #-----------------------------------------------------------------------------
@@ -468,20 +490,21 @@ class Interpreter
     $game_map.need_refresh = true if should_refresh
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Control Variables
   #-----------------------------------------------------------------------------
   def command_122
     value = 0
     case @parameters[3]
-    when 0   # invariable (fixed value)
+    when 0 # invariable (fixed value)
       value = @parameters[4]
-    when 1   # variable
+    when 1 # variable
       value = $game_variables[@parameters[4]]
-    when 2   # random number
+    when 2 # random number
       value = @parameters[4] + rand(@parameters[5] - @parameters[4] + 1)
-#    when 3, 4, 5   # item, actor, enemy
-    when 6   # character
+      #    when 3, 4, 5   # item, actor, enemy
+    when 6 # character
       character = get_character(@parameters[4])
       if character
         case @parameters[5]
@@ -493,12 +516,12 @@ class Interpreter
         when 5 then value = character.terrain_tag.id_number   # terrain tag
         end
       end
-    when 7   # other
+    when 7 # other
       case @parameters[4]
       when 0 then value = $game_map.map_id                             # map ID
       when 1 then value = $Trainer.pokemon_party.length                # party members
       when 2 then value = $Trainer.money                               # gold
-#      when 3   # steps
+        #      when 3   # steps
       when 4 then value = Graphics.frame_count / Graphics.frame_rate   # play time
       when 5 then value = $game_system.timer / Graphics.frame_rate     # timer
       when 6 then value = $game_system.save_count                      # save count
@@ -507,22 +530,22 @@ class Interpreter
     # Apply value and operation to all specified game variables
     for i in @parameters[0]..@parameters[1]
       case @parameters[2]
-      when 0   # set
+      when 0 # set
         next if $game_variables[i] == value
         $game_variables[i] = value
-      when 1   # add
+      when 1 # add
         next if $game_variables[i] >= 99999999
         $game_variables[i] += value
-      when 2   # subtract
+      when 2 # subtract
         next if $game_variables[i] <= -99999999
         $game_variables[i] -= value
-      when 3   # multiply
+      when 3 # multiply
         next if value == 1
         $game_variables[i] *= value
-      when 4   # divide
+      when 4 # divide
         next if value == 1 || value == 0
         $game_variables[i] /= value
-      when 5   # remainder
+      when 5 # remainder
         next if value == 1 || value == 0
         $game_variables[i] %= value
       end
@@ -532,6 +555,7 @@ class Interpreter
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Control Self Switch
   #-----------------------------------------------------------------------------
@@ -546,6 +570,7 @@ class Interpreter
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Control Timer
   #-----------------------------------------------------------------------------
@@ -554,6 +579,7 @@ class Interpreter
     $game_system.timer = @parameters[1] * Graphics.frame_rate if @parameters[0] == 0
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Gold
   #-----------------------------------------------------------------------------
@@ -580,6 +606,7 @@ class Interpreter
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Battle BGM
   #-----------------------------------------------------------------------------
@@ -587,6 +614,7 @@ class Interpreter
     ($PokemonGlobal.nextBattleBGM = @parameters[0]) ? @parameters[0].clone : nil
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Battle End ME
   #-----------------------------------------------------------------------------
@@ -594,6 +622,7 @@ class Interpreter
     ($PokemonGlobal.nextBattleME = @parameters[0]) ? @parameters[0].clone : nil
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Save Access
   #-----------------------------------------------------------------------------
@@ -601,6 +630,7 @@ class Interpreter
     $game_system.save_disabled = (@parameters[0] == 0)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Menu Access
   #-----------------------------------------------------------------------------
@@ -608,6 +638,7 @@ class Interpreter
     $game_system.menu_disabled = (@parameters[0] == 0)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Encounter
   #-----------------------------------------------------------------------------
@@ -616,6 +647,7 @@ class Interpreter
     $game_player.make_encounter_count
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Transfer Player
   #-----------------------------------------------------------------------------
@@ -626,15 +658,15 @@ class Interpreter
                     $game_temp.transition_processing
     # Set up the transfer and the player's new coordinates
     $game_temp.player_transferring = true
-    if @parameters[0] == 0   # Direct appointment
-      $game_temp.player_new_map_id    = @parameters[1]
-      $game_temp.player_new_x         = @parameters[2]
-      $game_temp.player_new_y         = @parameters[3]
+    if @parameters[0] == 0 # Direct appointment
+      $game_temp.player_new_map_id = @parameters[1]
+      $game_temp.player_new_x = @parameters[2]
+      $game_temp.player_new_y = @parameters[3]
       $game_temp.player_new_direction = @parameters[4]
-    else   # Appoint with variables
-      $game_temp.player_new_map_id    = $game_variables[@parameters[1]]
-      $game_temp.player_new_x         = $game_variables[@parameters[2]]
-      $game_temp.player_new_y         = $game_variables[@parameters[3]]
+    else # Appoint with variables
+      $game_temp.player_new_map_id = $game_variables[@parameters[1]]
+      $game_temp.player_new_x = $game_variables[@parameters[2]]
+      $game_temp.player_new_y = $game_variables[@parameters[3]]
       $game_temp.player_new_direction = @parameters[4]
     end
     @index += 1
@@ -642,10 +674,11 @@ class Interpreter
     if @parameters[5] == 0
       Graphics.freeze
       $game_temp.transition_processing = true
-      $game_temp.transition_name       = ""
+      $game_temp.transition_name = ""
     end
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Set Event Location
   #-----------------------------------------------------------------------------
@@ -654,11 +687,11 @@ class Interpreter
     character = get_character(@parameters[0])
     return true if character.nil?
     # Move the character
-    if @parameters[1] == 0   # Direct appointment
+    if @parameters[1] == 0 # Direct appointment
       character.moveto(@parameters[2], @parameters[3])
-    elsif @parameters[1] == 1   # Appoint with variables
+    elsif @parameters[1] == 1 # Appoint with variables
       character.moveto($game_variables[@parameters[2]], $game_variables[@parameters[3]])
-    else   # Exchange with another event
+    else # Exchange with another event
       character2 = get_character(@parameters[2])
       if character2
         old_x = character.x
@@ -676,6 +709,7 @@ class Interpreter
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Scroll Map
   #-----------------------------------------------------------------------------
@@ -685,28 +719,30 @@ class Interpreter
     $game_map.start_scroll(@parameters[0], @parameters[1], @parameters[2])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Map Settings
   #-----------------------------------------------------------------------------
   def command_204
     case @parameters[0]
-    when 0   # panorama
+    when 0 # panorama
       $game_map.panorama_name = @parameters[1]
-      $game_map.panorama_hue  = @parameters[2]
-    when 1   # fog
-      $game_map.fog_name       = @parameters[1]
-      $game_map.fog_hue        = @parameters[2]
-      $game_map.fog_opacity    = @parameters[3]
+      $game_map.panorama_hue = @parameters[2]
+    when 1 # fog
+      $game_map.fog_name = @parameters[1]
+      $game_map.fog_hue = @parameters[2]
+      $game_map.fog_opacity = @parameters[3]
       $game_map.fog_blend_type = @parameters[4]
-      $game_map.fog_zoom       = @parameters[5]
-      $game_map.fog_sx         = @parameters[6]
-      $game_map.fog_sy         = @parameters[7]
-    when 2   # battleback
-      $game_map.battleback_name  = @parameters[1]
+      $game_map.fog_zoom = @parameters[5]
+      $game_map.fog_sx = @parameters[6]
+      $game_map.fog_sy = @parameters[7]
+    when 2 # battleback
+      $game_map.battleback_name = @parameters[1]
       $game_temp.battleback_name = @parameters[1]
     end
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Fog Color Tone
   #-----------------------------------------------------------------------------
@@ -714,6 +750,7 @@ class Interpreter
     $game_map.start_fog_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Fog Opacity
   #-----------------------------------------------------------------------------
@@ -721,6 +758,7 @@ class Interpreter
     $game_map.start_fog_opacity_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Show Animation
   #-----------------------------------------------------------------------------
@@ -730,6 +768,7 @@ class Interpreter
     character.animation_id = @parameters[1]
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Transparent Flag
   #-----------------------------------------------------------------------------
@@ -737,6 +776,7 @@ class Interpreter
     $game_player.transparent = (@parameters[0] == 0)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Set Move Route
   #-----------------------------------------------------------------------------
@@ -746,6 +786,7 @@ class Interpreter
     character.force_move_route(@parameters[1])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Wait for Move's Completion
   #-----------------------------------------------------------------------------
@@ -753,6 +794,7 @@ class Interpreter
     @move_route_waiting = true if !$game_temp.in_battle
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Prepare for Transition
   #-----------------------------------------------------------------------------
@@ -761,16 +803,18 @@ class Interpreter
     Graphics.freeze
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Execute Transition
   #-----------------------------------------------------------------------------
   def command_222
     return false if $game_temp.transition_processing
     $game_temp.transition_processing = true
-    $game_temp.transition_name       = @parameters[0]
+    $game_temp.transition_name = @parameters[0]
     @index += 1
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Change Screen Color Tone
   #-----------------------------------------------------------------------------
@@ -778,6 +822,7 @@ class Interpreter
     $game_screen.start_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Screen Flash
   #-----------------------------------------------------------------------------
@@ -785,6 +830,7 @@ class Interpreter
     $game_screen.start_flash(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Screen Shake
   #-----------------------------------------------------------------------------
@@ -792,38 +838,41 @@ class Interpreter
     $game_screen.start_shake(@parameters[0], @parameters[1], @parameters[2] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Show Picture
   #-----------------------------------------------------------------------------
   def command_231
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    if @parameters[3] == 0   # Direct appointment
+    if @parameters[3] == 0 # Direct appointment
       x = @parameters[4]
       y = @parameters[5]
-    else   # Appoint with variables
+    else # Appoint with variables
       x = $game_variables[@parameters[4]]
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].show(@parameters[1], @parameters[2],
-       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Move Picture
   #-----------------------------------------------------------------------------
   def command_232
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    if @parameters[3] == 0   # Direct appointment
+    if @parameters[3] == 0 # Direct appointment
       x = @parameters[4]
       y = @parameters[5]
-    else   # Appoint with variables
+    else # Appoint with variables
       x = $game_variables[@parameters[4]]
       y = $game_variables[@parameters[5]]
     end
     $game_screen.pictures[number].move(@parameters[1] * Graphics.frame_rate / 20,
-       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+                                       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Rotate Picture
   #-----------------------------------------------------------------------------
@@ -832,15 +881,17 @@ class Interpreter
     $game_screen.pictures[number].rotate(@parameters[1])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Change Picture Color Tone
   #-----------------------------------------------------------------------------
   def command_234
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
     $game_screen.pictures[number].start_tone_change(@parameters[1],
-       @parameters[2] * Graphics.frame_rate / 20)
+                                                    @parameters[2] * Graphics.frame_rate / 20)
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Erase Picture
   #-----------------------------------------------------------------------------
@@ -849,6 +900,7 @@ class Interpreter
     $game_screen.pictures[number].erase
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Set Weather Effects
   #-----------------------------------------------------------------------------
@@ -856,6 +908,7 @@ class Interpreter
     $game_screen.weather(@parameters[0], @parameters[1], @parameters[2])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Play BGM
   #-----------------------------------------------------------------------------
@@ -863,6 +916,7 @@ class Interpreter
     pbBGMPlay(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Fade Out BGM
   #-----------------------------------------------------------------------------
@@ -870,6 +924,7 @@ class Interpreter
     pbBGMFade(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Play BGS
   #-----------------------------------------------------------------------------
@@ -877,6 +932,7 @@ class Interpreter
     pbBGSPlay(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Fade Out BGS
   #-----------------------------------------------------------------------------
@@ -884,6 +940,7 @@ class Interpreter
     pbBGSFade(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Memorize BGM/BGS
   #-----------------------------------------------------------------------------
@@ -892,6 +949,7 @@ class Interpreter
     $game_system.bgs_memorize
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Restore BGM/BGS
   #-----------------------------------------------------------------------------
@@ -900,6 +958,7 @@ class Interpreter
     $game_system.bgs_restore
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Play ME
   #-----------------------------------------------------------------------------
@@ -907,6 +966,7 @@ class Interpreter
     pbMEPlay(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Play SE
   #-----------------------------------------------------------------------------
@@ -914,6 +974,7 @@ class Interpreter
     pbSEPlay(@parameters[0])
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Stop SE
   #-----------------------------------------------------------------------------
@@ -941,8 +1002,9 @@ class Interpreter
         sscene = PokemonEntryScene.new
         sscreen = PokemonEntry.new(sscene)
         $game_actors[@parameters[0]].name = sscreen.pbStartScreen(
-           _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
-           1, @parameters[1], $game_actors[@parameters[0]].name)
+          _INTL("Enter {1}'s name.", $game_actors[@parameters[0]].name),
+          1, @parameters[1], $game_actors[@parameters[0]].name
+        )
       }
     end
     return true
@@ -985,6 +1047,7 @@ class Interpreter
     @index += 1
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Call Save Screen
   #-----------------------------------------------------------------------------
@@ -994,6 +1057,7 @@ class Interpreter
     screen.pbSaveScreen
     return true
   end
+
   #-----------------------------------------------------------------------------
   # * Game Over
   #-----------------------------------------------------------------------------
@@ -1002,6 +1066,7 @@ class Interpreter
     pbBGSFade(1.0)
     pbFadeOutIn { pbStartOver(true) }
   end
+
   #-----------------------------------------------------------------------------
   # * Return to Title Screen
   #-----------------------------------------------------------------------------
@@ -1009,6 +1074,7 @@ class Interpreter
     $game_temp.to_title = true
     return false
   end
+
   #-----------------------------------------------------------------------------
   # * Script
   #-----------------------------------------------------------------------------
@@ -1017,7 +1083,7 @@ class Interpreter
     # Look for more script commands or a continuation of one, and add them to script
     loop do
       break if ![355, 655].include?(@list[@index + 1].code)
-      script += @list[@index+1].parameters[0] + "\n"
+      script += @list[@index + 1].parameters[0] + "\n"
       @index += 1
     end
     # Run the script

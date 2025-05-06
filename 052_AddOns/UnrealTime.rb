@@ -95,7 +95,7 @@ module UnrealTime
   EXTRA_DAYS = -1
 
   WEEK_DAY_VARIABLE = 280
-  WEEK_DAYS = [:MONDAY,:TUESDAY,:WEDNESDAY,:THURSDAY,:FRIDAY,:SATURDAY,:SUNDAY]
+  WEEK_DAYS = [:MONDAY, :TUESDAY, :WEDNESDAY, :THURSDAY, :FRIDAY, :SATURDAY, :SUNDAY]
 
   # Initial date. In sequence: Year, month, day, hour and minutes.
   # Method UnrealTime.reset resets time back to this time.
@@ -140,7 +140,7 @@ module UnrealTime
     add_seconds(60 * 60 * 24 * days)
   end
 
-  NEED_32_BIT_FIX = [''].pack('p').size <= 4
+  NEED_32_BIT_FIX = [""].pack("p").size <= 4
 end
 
 # Essentials V18 and lower compatibility
@@ -155,9 +155,8 @@ module PBDayNight
         @cachedTone = Tone.new(0, 0, 0) if !@cachedTone
         return @cachedTone if !Settings::TIME_SHADING
         toneNeedUpdate = (!@dayNightToneLastUpdate ||
-          Graphics.frame_count - @dayNightToneLastUpdate >=
-            Graphics.frame_rate * UnrealTime::TONE_CHECK_INTERVAL
-        )
+                          Graphics.frame_count - @dayNightToneLastUpdate >=
+                            Graphics.frame_rate * UnrealTime::TONE_CHECK_INTERVAL)
         if toneNeedUpdate
           getToneInternal
           @dayNightToneLastUpdate = Graphics.frame_count
@@ -245,7 +244,7 @@ if UnrealTime::ENABLED
 
     def addNewFrameCount
       return if (UnrealTime::SWITCH_STOPS > 0 &&
-        $game_switches[UnrealTime::SWITCH_STOPS])
+                 $game_switches[UnrealTime::SWITCH_STOPS])
       self.newFrameCount += 1
     end
 

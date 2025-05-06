@@ -2,7 +2,7 @@
 
 SaveData.register_conversion(:v19_define_versions) do
   essentials_version 19
-  display_title 'Adding game version and Essentials version to save data'
+  display_title "Adding game version and Essentials version to save data"
   to_all do |save_data|
     unless save_data.has_key?(:essentials_version)
       save_data[:essentials_version] = Essentials::VERSION
@@ -15,27 +15,27 @@ end
 
 SaveData.register_conversion(:v19_convert_PokemonSystem) do
   essentials_version 19
-  display_title 'Updating PokemonSystem class'
+  display_title "Updating PokemonSystem class"
   to_all do |save_data|
     new_system = PokemonSystem.new
-    new_system.textspeed   = save_data[:pokemon_system].textspeed || new_system.textspeed
+    new_system.textspeed = save_data[:pokemon_system].textspeed || new_system.textspeed
     new_system.battlescene = save_data[:pokemon_system].battlescene || new_system.battlescene
     new_system.battlestyle = save_data[:pokemon_system].battlestyle || new_system.battlestyle
-    new_system.frame       = save_data[:pokemon_system].frame || new_system.frame
-    new_system.textskin    = save_data[:pokemon_system].textskin || new_system.textskin
-    new_system.screensize  = save_data[:pokemon_system].screensize || new_system.screensize
-    new_system.language    = save_data[:pokemon_system].language || new_system.language
-    new_system.runstyle    = save_data[:pokemon_system].runstyle || new_system.runstyle
-    new_system.bgmvolume   = save_data[:pokemon_system].bgmvolume || new_system.bgmvolume
-    new_system.sevolume    = save_data[:pokemon_system].sevolume || new_system.sevolume
-    new_system.textinput   = save_data[:pokemon_system].textinput || new_system.textinput
+    new_system.frame = save_data[:pokemon_system].frame || new_system.frame
+    new_system.textskin = save_data[:pokemon_system].textskin || new_system.textskin
+    new_system.screensize = save_data[:pokemon_system].screensize || new_system.screensize
+    new_system.language = save_data[:pokemon_system].language || new_system.language
+    new_system.runstyle = save_data[:pokemon_system].runstyle || new_system.runstyle
+    new_system.bgmvolume = save_data[:pokemon_system].bgmvolume || new_system.bgmvolume
+    new_system.sevolume = save_data[:pokemon_system].sevolume || new_system.sevolume
+    new_system.textinput = save_data[:pokemon_system].textinput || new_system.textinput
     save_data[:pokemon_system] = new_system
   end
 end
 
 SaveData.register_conversion(:v19_convert_player) do
   essentials_version 19
-  display_title 'Converting player trainer class'
+  display_title "Converting player trainer class"
   to_all do |save_data|
     next if save_data[:player].is_a?(Player)
     # Conversion of the party is handled in PokeBattle_Trainer.convert
@@ -45,7 +45,7 @@ end
 
 SaveData.register_conversion(:v19_move_global_data_to_player) do
   essentials_version 19
-  display_title 'Moving some global metadata data to player'
+  display_title "Moving some global metadata data to player"
   to_all do |save_data|
     global = save_data[:global_metadata]
     player = save_data[:player]
@@ -75,7 +75,7 @@ end
 
 SaveData.register_conversion(:v19_convert_global_metadata) do
   essentials_version 19
-  display_title 'Adding encounter version variable to global metadata'
+  display_title "Adding encounter version variable to global metadata"
   to_value :global_metadata do |global|
     global.bridge ||= 0
     global.encounter_version ||= 0
@@ -138,7 +138,7 @@ end
 
 SaveData.register_conversion(:v19_1_fix_phone_contacts) do
   essentials_version 19.1
-  display_title 'Fixing phone contacts data'
+  display_title "Fixing phone contacts data"
   to_value :global_metadata do |global|
     global.phoneNumbers.each do |contact|
       contact[1] = GameData::TrainerType.get(contact[1]).id if contact && contact.length == 8
@@ -148,7 +148,7 @@ end
 
 SaveData.register_conversion(:v19_convert_bag) do
   essentials_version 19
-  display_title 'Converting item IDs in Bag'
+  display_title "Converting item IDs in Bag"
   to_value :bag do |bag|
     bag.instance_eval do
       for pocket in self.pockets
@@ -184,7 +184,7 @@ end
 
 SaveData.register_conversion(:v19_convert_game_variables) do
   essentials_version 19
-  display_title 'Converting classes of things in Game Variables'
+  display_title "Converting classes of things in Game Variables"
   to_all do |save_data|
     variables = save_data[:variables]
     for i in 0..5000
@@ -207,7 +207,7 @@ end
 
 SaveData.register_conversion(:v19_convert_storage) do
   essentials_version 19
-  display_title 'Converting classes of Pokémon in storage'
+  display_title "Converting classes of Pokémon in storage"
   to_value :storage_system do |storage|
     storage.instance_eval do
       for box in 0...self.maxBoxes
@@ -222,7 +222,7 @@ end
 
 SaveData.register_conversion(:v19_convert_game_player) do
   essentials_version 19
-  display_title 'Converting game player character'
+  display_title "Converting game player character"
   to_value :game_player do |game_player|
     game_player.width = 1
     game_player.height = 1
@@ -235,7 +235,7 @@ end
 
 SaveData.register_conversion(:v19_convert_game_screen) do
   essentials_version 19
-  display_title 'Converting game screen'
+  display_title "Converting game screen"
   to_value :game_screen do |game_screen|
     game_screen.weather(game_screen.weather_type, game_screen.weather_max, 0)
   end

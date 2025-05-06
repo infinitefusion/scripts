@@ -41,16 +41,16 @@ end
 # HP/Status options
 #===============================================================================
 PokemonDebugMenuCommands.register("hpstatusmenu", {
-  "parent"      => "main",
-  "name"        => _INTL("HP/Status..."),
-  "always_show" => true
+  "parent" => "main",
+  "name" => _INTL("HP/Status..."),
+  "always_show" => true,
 })
 
 PokemonDebugMenuCommands.register("sethp", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Set HP"),
+  "parent" => "hpstatusmenu",
+  "name" => _INTL("Set HP"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
@@ -58,21 +58,22 @@ PokemonDebugMenuCommands.register("sethp", {
       params.setRange(0, pkmn.totalhp)
       params.setDefaultValue(pkmn.hp)
       newhp = pbMessageChooseNumber(
-         _INTL("Set {1}'s HP (max. {2}).", pkmn.name, pkmn.totalhp), params) { screen.pbUpdate }
+        _INTL("Set {1}'s HP (max. {2}).", pkmn.name, pkmn.totalhp), params
+      ) { screen.pbUpdate }
       if newhp != pkmn.hp
         pkmn.hp = newhp
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setstatus", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Set status"),
+  "parent" => "hpstatusmenu",
+  "name" => _INTL("Set status"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     elsif pkmn.hp <= 0
@@ -90,11 +91,11 @@ PokemonDebugMenuCommands.register("setstatus", {
         cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), commands, cmd)
         break if cmd < 0
         case cmd
-        when 0   # Cure
+        when 0 # Cure
           pkmn.heal_status
           screen.pbDisplay(_INTL("{1}'s status was cured.", pkmn.name))
           screen.pbRefreshSingle(pkmnid)
-        else   # Give status problem
+        else # Give status problem
           count = 0
           cancel = false
           if ids[cmd] == :SLEEP
@@ -102,11 +103,12 @@ PokemonDebugMenuCommands.register("setstatus", {
             params.setRange(0, 9)
             params.setDefaultValue(3)
             count = pbMessageChooseNumber(
-               _INTL("Set the Pokémon's sleep count."), params) { screen.pbUpdate }
+              _INTL("Set the Pokémon's sleep count."), params
+            ) { screen.pbUpdate }
             cancel = true if count <= 0
           end
           if !cancel
-            pkmn.status      = ids[cmd]
+            pkmn.status = ids[cmd]
             pkmn.statusCount = count
             screen.pbRefreshSingle(pkmnid)
           end
@@ -114,14 +116,14 @@ PokemonDebugMenuCommands.register("setstatus", {
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("fullheal", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Fully heal"),
+  "parent" => "hpstatusmenu",
+  "name" => _INTL("Fully heal"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
@@ -130,14 +132,14 @@ PokemonDebugMenuCommands.register("fullheal", {
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("makefainted", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Make fainted"),
+  "parent" => "hpstatusmenu",
+  "name" => _INTL("Make fainted"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
@@ -145,14 +147,14 @@ PokemonDebugMenuCommands.register("makefainted", {
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setpokerus", {
-  "parent"      => "hpstatusmenu",
-  "name"        => _INTL("Set Pokérus"),
+  "parent" => "hpstatusmenu",
+  "name" => _INTL("Set Pokérus"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       pokerus = (pkmn.pokerus) ? pkmn.pokerus : 0
@@ -160,60 +162,61 @@ PokemonDebugMenuCommands.register("setpokerus", {
              _INTL("Has strain {1}, infectious for {2} more days.", pokerus / 16, pokerus % 16),
              _INTL("Has strain {1}, not infectious.", pokerus / 16)][pkmn.pokerusStage]
       cmd = screen.pbShowCommands(msg, [
-         _INTL("Give random strain"),
-         _INTL("Make not infectious"),
-         _INTL("Clear Pokérus")], cmd)
+        _INTL("Give random strain"),
+        _INTL("Make not infectious"),
+        _INTL("Clear Pokérus"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Give random strain
+      when 0 # Give random strain
         pkmn.givePokerus
         screen.pbRefreshSingle(pkmnid)
-      when 1   # Make not infectious
+      when 1 # Make not infectious
         if pokerus > 0
           strain = pokerus / 16
           p = strain << 4
           pkmn.pokerus = p
           screen.pbRefreshSingle(pkmnid)
         end
-      when 2   # Clear Pokérus
+      when 2 # Clear Pokérus
         pkmn.pokerus = 0
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 #===============================================================================
 # Level/stats options
 #===============================================================================
 PokemonDebugMenuCommands.register("levelstats", {
-  "parent"      => "main",
-  "name"        => _INTL("Level/stats..."),
-  "always_show" => true
+  "parent" => "main",
+  "name" => _INTL("Level/stats..."),
+  "always_show" => true,
 })
 
 PokemonDebugMenuCommands.register("setlevel", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set level"),
+  "parent" => "levelstats",
+  "name" => _INTL("Set level"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
       screen.pbRefreshSingle(pkmnid)
 
-      if $PokemonSystem.level_caps==1
-        choice= pbMessage(_INTL("Set to which level?"),[_INTL("Set to level cap"), _INTL("Set to specific level"), _INTL("Cancel")],2)
-        if choice==0
+      if $PokemonSystem.level_caps == 1
+        choice = pbMessage(_INTL("Set to which level?"), [_INTL("Set to level cap"), _INTL("Set to specific level"), _INTL("Cancel")], 2)
+        if choice == 0
           level = getCurrentLevelCap()
         elsif choice == 1
-          level = promptSetLevelToNumber(pkmn,screen)
+          level = promptSetLevelToNumber(pkmn, screen)
         else
-            return
+          return
         end
       else
-        level = promptSetLevelToNumber(pkmn,screen)
+        level = promptSetLevelToNumber(pkmn, screen)
       end
       if level && level != pkmn.level
         pkmn.level = level
@@ -223,23 +226,24 @@ PokemonDebugMenuCommands.register("setlevel", {
       end
     end
     next false
-  }
+  },
 })
 
-def promptSetLevelToNumber(pkmn,screen)
+def promptSetLevelToNumber(pkmn, screen)
   params = ChooseNumberParams.new
   params.setRange(1, GameData::GrowthRate.max_level)
   params.setDefaultValue(pkmn.level)
   level = pbMessageChooseNumber(
-    _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params) { screen.pbUpdate }
+    _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params
+  ) { screen.pbUpdate }
   return level
 end
 
 PokemonDebugMenuCommands.register("setexp", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set Exp"),
+  "parent" => "levelstats",
+  "name" => _INTL("Set Exp"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
@@ -252,7 +256,8 @@ PokemonDebugMenuCommands.register("setexp", {
         params.setRange(minxp, maxxp - 1)
         params.setDefaultValue(pkmn.exp)
         newexp = pbMessageChooseNumber(
-           _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params) { screen.pbUpdate }
+          _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params
+        ) { screen.pbUpdate }
         if newexp != pkmn.exp
           pkmn.exp = newexp
           pkmn.calc_stats
@@ -261,24 +266,25 @@ PokemonDebugMenuCommands.register("setexp", {
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("hiddenvalues", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("EV/IV/pID..."),
+  "parent" => "levelstats",
+  "name" => _INTL("EV/IV/pID..."),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
       cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid), [
-           _INTL("Set EVs"),
-           _INTL("Set IVs"),
-           _INTL("Randomise pID")], cmd)
+        _INTL("Set EVs"),
+        _INTL("Set IVs"),
+        _INTL("Randomise pID"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Set EVs
+      when 0 # Set EVs
         cmd2 = 0
         loop do
           totalev = 0
@@ -292,8 +298,8 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           evcommands.push(_INTL("Randomise all"))
           evcommands.push(_INTL("Max randomise all"))
           cmd2 = screen.pbShowCommands(_INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
-                                      totalev, Pokemon::EV_LIMIT,
-                                      100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
+                                             totalev, Pokemon::EV_LIMIT,
+                                             100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
           break if cmd2 < 0
           if cmd2 < ev_id.length
             params = ChooseNumberParams.new
@@ -306,15 +312,15 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(thisValue)
             params.setCancelValue(thisValue)
             f = pbMessageChooseNumber(_INTL("Set the EV for {1} (max. {2}).",
-               GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
+                                            GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
               pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
-          else   # (Max) Randomise all
+          else # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
-            if cmd2 == evcommands.length - 2   # Randomize all (not max)
+            if cmd2 == evcommands.length - 2 # Randomize all (not max)
               evTotalTarget = rand(Pokemon::EV_LIMIT)
             end
             GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
@@ -332,7 +338,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             screen.pbRefreshSingle(pkmnid)
           end
         end
-      when 1   # Set IVs
+      when 1 # Set IVs
         cmd2 = 0
         loop do
           hiddenpower = pbHiddenPower(pkmn)
@@ -345,8 +351,8 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             totaliv += pkmn.iv[s.id]
           end
           msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
-             GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
-             iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
+                      GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
+                      iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
           cmd2 = screen.pbShowCommands(msg, ivcommands, cmd2)
           break if cmd2 < 0
@@ -356,188 +362,195 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
             params.setDefaultValue(pkmn.iv[iv_id[cmd2]])
             params.setCancelValue(pkmn.iv[iv_id[cmd2]])
             f = pbMessageChooseNumber(_INTL("Set the IV for {1} (max. 31).",
-               GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
+                                            GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
               pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
-          else   # Randomise all
+          else # Randomise all
             GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
             pkmn.calc_stats
             screen.pbRefreshSingle(pkmnid)
           end
         end
-      when 2   # Randomise pID
+      when 2 # Randomise pID
         pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
         pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("sethappiness", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Set happiness"),
+  "parent" => "levelstats",
+  "name" => _INTL("Set happiness"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.happiness)
     h = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's happiness (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's happiness (max. 255)."), params
+    ) { screen.pbUpdate }
     if h != pkmn.happiness
       pkmn.happiness = h
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("conteststats", {
-  "parent"      => "levelstats",
-  "name"        => _INTL("Contest stats..."),
-  "always_show" => true
+  "parent" => "levelstats",
+  "name" => _INTL("Contest stats..."),
+  "always_show" => true,
 })
 
 PokemonDebugMenuCommands.register("setbeauty", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Beauty"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Beauty"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.beauty)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Beauty (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Beauty (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.beauty
       pkmn.beauty = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setcool", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Cool"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Cool"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.cool)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Cool (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Cool (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.cool
       pkmn.cool = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setcute", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Cute"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Cute"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.cute)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Cute (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Cute (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.cute
       pkmn.cute = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setsmart", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Smart"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Smart"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.smart)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Smart (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Smart (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.smart
       pkmn.smart = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("settough", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Tough"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Tough"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.tough)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Tough (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Tough (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.tough
       pkmn.tough = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setsheen", {
-  "parent"      => "conteststats",
-  "name"        => _INTL("Set Sheen"),
+  "parent" => "conteststats",
+  "name" => _INTL("Set Sheen"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     params = ChooseNumberParams.new
     params.setRange(0, 255)
     params.setDefaultValue(pkmn.sheen)
     newval = pbMessageChooseNumber(
-       _INTL("Set the Pokémon's Sheen (max. 255)."), params) { screen.pbUpdate }
+      _INTL("Set the Pokémon's Sheen (max. 255)."), params
+    ) { screen.pbUpdate }
     if newval != pkmn.sheen
       pkmn.sheen = newval
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 #===============================================================================
 # Moves options
 #===============================================================================
 PokemonDebugMenuCommands.register("moves", {
-  "parent"      => "main",
-  "name"        => _INTL("Moves..."),
-  "always_show" => true
+  "parent" => "main",
+  "name" => _INTL("Moves..."),
+  "always_show" => true,
 })
 
 PokemonDebugMenuCommands.register("teachmove", {
-  "parent"      => "moves",
-  "name"        => _INTL("Teach move"),
+  "parent" => "moves",
+  "name" => _INTL("Teach move"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     move = pbChooseMoveList
     if move
       pbLearnMove(pkmn, move)
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("forgetmove", {
-  "parent"      => "moves",
-  "name"        => _INTL("Forget move"),
+  "parent" => "moves",
+  "name" => _INTL("Forget move"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     moveindex = screen.pbChooseMove(pkmn, _INTL("Choose move to forget."))
     if moveindex >= 0
       movename = pkmn.moves[moveindex].name
@@ -546,26 +559,26 @@ PokemonDebugMenuCommands.register("forgetmove", {
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("resetmoves", {
-  "parent"      => "moves",
-  "name"        => _INTL("Reset moves"),
+  "parent" => "moves",
+  "name" => _INTL("Reset moves"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pkmn.reset_moves
     screen.pbDisplay(_INTL("{1}'s moves were reset.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setmovepp", {
-  "parent"      => "moves",
-  "name"        => _INTL("Set move PP"),
+  "parent" => "moves",
+  "name" => _INTL("Set move PP"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       commands = []
@@ -580,7 +593,7 @@ PokemonDebugMenuCommands.register("setmovepp", {
       commands.push(_INTL("Restore all PP"))
       cmd = screen.pbShowCommands(_INTL("Alter PP of which move?"), commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < commands.length - 1   # Move
+      if cmd >= 0 && cmd < commands.length - 1 # Move
         move = pkmn.moves[cmd]
         movename = move.name
         if move.total_pp <= 0
@@ -590,70 +603,73 @@ PokemonDebugMenuCommands.register("setmovepp", {
           loop do
             msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)", movename, move.pp, move.total_pp, move.ppup)
             cmd2 = screen.pbShowCommands(msg, [
-               _INTL("Set PP"),
-               _INTL("Full PP"),
-               _INTL("Set PP Up")], cmd2)
+              _INTL("Set PP"),
+              _INTL("Full PP"),
+              _INTL("Set PP Up"),
+            ], cmd2)
             break if cmd2 < 0
             case cmd2
-            when 0   # Change PP
+            when 0 # Change PP
               params = ChooseNumberParams.new
               params.setRange(0, move.total_pp)
               params.setDefaultValue(move.pp)
               h = pbMessageChooseNumber(
-                 _INTL("Set PP of {1} (max. {2}).", movename, move.total_pp), params) { screen.pbUpdate }
+                _INTL("Set PP of {1} (max. {2}).", movename, move.total_pp), params
+              ) { screen.pbUpdate }
               move.pp = h
-            when 1   # Full PP
+            when 1 # Full PP
               move.pp = move.total_pp
-            when 2   # Change PP Up
+            when 2 # Change PP Up
               params = ChooseNumberParams.new
               params.setRange(0, 3)
               params.setDefaultValue(move.ppup)
               h = pbMessageChooseNumber(
-                 _INTL("Set PP Up of {1} (max. 3).", movename), params) { screen.pbUpdate }
+                _INTL("Set PP Up of {1} (max. 3).", movename), params
+              ) { screen.pbUpdate }
               move.ppup = h
               move.pp = move.total_pp if move.pp > move.total_pp
             end
           end
         end
-      elsif cmd == commands.length - 1   # Restore all PP
+      elsif cmd == commands.length - 1 # Restore all PP
         pkmn.heal_PP
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setinitialmoves", {
-  "parent"      => "moves",
-  "name"        => _INTL("Reset initial moves"),
+  "parent" => "moves",
+  "name" => _INTL("Reset initial moves"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pkmn.record_first_moves
     screen.pbDisplay(_INTL("{1}'s moves were set as its first-known moves.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
     next false
-  }
+  },
 })
 
 #===============================================================================
 # Other options
 #===============================================================================
 PokemonDebugMenuCommands.register("setitem", {
-  "parent"      => "main",
-  "name"        => _INTL("Set item"),
+  "parent" => "main",
+  "name" => _INTL("Set item"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     commands = [
       _INTL("Change item"),
-      _INTL("Remove item")
+      _INTL("Remove item"),
     ]
     loop do
       msg = (pkmn.hasItem?) ? _INTL("Item is {1}.", pkmn.item.name) : _INTL("No item.")
       cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
       case cmd
-      when 0   # Change item
+      when 0 # Change item
         item = pbChooseItemList(pkmn.item_id)
         if item && item != pkmn.item_id
           pkmn.item = item
@@ -662,7 +678,7 @@ PokemonDebugMenuCommands.register("setitem", {
           end
           screen.pbRefreshSingle(pkmnid)
         end
-      when 1   # Remove item
+      when 1 # Remove item
         if pkmn.hasItem?
           pkmn.item = nil
           pkmn.mail = nil
@@ -673,19 +689,19 @@ PokemonDebugMenuCommands.register("setitem", {
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setability", {
-  "parent"      => "main",
-  "name"        => _INTL("Set primary ability"),
+  "parent" => "main",
+  "name" => _INTL("Set primary ability"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     commands = [
       _INTL("Set possible ability"),
       _INTL("Set any ability"),
-      _INTL("Reset")
+      _INTL("Reset"),
     ]
     loop do
       if pkmn.ability
@@ -696,7 +712,7 @@ PokemonDebugMenuCommands.register("setability", {
       cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
       case cmd
-      when 0   # Set possible ability
+      when 0 # Set possible ability
         abils = pkmn.getAbilityList
         ability_commands = []
         abil_cmd = 0
@@ -709,33 +725,32 @@ PokemonDebugMenuCommands.register("setability", {
         pkmn.ability_index = abils[abil_cmd][1]
         pkmn.ability = nil
         screen.pbRefreshSingle(pkmnid)
-      when 1   # Set any ability
+      when 1 # Set any ability
         new_ability = pbChooseAbilityList(pkmn.ability_id)
         if new_ability && new_ability != pkmn.ability_id
           pkmn.ability = new_ability
           screen.pbRefreshSingle(pkmnid)
         end
-      when 2   # Reset
+      when 2 # Reset
         pkmn.ability_index = nil
         pkmn.ability = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
-
 PokemonDebugMenuCommands.register("setability2", {
-  "parent"      => "main",
-  "name"        => _INTL("Set secondary ability"),
+  "parent" => "main",
+  "name" => _INTL("Set secondary ability"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     commands = [
       _INTL("Set possible ability"),
       _INTL("Set any ability"),
-      _INTL("Reset")
+      _INTL("Reset"),
     ]
     loop do
       if pkmn.ability
@@ -746,7 +761,7 @@ PokemonDebugMenuCommands.register("setability2", {
       cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
       case cmd
-      when 0   # Set possible ability
+      when 0 # Set possible ability
         abils = pkmn.getAbilityList
         ability_commands = []
         abil_cmd = 0
@@ -759,27 +774,27 @@ PokemonDebugMenuCommands.register("setability2", {
         pkmn.ability2_index = abils[abil_cmd][1]
         pkmn.ability2 = nil
         screen.pbRefreshSingle(pkmnid)
-      when 1   # Set any ability
+      when 1 # Set any ability
         new_ability = pbChooseAbilityList(pkmn.ability2_id)
         if new_ability && new_ability != pkmn.ability2_id
           pkmn.ability2 = new_ability
           screen.pbRefreshSingle(pkmnid)
         end
-      when 2   # Reset
+      when 2 # Reset
         pkmn.ability2_index = nil
         pkmn.ability2 = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setnature", {
-  "parent"      => "main",
-  "name"        => _INTL("Set nature"),
+  "parent" => "main",
+  "name" => _INTL("Set nature"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
     ids = []
     GameData::Nature.each do |nature|
@@ -807,22 +822,22 @@ PokemonDebugMenuCommands.register("setnature", {
       msg = _INTL("Nature is {1}.", pkmn.nature.name)
       cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < commands.length - 1   # Set nature
+      if cmd >= 0 && cmd < commands.length - 1 # Set nature
         pkmn.nature = ids[cmd]
-      elsif cmd == commands.length - 1   # Reset
+      elsif cmd == commands.length - 1 # Reset
         pkmn.nature = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setgender", {
-  "parent"      => "main",
-  "name"        => _INTL("Set gender"),
+  "parent" => "main",
+  "name" => _INTL("Set gender"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.singleGendered?
       screen.pbDisplay(_INTL("{1} is single-gendered or genderless.", pkmn.speciesName))
     else
@@ -830,22 +845,23 @@ PokemonDebugMenuCommands.register("setgender", {
       loop do
         msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
         cmd = screen.pbShowCommands(msg, [
-           _INTL("Make male"),
-           _INTL("Make female"),
-           _INTL("Reset")], cmd)
+          _INTL("Make male"),
+          _INTL("Make female"),
+          _INTL("Reset"),
+        ], cmd)
         break if cmd < 0
         case cmd
-        when 0   # Make male
+        when 0 # Make male
           pkmn.makeMale
           if !pkmn.male?
             screen.pbDisplay(_INTL("{1}'s gender couldn't be changed.", pkmn.name))
           end
-        when 1   # Make female
+        when 1 # Make female
           pkmn.makeFemale
           if !pkmn.female?
             screen.pbDisplay(_INTL("{1}'s gender couldn't be changed.", pkmn.name))
           end
-        when 2   # Reset
+        when 2 # Reset
           pkmn.gender = nil
         end
         $Trainer.pokedex.register(pkmn) if !settingUpBattle
@@ -853,60 +869,60 @@ PokemonDebugMenuCommands.register("setgender", {
       end
     end
     next false
-  }
+  },
 })
-
 
 PokemonDebugMenuCommands.register("printInfo", {
-  "parent"      => "main",
-  "name"        => _INTL("Dump info"),
+  "parent" => "main",
+  "name" => _INTL("Dump info"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pkmn.print_all_attributes
     next false
-  }
+  },
 })
 PokemonDebugMenuCommands.register("speciesform", {
-  "parent"      => "main",
-  "name"        => _INTL("Species/form..."),
+  "parent" => "main",
+  "name" => _INTL("Species/form..."),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       msg = [_INTL("Species {1}, form {2}.", pkmn.speciesName, pkmn.form),
              _INTL("Species {1}, form {2} (forced).", pkmn.speciesName, pkmn.form)][(pkmn.forced_form.nil?) ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
-         _INTL("Set species"),
-         _INTL("Set fusion species")], cmd)
+        _INTL("Set species"),
+        _INTL("Set fusion species"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Set species
+      when 0 # Set species
         species = pbChooseSpeciesList(pkmn.species)
         if species && species != pkmn.species
           pkmn.species = species
           if pkmn.shiny?
-            pkmn.debug_shiny=true
+            pkmn.debug_shiny = true
           end
           pkmn.calc_stats
           $Trainer.pokedex.register(pkmn) if !settingUpBattle
           $Trainer.pokedex.set_owned(pkmn.species) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
-      when 1   # Set form
+      when 1 # Set form
         old_head_dex = get_head_number_from_symbol(pkmn.species)
         old_body_dex = get_body_number_from_symbol(pkmn.species)
-        pbMessage('Head species?')
-        head_species = pbChooseSpeciesList(old_head_dex,NB_POKEMON)
-        pbMessage('Body species?')
-        body_species = pbChooseSpeciesList(old_body_dex,NB_POKEMON)
+        pbMessage("Head species?")
+        head_species = pbChooseSpeciesList(old_head_dex, NB_POKEMON)
+        pbMessage("Body species?")
+        body_species = pbChooseSpeciesList(old_body_dex, NB_POKEMON)
 
-        fused_species_dex = getFusionSpecies(body_species.species,head_species.species)
+        fused_species_dex = getFusionSpecies(body_species.species, head_species.species)
         species = GameData::Species.get(fused_species_dex)
 
         if species && species != pkmn.species
           pkmn.species = species
           if pkmn.shiny?
-            pkmn.debug_shiny=true
+            pkmn.debug_shiny = true
           end
           pkmn.calc_stats
           $Trainer.pokedex.register(pkmn) if !settingUpBattle
@@ -941,59 +957,60 @@ PokemonDebugMenuCommands.register("speciesform", {
         #     screen.pbRefreshSingle(pkmnid)
         #   end
         # end
-      # when 2   # Remove form override
-      #   pkmn.forced_form = nil
-      #   screen.pbRefreshSingle(pkmnid)
+        # when 2   # Remove form override
+        #   pkmn.forced_form = nil
+        #   screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 #===============================================================================
 # Cosmetic options
 #===============================================================================
 PokemonDebugMenuCommands.register("cosmetic", {
-  "parent"      => "main",
-  "name"        => _INTL("Cosmetic info..."),
-  "always_show" => true
+  "parent" => "main",
+  "name" => _INTL("Cosmetic info..."),
+  "always_show" => true,
 })
 
 PokemonDebugMenuCommands.register("setshininess", {
-  "parent"      => "cosmetic",
-  "name"        => _INTL("Set shininess"),
+  "parent" => "cosmetic",
+  "name" => _INTL("Set shininess"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       msg = [_INTL("Is shiny."), _INTL("Is normal (not shiny).")][pkmn.shiny? ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
-           _INTL("Make shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], cmd)
+        _INTL("Make shiny"),
+        _INTL("Make normal"),
+        _INTL("Reset"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Make shiny
+      when 0 # Make shiny
         pkmn.shiny = true
-        pkmn.debug_shiny=true
-      when 1   # Make normal
+        pkmn.debug_shiny = true
+      when 1 # Make normal
         pkmn.shiny = false
-        pkmn.debug_shiny=false
-      when 2   # Reset
+        pkmn.debug_shiny = false
+      when 2 # Reset
         pkmn.shiny = nil
-        pkmn.debug_shiny=nil
+        pkmn.debug_shiny = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setpokeball", {
-  "parent"      => "cosmetic",
-  "name"        => _INTL("Set Poké Ball"),
+  "parent" => "cosmetic",
+  "name" => _INTL("Set Poké Ball"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
     balls = []
     for key in $BallTypes.keys
@@ -1015,193 +1032,197 @@ PokemonDebugMenuCommands.register("setpokeball", {
       pkmn.poke_ball = balls[cmd][0]
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setribbons", {
-  "parent"      => "cosmetic",
-  "name"        => _INTL("Set ribbons"),
+  "parent" => "cosmetic",
+  "name" => _INTL("Set ribbons"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       commands = []
       ids = []
       GameData::Ribbon.each do |ribbon_data|
         commands.push(_INTL("{1} {2}",
-           (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
+                            (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
         ids.push(ribbon_data.id)
       end
       commands.push(_INTL("Give all"))
       commands.push(_INTL("Clear all"))
       cmd = screen.pbShowCommands(_INTL("{1} ribbons.", pkmn.numRibbons), commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < ids.length   # Toggle ribbon
+      if cmd >= 0 && cmd < ids.length # Toggle ribbon
         if pkmn.hasRibbon?(ids[cmd])
           pkmn.takeRibbon(ids[cmd])
         else
           pkmn.giveRibbon(ids[cmd])
         end
-      elsif cmd == commands.length - 2   # Give all
+      elsif cmd == commands.length - 2 # Give all
         GameData::Ribbon.each do |ribbon_data|
           pkmn.giveRibbon(ribbon_data.id)
         end
-      elsif cmd == commands.length - 1   # Clear all
+      elsif cmd == commands.length - 1 # Clear all
         pkmn.clearAllRibbons
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("setnickname", {
-  "parent"      => "cosmetic",
-  "name"        => _INTL("Set nickname"),
+  "parent" => "cosmetic",
+  "name" => _INTL("Set nickname"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       speciesname = pkmn.speciesName
       msg = [_INTL("{1} has the nickname {2}.", speciesname, pkmn.name),
              _INTL("{1} has no nickname.", speciesname)][pkmn.nicknamed? ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
-           _INTL("Rename"),
-           _INTL("Erase name")], cmd)
+        _INTL("Rename"),
+        _INTL("Erase name"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Rename
+      when 0 # Rename
         oldname = (pkmn.nicknamed?) ? pkmn.name : ""
         newname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname),
                                      0, Pokemon::MAX_NAME_SIZE, oldname, pkmn)
         pkmn.name = newname
         screen.pbRefreshSingle(pkmnid)
-      when 1   # Erase name
+      when 1 # Erase name
         pkmn.name = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("ownership", {
-  "parent"      => "cosmetic",
-  "name"        => _INTL("Ownership..."),
+  "parent" => "cosmetic",
+  "name" => _INTL("Ownership..."),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       gender = [_INTL("Male"), _INTL("Female"), _INTL("Unknown")][pkmn.owner.gender]
       msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
-             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)
-            ][pkmn.foreign?($Trainer) ? 1 : 0]
+             _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)][pkmn.foreign?($Trainer) ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
-           _INTL("Make player's"),
-           _INTL("Set OT's name"),
-           _INTL("Set OT's gender"),
-           _INTL("Random foreign ID"),
-           _INTL("Set foreign ID")], cmd)
+        _INTL("Make player's"),
+        _INTL("Set OT's name"),
+        _INTL("Set OT's gender"),
+        _INTL("Random foreign ID"),
+        _INTL("Set foreign ID"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Make player's
+      when 0 # Make player's
         pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
-      when 1   # Set OT's name
-        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE+10)
-      when 2   # Set OT's gender
+      when 1 # Set OT's name
+        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE + 10)
+      when 2 # Set OT's gender
         cmd2 = screen.pbShowCommands(_INTL("Set OT's gender."),
-           [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
+                                     [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
-      when 3   # Random foreign ID
+      when 3 # Random foreign ID
         pkmn.owner.id = $Trainer.make_foreign_ID
-      when 4   # Set foreign ID
+      when 4 # Set foreign ID
         params = ChooseNumberParams.new
         params.setRange(0, 65535)
         params.setDefaultValue(pkmn.owner.public_id)
         val = pbMessageChooseNumber(
-           _INTL("Set the new ID (max. 65535)."), params) { screen.pbUpdate }
+          _INTL("Set the new ID (max. 65535)."), params
+        ) { screen.pbUpdate }
         pkmn.owner.id = val | val << 16
       end
     end
     next false
-  }
+  },
 })
 
 #===============================================================================
 # Other options
 #===============================================================================
 PokemonDebugMenuCommands.register("setegg", {
-  "parent"      => "main",
-  "name"        => _INTL("Set egg"),
+  "parent" => "main",
+  "name" => _INTL("Set egg"),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       msg = [_INTL("Not an egg"),
              _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
-           _INTL("Make egg"),
-           _INTL("Make Pokémon"),
-           _INTL("Set steps left to 1")], cmd)
+                                         _INTL("Make egg"),
+                                         _INTL("Make Pokémon"),
+                                         _INTL("Set steps left to 1"),
+                                       ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Make egg
+      when 0 # Make egg
         if !pkmn.egg? && (pbHasEgg?(pkmn.species) ||
-           screen.pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
-          pkmn.level          = Settings::EGG_LEVEL
+                          screen.pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
+          pkmn.level = Settings::EGG_LEVEL
           pkmn.calc_stats
-          pkmn.name           = _INTL("Egg")
+          pkmn.name = _INTL("Egg")
           pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
-          pkmn.hatched_map    = 0
-          pkmn.obtain_method  = 1
+          pkmn.hatched_map = 0
+          pkmn.obtain_method = 1
           screen.pbRefreshSingle(pkmnid)
         end
-      when 1   # Make Pokémon
+      when 1 # Make Pokémon
         if pkmn.egg?
-          pkmn.name           = nil
+          pkmn.name = nil
           pkmn.steps_to_hatch = 0
-          pkmn.hatched_map    = 0
-          pkmn.obtain_method  = 0
+          pkmn.hatched_map = 0
+          pkmn.obtain_method = 0
           screen.pbRefreshSingle(pkmnid)
         end
-      when 2   # Set steps left to 1
+      when 2 # Set steps left to 1
         pkmn.steps_to_hatch = 1 if pkmn.egg?
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("shadowpkmn", {
-  "parent"      => "main",
-  "name"        => _INTL("Shadow Pkmn..."),
+  "parent" => "main",
+  "name" => _INTL("Shadow Pkmn..."),
   "always_show" => true,
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
       msg = [_INTL("Not a Shadow Pokémon."),
-             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)
-            ][pkmn.shadowPokemon? ? 1 : 0]
+             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)][pkmn.shadowPokemon? ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
-         _INTL("Make Shadow"),
-         _INTL("Set heart gauge")], cmd)
+        _INTL("Make Shadow"),
+        _INTL("Set heart gauge"),
+      ], cmd)
       break if cmd < 0
       case cmd
-      when 0   # Make Shadow
+      when 0 # Make Shadow
         if !pkmn.shadowPokemon?
           pkmn.makeShadow
           screen.pbRefreshSingle(pkmnid)
         else
           screen.pbDisplay(_INTL("{1} is already a Shadow Pokémon.", pkmn.name))
         end
-      when 1   # Set heart gauge
+      when 1 # Set heart gauge
         if pkmn.shadowPokemon?
           oldheart = pkmn.heart_gauge
           params = ChooseNumberParams.new
           params.setRange(0, Pokemon::HEART_GAUGE_SIZE)
           params.setDefaultValue(pkmn.heart_gauge)
           val = pbMessageChooseNumber(
-             _INTL("Set the heart gauge (max. {1}).", Pokemon::HEART_GAUGE_SIZE),
-             params) { screen.pbUpdate }
+            _INTL("Set the heart gauge (max. {1}).", Pokemon::HEART_GAUGE_SIZE),
+            params
+          ) { screen.pbUpdate }
           if val != oldheart
             pkmn.adjustHeart(val - oldheart)
             pkmn.check_ready_to_purify
@@ -1212,22 +1233,22 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
       end
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("mysterygift", {
-  "parent"      => "main",
-  "name"        => _INTL("Mystery Gift"),
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "parent" => "main",
+  "name" => _INTL("Mystery Gift"),
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pbCreateMysteryGift(0, pkmn)
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("duplicate", {
-  "parent"      => "main",
-  "name"        => _INTL("Duplicate"),
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "parent" => "main",
+  "name" => _INTL("Duplicate"),
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to copy this Pokémon?"))
       clonedpkmn = pkmn.clone
       if screen.is_a?(PokemonPartyScreen)
@@ -1254,13 +1275,13 @@ PokemonDebugMenuCommands.register("duplicate", {
       next true
     end
     next false
-  }
+  },
 })
 
 PokemonDebugMenuCommands.register("delete", {
-  "parent"      => "main",
-  "name"        => _INTL("Delete"),
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+  "parent" => "main",
+  "name" => _INTL("Delete"),
+  "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
       if screen.is_a?(PokemonPartyScreen)
         screen.party[pkmnid] = nil
@@ -1274,5 +1295,5 @@ PokemonDebugMenuCommands.register("delete", {
       next true
     end
     next false
-  }
+  },
 })

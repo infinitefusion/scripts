@@ -151,7 +151,7 @@ end
 #===============================================================================
 class PokeBattle_Move_10A < PokeBattle_Move
   def ignoresReflect?
-    return true;
+    return true
   end
 
   def pbEffectGeneral(user)
@@ -171,8 +171,8 @@ class PokeBattle_Move_10A < PokeBattle_Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     if user.pbOpposingSide.effects[PBEffects::LightScreen] > 0 ||
-      user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
-      user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+       user.pbOpposingSide.effects[PBEffects::Reflect] > 0 ||
+       user.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
       hitNum = 1 # Wall-breaking anim
     end
     super
@@ -185,11 +185,11 @@ end
 #===============================================================================
 class PokeBattle_Move_10B < PokeBattle_Move
   def recoilMove?
-    return true;
+    return true
   end
 
   def unusableInGravity?
-    return true;
+    return true
   end
 
   def pbCrashDamage(user)
@@ -241,7 +241,7 @@ end
 #===============================================================================
 class PokeBattle_Move_10D < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbTarget(user)
@@ -252,8 +252,8 @@ class PokeBattle_Move_10D < PokeBattle_Move
   def pbMoveFailed?(user, targets)
     return false if user.pbHasType?(:GHOST)
     if !user.pbCanLowerStatStage?(:SPEED, user, self) &&
-      !user.pbCanRaiseStatStage?(:ATTACK, user, self) &&
-      !user.pbCanRaiseStatStage?(:DEFENSE, user, self)
+       !user.pbCanRaiseStatStage?(:ATTACK, user, self) &&
+       !user.pbCanRaiseStatStage?(:DEFENSE, user, self)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -305,7 +305,7 @@ end
 #===============================================================================
 class PokeBattle_Move_10E < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -396,7 +396,7 @@ end
 #===============================================================================
 class PokeBattle_Move_111 < PokeBattle_Move
   def cannotRedirect?
-    return true;
+    return true
   end
 
   def pbDamagingMove? # Stops damage being dealt in the setting-up turn
@@ -415,7 +415,7 @@ class PokeBattle_Move_111 < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user, target)
     if !@battle.futureSight &&
-      @battle.positions[target.index].effects[PBEffects::FutureSightCounter] > 0
+       @battle.positions[target.index].effects[PBEffects::FutureSightCounter] > 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -498,13 +498,13 @@ class PokeBattle_Move_113 < PokeBattle_Move
     return if @battle.pbAllFainted?(target.idxOwnSide)
     showAnim = true
     if user.effects[PBEffects::StockpileDef] > 0 &&
-      user.pbCanLowerStatStage?(:DEFENSE, user, self)
+       user.pbCanLowerStatStage?(:DEFENSE, user, self)
       if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
         showAnim = false
       end
     end
     if user.effects[PBEffects::StockpileSpDef] > 0 &&
-      user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
+       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
       user.pbLowerStatStage(:SPECIAL_DEFENSE, user.effects[PBEffects::StockpileSpDef], user, showAnim)
     end
     user.effects[PBEffects::Stockpile] = 0
@@ -519,7 +519,7 @@ end
 #===============================================================================
 class PokeBattle_Move_114 < PokeBattle_Move
   def healingMove?
-    return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
@@ -528,8 +528,8 @@ class PokeBattle_Move_114 < PokeBattle_Move
       return true
     end
     if !user.canHeal? &&
-      user.effects[PBEffects::StockpileDef] == 0 &&
-      user.effects[PBEffects::StockpileSpDef] == 0
+       user.effects[PBEffects::StockpileDef] == 0 &&
+       user.effects[PBEffects::StockpileSpDef] == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -539,11 +539,11 @@ class PokeBattle_Move_114 < PokeBattle_Move
   def pbEffectGeneral(user)
     hpGain = 0
     case [user.effects[PBEffects::Stockpile], 1].max
-    when 1 then
+    when 1
       hpGain = user.totalhp / 4
-    when 2 then
+    when 2
       hpGain = user.totalhp / 2
-    when 3 then
+    when 3
       hpGain = user.totalhp
     end
     if user.pbRecoverHP(hpGain) > 0
@@ -552,13 +552,13 @@ class PokeBattle_Move_114 < PokeBattle_Move
     @battle.pbDisplay(_INTL("{1}'s stockpiled effect wore off!", user.pbThis))
     showAnim = true
     if user.effects[PBEffects::StockpileDef] > 0 &&
-      user.pbCanLowerStatStage?(:DEFENSE, user, self)
+       user.pbCanLowerStatStage?(:DEFENSE, user, self)
       if user.pbLowerStatStage(:DEFENSE, user.effects[PBEffects::StockpileDef], user, showAnim)
         showAnim = false
       end
     end
     if user.effects[PBEffects::StockpileSpDef] > 0 &&
-      user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
+       user.pbCanLowerStatStage?(:SPECIAL_DEFENSE, user, self)
       user.pbLowerStatStage(:SPECIAL_DEFENSE, user.effects[PBEffects::StockpileSpDef], user, showAnim)
     end
     user.effects[PBEffects::Stockpile] = 0
@@ -602,7 +602,7 @@ class PokeBattle_Move_116 < PokeBattle_Move
     end
     oppMove = @battle.choices[target.index][2]
     if !oppMove ||
-      (oppMove.function != "0B0" && # Me First
+       (oppMove.function != "0B0" && # Me First
         (target.movedThisRound? || oppMove.statusMove?))
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -651,8 +651,8 @@ class PokeBattle_Move_118 < PokeBattle_Move
         showMessage = true
       end
       if b.effects[PBEffects::MagnetRise] > 0 ||
-        b.effects[PBEffects::Telekinesis] > 0 ||
-        b.effects[PBEffects::SkyDrop] >= 0
+         b.effects[PBEffects::Telekinesis] > 0 ||
+         b.effects[PBEffects::SkyDrop] >= 0
         b.effects[PBEffects::MagnetRise] = 0
         b.effects[PBEffects::Telekinesis] = 0
         b.effects[PBEffects::SkyDrop] = -1
@@ -669,13 +669,13 @@ end
 #===============================================================================
 class PokeBattle_Move_119 < PokeBattle_Move
   def unusableInGravity?
-    return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
     if user.effects[PBEffects::Ingrain] ||
-      user.effects[PBEffects::SmackDown] ||
-      user.effects[PBEffects::MagnetRise] > 0
+       user.effects[PBEffects::SmackDown] ||
+       user.effects[PBEffects::MagnetRise] > 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -693,21 +693,21 @@ end
 #===============================================================================
 class PokeBattle_Move_11A < PokeBattle_Move
   def unusableInGravity?
-    return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
     if target.effects[PBEffects::Ingrain] ||
-      target.effects[PBEffects::SmackDown] ||
-      target.effects[PBEffects::Telekinesis] > 0
+       target.effects[PBEffects::SmackDown] ||
+       target.effects[PBEffects::Telekinesis] > 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     if target.isSpecies?(:DIGLETT) ||
-      target.isSpecies?(:DUGTRIO) ||
-      target.isSpecies?(:SANDYGAST) ||
-      target.isSpecies?(:PALOSSAND) ||
-      (target.isSpecies?(:GENGAR) && target.mega?)
+       target.isSpecies?(:DUGTRIO) ||
+       target.isSpecies?(:SANDYGAST) ||
+       target.isSpecies?(:PALOSSAND) ||
+       (target.isSpecies?(:GENGAR) && target.mega?)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -725,7 +725,7 @@ end
 #===============================================================================
 class PokeBattle_Move_11B < PokeBattle_Move
   def hitsFlyingTargets?
-    return true;
+    return true
   end
 end
 
@@ -735,7 +735,7 @@ end
 #===============================================================================
 class PokeBattle_Move_11C < PokeBattle_Move
   def hitsFlyingTargets?
-    return true;
+    return true
   end
 
   def pbCalcTypeModSingle(moveType, defType, user, target)
@@ -764,7 +764,7 @@ end
 #===============================================================================
 class PokeBattle_Move_11D < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -978,7 +978,7 @@ end
 #===============================================================================
 class PokeBattle_Move_133 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
@@ -1040,7 +1040,7 @@ end
 #       pbSuccessCheckAgainstTarget is only called for targeted battlers.
 class PokeBattle_Move_137 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
@@ -1048,7 +1048,7 @@ class PokeBattle_Move_137 < PokeBattle_Move
     @battle.eachSameSideBattler(user) do |b|
       next if !b.hasActiveAbility?([:MINUS, :PLUS])
       next if !b.pbCanRaiseStatStage?(:DEFENSE, user, self) &&
-        !b.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self)
+              !b.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self)
       @validTargets.push(b)
     end
     if @validTargets.length == 0
@@ -1088,7 +1088,7 @@ end
 #===============================================================================
 class PokeBattle_Move_138 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -1106,7 +1106,7 @@ end
 #===============================================================================
 class PokeBattle_Move_139 < PokeBattle_TargetStatDownMove
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def initialize(battle, move)
@@ -1115,7 +1115,7 @@ class PokeBattle_Move_139 < PokeBattle_TargetStatDownMove
   end
 
   def pbAccuracyCheck(user, target)
-    ; return true;
+    return true
   end
 end
 
@@ -1125,7 +1125,7 @@ end
 #===============================================================================
 class PokeBattle_Move_13A < PokeBattle_TargetMultiStatDownMove
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def initialize(battle, move)
@@ -1134,7 +1134,7 @@ class PokeBattle_Move_13A < PokeBattle_TargetMultiStatDownMove
   end
 
   def pbAccuracyCheck(user, target)
-    ; return true;
+    return true
   end
 end
 
@@ -1144,7 +1144,7 @@ end
 #===============================================================================
 class PokeBattle_Move_13B < PokeBattle_StatDownMove
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def initialize(battle, move)
@@ -1164,7 +1164,7 @@ class PokeBattle_Move_13B < PokeBattle_StatDownMove
   end
 
   def pbAccuracyCheck(user, target)
-    ; return true;
+    return true
   end
 
   def pbEffectAgainstTarget(user, target)
@@ -1184,7 +1184,7 @@ end
 #===============================================================================
 class PokeBattle_Move_13C < PokeBattle_TargetStatDownMove
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def initialize(battle, move)
@@ -1193,7 +1193,7 @@ class PokeBattle_Move_13C < PokeBattle_TargetStatDownMove
   end
 
   def pbAccuracyCheck(user, target)
-    ; return true;
+    return true
   end
 end
 
@@ -1218,7 +1218,7 @@ class PokeBattle_Move_13E < PokeBattle_Move
       next if !b.pbHasType?(:GRASS)
       next if b.airborne? || b.semiInvulnerable?
       next if !b.pbCanRaiseStatStage?(:ATTACK, user, self) &&
-        !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
+              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
       @validTargets.push(b.index)
     end
     if @validTargets.length == 0
@@ -1291,8 +1291,8 @@ class PokeBattle_Move_140 < PokeBattle_Move
       next if !b || b.fainted?
       next if !b.poisoned?
       next if !b.pbCanLowerStatStage?(:ATTACK, user, self) &&
-        !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user, self) &&
-        !b.pbCanLowerStatStage?(:SPEED, user, self)
+              !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user, self) &&
+              !b.pbCanLowerStatStage?(:SPEED, user, self)
       @validTargets.push(b.index)
     end
     if @validTargets.length == 0
@@ -1444,11 +1444,11 @@ end
 #===============================================================================
 class PokeBattle_Move_147 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbAccuracyCheck(user, target)
-    ; return true;
+    return true
   end
 
   def pbEffectAgainstTarget(user, target)
@@ -1469,7 +1469,7 @@ end
 #===============================================================================
 class PokeBattle_Move_148 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -1562,8 +1562,8 @@ class PokeBattle_Move_14E < PokeBattle_TwoTurnMove
   def pbMoveFailed?(user, targets)
     return false if user.effects[PBEffects::TwoTurnAttack] # Charging turn
     if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self) &&
-      !user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self) &&
-      !user.pbCanRaiseStatStage?(:SPEED, user, self)
+       !user.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, user, self) &&
+       !user.pbCanRaiseStatStage?(:SPEED, user, self)
       @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!", user.pbThis))
       return true
     end
@@ -1591,7 +1591,7 @@ end
 #===============================================================================
 class PokeBattle_Move_14F < PokeBattle_Move
   def healingMove?
-    return Settings::MECHANICS_GENERATION >= 6;
+    return Settings::MECHANICS_GENERATION >= 6
   end
 
   def pbEffectAgainstTarget(user, target)
@@ -1780,7 +1780,7 @@ end
 class PokeBattle_Move_159 < PokeBattle_Move
   def pbFailsAgainstTarget?(user, target)
     if !target.pbCanPoison?(user, false, self) &&
-      !target.pbCanLowerStatStage?(:SPEED, user, self)
+       !target.pbCanLowerStatStage?(:SPEED, user, self)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1842,7 +1842,7 @@ end
 #       pbSuccessCheckAgainstTarget is only called for targeted battlers.
 class PokeBattle_Move_15C < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
@@ -1850,7 +1850,7 @@ class PokeBattle_Move_15C < PokeBattle_Move
     @battle.eachSameSideBattler(user) do |b|
       next if !b.hasActiveAbility?([:MINUS, :PLUS])
       next if !b.pbCanRaiseStatStage?(:ATTACK, user, self) &&
-        !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
+              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
       @validTargets.push(b)
     end
     if @validTargets.length == 0
@@ -1892,7 +1892,7 @@ end
 #===============================================================================
 class PokeBattle_Move_15D < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbCalcDamage(user, target, numTargets = 1)
@@ -1942,7 +1942,7 @@ end
 #===============================================================================
 class PokeBattle_Move_160 < PokeBattle_Move
   def healingMove?
-    return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -1952,7 +1952,7 @@ class PokeBattle_Move_160 < PokeBattle_Move
     #       works even if the stat stage cannot be changed due to an ability or
     #       other effect.
     if !@battle.moldBreaker && target.hasActiveAbility?(:CONTRARY) &&
-      target.statStageAtMax?(:ATTACK)
+       target.statStageAtMax?(:ATTACK)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     elsif target.statStageAtMin?(:ATTACK)
@@ -1993,7 +1993,7 @@ end
 #===============================================================================
 class PokeBattle_Move_161 < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def pbEffectAgainstTarget(user, target)
@@ -2045,16 +2045,16 @@ class PokeBattle_Move_164 < PokeBattle_Move_163
   end
 
   def physicalMove?(thisType = nil)
-    ; return (@calcCategory == 0);
+    return (@calcCategory == 0)
   end
 
   def specialMove?(thisType = nil)
-    ; return (@calcCategory == 1);
+    return (@calcCategory == 1)
   end
 
   def pbOnStartUse(user, targets)
-    echoln _INTL("type1={1}",user.type1)
-    echoln _INTL("type2={1}",user.type2)
+    echoln _INTL("type1={1}", user.type1)
+    echoln _INTL("type2={1}", user.type2)
 
     # Calculate user's effective attacking value
     stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
@@ -2076,17 +2076,17 @@ class PokeBattle_Move_164 < PokeBattle_Move_163
       # user.spdef*=0.5
       # user.speed*=1.5
 
-      user.changeFormSpecies(:NECROZMA,:U_NECROZMA,"UltraBurst2")
+      user.changeFormSpecies(:NECROZMA, :U_NECROZMA, "UltraBurst2")
       #user.changeForm(1,:NECROZMA)
     end
   end
 end
 
 #change back at the end of battle
-Events.onEndBattle += proc { |_sender,_e|
+Events.onEndBattle += proc { |_sender, _e|
   $Trainer.party.each_with_index do |value, i|
     pokemon = $Trainer.party[i]
-      pokemon.changeFormSpecies(:U_NECROZMA,:NECROZMA) if pokemon.isFusionOf(:U_NECROZMA)
+    pokemon.changeFormSpecies(:U_NECROZMA, :NECROZMA) if pokemon.isFusionOf(:U_NECROZMA)
   end
 }
 
@@ -2099,8 +2099,8 @@ class PokeBattle_Move_165 < PokeBattle_Move
     return if target.damageState.substitute || target.effects[PBEffects::GastroAcid]
     return if target.unstoppableAbility?
     return if @battle.choices[target.index][0] != :UseItem &&
-      !((@battle.choices[target.index][0] == :UseMove ||
-        @battle.choices[target.index][0] == :Shift) && target.movedThisRound?)
+              !((@battle.choices[target.index][0] == :UseMove ||
+                 @battle.choices[target.index][0] == :Shift) && target.movedThisRound?)
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant] = false
     @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!", target.pbThis))
@@ -2185,7 +2185,7 @@ end
 #===============================================================================
 class PokeBattle_Move_16B < PokeBattle_Move
   def ignoresSubstitute?(user)
-    ; return true;
+    return true
   end
 
   def initialize(battle, move)
@@ -2229,7 +2229,7 @@ class PokeBattle_Move_16B < PokeBattle_Move
       # Moves that start focussing at the start of the round
       "115", # Focus Punch
       "171", # Shell Trap
-      "172" # Beak Blast
+      "172", # Beak Blast
     ]
   end
 
@@ -2244,8 +2244,8 @@ class PokeBattle_Move_16B < PokeBattle_Move
     end
     targetMove = @battle.choices[target.index][2]
     if targetMove && (targetMove.function == "115" || # Focus Punch
-      targetMove.function == "171" || # Shell Trap
-      targetMove.function == "172") # Beak Blast
+                      targetMove.function == "171" || # Shell Trap
+                      targetMove.function == "172") # Beak Blast
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2297,7 +2297,7 @@ end
 #===============================================================================
 class PokeBattle_Move_16E < PokeBattle_Move
   def healingMove?
-    return true;
+    return true
   end
 
   def pbFailsAgainstTarget?(user, target)
@@ -2369,7 +2369,7 @@ end
 #===============================================================================
 class PokeBattle_Move_170 < PokeBattle_Move
   def worksWithNoTargets?
-    return true;
+    return true
   end
 
   def pbMoveFailed?(user, targets)
@@ -2475,15 +2475,15 @@ end
 #===============================================================================
 class PokeBattle_Move_175 < PokeBattle_FlinchMove
   def multiHitMove?
-    return true;
+    return true
   end
 
   def pbNumHits(user, targets)
-    ; return 2;
+    return 2
   end
 
   def tramplesMinimize?(param = 1)
-    ; return true;
+    return true
   end
 end
 

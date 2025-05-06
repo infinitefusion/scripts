@@ -9,17 +9,17 @@ end
 def updateHttpSettingsFile
   return if !downloadAllowed?()
   echoln "UPDATING SETTINGS"
-  download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::HTTP_CONFIGS_FILE_PATH,)
+  download_file(Settings::HTTP_CONFIGS_FILE_URL, Settings::HTTP_CONFIGS_FILE_PATH)
 end
 
 def updateCreditsFile
   return if !downloadAllowed?()
-  download_file(Settings::CREDITS_FILE_URL, Settings::CREDITS_FILE_PATH,)
+  download_file(Settings::CREDITS_FILE_URL, Settings::CREDITS_FILE_PATH)
 end
 
 def updateCustomDexFile
   return if !downloadAllowed?()
-  download_file(Settings::CUSTOM_DEX_FILE_URL, Settings::CUSTOM_DEX_ENTRIES_PATH,)
+  download_file(Settings::CUSTOM_DEX_FILE_URL, Settings::CUSTOM_DEX_ENTRIES_PATH)
 end
 
 def createCustomSpriteFolders()
@@ -63,7 +63,6 @@ end
 def fetch_sprite_from_web(url, destinationPath)
   return false if !downloadAllowed?()
   begin
-
     response = HTTPLite.get(url)
     if response[:status] == 200
       File.open(destinationPath, "wb") do |file|
@@ -87,7 +86,7 @@ def fetch_sprite_from_web(url, destinationPath)
 end
 
 def download_spritesheet(pif_sprite, dest)
-  return nil if requestRateExceeded?(Settings::CUSTOMSPRITES_RATE_LOG_FILE,Settings::CUSTOMSPRITES_ENTRIES_RATE_TIME_WINDOW,Settings::CUSTOMSPRITES_RATE_MAX_NB_REQUESTS)
+  return nil if requestRateExceeded?(Settings::CUSTOMSPRITES_RATE_LOG_FILE, Settings::CUSTOMSPRITES_ENTRIES_RATE_TIME_WINDOW, Settings::CUSTOMSPRITES_RATE_MAX_NB_REQUESTS)
   case pif_sprite.type
   when :AUTOGEN
     return
@@ -396,7 +395,6 @@ def fetch_latest_game_version
     echo error
     return nil
   end
-
 end
 
 # update_log_file: keep to true when trying to make an actual request

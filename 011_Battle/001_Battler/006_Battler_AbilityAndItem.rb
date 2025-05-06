@@ -2,7 +2,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Called when a Pokémon (self) is sent into battle or its ability changes.
   #=============================================================================
-  def pbEffectsOnSwitchIn(switchIn=false)
+  def pbEffectsOnSwitchIn(switchIn = false)
     # Healing Wish/Lunar Dance/entry hazards
     @battle.pbOnActiveOne(self) if switchIn
     # Primal Revert upon entering battle
@@ -11,13 +11,13 @@ class PokeBattle_Battler
     pbContinualAbilityChecks(true)
     # Abilities that trigger upon switching in
     if (!fainted? && unstoppableAbility?) || abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
+      BattleHandlers.triggerAbilityOnSwitchIn(self.ability, self, @battle)
     end
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
     # Items that trigger upon switching in (Air Balloon message)
     if switchIn && itemActive?
-      BattleHandlers.triggerItemOnSwitchIn(self.item,self,@battle)
+      BattleHandlers.triggerItemOnSwitchIn(self.item, self, @battle)
     end
     # Berry check, status-curing ability check
     pbHeldItemTriggerCheck if switchIn
@@ -29,10 +29,10 @@ class PokeBattle_Battler
   #=============================================================================
   def pbAbilitiesOnSwitchOut
     if abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchOut(self.ability,self,false)
+      BattleHandlers.triggerAbilityOnSwitchOut(self.ability, self, false)
     end
     # Reset form
-    @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
+    @battle.peer.pbOnLeavingBattle(@battle, @pokemon, @battle.usedInBattle[idxOwnSide][@index / 2])
     # Treat self as fainted
     @hp = 0
     @fainted = true
@@ -44,26 +44,26 @@ class PokeBattle_Battler
     # Self fainted; check all other battlers to see if their abilities trigger
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      BattleHandlers.triggerAbilityChangeOnBattlerFainting(b.ability,b,self,@battle)
+      BattleHandlers.triggerAbilityChangeOnBattlerFainting(b.ability, b, self, @battle)
     end
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      BattleHandlers.triggerAbilityOnBattlerFainting(b.ability,b,self,@battle)
+      BattleHandlers.triggerAbilityOnBattlerFainting(b.ability, b, self, @battle)
     end
   end
 
   # Used for Emergency Exit/Wimp Out.
-  def pbAbilitiesOnDamageTaken(oldHP,newHP=-1)
+  def pbAbilitiesOnDamageTaken(oldHP, newHP = -1)
     return false if !abilityActive?
-    newHP = @hp if newHP<0
-    return false if oldHP<@totalhp/2 || newHP>=@totalhp/2   # Didn't drop below half
-    ret = BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability,self,@battle)
+    newHP = @hp if newHP < 0
+    return false if oldHP < @totalhp / 2 || newHP >= @totalhp / 2   # Didn't drop below half
+    ret = BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability, self, @battle)
     return ret   # Whether self has switched out
   end
 
   # Called when a Pokémon (self) enters battle, at the end of each move used,
   # and at the end of each round.
-  def pbContinualAbilityChecks(onSwitchIn=false)
+  def pbContinualAbilityChecks(onSwitchIn = false)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
     # Trace
@@ -78,14 +78,14 @@ class PokeBattle_Battler
                 [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
         choices.push(b)
       end
-      if choices.length>0
+      if choices.length > 0
         choice = choices[@battle.pbRandom(choices.length)]
         @battle.pbShowAbilitySplash(self)
         self.ability = choice.ability
-        @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!",pbThis,choice.pbThis(true),choice.abilityName))
+        @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!", pbThis, choice.pbThis(true), choice.abilityName))
         @battle.pbHideAbilitySplash(self)
         if !onSwitchIn && (unstoppableAbility? || abilityActive?)
-          BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
+          BattleHandlers.triggerAbilityOnSwitchIn(self.ability, self, @battle)
         end
       end
     end
@@ -97,7 +97,7 @@ class PokeBattle_Battler
   # Cures status conditions, confusion and infatuation.
   def pbAbilityStatusCureCheck
     if abilityActive?
-      BattleHandlers.triggerStatusCureAbility(self.ability,self)
+      BattleHandlers.triggerStatusCureAbility(self.ability, self)
     end
   end
 
@@ -114,7 +114,7 @@ class PokeBattle_Battler
       end
     end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
-    @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
+    @effects[PBEffects::SlowStart] = 0 if self.ability != :SLOWSTART
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange
     # Check for end of primordial weather
@@ -140,10 +140,10 @@ class PokeBattle_Battler
   # Off.
   def pbRemoveItem(permanent = true)
     @effects[PBEffects::ChoiceBand] = nil
-    @effects[PBEffects::Unburden]   = true if self.item
+    @effects[PBEffects::Unburden] = true if self.item
 
     if permanent && self.item == self.initialItem
-      if $PokemonBag.pbQuantity(self.initialItem)>=1
+      if $PokemonBag.pbQuantity(self.initialItem) >= 1
         $PokemonBag.pbDeleteItem(self.initialItem)
       else
         setInitialItem(nil)
@@ -152,12 +152,12 @@ class PokeBattle_Battler
     self.item = nil
   end
 
-  def pbConsumeItem(recoverable=true,symbiosis=true,belch=true)
+  def pbConsumeItem(recoverable = true, symbiosis = true, belch = true)
     PBDebug.log("[Item consumed] #{pbThis} consumed its held #{itemName}")
     if recoverable
       setRecycleItem(@item_id)
       @effects[PBEffects::PickupItem] = @item_id
-      @effects[PBEffects::PickupUse]  = @battle.nextPickupUse
+      @effects[PBEffects::PickupUse] = @battle.nextPickupUse
     end
     setBelched if belch && self.item.is_berry?
     pbRemoveItem
@@ -175,10 +175,10 @@ class PokeBattle_Battler
       @battle.pbShowAbilitySplash(b)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} shared its {2} with {3}!",
-           b.pbThis,b.itemName,pbThis(true)))
+                                b.pbThis, b.itemName, pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1}'s {2} let it share its {3} with {4}!",
-           b.pbThis,b.abilityName,b.itemName,pbThis(true)))
+                                b.pbThis, b.abilityName, b.itemName, pbThis(true)))
       end
       self.item = b.item
       b.item = nil

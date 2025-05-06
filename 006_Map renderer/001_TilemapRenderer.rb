@@ -45,27 +45,26 @@ class TilemapRenderer
   #    6 => [["Water rock", "Sea deep"], []]
 
   EXTRA_AUTOTILES = {
-    1 => {  #route-field
-            996 => "flowers_orange[10]",
-            991 => "flowers_pink[10]",
-            999 => "flowers_yellow[10]",
-            1007 => "flowers_blue[10]",
-            1015 => "flowers_purple[10]",
-            1023 => "flowers_red[10]",
-            1031 => "flowers_grey[10]",
-            1039 => "flowers_white[10]",
+    1 => { #route-field
+      996 => "flowers_orange[10]",
+      991 => "flowers_pink[10]",
+      999 => "flowers_yellow[10]",
+      1007 => "flowers_blue[10]",
+      1015 => "flowers_purple[10]",
+      1023 => "flowers_red[10]",
+      1031 => "flowers_grey[10]",
+      1039 => "flowers_white[10]",
     },
-    2 => {  #small-town
-            996 => "flowers_orange[10]",
-            991 => "flowers_pink[10]",
-            999 => "flowers_yellow[10]",
-            1007 => "flowers_blue[10]",
-            1015 => "flowers_purple[10]",
-            1023 => "flowers_red[10]",
-            1031 => "flowers_grey[10]",
-            1039 => "flowers_white[10]",
+    2 => { #small-town
+      996 => "flowers_orange[10]",
+      991 => "flowers_pink[10]",
+      999 => "flowers_yellow[10]",
+      1007 => "flowers_blue[10]",
+      1015 => "flowers_purple[10]",
+      1023 => "flowers_red[10]",
+      1031 => "flowers_grey[10]",
+      1039 => "flowers_white[10]",
     },
-
 
     23 => { #outdoor
       1232 => "flowers_orange[10]",
@@ -87,7 +86,7 @@ class TilemapRenderer
       2660 => "flowers_red[10]",
       2668 => "flowers_grey[10]",
       2676 => "flowers_white[10]",
-    }
+    },
   }
 
   #=============================================================================
@@ -184,6 +183,7 @@ class TilemapRenderer
     end
 
     EXPANDED_AUTOTILES_FOLDER = "Graphics/Autotiles/ExpandedAutotiles/"
+
     def add(filename)
       return if nil_or_empty?(filename)
       if @bitmaps[filename]
@@ -202,7 +202,6 @@ class TilemapRenderer
           duration = $~[1].to_i
         end
         @frame_durations[filename] = duration.to_f / 20
-
       else
         orig_bitmap = pbGetAutotile(filename)
         @bitmap_wraps[filename] = false
@@ -227,7 +226,6 @@ class TilemapRenderer
       end
       @load_counts[filename] = 1
     end
-
 
     def remove(filename)
       super
@@ -517,8 +515,8 @@ class TilemapRenderer
   end
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
-    if tile.underwater_tile#tile.shows_reflection -2000
-        tile.z = -5
+    if tile.underwater_tile #tile.shows_reflection -2000
+      tile.z = -5
     elsif tile.bridge && $PokemonGlobal.bridge > 0
       tile.z = 0
     else

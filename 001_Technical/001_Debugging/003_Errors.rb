@@ -4,7 +4,7 @@
 class Reset < Exception
 end
 
-def pbGetExceptionMessage(e,_script="")
+def pbGetExceptionMessage(e, _script = "")
   emessage = e.message.dup
   emessage.force_encoding(Encoding::UTF_8)
   if e.is_a?(Hangup)
@@ -19,7 +19,7 @@ end
 
 def pbPrintException(e)
   emessage = ""
-  if $EVENTHANGUPMSG && $EVENTHANGUPMSG!=""
+  if $EVENTHANGUPMSG && $EVENTHANGUPMSG != ""
     emessage = $EVENTHANGUPMSG   # Message with map/event ID generated elsewhere
     $EVENTHANGUPMSG = nil
   else
@@ -35,7 +35,7 @@ def pbPrintException(e)
     message += "All fused, " if $game_switches[SWITCH_RANDOM_TRAINERS]
     message += "Randomized trainers, " if $game_switches[RandomizerWildPokemonOptionsScene::REGULAR_TO_FUSIONS]
   end
-    message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
+  message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
   message += "Message: #{emessage}\r\n"
   # show last 10/25 lines of backtrace

@@ -10,7 +10,6 @@ class FusionQuiz
   def initialize(difficulty = :REGULAR)
     @sprites = {}
 
-
     @previewwindow = nil
     @difficulty = difficulty
     @customs_list = getCustomSpeciesList(true, false)
@@ -24,10 +23,9 @@ class FusionQuiz
     @streak_multiplier = 0.15
   end
 
-
   def start_quiz(nb_rounds = 3)
-    nb_games_played= pbGet(VAR_STAT_FUSION_QUIZ_NB_TIMES)
-    pbSet(VAR_STAT_FUSION_QUIZ_NB_TIMES,nb_games_played+1)
+    nb_games_played = pbGet(VAR_STAT_FUSION_QUIZ_NB_TIMES)
+    pbSet(VAR_STAT_FUSION_QUIZ_NB_TIMES, nb_games_played + 1)
 
     round_multiplier = 1
     round_multiplier_increase = 0.1
@@ -66,10 +64,10 @@ class FusionQuiz
     hide_fusion_picture
     Kernel.pbClearText()
     previous_highest = pbGet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE)
-    pbSet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE,@score) if @score > previous_highest
+    pbSet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE, @score) if @score > previous_highest
 
     previous_total = pbGet(VAR_STAT_FUSION_QUIZ_TOTAL_PTS)
-    pbSet(VAR_STAT_FUSION_QUIZ_TOTAL_PTS,previous_total+@score)
+    pbSet(VAR_STAT_FUSION_QUIZ_TOTAL_PTS, previous_total + @score)
     dispose
   end
 
@@ -119,7 +117,6 @@ class FusionQuiz
     end
     current_streak_dialog()
     hide_fusion_picture()
-
   end
 
   def calculate_points_awarded(base_points, round_multiplier)
@@ -153,18 +150,18 @@ class FusionQuiz
   end
 
   def refresh_streak_ui()
-    shadow_color  = Color.new(160,160,160)
-    base_color_low_streak = Color.new(72,72,72)
-    base_color_medium_streak = Color.new(213,254,205)
-    base_color_high_streak = Color.new(100,232,96)
+    shadow_color = Color.new(160, 160, 160)
+    base_color_low_streak = Color.new(72, 72, 72)
+    base_color_medium_streak = Color.new(213, 254, 205)
+    base_color_high_streak = Color.new(100, 232, 96)
 
-    streak_color= base_color_low_streak
+    streak_color = base_color_low_streak
     streak_color = base_color_medium_streak if @current_streak >= 2
     streak_color = base_color_high_streak if @current_streak >= 4
 
-    message = _INTL("Streak: {1}",@current_streak)
+    message = _INTL("Streak: {1}", @current_streak)
     Kernel.pbClearText()
-    Kernel.pbDisplayText(message,420,340,nil,streak_color)
+    Kernel.pbDisplayText(message, 420, 340, nil, streak_color)
   end
 
   def award_points(nb_points)
@@ -192,16 +189,16 @@ class FusionQuiz
   end
 
   def current_streak_dialog()
-    return if @current_streak ==0
-    streak_base_worth= @difficulty == :REGULAR ? 25 : 100
+    return if @current_streak == 0
+    streak_base_worth = @difficulty == :REGULAR ? 25 : 100
     if @current_streak % 4 == 0
-      extra_points = (@current_streak/4)*streak_base_worth
+      extra_points = (@current_streak / 4) * streak_base_worth
       if @current_streak >= 8
         pbMessage(_INTL("That's {1} correct answers in a row. You're on a roll!", @current_streak))
       else
         pbMessage(_INTL("That's {1} correct answers in a row. You're doing great!", @current_streak))
       end
-      pbMessage(_INTL("Here's {1} extra points for maintaining a streak!",extra_points))
+      pbMessage(_INTL("Here's {1} extra points for maintaining a streak!", extra_points))
       award_points(extra_points)
     end
   end
@@ -305,5 +302,4 @@ class FusionQuiz
   def dispose
     @previewwindow.dispose
   end
-
 end

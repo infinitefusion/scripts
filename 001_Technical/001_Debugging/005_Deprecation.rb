@@ -10,7 +10,7 @@ module Deprecation
   def warn_method(method_name, removal_version = nil, alternative = nil)
     text = _INTL('WARN: usage of deprecated method "{1}" or its alias.', method_name)
     unless removal_version.nil?
-      text += _INTL("\nThe method is slated to be"\
+      text += _INTL("\nThe method is slated to be" \
                     " removed in Essentials {1}.", removal_version)
     end
     unless alternative.nil?
@@ -41,11 +41,11 @@ class Module
       raise ArgumentError, "#{class_name} does not have method #{aliased_method} defined"
     end
 
-    delimiter = class_method ? '.' : '#'
+    delimiter = class_method ? "." : "#"
 
     target.define_method(name) do |*args, **kvargs|
-      alias_name = format('%s%s%s', class_name, delimiter, name)
-      aliased_method_name = format('%s%s%s', class_name, delimiter, aliased_method)
+      alias_name = format("%s%s%s", class_name, delimiter, name)
+      aliased_method_name = format("%s%s%s", class_name, delimiter, aliased_method)
       Deprecation.warn_method(alias_name, removal_in, aliased_method_name)
       method(aliased_method).call(*args, **kvargs)
     end

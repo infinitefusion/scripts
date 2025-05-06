@@ -1,4 +1,4 @@
-def pbSpecialTutor(pokemon,legendaries=false)
+def pbSpecialTutor(pokemon, legendaries = false)
   retval = true
   tutorUtil = FusionTutorService.new(pokemon)
   pbFadeOutIn {
@@ -67,7 +67,6 @@ def getlegendaryConditionExample()
 end
 
 class FusionTutorService
-
   def has_compatible_move(include_legendaries = false)
     return !getCompatibleMoves(include_legendaries).empty?
   end
@@ -198,8 +197,4 @@ class FusionTutorService
     return true if @show_full_list
     return @pokemon.compatible_with_move?(move)
   end
-
 end
-
-
-

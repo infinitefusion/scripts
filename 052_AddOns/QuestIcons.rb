@@ -1,14 +1,15 @@
-def setDialogIconOff(eventId=nil)
+def setDialogIconOff(eventId = nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
   event.setDialogIconManualOffValue(true)
 end
 
-def setDialogIconOn(eventId=nil)
+def setDialogIconOn(eventId = nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
   event.setDialogIconManualOffValue(false)
 end
+
 class Game_Event < Game_Character
   #set from analyzing the event's content at load
   attr_accessor :show_quest_icon
@@ -20,20 +21,22 @@ class Game_Event < Game_Character
 
   QUEST_NPC_TRIGGER = "questNPC"
   MAPS_WITH_NO_ICONS = [] #Maps in which the game shouldn't try to look for quest icons(e.g. maps with a lot of events - mostly for possible performance issues)
-  DIALOG_ICON_COMMENT_TRIGGER=["dialogIcon"]
+  DIALOG_ICON_COMMENT_TRIGGER = ["dialogIcon"]
 
   alias eventQuestIcon_init initialize
-  def initialize(map_id, event, map=nil)
+
+  def initialize(map_id, event, map = nil)
     eventQuestIcon_init(map_id, event, map)
     addQuestMarkersToSprite unless MAPS_WITH_NO_ICONS.include?($game_map.map_id)
   end
 
   def setDialogIconManualOffValue(value)
-    @dialog_icon_manual_off=value
+    @dialog_icon_manual_off = value
     @show_dialog_icon = !@dialog_icon_manual_off
   end
+
   def setQuestIconManualOffValue(value)
-    @quest_icon_manual_off=value
+    @quest_icon_manual_off = value
     @show_quest_icon = !@quest_icon_manual_off
   end
 
@@ -57,7 +60,7 @@ class Game_Event < Game_Character
     match = name.match(/#{Regexp.escape(QUEST_NPC_TRIGGER)}\(([^)]+)\)/)  # Capture anything inside parentheses
     return nil unless match
     quest_id = match[1]
-    quest_id = quest_id.gsub(/^['"]|['"]$/, '')  # Remove quotes if they exist
+    quest_id = quest_id.gsub(/^['"]|['"]$/, "")  # Remove quotes if they exist
     echoln "MATCH"
     echoln quest_id
     return nil if isQuestAlreadyAccepted?(quest_id)
@@ -73,19 +76,16 @@ class Game_Event < Game_Character
     return false if page.graphic.character_name.empty?
     return true
   end
-
 end
 
-
-
 class Sprite_Character
-
   DIALOGUE_ICON_NAME = "Graphics/Pictures/Quests/dialogIcon"
   QUEST_ICON_NAME = "Graphics/Pictures/Quests/questIcon"
   attr_accessor :questIcon
   alias questIcon_init initialize
-  def initialize(viewport, character = nil, is_follower=nil)
-    questIcon_init(viewport,character)
+
+  def initialize(viewport, character = nil, is_follower = nil)
+    questIcon_init(viewport, character)
     if character.is_a?(Game_Event) && character.show_dialog_icon
       addQuestMarkerToSprite(:DIALOG_ICON)
     end
@@ -94,8 +94,6 @@ class Sprite_Character
     end
     #addQuestMarkersToSprite(character) unless MAPS_WITH_NO_ICONS.include?($game_map.map_id)
   end
-
-
 
   # def addQuestMarkersToSprite(character)
   #   quest_id = detectQuestSwitch(character)
@@ -106,8 +104,8 @@ class Sprite_Character
   #   end
   # end
 
-
   alias questIcon_update update
+
   def update
     questIcon_update
     updateGameEvent if @character.is_a?(Game_Event)
@@ -119,20 +117,15 @@ class Sprite_Character
   end
 
   alias questIcon_dispose dispose
+
   def dispose
     questIcon_dispose
     removeQuestIcon
   end
 
-
-
-
   # Event name must contain questNPC(x) for a quest icon to be displayed
   # Where x is the quest ID
   # if the quest has not already been accepted, the quest marker will be shown
-
-
-
 
   #type: :QUEST_ICON, :DIALOG_ICON
   def addQuestMarkerToSprite(iconType)
@@ -154,21 +147,20 @@ class Sprite_Character
     return if !@questIcon
     return if !@questIcon.bitmap
 
-    y_offset =-70
+    y_offset = -70
 
     @questIcon.ox = @questIcon.bitmap.width / 2.0
     @questIcon.oy = @questIcon.bitmap.height / 2.0
 
     x_position = @character.screen_x
     y_position = @character.screen_y + y_offset
-    @questIcon.x =  x_position
-    @questIcon.y =  y_position
-    @questIcon.z =  999
+    @questIcon.x = x_position
+    @questIcon.y = y_position
+    @questIcon.z = 999
   end
 
   def removeQuestIcon()
     @questIcon.dispose if @questIcon
     @questIcon = nil
   end
-
 end

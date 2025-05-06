@@ -11,13 +11,15 @@ class Game_SelfSwitches
   def initialize
     @data = {}
   end
+
   #-----------------------------------------------------------------------------
   # * Get Self Switch
   #     key : key
   #-----------------------------------------------------------------------------
   def [](key)
-    return (@data[key]==true) ? true : false
+    return (@data[key] == true) ? true : false
   end
+
   #-----------------------------------------------------------------------------
   # * Set Self Switch
   #     key   : key

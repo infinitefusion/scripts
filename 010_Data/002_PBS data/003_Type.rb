@@ -13,30 +13,30 @@ module GameData
     DATA_FILENAME = "types.dat"
 
     SCHEMA = {
-      "Name"          => [1, "s"],
-      "InternalName"  => [2, "s"],
-      "IsPseudoType"  => [3, "b"],
+      "Name" => [1, "s"],
+      "InternalName" => [2, "s"],
+      "IsPseudoType" => [3, "b"],
       "IsSpecialType" => [4, "b"],
-      "Weaknesses"    => [5, "*s"],
-      "Resistances"   => [6, "*s"],
-      "Immunities"    => [7, "*s"]
+      "Weaknesses" => [5, "*s"],
+      "Resistances" => [6, "*s"],
+      "Immunities" => [7, "*s"],
     }
 
     extend ClassMethods
     include InstanceMethods
 
     def initialize(hash)
-      @id           = hash[:id]
-      @id_number    = hash[:id_number]    || -1
-      @real_name    = hash[:name]         || "Unnamed"
-      @pseudo_type  = hash[:pseudo_type]  || false
+      @id = hash[:id]
+      @id_number = hash[:id_number] || -1
+      @real_name = hash[:name] || "Unnamed"
+      @pseudo_type = hash[:pseudo_type] || false
       @special_type = hash[:special_type] || false
-      @weaknesses   = hash[:weaknesses]   || []
-      @weaknesses   = [@weaknesses] if !@weaknesses.is_a?(Array)
-      @resistances  = hash[:resistances]  || []
-      @resistances  = [@resistances] if !@resistances.is_a?(Array)
-      @immunities   = hash[:immunities]   || []
-      @immunities   = [@immunities] if !@immunities.is_a?(Array)
+      @weaknesses = hash[:weaknesses] || []
+      @weaknesses = [@weaknesses] if !@weaknesses.is_a?(Array)
+      @resistances = hash[:resistances] || []
+      @resistances = [@resistances] if !@resistances.is_a?(Array)
+      @immunities = hash[:immunities] || []
+      @immunities = [@immunities] if !@immunities.is_a?(Array)
     end
 
     # @return [String] the translated name of this item
@@ -45,7 +45,7 @@ module GameData
     end
 
     def physical?; return !@special_type; end
-    def special?;  return @special_type; end
+    def special?; return @special_type; end
 
     def effectiveness(other_type)
       return Effectiveness::NORMAL_EFFECTIVE_ONE if !other_type
@@ -60,11 +60,11 @@ end
 #===============================================================================
 
 module Effectiveness
-  INEFFECTIVE            = 0
+  INEFFECTIVE = 0
   NOT_VERY_EFFECTIVE_ONE = 1
-  NORMAL_EFFECTIVE_ONE   = 2
-  SUPER_EFFECTIVE_ONE    = 4
-  NORMAL_EFFECTIVE       = NORMAL_EFFECTIVE_ONE ** 3
+  NORMAL_EFFECTIVE_ONE = 2
+  SUPER_EFFECTIVE_ONE = 4
+  NORMAL_EFFECTIVE = NORMAL_EFFECTIVE_ONE ** 3
 
   module_function
 

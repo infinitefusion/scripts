@@ -106,7 +106,7 @@ class PokeBattle_Battler
   end
 
   def fainted?
-    return @hp <= 0;
+    return @hp <= 0
   end
 
   alias isFainted? fainted?
@@ -134,15 +134,15 @@ class PokeBattle_Battler
   # Properties from Pokémon
   #=============================================================================
   def happiness
-    return @pokemon ? @pokemon.happiness : 0;
+    return @pokemon ? @pokemon.happiness : 0
   end
 
   def nature
-    return @pokemon ? @pokemon.nature : 0;
+    return @pokemon ? @pokemon.nature : 0
   end
 
   def pokerusStage
-    return @pokemon ? @pokemon.pokerusStage : 0;
+    return @pokemon ? @pokemon.pokerusStage : 0
   end
 
   #=============================================================================
@@ -154,7 +154,7 @@ class PokeBattle_Battler
   end
 
   def mega?
-    return @pokemon && @pokemon.mega?;
+    return @pokemon && @pokemon.mega?
   end
 
   alias isMega? mega?
@@ -165,19 +165,19 @@ class PokeBattle_Battler
   end
 
   def primal?
-    return @pokemon && @pokemon.primal?;
+    return @pokemon && @pokemon.primal?
   end
 
   alias isPrimal? primal?
 
   def shadowPokemon?
-    return false;
+    return false
   end
 
   alias isShadow? shadowPokemon?
 
   def inHyperMode?
-    return false;
+    return false
   end
 
   #=============================================================================
@@ -292,7 +292,7 @@ class PokeBattle_Battler
     end
     # Badge multiplier
     if @battle.internalBattle && pbOwnedByPlayer? &&
-      @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPEED
+       @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPEED
       speedMult *= 1.1
     end
     # Calculation
@@ -418,7 +418,7 @@ class PokeBattle_Battler
       :ZENMODE,
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
-      :RKSSYSTEM
+      :RKSSYSTEM,
     ]
     return ability_blacklist.include?(abil.id)
   end
@@ -445,7 +445,7 @@ class PokeBattle_Battler
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
-      :RKSSYSTEM
+      :RKSSYSTEM,
     ]
     return ability_blacklist.include?(abil.id)
   end
@@ -761,29 +761,27 @@ class PokeBattle_Battler
     if @ability_id == :SHIELDSDOWN
       if @pokemon.isFusionOf(:MINIOR_M)
         if new_hp <= (@totalhp / 2)
-          changeBattlerForm(:MINIOR_M, :MINIOR_C,nil, :SHELLSMASH)
+          changeBattlerForm(:MINIOR_M, :MINIOR_C, nil, :SHELLSMASH)
           @battle.pbDisplay(_INTL("{1} changed to the Core Form!", pbThis))
         end
       end
       if @pokemon.isFusionOf(:MINIOR_C)
         if new_hp > (@totalhp / 2)
-          changeBattlerForm(:MINIOR_C, :MINIOR_M,nil, :SHELLSMASH)
+          changeBattlerForm(:MINIOR_C, :MINIOR_M, nil, :SHELLSMASH)
           @battle.pbDisplay(_INTL("{1} changed to the Meteor Form!", pbThis))
         end
       end
     end
   end
 
-
-  def changeBattlerForm(oldForm, newForm,commonAnimation=nil,moveAnimation=nil)
+  def changeBattlerForm(oldForm, newForm, commonAnimation = nil, moveAnimation = nil)
     @pokemon.changeFormSpecies(oldForm, newForm)
     if moveAnimation
-      changeFormSpeciesMoveAnimation(oldForm, newForm,moveAnimation)
+      changeFormSpeciesMoveAnimation(oldForm, newForm, moveAnimation)
     else
       changeFormSpeciesCommonAnimation(oldForm, newForm, commonAnimation)
     end
   end
-
 
   #These methods only play the animation and change the graphics.
   # To also change the species, call changeFormSpecies() instead
@@ -793,9 +791,9 @@ class PokeBattle_Battler
     @battle.scene.pbRefreshOne(@index)
   end
 
-  def changeFormSpeciesMoveAnimation(oldForm, newForm, moveID=:REFRESH)
+  def changeFormSpeciesMoveAnimation(oldForm, newForm, moveID = :REFRESH)
     @battle.scene.pbChangePokemon(self, @pokemon)
-    @battle.scene.pbAnimation(moveID, self,self)
+    @battle.scene.pbAnimation(moveID, self, self)
     @battle.scene.pbRefreshOne(@index)
   end
 end

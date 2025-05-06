@@ -81,5 +81,4 @@ class Sprite_Hair < Sprite_Wearable
     end
     adjustPositionForScreenScrolling()
   end
-
 end

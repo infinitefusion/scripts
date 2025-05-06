@@ -67,9 +67,9 @@ class PokeBattle_Battle
     return true if Settings::MORE_TYPE_EFFECTS && battler.pbHasType?(:GHOST)
     # Other certain trapping effects
     if battler.effects[PBEffects::Trapping] > 0 ||
-      battler.effects[PBEffects::MeanLook] >= 0 ||
-      battler.effects[PBEffects::Ingrain] ||
-      @field.effects[PBEffects::FairyLock] > 0
+       battler.effects[PBEffects::MeanLook] >= 0 ||
+       battler.effects[PBEffects::Ingrain] ||
+       @field.effects[PBEffects::FairyLock] > 0
       partyScene.pbDisplay(_INTL("{1} can't be switched out!", battler.pbThis)) if partyScene
       return false
     end
@@ -164,8 +164,8 @@ class PokeBattle_Battle
           #       Pokémon when an opponent replaces a fainted Pokémon in single
           #       battles. In double battles, etc. there is no such offer.
           if @internalBattle && @switchStyle && trainerBattle? && pbSideSize(0) == 1 &&
-            opposes?(idxBattler) && !@battlers[0].fainted? && !switched.include?(0) &&
-            pbCanChooseNonActive?(0) && @battlers[0].effects[PBEffects::Outrage] == 0
+             opposes?(idxBattler) && !@battlers[0].fainted? && !switched.include?(0) &&
+             pbCanChooseNonActive?(0) && @battlers[0].effects[PBEffects::Outrage] == 0
             idxPartyForName = idxPartyNew
             enemyParty = pbParty(idxBattler)
             if enemyParty[idxPartyNew].ability == :ILLUSION
@@ -353,7 +353,7 @@ class PokeBattle_Battle
     # Entry hazards
     # Stealth Rock
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
-      GameData::Type.exists?(:ROCK)
+       GameData::Type.exists?(:ROCK)
       bTypes = battler.pbTypes(true)
       eff = Effectiveness.calculate(:ROCK, bTypes[0], bTypes[1], bTypes[2])
       if !Effectiveness.ineffective?(eff)
@@ -369,7 +369,7 @@ class PokeBattle_Battle
     end
     # Spikes
     if battler.pbOwnSide.effects[PBEffects::Spikes] > 0 && battler.takesIndirectDamage? &&
-      !battler.airborne?
+       !battler.airborne?
       spikesDiv = [8, 6, 4][battler.pbOwnSide.effects[PBEffects::Spikes] - 1]
       oldHP = battler.hp
       battler.pbReduceHP(battler.totalhp / spikesDiv, false)
@@ -381,7 +381,7 @@ class PokeBattle_Battle
     end
     # Toxic Spikes
     if battler.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0 && !battler.fainted? &&
-      !battler.airborne?
+       !battler.airborne?
       if battler.pbHasType?(:POISON)
         battler.pbOwnSide.effects[PBEffects::ToxicSpikes] = 0
         pbDisplay(_INTL("{1} absorbed the poison spikes!", battler.pbThis))
@@ -395,7 +395,7 @@ class PokeBattle_Battle
     end
     # Sticky Web
     if battler.pbOwnSide.effects[PBEffects::StickyWeb] && !battler.fainted? &&
-      !battler.airborne?
+       !battler.airborne?
       pbDisplay(_INTL("{1} was caught in a sticky web!", battler.pbThis))
       if battler.pbCanLowerStatStage?(:SPEED)
         battler.pbLowerStatStage(:SPEED, 1, nil)

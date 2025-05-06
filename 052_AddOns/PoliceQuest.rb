@@ -4,5 +4,3 @@ def getBlackMarketOriginalTrainer
   # trainer = NPCTrainer.new("", randomTrainer.id)
   # return trainer
 end
-
-

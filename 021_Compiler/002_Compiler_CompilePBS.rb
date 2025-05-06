@@ -8,7 +8,7 @@ module Compiler
     nonglobaltypes = {
       "Name" => [0, "s"],
       "Filename" => [1, "s"],
-      "Point" => [2, "uussUUUU"]
+      "Point" => [2, "uussUUUU"],
     }
     currentmap = -1
     rgnnames = []
@@ -60,7 +60,7 @@ module Compiler
         "N" => "N", "North" => "N",
         "E" => "E", "East" => "E",
         "S" => "S", "South" => "S",
-        "W" => "W", "West" => "W"
+        "W" => "W", "West" => "W",
       }
       record = []
       thisline = line.dup
@@ -176,7 +176,7 @@ module Compiler
           :special_type => contents["IsSpecialType"],
           :weaknesses => contents["Weaknesses"],
           :resistances => contents["Resistances"],
-          :immunities => contents["Immunities"]
+          :immunities => contents["Immunities"],
         }
         # Add type's data to records
         GameData::Type.register(type_hash)
@@ -225,7 +225,7 @@ module Compiler
         :id => ability_symbol,
         :id_number => ability_number,
         :name => line[2],
-        :description => line[3]
+        :description => line[3],
       }
       # Add ability's data to records
       GameData::Ability.register(ability_hash)
@@ -250,8 +250,7 @@ module Compiler
     pbCompilerEachPreppedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuueiss",
                                             nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
-                                            nil, nil, nil, :Target, nil, nil, nil
-      ])
+                                            nil, nil, nil, :Target, nil, nil, nil])
       move_number = line[0]
       move_symbol = line[1].to_sym
       if GameData::Move::DATA[move_number]
@@ -281,7 +280,7 @@ module Compiler
         :target => GameData::Target.get(line[10]).id,
         :priority => line[11],
         :flags => line[12],
-        :description => line[13]
+        :description => line[13],
       }
       # Add move's data to records
       GameData::Move.register(move_hash)
@@ -324,7 +323,7 @@ module Compiler
         :description => line[6],
         :field_use => line[7],
         :battle_use => line[8],
-        :type => line[9]
+        :type => line[9],
       }
       item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
       # Add item's data to records
@@ -360,7 +359,7 @@ module Compiler
           :hours_per_stage => line[0],
           :drying_per_hour => line[1],
           :minimum_yield => line[2],
-          :maximum_yield => line[3]
+          :maximum_yield => line[3],
         }
         # Add berry plant's data to records
         GameData::BerryPlant.register(berry_plant_hash)
@@ -435,7 +434,7 @@ module Compiler
             for i in 0...value.length / 2
               move_array.push([value[i * 2], value[i * 2 + 1], i])
             end
-            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b [0] }
+            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b[0] }
             move_array.each { |arr| arr.pop }
             contents[key] = move_array
           when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
@@ -491,7 +490,7 @@ module Compiler
           :front_sprite_y => contents["BattlerEnemyY"],
           :front_sprite_altitude => contents["BattlerAltitude"],
           :shadow_x => contents["BattlerShadowX"],
-          :shadow_size => contents["BattlerShadowSize"]
+          :shadow_size => contents["BattlerShadowSize"],
         }
         # Add species' data to records
         GameData::Species.register(species_hash)
@@ -614,7 +613,7 @@ module Compiler
             for i in 0...value.length / 2
               move_array.push([value[i * 2], value[i * 2 + 1], i])
             end
-            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b [0] }
+            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b[0] }
             move_array.each { |arr| arr.pop }
             contents[key] = move_array
           when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
@@ -696,7 +695,7 @@ module Compiler
           :front_sprite_y => contents["BattlerEnemyY"] || base_data.front_sprite_y,
           :front_sprite_altitude => contents["BattlerAltitude"] || base_data.front_sprite_altitude,
           :shadow_x => contents["BattlerShadowX"] || base_data.shadow_x,
-          :shadow_size => contents["BattlerShadowSize"] || base_data.shadow_size
+          :shadow_size => contents["BattlerShadowSize"] || base_data.shadow_size,
         }
         # If form is single-typed, ensure it remains so if base species is dual-typed
         species_hash[:type2] = contents["Type1"] if contents["Type1"] && !contents["Type2"]
@@ -860,7 +859,7 @@ module Compiler
         :id => ribbon_symbol,
         :id_number => ribbon_number,
         :name => line[2],
-        :description => line[3]
+        :description => line[3],
       }
       # Add ribbon's data to records
       GameData::Ribbon.register(ribbon_hash)
@@ -890,7 +889,7 @@ module Compiler
     pbCompilerEachPreppedLine(path) { |line, line_no|
       next if line.length == 0
       if expected_lines > 0 && line[/^\d+,/] && new_format # Species line (new format)
-        values = line.split(',').collect! { |v| v.strip }
+        values = line.split(",").collect! { |v| v.strip }
         if !values || values.length < 3
           raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
                       GameData::EncounterType.get(current_type).real_name, encounter_hash[:map], line, FileLineData.linereport)
@@ -906,7 +905,7 @@ module Compiler
         end
         encounter_hash[:types][current_type].push(values)
       elsif expected_lines > 0 && !new_format # Expect a species line and nothing else (old format)
-        values = line.split(',').collect! { |v| v.strip }
+        values = line.split(",").collect! { |v| v.strip }
         if !values || values.length < 2
           raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
                       GameData::EncounterType.get(current_type).real_name, encounter_hash[:map], line, FileLineData.linereport)
@@ -928,7 +927,7 @@ module Compiler
           raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
         end
         new_format = true
-        values = $~[1].split(',').collect! { |v| v.strip.to_i }
+        values = $~[1].split(",").collect! { |v| v.strip.to_i }
         values[1] = 0 if !values[1]
         map_number = values[0]
         map_version = values[1]
@@ -962,7 +961,7 @@ module Compiler
           :map => map_number,
           :version => map_version,
           :step_chances => step_chances,
-          :types => {}
+          :types => {},
         }
         current_type = nil
         need_step_chances = true
@@ -1003,7 +1002,7 @@ module Compiler
           :map => map_number,
           :version => 0,
           :step_chances => step_chances,
-          :types => {}
+          :types => {},
         }
         current_type = nil
         need_step_chances = true
@@ -1025,7 +1024,7 @@ module Compiler
         end
       else
         # Check if line is an encounter method name or not
-        values = line.split(',').collect! { |v| v.strip }
+        values = line.split(",").collect! { |v| v.strip }
         current_type = (values[0] && !values[0].empty?) ? values[0].to_sym : nil
         if current_type && GameData::EncounterType.exists?(current_type) # Start of a new encounter method
           need_step_chances = false
@@ -1077,11 +1076,10 @@ module Compiler
     pbCompilerEachCommentedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "unsUSSSeUS",
                                             nil, nil, nil, nil, nil, nil, nil, {
-                                              "Male" => 0, "M" => 0, "0" => 0,
-                                              "Female" => 1, "F" => 1, "1" => 1,
-                                              "Mixed" => 2, "X" => 2, "2" => 2, "" => 2
-                                            }, nil, nil]
-      )
+        "Male" => 0, "M" => 0, "0" => 0,
+        "Female" => 1, "F" => 1, "1" => 1,
+        "Mixed" => 2, "X" => 2, "2" => 2, "" => 2,
+      }, nil, nil])
       type_number = line[0]
       type_symbol = line[1].to_sym
       if GameData::TrainerType::DATA[type_number]
@@ -1100,7 +1098,7 @@ module Compiler
         :intro_ME => line[6],
         :gender => line[7],
         :skill_level => line[8],
-        :skill_code => line[9]
+        :skill_code => line[9],
       }
       # Add trainer type's data to records
       GameData::TrainerType.register(type_hash)
@@ -1158,7 +1156,7 @@ module Compiler
           :trainer_type => line_data[0],
           :name => line_data[1],
           :version => line_data[2] || 0,
-          :pokemon => []
+          :pokemon => [],
         }
         current_pkmn = nil
         trainer_names[trainer_id] = trainer_hash[:name]
@@ -1227,11 +1225,10 @@ module Compiler
           trainer_preRematchText_fused[trainer_id] = property_value if property_name == "PreRematchText_fused"
           trainer_preRematchText_unfused[trainer_id] = property_value if property_name == "PreRematchText_unfused"
           trainer_preRematchText_reversed[trainer_id] = property_value if property_name == "PreRematchText_reversed"
-
         when "Pokemon"
           current_pkmn = {
             :species => property_value[0],
-            :level => property_value[1]
+            :level => property_value[1],
           }
           trainer_hash[line_schema[0]].push(current_pkmn)
         else
@@ -1258,7 +1255,7 @@ module Compiler
             if property_value[/^\d+$/]
               current_pkmn[line_schema[0]] = pbBallTypeToItem(property_value.to_i).id
             elsif !GameData::Item.exists?(property_value.to_sym) ||
-              !GameData::Item.get(property_value.to_sym).is_poke_ball?
+                  !GameData::Item.get(property_value.to_sym).is_poke_ball?
               raise _INTL("Value {1} isn't a defined Poké Ball.\r\n{2}", property_value, FileLineData.linereport)
             else
               current_pkmn[line_schema[0]] = property_value.to_sym
@@ -1286,7 +1283,7 @@ module Compiler
             :trainer_type => nil,
             :name => nil,
             :version => 0,
-            :pokemon => []
+            :pokemon => [],
           }
           current_pkmn = nil
         end
@@ -1318,7 +1315,7 @@ module Compiler
                                         "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 },
                                       nil, nil, :Nature, nil, nil, nil, nil, nil])
           current_pkmn = {
-            :species => line_data[0]
+            :species => line_data[0],
           }
           trainer_hash[:pokemon].push(current_pkmn)
           # Error checking in properties
@@ -1383,7 +1380,6 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
 
-
     trainer_lose_texts_rematch = []
     trainer_preRematch_text = []
     trainer_preRematchText_caught = []
@@ -1410,7 +1406,7 @@ module Compiler
     btTrainersRequiredTypes = {
       "Trainers" => [0, "s"],
       "Pokemon" => [1, "s"],
-      "Challenges" => [2, "*s"]
+      "Challenges" => [2, "*s"],
     }
     if !safeExists?(path)
       File.open(path, "wb") { |f|
@@ -1481,7 +1477,7 @@ module Compiler
       "BeginSpeech" => [2, "s"],
       "EndSpeechWin" => [3, "s"],
       "EndSpeechLose" => [4, "s"],
-      "PokemonNos" => [5, "*u"]
+      "PokemonNos" => [5, "*u"],
     }
     trainernames = []
     beginspeech = []
@@ -1563,7 +1559,7 @@ module Compiler
             :player_E => contents["PlayerE"],
             :player_F => contents["PlayerF"],
             :player_G => contents["PlayerG"],
-            :player_H => contents["PlayerH"]
+            :player_H => contents["PlayerH"],
           }
           # Add metadata's data to records
           GameData::Metadata.register(metadata_hash)
@@ -1591,7 +1587,7 @@ module Compiler
             :trainer_victory_ME => contents["TrainerVictoryME"],
             :wild_capture_ME => contents["WildCaptureME"],
             :town_map_size => contents["MapSize"],
-            :battle_environment => contents["Environment"]
+            :battle_environment => contents["Environment"],
           }
           # Add metadata's data to records
           GameData::MapMetadata.register(metadata_hash)

@@ -68,7 +68,6 @@ def addNewTrainerRematch(trainerId)
   #$PokemonGlobal.rematchedTrainers[:trainerId]
   newTrainer = RematchTrainer.new(trainerId)
   $PokemonGlobal.rematchedTrainers[trainerId.to_sym] = newTrainer
-
 end
 
 def getNumberRematchOld(trainerId)
@@ -135,25 +134,24 @@ end
 def evolveRematchPokemon(nbRematch, speciesSymbol)
   species = getDexNumberForSpecies(speciesSymbol)
   if (nbRematch >= 30 && $Trainer.numbadges >= 6)
-    species = getEvolution(species,:HEAD)
-    species = getEvolution(species,:BODY)
-    species = getEvolution(species,:HEAD)
-    species = getEvolution(species,:BODY)
+    species = getEvolution(species, :HEAD)
+    species = getEvolution(species, :BODY)
+    species = getEvolution(species, :HEAD)
+    species = getEvolution(species, :BODY)
   elsif (nbRematch >= 20 && $Trainer.numbadges >= 3)
-    species = getEvolution(species,:HEAD)
-    species = getEvolution(species,:BODY)
-    species = getEvolution(species,:HEAD)
-  elsif  (nbRematch >= 10 && $Trainer.numbadges >= 3)
-    species = getEvolution(species,:HEAD)
-    species = getEvolution(species,:BODY)
-  elsif  (nbRematch >= 5)
-    species = getEvolution(species,:HEAD)
+    species = getEvolution(species, :HEAD)
+    species = getEvolution(species, :BODY)
+    species = getEvolution(species, :HEAD)
+  elsif (nbRematch >= 10 && $Trainer.numbadges >= 3)
+    species = getEvolution(species, :HEAD)
+    species = getEvolution(species, :BODY)
+  elsif (nbRematch >= 5)
+    species = getEvolution(species, :HEAD)
   end
   return species
 end
 
-
-def getEvolution(speciesParam, halfToEvolve=nil)
+def getEvolution(speciesParam, halfToEvolve = nil)
   species = dexNum(speciesParam)
   begin
     prioritizeHead = halfToEvolve == :HEAD
@@ -213,15 +211,13 @@ def getFusionSpeciesSymbol(body, head)
   head_num = dexNum(head)
   nb_pokemon = Settings::NB_POKEMON
   id = body_num * nb_pokemon + head_num
-  if id > (nb_pokemon*nb_pokemon)+nb_pokemon
+  if id > (nb_pokemon * nb_pokemon) + nb_pokemon
     displayRandomizerErrorMessage()
     return body
   end
 
   return GameData::Species.get(id).species
 end
-
-
 
 #
 def evolveHead(species)
@@ -267,9 +263,8 @@ def getCorrectEvolvedSpecies(pokemon)
     for form in pbGetEvolvedFormData(pokemon.species)
       newspecies = form[2]
     end
-    return newspecies;
+    return newspecies
   end
-
 end
 
 def printDebugRematchInfo(nbRematch, expRate, newLevel, levelCap, originalLevel)

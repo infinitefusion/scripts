@@ -3,7 +3,7 @@ class File
   def self.copy(source, destination)
     data = ""
     t = Time.now
-    File.open(source, 'rb') do |f|
+    File.open(source, "rb") do |f|
       while r = f.read(4096)
         if Time.now - t > 1
           Graphics.update
@@ -13,7 +13,7 @@ class File
       end
     end
     File.delete(destination) if File.file?(destination)
-    f = File.new(destination, 'wb')
+    f = File.new(destination, "wb")
     f.write data
     f.close
   end
@@ -44,7 +44,7 @@ module SpriteRenamer
   def convert_pokemon_filename(full_name, default_prefix = "")
     name = full_name
     extension = ".png"
-    if full_name[/^(.+)\.([^\.]+)$/]   # Of the format something.abc
+    if full_name[/^(.+)\.([^\.]+)$/] # Of the format something.abc
       name = $~[1]
       extension = "." + $~[2]
     end
@@ -116,7 +116,7 @@ module SpriteRenamer
         File.move(src_dir + file, dest_dir + "Eggs/000_egg.png")
       else
         next if !file[/^icon\d+[^\.]*\.[^\.]*$/]
-        new_filename = convert_pokemon_filename(file.sub(/^icon/, ''), "Icons/")
+        new_filename = convert_pokemon_filename(file.sub(/^icon/, ""), "Icons/")
         # moves the files into their appropriate folders
         File.move(src_dir + file, dest_dir + new_filename)
       end
@@ -132,7 +132,7 @@ module SpriteRenamer
       Graphics.update if i % 100 == 0
       pbSetWindowText(_INTL("Converting footprints {1}/{2}...", i, files.length)) if i % 50 == 0
       next if !file[/^footprint\d+[^\.]*\.[^\.]*$/]
-      new_filename = convert_pokemon_filename(file.sub(/^footprint/, ''), "Footprints/")
+      new_filename = convert_pokemon_filename(file.sub(/^footprint/, ""), "Footprints/")
       # moves the files into their appropriate folders
       File.move(src_dir + file, dest_dir + new_filename)
     end

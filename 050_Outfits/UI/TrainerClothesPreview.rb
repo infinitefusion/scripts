@@ -1,5 +1,5 @@
 class TrainerClothesPreview
-  attr_writer :pokeball, :clothes, :hat, :hat2, :hair, :skin_tone, :hair_color, :hat_color,:hat2_color, :clothes_color
+  attr_writer :pokeball, :clothes, :hat, :hat2, :hair, :skin_tone, :hair_color, :hat_color, :hat2_color, :clothes_color
 
   def initialize(x = 0, y = 0, windowed = true, pokeball = nil)
     @playerBitmap = nil
@@ -12,7 +12,7 @@ class TrainerClothesPreview
     resetOutfits()
   end
 
-  def set_hat(value,is_secondaryHat=false)
+  def set_hat(value, is_secondaryHat = false)
     if is_secondaryHat
       @hat2 = value
     else
@@ -20,7 +20,7 @@ class TrainerClothesPreview
     end
   end
 
-  def set_hat_color(value,is_secondaryHat=false)
+  def set_hat_color(value, is_secondaryHat = false)
     if is_secondaryHat
       @hat2_color = value
     else
@@ -44,7 +44,7 @@ class TrainerClothesPreview
     @playerBitmap = generate_front_trainer_sprite_bitmap(false,
                                                          @pokeball,
                                                          @clothes,
-                                                         @hat,@hat2, @hair,
+                                                         @hat, @hat2, @hair,
                                                          @skin_tone,
                                                          @hair_color, @hat_color, @clothes_color, @hat2_color)
     initialize_preview()
@@ -68,5 +68,4 @@ class TrainerClothesPreview
   def erase()
     @playerSprite.dispose if @playerSprite
   end
-
 end

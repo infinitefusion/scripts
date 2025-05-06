@@ -84,7 +84,7 @@ class Scene_Map
   def clear_quest_icons()
     for sprite in $scene.spriteset.character_sprites
       if sprite.is_a?(Sprite_Character) && sprite.questIcon
-         sprite.removeQuestIcon
+        sprite.removeQuestIcon
       end
     end
   end
@@ -102,13 +102,13 @@ class Scene_Map
     end
     $game_player.moveto($game_temp.player_new_x, $game_temp.player_new_y)
     case $game_temp.player_new_direction
-    when 2 then
+    when 2
       $game_player.turn_down
-    when 4 then
+    when 4
       $game_player.turn_left
-    when 6 then
+    when 6
       $game_player.turn_right
-    when 8 then
+    when 8
       $game_player.turn_up
     end
 
@@ -225,7 +225,7 @@ class Scene_Map
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
           dayOfWeek = getDayOfTheWeek().to_s
-          $scene.spriteset.addUserSprite(LocationWindow.new($game_map.name+ "\n"+ pbGetTimeNow.strftime("%I:%M %p") + "\n" + dayOfWeek))
+          $scene.spriteset.addUserSprite(LocationWindow.new($game_map.name + "\n" + pbGetTimeNow.strftime("%I:%M %p") + "\n" + dayOfWeek))
         end
       elsif Input.trigger?(Input::SPECIAL)
         unless $game_system.menu_disabled || $game_player.moving?
@@ -256,7 +256,7 @@ class Scene_Map
     @spritesetGlobal.playersprite.updateBitmap
   end
 
-  def reset_map(fadeout = false,reset_music=true)
+  def reset_map(fadeout = false, reset_music = true)
     $MapFactory.setup($game_map.map_id)
     $game_player.moveto($game_player.x, $game_player.y)
     $game_player.straighten

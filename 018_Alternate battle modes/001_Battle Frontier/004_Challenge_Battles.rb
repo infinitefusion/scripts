@@ -51,14 +51,14 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   # Remember original data, to be restored after battle
   challengedata = PokemonChallengeRules.new if !challengedata
   oldlevels = challengedata.adjustLevels($Trainer.party, opponent.party)
-  olditems  = $Trainer.party.transform { |p| p.item_id }
+  olditems = $Trainer.party.transform { |p| p.item_id }
   olditems2 = opponent.party.transform { |p| p.item_id }
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
   battle = challengedata.createBattle(scene, $Trainer, opponent)
   battle.internalBattle = false
-  battle.endSpeeches    = [endspeech]
+  battle.endSpeeches = [endspeech]
   battle.endSpeechesWin = [endspeechwin]
   # Set various other properties in the battle class
   pbPrepareBattle(battle)
@@ -87,7 +87,7 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   end
   # Save the record of the battle
   $PokemonTemp.lastbattle = nil
-  if decision == 1 || decision == 2 || decision == 5   # if win, loss or draw
+  if decision == 1 || decision == 2 || decision == 5 # if win, loss or draw
     $PokemonTemp.lastbattle = battle.pbDumpRecord
   end
   # Return true if the player won the battle, and false if any other result
@@ -99,7 +99,7 @@ end
 #===============================================================================
 def pbRecordLastBattle
   $PokemonGlobal.lastbattle = $PokemonTemp.lastbattle
-  $PokemonTemp.lastbattle   = nil
+  $PokemonTemp.lastbattle = nil
 end
 
 def pbPlayLastBattle

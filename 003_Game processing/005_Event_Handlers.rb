@@ -15,7 +15,7 @@ class Event
   # Removes an event handler procedure from the event.
   def -(method)
     for i in 0...@callbacks.length
-      next if @callbacks[i]!=method
+      next if @callbacks[i] != method
       @callbacks.delete_at(i)
       break
     end
@@ -25,7 +25,7 @@ class Event
   # Adds an event handler procedure from the event.
   def +(method)
     for i in 0...@callbacks.length
-      return self if @callbacks[i]==method
+      return self if @callbacks[i] == method
     end
     @callbacks.push(method)
     return self
@@ -44,13 +44,13 @@ class Event
   # proc { |sender,params| } where params is an array of the other parameters, and
   # proc { |sender,arg0,arg1,...| }
   def trigger(*arg)
-    arglist = arg[1,arg.length]
+    arglist = arg[1, arg.length]
     for callback in @callbacks
-      if callback.arity>2 && arg.length==callback.arity
+      if callback.arity > 2 && arg.length == callback.arity
         # Retrofitted for callbacks that take three or more arguments
         callback.call(*arg)
       else
-        callback.call(arg[0],arglist)
+        callback.call(arg[0], arglist)
       end
     end
   end
@@ -70,9 +70,9 @@ end
 #===============================================================================
 class HandlerHash
   def initialize(mod)
-    @mod         = mod
-    @hash        = {}
-    @addIfs      = []
+    @mod = mod
+    @hash = {}
+    @addIfs = []
     @symbolCache = {}
   end
 
@@ -90,7 +90,7 @@ class HandlerHash
     mod = Object.const_get(@mod) rescue nil
     return nil if !mod
     for key in mod.constants
-      next if mod.const_get(key)!=sym
+      next if mod.const_get(key) != sym
       ret = key.to_sym
       @symbolCache[sym] = ret
       break
@@ -98,15 +98,15 @@ class HandlerHash
     return ret
   end
 
-  def addIf(conditionProc,handler=nil,&handlerBlock)
-    if ![Proc,Hash].include?(handler.class) && !block_given?
+  def addIf(conditionProc, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
     end
-    @addIfs.push([conditionProc,handler || handlerBlock])
+    @addIfs.push([conditionProc, handler || handlerBlock])
   end
 
-  def add(sym,handler=nil,&handlerBlock) # 'sym' can be an ID or symbol
-    if ![Proc,Hash].include?(handler.class) && !block_given?
+  def add(sym, handler = nil, &handlerBlock) # 'sym' can be an ID or symbol
+    if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler (#{handler.inspect} was given)"
     end
     id = fromSymbol(sym)
@@ -115,16 +115,16 @@ class HandlerHash
     @hash[symbol] = handler || handlerBlock if symbol
   end
 
-  def copy(src,*dests)
+  def copy(src, *dests)
     handler = self[src]
     if handler
       for dest in dests
-        self.add(dest,handler)
+        self.add(dest, handler)
       end
     end
   end
 
-  def [](sym)   # 'sym' can be an ID or symbol
+  def [](sym) # 'sym' can be an ID or symbol
     id = fromSymbol(sym)
     ret = nil
     ret = @hash[id] if id && @hash[id]   # Real ID from the item
@@ -138,9 +138,9 @@ class HandlerHash
     return ret
   end
 
-  def trigger(sym,*args)
+  def trigger(sym, *args)
     handler = self[sym]
-    return (handler) ? handler.call(fromSymbol(sym),*args) : nil
+    return (handler) ? handler.call(fromSymbol(sym), *args) : nil
   end
 
   def clear
@@ -154,7 +154,7 @@ end
 #===============================================================================
 class HandlerHash2
   def initialize
-    @hash    = {}
+    @hash = {}
     @add_ifs = []
   end
 
@@ -207,8 +207,8 @@ end
 class HandlerHashBasic
   def initialize
     @ordered_keys = []
-    @hash         = {}
-    @addIfs       = []
+    @hash = {}
+    @addIfs = []
   end
 
   def [](entry)
@@ -227,7 +227,7 @@ class HandlerHashBasic
   end
 
   def add(entry, handler = nil, &handlerBlock)
-    if ![Proc,Hash].include?(handler.class) && !block_given?
+    if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{entry.inspect} has no valid handler (#{handler.inspect} was given)"
     end
     return if !entry || entry.empty?

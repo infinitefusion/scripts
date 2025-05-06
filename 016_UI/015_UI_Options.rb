@@ -137,7 +137,7 @@ class NumberOption < Option
   attr_reader :optstart
   attr_reader :optend
 
-  def initialize(name, optstart, optend, getProc, setProc, description="")
+  def initialize(name, optstart, optend, getProc, setProc, description = "")
     super(description)
     @name = name
     @optstart = optstart
@@ -281,8 +281,7 @@ class Window_PokemonOption < Window_DrawableCommand
         for value in @options[index].values
           pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
                            (ivalue == self[index]) ? @selBaseColor : self.baseColor,
-                           (ivalue == self[index]) ? @selShadowColor : self.shadowColor
-          )
+                           (ivalue == self[index]) ? @selShadowColor : self.shadowColor)
           xpos += self.contents.text_size(value).width
           xpos += spacing
           ivalue += 1
@@ -306,7 +305,8 @@ class Window_PokemonOption < Window_DrawableCommand
       self.contents.fill_rect(
         xpos + (sliderlength - 8) * (@options[index].optstart + self[index]) / @options[index].optend,
         rect.y - 8 + rect.height / 2,
-        8, 16, @selBaseColor)
+        8, 16, @selBaseColor
+      )
       value = sprintf("%d", @options[index].optstart + self[index])
       xpos += optionwidth - self.contents.text_size(value).width
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
@@ -381,12 +381,13 @@ class PokemonOption_Scene
 
   def initialize
     @autosave_menu = false
-    @manually_changed_difficulty=false
+    @manually_changed_difficulty = false
   end
 
   def initUIElements
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
-      _INTL("Options"), 0, 0, Graphics.width, 64, @viewport)
+      _INTL("Options"), 0, 0, Graphics.width, 64, @viewport
+    )
     @sprites["textbox"] = pbCreateMessageWindow
     @sprites["textbox"].text = _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
     @sprites["textbox"].letterbyletter = false

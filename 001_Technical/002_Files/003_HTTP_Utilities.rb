@@ -5,19 +5,19 @@
 #############################
 #
 
-def pbPostData(url, postdata, filename=nil, depth=0)
+def pbPostData(url, postdata, filename = nil, depth = 0)
   if url[/^http:\/\/([^\/]+)(.*)$/]
     host = $1
     path = $2
-    path = "/" if path.length==0
+    path = "/" if path.length == 0
     userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
     body = postdata.map { |key, value|
-      keyString   = key.to_s
+      keyString = key.to_s
       valueString = value.to_s
-      keyString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
-      valueString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
+      keyString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf("%%%02x", s[0]) }
+      valueString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf("%%%02x", s[0]) }
       next "#{keyString}=#{valueString}"
-    }.join('&')
+    }.join("&")
     ret = HTTPLite.post_body(
       url,
       body,
@@ -27,13 +27,13 @@ def pbPostData(url, postdata, filename=nil, depth=0)
         "Proxy-Connection" => "Close",
         "Content-Length" => body.bytesize.to_s,
         "Pragma" => "no-cache",
-        "User-Agent" => userAgent
+        "User-Agent" => userAgent,
       }
     ) rescue ""
     return ret if !ret.is_a?(Hash)
     return "" if ret[:status] != 200
     return ret[:body] if !filename
-    File.open(filename, "wb"){|f|f.write(ret[:body])}
+    File.open(filename, "wb") { |f| f.write(ret[:body]) }
     return ""
   end
   return ""
@@ -45,7 +45,7 @@ def pbDownloadData(url, filename = nil, authorization = nil, depth = 0, &block)
   headers = {
     "Proxy-Connection" => "Close",
     "Pragma" => "no-cache",
-    "User-Agent" => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
+    "User-Agent" => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14",
   }
   headers["authorization"] = authorization if authorization
   ret = HTTPLite.get(url, headers) rescue ""
@@ -68,7 +68,7 @@ end
 
 def pbDownloadToFile(url, file)
   begin
-    pbDownloadData(url,file)
+    pbDownloadData(url, file)
   rescue
   end
 end
@@ -84,7 +84,7 @@ end
 
 def pbPostToFile(url, postdata, file)
   begin
-    pbPostData(url, postdata,file)
+    pbPostData(url, postdata, file)
   rescue
   end
 end
@@ -100,7 +100,6 @@ def serialize_value(value)
   end
 end
 
-
 def serialize_json(data)
   #echoln data
   # Manually serialize the JSON data into a string
@@ -113,9 +112,8 @@ def serialize_json(data)
   return parts.join
 end
 
-
 def downloadAllowed?()
-  return $PokemonSystem.download_sprites==0
+  return $PokemonSystem.download_sprites == 0
 end
 
 def clean_json_string(str)
@@ -125,13 +123,13 @@ def clean_json_string(str)
   #cleaned_str = str.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
   cleaned_str = str
   # Remove literal \n, \r, \t, etc.
-  cleaned_str = cleaned_str.gsub(/\\n|\\r|\\t/, '')
+  cleaned_str = cleaned_str.gsub(/\\n|\\r|\\t/, "")
 
   # Remove actual newlines and carriage returns
-  cleaned_str = cleaned_str.gsub(/[\n\r]/, '')
+  cleaned_str = cleaned_str.gsub(/[\n\r]/, "")
 
   # Remove leading and trailing quotes
-  cleaned_str = cleaned_str.gsub(/\A"|"\Z/, '')
+  cleaned_str = cleaned_str.gsub(/\A"|"\Z/, "")
 
   # Replace Unicode escape sequences with corresponding characters
   cleaned_str = cleaned_str.gsub(/\\u([\da-fA-F]{4})/) { |match|
@@ -139,12 +137,3 @@ def clean_json_string(str)
   }
   return cleaned_str
 end
-
-
-
-
-
-
-
-
-

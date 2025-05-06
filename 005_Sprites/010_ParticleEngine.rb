@@ -3,29 +3,29 @@
 # In turn based on the Particle Engine designed by PinkMan
 class Particle_Engine
   def initialize(viewport = nil, map = nil)
-    @map       = (map) ? map : $game_map
-    @viewport  = viewport
-    @effect    = []
-    @disposed  = false
+    @map = (map) ? map : $game_map
+    @viewport = viewport
+    @effect = []
+    @disposed = false
     @firsttime = true
-    @effects   = {
+    @effects = {
       # PinkMan's Effects
-      "fire"         => Particle_Engine::Fire,
-      "smoke"        => Particle_Engine::Smoke,
-      "teleport"     => Particle_Engine::Teleport,
-      "spirit"       => Particle_Engine::Spirit,
-      "explosion"    => Particle_Engine::Explosion,
-      "aura"         => Particle_Engine::Aura,
+      "fire" => Particle_Engine::Fire,
+      "smoke" => Particle_Engine::Smoke,
+      "teleport" => Particle_Engine::Teleport,
+      "spirit" => Particle_Engine::Spirit,
+      "explosion" => Particle_Engine::Explosion,
+      "aura" => Particle_Engine::Aura,
       # BlueScope's Effects
-      "soot"         => Particle_Engine::Soot,
-      "sootsmoke"    => Particle_Engine::SootSmoke,
-      "rocket"       => Particle_Engine::Rocket,
-      "fixteleport"  => Particle_Engine::FixedTeleport,
-      "smokescreen"  => Particle_Engine::Smokescreen,
-      "flare"        => Particle_Engine::Flare,
-      "splash"       => Particle_Engine::Splash,
+      "soot" => Particle_Engine::Soot,
+      "sootsmoke" => Particle_Engine::SootSmoke,
+      "rocket" => Particle_Engine::Rocket,
+      "fixteleport" => Particle_Engine::FixedTeleport,
+      "smokescreen" => Particle_Engine::Smokescreen,
+      "flare" => Particle_Engine::Flare,
+      "splash" => Particle_Engine::Splash,
       # By Peter O.
-      "starteleport" => Particle_Engine::StarTeleport
+      "starteleport" => Particle_Engine::StarTeleport,
     }
   end
 
@@ -98,8 +98,6 @@ class Particle_Engine
   end
 end
 
-
-
 class ParticleEffect
   attr_accessor :x, :y, :z
 
@@ -109,29 +107,27 @@ class ParticleEffect
     @z = 0
   end
 
-  def update;  end
+  def update; end
   def dispose; end
 end
-
-
 
 class ParticleSprite
   attr_accessor :x, :y, :z, :ox, :oy, :opacity, :blend_type
   attr_reader :bitmap
 
   def initialize(viewport)
-    @viewport   = viewport
-    @sprite     = nil
-    @x          = 0
-    @y          = 0
-    @z          = 0
-    @ox         = 0
-    @oy         = 0
-    @opacity    = 255
-    @bitmap     = nil
+    @viewport = viewport
+    @sprite = nil
+    @x = 0
+    @y = 0
+    @z = 0
+    @ox = 0
+    @oy = 0
+    @opacity = 255
+    @bitmap = nil
     @blend_type = 0
-    @minleft    = 0
-    @mintop     = 0
+    @minleft = 0
+    @mintop = 0
   end
 
   def dispose
@@ -142,10 +138,10 @@ class ParticleSprite
     @bitmap = value
     if value
       @minleft = -value.width
-      @mintop  = -value.height
+      @mintop = -value.height
     else
       @minleft = 0
-      @mintop  = 0
+      @mintop = 0
     end
   end
 
@@ -159,28 +155,26 @@ class ParticleSprite
       @sprite = nil
     end
     if @sprite
-      @sprite.x          = @x if @sprite.x != @x
-      @sprite.x          -= @ox
-      @sprite.y          = @y if @sprite.y != @y
-      @sprite.y          -= @oy
-      @sprite.z          = @z if @sprite.z != @z
-      @sprite.opacity    = @opacity if @sprite.opacity != @opacity
+      @sprite.x = @x if @sprite.x != @x
+      @sprite.x -= @ox
+      @sprite.y = @y if @sprite.y != @y
+      @sprite.y -= @oy
+      @sprite.z = @z if @sprite.z != @z
+      @sprite.opacity = @opacity if @sprite.opacity != @opacity
       @sprite.blend_type = @blend_type if @sprite.blend_type != @blend_type
-      @sprite.bitmap     = @bitmap if @sprite.bitmap != @bitmap
+      @sprite.bitmap = @bitmap if @sprite.bitmap != @bitmap
     end
   end
 end
-
-
 
 class ParticleEffect_Event < ParticleEffect
   attr_accessor :event
 
   def initialize(event, viewport = nil)
-    @event     = event
-    @viewport  = viewport
+    @event = event
+    @viewport = viewport
     @particles = []
-    @bitmaps   = {}
+    @bitmaps = {}
   end
 
   def setParameters(params)
@@ -205,24 +199,24 @@ class ParticleEffect_Event < ParticleEffect
     @particles = []
     @particlex = []
     @particley = []
-    @opacity   = []
+    @opacity = []
     @startingx = self.x + @xoffset
     @startingy = self.y + @yoffset
-    @screen_x  = self.x
-    @screen_y  = self.y
-    @real_x    = @event.real_x
-    @real_y    = @event.real_y
-    @filename  = filename
-    @zoffset   = zOffset
-    @bmwidth   = 32
-    @bmheight  = 32
+    @screen_x = self.x
+    @screen_y = self.y
+    @real_x = @event.real_x
+    @real_y = @event.real_y
+    @filename = filename
+    @zoffset = zOffset
+    @bmwidth = 32
+    @bmheight = 32
     @maxparticless.times do |i|
       @particlex[i] = -@xoffset
       @particley[i] = -@yoffset
       @particles[i] = ParticleSprite.new(@viewport)
       @particles[i].bitmap = loadBitmap(filename, @hue) if filename
       if i == 0 && @particles[i].bitmap
-        @bmwidth  = @particles[i].bitmap.width
+        @bmwidth = @particles[i].bitmap.width
         @bmheight = @particles[i].bitmap.height
       end
       @particles[i].blend_type = blendtype
@@ -242,7 +236,7 @@ class ParticleEffect_Event < ParticleEffect
   def update
     if @viewport &&
        (@viewport.rect.x >= Graphics.width ||
-       @viewport.rect.y >= Graphics.height)
+        @viewport.rect.y >= Graphics.height)
       return
     end
     selfX = self.x
@@ -269,7 +263,7 @@ class ParticleEffect_Event < ParticleEffect
       maxX += @bmwidth
       maxY += @bmheight
       if maxX < 0 || maxY < 0 || minX >= Graphics.width || minY >= Graphics.height
-#        echo "skipped"
+        #        echo "skipped"
         return
       end
     end
@@ -357,8 +351,6 @@ class ParticleEffect_Event < ParticleEffect
   end
 end
 
-
-
 class Particle_Engine::Fire < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -368,8 +360,6 @@ class Particle_Engine::Fire < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Smoke < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -378,8 +368,6 @@ class Particle_Engine::Smoke < ParticleEffect_Event
     initParticles("smoke", 250)
   end
 end
-
-
 
 class Particle_Engine::Teleport < ParticleEffect_Event
   def initialize(event, viewport)
@@ -394,8 +382,6 @@ class Particle_Engine::Teleport < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Spirit < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -404,8 +390,6 @@ class Particle_Engine::Spirit < ParticleEffect_Event
     initParticles("particle", 250)
   end
 end
-
-
 
 class Particle_Engine::Explosion < ParticleEffect_Event
   def initialize(event, viewport)
@@ -416,8 +400,6 @@ class Particle_Engine::Explosion < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Aura < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -427,8 +409,6 @@ class Particle_Engine::Aura < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Soot < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -437,8 +417,6 @@ class Particle_Engine::Soot < ParticleEffect_Event
     initParticles("smoke", 100, 0, 2)
   end
 end
-
-
 
 class Particle_Engine::SootSmoke < ParticleEffect_Event
   def initialize(event, viewport)
@@ -452,8 +430,6 @@ class Particle_Engine::SootSmoke < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Rocket < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -462,8 +438,6 @@ class Particle_Engine::Rocket < ParticleEffect_Event
     initParticles("smoke", 100, -1)
   end
 end
-
-
 
 class Particle_Engine::FixedTeleport < ParticleEffect_Event
   def initialize(event, viewport)
@@ -478,8 +452,6 @@ class Particle_Engine::FixedTeleport < ParticleEffect_Event
   end
 end
 
-
-
 # By Peter O.
 class Particle_Engine::StarTeleport < ParticleEffect_Event
   def initialize(event, viewport)
@@ -493,8 +465,6 @@ class Particle_Engine::StarTeleport < ParticleEffect_Event
     end
   end
 end
-
-
 
 class Particle_Engine::Smokescreen < ParticleEffect_Event
   def initialize(event, viewport)
@@ -531,8 +501,6 @@ class Particle_Engine::Smokescreen < ParticleEffect_Event
   end
 end
 
-
-
 class Particle_Engine::Flare < ParticleEffect_Event
   def initialize(event, viewport)
     super
@@ -541,8 +509,6 @@ class Particle_Engine::Flare < ParticleEffect_Event
     initParticles("particle", 255)
   end
 end
-
-
 
 class Particle_Engine::Splash < ParticleEffect_Event
   def initialize(event, viewport)
@@ -560,8 +526,6 @@ class Particle_Engine::Splash < ParticleEffect_Event
     end
   end
 end
-
-
 
 class Game_Event < Game_Character
   attr_accessor :pe_refresh

@@ -14,7 +14,7 @@ class HairMartAdapter < OutfitsMartAdapter
 
     @hat_visible = false
     @removable = true
-    @previous_item= find_first_item()
+    @previous_item = find_first_item()
   end
 
   def find_first_item()
@@ -51,7 +51,6 @@ class HairMartAdapter < OutfitsMartAdapter
     return list_city_exclusive_hairstyles
   end
 
-
   def toggleEvent(item)
     pbSEPlay("GUI storage put down", 80, 100)
     toggleHatVisibility()
@@ -61,7 +60,6 @@ class HairMartAdapter < OutfitsMartAdapter
     text = ""
     #text << "Color: R, \n"
     text << "Toggle Hat: D\n"
-
   end
 
   def toggleHatVisibility()
@@ -71,7 +69,6 @@ class HairMartAdapter < OutfitsMartAdapter
   def getPrice(item, selling = nil)
     return 0 if !@isShop
     trainer_hair_id = getSplitHairFilenameAndVersionFromID(@worn_hair)[1]
-
 
     return nil if item.id == trainer_hair_id
     return item.price.to_i
@@ -153,20 +150,18 @@ class HairMartAdapter < OutfitsMartAdapter
     if getVersionFromFullID(@worn_hair) != @version
       worn_id = getSimplifiedHairIdFromFullID(@worn_hair)
       if getSimplifiedHairIdFromFullID($Trainer.hair) == worn_id
-        @worn_hair = getFullHairId(worn_id,@version)
+        @worn_hair = getFullHairId(worn_id, @version)
       end
     end
 
     $Trainer.hair = @worn_hair
     $Trainer.hat = @worn_hat
     $Trainer.hat2 = @worn_hat2
-
   end
 
   def get_unlocked_items_list()
     return $Trainer.unlocked_hairstyles
   end
-
 
   def getSpecialItemCaption(specialType)
     case specialType
@@ -197,7 +192,7 @@ class HairMartAdapter < OutfitsMartAdapter
   end
 
   def doSpecialItemAction(specialType)
-    switchVersion(nil,1)
+    switchVersion(nil, 1)
   end
 
   def currentVersionExists?(item)
@@ -205,5 +200,4 @@ class HairMartAdapter < OutfitsMartAdapter
     filename = getOverworldHairFilename(hairId)
     return pbResolveBitmap(filename)
   end
-
 end

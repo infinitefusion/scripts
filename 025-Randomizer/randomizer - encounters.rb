@@ -19,8 +19,8 @@ def Kernel.randomizeWildPokemonByRoute()
     types_hash = {}
     enc_data.types.each do |key, value|
       pokemonList = value
-      newType = randomizePokemonList(pokemonList,bstRange,maxSpecies,onlyCustoms,customsList)
-      types_hash[key]= newType
+      newType = randomizePokemonList(pokemonList, bstRange, maxSpecies, onlyCustoms, customsList)
+      types_hash[key] = newType
     end
     encounters_hash[:types] = types_hash
     GameData::EncounterRandom.register(encounters_hash)
@@ -33,17 +33,17 @@ def Kernel.randomizeWildPokemonByRoute()
 end
 
 #input: [[60, :TENTACOOL,5,40, [30, :GOLDEEN, 5, 35], etc.]]
-def randomizePokemonList(encountersList,bstRange=50,maxSpecies=NB_POKEMON,customOnly=false,customsList=[])
+def randomizePokemonList(encountersList, bstRange = 50, maxSpecies = NB_POKEMON, customOnly = false, customsList = [])
   includeLegendaries = $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES]
-  newList=[]
+  newList = []
   for encounter in encountersList
     oldPokemon = encounter[1]
     if customOnly
-      newPokemon = getNewCustomSpecies(oldPokemon,customsList,bstRange,false,includeLegendaries)
+      newPokemon = getNewCustomSpecies(oldPokemon, customsList, bstRange, false, includeLegendaries)
     else
-      newPokemon = getNewSpecies(oldPokemon,bstRange,false,maxSpecies,includeLegendaries)
+      newPokemon = getNewSpecies(oldPokemon, bstRange, false, maxSpecies, includeLegendaries)
     end
-    newEntry =[]
+    newEntry = []
     newEntry << encounter[0]
     newEntry << getSpecies(newPokemon).species
     newEntry << encounter[2]
@@ -52,7 +52,6 @@ def randomizePokemonList(encountersList,bstRange=50,maxSpecies=NB_POKEMON,custom
   end
   return newList
 end
-
 
 #
 # def Kernel.randomizeWildPokemonByRouteOld()
@@ -101,10 +100,8 @@ end
 #   $PokemonEncounters.setup($game_map.map_id)
 # end
 
-
 #file = File.new('Data/test.txt', 'w')
 #file.puts data.inspect
-
 
 # def displayProgress(current,total,bst)
 #   return if bst >= 100
@@ -173,7 +170,6 @@ end
 #   end
 # end
 
-
 #
 # def getRandomPokemon(originalPokemon,bstRange,maxDexNumber)
 #   originalBst = getBaseStatsTotal(originalPokemon)
@@ -206,18 +202,4 @@ end
 #   return (baseStat_temp/range).floor
 # end
 
-
 ######################################################
-
-
-
-
-
-
-
-
-
-
-
-
-

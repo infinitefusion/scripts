@@ -11,9 +11,9 @@ def pbSceneStandby
   $scene.createSpritesets if $scene.is_a?(Scene_Map)
 end
 
-def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
+def pbBattleAnimation(bgm = nil, battletype = 0, foe = nil)
   $game_temp.in_battle = true
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   # Set up audio
   playingBGS = nil
@@ -34,7 +34,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $game_temp.background_bitmap.dispose if $game_temp.background_bitmap
   $game_temp.background_bitmap = Graphics.snap_to_bitmap
   # Check for custom battle intro animations
-  handled = pbBattleAnimationOverride(viewport,battletype,foe)
+  handled = pbBattleAnimationOverride(viewport, battletype, foe)
   # Default battle intro animation
   if !handled
     # Determine which animation is played
@@ -42,58 +42,56 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     if $PokemonGlobal.surfing || $PokemonGlobal.diving
       location = 3
     elsif $PokemonTemp.encounterType &&
-      GameData::EncounterType.get($PokemonTemp.encounterType).type == :fishing
+          GameData::EncounterType.get($PokemonTemp.encounterType).type == :fishing
       location = 3
     elsif $PokemonEncounters.has_cave_encounters?
       location = 2
     elsif !GameData::MapMetadata.exists?($game_map.map_id) ||
-      !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+          !GameData::MapMetadata.get($game_map.map_id).outdoor_map
       location = 1
     end
     anim = ""
     if PBDayNight.isDay?
       case battletype
-      when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleTL","DiagonalBubbleBR","RisingSplash"][location]
-      when 1      # Trainer
-        anim = ["TwoBallPass","ThreeBallDown","BallDown","WavyThreeBallUp"][location]
-      when 3      # Double trainer
+      when 0, 2 # Wild, double wild
+        anim = ["SnakeSquares", "DiagonalBubbleTL", "DiagonalBubbleBR", "RisingSplash"][location]
+      when 1 # Trainer
+        anim = ["TwoBallPass", "ThreeBallDown", "BallDown", "WavyThreeBallUp"][location]
+      when 3 # Double trainer
         anim = "FourBallBurst"
       end
     else
       case battletype
-      when 0, 2   # Wild, double wild
-        anim = ["SnakeSquares","DiagonalBubbleBR","DiagonalBubbleBR","RisingSplash"][location]
-      when 1      # Trainer
-        anim = ["SpinBallSplit","BallDown","BallDown","WavySpinBall"][location]
-      when 3      # Double trainer
+      when 0, 2 # Wild, double wild
+        anim = ["SnakeSquares", "DiagonalBubbleBR", "DiagonalBubbleBR", "RisingSplash"][location]
+      when 1 # Trainer
+        anim = ["SpinBallSplit", "BallDown", "BallDown", "WavySpinBall"][location]
+      when 3 # Double trainer
         anim = "FourBallBurst"
       end
     end
     # Initial screen flashing
-    if location==2 || PBDayNight.isNight?
-      viewport.color = Color.new(0,0,0)         # Fade to black a few times
+    if location == 2 || PBDayNight.isNight?
+      viewport.color = Color.new(0, 0, 0)         # Fade to black a few times
     else
-      viewport.color = Color.new(255,255,255)   # Fade to white a few times
+      viewport.color = Color.new(255, 255, 255)   # Fade to white a few times
     end
-    halfFlashTime = Graphics.frame_rate*2/10   # 0.2 seconds, 8 frames
-    alphaDiff = (255.0/halfFlashTime).ceil
+    halfFlashTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
+    alphaDiff = (255.0 / halfFlashTime).ceil
     2.times do
       viewport.color.alpha = 0
-      for i in 0...halfFlashTime*2
-        if i<halfFlashTime; viewport.color.alpha += alphaDiff
-        else;               viewport.color.alpha -= alphaDiff
-        end
+      for i in 0...halfFlashTime * 2
+        if i < halfFlashTime; viewport.color.alpha += alphaDiff else; viewport.color.alpha -= alphaDiff end
         Graphics.update
         pbUpdateSceneMap
       end
     end
     # Play main animation
     Graphics.freeze
-    Graphics.transition(Graphics.frame_rate*1.25,sprintf("Graphics/Transitions/%s",anim))
-    viewport.color = Color.new(0,0,0,255)   # Ensure screen is black
+    Graphics.transition(Graphics.frame_rate * 1.25, sprintf("Graphics/Transitions/%s", anim))
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
     # Slight pause after animation before starting up the battle scene
-    (Graphics.frame_rate/10).times do
+    (Graphics.frame_rate / 10).times do
       Graphics.update
       Input.update
       pbUpdateSceneMap
@@ -108,16 +106,16 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     $game_system.bgm_resume(playingBGM)
     $game_system.bgs_resume(playingBGS)
   end
-  $PokemonGlobal.nextBattleBGM       = nil
-  $PokemonGlobal.nextBattleME        = nil
+  $PokemonGlobal.nextBattleBGM = nil
+  $PokemonGlobal.nextBattleME = nil
   $PokemonGlobal.nextBattleCaptureME = nil
-  $PokemonGlobal.nextBattleBack      = nil
-  $PokemonTemp.forced_alt_sprites=nil
+  $PokemonGlobal.nextBattleBack = nil
+  $PokemonTemp.forced_alt_sprites = nil
   $PokemonEncounters.reset_step_count
   # Fade back to the overworld
-  viewport.color = Color.new(0,0,0,255)
-  numFrames = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames
-  alphaDiff = (255.0/numFrames).ceil
+  viewport.color = Color.new(0, 0, 0, 255)
+  numFrames = Graphics.frame_rate * 4 / 10   # 0.4 seconds, 16 frames
+  alphaDiff = (255.0 / numFrames).ceil
   numFrames.times do
     viewport.color.alpha -= alphaDiff
     Graphics.update
@@ -131,36 +129,35 @@ end
 #===============================================================================
 # Vs. battle intro animation
 #===============================================================================
-def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
+def pbBattleAnimationOverride(viewport, battletype = 0, foe = nil)
   ##### VS. animation, by Luka S.J. #####
   ##### Tweaked by Maruno           #####
-  if (battletype==1 || battletype==3) && foe.length==1   # Against single trainer
+  if (battletype == 1 || battletype == 3) && foe.length == 1 # Against single trainer
     tr_type = foe[0].trainer_type
-    tr_number= GameData::TrainerType.get(tr_type).id_number
-
+    tr_number = GameData::TrainerType.get(tr_type).id_number
 
     if tr_type
       tbargraphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
       #tgraphic    = sprintf("vsTrainer_%s", tr_type.to_s) rescue nil
-      tgraphic    = sprintf("trainer%03d", tr_number) rescue nil
+      tgraphic = sprintf("trainer%03d", tr_number) rescue nil
 
       echoln tgraphic
       if pbResolveBitmap("Graphics/Transitions/" + tbargraphic) && pbResolveBitmap("Graphics/Characters/" + tgraphic)
         player_tr_type = $Trainer.trainer_type
         outfit = $Trainer.outfit
         # Set up
-        viewplayer = Viewport.new(0,Graphics.height/3,Graphics.width/2,128)
+        viewplayer = Viewport.new(0, Graphics.height / 3, Graphics.width / 2, 128)
         viewplayer.z = viewport.z
-        viewopp = Viewport.new(Graphics.width/2,Graphics.height/3,Graphics.width/2,128)
+        viewopp = Viewport.new(Graphics.width / 2, Graphics.height / 3, Graphics.width / 2, 128)
         viewopp.z = viewport.z
-        viewvs = Viewport.new(0,0,Graphics.width,Graphics.height)
+        viewvs = Viewport.new(0, 0, Graphics.width, Graphics.height)
         viewvs.z = viewport.z
         fade = Sprite.new(viewport)
-        fade.bitmap  = RPG::Cache.transition("vsFlash")
-        fade.tone    = Tone.new(-255,-255,-255)
+        fade.bitmap = RPG::Cache.transition("vsFlash")
+        fade.tone = Tone.new(-255, -255, -255)
         fade.opacity = 100
         overlay = Sprite.new(viewport)
-        overlay.bitmap = Bitmap.new(Graphics.width,Graphics.height)
+        overlay.bitmap = Bitmap.new(Graphics.width, Graphics.height)
         pbSetSystemFont(overlay.bitmap)
         #pbargraphic = sprintf("vsBar_%s_%d", player_tr_type.to_s, outfit) rescue nil
         pbargraphic = sprintf("vsBar_%s", player_tr_type.to_s) rescue nil
@@ -168,31 +165,31 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
           pbargraphic = sprintf("vsBar_%s", player_tr_type.to_s) rescue nil
         end
         # xoffset = ((Graphics.width/2)/10)*10
-        xoffset = ((Graphics.width/2)/10)*10
+        xoffset = ((Graphics.width / 2) / 10) * 10
         #xoffset = 0#((Graphics.width/2)/10)*10
 
         bar1 = Sprite.new(viewplayer)
         bar1.bitmap = RPG::Cache.transition(pbargraphic)
-        bar1.x      = -xoffset
+        bar1.x = -xoffset
         bar2 = Sprite.new(viewopp)
         bar2.bitmap = RPG::Cache.transition(tbargraphic)
-        bar2.x      = xoffset
+        bar2.x = xoffset
         vs = Sprite.new(viewvs)
-        vs.bitmap  = RPG::Cache.transition("vs")
-        vs.ox      = vs.bitmap.width/2
-        vs.oy      = vs.bitmap.height/2
-        vs.x       = Graphics.width/2
-        vs.y       = Graphics.height/1.5
+        vs.bitmap = RPG::Cache.transition("vs")
+        vs.ox = vs.bitmap.width / 2
+        vs.oy = vs.bitmap.height / 2
+        vs.x = Graphics.width / 2
+        vs.y = Graphics.height / 1.5
         vs.visible = false
         flash = Sprite.new(viewvs)
-        flash.bitmap  = RPG::Cache.transition("vsFlash")
+        flash.bitmap = RPG::Cache.transition("vsFlash")
         flash.opacity = 0
         # Animate bars sliding in from either side
-        slideInTime = (Graphics.frame_rate*0.25).floor
+        slideInTime = (Graphics.frame_rate * 0.25).floor
 
         for i in 0...slideInTime
-          bar1.x = xoffset*(i+1-slideInTime)/slideInTime
-          bar2.x = xoffset*(slideInTime-i-1)/slideInTime
+          bar1.x = xoffset * (i + 1 - slideInTime) / slideInTime
+          bar2.x = xoffset * (slideInTime - i - 1) / slideInTime
           pbWait(1)
         end
         bar1.dispose
@@ -220,39 +217,38 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         #
         playerSpriteWrapper = generate_front_trainer_sprite_bitmap()
         player.bitmap = playerSpriteWrapper.bitmap # RPG::Cache.load_bitmap("Graphics/Characters/", pgraphic) #RPG::Cache.transition(pgraphic)
-        player.x      =  -250
+        player.x = -250
         player.y = -30
         player.zoom_x = 2
         player.zoom_y = 2
 
-        player.mirror =true
-        player_center_offset=-20
+        player.mirror = true
+        player_center_offset = -20
 
         trainer = Sprite.new(viewopp)
         #trainer.bitmap = RPG::Cache.transition(tgraphic)
-        trainer.bitmap =RPG::Cache.load_bitmap("Graphics/Characters/", tgraphic) #RPG::Cache.transition(pgraphic)
-        trainer.x      = xoffset+150
-        trainer.tone   = Tone.new(-255,-255,-255)
+        trainer.bitmap = RPG::Cache.load_bitmap("Graphics/Characters/", tgraphic) #RPG::Cache.transition(pgraphic)
+        trainer.x = xoffset + 150
+        trainer.tone = Tone.new(-255, -255, -255)
         trainer.zoom_x = 2
         trainer.zoom_y = 2
         trainer.y = -10
-        trainer_center_offset=0
+        trainer_center_offset = 0
 
         # Dim the flash and make the trainer sprites appear, while animating bars
-        animTime = (Graphics.frame_rate*1.2).floor
+        animTime = (Graphics.frame_rate * 1.2).floor
         for i in 0...animTime
-          flash.opacity -= 52*20/Graphics.frame_rate if flash.opacity>0
-          bar1.ox -= 32*20/Graphics.frame_rate
-          bar2.ox += 32*20/Graphics.frame_rate
-          if i>=animTime/2 && i<slideInTime+animTime/2
-            player.x = (xoffset*(i+1-slideInTime-animTime/2)/slideInTime)+player_center_offset
-            trainer.x = xoffset*(slideInTime-i-1+animTime/2)/slideInTime+trainer_center_offset
+          flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
+          bar1.ox -= 32 * 20 / Graphics.frame_rate
+          bar2.ox += 32 * 20 / Graphics.frame_rate
+          if i >= animTime / 2 && i < slideInTime + animTime / 2
+            player.x = (xoffset * (i + 1 - slideInTime - animTime / 2) / slideInTime) + player_center_offset
+            trainer.x = xoffset * (slideInTime - i - 1 + animTime / 2) / slideInTime + trainer_center_offset
           end
           pbWait(1)
         end
 
-
-        echoln  "VS flash"
+        echoln "VS flash"
         #player.x = -150
         #player.y=-75
 
@@ -264,42 +260,42 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         pbSEPlay("Vs sword")
         # Make the Vs logo and trainer names appear, and reset trainer's tone
         vs.visible = true
-        trainer.tone = Tone.new(0,0,0)
+        trainer.tone = Tone.new(0, 0, 0)
         trainername = foe[0].name
         textpos = [
-          [$Trainer.name,Graphics.width/4,(Graphics.height/1.5)+4,2,
-           Color.new(248,248,248),Color.new(12*6,12*6,12*6)],
-          [trainername,(Graphics.width/4)+(Graphics.width/2),(Graphics.height/1.5)+4,2,
-           Color.new(248,248,248),Color.new(12*6,12*6,12*6)]
+          [$Trainer.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
+           Color.new(248, 248, 248), Color.new(12 * 6, 12 * 6, 12 * 6)],
+          [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
+           Color.new(248, 248, 248), Color.new(12 * 6, 12 * 6, 12 * 6)],
         ]
-        pbDrawTextPositions(overlay.bitmap,textpos)
+        pbDrawTextPositions(overlay.bitmap, textpos)
         # Fade out flash, shudder Vs logo and expand it, and then fade to black
-        animTime = (Graphics.frame_rate*2.75).floor
-        shudderTime = (Graphics.frame_rate*1.75).floor
-        zoomTime = (Graphics.frame_rate*2.5).floor
-        shudderDelta = [4*20/Graphics.frame_rate,1].max
+        animTime = (Graphics.frame_rate * 2.75).floor
+        shudderTime = (Graphics.frame_rate * 1.75).floor
+        zoomTime = (Graphics.frame_rate * 2.5).floor
+        shudderDelta = [4 * 20 / Graphics.frame_rate, 1].max
         for i in 0...animTime
-          if i<shudderTime   # Fade out the white flash
-            flash.opacity -= 52*20/Graphics.frame_rate if flash.opacity>0
-          elsif i==shudderTime   # Make the flash black
-            flash.tone = Tone.new(-255,-255,-255)
-          elsif i>=zoomTime   # Fade to black
-            flash.opacity += 52*20/Graphics.frame_rate if flash.opacity<255
+          if i < shudderTime # Fade out the white flash
+            flash.opacity -= 52 * 20 / Graphics.frame_rate if flash.opacity > 0
+          elsif i == shudderTime # Make the flash black
+            flash.tone = Tone.new(-255, -255, -255)
+          elsif i >= zoomTime # Fade to black
+            flash.opacity += 52 * 20 / Graphics.frame_rate if flash.opacity < 255
           end
-          bar1.ox -= 32*20/Graphics.frame_rate
-          bar2.ox += 32*20/Graphics.frame_rate
-          if i<shudderTime
-            j = i%(2*Graphics.frame_rate/20)
-            if j>=0.5*Graphics.frame_rate/20 && j<1.5*Graphics.frame_rate/20
+          bar1.ox -= 32 * 20 / Graphics.frame_rate
+          bar2.ox += 32 * 20 / Graphics.frame_rate
+          if i < shudderTime
+            j = i % (2 * Graphics.frame_rate / 20)
+            if j >= 0.5 * Graphics.frame_rate / 20 && j < 1.5 * Graphics.frame_rate / 20
               vs.x += shudderDelta
               vs.y -= shudderDelta
             else
               vs.x -= shudderDelta
               vs.y += shudderDelta
             end
-          elsif i<zoomTime
-            vs.zoom_x += 0.4*20/Graphics.frame_rate
-            vs.zoom_y += 0.4*20/Graphics.frame_rate
+          elsif i < zoomTime
+            vs.zoom_x += 0.4 * 20 / Graphics.frame_rate
+            vs.zoom_y += 0.4 * 20 / Graphics.frame_rate
           end
           pbWait(1)
         end
@@ -315,7 +311,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         viewvs.dispose
         viewopp.dispose
         viewplayer.dispose
-        viewport.color = Color.new(0,0,0,255)
+        viewport.color = Color.new(0, 0, 0, 255)
         return true
       end
     end
@@ -337,7 +333,7 @@ end
 
 alias __over1__pbBattleAnimationOverride pbBattleAnimationOverride
 
-def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
+def pbBattleAnimationOverride(viewport, battletype = 0, foe = nil)
   # The following example runs a common event that ought to do a custom
   # animation if some condition is true:
   #
@@ -348,5 +344,5 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
   #
   # The following line needs to call the aliased method if the custom transition
   # animation was NOT shown.
-  return __over1__pbBattleAnimationOverride(viewport,battletype,foe)
+  return __over1__pbBattleAnimationOverride(viewport, battletype, foe)
 end

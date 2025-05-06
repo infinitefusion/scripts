@@ -114,9 +114,7 @@ class BetterRegionMap
           @window["player"].center_origins
         end
       else
-
       end
-
     end
     @window["areahighlight"] = BitmapSprite.new(@window["map"].bitmap.width, @window["map"].bitmap.height, @mapoverlayvp)
     @window["areahighlight"].y = -8
@@ -260,7 +258,6 @@ class BetterRegionMap
     end
 
     return KANTO_DEFAULT_POS
-
   end
 
   def findNearbyHealingSpot(current_x, current_y)
@@ -271,7 +268,7 @@ class BetterRegionMap
     for new_x in current_x - range..current_x + range
       for new_y in current_y - range..current_y + range
         if can_fly_to_location(pbGetHealingSpot(new_x, new_y))
-          distance = Math.sqrt((new_x - current_x)**2 + (new_y - current_y)**2)
+          distance = Math.sqrt((new_x - current_x) ** 2 + (new_y - current_y) ** 2)
           if distance < min_distance && !(new_x == current_x && new_y == current_y)
             min_distance = distance
             closest_spot = [new_x, new_y]
@@ -283,7 +280,6 @@ class BetterRegionMap
     echoln "Closest spot: #{closest_spot.inspect}" if closest_spot
     return closest_spot
   end
-
 
   def synchronize_cursor
     # Sync logical position to visual cursor position
@@ -299,7 +295,6 @@ class BetterRegionMap
     @sprites["cursor"].x = visual_cursor_x + @window.x
     @sprites["cursor"].y = visual_cursor_y + @window.y
   end
-
 
   def move_cursor_to(x, y)
     # Update the logical position
@@ -318,16 +313,16 @@ class BetterRegionMap
     window_min_y = 0 if window_min_y > 0
 
     # Adjust the map window X-axis to center the cursor
-    if visual_cursor_x < 16  # Too far left
+    if visual_cursor_x < 16 # Too far left
       @window.x = [@window.x + (16 - visual_cursor_x), 0].min
-    elsif visual_cursor_x > Settings::SCREEN_WIDTH - 16  # Too far right
+    elsif visual_cursor_x > Settings::SCREEN_WIDTH - 16 # Too far right
       @window.x = [@window.x - (visual_cursor_x - (Settings::SCREEN_WIDTH - 16)), window_min_x].max
     end
 
     # Adjust the map window Y-axis to center the cursor
-    if visual_cursor_y < 32  # Too far up
+    if visual_cursor_y < 32 # Too far up
       @window.y = [@window.y + (32 - visual_cursor_y), 0].min
-    elsif visual_cursor_y > Settings::SCREEN_HEIGHT - 32  # Too far down
+    elsif visual_cursor_y > Settings::SCREEN_HEIGHT - 32 # Too far down
       @window.y = [@window.y - (visual_cursor_y - (Settings::SCREEN_HEIGHT - 32)), window_min_y].max
     end
 
@@ -337,10 +332,6 @@ class BetterRegionMap
     @sprites["cursor"].y = visual_cursor_y + @window.y
     adjust_window_if_not_visited_regions
   end
-
-
-
-
 
   def init_cursor_position(x, y)
     $PokemonGlobal.regionMapSel[0] = x
@@ -654,7 +645,6 @@ class BetterRegionMap
     echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
-
   def update_text
     location = @data[2].find do |e|
       e[0] == $PokemonGlobal.regionMapSel[0] &&
@@ -717,7 +707,7 @@ def calculatePointsAndCenter(mapwidth)
         showpoint = true
         for loc in @mapdata[@region][2]
           showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
-            loc[7] && !$game_switches[loc[7]]
+                               loc[7] && !$game_switches[loc[7]]
         end
         if showpoint
           #mapsize = pbGetMetadata(enc, MetadataMapSize)

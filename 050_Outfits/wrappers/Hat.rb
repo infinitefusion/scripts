@@ -1,6 +1,7 @@
 class Hat < Outfit
   attr_accessor :type
-  def initialize(id,name,description='',price=0,tags=[])
+
+  def initialize(id, name, description = "", price = 0, tags = [])
     super
     @type = :HAT
   end

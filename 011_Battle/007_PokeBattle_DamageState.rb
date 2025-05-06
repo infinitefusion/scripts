@@ -23,28 +23,28 @@ class PokeBattle_DamageState
   def initialize; reset; end
 
   def reset
-    @initialHP          = 0
-    @typeMod            = Effectiveness::INEFFECTIVE
-    @unaffected         = false
-    @protected          = false
-    @magicCoat          = false
-    @magicBounce        = false
-    @totalHPLost        = 0
-    @fainted            = false
+    @initialHP = 0
+    @typeMod = Effectiveness::INEFFECTIVE
+    @unaffected = false
+    @protected = false
+    @magicCoat = false
+    @magicBounce = false
+    @totalHPLost = 0
+    @fainted = false
     resetPerHit
   end
 
   def resetPerHit
-    @missed        = false
-    @calcDamage    = 0
-    @hpLost        = 0
-    @critical      = false
-    @substitute    = false
-    @focusBand     = false
-    @focusSash     = false
-    @sturdy        = false
-    @disguise      = false
-    @endured       = false
+    @missed = false
+    @calcDamage = 0
+    @hpLost = 0
+    @critical = false
+    @substitute = false
+    @focusBand = false
+    @focusSash = false
+    @sturdy = false
+    @disguise = false
+    @endured = false
     @berryWeakened = false
   end
 end

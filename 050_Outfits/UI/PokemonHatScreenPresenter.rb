@@ -47,15 +47,14 @@ class PokemonHatPresenter
     loop do
       Graphics.update
       Input.update
-      @hat_id = selector.selectNextOutfit(@hat_id, 1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::RIGHT)
-      @hat_id = selector.selectNextOutfit(@hat_id, -1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::LEFT)
+      @hat_id = selector.selectNextOutfit(@hat_id, 1, selector.hats_list, [], false, "hat", $Trainer.unlocked_hats, false) if Input.trigger?(Input::RIGHT)
+      @hat_id = selector.selectNextOutfit(@hat_id, -1, selector.hats_list, [], false, "hat", $Trainer.unlocked_hats, false) if Input.trigger?(Input::LEFT)
       break if Input.trigger?(Input::USE)
       return false if Input.trigger?(Input::BACK)
       @view.update()
     end
     @pokemon.hat = @hat_id
     @view.hide_select_arrows
-
   end
 
   def position_hat
@@ -83,7 +82,7 @@ class PokemonHatPresenter
     if @pokemon.isTripleFusion?
       #todo
     elsif @pokemon.isFusion?
-      @original_pokemon_bitmap = spriteLoader.load_fusion_sprite(@pokemon.head_id(),@pokemon.body_id())
+      @original_pokemon_bitmap = spriteLoader.load_fusion_sprite(@pokemon.head_id(), @pokemon.body_id())
     else
       echoln @pokemon
       echoln @pokemon.species_data
@@ -99,5 +98,4 @@ class PokemonHatPresenter
     pokemon_bitmap.blt(@x_pos, @y_pos, hatBitmapWrapper.bitmap, hatBitmapWrapper.bitmap.rect) if hatBitmapWrapper
     return pokemon_bitmap
   end
-
 end

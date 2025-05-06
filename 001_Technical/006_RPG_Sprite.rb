@@ -1,5 +1,5 @@
 class SpriteAnimation
-  @@_animations      = []
+  @@_animations = []
   @@_reference_count = {}
 
   def initialize(sprite)
@@ -7,9 +7,9 @@ class SpriteAnimation
   end
 
   %w[
-     x y ox oy viewport flash src_rect opacity tone
+    x y ox oy viewport flash src_rect opacity tone
   ].each_with_index do |s, _i|
-  eval <<-__END__
+    eval <<-__END__
 
   def #{s}(*arg)
     @sprite.#{s}(*arg)
@@ -31,8 +31,8 @@ class SpriteAnimation
     dispose_animation
     @_animation = animation
     return if @_animation == nil
-    @_animation_hit      = hit
-    @_animation_height   = height
+    @_animation_hit = hit
+    @_animation_height = height
     @_animation_duration = @_animation.frame_max
     fr = 20
     if @_animation.name[/\[\s*(\d+?)\s*\]\s*$/]
@@ -40,7 +40,7 @@ class SpriteAnimation
     end
     @_animation_frame_skip = Graphics.frame_rate / fr
     animation_name = @_animation.animation_name
-    animation_hue  = @_animation.animation_hue
+    animation_hue = @_animation.animation_hue
     bitmap = pbGetAnimation(animation_name, animation_hue)
     if @@_reference_count.include?(bitmap)
       @@_reference_count[bitmap] += 1
@@ -74,7 +74,7 @@ class SpriteAnimation
     end
     @_loop_animation_frame_skip = Graphics.frame_rate / fr
     animation_name = @_loop_animation.animation_name
-    animation_hue  = @_loop_animation.animation_hue
+    animation_hue = @_loop_animation.animation_hue
     bitmap = pbGetAnimation(animation_name, animation_hue)
     if @@_reference_count.include?(bitmap)
       @@_reference_count[bitmap] += 1
@@ -156,8 +156,8 @@ class SpriteAnimation
       return
     end
     frame_index = @_animation.frame_max - @_animation_duration
-    cell_data   = @_animation.frames[frame_index].cell_data
-    position    = @_animation.position
+    cell_data = @_animation.frames[frame_index].cell_data
+    position = @_animation.position
     animation_set_sprites(@_animation_sprites, cell_data, position, quick_update)
     return if quick_update
     for timing in @_animation.timings
@@ -168,8 +168,8 @@ class SpriteAnimation
 
   def update_loop_animation(quick_update = false)
     frame_index = @_loop_animation_index
-    cell_data   = @_loop_animation.frames[frame_index].cell_data
-    position    = @_loop_animation.position
+    cell_data = @_loop_animation.frames[frame_index].cell_data
+    position = @_loop_animation.position
     animation_set_sprites(@_loop_animation_sprites, cell_data, position, quick_update)
     return if quick_update
     for timing in @_loop_animation.timings
@@ -199,25 +199,25 @@ class SpriteAnimation
         sprite.visible = false if sprite != nil
         next
       end
-      sprite.x          = sprite_x + cell_data[i, 1]
-      sprite.y          = sprite_y + cell_data[i, 2]
+      sprite.x = sprite_x + cell_data[i, 1]
+      sprite.y = sprite_y + cell_data[i, 2]
       next if quick_update
-      sprite.visible    = true
+      sprite.visible = true
       sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
       case @_animation_height
-      when 0 then sprite.z  = 1
-      when 1 then sprite.z  = sprite.y+32+15
-      when 2 then sprite.z  = sprite.y+32+32+17
-      else        sprite.z  = 2000
+      when 0 then sprite.z = 1
+      when 1 then sprite.z = sprite.y + 32 + 15
+      when 2 then sprite.z = sprite.y + 32 + 32 + 17
+      else sprite.z = 2000
       end
-      sprite.ox         = 96
-      sprite.oy         = 96
-      sprite.zoom_x     = cell_data[i, 3] / 100.0
-      sprite.zoom_y     = cell_data[i, 3] / 100.0
-      sprite.angle      = cell_data[i, 4]
-      sprite.mirror     = (cell_data[i, 5] == 1)
-      sprite.tone       = self.tone
-      sprite.opacity    = cell_data[i, 6] * self.opacity / 255.0
+      sprite.ox = 96
+      sprite.oy = 96
+      sprite.zoom_x = cell_data[i, 3] / 100.0
+      sprite.zoom_y = cell_data[i, 3] / 100.0
+      sprite.angle = cell_data[i, 4]
+      sprite.mirror = (cell_data[i, 5] == 1)
+      sprite.tone = self.tone
+      sprite.opacity = cell_data[i, 6] * self.opacity / 255.0
       sprite.blend_type = cell_data[i, 7]
     end
   end
@@ -274,20 +274,18 @@ class SpriteAnimation
   end
 end
 
-
-
 module RPG
   class Sprite < ::Sprite
     def initialize(viewport = nil)
       super(viewport)
-      @_whiten_duration    = 0
-      @_appear_duration    = 0
-      @_escape_duration    = 0
-      @_collapse_duration  = 0
-      @_damage_duration    = 0
+      @_whiten_duration = 0
+      @_appear_duration = 0
+      @_escape_duration = 0
+      @_collapse_duration = 0
+      @_damage_duration = 0
       @_animation_duration = 0
-      @_blink              = false
-      @animations     = []
+      @_blink = false
+      @animations = []
       @loopAnimations = []
     end
 
@@ -299,43 +297,43 @@ module RPG
     end
 
     def whiten
-      self.blend_type     = 0
+      self.blend_type = 0
       self.color.set(255, 255, 255, 128)
-      self.opacity        = 255
-      @_whiten_duration   = 16
-      @_appear_duration   = 0
-      @_escape_duration   = 0
+      self.opacity = 255
+      @_whiten_duration = 16
+      @_appear_duration = 0
+      @_escape_duration = 0
       @_collapse_duration = 0
     end
 
     def appear
-      self.blend_type     = 0
+      self.blend_type = 0
       self.color.set(0, 0, 0, 0)
-      self.opacity        = 0
-      @_appear_duration   = 16
-      @_whiten_duration   = 0
-      @_escape_duration   = 0
+      self.opacity = 0
+      @_appear_duration = 16
+      @_whiten_duration = 0
+      @_escape_duration = 0
       @_collapse_duration = 0
     end
 
     def escape
-      self.blend_type     = 0
+      self.blend_type = 0
       self.color.set(0, 0, 0, 0)
-      self.opacity        = 255
-      @_escape_duration   = 32
-      @_whiten_duration   = 0
-      @_appear_duration   = 0
+      self.opacity = 255
+      @_escape_duration = 32
+      @_whiten_duration = 0
+      @_appear_duration = 0
       @_collapse_duration = 0
     end
 
     def collapse
-      self.blend_type     = 1
+      self.blend_type = 1
       self.color.set(255, 64, 64, 255)
-      self.opacity        = 255
+      self.opacity = 255
       @_collapse_duration = 48
-      @_whiten_duration   = 0
-      @_appear_duration   = 0
-      @_escape_duration   = 0
+      @_whiten_duration = 0
+      @_appear_duration = 0
+      @_escape_duration = 0
     end
 
     def damage(value, critical)
@@ -345,10 +343,10 @@ module RPG
       bitmap.font.name = "Arial Black"
       bitmap.font.size = 32
       bitmap.font.color.set(0, 0, 0)
-      bitmap.draw_text(-1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12-1, 160, 36, damage_string, 1)
-      bitmap.draw_text(-1, 12+1, 160, 36, damage_string, 1)
-      bitmap.draw_text(+1, 12+1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 - 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(-1, 12 + 1, 160, 36, damage_string, 1)
+      bitmap.draw_text(+1, 12 + 1, 160, 36, damage_string, 1)
       if value.is_a?(Numeric) && value < 0
         bitmap.font.color.set(176, 255, 144)
       else
@@ -367,12 +365,12 @@ module RPG
       end
       @_damage_sprite = ::Sprite.new(self.viewport)
       @_damage_sprite.bitmap = bitmap
-      @_damage_sprite.ox     = 80
-      @_damage_sprite.oy     = 20
-      @_damage_sprite.x      = self.x
-      @_damage_sprite.y      = self.y - self.oy / 2
-      @_damage_sprite.z      = 3000
-      @_damage_duration      = 40
+      @_damage_sprite.ox = 80
+      @_damage_sprite.oy = 20
+      @_damage_sprite.x = self.x
+      @_damage_sprite.y = self.y - self.oy / 2
+      @_damage_sprite.z = 3000
+      @_damage_duration = 40
     end
 
     def pushAnimation(array, anim)
@@ -386,21 +384,21 @@ module RPG
 
     def animation(animation, hit, height = 3)
       anim = SpriteAnimation.new(self)
-      anim.animation(animation,hit,height)
-      pushAnimation(@animations,anim)
+      anim.animation(animation, hit, height)
+      pushAnimation(@animations, anim)
     end
 
     def loop_animation(animation)
       anim = SpriteAnimation.new(self)
       anim.loop_animation(animation)
-      pushAnimation(@loopAnimations,anim)
+      pushAnimation(@loopAnimations, anim)
     end
 
     def dispose_damage
       return if @_damage_sprite == nil
       @_damage_sprite.bitmap.dispose
       @_damage_sprite.dispose
-      @_damage_sprite   = nil
+      @_damage_sprite = nil
       @_damage_duration = 0
     end
 

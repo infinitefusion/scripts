@@ -1,7 +1,7 @@
 class Movie
   attr_reader :finished
 
-  def initialize(framesPath, bgm, maxFrame = 1000, canStopEarly=false)
+  def initialize(framesPath, bgm, maxFrame = 1000, canStopEarly = false)
     @currentFrame = 1
     @initialTime = nil
     @timeElapsed = nil
@@ -9,19 +9,18 @@ class Movie
     @framesPath = framesPath
     @bgm = bgm
     @canStopEarly = canStopEarly
-    @finished=false
+    @finished = false
   end
 
   def play(imageNumber = 12)
-    @finished=false
+    @finished = false
     @currentFrame = 1
     @initialTime = Time.now
     @timeElapsed = Time.now
 
     pbBGMPlay(@bgm)
-    while (@currentFrame <= @maxFrame)# && !(@canStopEarly && Input::ACTION))
+    while (@currentFrame <= @maxFrame) # && !(@canStopEarly && Input::ACTION))
       if Input.trigger?(Input::C)
-
       end
       frame = sprintf(@framesPath, @currentFrame)
       picture = Game_Picture.new(imageNumber)
@@ -30,28 +29,28 @@ class Movie
       picture.erase
       @currentFrame += 1
     end
-    @finished=true
+    @finished = true
     pbBGMStop
   end
 
   def playInViewPort(viewport)
-    @finished=false
+    @finished = false
     @currentFrame = 1
     @initialTime = Time.now
     @timeElapsed = Time.now
 
     pbBGMPlay(@bgm)
-    while (@currentFrame <= @maxFrame)# && !(@canStopEarly && Input::ACTION))
+    while (@currentFrame <= @maxFrame) # && !(@canStopEarly && Input::ACTION))
       break if Input.trigger?(Input::C) && @canStopEarly
       frame = sprintf(@framesPath, @currentFrame)
       picture = Sprite.new(viewport)
       picture.bitmap = pbBitmap(frame)
-      picture.visible=true
+      picture.visible = true
       pbWait(Graphics.frame_rate / 20)
       picture.dispose
       @currentFrame += 1
     end
-    @finished=true
+    @finished = true
     pbBGMStop
   end
 

@@ -1,7 +1,5 @@
 class Hangup < Exception; end
 
-
-
 module RPG
   module Cache
     def self.debug
@@ -34,7 +32,6 @@ module RPG
     def self.need_clearing()
       return @cache.size >= 100
     end
-
 
     def self.load_bitmap(folder_name, filename, hue = 0)
       path = folder_name + filename
@@ -135,11 +132,10 @@ module RPG
   end
 end
 
-
-
 class BitmapWrapper < Bitmap
-  attr_reader   :refcount
+  attr_reader :refcount
   attr_accessor :never_dispose
+
   def dispose
     return if self.disposed?
     @refcount -= 1

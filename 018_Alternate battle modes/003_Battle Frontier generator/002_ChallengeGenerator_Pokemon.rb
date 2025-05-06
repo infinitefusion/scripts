@@ -1,10 +1,10 @@
-$baseStatTotal   = {}
-$babySpecies     = {}
-$minimumLevel    = {}
-$evolutions      = {}
-$legalMoves      = {}    # For each species, all the moves they have access to
+$baseStatTotal = {}
+$babySpecies = {}
+$minimumLevel = {}
+$evolutions = {}
+$legalMoves = {}    # For each species, all the moves they have access to
 $legalMovesLevel = 0     # Level for which $legalMoves were calculated
-$tmMoves         = nil   # Array of all moves teachable by a HM/TM/TR
+$tmMoves = nil   # Array of all moves teachable by a HM/TM/TR
 
 def pbBaseStatTotal(species)
   baseStats = GameData::Species.get(species).base_stats
@@ -76,26 +76,26 @@ def pbGetLegalMoves2(species, maxlevel)
     for move2 in movedatas
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
-      if md.function_code == "0A5" && move2[1].function_code == "000" &&   # Always hits
+      if md.function_code == "0A5" && move2[1].function_code == "000" && # Always hits
          md.type == move2[1].type && md.base_damage >= move2[1].base_damage
         deleteAll.call(moves, move2[0])
-      # If we have two status moves that have the same function code, delete the
-      # one with lower accuracy (Supersonic vs. Confuse Ray, etc.)
+        # If we have two status moves that have the same function code, delete the
+        # one with lower accuracy (Supersonic vs. Confuse Ray, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage == 0 &&
-         move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
+            move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
-      # Delete poison-causing moves if we have a move that causes toxic
+        # Delete poison-causing moves if we have a move that causes toxic
       elsif md.function_code == "006" && move2[1].function_code == "005"
         deleteAll.call(moves, move2[0])
-      # If we have two moves with the same function code and type, and one of
-      # them is damaging and has 10/15/the same PP as the other move and EITHER
-      # does more damage than the other move OR does the same damage but is more
-      # accurate, delete the other move (Surf, Flamethrower, Thunderbolt, etc.)
+        # If we have two moves with the same function code and type, and one of
+        # them is damaging and has 10/15/the same PP as the other move and EITHER
+        # does more damage than the other move OR does the same damage but is more
+        # accurate, delete the other move (Surf, Flamethrower, Thunderbolt, etc.)
       elsif md.function_code == move2[1].function_code && md.base_damage != 0 &&
-         md.type == move2[1].type &&
-         (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
-         (md.base_damage > move2[1].base_damage ||
-         (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
+            md.type == move2[1].type &&
+            (md.total_pp == 15 || md.total_pp == 10 || md.total_pp == move2[1].total_pp) &&
+            (md.base_damage > move2[1].base_damage ||
+             (md.base_damage == move2[1].base_damage && md.accuracy > move2[1].accuracy))
         deleteAll.call(moves, move2[0])
       end
     end
@@ -197,15 +197,15 @@ def pbRandomPokemonFromRule(rules, trainer)
     $legalMovesLevel = level
     $legalMoves[species] = pbGetLegalMoves2(species, level) if !$legalMoves[species]
     itemlist = [
-       :ORANBERRY, :SITRUSBERRY, :ADAMANTORB, :BABIRIBERRY,
-       :BLACKSLUDGE, :BRIGHTPOWDER, :CHESTOBERRY, :CHOICEBAND,
-       :CHOICESCARF, :CHOICESPECS, :CHOPLEBERRY, :DAMPROCK,
-       :DEEPSEATOOTH, :EXPERTBELT, :FLAMEORB, :FOCUSSASH,
-       :FOCUSBAND, :HEATROCK, :LEFTOVERS, :LIFEORB, :LIGHTBALL,
-       :LIGHTCLAY, :LUMBERRY, :OCCABERRY, :PETAYABERRY, :SALACBERRY,
-       :SCOPELENS, :SHEDSHELL, :SHELLBELL, :SHUCABERRY, :LIECHIBERRY,
-       :SILKSCARF, :THICKCLUB, :TOXICORB, :WIDELENS, :YACHEBERRY,
-       :HABANBERRY, :SOULDEW, :PASSHOBERRY, :QUICKCLAW, :WHITEHERB
+      :ORANBERRY, :SITRUSBERRY, :ADAMANTORB, :BABIRIBERRY,
+      :BLACKSLUDGE, :BRIGHTPOWDER, :CHESTOBERRY, :CHOICEBAND,
+      :CHOICESCARF, :CHOICESPECS, :CHOPLEBERRY, :DAMPROCK,
+      :DEEPSEATOOTH, :EXPERTBELT, :FLAMEORB, :FOCUSSASH,
+      :FOCUSBAND, :HEATROCK, :LEFTOVERS, :LIFEORB, :LIGHTBALL,
+      :LIGHTCLAY, :LUMBERRY, :OCCABERRY, :PETAYABERRY, :SALACBERRY,
+      :SCOPELENS, :SHEDSHELL, :SHELLBELL, :SHUCABERRY, :LIECHIBERRY,
+      :SILKSCARF, :THICKCLUB, :TOXICORB, :WIDELENS, :YACHEBERRY,
+      :HABANBERRY, :SOULDEW, :PASSHOBERRY, :QUICKCLAW, :WHITEHERB,
     ]
     # Most used: Leftovers, Life Orb, Choice Band, Choice Scarf, Focus Sash
     item = nil

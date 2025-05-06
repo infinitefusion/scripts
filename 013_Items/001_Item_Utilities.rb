@@ -254,7 +254,7 @@ end
 def pbBattleRestorePP(pkmn, battler, idxMove, pp)
   return if pbRestorePP(pkmn, idxMove, pp) == 0
   if battler && !battler.effects[PBEffects::Transform] &&
-    battler.moves[idxMove] && battler.moves[idxMove].id == pkmn.moves[idxMove].id
+     battler.moves[idxMove] && battler.moves[idxMove].id == pkmn.moves[idxMove].id
     battler.pbSetPP(battler.moves[idxMove], pkmn.moves[idxMove].pp)
   end
 end
@@ -334,7 +334,7 @@ end
 #===============================================================================
 def pbBikeCheck
   if $PokemonGlobal.surfing || $PokemonGlobal.diving ||
-    (!$PokemonGlobal.bicycle && $game_player.pbTerrainTag.must_walk)
+     (!$PokemonGlobal.bicycle && $game_player.pbTerrainTag.must_walk)
     pbMessage(_INTL("Can't use that here."))
     return false
   end
@@ -542,8 +542,7 @@ def pbUseItem(bag, item, bagscene = nil)
           break
         end
         pkmn = $Trainer.party[chosen]
-        if
-        pbCheckUseOnPokemon(item, pkmn, screen)
+        if pbCheckUseOnPokemon(item, pkmn, screen)
           ret = ItemHandlers.triggerUseOnPokemon(item, pkmn, screen)
           if ret && useType == 1 # Usable on Pokémon, consumed
             bag.pbDeleteItem(item)
@@ -561,11 +560,11 @@ def pbUseItem(bag, item, bagscene = nil)
   elsif useType == 2 # Item is usable from Bag
     intret = ItemHandlers.triggerUseFromBag(item)
     case intret
-    when 0 then
+    when 0
       return 0
-    when 1 then
+    when 1
       return 1 # Item used
-    when 2 then
+    when 2
       return 2 # Item used, end screen
     when 3 # Item used, consume item
       bag.pbDeleteItem(item)

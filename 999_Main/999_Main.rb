@@ -9,9 +9,9 @@ class Scene_DebugIntro
 end
 
 def handleReplaceExistingSprites()
-  spritesToReplaceList= $game_temp.unimportedSprites
-  $game_temp.unimportedSprites=nil
-  return if spritesToReplaceList.size==0
+  spritesToReplaceList = $game_temp.unimportedSprites
+  $game_temp.unimportedSprites = nil
+  return if spritesToReplaceList.size == 0
   commands = []
   #commands << "Pick which sprites to use as mains"
   commands << "Do not import the new sprites"
@@ -21,11 +21,11 @@ def handleReplaceExistingSprites()
   messageSingular = "While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game."
   messagePlural = "While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game."
 
-  messageText = spritesToReplaceList.size==1 ? messageSingular : messagePlural
-  message = _INTL(messageText,spritesToReplaceList.length.to_s)
+  messageText = spritesToReplaceList.size == 1 ? messageSingular : messagePlural
+  message = _INTL(messageText, spritesToReplaceList.length.to_s)
   pbMessage(message)
 
-  command = pbMessage("What to do with the new sprites?",commands,commands.size-1)
+  command = pbMessage("What to do with the new sprites?", commands, commands.size - 1)
   case command
   when 0 #Do not import
     pbMessage("You can manually sort the new sprites in the /indexed folder to choose which ones you want to keep.")
@@ -36,7 +36,7 @@ def handleReplaceExistingSprites()
   when 1 #Replace olds
     spritesToReplaceList.each do |oldPath, newPath|
       File.rename(oldPath, newPath)
-      $game_temp.nb_imported_sprites+=1
+      $game_temp.nb_imported_sprites += 1
       echo "\nSorted " + oldPath + " into " + newPath
     end
     #when 2 #Keep olds (rename new as alts)
@@ -60,14 +60,14 @@ end
 def clearTempFolder()
   folder_path = Settings::DOWNLOADED_SPRITES_FOLDER
   Dir.foreach(folder_path) do |file|
-    next if file == '.' or file == '..'
+    next if file == "." or file == ".."
     file_path = File.join(folder_path, file)
     File.delete(file_path) if File.file?(file_path)
   end
 end
 
 def sortCustomBattlers()
-  $game_temp.nb_imported_sprites=0
+  $game_temp.nb_imported_sprites = 0
   echo "Sorting CustomBattlers files..."
 
   # pbMessage("Warning: Sprites that are manually imported will not get updated when a new sprite pack releases. This means that if some contain errors, these will not get fixed for you. All of the sprites from the latest spritepack are already available in your game without the need to manually import anything.")
@@ -77,9 +77,9 @@ def sortCustomBattlers()
 
   alreadyExists = {}
   Dir.foreach(Settings::CUSTOM_SPRITES_TO_IMPORT_FOLDER) do |filename|
-    next if filename == '.' or filename == '..'
+    next if filename == "." or filename == ".."
     next if !filename.end_with?(".png")
-    split_name = filename.split('.')
+    split_name = filename.split(".")
 
     headNum = split_name[0]
     oldPath = Settings::CUSTOM_SPRITES_TO_IMPORT_FOLDER + filename
@@ -87,7 +87,7 @@ def sortCustomBattlers()
     echoln split_name
     echoln split_name.length
 
-    is_base_sprite = split_name.length ==2
+    is_base_sprite = split_name.length == 2
     if is_base_sprite #fusion sprite
       newDir = Settings::CUSTOM_BASE_SPRITE_FOLDER
     else
@@ -99,19 +99,18 @@ def sortCustomBattlers()
       if File.file?(newPath)
         alreadyExists[oldPath] = newPath
         echo "\nFile " + newPath + " already exists... Skipping."
-
       else
-          Dir.mkdir(newDir) if !Dir.exist?(newDir)
-          File.rename(oldPath, newPath)
-        $game_temp.nb_imported_sprites+=1
+        Dir.mkdir(newDir) if !Dir.exist?(newDir)
+        File.rename(oldPath, newPath)
+        $game_temp.nb_imported_sprites += 1
         echo "\nSorted " + filename + " into " + newPath
       end
     rescue
-      echo "\nCould not sort "+ filename
+      echo "\nCould not sort " + filename
     end
   end
   echo "\nFinished sorting"
-  $game_temp.unimportedSprites=alreadyExists
+  $game_temp.unimportedSprites = alreadyExists
 end
 
 # def playInViewPort(viewport)
@@ -135,7 +134,6 @@ end
 #   pbBGMStop
 # end
 
-
 def showLoadingScreen
   loading_screen_folder = "Graphics/titles/loading_screens"
   available_loading_screens = Dir.glob("#{loading_screen_folder}/*.png")
@@ -145,18 +143,17 @@ def showLoadingScreen
     selected_loading_screen = "Graphics/titles/default_loading_screen"
   end
   picture = Sprite.new(@viewport)
-     picture.bitmap = pbBitmap(selected_loading_screen)
-     picture.visible=true
-     Graphics.update
-     picture.dispose
+  picture.bitmap = pbBitmap(selected_loading_screen)
+  picture.visible = true
+  Graphics.update
+  picture.dispose
 end
-
 
 def showLoadMovie
   path = "Graphics\\Pictures\\introMarill"
   loading_screen = Sprite.new(@viewport)
   loading_screen.bitmap = pbBitmap(path)
-  loading_screen.visible=true
+  loading_screen.visible = true
 end
 
 def mainFunctionDebug
@@ -188,11 +185,11 @@ end
 
 loop do
   retval = mainFunction
-  if retval == 0   # failed
+  if retval == 0 # failed
     loop do
       Graphics.update
     end
-  elsif retval == 1   # ended successfully
+  elsif retval == 1 # ended successfully
     break
   end
 end

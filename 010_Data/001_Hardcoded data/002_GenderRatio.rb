@@ -17,8 +17,8 @@ module GameData
     def self.save; end
 
     def initialize(hash)
-      @id            = hash[:id]
-      @real_name     = hash[:name] || "Unnamed"
+      @id = hash[:id]
+      @real_name = hash[:name] || "Unnamed"
       @female_chance = hash[:female_chance]
     end
 
@@ -32,46 +32,46 @@ end
 #===============================================================================
 
 GameData::GenderRatio.register({
-  :id            => :AlwaysMale,
-  :name          => _INTL("Always Male")
+  :id => :AlwaysMale,
+  :name => _INTL("Always Male"),
 })
 
 GameData::GenderRatio.register({
-  :id            => :AlwaysFemale,
-  :name          => _INTL("Always Female")
+  :id => :AlwaysFemale,
+  :name => _INTL("Always Female"),
 })
 
 GameData::GenderRatio.register({
-  :id            => :Genderless,
-  :name          => _INTL("Genderless")
+  :id => :Genderless,
+  :name => _INTL("Genderless"),
 })
 
 GameData::GenderRatio.register({
-  :id            => :FemaleOneEighth,
-  :name          => _INTL("Female One Eighth"),
-  :female_chance => 32
+  :id => :FemaleOneEighth,
+  :name => _INTL("Female One Eighth"),
+  :female_chance => 32,
 })
 
 GameData::GenderRatio.register({
-  :id            => :Female25Percent,
-  :name          => _INTL("Female 25 Percent"),
-  :female_chance => 64
+  :id => :Female25Percent,
+  :name => _INTL("Female 25 Percent"),
+  :female_chance => 64,
 })
 
 GameData::GenderRatio.register({
-  :id            => :Female50Percent,
-  :name          => _INTL("Female 50 Percent"),
-  :female_chance => 128
+  :id => :Female50Percent,
+  :name => _INTL("Female 50 Percent"),
+  :female_chance => 128,
 })
 
 GameData::GenderRatio.register({
-  :id            => :Female75Percent,
-  :name          => _INTL("Female 75 Percent"),
-  :female_chance => 192
+  :id => :Female75Percent,
+  :name => _INTL("Female 75 Percent"),
+  :female_chance => 192,
 })
 
 GameData::GenderRatio.register({
-  :id            => :FemaleSevenEighths,
-  :name          => _INTL("Female Seven Eighths"),
-  :female_chance => 224
+  :id => :FemaleSevenEighths,
+  :name => _INTL("Female Seven Eighths"),
+  :female_chance => 224,
 })

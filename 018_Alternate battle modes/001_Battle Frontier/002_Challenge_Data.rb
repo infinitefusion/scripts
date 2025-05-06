@@ -26,7 +26,7 @@ def pbGetBTTrainers(challengeID)
 end
 
 def listAllPokemon
-  list=[]
+  list = []
   for i in 0..PBSpecies.maxValue
     list << i
   end
@@ -41,9 +41,6 @@ def pbGetBTPokemon(challenge_id)
   end
   return listAllPokemon
 
-
-
-
   # list=[]
   # while list.length <= target_size
   #   list << generate_random_species(max_bst)
@@ -53,13 +50,13 @@ end
 
 def generate_random_species(max_bst)
   additional_bst = $game_variables[120]
-  species=0
+  species = 0
   bonus = 0
-  while (species==0) # Loop Start
-    bonus+= 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
-    species=rand(PBSpecies.maxValue)+1
+  while (species == 0) # Loop Start
+    bonus += 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
+    species = rand(PBSpecies.maxValue) + 1
     bst = calcBaseStatsSum(species)
-    species=0 if bst > max_bst+additional_bst
+    species = 0 if bst > max_bst + additional_bst
   end
   return species
 end
@@ -67,12 +64,12 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbEntryScreen(ableproc=nil)
+def pbEntryScreen(ableproc = nil)
   retval = false
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $Trainer.party)
-    ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset,ableproc)
+    ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset, ableproc)
     # Set party
     pbBattleChallenge.setParty(ret) if ret
     # Continue (return true) if Pokémon were chosen
@@ -119,48 +116,46 @@ end
 
 def getTrainerTypeGraphic(trainerType)
   case trainerType
-  when :YOUNGSTER       then return "BW (19)"
-  when :LASS            then return "BW (23)"
-  when :POKEMANIAC      then return "BW (30)"
-  when :PSYCHIC_F       then return "BW (30)"
-  when :GENTLEMAN       then return "BW (55)"
-  when :LADY            then return "BW (28)"
-  when :CAMPER          then return "BW (59)"
-  when :PICNICKER       then return "BW (60)"
-  when :TUBER_M         then return "BWTuber_male"
-  when :TUBER_F         then return "BWTuber_female"
-  when :SWIMMER_M       then return "BWSwimmerLand"
-  when :SWIMMER_F       then return "BWSwimmer_female2"
-  when :COOLTRAINER_F   then return "BW024"
-  when :JUGGLER         then return "BWHarlequin"
-  when :POKEMONBREEDER  then return "BW028"
-  when :BUGCATCHER      then return "BWBugCatcher_male"
-  when :BLACKBELT       then return "BWBlackbelt"
-  when :FISHERMAN       then return "BW (71)"
-  when :RUINMANIAC      then return "BW (72)"
-  when :TAMER           then return "BW (69)"
-  when :BEAUTY          then return "BW015"
-  when :AROMALADY       then return "BWAomalady"
-  when :ROCKER          then return "BWPunkGuy"
-  when :BIRDKEEPER      then return "BW (29)"
-  when :SAILOR          then return "BWSailor"
-  when :HIKER           then return "BWHiker"
-  when :ENGINEER        then return "BW (75)"
-  when :COOLTRAINER_M   then return "BW023"
-  when :BIKER           then return "BW055"
-  when :CRUSHGIRL       then return "BWBattleGirl"
+  when :YOUNGSTER then return "BW (19)"
+  when :LASS then return "BW (23)"
+  when :POKEMANIAC then return "BW (30)"
+  when :PSYCHIC_F then return "BW (30)"
+  when :GENTLEMAN then return "BW (55)"
+  when :LADY then return "BW (28)"
+  when :CAMPER then return "BW (59)"
+  when :PICNICKER then return "BW (60)"
+  when :TUBER_M then return "BWTuber_male"
+  when :TUBER_F then return "BWTuber_female"
+  when :SWIMMER_M then return "BWSwimmerLand"
+  when :SWIMMER_F then return "BWSwimmer_female2"
+  when :COOLTRAINER_F then return "BW024"
+  when :JUGGLER then return "BWHarlequin"
+  when :POKEMONBREEDER then return "BW028"
+  when :BUGCATCHER then return "BWBugCatcher_male"
+  when :BLACKBELT then return "BWBlackbelt"
+  when :FISHERMAN then return "BW (71)"
+  when :RUINMANIAC then return "BW (72)"
+  when :TAMER then return "BW (69)"
+  when :BEAUTY then return "BW015"
+  when :AROMALADY then return "BWAomalady"
+  when :ROCKER then return "BWPunkGuy"
+  when :BIRDKEEPER then return "BW (29)"
+  when :SAILOR then return "BWSailor"
+  when :HIKER then return "BWHiker"
+  when :ENGINEER then return "BW (75)"
+  when :COOLTRAINER_M then return "BW023"
+  when :BIKER then return "BW055"
+  when :CRUSHGIRL then return "BWBattleGirl"
   when :POKEMONRANGER_M then return "BW (47)"
   when :POKEMONRANGER_F then return "BW (48)"
-  when :PSYCHIC_M       then return "BW (30)"
-  when :CHANNELER       then return "BW (40)"
-  when :GAMBLER         then return "BW (111)"
-  when :SCIENTIST       then return "BW (81)"
-  when :SUPERNERD       then return "BW (81)"
-  when :CUEBALL         then return "BWRoughneck"
+  when :PSYCHIC_M then return "BW (30)"
+  when :CHANNELER then return "BW (40)"
+  when :GAMBLER then return "BW (111)"
+  when :SCIENTIST then return "BW (81)"
+  when :SUPERNERD then return "BW (81)"
+  when :CUEBALL then return "BWRoughneck"
   end
 end
-
-
 
 #===============================================================================
 #
@@ -213,12 +208,12 @@ class PBPokemon
     ev_array = []
     ev.each do |stat|
       case stat.upcase
-      when "HP"          then ev_array.push(:HP)
-      when "ATK"         then ev_array.push(:ATTACK)
-      when "DEF"         then ev_array.push(:DEFENSE)
+      when "HP" then ev_array.push(:HP)
+      when "ATK" then ev_array.push(:ATTACK)
+      when "DEF" then ev_array.push(:DEFENSE)
       when "SA", "SPATK" then ev_array.push(:SPECIAL_ATTACK)
       when "SD", "SPDEF" then ev_array.push(:SPECIAL_DEFENSE)
-      when "SPD"         then ev_array.push(:SPEED)
+      when "SPD" then ev_array.push(:SPEED)
       end
     end
     moves = pieces[4].split(/\s*,\s*/)
@@ -243,19 +238,19 @@ class PBPokemon
       ev_array.push(s.id) if pkmn.ev[s.id] > 60
     end
     return self.new(pkmn.species, pkmn.item_id, pkmn.nature,
-       mov1, mov2, mov3, mov4, ev_array)
+                    mov1, mov2, mov3, mov4, ev_array)
   end
 
   def initialize(species, item, nature, move1, move2, move3, move4, ev)
     @species = species
     itm = GameData::Item.try_get(item)
-    @item    = itm ? itm.id : nil
-    @nature  = nature
-    @move1   = move1
-    @move2   = move2
-    @move3   = move3
-    @move4   = move4
-    @ev      = ev
+    @item = itm ? itm.id : nil
+    @nature = nature
+    @move1 = move1
+    @move2 = move2
+    @move3 = move3
+    @move4 = move4
+    @ev = ev
   end
 
   def inspect
@@ -298,7 +293,7 @@ class PBPokemon
   def createPokemon(level, iv, trainer)
     pkmn = Pokemon.new(@species, level, trainer, false)
     pkmn.item = @item
-    pkmn.personalID = rand(2**16) | rand(2**16) << 16
+    pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
     pkmn.nature = nature
     pkmn.happiness = 0
     pkmn.moves.push(Pokemon::Move.new(self.convertMove(@move1)))

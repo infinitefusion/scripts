@@ -3,26 +3,24 @@
 #===============================================================================
 # Unused class.
 class PokeBattle_NullBattlePeer
-  def pbOnEnteringBattle(battle,pkmn,wild=false); end
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false); end
+  def pbOnEnteringBattle(battle, pkmn, wild = false); end
+  def pbOnLeavingBattle(battle, pkmn, usedInBattle, endBattle = false); end
 
-  def pbStorePokemon(player,pkmn)
+  def pbStorePokemon(player, pkmn)
     player.party[player.party.length] = pkmn if !player.party_full?
     return -1
   end
 
   def pbGetStorageCreatorName; return nil; end
-  def pbCurrentBox;            return -1;  end
-  def pbBoxName(box);          return "";  end
+  def pbCurrentBox; return -1; end
+  def pbBoxName(box); return ""; end
 end
-
-
 
 #===============================================================================
 #
 #===============================================================================
 class PokeBattle_RealBattlePeer
-  def pbStorePokemon(player,pkmn)
+  def pbStorePokemon(player, pkmn)
     if !player.party_full?
       player.party[player.party.length] = pkmn
       return -1
@@ -30,7 +28,7 @@ class PokeBattle_RealBattlePeer
     pkmn.heal
     oldCurBox = pbCurrentBox
     storedBox = $PokemonStorage.pbStoreCaught(pkmn)
-    if storedBox<0
+    if storedBox < 0
       # NOTE: Poké Balls can't be used if storage is full, so you shouldn't ever
       #       see this message.
       pbDisplayPaused(_INTL("Can't catch any more..."))
@@ -49,24 +47,22 @@ class PokeBattle_RealBattlePeer
   end
 
   def pbBoxName(box)
-    return (box<0) ? "" : $PokemonStorage[box].name
+    return (box < 0) ? "" : $PokemonStorage[box].name
   end
 
-  def pbOnEnteringBattle(_battle,pkmn,wild=false)
-    f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
+  def pbOnEnteringBattle(_battle, pkmn, wild = false)
+    f = MultipleForms.call("getFormOnEnteringBattle", pkmn, wild)
     pkmn.form = f if f
   end
 
   # For switching out, including due to fainting, and for the end of battle
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false)
+  def pbOnLeavingBattle(battle, pkmn, usedInBattle, endBattle = false)
     return if !pkmn
-    f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
-    pkmn.form = f if f && pkmn.form!=f
-    pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp
+    f = MultipleForms.call("getFormOnLeavingBattle", pkmn, battle, usedInBattle, endBattle)
+    pkmn.form = f if f && pkmn.form != f
+    pkmn.hp = pkmn.totalhp if pkmn.hp > pkmn.totalhp
   end
 end
-
-
 
 #===============================================================================
 #

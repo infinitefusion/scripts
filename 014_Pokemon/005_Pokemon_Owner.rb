@@ -42,7 +42,7 @@ class Pokemon
     # @param gender [Integer] owner gender
     # @param language [Integer] owner language
     # @return [Owner] foreign Owner object
-    def self.new_foreign(name = '', gender = 2, language = 2)
+    def self.new_foreign(name = "", gender = 2, language = 2)
       return new($Trainer.make_foreign_ID, name, gender, language)
     end
 

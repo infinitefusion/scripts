@@ -13,9 +13,9 @@ class Pokemon
     # Creates a new Move object.
     # @param move_id [Symbol, String, Integer] move ID
     def initialize(move_id)
-      @id   = GameData::Move.get(move_id).id
+      @id = GameData::Move.get(move_id).id
       @ppup = 0
-      @pp   = total_pp
+      @pp = total_pp
     end
 
     # Sets this move's ID, and caps the PP amount if it is now greater than this
@@ -45,20 +45,21 @@ class Pokemon
       max_pp = GameData::Move.get(@id).total_pp
       return max_pp + max_pp * @ppup / 5
     end
+
     alias totalpp total_pp
 
     def function_code; return GameData::Move.get(@id).function_code; end
-    def base_damage;   return GameData::Move.get(@id).base_damage;   end
-    def type;          return GameData::Move.get(@id).type;          end
-    def category;      return GameData::Move.get(@id).category;      end
-    def accuracy;      return GameData::Move.get(@id).accuracy;      end
+    def base_damage; return GameData::Move.get(@id).base_damage; end
+    def type; return GameData::Move.get(@id).type; end
+    def category; return GameData::Move.get(@id).category; end
+    def accuracy; return GameData::Move.get(@id).accuracy; end
     def effect_chance; return GameData::Move.get(@id).effect_chance; end
-    def target;        return GameData::Move.get(@id).target;        end
-    def priority;      return GameData::Move.get(@id).priority;      end
-    def flags;         return GameData::Move.get(@id).flags;         end
-    def name;          return GameData::Move.get(@id).name;          end
-    def description;   return GameData::Move.get(@id).description;   end
-    def hidden_move?;  return GameData::Move.get(@id).hidden_move?;  end
+    def target; return GameData::Move.get(@id).target; end
+    def priority; return GameData::Move.get(@id).priority; end
+    def flags; return GameData::Move.get(@id).flags; end
+    def name; return GameData::Move.get(@id).name; end
+    def description; return GameData::Move.get(@id).description; end
+    def hidden_move?; return GameData::Move.get(@id).hidden_move?; end
   end
 end
 
