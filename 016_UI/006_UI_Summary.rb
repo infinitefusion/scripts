@@ -336,7 +336,7 @@ class PokemonSummary_Scene
     end
     # Show shininess star
     if @pokemon.shiny?
-      addShinyStarsToGraphicsArray(imagepos, 2, 134, @pokemon.bodyShiny?, @pokemon.headShiny?, @pokemon.debugShiny?, nil, nil, nil, nil, true)
+      addShinyStarsToGraphicsArray(imagepos, 2, 126, @pokemon.bodyShiny?, @pokemon.headShiny?, @pokemon.debugShiny?, nil, nil, nil, nil, true)
       #imagepos.push([sprintf("Graphics/Pictures/shiny"), 2, 134])
     end
     # Draw all images
@@ -909,7 +909,7 @@ class PokemonSummary_Scene
     pbFadeOutIn {
       scene = PokemonPokedexInfo_Scene.new
       screen = PokemonPokedexInfoScreen.new(scene)
-      screen.pbStartSceneSingle(@pokemon.species)
+      screen.pbStartSceneSingle(@pokemon)
     }
     pbChangePokemon
     @page -= 1
@@ -1308,7 +1308,7 @@ class PokemonSummary_Scene
       pbFadeOutIn {
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
-        screen.pbStartSceneSingle(@pokemon.species)
+        screen.pbStartSceneSingle(@pokemon)
       }
       pbChangePokemon
       dorefresh = true
@@ -1334,28 +1334,28 @@ class PokemonSummary_Scene
     echoln pokemon.hat
     cmd = 0
     msg = "What should you do?"
-    loop do
-      cmd = pbShowCommands([
-        _INTL("Put on hat"),
-        _INTL("Remove hat"),
-        _INTL("Back")])
-      break if cmd == -1
-      if cmd == 0   #Put on hat
-        @sprites["pokemon"].visible=false
-        pbOpenHatScreenSummary(pokemon)
-        @sprites["pokemon"].visible=true
-        pbDisplay(_INTL("{1} put on a hat!",pokemon.name))
-        #@sprites["pokemon"].visible=false
-
-      elsif cmd == 1 #remove hat
-        if pbConfirm(_INTL("Remove {1}'s hat?",pokemon.name))
-          pokemon.hat=nil
-          pbDisplay(_INTL("{1}'s hat was removed",pokemon.name))
+      loop do
+        cmd = pbShowCommands([
+          _INTL("Put on hat"),
+          _INTL("Remove hat"),
+          _INTL("Back")])
+        break if cmd == -1
+        if cmd == 0   #Put on hat
+          @sprites["pokemon"].visible=false
+          pbOpenHatScreenSummary(pokemon)
+          @sprites["pokemon"].visible=true
+          pbDisplay(_INTL("{1} put on a hat!",pokemon.name))
+          #@sprites["pokemon"].visible=false
+  
+        elsif cmd == 1 #remove hat
+          if pbConfirm(_INTL("Remove {1}'s hat?",pokemon.name))
+            pokemon.hat=nil
+            pbDisplay(_INTL("{1}'s hat was removed",pokemon.name))
+          end
+        else
+          break
         end
-      else
-        break
-      end
-      pbChangePokemon()
+        pbChangePokemon()
     end
   end
 

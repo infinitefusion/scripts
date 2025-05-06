@@ -1,4 +1,4 @@
-class PokemonPokedexInfo_Scene
+class PokemonPokedexInfo_Scene < Bitmap # need it for applied hue
   #todo add indicator to show which one is the main sprite -
   # also maybe add an indicator in main list for when a sprite has available alts
 
@@ -46,7 +46,6 @@ class PokemonPokedexInfo_Scene
     @sprites["bgSelected_next"].visible = false
 
     @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
-
   end
 
   def initializeSpritesPage(altsList)
@@ -83,8 +82,8 @@ class PokemonPokedexInfo_Scene
     @sprites["nextSprite"].zoom_y = Settings::FRONTSPRITE_SCALE #/2
 
     @sprites["selectedSprite"].z = 9999999
-    @sprites["previousSprite"].z = 9999999
-    @sprites["nextSprite"].z = 9999999
+    @sprites["previousSprite"].z = 9999998
+    @sprites["nextSprite"].z = 9999998
 
     @selected_pif_sprite = get_pif_sprite(@available[@selected_index])
     @previous_pif_sprite = get_pif_sprite(@available[@selected_index - 1])
@@ -97,11 +96,9 @@ class PokemonPokedexInfo_Scene
     end
 
     if altsList.size >= 3
-      animated_bitmap =
-        @sprites["previousSprite"].bitmap = load_pif_sprite(@previous_pif_sprite)
+      @sprites["previousSprite"].bitmap = load_pif_sprite(@previous_pif_sprite)
       @sprites["previousSprite"].visible = true
     end
-
   end
 
   def load_pif_sprite(pif_sprite)
@@ -157,7 +154,7 @@ class PokemonPokedexInfo_Scene
     previous_index = @selected_index == 0 ? @available.size - 1 : @selected_index - 1
     next_index = @selected_index == @available.size - 1 ? 0 : @selected_index + 1
 
-    get_pif_sprite(@available[@selected_index])
+    get_pif_sprite(@available[@selected_index]).dump_info()
     @sprites["bgSelected_previous"].visible = true if is_main_sprite(previous_index) && @available.size > 2
     @sprites["bgSelected_center"].visible = true if is_main_sprite(@selected_index)
     @sprites["bgSelected_next"].visible = true if is_main_sprite(next_index) && @available.size > 1
@@ -168,7 +165,6 @@ class PokemonPokedexInfo_Scene
     if isFusion(dex_number)
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number, body_id)
-
       #Autogen sprite
       if alt_letter == "autogen"
         pif_sprite = PIFSprite.new(:AUTOGEN, head_id, body_id)
@@ -185,7 +181,6 @@ class PokemonPokedexInfo_Scene
       sprite_path = alt_letter.split("_", 2)[1]
       pif_sprite.local_path = sprite_path
     end
-    #pif_sprite.dump_info
     return pif_sprite
   end
 
@@ -209,14 +204,38 @@ class PokemonPokedexInfo_Scene
     end
     @selected_pif_sprite = get_pif_sprite(@available[@selected_index])
 
-
     @previous_pif_sprite = get_pif_sprite(@available[previousIndex])
     @next_pif_sprite = get_pif_sprite(@available[nextIndex])
 
-    @sprites["previousSprite"].bitmap = load_pif_sprite(@previous_pif_sprite) if previousIndex != nextIndex
-    @sprites["selectedSprite"].bitmap = load_pif_sprite(@selected_pif_sprite)
-    @sprites["nextSprite"].bitmap = load_pif_sprite(@next_pif_sprite)
+    if previousIndex != nextIndex
+      @sprites["previousSprite"].bitmap = load_pif_sprite(@previous_pif_sprite)
 
+      if @pokemon != nil && @pokemon.shiny? && @sprites["previousSprite"].bitmap
+        @sprites["previousSprite"].bitmap.hue_clear(@pokemon.id_number, "_previousSprite")
+        @sprites["previousSprite"].bitmap.hue_changecolors(@pokemon.id_number, @pokemon.bodyShiny?, @pokemon.headShiny?, "_previousSprite")
+      elsif @isShiny && @sprites["previousSprite"].bitmap
+        @sprites["previousSprite"].bitmap.hue_clear(@idSpecies, "_previousSprite")
+        @sprites["previousSprite"].bitmap.hue_changecolors(@idSpecies, @isBody_Shiny, @isHead_Shiny, "_previousSprite")
+      end
+    end
+
+    @sprites["selectedSprite"].bitmap = load_pif_sprite(@selected_pif_sprite)
+    if @pokemon != nil && @pokemon.shiny? && @sprites["selectedSprite"].bitmap
+      @sprites["selectedSprite"].bitmap.hue_clear(@pokemon.id_number, "_selectedSprite")
+      @sprites["selectedSprite"].bitmap.hue_changecolors(@pokemon.id_number, @pokemon.bodyShiny?, @pokemon.headShiny?, "_selectedSprite")
+    elsif @isShiny && @sprites["selectedSprite"].bitmap
+      @sprites["selectedSprite"].bitmap.hue_clear(@idSpecies, "_selectedSprite")
+      @sprites["selectedSprite"].bitmap.hue_changecolors(@idSpecies, @isBody_Shiny, @isHead_Shiny, "_selectedSprite")
+    end
+
+    @sprites["nextSprite"].bitmap = load_pif_sprite(@next_pif_sprite)
+    if @pokemon != nil && @pokemon.shiny? && @sprites["nextSprite"].bitmap
+      @sprites["nextSprite"].bitmap.hue_clear(@pokemon.id_number, "_nextSprite")
+      @sprites["nextSprite"].bitmap.hue_changecolors(@pokemon.id_number, @pokemon.bodyShiny?, @pokemon.headShiny?, "_nextSprite")
+    elsif @isShiny && @sprites["nextSprite"].bitmap
+      @sprites["nextSprite"].bitmap.hue_clear(@idSpecies, "_nextSprite")
+      @sprites["nextSprite"].bitmap.hue_changecolors(@idSpecies, @isBody_Shiny, @isHead_Shiny, "_nextSprite")
+    end
     #selected_bitmap = @sprites["selectedSprite"].getBitmap
     # sprite_path = selected_bitmap.path
     #isBaseSprite = isBaseSpritePath(@available[@selected_index])
@@ -230,7 +249,9 @@ class PokemonPokedexInfo_Scene
   def showSpriteCredits(filename, generated_sprite = false)
     @creditsOverlay.dispose
 
-    spritename = File.basename(filename, '.*')
+    x = Graphics.width / 2 - 75
+    y = Graphics.height - 60
+    spritename = File.basename(filename, ".*")
 
     if !generated_sprite
       discord_name = getSpriteCredits(spritename)
@@ -240,18 +261,12 @@ class PokemonPokedexInfo_Scene
       discord_name = "" #"Japeal\n(Generated)"
     end
     discord_name = "Imported sprite" if @selected_pif_sprite.local_path
-    author_name = File.basename(discord_name, '#*')
+    author_name = File.basename(discord_name, "#*")
 
-    x = Graphics.width / 2
     label_base_color = Color.new(248, 248, 248)
     label_shadow_color = Color.new(104, 104, 104)
     @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
-    split_name = splitSpriteCredits(author_name, @creditsOverlay, @creditsOverlay.width - 20)
-    line_height = @creditsOverlay.text_size(author_name).height
-    textpos = split_name.each_with_index.map { |name, index|
-      y = (Graphics.height - 60) + (line_height * ((index + 1) - ((split_name.length.to_f + 1) / 2)))
-      [name, x, y, 2, label_base_color, label_shadow_color]
-    }
+    textpos = [[author_name, x, y, 0, label_base_color, label_shadow_color]]
     pbDrawTextPositions(@creditsOverlay, textpos)
   end
 
@@ -339,7 +354,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def sprite_is_alt(sprite_path)
-    spritename = File.basename(sprite_path, '.*')
+    spritename = File.basename(sprite_path, ".*")
     return spritename.match?(/[a-zA-Z]/)
   end
 
@@ -355,7 +370,19 @@ class PokemonPokedexInfo_Scene
       else
         message = 'Would you like to use this sprite instead of the current sprite?'
         if pbConfirmMessage(_INTL(message))
-          swap_main_sprite()
+          # reset shiny sprite for having the new one
+          if @sprites["selectedSprite"] && @sprites["selectedSprite"].bitmap
+            if @pokemon
+              @sprites["selectedSprite"].bitmap.hue_clear(@pokemon.id_number, "")
+            elsif @idSpecies
+              @sprites["selectedSprite"].bitmap.hue_clear(@idSpecies, "")
+            else
+              @sprites["selectedSprite"].bitmap.hue_clear(getDexNumberForSpecies(@species), "")
+            end
+          end
+  
+          # Appeler swap_main_sprite si tout est valide
+          swap_main_sprite() if @selected_pif_sprite
           return true
         end
       end

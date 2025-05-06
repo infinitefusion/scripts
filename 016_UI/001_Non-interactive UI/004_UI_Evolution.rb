@@ -571,7 +571,7 @@ class PokemonEvolutionScene
     pbFlashInOut(canceled,oldstate,oldstate2)
     if canceled
       pbMessageDisplay(@sprites["msgwindow"],
-         _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
+      _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
     else
       pbEvolutionSuccess(reversing)
     end
@@ -625,8 +625,8 @@ class PokemonEvolutionScene
       $Trainer.pokedex.register(@pokemon)
       $Trainer.pokedex.set_owned(@newspecies)
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                               _INTL("{1}'s data was added to the Pokédex", newspeciesname))
-      @scene.pbShowPokedex(@newspecies)
+      _INTL("{1}'s data was added to the Pokédex", newspeciesname))
+      @scene.pbShowPokedex(@newspecies, @pokemon.headShiny?, @pokemon.bodyShiny?)
     end
 
 

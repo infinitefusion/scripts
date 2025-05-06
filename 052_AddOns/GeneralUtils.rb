@@ -153,19 +153,47 @@ end
 
 
 
-def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx = nil, srcy = nil, width = nil, height = nil,
-                                 showSecondStarUnder = false, showSecondStarAbove = false)
-  color = debugShiny ? Color.new(0, 0, 0, 255) : nil
-  imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
-  if shinyBody && shinyHead
+def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx = nil, srcy = nil, width = nil, height = nil, showSecondStarUnder = false, showSecondStarAbove = false, showSecondStarAfter = false, centraliseStar = false)
+  # for having custom stars on debug and better moving options 
+  color = nil
+  if !(shinyBody && shinyHead)
+    if debugShiny
+      imageArray.push(["Graphics/Pictures/shiny_debug", xPos, yPos, srcx, srcy, width, height, color])
+    else
+      imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+    end
+  else
+    # Centralize the first Star
+    if centraliseStar
+      if showSecondStarUnder
+        yPos -= 8
+      elsif showSecondStarAbove
+        yPos += 8
+      elsif showSecondStarAfter
+        xPos -= 8
+      else
+        xPos += 8
+      end
+    end
+    if debugShiny
+      imageArray.push(["Graphics/Pictures/shiny_debug", xPos, yPos, srcx, srcy, width, height, color])
+    else
+      imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+    end
     if showSecondStarUnder
       yPos += 15
     elsif showSecondStarAbove
       yPos -= 15
+    elsif showSecondStarAfter
+      xPos += 15
     else
       xPos -= 15
     end
-    imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+    if debugShiny
+      imageArray.push(["Graphics/Pictures/shiny_debug", xPos, yPos, srcx, srcy, width, height, color])
+    else
+      imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+    end
   end
   # if onlyOutline
   #   imageArray.push(["Graphics/Pictures/shiny_black",xPos,yPos,srcx,srcy,width,height,color])
@@ -377,16 +405,9 @@ def isHoennPokemon(species)
   list = [252, 253, 276, 277, 278, 279, 280, 281, 282, 283, 284,
           285, 286, 287, 289, 290, 291, 292, 293, 300, 301, 302, 303,
           304, 309, 310, 311, 312, 313, 314, 333, 334, 335, 336, 340,
-          341, 342, 355, 356, 357, 378, 379, 380, 381, 382, 385, 386,
-          387, 390, 391, 392, 393, 394, 395, 396, 401, 404, 405, 421,
-          427, 428, 436, 437, 442, 443, 447, 448, 449, 457, 458, 488,
-          495, 496, 497, 501, 502, 503, 504, 505, 506, 507, 508, 509,
-          510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521,
-          522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533,
-          534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545,
-          546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557,
-          558, 559, 560, 561, 562, 563, 564, 565
-  ]
+          341, 342, 355, 356, 357, 378, 379, 380, 381, 382, 385, 386, 387, 390,
+          391, 392, 393, 394, 395, 396, 401, 404, 405, 421, 427, 428, 436,
+          437, 442, 443, 447, 448, 449, 457, 458, 488, 495, 496, 497, 501]
   return list.include?(dexNum) || list.include?(head_dex) || list.include?(body_dex)
 end
 
@@ -488,15 +509,10 @@ def get_difficulty_text
   end
 end
 
-def getCurrentLevelCap()
-  current_max_level = Settings::LEVEL_CAPS[$Trainer.badge_count]
-  current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
-  return current_max_level
-end
-
 def pokemonExceedsLevelCap(pokemon)
   return false if $Trainer.badge_count >= Settings::NB_BADGES
-  current_max_level = getCurrentLevelCap()
+  current_max_level = Settings::LEVEL_CAPS[$Trainer.badge_count]
+  current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
   return pokemon.level >= current_max_level
 end
 
@@ -520,68 +536,3 @@ def new_spritepack_was_released()
   end
   return false
 end
-
-def splitSpriteCredits(name, bitmap, max_width)
-  name_full_width = bitmap.text_size(name).width
-  # use original name if can fit on one line
-  return [ name ] if name_full_width <= max_width
-
-  temp_string = name
-  name_split = []
-
-  # split name by collab separator " & " nearest to max width
-  start_pos = temp_string.index(' & ')
-  temp_pos = nil
-  while start_pos && (bitmap.text_size(temp_string).width > max_width)
-    substring_width = bitmap.text_size(temp_string[0, start_pos]).width
-    if substring_width > max_width
-      name_split << temp_string[0, temp_pos].strip
-      temp_string = temp_string[(temp_pos + 1)..].strip
-      start_pos = temp_string.index(' & ')
-      temp_pos = nil
-      next
-    end
-
-    temp_pos = start_pos
-    start_pos = temp_string.index(' & ', start_pos + 1)
-  end
-
-  # append remainder of " & " split if within max width
-  if temp_pos != nil
-    name_split << temp_string[0, temp_pos].strip
-    temp_string = temp_string[(temp_pos + 1)..].strip
-  end
-
-  # split remaining string by space
-  temp_pos = nil
-  if (bitmap.text_size(temp_string).width > max_width) && (start_pos = temp_string.index(' '))
-    while start_pos && (bitmap.text_size(temp_string).width > max_width)
-      substring_width = bitmap.text_size(temp_string[0, start_pos]).width
-      if substring_width > max_width
-        name_split << temp_string[0, temp_pos].strip
-        temp_string = temp_string[(temp_pos + 1)..].strip
-        start_pos = temp_string.index(' ')
-        temp_pos = nil
-        next
-      end
-
-      temp_pos = start_pos
-      start_pos = temp_string.index(' ', start_pos + 1)
-    end
-  end
-
-  # append remaining text, even if too long for screen
-  name_split << temp_string if temp_string != ''
-
-  return name_split
-end
-
-
-def get_spritecharacter_for_event(event_id)
-  for sprite in $scene.spriteset.character_sprites
-    if sprite.character.id == event_id
-      return sprite
-    end
-  end
-end
-

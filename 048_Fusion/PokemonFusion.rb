@@ -532,7 +532,7 @@ class PokemonFusionScene
   end
   # def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
 
-  #def pbGenerateMetafiles(s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx)
+  # def pbGenerateMetafiles(s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx)
 
 
   #OLD ANIMATION
@@ -685,7 +685,7 @@ class PokemonFusionScene
     @sprites["dnasplicer"].y=(Graphics.height/2)-50
     @sprites["dnasplicer"].opacity=0
 
-    @sprites["rsprite1"].setPokemonBitmapFromId(poke_body_number, false, pokemon_head.shiny?)
+    @sprites["rsprite1"].setPokemonBitmapFromId(poke_body_number, false, pokemon_body.shiny?)
     @sprites["rsprite3"].setPokemonBitmapFromId(poke_head_number, false, pokemon_head.shiny?)
 
 
@@ -693,7 +693,7 @@ class PokemonFusionScene
     @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number,poke_body_number)
 
     #this will use the sprite that is set when we call obtain_fusion_pif_sprite, and apply the shiny effect
-    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon_head.shiny? || pokemon_body.shiny?, pokemon_head.shiny?, pokemon_body.shiny?)
+    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon_head.shiny? || pokemon_body.shiny?, pokemon_body.shiny?, pokemon_head.shiny?)
 
     splicer_bitmap = _INTL("Graphics/Items/{1}",splicerItem)
     @sprites["dnasplicer"].setBitmap(splicer_bitmap)
@@ -817,7 +817,7 @@ class PokemonFusionScene
     pbBGMStop()
     pbPlayCry(@pokemon)
     Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                            _INTL("The Pokémon are being fused!", @pokemon1.name))
+    _INTL("The Pokémon are being fused!", @pokemon1.name))
 
     Kernel.pbMessageWaitForInput(@sprites["msgwindow"], 100, true)
     pbPlayDecisionSE()
@@ -868,7 +868,7 @@ class PokemonFusionScene
       drawSpriteCredits(@fusion_pif_sprite, @viewport)
       pbBGMPlay(pbGetWildVictoryME)
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                              _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+      _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
 
       #exp
       @pokemon1.exp_when_fused_head = @pokemon2.exp
@@ -889,8 +889,9 @@ class PokemonFusionScene
         $Trainer.pokedex.set_seen(newSpecies)
         $Trainer.pokedex.set_owned(newSpecies)
         Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                                _INTL("{1}'s data was added to the Pokédex", newspeciesname))
-        @scene.pbShowPokedex(@newspecies)
+        _INTL("{1}'s data was added to the Pokédex", newspeciesname))
+        # @scene.pbShowPokedex(@newspecies)
+        @scene.pbShowPokedex(@newspecies, @pokemon1.head_shiny, @pokemon1.body_shiny)
       end
       overlay.dispose
       #first check if hidden ability
@@ -969,12 +970,9 @@ def drawSpriteCredits(pif_sprite, viewport)
   label_base_color = Color.new(98, 231, 110)
   label_shadow_color = Color.new(27, 169, 40)
 
-  split_name = splitSpriteCredits(_INTL("Sprite by {1}", author_name), overlay, overlay.width - 20)
-  line_height = overlay.text_size(author_name).height
-  textpos = split_name.each_with_index.map { |name, index|
-    y = 240 - ((split_name.length - (index + 1)) * line_height)
-    [name, x, y, 2, label_base_color, label_shadow_color]
-  }
+  #label_shadow_color = Color.new(33, 209, 50)
+  text = _INTL("Sprite by {1}", author_name)
+  textpos = [[text, x, y, 2, label_base_color, label_shadow_color]]
   pbDrawTextPositions(overlay, textpos)
 end
 
@@ -1084,11 +1082,11 @@ def calculateFusedPokemonLevel(lv1, lv2, superSplicers)
   return lv1
 end
 
-def pbShowPokedex(species)
+def pbShowPokedex(species, headShiny = false, bodyShiny = false)
   pbFadeOutIn {
     scene = PokemonPokedexInfo_Scene.new
     screen = PokemonPokedexInfoScreen.new(scene)
-    screen.pbDexEntry(species)
+    screen.pbDexEntry(species, headShiny, bodyShiny)
   }
 end
 
