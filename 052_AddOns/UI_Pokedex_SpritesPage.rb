@@ -347,20 +347,20 @@ class PokemonPokedexInfo_Scene
     if @available.length > 1
       if is_main_sprite()
         if brief
-          pbMessage("This sprite will remain the displayed sprite")
+          pbMessage(_INTL("This sprite will remain the displayed sprite"))
           return true
         else
-          pbMessage("This sprite is already the displayed sprite")
+          pbMessage(_INTL("This sprite is already the displayed sprite"))
         end
       else
-        message = 'Would you like to use this sprite instead of the current sprite?'
-        if pbConfirmMessage(_INTL(message))
+        message = _INTL("Would you like to use this sprite instead of the current sprite?")
+        if pbConfirmMessage(message)
           swap_main_sprite()
           return true
         end
       end
     else
-      pbMessage("This is the only sprite available for this Pokémon!")
+      pbMessage(_INTL("This is the only sprite available for this Pokémon!"))
     end
     return false
   end

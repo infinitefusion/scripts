@@ -179,7 +179,7 @@ def pbManageMysteryGifts
               _INTL("Receive"),
               _INTL("Delete"),
               _INTL("Cancel")]
-        cmd=pbMessage("\\ts[]"+commands[command],cmds,-1,nil,cmd)
+        cmd = pbMessage( "\\ts[]" + commands[command], cmds, -1, nil, cmd)
         if cmd==-1 || cmd==cmds.length-1
           break
         elsif cmd==0   # Toggle on/offline

@@ -60,10 +60,10 @@ def showNewTRMissionMessage(title, description, show_description)
   pbMEPlay("rocketQuest", 80, 110)
 
   pbCallBub(3)
-  Kernel.pbMessage("\\C[#{titleColor}]NEW MISSION: " + title)
+  Kernel.pbMessage(_INTL("\\C[{1}]NEW MISSION: {2}", titleColor, title))
   if show_description
     pbCallBub(3)
-    Kernel.pbMessage("\\C[#{textColor}]" + description)
+    Kernel.pbMessage(_INTL("\\C[{1}]", description))
   end
 end
 
@@ -72,8 +72,8 @@ def finishTRQuest(id, status, silent = false)
   return if pbCompletedQuest?(id)
   pbMEPlay("Register phone") if status == :SUCCESS && !silent
   pbMEPlay("Voltorb Flip Game Over") if status == :FAILURE && !silent
-  Kernel.pbMessage("\\C[2]Mission completed!") if status == :SUCCESS && !silent
-  Kernel.pbMessage("\\C[2]Mission Failed...") if status == :FAILURE && !silent
+  Kernel.pbMessage(_INTL("\\C[2]Mission completed!")) if status == :SUCCESS && !silent
+  Kernel.pbMessage(_INTL("\\C[2]Mission Failed...")) if status == :FAILURE && !silent
 
   $game_variables[VAR_KARMA] -= 5 # karma
   $game_variables[VAR_NB_ROCKET_MISSIONS] += 1 #nb. quests completed
@@ -82,17 +82,17 @@ def finishTRQuest(id, status, silent = false)
 end
 
 TR_QUESTS = {
-  "tr_cerulean_1" => Quest.new("tr_cerulean_1", "Creepy Crawlies", "The Team Rocket Captain has tasked you with clearing the bug infestation in the temporary Rocket HQ in Cerulean City", QuestBranchRocket, "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_2" => Quest.new("tr_cerulean_2", "No Fishing Zone", "Intimidate the fishermen at Nugget Bridge until they leave the area.", QuestBranchRocket, "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_3" => Quest.new("tr_cerulean_3", "Disobedient Pokémon", "Bring back the Pokémon given by the Team Rocket Captain fainted to teach it a lesson.", QuestBranchRocket, "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_4" => Quest.new("tr_cerulean_4", "Gran Theft Pokémon!", "Follow Petrel and go steal a rare Pokémon from a young girl.", QuestBranchRocket, "rocket_petrel", "Cerulean City", TRQuestColor),
+  "tr_cerulean_1" => Quest.new("tr_cerulean_1", _INTL("Creepy Crawlies"), _INTL("The Team Rocket Captain has tasked you with clearing the bug infestation in the temporary Rocket HQ in Cerulean City"), QuestBranchRocket, "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
+  "tr_cerulean_2" => Quest.new("tr_cerulean_2", _INTL("No Fishing Zone"), _INTL("Intimidate the fishermen at Nugget Bridge until they leave the area."), QuestBranchRocket, "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
+  "tr_cerulean_3" => Quest.new("tr_cerulean_3", _INTL("Disobedient Pokémon"), _INTL("Bring back the Pokémon given by the Team Rocket Captain fainted to teach it a lesson."), QuestBranchRocket, "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
+  "tr_cerulean_4" => Quest.new("tr_cerulean_4", _INTL("Gran Theft Pokémon!"), _INTL("Follow Petrel and go steal a rare Pokémon from a young girl."), QuestBranchRocket, "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
 
-  "tr_celadon_1" => Quest.new("tr_celadon_1", "Supplying the new grunts", "Catch 4 Pokémon with Rocket Balls in the outskirts of Celadon City.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_2" => Quest.new("tr_celadon_2", "Interception!", "Intercept the TMs shipment to the Celadon Store and pose as the delivery person to deliver fake TMs.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_3" => Quest.new( "tr_celadon_3", "Pokémon Collector", "Go meet a Pokémon collector on Route 22, near Viridian City and get his rare Pokémon.", QuestBranchRocket, "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_4" => Quest.new("tr_celadon_4", "Operation Shutdown", "The Team Rocket HQ is being raided! Regroup with the rest of the grunts in Goldenrod Tunnel!", QuestBranchRocket, "rocket_archer", "Goldenrod City", TRQuestColor),
+  "tr_celadon_1" => Quest.new("tr_celadon_1", _INTL("Supplying the new grunts"), _INTL("Catch 4 Pokémon with Rocket Balls in the outskirts of Celadon City."), QuestBranchRocket, "rocket_archer", _INTL("Celadon City"), TRQuestColor),
+  "tr_celadon_2" => Quest.new("tr_celadon_2", _INTL("Interception!"), _INTL("Intercept the TMs shipment to the Celadon Store and pose as the delivery person to deliver fake TMs."), QuestBranchRocket, "rocket_archer", _INTL("Celadon City"), TRQuestColor),
+  "tr_celadon_3" => Quest.new( "tr_celadon_3", _INTL("Pokémon Collector"), _INTL("Go meet a Pokémon collector on Route 22, near Viridian City and get his rare Pokémon."), QuestBranchRocket, "rocket_archer", _INTL("Celadon City"), TRQuestColor),
+  "tr_celadon_4" => Quest.new("tr_celadon_4", _INTL("Operation Shutdown"), _INTL("The Team Rocket HQ is being raided! Regroup with the rest of the grunts in Goldenrod Tunnel!"), QuestBranchRocket, "rocket_archer", _INTL("Goldenrod City"), TRQuestColor),
 
-  "tr_pinkan" => Quest.new("tr_pinkan", "Pinkan Island!", "Help Team Rocket with a heist on a Pokémon nature preserve!", QuestBranchRocket, "rocket_archer", "Goldenrod City", TRQuestColor),
+  "tr_pinkan" => Quest.new("tr_pinkan", _INTL("Pinkan Island!"), _INTL("Help Team Rocket with a heist on a Pokémon nature preserve!"), QuestBranchRocket, "rocket_archer", "Goldenrod City", TRQuestColor),
 
 }
 
@@ -141,64 +141,64 @@ def legendaryQuestioning()
 
   #question 1
   pbCallBub(2, @event_id)
-  pbMessage("First off what does the legendary Pokémon look like?")
-  bodyTypes = { :BIRD => "A flying creature", :BEAST => "A large beast", :FISH => "An aquatic creature", :UNKNOWN => "I don't know..." }
+  pbMessage(_INTL("First off what does the legendary Pokémon look like?"))
+  bodyTypes = { :BIRD => _INTL("A flying creature"), :BEAST => _INTL("A large beast"), :FISH => _INTL("An aquatic creature"), :UNKNOWN => _INTL("I don't know...") }
   chosen_bodyType = optionsMenu(bodyTypes.values)
   answers_so_far << bodyTypes.keys[chosen_bodyType]
   if chosen_bodyType == bodyTypes.length - 1
     pbCallBub(2, @event_id)
-    pbMessage("You don't know? Have you even seen that Pokémon?")
+    pbMessage(_INTL("You don't know? Have you even seen that Pokémon?"))
     pbCallBub(2, @event_id)
-    pbMessage("Hmm... You better have some more information.")
+    pbMessage(_INTL("Hmm... You better have some more information."))
     uncertain_answers += 1
   else
     pbCallBub(2, @event_id)
-    pbMessage("#{bodyTypes.values[chosen_bodyType]} that's also a legendary Pokémon? That sounds incredible! You have my attention.")
+    pbMessage(_INTL("{1} that's also a legendary Pokémon? That sounds incredible! You have my attention.", bodyTypes.values[chosen_bodyType]))
   end
 
   #question 2
   pbCallBub(2, @event_id)
-  pbMessage("Okay... What about its type?")
-  types = { :ELECTRIC => "Electric-type", :FIRE => "Fire-type", :WATER => "Water-Type", :ICE => "Ice-type", :UNKNOWN => "I don't know..." }
+  pbMessage(_INTL("Okay... What about its type?"))
+  types = { :ELECTRIC => _INTL("Electric-type"), :FIRE => _INTL("Fire-type"), :WATER => _INTL("Water-Type"), :ICE => _INTL("Ice-type"), :UNKNOWN => _INTL("I don't know...") }
   chosen_type = optionsMenu(types.values)
   answers_so_far << types.keys[chosen_type]
 
   if chosen_type == types.length - 1
     pbCallBub(2, @event_id)
-    pbMessage("So you don't know its type... Hmm...")
+    pbMessage(_INTL("So you don't know its type... Hmm..."))
     uncertain_answers += 1
   else
     if chosen_bodyType == bodyTypes.length - 1
       pbCallBub(2, @event_id)
-      pbMessage("Hmm... So it's an unknown creature that's #{types.values[chosen_type]}...")
+      pbMessage(_INTL("Hmm... So it's an unknown creature that's {1}...", types.values[chosen_type]))
     else
       pbCallBub(2, @event_id)
-      pbMessage("Hmm... #{bodyTypes.values[chosen_bodyType]} that's #{types.values[chosen_type]}.")
+      pbMessage(_INTL("Hmm... {1} that's {2}.", bodyTypes.values[chosen_bodyType], types.values[chosen_type]))
     end
     susMeter = calculateSuspicionLevel(answers_so_far, uncertain_answers)
     if susMeter == 0
       pbCallBub(2, @event_id)
-      pbMessage("That sounds pretty exciting!")
+      pbMessage(_INTL("That sounds pretty exciting!"))
     else
       pbCallBub(2, @event_id)
-      pbMessage("I've never heard of such a creature, but keep going.")
+      pbMessage(_INTL("I've never heard of such a creature, but keep going."))
     end
   end
 
   #question 3
   pbCallBub(2, @event_id)
-  pbMessage("So... Where was this legendary Pokémon sighted?")
-  locations = { :VIRIDIAN => "Near Viridian City", :LAVENDER => "Near Lavender Town", :CERULEAN => "Near Cerulean City", :CINNABAR => "Near Cinnabar Island", :UNKNOWN => "I don't know" }
+  pbMessage(_INTL("So... Where was this legendary Pokémon sighted?"))
+  locations = { :VIRIDIAN => _INTL("Near Viridian City"), :LAVENDER => _INTL("Near Lavender Town"), :CERULEAN => _INTL("Near Cerulean City"), :CINNABAR => _INTL("Near Cinnabar Island"), :UNKNOWN => _INTL("I don't know") }
   chosen_location = optionsMenu(locations.values)
   if chosen_location == locations.length - 1
     uncertain_answers += 1
     if uncertain_answers == 3
       pbCallBub(2, @event_id)
-      pbMessage("Do you even know anything? This has been such a waste of time!")
+      pbMessage(_INTL("Do you even know anything? This has been such a waste of time!"))
       return 100
     else
       pbCallBub(2, @event_id)
-      pbMessage("How can you not know where it was sighted? Do you know how unhelpful this is to me?")
+      pbMessage(_INTL("How can you not know where it was sighted? Do you know how unhelpful this is to me?"))
       uncertain_answers += 1
     end
   else
@@ -206,21 +206,21 @@ def legendaryQuestioning()
     susMeter = calculateSuspicionLevel(answers_so_far, uncertain_answers)
     if susMeter == 0
       pbCallBub(2, @event_id)
-      pbMessage("#{locations.values[chosen_location]}, huh? Ah yes, that would make a lot of sense... How did I not think of this before?")
+      pbMessage(_INTL("{1}, huh? Ah yes, that would make a lot of sense... How did I not think of this before?", locations.values[chosen_location]))
     else
       pbCallBub(2, @event_id)
-      pbMessage("Hmmm... #{locations.values[chosen_location]}, really? That sounds pretty surprising to me.")
+      pbMessage(_INTL("Hmmm... {1}, really? That sounds pretty surprising to me.", locations.values[chosen_location]))
     end
   end
 
   #question 4
-  locations_formatted = { :VIRIDIAN => "Viridian City", :LAVENDER => "Lavender Town", :CERULEAN => "Cerulean City", :CINNABAR => "Cinnabar Island", :UNKNOWN => "that unknown location" }
+  locations_formatted = { :VIRIDIAN => _INTL("Viridian City"), :LAVENDER => _INTL("Lavender Town"), :CERULEAN => _INTL("Cerulean City"), :CINNABAR => _INTL("Cinnabar Island"), :UNKNOWN => _INTL("that unknown location") }
   pbCallBub(2, @event_id)
-  pbMessage("And at what time of the day was that legendary Pokémon seen near #{locations_formatted.values[chosen_location]} exactly?")
-  time_of_day = { :DAWN => "At dawn", :NOON => "At noon", :AFTERNOON => "In the afternoon", :SUNSET => "At sunset", :NIGHT => "At night" }
+  pbMessage(_INTL("And at what time of the day was that legendary Pokémon seen near {1} exactly?", locations_formatted.values[chosen_location]))
+  time_of_day = { :DAWN => _INTL("At dawn"), :NOON => _INTL("At noon"), :AFTERNOON => _INTL("In the afternoon"), :SUNSET => _INTL("At sunset"), :NIGHT => _INTL("At night") }
   chosen_time = optionsMenu(time_of_day.values)
   pbCallBub(2, @event_id)
-  pbMessage("So it was seen near #{locations_formatted.values[chosen_location]} #{time_of_day.values[chosen_time].downcase}...")
+  pbMessage(_INTL("So it was seen near {1} {2}...", locations_formatted.values[chosen_location], time_of_day.values[chosen_time].downcase))
   answers_so_far << time_of_day.keys[chosen_time]
   return calculateSuspicionLevel(answers_so_far, uncertain_answers)
 end
@@ -228,7 +228,7 @@ end
 def sellPokemon(event_id)
   if $Trainer.party.length <= 1
     pbCallBub(2, event_id)
-    pbMessage("... Wait, I can't take your only Pokémon!")
+    pbMessage(_INTL("... Wait, I can't take your only Pokémon!"))
     return false
   end
   pbChoosePokemon(1, 2,
@@ -241,37 +241,37 @@ def sellPokemon(event_id)
   exotic_pokemon_id = pbGet(VAR_EXOTIC_POKEMON_ID)
   if chosenPokemon.personalID == exotic_pokemon_id
     pbCallBub(2, event_id)
-    pbMessage("Oh, this is the Pokémon you got from the collector, right?")
+    pbMessage(_INTL("Oh, this is the Pokémon you got from the collector, right?"))
     pbCallBub(2, event_id)
-    pbMessage("Yeah, I can't take that one. The collector blabbed to the police so it's too risky.")
+    pbMessage(_INTL("Yeah, I can't take that one. The collector blabbed to the police so it's too risky."))
     return false
   end
 
   speciesName = GameData::Species.get(chosenPokemon.species).real_name
   pbCallBub(2, event_id)
-  if pbConfirmMessageSerious("You wanna sell me this #{speciesName}, is that right?")
+  if pbConfirmMessageSerious(_INTL("You wanna sell me this {1}, is that right?", speciesName))
     pbCallBub(2, event_id)
-    pbMessage("Hmm... Let's see...")
+    pbMessage(_INTL("Hmm... Let's see..."))
     pbWait(10)
     value = calculate_pokemon_value(chosenPokemon)
     pbCallBub(2, event_id)
-    if pbConfirmMessageSerious("\\GI could give you $#{value.to_s} for it. Do we have a deal?")
+    if pbConfirmMessageSerious(_INTL("\\GI could give you ${1} for it. Do we have a deal?", value.to_s))
       payout = (value * 0.7).to_i
       pbCallBub(2, event_id)
-      pbMessage("\\GExcellent. And of course, 30% goes to Team Rocket. So you get $#{payout}.")
+      pbMessage(_INTL("\\GExcellent. And of course, 30% goes to Team Rocket. So you get ${1}.", payout))
       $Trainer.money += payout
       $Trainer.remove_pokemon_at_index(pbGet(1))
       pbSEPlay("Mart buy item")
       pbCallBub(2, event_id)
-      pbMessage("\\GPleasure doing business with you.")
+      pbMessage(_INTL("\\GPleasure doing business with you."))
       return true
     else
       pbCallBub(2, event_id)
-      pbMessage("Stop wasting my time!")
+      pbMessage(_INTL("Stop wasting my time!"))
     end
   else
     pbCallBub(2, event_id)
-    pbMessage("Stop wasting my time!")
+    pbMessage(_INTL("Stop wasting my time!"))
   end
   return false
 end

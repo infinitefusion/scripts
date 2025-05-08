@@ -243,9 +243,7 @@ class PokemonLoadScreen
   # Prompts the player to delete the save files.
   def prompt_save_deletion
     pbMessage(_INTL('The save file is corrupt, or is incompatible with this game.'))
-    exit unless pbConfirmMessageSerious(
-      _INTL('Do you want to delete the save file and start anew?')
-    )
+    exit unless pbConfirmMessageSerious(_INTL('Do you want to delete the save file and start anew?'))
     self.delete_save_data
     $game_system   = Game_System.new
     $PokemonSystem = PokemonSystem.new

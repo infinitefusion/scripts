@@ -46,8 +46,8 @@ class PokemonTrainerCard_Scene
   def promptSwapBackground()
     $Trainer.unlocked_card_backgrounds = [] if !$Trainer.unlocked_card_backgrounds
     if $Trainer.unlocked_card_backgrounds.length >= 1
-      if pbConfirmMessage("Swap your current Trainer Card background")
-        chosen = pbListScreen("Trainer card", TrainerCardBackgroundLister.new($Trainer.unlocked_card_backgrounds))
+      if pbConfirmMessage(_INTL("Swap your current Trainer Card background"))
+        chosen = pbListScreen(_INTL("Trainer card"), TrainerCardBackgroundLister.new($Trainer.unlocked_card_backgrounds))
         echoln chosen
         if chosen
           $Trainer.card_background = chosen
@@ -56,7 +56,7 @@ class PokemonTrainerCard_Scene
         end
       end
     else
-      pbMessage("You can purchase new Trainer Card backgrounds at PokéMarts!")
+      pbMessage(_INTL("You can purchase new Trainer Card backgrounds at PokéMarts!"))
     end
   end
 

@@ -994,60 +994,60 @@ DebugMenuCommands.register("exportanims", {
 #===============================================================================
 # Other options
 #===============================================================================
-# DebugMenuCommands.register("othermenu", {
-#   "parent"      => "main",
-#   "name"        => _INTL("Other options..."),
-#   "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
-#   "always_show" => true
-# })
-#
-# DebugMenuCommands.register("mysterygift", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Manage Mystery Gifts"),
-#   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbManageMysteryGifts
-#   }
-# })
-#
-# DebugMenuCommands.register("extracttext", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Extract Text"),
-#   "description" => _INTL("Extract all text in the game to a single file for translating."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbExtractText
-#   }
-# })
-#
-# DebugMenuCommands.register("compiletext", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Compile Text"),
-#   "description" => _INTL("Import text and converts it into a language file."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbCompileTextUI
-#   }
-# })
-#
-#
-# DebugMenuCommands.register("renamesprites", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Rename Old Sprites"),
-#   "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     SpriteRenamer.convert_files
-#   }
-# })
-#
-# DebugMenuCommands.register("invalidtiles", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Fix Invalid Tiles"),
-#   "description" => _INTL("Scans all maps and erases non-existent tiles."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbDebugFixInvalidTiles
-#   }
-# })
+DebugMenuCommands.register("othermenu", {
+  "parent"      => "main",
+  "name"        => _INTL("Other options..."),
+  "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
+  "always_show" => true
+})
+
+DebugMenuCommands.register("mysterygift", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Manage Mystery Gifts"),
+  "description" => _INTL("Edit and enable/disable Mystery Gifts."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbManageMysteryGifts
+  }
+})
+
+DebugMenuCommands.register("extracttext", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Extract Text"),
+  "description" => _INTL("Extract all text in the game to a single file for translating."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbExtractText
+  }
+})
+
+DebugMenuCommands.register("compiletext", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Compile Text"),
+  "description" => _INTL("Import text and converts it into a language file."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbCompileTextUI
+  }
+})
+
+
+DebugMenuCommands.register("renamesprites", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Rename Old Sprites"),
+  "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
+  "always_show" => true,
+  "effect"      => proc {
+    SpriteRenamer.convert_files
+  }
+})
+
+DebugMenuCommands.register("invalidtiles", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Fix Invalid Tiles"),
+  "description" => _INTL("Scans all maps and erases non-existent tiles."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbDebugFixInvalidTiles
+  }
+})

@@ -407,7 +407,7 @@ class VoltorbFlip
     elsif Input.trigger?(Input::BACK)
       @sprites["curtain"].opacity=100
       if @points==0
-        if pbConfirmMessage("You haven't found any Coins! Are you sure you want to quit?")
+        if pbConfirmMessage(_INTL("You haven't found any Coins! Are you sure you want to quit?"))
           @sprites["curtain"].opacity=0
           pbShowAndDispose
           @quit=true

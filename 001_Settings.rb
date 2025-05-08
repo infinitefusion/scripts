@@ -22,7 +22,7 @@ module Settings
   FUSION_ICON_SPRITE_OFFSET = 10
 
   ANIMATE_REFLECTIONS= true
-
+  GAME_ID = :IF_KANTO
   #Infinite fusion settings
   NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
@@ -540,8 +540,8 @@ module Settings
   # file in the Data folder. Edit only if you have 2 or more languages to choose
   # from.
   LANGUAGES = [
-    #  ["English", "english.dat"],
-    #  ["Deutsch", "deutsch.dat"]
+      ["English", "english.dat"],
+      ["French", "french.dat"]
   ]
 
 

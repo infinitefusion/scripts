@@ -2043,7 +2043,7 @@ class PokemonStorageScreen
     end
     command = pbShowCommands(_INTL("Release this Pokémon?"), [_INTL("No"), _INTL("Yes")])
     if command == 1
-      if pokemon.owner.name  == "RENTAL"
+      if pokemon.owner.name  == _INTL("RENTAL")
         pbDisplay(_INTL("This Pokémon cannot be released"))
         return
       end
@@ -2399,9 +2399,9 @@ class PokemonStorageScreen
   end
 
   def selectSplicer()
-    dna_splicers_const = "DNA Splicers"
-    super_splicers_const = "Super Splicers"
-    infinite_splicers_const = "Infinite Splicers"
+    dna_splicers_const = _INTL("DNA Splicers")
+    super_splicers_const = _INTL("Super Splicers")
+    infinite_splicers_const = _INTL("Infinite Splicers")
 
     dnaSplicersQt = $PokemonBag.pbQuantity(:DNASPLICERS)
     superSplicersQt = $PokemonBag.pbQuantity(:SUPERSPLICERS)

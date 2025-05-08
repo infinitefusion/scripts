@@ -39,17 +39,17 @@ def changeOricorioFlower(form = 1)
   message = ""
   form_name = ""
   if form == 1
-    message = "It's a flower with red nectar. "
-    form_name = "Baile"
+    message = _INTL("It's a flower with red nectar. ")
+    form_name = _INTL("Baile")
   elsif form == 2
-    message = "It's a flower with yellow nectar. "
-    form_name = "Pom-pom"
+    message = _INTL("It's a flower with yellow nectar. ")
+    form_name = _INTL("Pom-pom")
   elsif form == 3
-    message = "It's a flower with pink nectar. "
-    form_name = "Pa'u"
+    message = _INTL("It's a flower with pink nectar. ")
+    form_name = _INTL("Pa'u")
   elsif form == 4
-    message = "It's a flower with blue nectar. "
-    form_name = "Sensu"
+    message = _INTL("It's a flower with blue nectar. ")
+    form_name = _INTL("Sensu")
   end
 
   message = message + "Show it to a Pokémon?"
@@ -119,7 +119,7 @@ end
 
 def fossilsGuyBattle(level = 20, end_message = "")
   team = getFossilsGuyTeam(level)
-  customTrainerBattle("Miguel",
+  customTrainerBattle(_INTL("Miguel"),
                       :SUPERNERD,
                       team,
                       level,
@@ -221,13 +221,13 @@ end
 
 # Old menu for changing difficulty - unused
 def change_game_difficulty(down_only = false)
-  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  message = _INTL("The game is currently on {1} difficulty.", get_difficulty_text())
   pbMessage(message)
 
-  choice_easy = "Easy"
-  choice_normal = "Normal"
-  choice_hard = "Hard"
-  choice_cancel = "Cancel"
+  choice_easy = _INTL("Easy")
+  choice_normal = _INTL("Normal")
+  choice_hard = _INTL("Hard")
+  choice_cancel = _INTL("Cancel")
 
   available_difficulties = []
   currentDifficulty = get_current_game_difficulty
@@ -248,7 +248,7 @@ def change_game_difficulty(down_only = false)
     available_difficulties << choice_hard
   end
   available_difficulties << choice_cancel
-  index = pbMessage("Select a new difficulty", available_difficulties, available_difficulties[-1])
+  index = pbMessage(_INTL("Select a new difficulty"), available_difficulties, available_difficulties[-1])
   choice = available_difficulties[index]
   case choice
   when choice_easy
@@ -264,7 +264,7 @@ def change_game_difficulty(down_only = false)
     return
   end
 
-  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  message = _INTL("The game is currently on {1} difficulty.", get_difficulty_text())
   pbMessage(message)
 end
 
@@ -356,13 +356,13 @@ end
 def getGenericPokemonCryText(pokemonSpecies)
   case pokemonSpecies
   when 25
-    return "Pika!"
+    return _INTL("Pika!")
   when 16, 17, 18, 21, 22, 144, 145, 146, 227, 417, 418, 372 # birds
-    return "Squawk!"
+    return _INTL("Squawk!")
   when 163, 164
-    return "Hoot!" # owl
+    return _INTL("Hoot!") # owl
   else
-    return "Guaugh!"
+    return _INTL("Guaugh!")
   end
 end
 
@@ -800,7 +800,7 @@ def give_date_specific_hats()
   if (current_date.day == 24 || current_date.day == 25) && current_date.month == 12
     if !$Trainer.unlocked_hats.include?(HAT_SANTA)
       pbCallBub(2, @event_id, true)
-      pbMessage("Hi! We're giving out a special hat today for the holidays season. Enjoy!")
+      pbMessage(_INTL("Hi! We're giving out a special hat today for the holidays season. Enjoy!"))
       obtainHat(HAT_SANTA)
     end
   end
@@ -809,7 +809,7 @@ def give_date_specific_hats()
   if (current_date.day == 1 && current_date.month == 4)
     if !$Trainer.unlocked_hats.include?(HAT_CLOWN)
       pbCallBub(2, @event_id, true)
-      pbMessage("Hi! We're giving out this fun accessory for this special day. Enjoy!")
+      pbMessage(_INTL("Hi! We're giving out this fun accessory for this special day. Enjoy!"))
       obtainHat(HAT_CLOWN)
     end
   end
@@ -920,17 +920,17 @@ def getNextLunarFeatherHint()
   nb_feathers = pbGet(VAR_LUNAR_FEATHERS)
   case nb_feathers
   when 0
-    return "Find the first feather in the northernmost dwelling in the port of exquisite sunsets..."
+    return _INTL("Find the first feather in the northernmost dwelling in the port of exquisite sunsets...")
   when 1
-    return "Amidst a nursery for Pokémon youngsters, the second feather hides, surrounded by innocence."
+    return _INTL("Amidst a nursery for Pokémon youngsters, the second feather hides, surrounded by innocence.")
   when 2
-    return "Find the next one in the inn where water meets rest"
+    return _INTL("Find the next one in the inn where water meets rest")
   when 3
-    return "Find the next one inside the lone house in the city at the edge of civilization."
+    return _INTL("Find the next one inside the lone house in the city at the edge of civilization.")
   when 4
-    return "The final feather lies back in the refuge for orphaned Pokémon..."
+    return _INTL("The final feather lies back in the refuge for orphaned Pokémon...")
   else
-    return "Lie in the bed... Bring me the feathers..."
+    return _INTL("Lie in the bed... Bring me the feathers...")
   end
 end
 
@@ -1045,7 +1045,7 @@ def swapReleaseCaughtPokemon(caughtPokemon)
   index = pbGet(1)
   return false if index == -1
   releasedPokemon = $Trainer.party[index]
-  pbMessage("#{releasedPokemon.name} was released.")
+  pbMessage(_INTL("{1} was released.", releasedPokemon.name))
   pbRemovePokemonAt(index)
   pbStorePokemon(caughtPokemon)
 
@@ -1182,8 +1182,8 @@ def openUrlInBrowser(url = "")
     system("xdg-open", url) || system("open", url) || system("start", url)
   rescue
     Input.clipboard = url
-    pbMessage("The game could not open the link in the browser")
-    pbMessage("The link has been copied to your clipboard instead")
+    pbMessage(_INTL("The game could not open the link in the browser"))
+    pbMessage(_INTL("The link has been copied to your clipboard instead"))
   end
 end
 
@@ -1257,19 +1257,19 @@ def getDisplayDifficulty
 end
 
 def getDisplayDifficultyFromIndex(difficultyIndex)
-  return "Easy" if difficultyIndex == 0
-  return "Normal" if difficultyIndex == 1
-  return "Hard" if difficultyIndex == 2
-  return "???"
+  return _INTL("Easy") if difficultyIndex == 0
+  return _INTL("Normal") if difficultyIndex == 1
+  return _INTL("Hard") if difficultyIndex == 2
+  return _INTL("???")
 end
 
 def getGameModeFromIndex(index)
-  return "Classic" if index == 0
-  return "Random" if index == 1
-  return "Remix" if index == 2
-  return "Expert" if index == 3
-  return "Species" if index == 4
-  return "Debug" if index == 5
+  return _INTL("Classic") if index == 0
+  return _INTL("Random") if index == 1
+  return _INTL("Remix") if index == 2
+  return _INTL("Expert") if index == 3
+  return _INTL("Species") if index == 4
+  return _INTL("Debug") if index == 5
   return ""
 end
 
@@ -1565,7 +1565,7 @@ def getHiddenPowerName(pokemon)
 
   echoln hiddenPowerType
   if Settings::TRIPLE_TYPES.include?(hiddenPowerType)
-    return "Neutral"
+    return _INTL("Neutral")
   end
   return PBTypes.getName(hiddenPowerType)
 end
@@ -1581,14 +1581,14 @@ end
 # Rewards given by hotel questman after a certain nb. of completed quests
 #
 QUEST_REWARDS = [
-  QuestReward.new(1, :HM08, 1, "This HM will allow you to illuminate dark caves and should help you to progress in your journey!"),
-  QuestReward.new(5, :AMULETCOIN, 1, "This item will allows you to get twice the money in a battle if the Pokémon holding it took part in it!"),
-  QuestReward.new(10, :LANTERN, 1, "This will allow you to illuminate caves without having to use a HM! Practical, isn't it?"),
-  QuestReward.new(15, :LINKINGCORD, 3, "This strange cable triggers the evolution of Pokémon that typically evolve via trade. I know you'll put it to good use!"),
-  QuestReward.new(20, :SLEEPINGBAG, 1, "This handy item will allow you to sleep anywhere you want. You won't even need hotels anymore!"),
-  QuestReward.new(30, :MISTSTONE, 1, "This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!", true),
-  QuestReward.new(50, :GSBALL, 1, "This mysterious ball is rumored to be the key to call upon the protector of Ilex Forest.  It's a precious relic."),
-  QuestReward.new(60, :MASTERBALL, 1, "This rare ball can catch any Pokémon. Don't waste it!", true),
+  QuestReward.new(1, :HM08, 1, _INTL("This HM will allow you to illuminate dark caves and should help you to progress in your journey!")),
+  QuestReward.new(5, :AMULETCOIN, 1, _INTL("This item will allows you to get twice the money in a battle if the Pokémon holding it took part in it!")),
+  QuestReward.new(10, :LANTERN, 1, _INTL("This will allow you to illuminate caves without having to use a HM! Practical, isn't it?")),
+  QuestReward.new(15, :LINKINGCORD, 3, _INTL("This strange cable triggers the evolution of Pokémon that typically evolve via trade. I know you'll put it to good use!")),
+  QuestReward.new(20, :SLEEPINGBAG, 1, _INTL("This handy item will allow you to sleep anywhere you want. You won't even need hotels anymore!")),
+  QuestReward.new(30, :MISTSTONE, 1, _INTL("This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!"), true),
+  QuestReward.new(50, :GSBALL, 1, _INTL("This mysterious ball is rumored to be the key to call upon the protector of Ilex Forest.  It's a precious relic.")),
+  QuestReward.new(60, :MASTERBALL, 1, _INTL("This rare ball can catch any Pokémon. Don't waste it!"), true),
 ]
 
 def turnEventTowardsEvent(turning, turnedTowards)
@@ -1764,9 +1764,9 @@ end
 def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
 
   commands = []
-  command_hats = "Hats Dye Kit ($#{hats_kit_price})"
-  command_clothes = "Clothes Dye Kit ($#{clothes_kit_price})"
-  command_cancel = "Cancel"
+  command_hats = _INTL("Hats Dye Kit (${1})", hats_kit_price)
+  command_clothes = _INTL("Clothes Dye Kit (${1})", clothes_kit_price)
+  command_cancel = _INTL("Cancel")
 
   commands << command_hats if !$PokemonBag.pbHasItem?(:HATSDYEKIT)
   commands << command_clothes if !$PokemonBag.pbHasItem?(:CLOTHESDYEKIT)
@@ -1774,50 +1774,50 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
 
   if commands.length <= 1
     pbCallBub(2,@event_id)
-    pbMessage("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!")
+    pbMessage(_INTL("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!"))
 
     pbCallBub(2,@event_id)
-    pbMessage("You can use them at any time when you change clothes.")
+    pbMessage(_INTL("You can use them at any time when you change clothes."))
     return
   end
   pbCallBub(2,@event_id)
-  pbMessage("\\GWelcome! Are you interested in dyeing your outfits different colours?")
+  pbMessage(_INTL("\\GWelcome! Are you interested in dyeing your outfits different colours?"))
 
   pbCallBub(2,@event_id)
-  pbMessage("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!")
+  pbMessage(_INTL("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!"))
 
   pbCallBub(2,@event_id)
-  pbMessage("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?")
+  pbMessage(_INTL("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?"))
 
   choice = optionsMenu(commands,commands.length)
   case commands[choice]
   when command_hats
     if $Trainer.money < hats_kit_price
       pbCallBub(2,@event_id)
-      pbMessage("Oh, you don't have enough money...")
+      pbMessage(_INTL("Oh, you don't have enough money..."))
       return
     end
-    pbMessage("\\G\\PN purchased the dye kit.")
+    pbMessage(_INTL("\\G\\PN purchased the dye kit."))
     $Trainer.money -= hats_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:HATSDYEKIT)
     pbCallBub(2,@event_id)
-    pbMessage("\\GHere you go! Have fun dyeing your hats!")
+    pbMessage(_INTL("\\GHere you go! Have fun dyeing your hats!"))
   when command_clothes
     if $Trainer.money < clothes_kit_price
       pbCallBub(2,@event_id)
-      pbMessage("Oh, you don't have enough money...")
+      pbMessage(_INTL("Oh, you don't have enough money..."))
       return
     end
-    pbMessage("\\G\\PN purchased the dye kit.")
+    pbMessage(_INTL("\\G\\PN purchased the dye kit."))
     $Trainer.money -= clothes_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:CLOTHESDYEKIT)
     pbCallBub(2,@event_id)
-    pbMessage("\\GHere you go! Have fun dyeing your clothes!")
+    pbMessage(_INTL("\\GHere you go! Have fun dyeing your clothes!"))
   end
   pbCallBub(2,@event_id)
-  pbMessage("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes.")
+  pbMessage(_INTL("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes."))
 end
 
 def giveJigglypuffScribbles(possible_versions = [1,2,3,4])
