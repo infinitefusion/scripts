@@ -100,7 +100,7 @@ QUESTS = {
 
   #Cerulean hotel
   "cerulean_1" => Quest.new("cerulean_1", "Playing Cupid", _INTL("A boy in Cerulean City wants you bring a love letter to a Pokémon Breeder named Maude. She's probably somewhere in one of the routes near Cerulean City"), QuestBranchHotels, "BW (18)", _INTL("Cerulean City"), HotelQuestColor),
-  "cerulean_2" => Quest.new("cerulean_2", "Type Experts", _INTL("Defeat all of the Type Experts scattered around the Kanto region (#{pbGet(VAR_TYPE_EXPERTS_BEATEN)}/#{TOTAL_NB_TYPE_EXPERTS})"), QuestBranchHotels, "expert-normal", _INTL("Cerulean City"), HotelQuestColor),
+  "cerulean_2" => Quest.new("cerulean_2", "Type Experts", _INTL("Defeat all of the Type Experts scattered around the Kanto region ({1}/{2})", pbGet(VAR_TYPE_EXPERTS_BEATEN), TOTAL_NB_TYPE_EXPERTS), QuestBranchHotels, "expert-normal", _INTL("Cerulean City"), HotelQuestColor),
 
   #Route 24
   "cerulean_field_1" => Quest.new("cerulean_field_1", _INTL("Field Research (Part 1)"), _INTL("Professor Oak's aide wants you to catch an Abra."), QuestBranchField, "BW (82)", _INTL("Route 24"), FieldQuestColor),

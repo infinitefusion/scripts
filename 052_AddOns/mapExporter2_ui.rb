@@ -41,7 +41,7 @@
 #       commands.each_with_index do |s, i|
 #         cmd_sym = s.gsub(/\s+/, "").to_sym
 #         x = sym_commands.include?(cmd_sym) ? "[x]" : "[  ]"
-#         sel_commands.push(_INTL("{1} {2}",x, s))
+#         sel_commands.push("#{x} #{s}")
 #       end
 #       sel_commands.push("Export Map...")
 #       cmdwindow.commands = sel_commands

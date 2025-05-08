@@ -103,7 +103,7 @@ end
 
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
   #download_pokemon_sprite_if_missing(bodyId, headId)
-  picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
+  picturePath = "Graphics/Battlers/#{headId}/#{headId}.#{bodyId}.png"
 
   if include_customs && customSpriteExistsBodyHead(bodyId, headId)
     pathCustom = getCustomSpritePath(bodyId, headId)
@@ -115,7 +115,7 @@ def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
 end
 
 def getCustomSpritePath(body, head)
-  return _INTL("#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}{1}/{1}.{2}.png", head, body)
+  return "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head}/#{head}.#{body}.png"
 end
 
 def customSpriteExistsForm(species, form_id_head = nil, form_id_body = nil)
@@ -131,7 +131,7 @@ def customSpriteExistsForm(species, form_id_head = nil, form_id_body = nil)
   spritename += "." + body.to_s
   spritename += "_" + form_id_body.to_s if form_id_body
 
-  pathCustom = _INTL("Graphics/.CustomBattlers/indexed/{1}/{2}.png", folder, spritename)
+  pathCustom = "Graphics/.CustomBattlers/indexed/#{folder}/#{spritename}.png"
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
 end

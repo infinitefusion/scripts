@@ -1004,7 +1004,7 @@ def promptKeepOrRelease(pokemon)
   pickedOption = false
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
-                        [_INTL("Release a party member"), _INTL("Release this #{pokemon.name}"),], 2)
+                        [_INTL("Release a party member"), _INTL("Release this {1}", pokemon.name),], 2)
     echoln ("command " + command.to_s)
     case command
     when 0 # SWAP
@@ -1113,7 +1113,7 @@ def exportFusedPokemonForShowdown(pokemon)
     fusionLine = _INTL("Fusion: {1}\n", body_pokemon_species.name)
   end
   evsLine = calculateEvLineForShowdown(pokemon)
-  natureLine = "#{GameData::Nature.get(pokemon.nature).real_name} Nature"
+  natureLine = _INTL("{1} Nature", GameData::Nature.get(pokemon.nature).real_name)
   ivsLine = calculateIvLineForShowdown(pokemon)
 
   move1 = "", move2 = "", move3 = "", move4 = ""

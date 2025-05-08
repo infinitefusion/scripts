@@ -2,7 +2,7 @@
 def pick_trainer_sprite(spriter_name)
   possible_types = "abcd"
   trainer_type_index = select_number_from_seed(spriter_name,0,3)
-  path = _INTL("Graphics/Trainers/trainer116{1}",possible_types[trainer_type_index].to_s)
+  path = "Graphics/Trainers/trainer116#{possible_types[trainer_type_index].to_s}"
   return path
 end
 
@@ -18,18 +18,18 @@ end
 
 def pick_spriter_losing_dialog(spriter_name)
   possible_dialogs = [
-    "Oh... I lost...",
-    "I did my best!",
-    "You're too strong!",
-    "You win!",
-    "What a fight!",
-    "That was fun!",
-    "Ohh, that's too bad",
-    "I should've sprited some stronger Pokémon!",
-    "So much for that!",
-    "Should've seen that coming!",
-    "I can't believe it!",
-    "What a surprise!"
+    _INTL("Oh... I lost..."),
+    _INTL("I did my best!"),
+    _INTL("You're too strong!"),
+    _INTL("You win!"),
+    _INTL("What a fight!"),
+    _INTL("That was fun!"),
+    _INTL("Ohh, that's too bad"),
+    _INTL("I should've sprited some stronger Pokémon!"),
+    _INTL("So much for that!"),
+    _INTL("Should've seen that coming!"),
+    _INTL("I can't believe it!"),
+    _INTL("What a surprise!")
   ]
   index = select_number_from_seed(spriter_name,0,possible_dialogs.size-1)
   return possible_dialogs[index]

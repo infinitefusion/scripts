@@ -168,8 +168,8 @@ class PokemonBag_Scene
       end
     end
     @bag.lastpocket = lastpocket
-    @sliderbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Bag/icon_slider"))
-    @pocketbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Bag/icon_pocket"))
+    @sliderbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_slider")
+    @pocketbitmap = AnimatedBitmap.new("Graphics/Pictures/Bag/icon_pocket")
     @sprites = {}
     @sprites["background"] = IconSprite.new(0,0,@viewport)
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
@@ -571,7 +571,7 @@ class PokemonBagScreen
             params.setRange(0, Settings::BAG_MAX_PER_SLOT)
             params.setDefaultValue(qty)
             newqty = pbMessageChooseNumber(
-               _INTL("Choose new quantity of {1} (max. #{Settings::BAG_MAX_PER_SLOT}).",itemplural),params) { @scene.pbUpdate }
+               _INTL("Choose new quantity of {1} (max. {2}).", itemplural, Settings::BAG_MAX_PER_SLOT),params) { @scene.pbUpdate }
             if newqty>qty
               @bag.pbStoreItem(item,newqty-qty)
             elsif newqty<qty

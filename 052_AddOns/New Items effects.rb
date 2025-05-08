@@ -287,7 +287,7 @@ def useSleepingBag()
   pbFadeOutIn {
     Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
   }
-  time = pbGetTimeNow.strftime("%I:%M %p")
+  time = pbGetTimeNowGlobal
   newDay = getDayOfTheWeek()
   if newDay != oldDay
     Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, newDay.downcase.capitalize))
@@ -833,7 +833,7 @@ def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
   overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
 
   pokemon = GameData::Species.get(pokemon_id)
-  typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+  typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
   type1_number = GameData::Type.get(pokemon.type1).id_number
   type2_number = GameData::Type.get(pokemon.type2).id_number
   type1rect = Rect.new(0, type1_number * 28, 64, 28)

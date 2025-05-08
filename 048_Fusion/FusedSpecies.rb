@@ -239,8 +239,13 @@ module GameData
       body_nat_dex = GameData::NAT_DEX_MAPPING[@body_pokemon.id_number] ? GameData::NAT_DEX_MAPPING[@body_pokemon.id_number] : @body_pokemon.id_number
       head_nat_dex = GameData::NAT_DEX_MAPPING[@head_pokemon.id_number] ? GameData::NAT_DEX_MAPPING[@head_pokemon.id_number] : @head_pokemon.id_number
       begin
-        prefix = GameData::SPLIT_NAMES[head_nat_dex][0]
-        suffix = GameData::SPLIT_NAMES[body_nat_dex][1]
+        if Settings::LANGUAGES.length >= 2 && Settings::LANGUAGES[$PokemonSystem.language][1] == "french.dat"
+          prefix = GameData::SPLIT_NAMES_FR[head_nat_dex][0]
+          suffix = GameData::SPLIT_NAMES_FR[body_nat_dex][1]
+        else
+          prefix = GameData::SPLIT_NAMES[head_nat_dex][0]
+          suffix = GameData::SPLIT_NAMES[body_nat_dex][1]
+        end
         if prefix[-1] == suffix[0]
           prefix = prefix[0..-2]
         end

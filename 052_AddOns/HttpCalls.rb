@@ -127,9 +127,9 @@ end
 #     head_id = head_id.to_s
 #     body_id = body_id.to_s
 #
-#     downloaded_file_name = _INTL("{1}/{2}.{3}{4}.png", saveLocation, head_id, body_id, alt_letter)
+#     downloaded_file_name = _INTL("#{saveLocation}/#{head_id}.#{body_id}#{alt_letter}.png")
 #     if !body_id || body_id == ""
-#       downloaded_file_name = _INTL("{1}{2}{3}.png", saveLocation, head_id, alt_letter)
+#       downloaded_file_name = _INTL("#{saveLocation}#{head_id}#{alt_letter}.png")
 #     end
 #
 #     return downloaded_file_name if pbResolveBitmap(downloaded_file_name)
@@ -179,9 +179,9 @@ end
 #
 def download_autogen_sprite(head_id, body_id)
   #return nil if !downloadAllowed?()
-  #template_url = Settings::AUTOGEN_SPRITES_REPO_URL + "{1}/{1}.{2}.png"
+  #template_url = Settings::AUTOGEN_SPRITES_REPO_URL + "#{head_id}/#{head_id}.#{body_id}.png"
 
-  destPath = _INTL("{1}{2}", Settings::BATTLERS_FOLDER, head_id)
+  destPath = "#{Settings::BATTLERS_FOLDER}#{head_id}"
 
   autogenExtracter = AutogenExtracter.new
   return autogenExtracter.extract_bitmap_to_file(PIFSprite.new(:AUTOGEN, head_id, body_id), destPath)
@@ -194,8 +194,8 @@ end
 
 def download_custom_sprite(head_id, body_id, alt_letter = "")
   return nil unless downloadAllowed?()
-  #url = getDownloadableCustomSpritesUrl() + "{1}.{2}{3}.png"
-  destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+  #url = getDownloadableCustomSpritesUrl() + "#{head_id}.#{body_id}#{alt_letter}.png"
+  destPath = "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head_id}"
   spriteExtracter = CustomSpriteExtracter.new
   sprite_path = spriteExtracter.extract_bitmap_to_file(head_id, body_id, alt_letter, destPath)
   echoln sprite_path
@@ -213,8 +213,8 @@ end
 #   head_id = (head_id.to_s) + spriteformHead_suffix.to_s
 #   body_id = (body_id.to_s) + spriteformBody_suffix.to_s
 #   return nil if !downloadAllowed?()
-#   url = getDownloadableCustomSpritesUrl() + "{1}.{2}{3}.png"
-#   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+#   url = getDownloadableCustomSpritesUrl() + "#{head_id}.#{body_id}#{alt_letter}.png"
+#   destPath = "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head_id}"
 #   if !Dir.exist?(destPath)
 #     Dir.mkdir(destPath)
 #   end
@@ -227,8 +227,8 @@ end
 #   head_id = (head_id.to_s) + spriteformHead_suffix.to_s
 #   body_id = (body_id.to_s) + spriteformBody_suffix.to_s
 #   return nil if !downloadAllowed?()
-#   url = getDownloadableCustomSpritesUrl() + "{1}.{2}{3}.png"
-#   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+#   url = getDownloadableCustomSpritesUrl() + "#{head_id}.#{body_id}#{alt_letter}.png"
+#   destPath = "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head_id}"
 #   if !Dir.exist?(destPath)
 #     Dir.mkdir(destPath)
 #   end
@@ -240,7 +240,7 @@ end
 # #todo refactor & put custom base sprites in same folder as fusion sprites
 # def download_unfused_main_sprite(dex_num, alt_letter="")
 #   base_url = alt_letter == "" ? Settings::BASE_POKEMON_SPRITES_REPO_URL : getDownloadableBaseSpritesUrl()
-#   filename = _INTL("{1}{2}.png",dex_num,alt_letter)
+#   filename = "#{dex_num}#{alt_letter}.png"
 #   url = base_url + filename
 #
 #   echoln url
@@ -310,9 +310,9 @@ end
 #   end
 
 # def download_all_alt_sprites(head_id, body_id)
-#   base_url = "#{getDownloadableCustomSpritesUrl()}{1}.{2}"
+#   base_url = "#{getDownloadableCustomSpritesUrl()}#{head_id}.#{body_id}"
 #   extension = ".png"
-#   destPath = _INTL("{1}{2}", Settings::CUSTOM_BATTLERS_FOLDER_INDEXED, head_id)
+#   destPath = "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head_id}"
 #   if !Dir.exist?(destPath)
 #     Dir.mkdir(destPath)
 #   end

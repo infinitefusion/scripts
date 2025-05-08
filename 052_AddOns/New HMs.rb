@@ -102,7 +102,7 @@ HiddenMoveHandlers::UseMove.add(:MORNINGSUN,proc{|move,pokemon|
   pbHiddenMoveAnimation(pokemon)
   pbFadeOutIn(99999){
     pbSkipTime(9)
-    newTime = pbGetTimeNow.strftime("%I:%M %p")
+    newTime = pbGetTimeNowGlobal
     Kernel.pbMessage(_INTL("{1} waited until morning...",$Trainer.name))
     Kernel.pbMessage(_INTL("The time is now {1}",newTime))
     $game_screen.weather(:None,0,0)
@@ -125,7 +125,7 @@ HiddenMoveHandlers::UseMove.add(:MOONLIGHT,proc{|move,pokemon|
   pbHiddenMoveAnimation(pokemon)
   pbFadeOutIn(99999){
     pbSkipTime(21)
-    newTime = pbGetTimeNow.strftime("%I:%M %p")
+    newTime = pbGetTimeNowGlobal
     Kernel.pbMessage(_INTL("{1} waited until night...",$Trainer.name))
     Kernel.pbMessage(_INTL("The time is now {1}",newTime))
     $game_screen.weather(:None,0,0)

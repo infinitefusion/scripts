@@ -130,7 +130,7 @@ DebugMenuCommands.register("togglewallpapers", {
         paperscmds.push(_INTL("Unlock all"))
         paperscmds.push(_INTL("Lock all"))
         for i in PokemonStorage::BASICWALLPAPERQTY...w.length
-          paperscmds.push(_INTL("{1} {2}", unlockarray[i] ? "[Y]" : "[  ]", w[i]))
+          paperscmds.push("#{unlockarray[i] ? '[Y]' : '[  ]'} #{w[i]}")
         end
         paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
         break if paperscmd < 0
@@ -782,7 +782,7 @@ DebugMenuCommands.register("dexlists", {
       for i in 0...dex_names.length
         name = (dex_names[i].is_a?(Array)) ? dex_names[i][0] : dex_names[i]
         unlocked = $Trainer.pokedex.unlocked?(i)
-        dexescmds.push(_INTL("{1} {2}", unlocked ? "[Y]" : "[  ]", name))
+        dexescmds.push("#{unlocked ? "[Y]" : '[  ]'} #{name}")
       end
       dexescmd = pbShowCommands(nil, dexescmds, -1, dexescmd)
       break if dexescmd < 0

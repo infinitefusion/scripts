@@ -242,7 +242,7 @@ def displayTeamFlag(frame)
   # end
   # pbMessage( "Top contributors:<br>#{contributors_string}")
 
-  flag_id = _INTL("flags/{1}_FLAG", species.id.to_s)
+  flag_id = "flags/#{species.id.to_s}_FLAG", 
   flag_name = _INTL("Team {1}", species.real_name)
   prompt_flag_purchase(flag_id, flag_name, 5000)
 

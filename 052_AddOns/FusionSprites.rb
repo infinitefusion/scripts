@@ -194,7 +194,7 @@ end
 #   random_alt = "" if !random_alt || localOnly
 #
 #
-#   filename = _INTL("{1}{2}.png", dex_number,random_alt)
+#   filename = "#{dex_number}#{random_alt}.png"
 #
 #   path = Settings::CUSTOM_BASE_SPRITES_FOLDER  + filename
 #   if pbResolveBitmap(path)
@@ -264,7 +264,7 @@ end
 #   end
 #
 #
-#   pokemon_name = _INTL("{1}.{2}",head_id, body_id)
+#   pokemon_name = "#{head_id}.#{body_id}"
 #
 #   #get altSprite letter
 #   random_alt = get_random_alt_letter_for_custom(head_id, body_id) #nil if no main
@@ -276,7 +276,7 @@ end
 #   end
 #
 #
-#   filename = _INTL("{1}{2}.png", pokemon_name, random_alt)
+#   filename = "#{pokemon_name}#{random_alt}.png"
 #   #Try local custom sprite
 #   local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s  + "/" + filename
 #   if pbResolveBitmap(local_custom_path)
@@ -311,7 +311,7 @@ end
 # end
 
 def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
-  spriteName = _INTL("{1}.{2}", head_id, body_id)
+  spriteName = "#{head_id}.#{body_id}"
   echoln spriteName
   if onlyMain
     alts_list = list_main_sprites_letters(spriteName)
@@ -325,7 +325,7 @@ def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
 end
 
 def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
-  spriteName = _INTL("{1}", dex_num)
+  spriteName = dex_num.to_s
   if onlyMain
     letters_list= list_main_sprites_letters(spriteName)
   else
@@ -352,7 +352,7 @@ def list_main_sprites_letters(spriteName)
 end
 
 def list_all_sprites_letters_head_body(head_id,body_id)
-  spriteName = _INTL("{1}.{2}", head_id, body_id)
+  spriteName = "#{head_id}.#{body_id}"
   all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
   letters = []
   all_sprites_map.each do |key, value|

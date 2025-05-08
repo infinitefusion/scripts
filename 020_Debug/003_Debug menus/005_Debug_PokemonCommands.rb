@@ -1028,8 +1028,7 @@ PokemonDebugMenuCommands.register("setribbons", {
       commands = []
       ids = []
       GameData::Ribbon.each do |ribbon_data|
-        commands.push(_INTL("{1} {2}",
-           (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
+        commands.push("#{pkmn.hasRibbon?(ribbon_data.id) ? '[Y]' : '[  ]'} #{ribbon_data.name}")
         ids.push(ribbon_data.id)
       end
       commands.push(_INTL("Give all"))

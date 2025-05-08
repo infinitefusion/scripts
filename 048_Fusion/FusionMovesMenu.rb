@@ -36,7 +36,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
 
   def pbStartScene(inloadscreen = false)
     super
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["overlay"].z = 9999
     pbSetSystemFont(@sprites["overlay"].bitmap)

@@ -651,7 +651,7 @@ class BetterRegionMap
   end
 
   def print_current_position()
-    echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
+    echoln "(#{$PokemonGlobal.regionMapSel[0]}, #{$PokemonGlobal.regionMapSel[1]})"
   end
 
 
@@ -812,7 +812,7 @@ end
 #
 # class PokemonPokedexInfo_Scene
 #   def drawPageArea
-#     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
+#     @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_area")
 #     overlay = @sprites["overlay"].bitmap
 #     base   = Color.new(88,88,80)
 #     shadow = Color.new(168,184,184)

@@ -220,7 +220,7 @@ def generateTrainerTradeOffer(trainer)
 
   wanted_type_name = GameData::Type.get(wanted_type).real_name
   trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
-  pbMessage(_INTL("#{trainerClassName} #{trainer.trainerName} is looking for #{wanted_type_name}-type Pokémon. Which Pokémon do you want to trade?."),)
+  pbMessage(_INTL("{1} {2} is looking for {3}-type Pokémon. Which Pokémon do you want to trade?.", trainerClassName, trainer.trainerName, wanted_type_name))
   pbChoosePokemon(1,2,
                   proc {|pokemon|
                     pokemon.hasType?(wanted_type)
@@ -232,20 +232,20 @@ def generateTrainerTradeOffer(trainer)
     chosen_pokemon = $Trainer.party[chosen_index]
     offered_pokemon = offerPokemonForTrade(chosen_pokemon,trainer.currentTeam,trainer.trainerType)
     if !offered_pokemon
-      pbMessage(_INTL("#{trainerClassName} #{trainer.trainerName} does not want to trade..."))
+      pbMessage(_INTL("{1} {2} does not want to trade...", trainerClassName, trainer.trainerName))
       return trainer
     end
 
     pif_sprite = BattleSpriteLoader.new.get_pif_sprite_from_species(offered_pokemon.species)
     pif_sprite.dump_info()
 
-    message = _INTL("#{trainerClassName} #{trainer.trainerName} is offering #{offered_pokemon.name} (Level #{offered_pokemon.level}) for your #{chosen_pokemon.name}.")
+    message = _INTL("{1} {2} is offering {3} (Level {4}) for your {5}.", trainerClassName, trainer.trainerName, offered_pokemon.name, offered_pokemon.level, chosen_pokemon.name)
 
     $game_screen.pictures[bg_image_id].show("Trainers/obtain_trade_bg.png", 0, Graphics.width/4, 20)
     displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
     $game_screen.pictures[bg_image_id].erase
 
-    if pbConfirmMessage(_INTL("Trade away #{chosen_pokemon.name} for #{trainerClassName} #{trainer.trainerName}'s #{offered_pokemon.name}?"))
+    if pbConfirmMessage(_INTL("Trade away {1} for {2} {3}'s {4}?", chosen_pokemon.name, trainerClassName, trainer.trainerName, offered_pokemon.name))
       pbStartTrade(chosen_index, offered_pokemon,offered_pokemon.name,trainer.trainerName,0)
       updated_party = trainer.currentTeam
       updated_party.delete(offered_pokemon)

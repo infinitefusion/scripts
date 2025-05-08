@@ -70,10 +70,7 @@ class PokemonTrainerCard_Scene
     min = totalsec / 60 % 60
     time = (hour > 0) ? _INTL("{1}h {2}m", hour, min) : _INTL("{1}m", min)
     $PokemonGlobal.startTime = pbGetTimeNow if !$PokemonGlobal.startTime
-    starttime = _INTL("{1} {2}, {3}",
-                      pbGetAbbrevMonthName($PokemonGlobal.startTime.mon),
-                      $PokemonGlobal.startTime.day,
-                      $PokemonGlobal.startTime.year)
+    starttime = "#{pbGetAbbrevMonthName($PokemonGlobal.startTime.mon)} #{$PokemonGlobal.startTime.day}, #{$PokemonGlobal.startTime.year}",
     textPositions = [
       [_INTL("Name"), 34, 58, 0, baseColor, shadowColor],
       [$Trainer.name, 302, 58, 1, baseColor, shadowColor],
