@@ -1207,6 +1207,7 @@ def obtainStarter(starterIndex = 0)
     end
     starter = startersList[starterIndex]
   end
+  echoln startersList
   return GameData::Species.get(starter)
 end
 
@@ -1619,7 +1620,7 @@ def turnPlayerTowardsEvent(event)
   end
 end
 
-def displayPicture(image,x,y,z)
+def displayPicture(image,x,y,z=0)
   pictureWindow = PictureWindow.new(image)
   pictureWindow.z = z
   pictureWindow.x = x
@@ -1628,11 +1629,12 @@ def displayPicture(image,x,y,z)
   return pictureWindow
 end
 
-def showPokemonInPokeball(pif_sprite,message)
-  background_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_back.png",Graphics.width/4, 20,1)
-  foreground_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_front_nobg.png",Graphics.width/4, 20,9999)
-  #foreground_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_front_bg.png",Graphics.width/4-25, 30,9999)
+def showPokemonInPokeballWithMessage(pif_sprite, message, x_position, y_position)
+  x_position = Graphics.width/4 if !x_position
+  y_position = 20 if !y_position
 
+  background_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_back",x_position, y_position,1)
+  foreground_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_front",x_position, y_position,9999)
   displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
   background_sprite.dispose
   foreground_sprite.dispose

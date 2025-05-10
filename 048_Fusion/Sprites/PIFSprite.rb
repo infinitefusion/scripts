@@ -23,6 +23,14 @@ class PIFSprite
     echoln "Alt letter: #{@alt_letter}"
     echoln "Local path: #{@local_path}"
   end
+  def species
+    if @type == :BASE
+      return GameData::Species.get(@head_id).species
+    else
+      return "B#{@body_id}H#{@head_id}".to_sym
+    end
+  end
+
 
   def exists()
     filename = get_spritesheet_path()

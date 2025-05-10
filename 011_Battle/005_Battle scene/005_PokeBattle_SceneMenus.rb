@@ -251,11 +251,11 @@ class FightMenuDisplay < BattleMenuBase
         next button
       end
       # Create overlay for buttons (shows move names)
-      @overlay = BitmapSprite.new(Graphics.width,Graphics.height-self.y,viewport)
-      @overlay.x = self.x
-      @overlay.y = self.y
-      pbSetNarrowFont(@overlay.bitmap)
-      addSprite("overlay",@overlay)
+      @pokemon_name_overlay = BitmapSprite.new(Graphics.width, Graphics.height-self.y, viewport)
+      @pokemon_name_overlay.x = self.x
+      @pokemon_name_overlay.y = self.y
+      pbSetNarrowFont(@pokemon_name_overlay.bitmap)
+      addSprite("overlay", @pokemon_name_overlay)
       # Create overlay for selected move's info (shows move's PP)
       @infoOverlay = BitmapSprite.new(Graphics.width,Graphics.height-self.y,viewport)
       @infoOverlay.x = self.x
@@ -314,7 +314,7 @@ class FightMenuDisplay < BattleMenuBase
     super
     @msgBox.z      += 1 if @msgBox
     @cmdWindow.z   += 2 if @cmdWindow
-    @overlay.z     += 5 if @overlay
+    @pokemon_name_overlay.z     += 5 if @pokemon_name_overlay
     @infoOverlay.z += 6 if @infoOverlay
     @typeIcon.z    += 1 if @typeIcon
   end
@@ -343,7 +343,7 @@ class FightMenuDisplay < BattleMenuBase
       return
     end
     # Draw move names onto overlay
-    @overlay.bitmap.clear
+    @pokemon_name_overlay.bitmap.clear
     textPos = []
     @buttons.each_with_index do |button,i|
       next if !@visibility["button_#{i}"]
@@ -360,7 +360,7 @@ class FightMenuDisplay < BattleMenuBase
       end
       textPos.push([moves[i].name,x,y,2,moveNameBase,TEXT_SHADOW_COLOR])
     end
-    pbDrawTextPositions(@overlay.bitmap,textPos)
+    pbDrawTextPositions(@pokemon_name_overlay.bitmap, textPos)
   end
 
   def refreshSelection
@@ -493,11 +493,11 @@ class TargetMenuDisplay < BattleMenuBase
       next button
     end
     # Create overlay (shows target names)
-    @overlay = BitmapSprite.new(Graphics.width,Graphics.height-self.y,viewport)
-    @overlay.x = self.x
-    @overlay.y = self.y
-    pbSetNarrowFont(@overlay.bitmap)
-    addSprite("overlay",@overlay)
+    @pokemon_name_overlay = BitmapSprite.new(Graphics.width, Graphics.height-self.y, viewport)
+    @pokemon_name_overlay.x = self.x
+    @pokemon_name_overlay.y = self.y
+    pbSetNarrowFont(@pokemon_name_overlay.bitmap)
+    addSprite("overlay", @pokemon_name_overlay)
     self.z = z
     refresh
   end
@@ -509,7 +509,7 @@ class TargetMenuDisplay < BattleMenuBase
 
   def z=(value)
     super
-    @overlay.z += 5 if @overlay
+    @pokemon_name_overlay.z += 5 if @pokemon_name_overlay
   end
 
   def setDetails(texts,mode)
@@ -535,7 +535,7 @@ class TargetMenuDisplay < BattleMenuBase
       button.z          = self.z + ((sel) ? 3 : 2)
     end
     # Draw target names onto overlay
-    @overlay.bitmap.clear
+    @pokemon_name_overlay.bitmap.clear
     textpos = []
     @buttons.each_with_index do |button,i|
       next if !button || nil_or_empty?(@texts[i])
@@ -543,7 +543,7 @@ class TargetMenuDisplay < BattleMenuBase
       y = button.y-self.y+2
       textpos.push([@texts[i],x,y,2,TEXT_BASE_COLOR,TEXT_SHADOW_COLOR])
     end
-    pbDrawTextPositions(@overlay.bitmap,textpos)
+    pbDrawTextPositions(@pokemon_name_overlay.bitmap, textpos)
   end
 
   def refresh

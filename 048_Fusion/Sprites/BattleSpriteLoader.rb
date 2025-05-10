@@ -65,6 +65,11 @@ class BattleSpriteLoader
     end
   end
 
+  def registerSpriteSubstitution(pif_sprite)
+    substitution_id = get_sprite_substitution_id_from_dex_number(pif_sprite.species)
+    $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite
+  end
+
   def obtain_fusion_pif_sprite(head_id,body_id)
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
     pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal

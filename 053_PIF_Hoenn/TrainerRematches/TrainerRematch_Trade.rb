@@ -240,7 +240,7 @@ def generateTrainerTradeOffer(trainer)
     pif_sprite.dump_info()
 
     message = _INTL("#{trainerClassName} #{trainer.trainerName} is offering #{offered_pokemon.name} (Level #{offered_pokemon.level}) for your #{chosen_pokemon.name}.")
-    showPokemonInPokeball(pif_sprite,message)
+    showPokemonInPokeballWithMessage(pif_sprite, message)
 
     if pbConfirmMessage(_INTL("Trade away #{chosen_pokemon.name} for #{trainerClassName} #{trainer.trainerName}'s #{offered_pokemon.name}?"))
       pbStartTrade(chosen_index, offered_pokemon,offered_pokemon.name,trainer.trainerName,0)
