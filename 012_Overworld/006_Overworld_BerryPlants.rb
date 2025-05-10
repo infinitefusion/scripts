@@ -244,7 +244,7 @@ class BerryPlantSprite
       @event.character_name="berrytreeplanted"   # Common to all berries
       @event.turn_down
     else
-      filename=sprintf("berrytree%s",GameData::Item.get(berryData[1]).id.to_s)
+      filename=sprintf("berrytree_%s",GameData::Item.get(berryData[1]).id.to_s)
       if pbResolveBitmap("Graphics/Characters/"+filename)
         @event.character_name=filename
         case berryData[0]
@@ -264,7 +264,10 @@ class BerryPlantSprite
   end
 end
 
-
+#todo: return whether the player has any mulch items
+def canFertilize?
+  return true
+end
 
 def pbBerryPlant
   interp=pbMapInterpreter
@@ -292,11 +295,17 @@ def pbBerryPlant
     if Settings::NEW_BERRY_PLANTS
       # Gen 4 planting mechanics
       if !berryData[7] || berryData[7]==0 # No mulch used yet
-        cmd=pbMessage(_INTL("It's soft, earthy soil."),[
-                            _INTL("Fertilize"),
-                            _INTL("Plant Berry"),
-                            _INTL("Exit")],-1)
-        if cmd==0 # Fertilize
+        cmd_fertilize = _INTL("Fertilize")
+        cmd_plant = _INTL("Plant")
+        cmd_cancel = _INTL("Exit")
+
+        commands = []
+        commands << cmd_fertilize if canFertilize?
+        commands << cmd_plant
+        commands << cmd_cancel
+
+        cmd=pbMessage(_INTL("It's soft, earthy soil."),commands,-1)
+        if commands[cmd]== cmd_fertilize # Fertilize
           ret=0
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
@@ -333,7 +342,7 @@ def pbBerryPlant
             end
             return
           end
-        elsif cmd==1 # Plant Berry
+        elsif commands[cmd]== cmd_plant # Plant Berry
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
             screen = PokemonBagScreen.new(scene,$PokemonBag)

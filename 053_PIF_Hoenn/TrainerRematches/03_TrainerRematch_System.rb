@@ -15,7 +15,7 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
   result = original_pbTrainerBattle(trainerID, trainerName, *args)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) #if Settings::GAME_ID == :IF_HOENN
+  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
   return result
 end
 def postTrainerBattleActions(trainerID, trainerName,trainerVersion)

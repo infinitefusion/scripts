@@ -221,10 +221,10 @@ module Settings
   POISON_IN_FIELD = true #(MECHANICS_GENERATION <= 4)
   # Whether poisoned Pokémon will faint while walking around in the field
   # (true), or survive the poisoning with 1 HP (false).
-  POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION >= 3)
+  POISON_FAINT_IN_FIELD = false
   # Whether planted berries grow according to Gen 4 mechanics (true) or Gen 3
   # mechanics (false).
-  NEW_BERRY_PLANTS = (MECHANICS_GENERATION >= 4)
+  NEW_BERRY_PLANTS = true
   # Whether fishing automatically hooks the Pokémon (true), or whether there is
   # a reaction test first (false).
   FISHING_AUTO_HOOK = false

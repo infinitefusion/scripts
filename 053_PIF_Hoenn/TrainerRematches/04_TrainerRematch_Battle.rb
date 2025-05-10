@@ -13,7 +13,7 @@ def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
   updated_team = []
 
   trainer_pokemon = $Trainer.party[0]
-
+  return if !trainer_pokemon
   for pokemon in trainer.currentTeam
     gained_exp = trainer_pokemon.level * trainer_pokemon.base_exp
     gained_exp /= 2 if playerWon   #trainer lost so he's not getting full exp

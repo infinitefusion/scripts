@@ -1619,6 +1619,24 @@ def turnPlayerTowardsEvent(event)
   end
 end
 
+def displayPicture(image,x,y,z)
+  pictureWindow = PictureWindow.new(image)
+  pictureWindow.z = z
+  pictureWindow.x = x
+  pictureWindow.y = y
+  pictureWindow.opacity = 0
+  return pictureWindow
+end
+
+def showPokemonInPokeball(pif_sprite,message)
+  background_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_back.png",Graphics.width/4, 20,1)
+  foreground_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_front_nobg.png",Graphics.width/4, 20,9999)
+  #foreground_sprite = displayPicture("Graphics/Pictures/Trainers/obtain_trade_front_bg.png",Graphics.width/4-25, 30,9999)
+
+  displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
+  background_sprite.dispose
+  foreground_sprite.dispose
+end
 def displaySpriteWindowWithMessage(pif_sprite, message = "", x = 0, y = 0, z = 0)
   spriteLoader = BattleSpriteLoader.new
   sprite_bitmap = spriteLoader.load_pif_sprite_directly(pif_sprite)
