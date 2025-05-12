@@ -43,6 +43,7 @@ end
 
 class BetterRegionMap
   KANTO_DEFAULT_POS = [37, 7]
+  HOENN_DEFAULT_POS = [0, 0]
 
   CursorAnimateDelay = 12.0
   CursorMoveSpeed = 2.0
@@ -85,7 +86,11 @@ class BetterRegionMap
     @window = SpriteHash.new
     @window["map"] = Sprite.new(@mapvp)
 
-    mapFilename = isPostgame?() ? "map_postgame" : "map"
+    if Settings::GAME_ID == :IF_KANTO
+      mapFilename = isPostgame?() ? "map_postgame" : "map"
+    else
+      mapFilename = "map_hoenn"
+    end
     # @window["map"].bmp("Graphics/Pictures/#{@data[1]}")
     @window["map"].bmp("Graphics/Pictures/map/#{mapFilename}")
 
@@ -175,27 +180,6 @@ class BetterRegionMap
 
     @sprites["cursor"].z = 11
 
-    # Center the window on the cursor
-    # windowminx = -1 * (@window["map"].bmp.width - Settings::SCREEN_WIDTH)
-    # windowminx = 0 if windowminx > 0
-    # windowminy = -1 * (@window["map"].bmp.height - Settings::SCREEN_HEIGHT)
-    # windowminy = 0 if windowminy > 0
-    #
-    # if @sprites["cursor"].x > (Settings::SCREEN_WIDTH / 2)
-    #   @window.x = (Settings::SCREEN_WIDTH / 2 ) - @sprites["cursor"].x
-    #   if (@window.x < windowminx)
-    #     @window.x = windowminx
-    #   end
-    #   @sprites["cursor"].x += @window.x
-    # end
-    # if @sprites["cursor"].y > (Settings::SCREEN_HEIGHT / 2)
-    #   @window.y = (Settings::SCREEN_HEIGHT / 2 ) - @sprites["cursor"].y
-    #   if @window.y < windowminy
-    #     @window.y = windowminy
-    #   end
-    #   @sprites["cursor"].y += @window.y
-    # end
-
     @sprites["cursor"].ox = (@sprites["cursor"].bmp.height - TileWidth) / 2.0
     @sprites["cursor"].oy = @sprites["cursor"].ox
     @sprites["txt"] = TextSprite.new(@viewport)
@@ -259,8 +243,7 @@ class BetterRegionMap
       return [x_pos, y_pos]
     end
 
-    return KANTO_DEFAULT_POS
-
+    return Settings::GAME_ID == :IF_KANTO ? KANTO_DEFAULT_POS : HOENN_DEFAULT_POS
   end
 
   def findNearbyHealingSpot(current_x, current_y)
@@ -391,25 +374,30 @@ class BetterRegionMap
   end
 
   def adjust_window_if_not_visited_regions()
-    if !been_to_johto()
-      baseline = -352
-      if @window.x >= baseline
-        old_window_x = @window.x
-        @window.x = baseline
-        difference = baseline - old_window_x
-        @sprites["cursor"].x += difference
+    if Settings::GAME_ID == :IF_KANTO
+      if !been_to_johto()
+        baseline = -352
+        if @window.x >= baseline
+          old_window_x = @window.x
+          @window.x = baseline
+          difference = baseline - old_window_x
+          @sprites["cursor"].x += difference
+        end
       end
+
+      if !been_to_sevii()
+        baseline = 0
+        if @window.y < baseline
+          old_window_y = @window.y
+          @window.y = baseline
+          difference = baseline - old_window_y
+          @sprites["cursor"].y += difference
+        end
+      end
+    else
+      return
     end
 
-    if !been_to_sevii()
-      baseline = 0
-      if @window.y < baseline
-        old_window_y = @window.y
-        @window.y = baseline
-        difference = baseline - old_window_y
-        @sprites["cursor"].y += difference
-      end
-    end
   end
 
   def can_fly_to_location(healspot)

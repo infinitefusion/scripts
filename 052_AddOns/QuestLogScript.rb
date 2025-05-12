@@ -84,12 +84,12 @@ QuestBranchLegendary = "Legendary Quests"
 #todo: convert to non-numerical ids like team rocket quests
 QUESTS = {
   #Pokemart
-  "pokemart_johto" => Quest.new(5, "Johto Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Johto region.", QuestBranchHotels, "traveler_johto", "Cerulean City", HotelQuestColor),
-  "pokemart_hoenn" => Quest.new(31, "Hoenn Pokémon", "A traveler in the PokéMart you to show him a Pokémon native to the Hoenn region.", QuestBranchHotels, "traveler_hoenn", "Vermillion City", HotelQuestColor),
-  "pokemart_sinnoh" => Quest.new(25, "Sinnoh Pokémon", "A traveler in the Department Center wants you to show him a Pokémon native to the Sinnoh region.", QuestBranchHotels, "traveler_sinnoh", "Celadon City", HotelQuestColor),
-  "pokemart_unova" => Quest.new(41, "Unova Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Unova region.", QuestBranchHotels, "traveler_unova", "Fuchsia City", HotelQuestColor),
-  "pokemart_kalos" => Quest.new(38, "Kalos Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Kalos region.", QuestBranchHotels, "traveler_kalos", "Saffron City", HotelQuestColor),
-  "pokemart_alola" => Quest.new(62, "Alola Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Alola region.", QuestBranchHotels, "traveler_alola", "Cinnabar Island", HotelQuestColor),
+  "pokemart_johto" => Quest.new("pokemart_johto", "Johto Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Johto region.", QuestBranchHotels, "traveler_johto", "Cerulean City", HotelQuestColor),
+  "pokemart_hoenn" => Quest.new("pokemart_hoenn", "Hoenn Pokémon", "A traveler in the PokéMart you to show him a Pokémon native to the Hoenn region.", QuestBranchHotels, "traveler_hoenn", "Vermillion City", HotelQuestColor),
+  "pokemart_sinnoh" => Quest.new("pokemart_sinnoh", "Sinnoh Pokémon", "A traveler in the Department Center wants you to show him a Pokémon native to the Sinnoh region.", QuestBranchHotels, "traveler_sinnoh", "Celadon City", HotelQuestColor),
+  "pokemart_unova" => Quest.new( "pokemart_unova", "Unova Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Unova region.", QuestBranchHotels, "traveler_unova", "Fuchsia City", HotelQuestColor),
+  "pokemart_kalos" => Quest.new("pokemart_kalos", "Kalos Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Kalos region.", QuestBranchHotels, "traveler_kalos", "Saffron City", HotelQuestColor),
+  "pokemart_alola" => Quest.new("pokemart_alola", "Alola Pokémon", "A traveler in the PokéMart wants you to show him a Pokémon native to the Alola region.", QuestBranchHotels, "traveler_alola", "Cinnabar Island", HotelQuestColor),
 
 
   #Pewter hotel
