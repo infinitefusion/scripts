@@ -1292,6 +1292,7 @@ end
 
 # Necessary dor setting the various events within the pokemart map, uses the numbers as wondertrade
 def get_city_numerical_id(city_sym)
+  return get_city_numerical_id_hoenn if Settings::GAME_ID == :IF_HOENN
   current_city_numerical = {
     :PEWTER => 1,
     :CERULEAN => 2,
@@ -1337,6 +1338,7 @@ def enter_pokemart(city)
 end
 
 def exit_pokemart()
+  return exit_pokemart_hoenn() if Settings::GAME_ID == :IF_HOENN
   pokemart_entrances = {
     :PEWTER => [380, 43, 24],
     :CERULEAN => [1, 24, 22],
@@ -1406,6 +1408,7 @@ def pokemart_hat_shop(include_defaults = true)
 end
 
 def get_mart_exclusive_items(city)
+  return get_mart_exclusive_items_hoenn if Settings::GAME_ID == :IF_HOENN
   items_list = []
   case city
   when :PEWTER;

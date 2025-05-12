@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Necessary dor setting the various events within the pokemart map, uses the numbers as wondertrade
-def get_city_numerical_id(city_sym)
+def get_city_numerical_id_hoenn(city_sym)
   current_city_numerical = {
     :LITTLEROOT => 1,
     :OLDALE => 2,
@@ -26,21 +26,21 @@ end
 POKEMART_MAP_ID = 24
 POKEMART_DOOR_POS = [12, 12]
 # city -> Symbol
-def enter_pokemart(city)
-  pbSet(VAR_CURRENT_MART, city)
-  pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, get_city_numerical_id(city))
-  echoln get_city_numerical_id(city)
-  pbFadeOutIn {
-    $game_temp.player_new_map_id = POKEMART_MAP_ID
-    $game_temp.player_new_x = POKEMART_DOOR_POS[0]
-    $game_temp.player_new_y = POKEMART_DOOR_POS[1]
-    $scene.transfer_player(true)
-    $game_map.autoplay
-    $game_map.refresh
-  }
-end
+# def enter_pokemart(city)
+#   pbSet(VAR_CURRENT_MART, city)
+#   pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, get_city_numerical_id(city))
+#   echoln get_city_numerical_id(city)
+#   pbFadeOutIn {
+#     $game_temp.player_new_map_id = POKEMART_MAP_ID
+#     $game_temp.player_new_x = POKEMART_DOOR_POS[0]
+#     $game_temp.player_new_y = POKEMART_DOOR_POS[1]
+#     $scene.transfer_player(true)
+#     $game_map.autoplay
+#     $game_map.refresh
+#   }
+# end
 
-def exit_pokemart()
+def exit_pokemart_hoenn()
   pokemart_entrances = {
     :LITTLEROOT => [1, 0, 0],
     :OLDALE => [1, 0, 0],
@@ -77,4 +77,9 @@ def exit_pokemart()
     $game_map.autoplay
     $game_map.refresh
   }
+end
+
+def get_mart_exclusive_items_hoenn(city)
+  items_list = []
+  return items_list
 end
