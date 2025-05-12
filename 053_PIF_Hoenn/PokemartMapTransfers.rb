@@ -23,8 +23,11 @@ def get_city_numerical_id_hoenn(city_sym)
   return current_city_numerical[city_sym]
 end
 
-POKEMART_MAP_ID = 24
-POKEMART_DOOR_POS = [12, 12]
+if Settings::GAME_ID == :IF_HOENN
+  POKEMART_MAP_ID = 24
+  POKEMART_DOOR_POS = [12, 12]
+end
+
 # city -> Symbol
 # def enter_pokemart(city)
 #   pbSet(VAR_CURRENT_MART, city)
