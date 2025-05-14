@@ -2,25 +2,31 @@ def setDialogIconOff(eventId=nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
   event.setDialogIconManualOffValue(true)
+  event.setTradeIconManualOffValue(true)
 end
 
 def setDialogIconOn(eventId=nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
   event.setDialogIconManualOffValue(false)
+  event.setTradeIconManualOffValue(false)
+
 end
 class Game_Event < Game_Character
   #set from analyzing the event's content at load
   attr_accessor :show_quest_icon
   attr_accessor :show_dialog_icon
+  attr_accessor :show_trade_icon
 
   #set manually from inside the event when triggered
   attr_accessor :quest_icon_manual_off
   attr_accessor :dialog_icon_manual_off
+  attr_accessor :trade_icon_manual_off
 
   QUEST_NPC_TRIGGER = "questNPC"
   MAPS_WITH_NO_ICONS = [] #Maps in which the game shouldn't try to look for quest icons(e.g. maps with a lot of events - mostly for possible performance issues)
   DIALOG_ICON_COMMENT_TRIGGER=["dialogIcon"]
+  TRADE_ICON_COMMENT_TRIGGER=["tradeIcon"]
 
   alias eventQuestIcon_init initialize
   def initialize(map_id, event, map=nil)
@@ -36,10 +42,15 @@ class Game_Event < Game_Character
     @quest_icon_manual_off=value
     @show_quest_icon = !@quest_icon_manual_off
   end
+  def setTradeIconManualOffValue(value)
+    @trade_icon_manual_off=value
+    @show_trade_icon = !@trade_icon_manual_off
+  end
 
   def addQuestMarkersToSprite()
     @show_quest_icon = detectQuestSwitch(self) && !@quest_icon_manual_off
     @show_dialog_icon = detectDialogueIcon(self) && !@dialog_icon_manual_off
+    @show_trade_icon = detectTradeIcon(self) && !@trade_icon_manual_off
   end
 
   def detectDialogueIcon(event)
@@ -49,6 +60,15 @@ class Game_Event < Game_Character
     return nil if !(first_command.code == 108 || first_command.code == 408)
     comments = first_command.parameters
     return comments.any? { |str| DIALOG_ICON_COMMENT_TRIGGER.include?(str) }
+  end
+
+  def detectTradeIcon(event)
+    return nil if !validateEventIsCompatibleWithIcons(event)
+    page = pbGetActiveEventPage(event)
+    first_command = page.list[0]
+    return nil if !(first_command.code == 108 || first_command.code == 408)
+    comments = first_command.parameters
+    return comments.any? { |str| TRADE_ICON_COMMENT_TRIGGER.include?(str) }
   end
 
   def detectQuestSwitch(event)
@@ -82,6 +102,8 @@ class Sprite_Character
 
   DIALOGUE_ICON_NAME = "Graphics/Pictures/Quests/dialogIcon"
   QUEST_ICON_NAME = "Graphics/Pictures/Quests/questIcon"
+  TRADE_ICON_NAME = "Graphics/Pictures/Quests/tradeIcon"
+
   attr_accessor :questIcon
   alias questIcon_init initialize
   def initialize(viewport, character = nil, is_follower=nil)
@@ -91,6 +113,9 @@ class Sprite_Character
     end
     if character.is_a?(Game_Event) && character.show_quest_icon
       addQuestMarkerToSprite(:QUEST_ICON)
+    end
+    if character.is_a?(Game_Event) && character.show_trade_icon
+      addQuestMarkerToSprite(:TRADE_ICON)
     end
     #addQuestMarkersToSprite(character) unless MAPS_WITH_NO_ICONS.include?($game_map.map_id)
   end
@@ -114,7 +139,7 @@ class Sprite_Character
   end
 
   def updateGameEvent
-    removeQuestIcon if !@character.show_dialog_icon && !@character.show_quest_icon
+    removeQuestIcon if !@character.show_dialog_icon && !@character.show_quest_icon && !@character.show_trade_icon
     positionQuestIndicator if @questIcon
   end
 
@@ -143,6 +168,8 @@ class Sprite_Character
       iconPath = QUEST_ICON_NAME
     when :DIALOG_ICON
       iconPath = DIALOGUE_ICON_NAME
+    when :TRADE_ICON
+      iconPath = TRADE_ICON_NAME
     end
     return if !iconPath
     @questIcon.bmp(iconPath)
