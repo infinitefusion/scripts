@@ -12,7 +12,7 @@ def pbSetPokemonCenter
   $PokemonGlobal.pokecenterX         = $game_player.x
   $PokemonGlobal.pokecenterY         = $game_player.y
   $PokemonGlobal.pokecenterDirection = $game_player.direction
-  if $game_variables[AUTOSAVE_HEALING_VAR]==0
+  if $game_variables[AUTOSAVE_HEALING_VAR]==0 && Settings::GAME_ID == :IF_KANTO
     pbSEPlay("save",100,100)
     Kernel.tryAutosave()
   end

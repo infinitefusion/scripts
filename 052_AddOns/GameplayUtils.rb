@@ -1292,7 +1292,7 @@ end
 
 # Necessary dor setting the various events within the pokemart map, uses the numbers as wondertrade
 def get_city_numerical_id(city_sym)
-  return get_city_numerical_id_hoenn if Settings::GAME_ID == :IF_HOENN
+  return get_city_numerical_id_hoenn(city_sym) if Settings::GAME_ID == :IF_HOENN
   current_city_numerical = {
     :PEWTER => 1,
     :CERULEAN => 2,
