@@ -89,7 +89,12 @@ class BetterRegionMap
     if Settings::GAME_ID == :IF_KANTO
       mapFilename = isPostgame?() ? "map_postgame" : "map"
     else
-      mapFilename = "map_hoenn"
+      if PBDayNight.isNight?
+        mapFilename = "map_hoenn_night"
+      else
+        mapFilename = "map_hoenn"
+      end
+      echoln mapFilename
     end
     # @window["map"].bmp("Graphics/Pictures/#{@data[1]}")
     @window["map"].bmp("Graphics/Pictures/map/#{mapFilename}")

@@ -15,11 +15,12 @@ class GameWeather
   CHANCE_OF_RAIN = 10 #/100
   CHANCE_OF_SUNNY = 5 #/100
   CHANCE_OF_WINDY = 5 #/100
+  CHANCE_OF_FOG = 10 #/100    Only possible in the morning, otherwise, when rain and sun combine
 
   MAX_INTENSITY_ON_NEW_WEATHER = 4
-
-  CHANCES_OF_INTENSITY_INCREASE = 25 # /100
-  CHANCES_OF_INTENSITY_DECREASE = 50 # /100
+  CHANCE_OF_NEW_WEATHER =  15 # /100    spontaneous new weather popping up somewhere
+  CHANCES_OF_INTENSITY_INCREASE = 50 # /100
+  CHANCES_OF_INTENSITY_DECREASE = 30 # /100
 
   BASE_CHANCES_OF_WEATHER_END = 5 #/100 - For a weather intensity of 10. Chances increase the lower the intensity is
   BASE_CHANCES_OF_WEATHER_MOVE = 10
@@ -28,7 +29,7 @@ class GameWeather
   COLD_MAPS = [444] #Rain is snow on that map (shoal cave)
   SANDSTORM_MAPS = [555] #Always sandstorm, doesn't spread
   SOOT_MAPS = []  #Always soot, doesn't spread
-  NO_WIND_MAPS = [989] #Sootopolis
+  NO_WIND_MAPS = [989] #Sootopolis, Petalburg Forest
 
   def map_current_weather_type(map_id)
     map_weather = @current_weather[map_id]
@@ -40,15 +41,13 @@ class GameWeather
     # Similar to roaming legendaries: A hash of all the maps accessible from one map
     @neighbors_maps = generate_neighbor_map_from_town_map
     initialize_weather
-    echoln @neighbors_maps
   end
 
   def initialize_weather
     weather = {}
     @neighbors_maps.keys.each { |map_id|
-      weather[map_id] = adjust_weather_for_neighbor_conflict(map_id, roll_for_new_weather)
+      weather[map_id] = roll_for_new_weather
     }
-    print_current_weather
     @current_weather = weather
   end
 
@@ -70,19 +69,16 @@ class GameWeather
         updated_weather = get_updated_weather(updated_weather[0],updated_weather[1],map_id)
       else
         if roll_for_weather_end(intensity)
-          if intensity >= 2
-            new_weather[map_id] = get_updated_weather(@current_weather[0], 1,map_id)
-          else
-            new_weather[map_id] = get_updated_weather(:None, 0,map_id)
-          end
           if roll_for_weather_move
             propagate_weather_on_move(map_id, type, intensity, new_weather)
-            new_weather[map_id] = get_updated_weather(:None, 0,map_id)
-            next
+          end
+          if intensity >= 2
+            new_weather[map_id] = get_updated_weather(type, 1, map_id)
+          else
+            new_weather[map_id] = get_updated_weather(:None, 0, map_id)
           end
           next
         end
-
         intensity -= 1 if roll_for_weather_decrease
         intensity += 1 if roll_for_weather_increase
         updated_weather = get_updated_weather(type, intensity,map_id)
@@ -104,6 +100,12 @@ class GameWeather
     end
     if SOOT_MAPS.include?(map_id)
       type = :SootRain if type == :Rain
+    end
+    if NO_WIND_MAPS.include?(map_id)
+      type = :None if type == :StrongWinds
+    end
+    if PBDayNight.isNight? && type == :Sunny
+      type = :None
     end
     return [type, intensity]
   end
@@ -135,30 +137,37 @@ class GameWeather
 
       if roll < propagation_chance
         result_type = resolve_weather_interaction(type, neighbor_type, intensity, neighbor_intensity)
-        result_type = :None if !result_type
         result_intensity = [intensity - 1, 1].max
-        echoln "  → Success! #{neighbor_map_name} now has #{result_type} (#{result_intensity})" if DEBUG_PROPAGATION
-        new_weather[neighbor_id] = [result_type, result_intensity]
+        updated_weather = adjust_weather_for_neighbor_conflict(neighbor_id, [result_type, result_intensity])
+        new_weather[neighbor_id] = get_updated_weather(updated_weather[0], updated_weather[1], neighbor_id)
       else
         echoln "  → Failed to propagate to #{neighbor_map_name}" if DEBUG_PROPAGATION
       end
     end
   end
 
-  def adjust_weather_for_neighbor_conflict(map_id, weather)
-    type, intensity = weather
-    return weather unless type == :Rain || type == :Sunny
+  def resolve_conflicting_neighbors(map_id, proposed_type, proposed_intensity)
+    return [proposed_type, proposed_intensity] unless proposed_type == :Rain || proposed_type == :Sunny
 
     neighbors = @neighbors_maps[map_id] || []
     neighbors.each do |neighbor_id|
       neighbor_type, _ = @current_weather[neighbor_id] || [:None, 0]
-      if (type == :Rain && neighbor_type == :Sunny) || (type == :Sunny && neighbor_type == :Rain)
-        echoln "  → Weather at map #{map_id} changed from #{type} to Fog due to neighbor conflict with #{neighbor_type}" if DEBUG_PROPAGATION
-        return [:Fog, intensity]
+      if (proposed_type == :Rain && neighbor_type == :Sunny) || (proposed_type == :Sunny && neighbor_type == :Rain)
+        echoln "  → Weather at map #{map_id} changed from #{proposed_type} to Fog due to neighbor conflict with #{neighbor_type}" if DEBUG_PROPAGATION
+        return [:Fog, proposed_intensity]
       end
     end
-    return weather
+
+    return [proposed_type, proposed_intensity]
   end
+
+
+
+  def adjust_weather_for_neighbor_conflict(map_id, weather)
+    return weather unless @current_weather
+    resolve_conflicting_neighbors(map_id, *weather)
+  end
+
 
   def propagate_weather_on_move(map_id, type, intensity, new_weather)
     return if type == :None || intensity <= 1
@@ -190,8 +199,8 @@ class GameWeather
       if roll < propagation_chance
         result_type = resolve_weather_interaction(type, neighbor_type, intensity, neighbor_intensity)
         result_intensity = [intensity - 1, 1].max
-        echoln "  → End propagation success! #{neighbor_map_name} now has #{result_type} (#{result_intensity})" if DEBUG_PROPAGATION
-        new_weather[neighbor_id] = get_updated_weather(result_type, result_intensity,map_id)
+        updated_weather = adjust_weather_for_neighbor_conflict(neighbor_id, [result_type, result_intensity])
+        new_weather[neighbor_id] = get_updated_weather(updated_weather[0], updated_weather[1], neighbor_id)
       else
         echoln "  → End propagation failed to reach #{neighbor_map_name}" if DEBUG_PROPAGATION
       end
@@ -207,7 +216,7 @@ class GameWeather
     return :Fog if incoming == :Sunny && existing == :Rain
 
     if incoming == :Rain && existing == :StrongWinds
-      return :Storm if incoming_intensity >= 4 || existing_intensity >= 4
+      return :Storm if incoming_intensity >= 3 || existing_intensity >= 3
     end
     return incoming
   end
@@ -222,7 +231,6 @@ class GameWeather
       else
         map_name = map_id
       end
-
       echoln "  #{map_name} : #{value}"
     end
 
@@ -249,12 +257,15 @@ class GameWeather
   def roll_for_new_weather
     intensity = rand(MAX_INTENSITY_ON_NEW_WEATHER) + 1
     roll = rand(100)
+    return [:None,0] if rand(100) > CHANCE_OF_NEW_WEATHER
     if roll < CHANCE_OF_RAIN
       return [:Rain, intensity]
     elsif roll < CHANCE_OF_RAIN + CHANCE_OF_SUNNY
       return [:Sunny, intensity]
     elsif roll < CHANCE_OF_RAIN + CHANCE_OF_SUNNY + CHANCE_OF_WINDY
       return [:StrongWinds, intensity]
+    elsif roll < CHANCE_OF_RAIN + CHANCE_OF_SUNNY + CHANCE_OF_WINDY + CHANCE_OF_FOG && PBDayNight.isMorning?
+      return [:Fog, intensity]
     else
       return [:None, 0]
     end
