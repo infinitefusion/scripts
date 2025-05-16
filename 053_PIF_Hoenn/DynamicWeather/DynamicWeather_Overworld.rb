@@ -11,10 +11,16 @@ Events.onMapChange+= proc { |_old_map_id|
   }
 
 def update_overworld_weather(current_map)
+    return if current_map.nil?
     current_weather_array = $game_weather.current_weather[current_map]
+    echoln current_map
+    echoln $game_weather.current_weather
+    echoln current_weather_array
+
     current_weather_type = current_weather_array[0]
     current_weather_intensity = current_weather_array[1]
-
+    current_weather_type = :None if !current_weather_type
+    current_weather_intensity=0 if !current_weather_intensity
     current_weather_type = :None if PBDayNight.isNight? && current_weather_type == :Sunny
     $game_screen.weather(current_weather_type,current_weather_intensity,0)
 end

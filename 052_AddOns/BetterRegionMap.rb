@@ -85,7 +85,7 @@ class BetterRegionMap
     @sprites["bg"].bmp("Graphics/Pictures/mapbg")
     @window = SpriteHash.new
     @window["map"] = Sprite.new(@mapvp)
-
+    @weatherIcons = SpriteHash.new
     if Settings::GAME_ID == :IF_KANTO
       mapFilename = isPostgame?() ? "map_postgame" : "map"
     else
@@ -238,6 +238,7 @@ class BetterRegionMap
       end
     end
 
+    draw_all_weather# if DEBUG_WEATHER
     initial_position = calculate_initial_position(player)
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()
@@ -478,6 +479,7 @@ class BetterRegionMap
       end
       if Input.trigger?(Input::AUX1)
         print_current_position()
+        new_weather_cycle if DEBUG_WEATHER
       end
 
       if Input.trigger?(Input::C) && @dirs.empty?
@@ -651,9 +653,6 @@ class BetterRegionMap
   def print_current_position()
     echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
-
-
-
 
 
   def update_text
