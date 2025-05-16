@@ -49,7 +49,7 @@ class Spriteset_Map
     $scene.map_renderer.add_tileset(@map.tileset_name)
     @map.autotile_names.each do |filename|
       $scene.map_renderer.add_autotile(filename)
-      $scene.map_renderer.add_extra_autotiles(@map.tileset_id)
+      $scene.map_renderer.add_extra_autotiles(@map.tileset_id,@map.map_id)
     end
 
     @panorama = AnimatedPlane.new(@@viewport0)

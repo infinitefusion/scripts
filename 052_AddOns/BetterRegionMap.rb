@@ -170,6 +170,16 @@ class BetterRegionMap
     @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
     @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
 
+
+    @sprites["weather"] = Sprite.new(@viewport2)
+    @sprites["weather"].bmp(get_current_map_weather_icon)
+
+    @sprites["weather"].x=446
+    @sprites["weather"].y=34
+    @sprites["weather"].z=5000
+
+
+
     if !$PokemonGlobal.regionMapSel
       $PokemonGlobal.regionMapSel = [0, 0]
     end
@@ -643,11 +653,23 @@ class BetterRegionMap
   end
 
 
+
+
+
   def update_text
     location = @data[2].find do |e|
       e[0] == $PokemonGlobal.regionMapSel[0] &&
         e[1] == $PokemonGlobal.regionMapSel[1]
     end
+
+    if Settings::GAME_ID == :IF_HOENN
+      weather = update_weather_icon(location)
+      if !weather
+        @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
+        @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
+      end
+    end
+
     text = ""
     text = location[2] if location
     poi = ""

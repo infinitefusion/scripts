@@ -46,6 +46,12 @@ module RPG
       @new_sprites          = []
       @new_sprite_lifetimes = []
       @fading               = false
+
+      @lightning_overlay = Sprite.new(@viewport)
+      @lightning_overlay.bitmap = RPG::Cache.load_bitmap("Graphics/Weather/", "lightning")
+      @lightning_overlay.opacity = 0
+      @lightning_overlay.z = 2000  # On top of everything
+
     end
 
     def dispose
@@ -58,6 +64,7 @@ module RPG
         weather[1].each { |bitmap| bitmap.dispose if bitmap }
         weather[2].each { |bitmap| bitmap.dispose if bitmap }
       end
+      @lightning_sprite.dispose if @lightning_sprite
     end
 
     def fade_in(new_type, new_max, duration = 1)
@@ -65,6 +72,7 @@ module RPG
       new_type = GameData::Weather.get(new_type).id
       new_max = 0 if new_type == :None
       return if @type == new_type && @max == new_max
+      set_fog(new_type)
       if duration > 0
         @target_type = new_type
         @target_max = new_max
@@ -100,6 +108,7 @@ module RPG
         @fading = false
       end
       @type = type
+      set_fog(type)
       prepare_bitmaps(@type)
       if GameData::Weather.get(@type).has_tiles?
         w = @weatherTypes[@type][2][0].width
@@ -113,6 +122,15 @@ module RPG
       @sprites.each_with_index { |sprite, i| set_sprite_bitmap(sprite, i, @type) }
       ensureTiles
       @tiles.each_with_index { |sprite, i| set_tile_bitmap(sprite, i, @type) }
+    end
+
+    def set_fog(weather_type)
+      weather = GameData::Weather.get(weather_type)
+      return if weather.fog_name.nil?
+      $game_map.fog_name       = weather.fog_name
+      $game_map.fog_opacity    = 25* $game_screen.weather_power
+      $game_map.fog_sx         = weather.tile_delta_x
+      $game_map.fog_sy         = weather.tile_delta_y
     end
 
     def max=(value)
@@ -294,6 +312,11 @@ module RPG
           sprite.x += [2, 1, 0, -1][rand(4)] * dist_x / 8   # Random movement
           sprite.y += [2, 1, 1, 0, 0, -1][index % 6] * dist_y / 10   # Variety
         end
+
+        if weather_type == :StrongWinds
+          sprite.opacity-=[20, 0, 10, -10][rand(4)]
+        end
+
         sprite.opacity += @weatherTypes[weather_type][0].particle_delta_opacity * delta_t
         x = sprite.x - @ox
         y = sprite.y - @oy
@@ -477,12 +500,30 @@ module RPG
           @time_until_flash -= Graphics.delta_s
           if @time_until_flash <= 0
             @viewport.flash(Color.new(255, 255, 255, 230), (2 + rand(3)) * 20)
+            if true#rand < 0.25
+              @lightning_overlay.opacity = 255
+              @lightning_overlay_duration = 20  # Lasts ~10 frames
+              @lightning_overlay.y = rand(-200..0)
+              @lightning_overlay.x = [-200,-150,150, 250].sample
+              echoln @lightning_overlay.x
+
+            end
           end
         end
         if @time_until_flash <= 0
           @time_until_flash = (1 + rand(12)) * 0.5   # 0.5-6 seconds
         end
       end
+      if @lightning_overlay_duration && @lightning_overlay_duration > 0
+        @lightning_overlay_duration -= 1
+        @lightning_overlay.opacity = (255 * (@lightning_overlay_duration / 10.0)).to_i
+      else
+        @lightning_overlay.opacity = 0 if @lightning_overlay
+        @lightning_overlay_duration = nil
+      end
+
+
+
       @viewport.update
       # Update weather particles (raindrops, snowflakes, etc.)
       if @weatherTypes[@type] && @weatherTypes[@type][1].length > 0
