@@ -500,7 +500,7 @@ module RPG
           @time_until_flash -= Graphics.delta_s
           if @time_until_flash <= 0
             @viewport.flash(Color.new(255, 255, 255, 230), (2 + rand(3)) * 20)
-            if true#rand < 0.25
+            if rand < 0.1
               @lightning_overlay.opacity = 255
               @lightning_overlay_duration = 20  # Lasts ~10 frames
               @lightning_overlay.y = rand(-200..0)

@@ -1,6 +1,7 @@
 class BetterRegionMap
   DEBUG_WEATHER = true
   def update_weather_icon(location)
+    return
     return nil if !location
     map_id = location[4]
     return nil if !map_id
@@ -88,7 +89,7 @@ def get_weather_icon(weather_type,intensity)
     icon_name = "mapRain"
   when :Fog
     icon_name = "mapFog"
-  when :StrongWinds
+  when :Wind
     icon_name = "mapWind"
   when :Storm
     icon_name = "mapStorm"
@@ -96,6 +97,12 @@ def get_weather_icon(weather_type,intensity)
     icon_name = "mapSand"
   when :Snow
     icon_name = "mapSnow"
+  when :HeavyRain
+    icon_name = "mapHeavyRain"
+  when :StrongWinds
+    icon_name = "mapStrongWinds"
+  when :HarshSun
+    icon_name = "mapHarshSun"
   else
     icon_name = nil
   end
@@ -104,7 +111,7 @@ end
 def get_full_weather_icon_name(weather_type,intensity)
   return nil if !weather_type
   return nil if !intensity
-  same_intensity_weather_types = [:Sandstorm,:Snow]
+  same_intensity_weather_types = [:Sandstorm,:Snow,:StrongWinds,:HeavyRain,:HarshSun]
 
   base_weather_icon_name = get_weather_icon(weather_type,intensity)
   icon_name = base_weather_icon_name

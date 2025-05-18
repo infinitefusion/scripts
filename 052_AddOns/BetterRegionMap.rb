@@ -436,6 +436,7 @@ class BetterRegionMap
   end
 
   def main
+    frame=0
     loop do
       update
       if Input.press?(Input::RIGHT) && ![4, 6].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
@@ -482,9 +483,10 @@ class BetterRegionMap
           @mdirs << DIRECTION_UP
         end
       end
-      if Input.trigger?(Input::AUX1)
+      if Input.repeat?(Input::AUX1)
         print_current_position()
-        new_weather_cycle if DEBUG_WEATHER
+        new_weather_cycle if DEBUG_WEATHER && frame%12==0
+        frame+=1
       end
 
       if Input.trigger?(Input::C) && @dirs.empty?

@@ -167,10 +167,28 @@ GameData::Weather.register({
 })
 
 GameData::Weather.register({
- :id               => :StrongWinds,
+ :id               => :Wind,
  :category         => :StrongWinds,
  :id_number        => 9,
  :particle_delta_x     => -1000,
  :particle_delta_y     => 0,
  :graphics         => [["wind1","wind2","wind3","windleaf1","windleaf2"], nil]
+})
+
+GameData::Weather.register({
+ :id               => :StrongWinds,
+ :category         => :StrongWinds,
+ :id_number        => 10,
+ :particle_delta_x     => -1000,
+ :particle_delta_y     => 0,
+ :graphics         => [["wind1","wind2","wind3","windleaf1","windleaf2"], nil]
+})
+
+GameData::Weather.register({
+ :id               => :HarshSun,
+ :id_number        => 11,
+ :category         => :Sun,
+ :tone_proc        => proc { |strength|
+   next Tone.new(64, 64, 32, 0)
+ }
 })

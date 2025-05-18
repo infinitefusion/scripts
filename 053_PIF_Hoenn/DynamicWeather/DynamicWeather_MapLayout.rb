@@ -1,10 +1,24 @@
 def update_neighbor_map
   @neighbors_maps = generate_neighbor_map_from_town_map
+  @neighbors_maps = normalize_neighbors(@neighbors_maps)
+
+  echoln @neighbors_maps
 end
 
+def normalize_neighbors(map)
+  fixed_map = {}
 
+  map.each do |map_id, neighbors|
+    neighbors.each do |neighbor_id|
+      fixed_map[map_id] ||= []
+      fixed_map[neighbor_id] ||= []
+      fixed_map[map_id] |= [neighbor_id]
+      fixed_map[neighbor_id] |= [map_id]
+    end
+  end
 
-
+  fixed_map
+end
 def generate_neighbor_map_from_town_map
   mapdata = pbLoadTownMapData
   neighbor_map = {}
@@ -32,11 +46,11 @@ def generate_neighbor_map_from_town_map
     [[0, -1], [0, 1], [-1, 0], [1, 0]].each do |dx, dy|
       neighbor_coords = [x + dx, y + dy]
       neighbor_name = name_grid[neighbor_coords]
-      next if neighbor_name.nil? || neighbor_name == name
 
       map1 = name_to_map_id[name]
       map2 = name_to_map_id[neighbor_name]
       next unless map1 && map2
+      next if map1 == map2  # Prevent self-linking
 
       neighbor_map[map1] ||= []
       neighbor_map[map2] ||= []
@@ -45,6 +59,8 @@ def generate_neighbor_map_from_town_map
       neighbor_map[map2] << map1 unless neighbor_map[map2].include?(map1)
     end
   end
+
+  echoln neighbor_map
   return neighbor_map
 end
 
@@ -64,7 +80,7 @@ def generate_neighbor_map_from_connections
       map2 = conn[3]
 
       next unless map1.is_a?(Integer) && map2.is_a?(Integer)
-      next if is_indoor_map?(map1) || is_indoor_map?(map2)
+      #next if is_indoor_map?(map1) || is_indoor_map?(map2)
 
       neighbor_map[map1] ||= []
       neighbor_map[map2] ||= []
