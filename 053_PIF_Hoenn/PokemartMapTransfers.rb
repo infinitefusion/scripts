@@ -133,7 +133,5 @@ end
 
 def inCity?(city)
   city_map_id = CITIES_MAP_IDS[city]
-  echoln "are we in city #{city}? #{city_map_id}, #{$PokemonGlobal.pokecenterMapId} "
-
   return $PokemonGlobal.pokecenterMapId ==city_map_id
 end

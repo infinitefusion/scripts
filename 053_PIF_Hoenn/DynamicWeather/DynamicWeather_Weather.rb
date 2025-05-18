@@ -2,7 +2,7 @@ SaveData.register(:weather) do
   ensure_class :GameWeather
   save_value { $game_weather }
   load_value { |value|
-    $game_weather = GameWeather.new # value || GameWeather.new
+    $game_weather =  value || GameWeather.new
     $game_weather.update_neighbor_map
     $game_weather.initialize_weather unless $game_weather.current_weather
     # to account for new maps added
@@ -14,7 +14,7 @@ class GameWeather
   attr_accessor :current_weather
   attr_accessor :last_update_time
 
-  TIME_BETWEEN_WEATHER_UPDATES = 12000 # about 3 minutes
+  TIME_BETWEEN_WEATHER_UPDATES = 12000 # 180 seconds, only actually changes once the player changes map
 
   CHANCE_OF_NEW_WEATHER = 2 # /100    spontaneous new weather popping up somewhere
   CHANCE_OF_RAIN = 40 #/100
@@ -28,7 +28,7 @@ class GameWeather
   CHANCES_OF_INTENSITY_INCREASE = 30 # /100
   CHANCES_OF_INTENSITY_DECREASE = 20 # /100
   BASE_CHANCE_OF_WEATHER_SPREAD = 15
-  BASE_CHANCES_OF_WEATHER_END = 5 #/100 - For a weather intensity of 10. Chances should increase the lower the intensity is
+  BASE_CHANCES_OF_WEATHER_END = 10 #/100 - For a weather intensity of 10. Chances should increase the lower the intensity is
   BASE_CHANCES_OF_WEATHER_MOVE = 10
   DEBUG_PROPAGATION = false
 
@@ -94,7 +94,6 @@ class GameWeather
     new_weather = @current_weather.dup
     new_weather.each do |map_id, (type, intensity)|
       try_end_weather(map_id,type, get_map_weather_intensity(map_id))
-
       try_spawn_new_weather(map_id,type, intensity)
       try_propagate_weather_to_neighbors(map_id,type, intensity)
       echoln @current_weather[954] if @debug_you
@@ -172,7 +171,12 @@ class GameWeather
 
     should_weather_end = roll_for_weather_end(map_weather_type,weather_intensity)
     return if !should_weather_end
-    new_weather = [:None,0]
+    if weather_intensity >1
+      map_weather_type = :Rain if map_weather_type == :Storm
+      new_weather = [map_weather_type,0]
+    else
+      new_weather = [:None,0]
+    end
     @current_weather[map_id] = adjust_weather_for_map(new_weather,map_id)
   end
 
@@ -321,28 +325,32 @@ class GameWeather
   end
 
   def select_new_weather_spawn
-    return [:None, 0] if rand(100) >= CHANCE_OF_NEW_WEATHER  # 85% chance to return nothing
+    return [:None, 0] if rand(100) >= CHANCE_OF_NEW_WEATHER
 
-    intensity = rand(MAX_INTENSITY_ON_NEW_WEATHER) + 1
-    roll = rand(100)
+    base_intensity = rand(MAX_INTENSITY_ON_NEW_WEATHER) + 1
 
-    total = CHANCE_OF_RAIN + CHANCE_OF_SUNNY + CHANCE_OF_WINDY
-    total += CHANCE_OF_FOG if PBDayNight.isMorning?
+    weights = []
+    weights << [:Rain, CHANCE_OF_RAIN]
+    weights << [:Sunny, CHANCE_OF_SUNNY]
+    weights << [:Wind, CHANCE_OF_WINDY]
+    weights << [:Fog, CHANCE_OF_FOG] if PBDayNight.isMorning?
 
-    fog_cutoff = CHANCE_OF_RAIN + CHANCE_OF_SUNNY + CHANCE_OF_WINDY + (PBDayNight.isMorning? ? CHANCE_OF_FOG : 0)
+    total = weights.sum { |w| w[1] }
+    roll = rand(total)
 
-    if roll < CHANCE_OF_RAIN
-      return [:Rain, intensity]
-    elsif roll < CHANCE_OF_RAIN + CHANCE_OF_SUNNY
-      return [:Sunny, intensity]
-    elsif roll < CHANCE_OF_RAIN + CHANCE_OF_SUNNY + CHANCE_OF_WINDY
-      return [:Wind, intensity]
-    elsif PBDayNight.isMorning? && roll < fog_cutoff
-      return [:Fog, intensity]
-    else
-      return [:None, 0]
+    sum = 0
+    weights.each do |type, chance|
+      sum += chance
+      if roll < sum
+        intensity = (type == :Fog) ? base_intensity + 2 : base_intensity
+        return [type, intensity]
+      end
     end
+
+    return [:None, 0]  # Fallback
   end
+
+
 
 
 end

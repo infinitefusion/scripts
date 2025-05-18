@@ -67,8 +67,16 @@ module RPG
       @lightning_sprite.dispose if @lightning_sprite
     end
 
-    def fade_in(new_type, new_max, duration = 1)
+    def get_max_sprites(power, weather_type)
+      if weather_type == :Wind
+        power /= 8
+      end
+      return (power + 1) * RPG::Weather::MAX_SPRITES / 10
+    end
+
+    def fade_in(new_type, weather_power, duration = 1)
       return if @fading
+      new_max = get_max_sprites(weather_power,new_type)
       new_type = GameData::Weather.get(new_type).id
       new_max = 0 if new_type == :None
       return if @type == new_type && @max == new_max
@@ -96,7 +104,7 @@ module RPG
         @new_sprites.each_with_index { |sprite, i| set_sprite_bitmap(sprite, i, @target_type) }
       else
         self.type = new_type
-        self.max = new_max
+        self.set_max(new_max,new_type)
       end
     end
 
@@ -128,14 +136,16 @@ module RPG
       weather = GameData::Weather.get(weather_type)
       return if weather.fog_name.nil?
       $game_map.fog_name       = weather.fog_name
-      $game_map.fog_opacity    = 25* $game_screen.weather_power
+      $game_map.fog_opacity    = 40* $game_screen.weather_power
       $game_map.fog_sx         = weather.tile_delta_x
       $game_map.fog_sy         = weather.tile_delta_y
     end
 
-    def max=(value)
+    def set_max(value,weather_type)
       return if @max == value
-      @max = value.clamp(0, MAX_SPRITES)
+      value = value.clamp(0, get_max_sprites(value,weather_type))
+      echoln "[Weather] Setting max particles to #{value} for type #{@type}" if @max != value
+      @max = value
       ensureSprites
       for i in 0...MAX_SPRITES
         @sprites[i].visible = (i < @max) if @sprites[i]
@@ -313,7 +323,7 @@ module RPG
           sprite.y += [2, 1, 1, 0, 0, -1][index % 6] * dist_y / 10   # Variety
         end
 
-        if weather_type == :StrongWinds
+        if weather_type == :StrongWinds || weather_type == :Wind
           sprite.opacity-=[20, 0, 10, -10][rand(4)]
         end
 
@@ -505,8 +515,6 @@ module RPG
               @lightning_overlay_duration = 20  # Lasts ~10 frames
               @lightning_overlay.y = rand(-200..0)
               @lightning_overlay.x = [-200,-150,150, 250].sample
-              echoln @lightning_overlay.x
-
             end
           end
         end

@@ -24,3 +24,7 @@ end
 def isWeatherFog?()
   return $game_weather.get_map_weather_type($game_map.map_id) == :Fog
 end
+
+def isWeatherSnow?()
+  return $game_weather.get_map_weather_type($game_map.map_id) == :Fog
+end

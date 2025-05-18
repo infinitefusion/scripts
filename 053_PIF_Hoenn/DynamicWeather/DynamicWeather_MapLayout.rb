@@ -1,8 +1,6 @@
 def update_neighbor_map
   @neighbors_maps = generate_neighbor_map_from_town_map
   @neighbors_maps = normalize_neighbors(@neighbors_maps)
-
-  echoln @neighbors_maps
 end
 
 def normalize_neighbors(map)
@@ -59,8 +57,6 @@ def generate_neighbor_map_from_town_map
       neighbor_map[map2] << map1 unless neighbor_map[map2].include?(map1)
     end
   end
-
-  echoln neighbor_map
   return neighbor_map
 end
 
