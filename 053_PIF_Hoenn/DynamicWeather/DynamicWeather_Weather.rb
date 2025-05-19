@@ -1,3 +1,5 @@
+# Dynamic weather system by Chardub, for Pokemon Infinite Fusion
+
 SaveData.register(:weather) do
   ensure_class :GameWeather
   save_value { $game_weather }
@@ -33,6 +35,9 @@ class GameWeather
   DEBUG_PROPAGATION = false
 
   COLD_MAPS = [444] # Rain is snow on that map (shoal cave)
+  SNOW_LIMITS = [965,951] # Route 121, Pacifidlog - Snow turns to rain if it reaches these maps
+
+
   SANDSTORM_MAPS = [555] # Always sandstorm, doesn't spread
   SOOT_MAPS = [] # Always soot, doesn't spread
   NO_WIND_MAPS = [989] # Sootopolis, Petalburg Forest
@@ -190,8 +195,14 @@ class GameWeather
   def get_updated_weather(type, intensity, map_id)
     if COLD_MAPS.include?(map_id)
       type = :Snow if type == :Rain
+      type = :Blizzard if type == :Storm
       type = :None if type == :Sunny
     end
+    if SNOW_LIMITS.include?(map_id)
+      type = :Rain if type == :Snow
+    end
+
+
     if SOOT_MAPS.include?(map_id)
       type = :SootRain if type == :Rain
     end
