@@ -529,6 +529,9 @@ module Settings
   # ID of the animation played when a berry tree grows a stage while the player
   # is on the map (for new plant growth mechanics only).
   PLANT_SPARKLE_ANIMATION_ID = 7
+  SPARKLE_SHORT_ANIMATION_ID = 25
+  SPARKLE_SUBTLE_ANIMATION_ID = 29
+
   SLEEP_ANIMATION_ID = 26
 
   CUT_TREE_ANIMATION_ID = 19

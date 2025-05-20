@@ -28,3 +28,17 @@ end
 def isWeatherSnow?()
   return $game_weather.get_map_weather_type($game_map.map_id) == :Fog
 end
+
+
+def changeCurrentWeather(weatherType,intensity)
+  new_map_id = $game_map.map_id
+  mapMetadata = GameData::MapMetadata.try_get(new_map_id)
+  return nil if mapMetadata.nil?
+  return nil if !mapMetadata.outdoor_map
+  if $game_weather
+    $game_weather.set_map_weather($game_map.map_id,weatherType,intensity)
+    $game_weather.update_overworld_weather($game_map.map_id)
+  else
+    $game_screen.weather(weatherType,intensity,5)
+  end
+end

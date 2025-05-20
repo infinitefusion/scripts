@@ -1,17 +1,22 @@
 # Dynamic weather system by Chardub, for Pokemon Infinite Fusion
 
-SaveData.register(:weather) do
-  ensure_class :GameWeather
-  save_value { $game_weather }
-  load_value { |value|
-    $game_weather =  value || GameWeather.new
-    $game_weather.update_neighbor_map
-    $game_weather.initialize_weather unless $game_weather.current_weather
-    # to account for new maps added
-  }
-  new_game_value { GameWeather.new }
-end
+if Settings::GAME_ID == :IF_HOENN
+  SaveData.register(:weather) do
+    ensure_class :GameWeather
+    save_value { $game_weather }
+    load_value { |value|
+      if value.is_a?(GameWeather)
+        $game_weather = value
+      else
+        $game_weather = GameWeather.new
+      end
+      $game_weather.update_neighbor_map     # reupdate the neighbors map to account for new maps added
 
+      $game_weather.initialize_weather unless $game_weather.current_weather
+    }
+    new_game_value { GameWeather.new }
+  end
+end
 class GameWeather
   attr_accessor :current_weather
   attr_accessor :last_update_time
@@ -68,6 +73,9 @@ class GameWeather
     @current_weather = weather
   end
 
+  def set_map_weather(map_id,weather_type,intensity)
+    @current_weather[map_id] = [weather_type,intensity]
+  end
 
   def get_map_weather_type(map_id)
     if !@current_weather[map_id]
