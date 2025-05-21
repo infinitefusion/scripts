@@ -709,6 +709,7 @@ def regirock_steel_move_boulder()
 end
 
 def displayRandomizerErrorMessage()
+  echoln caller
   Kernel.pbMessage(_INTL("The randomizer has encountered an error. You should try to re-randomize your game as soon as possible."))
   Kernel.pbMessage(_INTL("You can do this on the top floor of Pokémon Centers."))
 end

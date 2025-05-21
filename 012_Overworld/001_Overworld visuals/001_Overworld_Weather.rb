@@ -144,7 +144,7 @@ module RPG
     def set_max(value,weather_type)
       return if @max == value
       value = value.clamp(0, get_max_sprites(value,weather_type))
-      echoln "[Weather] Setting max particles to #{value} for type #{@type}" if @max != value
+      #echoln "[Weather] Setting max particles to #{value} for type #{@type}" if @max != value
       @max = value
       ensureSprites
       for i in 0...MAX_SPRITES
@@ -293,7 +293,7 @@ module RPG
           lifetimes[index] = (distance_to_cover.to_f / y_speed).abs
         end
       end
-      sprite.opacity = 255
+      sprite.opacity = 100
     end
 
     def update_sprite_position(sprite, index, is_new_sprite = false)
