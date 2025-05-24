@@ -8,17 +8,18 @@
 # e.g. If the player uses a stronger Pokemon in the battle, the NPC will get more experience
 # as a result
 #
-def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
+def makeRebattledTrainerTeamGainExp(trainer, playerWon=true, gained_exp=nil)
   return if !trainer
   updated_team = []
 
   trainer_pokemon = $Trainer.party[0]
   return if !trainer_pokemon
   for pokemon in trainer.currentTeam
-    gained_exp = trainer_pokemon.level * trainer_pokemon.base_exp
-    gained_exp /= 2 if playerWon   #trainer lost so he's not getting full exp
-    gained_exp /= trainer.currentTeam.length
-
+    if !gained_exp  #Set depending on first pokemon in party if not given a specific amount
+      gained_exp = trainer_pokemon.level * trainer_pokemon.base_exp
+      gained_exp /= 2 if playerWon   #trainer lost so he's not getting full exp
+      gained_exp /= trainer.currentTeam.length
+    end
     growth_rate = pokemon.growth_rate
     new_exp = growth_rate.add_exp(pokemon.exp, gained_exp)
     pokemon.exp = new_exp

@@ -407,6 +407,18 @@ def randomizePlayerOutfit()
 
 end
 
+def select_hat()
+  hats_list = $Trainer.unlocked_hats
+  options = []
+  hats_list.each do |hat_id|
+    hat_name = get_hat_by_id(hat_id)
+    options << hat_name.name
+  end
+  chosen_index= optionsMenu(options)
+  selected_hat_id = hats_list[chosen_index]
+  return selected_hat_id
+end
+
 def canPutHatOnPokemon(pokemon)
   return !pokemon.egg? && !pokemon.isTripleFusion? && $game_switches[SWITCH_UNLOCKED_POKEMON_HATS]
 end
