@@ -1520,8 +1520,10 @@ def getMappedKeyFor(internalKey)
 end
 
 # if need to play animation from event route
-def playAnimation(animationId, x, y)
+def playAnimation(animationId, x=nil, y=nil)
   return if !$scene.is_a?(Scene_Map)
+  x = @event.x unless x
+  y = @event.y unless y
   $scene.spriteset.addUserAnimation(animationId, x, y, true)
 end
 

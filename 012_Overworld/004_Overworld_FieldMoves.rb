@@ -867,6 +867,7 @@ def pbEndSurf(_xOffset, _yOffset)
       pbOnStepTaken(result)
     end
     $PokemonTemp.surfJump = nil
+    $game_temp.clearSurfSplashPatches
     return true
 
   end

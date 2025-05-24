@@ -226,6 +226,7 @@ end
 def pbBattleOnStepTaken(repel_active)
   return if $Trainer.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
+  return if $PokemonGlobal.surfing && Settings::GAME_ID == :IF_HOENN
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)

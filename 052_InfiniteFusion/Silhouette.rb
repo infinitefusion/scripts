@@ -1,5 +1,5 @@
 class PokemonTemp
-  def pbClearSilhouetteEvents()
+  def pbClearAllTempEvents()
     echoln @tempEvents
     @tempEvents.keys.each {|map_id|
       map = $MapFactory.getMap(map_id,false)
@@ -36,7 +36,7 @@ end
 Events.onStepTaken += proc { |sender, e|
   next if !$PokemonTemp.silhouetteDirection
   if $PokemonTemp.silhouetteDirection && $PokemonTemp.silhouetteDirection == $game_player.direction
-    $PokemonTemp.pbClearSilhouetteEvents
+    $PokemonTemp.pbClearAllTempEvents
     $PokemonTemp.silhouetteDirection = nil
   end
 }
@@ -52,13 +52,15 @@ Events.onStepTaken += proc { |sender, e|
   steps_nb = minimum_steps if steps_nb<minimum_steps
   next if $PokemonGlobal.stepcount % steps_nb != 0
   next if !isOutdoor()
-  $PokemonTemp.pbClearSilhouetteEvents
+  $PokemonTemp.pbClearAllTempEvents
   spawnSilhouette()
 }
 Events.onMapChange += proc { |sender, e|
   next if $PokemonTemp.tempEvents.empty?
   $PokemonTemp.pbClearTempEvents()
 }
+
+
 
 
 def getRandomPositionOnPerimeter(width, height, center_x, center_y, variance=0,edge=nil)
