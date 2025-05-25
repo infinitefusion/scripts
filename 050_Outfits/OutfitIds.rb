@@ -151,6 +151,7 @@ HAIR_HAPPINY="happinysuit"
 HAIR_LATIAS="SpecialLatias"
 HAIR_GARDEVOIR="gardevoir"
 HAIR_EEVEE="eeveetail"
+HAIR_LEAFEON="leafeonbob"
 
 HAIR_BRENDAN = "buzzcut"
 HAIR_MAY = "may"

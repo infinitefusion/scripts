@@ -64,6 +64,7 @@ class TilemapRenderer
             1023 => "flowers_red[10]",
             1031 => "flowers_grey[10]",
             1039 => "flowers_white[10]",
+
     },
 
 
@@ -88,6 +89,40 @@ class TilemapRenderer
       2668 => "flowers_grey[10]",
       2676 => "flowers_white[10]",
     }
+  }
+
+  WIND_TREE_AUTOTILES = {
+    1 => {  #Route-field
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    2 => {  #small-town
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
   }
 
   #=============================================================================
@@ -421,9 +456,18 @@ class TilemapRenderer
     @autotiles.remove(filename)
   end
 
-  def add_extra_autotiles(tileset_id)
-    overrides = EXTRA_AUTOTILES[tileset_id]
-    return unless overrides
+  def get_autotile_overrides(tileset_id,map_id)
+    base_overrides = EXTRA_AUTOTILES[tileset_id] || {}
+    wind_overrides =WIND_TREE_AUTOTILES[tileset_id] || {}
+    if $game_weather.map_current_weather_type(map_id) == :Wind && WIND_TREE_AUTOTILES[tileset_id]
+      return base_overrides.merge(wind_overrides)
+    end
+    return base_overrides
+  end
+
+  def add_extra_autotiles(tileset_id,map_id)
+    overrides = get_autotile_overrides(tileset_id,map_id)
+    return if !overrides || overrides.empty?
     overrides.each do |tile_id, filename|
       @autotiles.add(filename)
       @custom_autotile_ids[tile_id] = filename
@@ -465,7 +509,7 @@ class TilemapRenderer
       # end
 
       filename = nil
-      extra_autotile_hash = EXTRA_AUTOTILES[map.tileset_id]
+      extra_autotile_hash = get_autotile_overrides(map.tileset_id,map.map_id)
 
       if extra_autotile_hash && extra_autotile_hash[tile_id]
         # Custom tile_id override

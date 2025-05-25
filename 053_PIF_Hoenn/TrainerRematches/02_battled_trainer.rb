@@ -119,6 +119,7 @@ class BattledTrainer
 
   attr_accessor :previous_random_events
   attr_accessor :has_pending_action
+  attr_accessor :custom_appearance
 
   def initialize(trainerType,trainerName,trainerVersion)
     @trainerType = trainerType
@@ -132,6 +133,10 @@ class BattledTrainer
     @previous_random_events =[]
     @has_pending_action=false
     @favorite_type = pick_favorite_type(trainerType)
+  end
+
+  def set_custom_appearance(trainer_appearance)
+    @custom_appearance = trainer_appearance
   end
 
   def pick_favorite_type(trainer_type)

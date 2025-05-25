@@ -19,16 +19,6 @@
 ####
 
 
-
-
-
-
-
-
-
-
-
-
 #actionType :
 # :BATTLE
 # :TRADE
@@ -48,13 +38,6 @@ def doPostBattleAction(actionType)
   updateRebattledTrainer(event.id,map_id,trainer)
 
 end
-
-
-
-
-
-
-
 
 #party: array of pokemon team
 # [[:SPECIES,level], ... ]

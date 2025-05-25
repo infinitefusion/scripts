@@ -43,7 +43,6 @@ def download_file(url, saveLocation)
       return saveLocation
     else
       echoln _INTL("Failed to download file {1}", url)
-      echoln caller
     end
     return nil
   rescue MKXPError, Errno::ENOENT => error
@@ -73,7 +72,6 @@ def fetch_sprite_from_web(url, destinationPath)
       return true
     end
     echoln "Failed to download #{url}"
-    echoln caller
     return false
   rescue MKXPError => e
     echoln "MKXPError: #{e.message}"

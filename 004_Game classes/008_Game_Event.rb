@@ -24,6 +24,9 @@ class Game_Event < Game_Character
     @through      = true
     @to_update    = true
     @tempSwitches = {}
+    if @event.name[/forced_z\s*=\s*(-?\d+)/i]
+      @forced_z = $1.to_i
+    end
     moveto(@event.x, @event.y) if map
     refresh
   end
@@ -139,6 +142,7 @@ class Game_Event < Game_Character
     end
     return false
   end
+
 
   def pbCheckEventTriggerAfterTurning
     return if $game_system.map_interpreter.running? || @starting

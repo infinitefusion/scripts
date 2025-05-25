@@ -24,7 +24,7 @@ class Quest
   attr_accessor :time
   attr_accessor :completed
 
-  def initialize(id, name, desc, npc, sprite, location, color = :WHITE, time = Time.now, completed = false)
+  def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false)
     self.id = id
     self.name = name
     self.desc = desc

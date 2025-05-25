@@ -72,6 +72,7 @@ class StartersSelectionScene
             chosenPokemon = @shown_starter_species
             @spritesLoader.registerSpriteSubstitution(@pif_sprite)
             disposeGraphics
+            pbSet(VAR_HOENN_CHOSEN_STARTER_INDEX,@index)
             return chosenPokemon
           end
         end

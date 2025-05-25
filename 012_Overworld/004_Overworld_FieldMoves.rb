@@ -867,6 +867,7 @@ def pbEndSurf(_xOffset, _yOffset)
       pbOnStepTaken(result)
     end
     $PokemonTemp.surfJump = nil
+    $game_temp.clearSurfSplashPatches
     return true
 
   end
@@ -1026,6 +1027,41 @@ HiddenMoveHandlers::UseMove.add(:SWEETSCENT, proc { |move, pokemon|
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
   pbSweetScent
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:RAINDANCE, proc { |move, pkmn, showmsg|
+  next true
+})
+
+
+HiddenMoveHandlers::UseMove.add(:RAINDANCE, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Rain,1)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:SUNNYDAY, proc { |move, pkmn, showmsg|
+  next true
+})
+HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Sunny,1)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:WHIRLWIND, proc { |move, pkmn, showmsg|
+  next true
+})
+HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Wind,1)
   next true
 })
 

@@ -85,11 +85,16 @@ class BetterRegionMap
     @sprites["bg"].bmp("Graphics/Pictures/mapbg")
     @window = SpriteHash.new
     @window["map"] = Sprite.new(@mapvp)
-
+    @weatherIcons = SpriteHash.new
     if Settings::GAME_ID == :IF_KANTO
       mapFilename = isPostgame?() ? "map_postgame" : "map"
     else
-      mapFilename = "map_hoenn"
+      if PBDayNight.isNight?
+        mapFilename = "map_hoenn_night"
+      else
+        mapFilename = "map_hoenn"
+      end
+      echoln mapFilename
     end
     # @window["map"].bmp("Graphics/Pictures/#{@data[1]}")
     @window["map"].bmp("Graphics/Pictures/map/#{mapFilename}")
@@ -170,6 +175,16 @@ class BetterRegionMap
     @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
     @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
 
+
+    @sprites["weather"] = Sprite.new(@viewport2)
+    @sprites["weather"].bmp(get_current_map_weather_icon)
+
+    @sprites["weather"].x=446
+    @sprites["weather"].y=34
+    @sprites["weather"].z=5000
+
+
+
     if !$PokemonGlobal.regionMapSel
       $PokemonGlobal.regionMapSel = [0, 0]
     end
@@ -228,6 +243,7 @@ class BetterRegionMap
       end
     end
 
+    draw_all_weather# if DEBUG_WEATHER
     initial_position = calculate_initial_position(player)
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()
@@ -420,6 +436,7 @@ class BetterRegionMap
   end
 
   def main
+    frame=0
     loop do
       update
       if Input.press?(Input::RIGHT) && ![4, 6].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
@@ -466,8 +483,10 @@ class BetterRegionMap
           @mdirs << DIRECTION_UP
         end
       end
-      if Input.trigger?(Input::AUX1)
+      if Input.repeat?(Input::AUX1)
         print_current_position()
+        new_weather_cycle if DEBUG_WEATHER && frame%12==0
+        frame+=1
       end
 
       if Input.trigger?(Input::C) && @dirs.empty?
@@ -648,6 +667,15 @@ class BetterRegionMap
       e[0] == $PokemonGlobal.regionMapSel[0] &&
         e[1] == $PokemonGlobal.regionMapSel[1]
     end
+
+    if Settings::GAME_ID == :IF_HOENN
+      weather = update_weather_icon(location)
+      if !weather
+        @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
+        @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
+      end
+    end
+
     text = ""
     text = location[2] if location
     poi = ""

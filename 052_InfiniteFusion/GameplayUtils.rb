@@ -709,6 +709,7 @@ def regirock_steel_move_boulder()
 end
 
 def displayRandomizerErrorMessage()
+  echoln caller
   Kernel.pbMessage(_INTL("The randomizer has encountered an error. You should try to re-randomize your game as soon as possible."))
   Kernel.pbMessage(_INTL("You can do this on the top floor of Pokémon Centers."))
 end
@@ -1519,8 +1520,10 @@ def getMappedKeyFor(internalKey)
 end
 
 # if need to play animation from event route
-def playAnimation(animationId, x, y)
+def playAnimation(animationId, x=nil, y=nil)
   return if !$scene.is_a?(Scene_Map)
+  x = @event.x unless x
+  y = @event.y unless y
   $scene.spriteset.addUserAnimation(animationId, x, y, true)
 end
 
