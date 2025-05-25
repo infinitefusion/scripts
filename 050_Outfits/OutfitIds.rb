@@ -40,9 +40,11 @@ HAT_PIKACHUM_NEST = "pikhatchum"
 HAT_PIKACHUF_NEST = "pikhatchuf"
 HAT_PARAS_NEST = "headparas"
 HAT_EEVEE_NEST = "eevee"
-
+HAT_SILPHSCOPE = "silphscope"
 HAT_BRENDAN = "brendanRSE"
 HAT_MAY = "mayRSE"
+HAT_ORAN = "orange"
+
 
 HAT_PARASHROOM = "parashroom"
 HAT_AERODACTYL = "aerodactylSkull"
@@ -59,6 +61,8 @@ HAT_FEZ = "fez"
 HAT_HALO = "halo"
 HAT_MAGIKARP = "magicap"
 HAT_SLOWKING_SHELL = "slowking"
+HAT_TENTACRUEL = "tentacruel"
+
 HAT_ZOROARK = "banefulfoxmask"
 HAT_FROG = "froghat"
 HAT_SANTA = "santa"
