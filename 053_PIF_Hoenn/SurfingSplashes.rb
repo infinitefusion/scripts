@@ -33,12 +33,12 @@ class SurfPatch
   attr_accessor :shape      #Array of tiles coordinates (ex: [[10,20],[1,5]])
 
   def initialize(patch_size)
-    x, y = getRandomPositionOnPerimeter(15, 11, $game_player.x, $game_player.y, 2)
-    variance = rand(5)
+    x, y = getRandomPositionOnPerimeter(8, 6, $game_player.x, $game_player.y, 2)
+    variance = rand(5..8)
     @shape =getRandomSplashPatch(patch_size,x,y,variance)
   end
 
-  def getRandomSplashPatch(tile_count, center_x, center_y, variance = 0)
+  def getRandomSplashPatch(tile_count, center_x, center_y, variance = rand(4))
     return [] if tile_count <= 0
 
     center_pos = getRandomPositionOnPerimeter(tile_count, tile_count, center_x, center_y, variance)
@@ -109,6 +109,8 @@ end
 
 
 Events.onStepTaken += proc { |sender, e|
+  water_encounter_chance = 25
+
   next unless $scene.is_a?(Scene_Map)
   next unless Settings::GAME_ID == :IF_HOENN
   next unless $PokemonGlobal.surfing
@@ -119,7 +121,9 @@ Events.onStepTaken += proc { |sender, e|
     $game_temp.surf_patches.each_with_index do |patch,index|
       next unless patch && patch.shape
       if patch.shape.include?([player_x, player_y])
+        next if rand(100) > water_encounter_chance
         $game_temp.surf_patches.delete_at(index)
+        echoln "surf patch encounter!"
         wild_pokemon = $PokemonEncounters.choose_wild_pokemon(:Water)
         species = wild_pokemon[0]
         level = wild_pokemon[1]

@@ -77,6 +77,7 @@ class Game_Character
     @locked = false
     @prelock_direction = 0
     @under_everything=false
+    @forced_z=nil
   end
 
   def at_coordinate?(check_x, check_y)
@@ -339,6 +340,7 @@ class Game_Character
   def screen_z(height = 0)
     return -1 if @under_everything
     return 999 if @always_on_top
+    return @forced_z if @forced_z
     z = screen_y_ground
     if @tile_id > 0
       begin
