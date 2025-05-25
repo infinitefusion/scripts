@@ -21,7 +21,7 @@ module Settings
   #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10
 
-  ANIMATE_REFLECTIONS= GAME_ID == :IF_HOENN #true
+  ANIMATE_REFLECTIONS= false#GAME_ID == :IF_HOENN #true
 
   #Infinite fusion settings
   NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501

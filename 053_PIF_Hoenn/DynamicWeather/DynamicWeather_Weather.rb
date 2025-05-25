@@ -104,6 +104,7 @@ class GameWeather
 
 
   def update_weather()
+    return if !$game_weather
     new_weather = @current_weather.dup
     new_weather.each do |map_id, (type, intensity)|
       try_end_weather(map_id,type, get_map_weather_intensity(map_id))

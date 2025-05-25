@@ -2,6 +2,14 @@ class Bitmap
 
   def hue_customcolor(rules_string)
     return if rules_string.nil? || rules_string == "nil"
+    if rules_string.include?("&")
+      rules_string.split("&").each do |part|
+        part = part.strip
+        next if part.empty?
+        hue_customcolor(part)
+      end
+      return
+    end
     rules = rules_string.split("|").map do |str|
       parts = str.split(".")
       {
@@ -39,7 +47,7 @@ class Bitmap
 
         from = closest_rule[:from]
         to = closest_rule[:to]
-        # Avoid mult by zero
+        # Avoid multiplication by zero
         to[0] = 10 if to[0] <= 10
         to[1] = 10 if to[1] <= 10
         to[2] = 10 if to[2] <= 10
@@ -54,6 +62,7 @@ class Bitmap
       end
     end
   end
+
 
   def update_shiny_cache(dex_number, name)
     if isFusion(dex_number)
