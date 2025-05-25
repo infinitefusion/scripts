@@ -2378,6 +2378,7 @@ class PokemonStorageScreen
       reverseFusion(pokemon)
       $PokemonBag.pbDeleteItem(:DNAREVERSER) if $PokemonBag.pbQuantity(:INFINITEREVERSERS) <= 0
     end
+    @scene.pbHardRefresh
   end
 
   def pbUnfuseFromPC(selected)

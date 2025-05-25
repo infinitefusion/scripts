@@ -29,28 +29,37 @@ module GameData
     ADDITIONAL_OFFSET_WHEN_TOO_CLOSE = 40
     MINIMUM_DEX_DIF = 20
 
-    def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false)
+    def self.calculateShinyHueOffset(dex_number, isBodyShiny = false, isHeadShiny = false, color = :c1)
       if dex_number <= NB_POKEMON
-        if SHINY_COLOR_OFFSETS[dex_number]
-          return SHINY_COLOR_OFFSETS[dex_number]
+        if SHINY_COLOR_OFFSETS[dex_number]&.dig(color)
+          return SHINY_COLOR_OFFSETS[dex_number]&.dig(color)
         end
         body_number = dex_number
         head_number = dex_number
-
       else
         body_number = getBodyID(dex_number)
         head_number = getHeadID(dex_number, body_number)
       end
-      if isBodyShiny && isHeadShiny && SHINY_COLOR_OFFSETS[body_number] && SHINY_COLOR_OFFSETS[head_number]
-        offset = SHINY_COLOR_OFFSETS[body_number] + SHINY_COLOR_OFFSETS[head_number]
-      elsif isHeadShiny && SHINY_COLOR_OFFSETS[head_number]
-        offset = SHINY_COLOR_OFFSETS[head_number]
-      elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]
-        offset = SHINY_COLOR_OFFSETS[body_number]
+      if isBodyShiny && isHeadShiny && SHINY_COLOR_OFFSETS[body_number]&.dig(color) && SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[body_number]&.dig(color) + SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+      elsif isHeadShiny && SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[head_number]&.dig(color)
+      elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]&.dig(color)
+        offset = SHINY_COLOR_OFFSETS[body_number]&.dig(color)
       else
+        return 0 if color != :v1
         offset = calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny, isHeadShiny)
       end
       return offset
+    end
+
+
+    def self.hex_to_rgb(hex)
+      hex = hex.delete("#")
+      r = hex[0..1].to_i(16)
+      g = hex[2..3].to_i(16)
+      b = hex[4..5].to_i(16)
+      [r, g, b]
     end
 
     def self.calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny = false, isHeadShiny = false)
@@ -98,7 +107,7 @@ module GameData
         end
       end
       if isShiny
-        sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
+        sprite.shiftAllColors(dex_number, bodyShiny, headShiny)
       end
       return sprite
     end
