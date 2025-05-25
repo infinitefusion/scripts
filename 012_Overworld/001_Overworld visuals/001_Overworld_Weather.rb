@@ -68,6 +68,7 @@ module RPG
     end
 
     def get_max_sprites(power, weather_type)
+      power= MAX_SPRITES if !power
       if weather_type == :Wind
         power /= 8
       end

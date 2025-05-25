@@ -1,8 +1,6 @@
 class Bitmap
 
   def hue_customcolor(rules_string)
-    echoln rules_string
-
     return if rules_string.nil? || rules_string == "nil"
     rules = rules_string.split("|").map do |str|
       parts = str.split(".")

@@ -4,6 +4,7 @@ class PokemonEncounters
   WEATHER_ENCOUNTER_BASE_CHANCE = 8 #/100 (for weather intensity of 0)
   alias pokemonEssentials_PokemonEncounter_choose_wild_pokemon choose_wild_pokemon
   def choose_wild_pokemon(enc_type, *args)
+    return pokemonEssentials_PokemonEncounter_choose_wild_pokemon(enc_type, *args) if !$game_weather
     current_weather_type = $game_weather.get_map_weather_type($game_map.map_id)
     current_weather_intensity = $game_weather.get_map_weather_intensity($game_map.map_id)
     if can_substitute_for_weather_encounter(enc_type, current_weather_type)
