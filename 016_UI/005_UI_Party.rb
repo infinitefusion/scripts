@@ -1226,6 +1226,24 @@ class PokemonPartyScreen
     }
     return retval
   end
+
+  def fuseFromParty(pokemon)
+    splicerItem = selectSplicer()
+    return unless splicerItem
+    if pbDNASplicing(pokemon,@scene,splicerItem)
+      $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICER2
+    end
+  end
+
+  def unfuseFromParty(pokemon,index)
+    splicerItem = selectSplicer()
+    return unless splicerItem
+    isSuperSplicer = [:SUPERSPLICERS,:INFINITESPLICERS2].include?(splicerItem)
+    if pbUnfuse(pokemon,@scene,isSuperSplicer)
+      $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICER2
+    end
+  end
+
   def pbPokemonRename(pkmn, pkmnid)
     cmd = 0
     loop do
@@ -1277,6 +1295,9 @@ class PokemonPartyScreen
       cmdItem = -1
       cmdHat = -1
       cmdLearnMove = -1
+      cmdUnfuse = -1
+      cmdFuse = -1
+
 
       # Build the commands
       commands[cmdSummary = commands.length] = _INTL("Summary")
@@ -1300,7 +1321,16 @@ class PokemonPartyScreen
         end
       end
       commands[cmdNickname = commands.length] = _INTL("Nickname") if !pkmn.egg?
-      commands[cmdLearnMove = commands.length] = _INTL("Remember moves")
+      #commands[cmdLearnMove = commands.length] = _INTL("Remember moves")
+
+      if playerHasFusionItems
+        if pkmn.isFusion?
+          commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
+        else
+          commands[cmdFuse = commands.length] = _INTL("Fuse")
+        end
+      end
+
 
       commands[commands.length] = _INTL("Cancel")
       command = @scene.pbShowCommands(_INTL("Do what with {1}?", pkmn.name), commands)
@@ -1367,6 +1397,10 @@ class PokemonPartyScreen
         pbRememberMoves(pkmn)
       elsif cmdNickname >= 0 && command == cmdNickname
         pbPokemonRename(pkmn, pkmnid)
+      elsif cmdFuse >= 0 && command == cmdFuse
+        fuseFromParty(pkmn)
+      elsif cmdUnfuse >= 0 && command == cmdUnfuse
+        unfuseFromParty(pkmn,pkmnid)
       elsif cmdDebug >= 0 && command == cmdDebug
         pbPokemonDebug(pkmn, pkmnid)
       elsif cmdSwitch >= 0 && command == cmdSwitch
@@ -1474,6 +1508,9 @@ class PokemonPartyScreen
     @scene.pbEndScene
     return nil
   end
+
+
+
 end
 
 #===============================================================================
