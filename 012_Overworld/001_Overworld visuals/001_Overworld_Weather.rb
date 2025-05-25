@@ -48,7 +48,7 @@ module RPG
       @fading               = false
 
       @lightning_overlay = Sprite.new(@viewport)
-      @lightning_overlay.bitmap = RPG::Cache.load_bitmap("Graphics/Weather/", "lightning")
+      @lightning_overlay.bitmap = RPG::Cache.load_bitmap("Graphics/Weather/", "lightning") if pbResolveBitmap("Graphics/Weather/lightning")
       @lightning_overlay.opacity = 0
       @lightning_overlay.z = 2000  # On top of everything
 
