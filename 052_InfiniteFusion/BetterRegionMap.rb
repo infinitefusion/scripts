@@ -243,7 +243,7 @@ class BetterRegionMap
       end
     end
 
-    draw_all_weather# if DEBUG_WEATHER
+    draw_all_weather if DEBUG_WEATHER && $game_weather
     initial_position = calculate_initial_position(player)
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()

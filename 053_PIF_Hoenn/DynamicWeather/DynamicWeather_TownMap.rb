@@ -73,6 +73,7 @@ class BetterRegionMap
 
 end
 def get_current_map_weather_icon
+  return if !$game_weather
   current_weather= $game_weather.current_weather[$game_map.map_id]
   weather_type = current_weather[0]
   weather_intensity = current_weather[1]

@@ -23,6 +23,18 @@ def obtainHat(outfit_id,secondary=false)
   return false
 end
 
+#Like obtainHat, but silent
+def unlockHat(outfit_id)
+  echoln "obtained new hat: " + outfit_id
+  outfit = get_hat_by_id(outfit_id)
+  if !outfit
+    pbMessage(_INTL("The hat #{outfit_id} is invalid."))
+    return
+  end
+  $Trainer.unlocked_hats << outfit_id if !$Trainer.unlocked_hats.include?(outfit_id)
+  return false
+end
+
 def obtainClothes(outfit_id)
   echoln "obtained new clothes: " + outfit_id
   outfit = get_clothes_by_id(outfit_id)
