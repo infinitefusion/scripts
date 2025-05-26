@@ -39,7 +39,11 @@ end
 
 BATTLED_TRAINER_RIVAL_KEY = "rival"
 
-
+def init_rival_name
+  rival_name = "Brendan" if isPlayerFemale
+  rival_name = "May" if isPlayerMale
+  pbSet(VAR_RIVAL_NAME,rival_name)
+end
 def set_rival_hat(hat)
   $Trainer.rival_appearance = TrainerAppearance.new(
     $Trainer.rival_appearance.skin_color,

@@ -19,13 +19,13 @@ class StartersSelectionScene
     @foreground = displayPicture("Graphics/Pictures/Trades/hoenn_starter_bag_foreground.png", -20, -20)
     @foreground.z=999
 
-    @pokeball_closed_left = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed.png", POKEBALL_LEFT_X, POKEBALL_LEFT_Y)
+    @pokeball_closed_left = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed_1.png", POKEBALL_LEFT_X, POKEBALL_LEFT_Y)
     @pokeball_closed_left.z=2
 
-    @pokeball_closed_middle = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed.png", POKEBALL_MIDDLE_X, POKEBALL_MIDDLE_Y)
+    @pokeball_closed_middle = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed_2.png", POKEBALL_MIDDLE_X, POKEBALL_MIDDLE_Y)
     @pokeball_closed_middle.z=100
 
-    @pokeball_closed_right = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed.png", POKEBALL_RIGHT_X, POKEBALL_RIGHT_Y)
+    @pokeball_closed_right = displayPicture("Graphics/Pictures/Trades/trade_pokeball_closed_3.png", POKEBALL_RIGHT_X, POKEBALL_RIGHT_Y)
     @pokeball_closed_right.z=2
 
 
