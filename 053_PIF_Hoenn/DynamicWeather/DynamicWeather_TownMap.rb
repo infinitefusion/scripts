@@ -65,7 +65,7 @@ class BetterRegionMap
 
 
   def new_weather_cycle
-    return if !$game_weather.update_weather
+    return if !$game_weather
     @weatherIcons.dispose
     @weatherIcons = SpriteHash.new
     $game_weather.update_weather

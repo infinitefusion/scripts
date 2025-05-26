@@ -1031,7 +1031,7 @@ HiddenMoveHandlers::UseMove.add(:SWEETSCENT, proc { |move, pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:RAINDANCE, proc { |move, pkmn, showmsg|
-  next true
+  next true if Settings::GAME_ID == :IF_HOENN
 })
 
 
@@ -1044,7 +1044,7 @@ HiddenMoveHandlers::UseMove.add(:RAINDANCE, proc { |move, pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:SUNNYDAY, proc { |move, pkmn, showmsg|
-  next true
+  next true if Settings::GAME_ID == :IF_HOENN
 })
 HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
@@ -1055,7 +1055,7 @@ HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:WHIRLWIND, proc { |move, pkmn, showmsg|
-  next true
+  next true if Settings::GAME_ID == :IF_HOENN
 })
 HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
