@@ -7,7 +7,12 @@ class StartersSelectionScene
   TEXT_POSITION_Y = 10
 
   def initialize(starters = [])
-    @starters = starters
+    @starters_species = starters
+    @starter_pokemon = []
+    @starters_species.each do |species|
+      @starter_pokemon.push(Pokemon.new(species,5))
+    end
+
     @spritesLoader = BattleSpriteLoader.new
     @shown_starter_species=nil
   end
@@ -55,12 +60,12 @@ class StartersSelectionScene
         if Input.trigger?(Input::RIGHT)
           previous_index = @index
           @index+=1
-          @index = 0 if @index == @starters.length
+          @index = 0 if @index == @starters_species.length
         end
         if Input.trigger?(Input::LEFT)
           previous_index = @index
           @index-=1
-          @index = @starters.length-1 if @index < 0
+          @index = @starters_species.length-1 if @index < 0
         end
         if Input.trigger?(Input::UP) || Input.trigger?(Input::DOWN)
           updateOpenPokeballPosition
@@ -69,7 +74,7 @@ class StartersSelectionScene
 
           if Input.trigger?(Input::USE)
           if pbConfirmMessage(_INTL("Do you choose this Pokémon?"))
-            chosenPokemon = @shown_starter_species
+            chosenPokemon = @starter_pokemon[@index]
             @spritesLoader.registerSpriteSubstitution(@pif_sprite)
             disposeGraphics
             pbSet(VAR_HOENN_CHOSEN_STARTER_INDEX,@index)
@@ -134,7 +139,7 @@ class StartersSelectionScene
     @pokeball_open_back.dispose if @pokeball_open_back
     @pokeball_open_front.dispose if @pokeball_open_front
 
-    @shown_starter_species = @starters[@index]
+    @shown_starter_species = @starters_species[@index]
 
     updateOpenPokeballPosition
     @pokeball_open_back = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_back",@shown_pokemon_x, @shown_pokemon_y,2)
@@ -146,6 +151,12 @@ class StartersSelectionScene
   def updatePokemonSprite()
     @pif_sprite = @spritesLoader.get_pif_sprite_from_species(@shown_starter_species.species)
     sprite_bitmap = @spritesLoader.load_pif_sprite_directly(@pif_sprite)
+    pokemon = @starter_pokemon[@index]
+    if pokemon.shiny?
+      sprite_bitmap.bitmap.update_shiny_cache(pokemon.id_number, "")
+      sprite_bitmap.shiftAllColors(pokemon.id_number, pokemon.bodyShiny?, pokemon.headShiny?)
+    end
+
     @pokemonSpriteWindow.dispose if @pokemonSpriteWindow
     @pokemonSpriteWindow = PictureWindow.new(sprite_bitmap.bitmap)
 
