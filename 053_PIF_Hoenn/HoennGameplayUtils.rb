@@ -22,6 +22,6 @@ end
 def hoennSelectStarter
   starters = [obtainStarter(0), obtainStarter(1), obtainStarter(2)]
   selected_starter = StartersSelectionScene.new(starters).startScene
-  pbAddPokemonSilent(selected_starter,5)
+  pbAddPokemonSilent(selected_starter)
   return selected_starter
 end

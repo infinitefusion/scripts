@@ -82,7 +82,7 @@ module Settings
   EGGSPRITE_SCALE = 1
   BACKSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_POSITION = 200
-  SHINY_HUE_OFFSET = 75
+  SHINY_HUE_OFFSET = 75 #no longer used
   NO_LEVEL_MODE_LEVEL_INCR = 5.8
   NO_LEVEL_MODE_LEVEL_BASE = 6
 
@@ -164,7 +164,7 @@ module Settings
   # Number of badges in the game
   NB_BADGES = 16
   # The odds of a newly generated Pokémon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = 16#(MECHANICS_GENERATION >= 6) ? 16 : 8
+  SHINY_POKEMON_CHANCE =16#(MECHANICS_GENERATION >= 6) ? 16 : 8
 
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE = 3
