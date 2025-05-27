@@ -967,20 +967,58 @@ PokemonDebugMenuCommands.register("setshininess", {
     cmd = 0
     loop do
       msg = [_INTL("Is shiny."), _INTL("Is normal (not shiny).")][pkmn.shiny? ? 0 : 1]
-      cmd = screen.pbShowCommands(msg, [
-           _INTL("Make shiny"),
-           _INTL("Make normal"),
-           _INTL("Reset")], cmd)
+      cmdMakeShiny = _INTL("Make shiny")
+      cmdMakeNormal = _INTL("Make normal")
+      cmdMakeHeadShiny = _INTL("Make head shiny")
+      cmdMakeBodyShiny = _INTL("Make body shiny")
+      cmdMakeHeadNormal = _INTL("Make head normal")
+      cmdMakeBodyNormal = _INTL("Make body normal")
+      cmdReset = _INTL("Reset")
+
+      options = []
+      if(pkmn.isFusion?)
+        options << cmdMakeBodyShiny if !pkmn.body_shiny
+        options << cmdMakeBodyNormal if pkmn.body_shiny
+
+        options << cmdMakeHeadShiny if !pkmn.head_shiny
+        options << cmdMakeHeadNormal if pkmn.head_shiny
+      else
+        options << cmdMakeNormal if pkmn.shiny?
+        options << cmdMakeShiny if !pkmn.shiny?
+      end
+      options << cmdReset
+
+      cmd = screen.pbShowCommands(msg,options,cmd)
       break if cmd < 0
-      case cmd
-      when 0   # Make shiny
+      case options[cmd]
+      when cmdMakeShiny  # Make shiny (unfused)
         pkmn.shiny = true
         pkmn.debug_shiny=true
-      when 1   # Make normal
+      when cmdMakeHeadShiny    # Fused - Shiny head
+        pkmn.shiny = true
+        pkmn.head_shiny = true
+        pkmn.debug_shiny=true
+
+        echoln "head is shiny!"
+      when cmdMakeBodyShiny   # Fused - Shiny head
+        pkmn.shiny = true
+        pkmn.body_shiny = true
+        pkmn.debug_shiny=true
+      when cmdMakeNormal   # Make normal
         pkmn.shiny = false
         pkmn.debug_shiny=false
-      when 2   # Reset
+      when cmdMakeBodyNormal   # Make boxy normal
+        pkmn.body_shiny = false
+        pkmn.debug_shiny=false if !pkmn.head_shiny
+        pkmn.shiny=false if !pkmn.head_shiny
+      when cmdMakeHeadNormal   # Make boxy normal
+        pkmn.head_shiny = false
+        pkmn.debug_shiny=false if !pkmn.body_shiny
+        pkmn.shiny=false if !pkmn.body_shiny
+      when cmdReset     # Reset
         pkmn.shiny = nil
+        pkmn.head_shiny = nil
+        pkmn.body_shiny = nil
         pkmn.debug_shiny=nil
       end
       screen.pbRefreshSingle(pkmnid)
