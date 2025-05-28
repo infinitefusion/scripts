@@ -1635,9 +1635,9 @@ def displayPicture(image,x,y,z=0)
   return pictureWindow
 end
 
-def showPokemonInPokeballWithMessage(pif_sprite, message, x_position, y_position)
+def showPokemonInPokeballWithMessage(pif_sprite, message, x_position=nil, y_position=nil)
   x_position = Graphics.width/4 if !x_position
-  y_position = 20 if !y_position
+  y_position = 10 if !y_position
 
   background_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_back",x_position, y_position,1)
   foreground_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_front",x_position, y_position,9999)
