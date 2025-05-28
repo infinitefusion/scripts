@@ -11,8 +11,11 @@ module GameData
         pokemon_id = getFusedPokemonIdFromDexNum(body_id, head_id)
         return GameData::FusedSpecies.new(pokemon_id)
       end
-      head_id = get_head_number_from_symbol(id)
+
+
+      id = normalize_id(id)
       body_id = get_body_number_from_symbol(id)
+      head_id = get_head_number_from_symbol(id)
 
       @body_pokemon = GameData::Species.get(body_id)
       @head_pokemon = GameData::Species.get(head_id)
@@ -86,6 +89,32 @@ module GameData
       # @mega_move = nil
       # @unmega_form = 0
       # @mega_message = 0
+    end
+
+    #Input formats:
+    # :1_x_2
+    # :BULBASAUR_x_IVYSAUR
+    # :B2H1
+    #
+    # Output: :B2H1
+    def normalize_id(id)
+      if id.to_s.include?("_x_")
+        full_id_split = id.to_s.split("_x_")
+        # Detect if both sides are numeric
+        if full_id_split[0] =~ /^\d+$/ && full_id_split[1] =~ /^\d+$/
+          head_dex = full_id_split[0].to_i
+          body_dex = full_id_split[1].to_i
+        else
+          head_species = full_id_split[0].to_sym
+          body_species = full_id_split[1].to_sym
+
+          head_dex = getDexNumberForSpecies(head_species)
+          body_dex = getDexNumberForSpecies(body_species)
+        end
+        return "B#{body_dex}H#{head_dex}".to_sym
+      else #Passed internal ID directly, just return it
+        return id
+      end
     end
 
     def get_body_number_from_symbol(id)

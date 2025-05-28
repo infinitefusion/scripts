@@ -33,7 +33,13 @@ module GameData
       return other if other.is_a?(self)
       other = other.to_sym if other.is_a?(String)
 
+      #B1H1 - old format (still supported)
       if other.to_s.match?(/\AB\d+H\d+\z/)
+        species = GameData::FusedSpecies.new(other)
+        return species
+      end
+
+      if other.to_s.include?("_x_")
         species = GameData::FusedSpecies.new(other)
         return species
       end
@@ -67,10 +73,16 @@ module GameData
       return other if other.is_a?(self)
       other = other.to_sym if other.is_a?(String)
 
-      if other.to_s.match?(/\AB\d+H\d+\z/)
+      if other.to_s.match?(/\AB\d+H\d+\z/) #old format (still supported)
         species = GameData::FusedSpecies.new(other)
         return species
       end
+
+      if other.to_s.include?("_x_") #new format
+        species = GameData::FusedSpecies.new(other)
+        return species
+      end
+
       if other.is_a?(Integer) && self == GameData::Species
         if other > NB_POKEMON
           body_id = getBodyID(other)
