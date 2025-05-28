@@ -39,7 +39,7 @@ module GameData
         return species
       end
 
-      if other.to_s.include?("_x_")
+      if other.to_s.include?("/")
         species = GameData::FusedSpecies.new(other)
         return species
       end

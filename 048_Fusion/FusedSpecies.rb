@@ -98,8 +98,8 @@ module GameData
     #
     # Output: :B2H1
     def normalize_id(id)
-      if id.to_s.include?("_x_")
-        full_id_split = id.to_s.split("_x_")
+      if id.to_s.include?("/")
+        full_id_split = id.to_s.split("/")
         # Detect if both sides are numeric
         if full_id_split[0] =~ /^\d+$/ && full_id_split[1] =~ /^\d+$/
           head_dex = full_id_split[0].to_i
