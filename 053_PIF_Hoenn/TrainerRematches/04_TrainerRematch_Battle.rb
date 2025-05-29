@@ -67,6 +67,7 @@ def generateTrainerRematch(trainer)
   end
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
+  trainer.increase_friendship(5)
   return updated_trainer
 end
 

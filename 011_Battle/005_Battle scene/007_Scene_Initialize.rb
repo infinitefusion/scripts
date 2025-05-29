@@ -170,30 +170,59 @@ class PokeBattle_Scene
   end
 
   def pbCreateTrainerBackSprite(idxTrainer, trainerType, numTrainers = 1)
-    x = 100
-    y = 410
 
-    sprite = IconSprite.new(x,y,@viewport)
-
-    allowEasterEggPokeball = pbInSafari? #Never allow except in Safari Zone - add more conditions if needed
-    sprite.setBitmapDirectly(generate_front_trainer_sprite_bitmap(allowEasterEggPokeball))
-    sprite.zoom_x=2
-    sprite.zoom_y=2
-    sprite.z=100 + idxTrainer
-
-    sprite.mirror =true
-    @sprites["player_#{idxTrainer + 1}"] = sprite
-    return sprite
 
     #trainer = pbAddSprite("player_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     #
-    # if idxTrainer == 0 # Player's sprite
-    #   #trainerFile = GameData::TrainerType.player_back_sprite_filename(trainerType)
-    #   trainerFile = generate_front_trainer_sprite_bitmap()
-    # else
-    #   # Partner trainer's sprite
-    #   trainerFile = GameData::TrainerType.back_sprite_filename(trainerType)
-    # end
+    if idxTrainer == 0 # Player's sprite
+      x = 100
+      y = 410
+
+      sprite = IconSprite.new(x,y,@viewport)
+
+      allowEasterEggPokeball = pbInSafari? #Never allow except in Safari Zone - add more conditions if needed
+      sprite.setBitmapDirectly(generate_front_trainer_sprite_bitmap(allowEasterEggPokeball))
+      sprite.zoom_x=2
+      sprite.zoom_y=2
+      sprite.z=100 + idxTrainer
+
+      sprite.mirror =true
+       @sprites["player_#{idxTrainer + 1}"] = sprite
+    else
+      x = 200
+      y = 380
+      # Partner trainer's sprite
+      trainerFile = GameData::TrainerType.front_sprite_filename(trainerType)
+      echoln ""
+      echoln "-------"
+      echoln trainerFile
+
+      trainer_sprite = IconSprite.new(x,y,@viewport)
+      trainer_sprite.setBitmap(trainerFile)
+      trainer_sprite.zoom_x=2
+      trainer_sprite.zoom_y=2
+      trainer_sprite.z = 30 + idxTrainer
+      trainer_sprite.mirror =true
+      if trainer_sprite.bitmap.width > trainer_sprite.bitmap.height * 2
+        trainer_sprite.src_rect.x = 0
+        trainer_sprite.src_rect.width = trainer_sprite.bitmap.width / 5
+      end
+      trainer_sprite.ox = trainer_sprite.src_rect.width / 2
+      trainer_sprite.oy = trainer_sprite.bitmap.height
+
+      @sprites["player_#{idxTrainer + 1}"] = trainer_sprite
+
+      #
+      #
+      # trainer.z = 30 + idxTrainer
+      # if trainer.bitmap.width > trainer.bitmap.height * 2
+      #   trainer.src_rect.x = 0
+      #   trainer.src_rect.width = trainer.bitmap.width / 5
+      # end
+      # trainer.ox = trainer.src_rect.width / 2
+      # trainer.oy = trainer.bitmap.height
+
+    end
     # spriteX, spriteY = PokeBattle_SceneConstants.pbTrainerPosition(0, idxTrainer, numTrainers)
     # trainer = pbAddSprite("player_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     # return if !trainer.bitmap

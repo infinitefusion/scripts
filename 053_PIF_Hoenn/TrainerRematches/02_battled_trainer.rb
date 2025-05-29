@@ -1,82 +1,6 @@
-# frozen_string_literal: true
-
 class BattledTrainer
-  TRAINER_CLASS_FAVORITE_TYPES =
-    {
-      AROMALADY:      [:GRASS, :FAIRY],
-      BEAUTY:         [:FAIRY, :WATER, :NORMAL, :GRASS],
-      BIKER:          [:POISON, :DARK],
-      BIRDKEEPER:     [:FLYING, :NORMAL],
-      BUGCATCHER:     [:BUG],
-      BURGLAR:        [:FIRE, :DARK],
-      CHANNELER:      [:GHOST, :PSYCHIC],
-      CUEBALL:        [:FIGHTING],
-      ENGINEER:       [:ELECTRIC, :STEEL],
-      FISHERMAN:      [:WATER],
-      GAMBLER:        [:NORMAL, :PSYCHIC],
-      GENTLEMAN:      [:NORMAL, :STEEL],
-      HIKER:          [:ROCK, :GROUND],
-      JUGGLER:        [:PSYCHIC, :GHOST],
-      LADY:           [:FAIRY, :NORMAL],
-      PAINTER:        [:NORMAL, :PSYCHIC],
-      POKEMANIAC:     [:DRAGON, :GROUND],
-      POKEMONBREEDER: [:NORMAL, :GRASS],
-      PROFESSOR:      [:NORMAL, :PSYCHIC],
-      ROCKER:         [:ELECTRIC, :FIRE],
-      RUINMANIAC:     [:GROUND, :ROCK],
-      SAILOR:         [:WATER, :FIGHTING],
-      SCIENTIST:      [:ELECTRIC, :STEEL, :POISON],
-      SUPERNERD:      [:ELECTRIC, :PSYCHIC, :STEEL],
-      TAMER:          [:NORMAL, :DARK],
-      BLACKBELT:      [:FIGHTING],
-      CRUSHGIRL:      [:FIGHTING],
-      CAMPER:         [:BUG, :NORMAL, :GRASS],
-      PICNICKER:      [:GRASS, :NORMAL],
-      COOLTRAINER_M:  [:DRAGON, :STEEL, :FIRE],
-      COOLTRAINER_F:  [:ICE, :PSYCHIC, :FAIRY],
-      YOUNGSTER:      [:NORMAL, :BUG],
-      LASS:           [:NORMAL, :FAIRY],
-      POKEMONRANGER_M: [:GRASS, :GROUND],
-      POKEMONRANGER_F: [:GRASS, :WATER],
-      PSYCHIC_M:      [:PSYCHIC, :GHOST],
-      PSYCHIC_F:      [:PSYCHIC, :FAIRY],
-      SWIMMER_M:      [:WATER],
-      SWIMMER_F:      [:WATER, :ICE],
-      SWIMMER2_M:     [:WATER],
-      SWIMMER2_F:     [:WATER],
-      TUBER_M:        [:WATER],
-      TUBER_F:        [:WATER],
-      TUBER2_M:       [:WATER],
-      TUBER2_F:       [:WATER],
-      COOLCOUPLE:     [:FIRE, :ICE],
-      CRUSHKIN:       [:FIGHTING],
-      SISANDBRO:      [:WATER, :GROUND],
-      TWINS:          [:FAIRY, :NORMAL],
-      YOUNGCOUPLE:    [:NORMAL, :PSYCHIC],
-      SOCIALITE:      [:FAIRY, :NORMAL],
-      BUGCATCHER_F:   [:BUG],
-      ROUGHNECK:      [:DARK, :FIGHTING],
-      TEACHER:        [:PSYCHIC, :NORMAL],
-      PRESCHOOLER_M:  [:NORMAL],
-      PRESCHOOLER_F:  [:FAIRY, :NORMAL],
-      HAUNTEDGIRL_YOUNG:  [:GHOST],
-      HAUNTEDGIRL:        [:GHOST, :DARK],
-      CLOWN:          [:PSYCHIC, :FAIRY],
-      NURSE:          [:NORMAL, :FAIRY],
-      WORKER:         [:STEEL, :GROUND],
-      COOLTRAINER_M2: [:FIGHTING, :STEEL],
-      COOLTRAINER_F2: [:PSYCHIC, :ICE],
-      FARMER:         [:GRASS, :GROUND, :NORMAL],
-      PYROMANIAC:     [:FIRE],
-      KIMONOGIRL:     [:FAIRY, :PSYCHIC, :GHOST],
-      SAGE:           [:PSYCHIC, :GHOST],
-      PLAYER:         [:ICE, :FIGHTING],
-      POLICE:         [:DARK, :FIGHTING],
-      SKIER_F:        [:ICE],
-      DELIVERYMAN:  [:NORMAL],
-    }
-
   DELAY_BETWEEN_NPC_TRADES = 180 #In seconds (3 minutes)
+  MAX_FRIENDSHIP = 100
 
   attr_accessor :trainerType
   attr_accessor :trainerName
@@ -121,6 +45,8 @@ class BattledTrainer
   attr_accessor :has_pending_action
   attr_accessor :custom_appearance
 
+  attr_accessor :friendship #increases the more you interact with them, unlocks more interact options
+  attr_accessor :friendship_level
   def initialize(trainerType,trainerName,trainerVersion)
     @trainerType = trainerType
     @trainerName = trainerName
@@ -129,10 +55,46 @@ class BattledTrainer
     @nb_rematches = 0
     @currentStatus = :IDLE
     @previous_status = :IDLE
-    @previous_trade_timestamp = Time.now
+    @previous_trade_timestamp = Time.now-DELAY_BETWEEN_NPC_TRADES
     @previous_random_events =[]
     @has_pending_action=false
     @favorite_type = pick_favorite_type(trainerType)
+    @friendship = 0
+    @friendship_level = 0
+  end
+
+  def friendship_level
+    @friendship_level =0 if !@friendship_level
+    return @friendship_level
+  end
+  def increase_friendship(amount)
+    @friendship=0 if !@friendship
+    @friendship_level=0 if !@friendship_level
+    gain = amount / ((@friendship + 1) ** 0.4)
+    @friendship += gain
+    @friendship = MAX_FRIENDSHIP if @friendship > MAX_FRIENDSHIP
+
+    echoln "Friendship with #{@trainerName} increased by #{gain.round(2)} (total: #{@friendship.round(2)})"
+
+    thresholds = FRIENDSHIP_LEVELS[@trainerType] || []
+    echoln thresholds
+
+    while @friendship_level < thresholds.length && @friendship >= thresholds[@friendship_level]
+      @friendship_level += 1
+
+      trainerClassName = GameData::TrainerType.get(@trainerType).real_name
+      pbMessage(_INTL("\\C[3]Friendship increased with #{trainerClassName} #{@trainerName}!"))
+      case @friendship_level
+      when 1
+        pbMessage(_INTL("You can now trade with each other!"))
+      when 2
+        pbMessage(_INTL("They will now give you items from time to time!"))
+      when 3
+        pbMessage(_INTL("You can now partner up with them!"))
+      end
+
+      echoln "🎉 #{@trainerName}'s friendship level increased to #{@friendship_level}!"
+    end
   end
 
   def set_custom_appearance(trainer_appearance)

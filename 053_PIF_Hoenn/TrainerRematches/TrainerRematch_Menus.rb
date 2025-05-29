@@ -22,6 +22,7 @@
 #actionType :
 # :BATTLE
 # :TRADE
+# :PARTNER
 def doPostBattleAction(actionType)
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
@@ -34,9 +35,21 @@ def doPostBattleAction(actionType)
     trainer = doNPCTrainerRematch(trainer)
   when :TRADE
     trainer = doNPCTrainerTrade(trainer)
+  when :PARTNER
+    partnerWithTrainer(event.id,map_id,trainer)
   end
   updateRebattledTrainer(event.id,map_id,trainer)
 
+end
+
+def setTrainerFriendship(trainer)
+  params = ChooseNumberParams.new
+  params.setRange(0,100)
+  params.setDefaultValue($game_map.map_id)
+  number = pbMessageChooseNumber("Frienship (0-100)?",params)
+  trainer.friendship = number
+  trainer.increase_friendship(0)
+  return trainer
 end
 
 #party: array of pokemon team
@@ -46,24 +59,31 @@ end
 def postBattleActionsMenu()
   rematchCommand = "Rematch"
   tradeCommand = "Trade Offer"
+  partnerCommand = "Partner up"
   cancelCommand = "See ya!"
 
   updateTeamDebugCommand = "(Debug) Simulate random event"
   resetTrainerDebugCommand = "(Debug) Reset trainer"
+  setFriendshipDebugCommand = "(Debug) Set Friendship"
   printTrainerTeamDebugCommand = "(Debug) Print team"
 
-  options = []
-  options << rematchCommand
-  options << tradeCommand #todo: make it unlockable after a small tutorial by one of the early NPC trainers
-  options << updateTeamDebugCommand if $DEBUG
-  options << resetTrainerDebugCommand if $DEBUG
-  options << printTrainerTeamDebugCommand if $DEBUG
-
-  options << cancelCommand
 
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
+
+  options = []
+  options << rematchCommand
+  options << tradeCommand if trainer.friendship_level >= 1
+  options << partnerCommand if trainer.friendship_level >= 3
+
+  options << updateTeamDebugCommand if $DEBUG
+  options << resetTrainerDebugCommand if $DEBUG
+  options << setFriendshipDebugCommand if $DEBUG
+  options << printTrainerTeamDebugCommand if $DEBUG
+
+  options << cancelCommand
+
   trainer = applyTrainerRandomEvents(trainer)
   showPrerematchDialog
   choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
@@ -73,6 +93,8 @@ def postBattleActionsMenu()
     doPostBattleAction(:BATTLE)
   when tradeCommand
     doPostBattleAction(:TRADE)
+  when partnerCommand
+    doPostBattleAction(:PARTNER)
   when updateTeamDebugCommand
     echoln("")
     echoln "---------------"
@@ -81,6 +103,10 @@ def postBattleActionsMenu()
     applyTrainerRandomEvents(trainer)
   when resetTrainerDebugCommand
     resetTrainerRebattle(event.id,map_id)
+  when setFriendshipDebugCommand
+    trainer = getRebattledTrainer(event.id,map_id)
+    trainer = setTrainerFriendship(trainer)
+    updateRebattledTrainer(event.id,map_id,trainer)
   when printTrainerTeamDebugCommand
     trainer = getRebattledTrainer(event.id,map_id)
     printNPCTrainerCurrentTeam(trainer)
