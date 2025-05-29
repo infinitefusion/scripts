@@ -2280,7 +2280,7 @@ class PokemonStorageScreen
     pokemon = @storage[selected[0], selected[1]]
 
     if !pokemon
-      command = pbShowCommands("Select an action", ["Cancel", "Stop fusing"])
+      command = pbShowCommands("Select an action", ["Continue fusing", "Stop fusing"])
       case command
       when 1 #stop
         cancelFusion()
@@ -2291,7 +2291,7 @@ class PokemonStorageScreen
         _INTL("Swap")
       ]
       commands.push(_INTL("Stop fusing"))
-      commands.push(_INTL("Cancel"))
+      commands.push(_INTL("Continue fusing"))
 
       if !heldpoke
         pbPlace(selected)
