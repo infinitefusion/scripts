@@ -43,15 +43,6 @@ class HairMartAdapter < OutfitsMartAdapter
     return false
   end
 
-  def list_regional_set_items()
-    return list_regional_hairstyles
-  end
-
-  def list_city_exclusive_items
-    return list_city_exclusive_hairstyles
-  end
-
-
   def toggleEvent(item)
     pbSEPlay("GUI storage put down", 80, 100)
     toggleHatVisibility()
