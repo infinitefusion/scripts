@@ -466,11 +466,13 @@ def pbBerryPlant
         pbMessage(_INTL("Too bad...\nThe Bag is full..."))
         return
       end
+
+      pbMEPlay("Berry Obtained")
       $PokemonBag.pbStoreItem(berry, berrycount)
       if berrycount > 1
-        pbMessage(_INTL("You picked the {1} \\c[1]{2}\\c[0].\\wtnp[30]", berrycount, itemname))
+        pbMessage(_INTL("You picked the {1} \\c[1]{2}\\c[0].\\wtnp[10]", berrycount, itemname))
       else
-        pbMessage(_INTL("You picked the \\c[1]{1}\\c[0].\\wtnp[30]", itemname))
+        pbMessage(_INTL("You picked the \\c[1]{1}\\c[0].\\wtnp[10]", itemname))
       end
       pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
                       $Trainer.name, itemname, pocket, PokemonBag.pocketNames()[pocket]))
@@ -529,10 +531,11 @@ def pbPickBerry(berry, qty = 1)
       return
     end
     $PokemonBag.pbStoreItem(berry, qty)
+    pbMEPlay("Berry Obtained")
     if qty > 1
-      pbMessage(_INTL("You picked the {1} \\c[1]{2}\\c[0].\\wtnp[30]", qty, itemname))
+      pbMessage(_INTL("You picked the {1} \\c[1]{2}\\c[0].\\wtnp[10]", qty, itemname))
     else
-      pbMessage(_INTL("You picked the \\c[1]{1}\\c[0].\\wtnp[30]", itemname))
+      pbMessage(_INTL("You picked the \\c[1]{1}\\c[0].\\wtnp[10]", itemname))
     end
     pocket = berry.pocket
     pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
