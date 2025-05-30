@@ -22,7 +22,7 @@ module Settings
   FUSION_ICON_SPRITE_OFFSET = 10
 
   ANIMATE_REFLECTIONS= false#GAME_ID == :IF_HOENN #true
-
+  USE_REFLECTIONS = false
   #Infinite fusion settings
   NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
