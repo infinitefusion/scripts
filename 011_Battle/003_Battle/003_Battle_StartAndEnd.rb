@@ -420,7 +420,7 @@ class PokeBattle_Battle
         end
         @opponent.each_with_index do |_t,i|
           @scene.pbShowOpponent(i)
-          msg = (@endSpeeches[i] && @endSpeeches[i]!="") ? @endSpeeches[i] : "..."
+          msg = (@endSpeeches[i] && @endSpeeches[i] !="") ? @endSpeeches[i] : "..."
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/,pbPlayer.name))
         end
       end

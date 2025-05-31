@@ -14,7 +14,7 @@ alias original_pbTrainerBattle pbTrainerBattle
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
-  result = original_pbTrainerBattle(trainerID, trainerName, *args)
+  result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)
   postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
   return result
 end
