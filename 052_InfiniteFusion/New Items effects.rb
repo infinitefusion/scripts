@@ -351,6 +351,26 @@ ItemHandlers::UseFromBag.add(:EMERGENCYWHISTLE, proc { |item|
   next 0
 })
 
+ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
+  if $game_switches[SWITCH_SPORES_REPEL]
+    if pbQuantity(:MUSHROOMSPORES) >= 2
+      if pbConfirmMessage("Condense 2 spore samples into a Repel?")
+        $PokemonBag.pbDeleteItem(:MUSHROOMSPORES,2)
+        pbReceiveItem(:REPEL)
+        next 1
+      else
+        next 1
+      end
+
+    else
+      pbMessage("Collect another sample to condense them into a Repel.")
+      next 1
+    end
+  end
+  next 0
+})
+
+
 ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   TOTAL_SPIRITS_NEEDED = 108
   nbSpirits = pbGet(VAR_ODDKEYSTONE_NB)

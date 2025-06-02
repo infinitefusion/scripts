@@ -1867,15 +1867,7 @@ def giveJigglypuffScribbles(possible_versions = [1,2,3,4])
 end
 
 
-def player_near_event?(map_id, event_id, radius)
-  return false if map_id != $game_map.map_id
-  event = $game_map.events[event_id]
-  return false if event.nil?
-  dx = $game_player.x - event.x
-  dy = $game_player.y - event.y
-  distance = Math.sqrt(dx * dx + dy * dy)
-  return distance <= radius
-end
+
 
 
 

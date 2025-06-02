@@ -50,10 +50,6 @@ class BattleIntroAnimation < PokeBattle_Animation
   def makeSlideSprite(spriteName,deltaMult,appearTime,origin=nil)
     # If deltaMult is positive, the sprite starts off to the right and moves
     # left (for sprites on the player's side and the background).
-    echoln "YABADOU"
-    echoln "#{spriteName}"
-    echoln @sprites[spriteName]
-
     return if !@sprites[spriteName]
     s = addSprite(@sprites[spriteName],origin)
     s.setDelta(0,(Graphics.width*deltaMult).floor,0)

@@ -909,7 +909,7 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom = t
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   text_color = item.is_key_item? ? "\\c[3]" : "\\c[1]"
-  if item == :LEFTOVERS
+  if item == :LEFTOVERS || item == :MUSHROOMSPORES
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine? # TM or HM
     # if $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] && $game_variables[VAR_CURRENT_GYM_TYPE] > -1
