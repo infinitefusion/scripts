@@ -124,6 +124,18 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               ]
     )
 
+    generated_entries_option_selected = $PokemonSystem.include_alt_sprites_in_random ? 1 : 0
+    options << EnumOption.new(_INTL("Sprite categories"), [_INTL("Normal"), _INTL("Anything")],
+                              proc { generated_entries_option_selected },
+                              proc { |value|
+                                $PokemonSystem.include_alt_sprites_in_random = value == 1
+                              },
+                              [
+                                "Auto-selected sprites follow standard Pokémon sprites rules.",
+                                "Auto-selected sprites can be anything, including references, sprites, memes, and joke sprites."
+                              ]
+    ) ? 1 : 0
+
     custom_eggs_option_selected = $PokemonSystem.use_custom_eggs ? 1 : 0
     options << EnumOption.new(_INTL("Custom Eggs"), [_INTL("On"), _INTL("Off")],
                               proc { custom_eggs_option_selected },

@@ -321,7 +321,6 @@ end
 
 def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  echoln spriteName
   if onlyMain
     alts_list = list_main_sprites_letters(spriteName)
     return nil if alts_list.empty?
@@ -345,6 +344,7 @@ def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
 end
 
 def list_main_sprites_letters(spriteName)
+  return list_all_sprites_letters(spriteName) if $PokemonSystem.include_alt_sprites_in_random
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
   main_sprites = []
   all_sprites.each do |key, value|

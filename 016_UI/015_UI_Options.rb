@@ -24,6 +24,7 @@ class PokemonSystem
   attr_accessor :type_icons
   attr_accessor :use_generated_dex_entries
   attr_accessor :use_custom_eggs
+  attr_accessor :include_alt_sprites_in_random
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
@@ -47,6 +48,7 @@ class PokemonSystem
     @type_icons = true
     @use_generated_dex_entries = true
     @use_custom_eggs = true
+    @include_alt_sprites_in_random = true
   end
 end
 
