@@ -205,7 +205,6 @@ def doNPCTrainerTrade(trainer)
     pbMessage(_INTL("The trainer is not ready to trade yet. Wait a little bit before you make your offer."))
     return trainer
   end
-  trainer.increase_friendship(20)
   return generateTrainerTradeOffer(trainer)
 end
 
@@ -246,6 +245,7 @@ def generateTrainerTradeOffer(trainer)
       updated_party.delete(offered_pokemon)
       updated_party << chosen_pokemon.clone
       trainer.previous_trade_timestamp= Time.now
+      trainer.increase_friendship(20)
       return trainer
     end
   end
