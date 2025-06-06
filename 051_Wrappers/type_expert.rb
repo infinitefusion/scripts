@@ -93,7 +93,7 @@ TYPE_EXPERT_REWARDS = {
   :NORMAL => [CLOTHES_NORMAL],
 }
 
-TOTAL_NB_TYPE_EXPERTS = 12
+TOTAL_NB_TYPE_EXPERTS = 14
 def type_expert_battle(type_id)
   type = GameData::Type.get(type_id)
   pbCallBub(2, @event_id)
