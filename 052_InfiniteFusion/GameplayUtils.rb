@@ -1867,6 +1867,14 @@ def giveJigglypuffScribbles(possible_versions = [1,2,3,4])
 end
 
 
+#type:
+# 0: default
+# 1: wood
+def sign(message,type=0)
+  signId= "sign_#{type}"
+  formatted_message = "\\sign[#{signId}]#{message}"
+  pbMessage(formatted_message)
+end
 
 
 

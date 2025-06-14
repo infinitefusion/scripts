@@ -129,8 +129,12 @@ QUESTS = {
 
     #Route 116
 define_quest("route116_glasses",:FIELD_QUEST,"Lost glasses", "A trainer has lost their glasses, help him find them!","Route 116","NPC_Hoenn_BugManiac")
-define_quest("petalburgwoods_spores",:FIELD_QUEST,"Spores harvest", "A scientist has tasked you to collect 4 spore samples from the large mushrooms that can be found imn the woods!","Petalburg Woods","NPC_Hoenn_Scientist")
 
+#Route 104 (South)
+define_quest("route104_rivalWeather",:FIELD_QUEST,"Weather Watch", "Help your rival with fieldwork and find a Pokémon that only appears when it's windy!","Route 104","rival")
+
+#Petalburg woods
+define_quest("petalburgwoods_spores",:FIELD_QUEST,"Spores harvest", "A scientist has tasked you to collect 4 spore samples from the large mushrooms that can be found in the woods!","Petalburg Woods","NPC_Hoenn_Scientist")
 
 
 

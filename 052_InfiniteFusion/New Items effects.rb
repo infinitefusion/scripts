@@ -297,6 +297,31 @@ def useSleepingBag()
   return 1
 end
 
+def useFieldSleepingBag()
+  currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
+  confirmed = Kernel.pbConfirmMessage("Sleep for an hour?")
+  if confirmed
+    oldDay = getDayOfTheWeek()
+    timeAdded = 0
+    timeAdded = 3600
+
+    pbSet(UnrealTime::EXTRA_SECONDS, currentSecondsValue + timeAdded)
+    pbSEPlay("Sleep", 100)
+    pbFadeOutIn {
+      Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
+    }
+    time = pbGetTimeNow.strftime("%I:%M %p")
+    newDay = getDayOfTheWeek()
+    if newDay != oldDay
+      Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, newDay.downcase.capitalize))
+    else
+      Kernel.pbMessage(_INTL("The current time is now {1}.", time))
+    end
+    return 1
+  end
+
+end
+
 ItemHandlers::UseFromBag.add(:SLEEPINGBAG, proc { |item|
   mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
   if !mapMetadata || !mapMetadata.outdoor_map
@@ -313,6 +338,24 @@ ItemHandlers::UseInField.add(:SLEEPINGBAG, proc { |item|
     next 0
   end
   next useSleepingBag()
+})
+
+ItemHandlers::UseFromBag.add(:FIELDSLEEPINGBAG, proc { |item|
+  mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if !mapMetadata || !mapMetadata.outdoor_map
+    Kernel.pbMessage(_INTL("Can't use that here..."))
+    next 0
+  end
+  next useFieldSleepingBag()
+})
+
+ItemHandlers::UseInField.add(:FIELDSLEEPINGBAG, proc { |item|
+  mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if !mapMetadata || !mapMetadata.outdoor_map
+    Kernel.pbMessage(_INTL("Can't use that here..."))
+    next 0
+  end
+  next useFieldSleepingBag()
 })
 
 ItemHandlers::UseFromBag.add(:ROCKETUNIFORM, proc { |item|
