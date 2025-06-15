@@ -308,7 +308,9 @@ def useFieldSleepingBag()
     pbSet(UnrealTime::EXTRA_SECONDS, currentSecondsValue + timeAdded)
     pbSEPlay("Sleep", 100)
     pbFadeOutIn {
+      $game_weather.update_weather
       Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
+      $scene.reset_map(false)
     }
     time = pbGetTimeNow.strftime("%I:%M %p")
     newDay = getDayOfTheWeek()
