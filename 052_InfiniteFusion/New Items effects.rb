@@ -1204,18 +1204,16 @@ ItemHandlers::UseFromBag.add(:EXPALLOFF, proc { |item|
   next 1 # Continue
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:BANANA, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 30, scene)
+ItemHandlers::BattleUseOnPokemon.add(:BANANA,proc { |item,pokemon,battler,choices,scene|
+  pbBattleHPItem(pokemon,battler,30,scene)
 })
+
 ItemHandlers::UseOnPokemon.add(:BANANA, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 30, scene)
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 50, scene)
-})
-ItemHandlers::UseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 50, scene)
+ItemHandlers::BattleUseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, battler, choices, scene|
+  pbBattleHPItem(pokemon, battler, 50, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
@@ -1320,16 +1318,16 @@ ItemHandlers::UseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 100, scene)
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 100, scene)
+ItemHandlers::BattleUseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, battler, choices, scene|
+  pbBattleHPItem(pokemon, battler, 100, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, scene|
   next pbHPItem(pokemon, 100, scene)
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 100, scene)
+ItemHandlers::BattleUseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, battler, choices, scene|
+  pbBattleHPItem(pokemon, battler, 100, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:RAGECANDYBAR, proc { |item, pokemon, scene|
@@ -2088,19 +2086,6 @@ ItemHandlers::UseFromBag.add(:EXPALLOFF, proc { |item|
   next 1 # Continue
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:BANANA, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 30, scene)
-})
-ItemHandlers::UseOnPokemon.add(:BANANA, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 30, scene)
-})
-
-ItemHandlers::BattleUseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 50, scene)
-})
-ItemHandlers::UseOnPokemon.add(:GOLDENBANANA, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 50, scene)
-})
 
 ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
   blacklisted_maps = [
