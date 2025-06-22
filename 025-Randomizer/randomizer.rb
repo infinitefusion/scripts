@@ -31,7 +31,7 @@ def get_pokemon_list(include_fusions = false)
   #Create array of all pokemon dex numbers
   pokeArray = []
 
-  monLimit = include_fusions ? PBSpecies.maxValue : NB_POKEMON - 1
+  monLimit = include_fusions ? PBSpecies.maxValue : NB_POKEMON
   for i in 1..monLimit
     pokeArray.push(i)
   end
