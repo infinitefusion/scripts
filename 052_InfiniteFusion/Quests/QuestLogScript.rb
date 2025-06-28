@@ -138,8 +138,11 @@ def pbCompletedQuest?(id)
 end
 
 def pbQuestlog
-  # pbMessage(_INTL("The quest log has been temporarily removed from the game and is planned to be added back in a future update"))
-  # return
+  if !$Trainer.quests_repaired
+    fix_quest_ids
+    $Trainer.quests_repaired=true
+  end
+
   Questlog.new
 end
 
@@ -159,10 +162,6 @@ end
 def pbSetQuest(id, completed)
   $Trainer.quests = [] if $Trainer.quests.class == NilClass
   for q in $Trainer.quests
-    # echoln id
-    # echoln q.id
-    # echoln q.completed
-    # echoln "----"
     q.completed = completed if q.id == id
   end
 end
@@ -767,147 +766,302 @@ def pbSynchronizeQuestLog()
   ########################
   ### Quest started    ###
   ########################
-  #Pewter
-  pbAddQuest(0) if $game_switches[926]
-  pbAddQuest(1) if $game_switches[927]
+  # Pewter
+  pbAddQuest("pewter_1") if $game_switches[926]
+  pbAddQuest("pewter_2") if $game_switches[927]
 
-  #Cerulean
-  pbAddQuest(3) if $game_switches[931]
-  pbAddQuest(4) if $game_switches[942] || $game_self_switches[[462, 7, "A"]]
+  # Cerulean
+  pbAddQuest("cerulean_1") if $game_switches[931]
+  pbAddQuest("cerulean_2") if $game_switches[942] || $game_self_switches[[462, 7, "A"]]
 
-  #Vermillion
-  pbAddQuest(10) if $game_self_switches[[464, 6, "A"]]
-  pbAddQuest(11) if $game_switches[945]
-  pbAddQuest(12) if $game_switches[929]
-  pbAddQuest(13) if $game_switches[175]
+  # Vermillion
+  pbAddQuest("vermillion_1") if $game_self_switches[[464, 6, "A"]]
+  pbAddQuest("vermillion_2") if $game_switches[945]
+  pbAddQuest("vermillion_3") if $game_switches[929]
+  pbAddQuest("vermillion_4") if $game_switches[175]
 
-  #Celadon
-  pbAddQuest(14) if $game_self_switches[[466, 10, "A"]]
-  pbAddQuest(15) if $game_switches[185]
-  pbAddQuest(16) if $game_switches[946]
-  pbAddQuest(17) if $game_switches[172]
+  # Celadon
+  pbAddQuest("celadon_1") if $game_self_switches[[466, 10, "A"]]
+  pbAddQuest("celadon_2") if $game_switches[185]
+  pbAddQuest("celadon_3") if $game_switches[946]
+  pbAddQuest("celadon_4") if $game_switches[172]
 
-  #Fuchsia
-  pbAddQuest(18) if $game_switches[941]
-  pbAddQuest(19) if $game_switches[943]
-  pbAddQuest(20) if $game_switches[949]
+  # Fuchsia
+  pbAddQuest("fuchsia_1") if $game_switches[941]
+  pbAddQuest("fuchsia_2") if $game_switches[943]
+  pbAddQuest("fuchsia_3") if $game_switches[949]
 
-  #Crimson
-  pbAddQuest(21) if $game_switches[940]
-  pbAddQuest(22) if $game_self_switches[[177, 9, "A"]]
-  pbAddQuest(23) if $game_self_switches[[177, 8, "A"]]
+  # Crimson
+  pbAddQuest("crimson_1") if $game_switches[940]
+  pbAddQuest("crimson_2") if $game_self_switches[[177, 9, "A"]]
+  pbAddQuest("crimson_3") if $game_self_switches[[177, 8, "A"]]
 
-  #Saffron
-  pbAddQuest(24) if $game_switches[932]
-  pbAddQuest(25) if $game_self_switches[[111, 19, "A"]]
-  pbAddQuest(26) if $game_switches[948]
-  pbAddQuest(27) if $game_switches[339]
-  pbAddQuest(28) if $game_switches[300]
+  # Saffron
+  pbAddQuest("saffron_1") if $game_switches[932]
+  pbAddQuest("saffron_2") if $game_self_switches[[111, 19, "A"]]
+  pbAddQuest("saffron_3") if $game_switches[948]
+  pbAddQuest("saffron_4") if $game_switches[339]
+  pbAddQuest("saffron_5") if $game_switches[300]
 
-  #Cinnabar
-  pbAddQuest(29) if $game_switches[904]
-  pbAddQuest(30) if $game_switches[903]
+  # Cinnabar
+  pbAddQuest("cinnabar_1") if $game_switches[904]
+  pbAddQuest("cinnabar_2") if $game_switches[903]
 
-  #Goldenrod
-  pbAddQuest(31) if $game_self_switches[[244, 5, "A"]]
-  pbAddQuest(32) if $game_self_switches[[244, 8, "A"]]
+  # Goldenrod
+  pbAddQuest("goldenrod_1") if $game_self_switches[[244, 5, "A"]]
+  pbAddQuest("goldenrod_2") if $game_self_switches[[244, 8, "A"]]
 
-  #Violet
-  pbSetQuest(33, true) if $game_switches[908]
-  pbSetQuest(34, true) if $game_switches[410]
+  # Violet
+  pbSetQuest("violet_1", true) if $game_switches[908]
+  pbSetQuest("violet_2", true) if $game_switches[410]
 
-  #Blackthorn
-  pbSetQuest(35, true) if $game_self_switches[[332, 10, "A"]]
-  pbSetQuest(36, true) if $game_self_switches[[332, 8, "A"]]
-  pbSetQuest(37, true) if $game_self_switches[[332, 5, "B"]]
+  # Blackthorn
+  pbSetQuest("blackthorn_1", true) if $game_self_switches[[332, 10, "A"]]
+  pbSetQuest("blackthorn_2", true) if $game_self_switches[[332, 8, "A"]]
+  pbSetQuest("blackthorn_3", true) if $game_self_switches[[332, 5, "B"]]
 
-  #Ecruteak
-  pbSetQuest(38, true) if $game_self_switches[[576, 9, "A"]]
-  pbSetQuest(39, true) if $game_self_switches[[576, 8, "A"]]
+  # Ecruteak
+  pbSetQuest("ecruteak_1", true) if $game_self_switches[[576, 9, "A"]]
+  pbSetQuest("ecruteak_2", true) if $game_self_switches[[576, 8, "A"]]
 
-  #Kin
-  pbSetQuest(40, true) if $game_switches[526]
-  pbSetQuest(41, true) if $game_self_switches[[565, 10, "A"]]
+  # Kin
+  pbSetQuest("kin_1", true) if $game_switches[526]
+  pbSetQuest("kin_2", true) if $game_self_switches[[565, 10, "A"]]
 
   ########################
   ### Quest finished    ###
   ########################
-  #Pewter
-  pbSetQuest(0, true) if $game_self_switches[[460, 5, "A"]]
-  pbSetQuest(1, true) if $game_self_switches[[460, 7, "A"]] || $game_self_switches[[460, 7, "B"]]
+  # Pewter
+  pbSetQuest("pewter_1", true) if $game_self_switches[[460, 5, "A"]]
+  pbSetQuest("pewter_2", true) if $game_self_switches[[460, 7, "A"]] || $game_self_switches[[460, 7, "B"]]
   if $game_self_switches[[460, 9, "A"]]
-    pbAddQuest(2)
-    pbSetQuest(2, true)
+    pbAddQuest("pewter_3")
+    pbSetQuest("pewter_3", true)
   end
 
-  #Cerulean
+  # Cerulean
   if $game_self_switches[[462, 8, "A"]]
-    pbAddQuest(5)
-    pbSetQuest(5, true)
+    pbAddQuest("cerulean_3")
+    pbSetQuest("cerulean_3", true)
   end
-  pbSetQuest(3, true) if $game_switches[931] && !$game_switches[939]
-  pbSetQuest(4, true) if $game_self_switches[[462, 7, "A"]]
+  pbSetQuest("cerulean_1", true) if $game_switches[931] && !$game_switches[939]
+  pbSetQuest("cerulean_2", true) if $game_self_switches[[462, 7, "A"]]
 
-  #Vermillion
-  pbSetQuest(13, true) if $game_self_switches[[19, 19, "B"]]
+  # Vermillion
+  pbSetQuest("vermillion_4", true) if $game_self_switches[[19, 19, "B"]]
   if $game_self_switches[[464, 8, "A"]]
-    pbAddQuest(9)
-    pbSetQuest(9, true)
+    pbAddQuest("vermillion_0")
+    pbSetQuest("vermillion_0", true)
   end
-  pbSetQuest(10, true) if $game_self_switches[[464, 6, "B"]]
-  pbSetQuest(11, true) if $game_variables[145] >= 1
-  pbSetQuest(12, true) if $game_self_switches[[464, 5, "A"]]
+  pbSetQuest("vermillion_1", true) if $game_self_switches[[464, 6, "B"]]
+  pbSetQuest("vermillion_2", true) if $game_variables[145] >= 1
+  pbSetQuest("vermillion_3", true) if $game_self_switches[[464, 5, "A"]]
 
-  #Celadon
-  pbSetQuest(14, true) if $game_self_switches[[466, 10, "A"]]
-  pbSetQuest(15, true) if $game_switches[947]
-  pbSetQuest(16, true) if $game_self_switches[[466, 9, "A"]]
-  pbSetQuest(17, true) if $game_self_switches[[509, 5, "D"]]
+  # Celadon
+  pbSetQuest("celadon_1", true) if $game_self_switches[[466, 10, "A"]]
+  pbSetQuest("celadon_2", true) if $game_switches[947]
+  pbSetQuest("celadon_3", true) if $game_self_switches[[466, 9, "A"]]
+  pbSetQuest("celadon_4", true) if $game_self_switches[[509, 5, "D"]]
 
-  #Fuchsia
-  pbSetQuest(18, true) if $game_self_switches[[478, 6, "A"]]
-  pbSetQuest(19, true) if $game_self_switches[[478, 8, "A"]]
-  pbSetQuest(20, true) if $game_switches[922]
+  # Fuchsia
+  pbSetQuest("fuchsia_1", true) if $game_self_switches[[478, 6, "A"]]
+  pbSetQuest("fuchsia_2", true) if $game_self_switches[[478, 8, "A"]]
+  pbSetQuest("fuchsia_3", true) if $game_switches[922]
 
-  #Crimson
-  pbSetQuest(21, true) if $game_self_switches[[177, 5, "A"]]
-  pbSetQuest(22, true) if $game_self_switches[[177, 9, "A"]]
-  pbSetQuest(23, true) if $game_self_switches[[177, 8, "A"]]
+  # Crimson
+  pbSetQuest("crimson_1", true) if $game_self_switches[[177, 5, "A"]]
+  pbSetQuest("crimson_2", true) if $game_self_switches[[177, 9, "A"]]
+  pbSetQuest("crimson_3", true) if $game_self_switches[[177, 8, "A"]]
 
-  #Saffron
-  pbSetQuest(24, true) if $game_switches[938]
-  pbSetQuest(25, true) if $game_self_switches[[111, 19, "A"]]
-  pbSetQuest(26, true) if $game_self_switches[[111, 9, "A"]]
-  pbSetQuest(27, true) if $game_switches[338]
-  pbSetQuest(28, true) if $game_self_switches[[111, 18, "A"]]
+  # Saffron
+  pbSetQuest("saffron_1", true) if $game_switches[938]
+  pbSetQuest("saffron_2", true) if $game_self_switches[[111, 19, "A"]]
+  pbSetQuest("saffron_3", true) if $game_self_switches[[111, 9, "A"]]
+  pbSetQuest("saffron_4", true) if $game_switches[338]
+  pbSetQuest("saffron_5", true) if $game_self_switches[[111, 18, "A"]]
 
-  #Cinnabar
-  pbSetQuest(29, true) if $game_self_switches[[136, 5, "A"]]
-  pbSetQuest(30, true) if $game_self_switches[[136, 8, "A"]]
+  # Cinnabar
+  pbSetQuest("cinnabar_1", true) if $game_self_switches[[136, 5, "A"]]
+  pbSetQuest("cinnabar_2", true) if $game_self_switches[[136, 8, "A"]]
 
-  #Goldenrod
-  pbSetQuest(31, true) if $game_self_switches[[244, 5, "A"]]
-  pbSetQuest(32, true) if $game_self_switches[[244, 8, "B"]]
+  # Goldenrod
+  pbSetQuest("goldenrod_1", true) if $game_self_switches[[244, 5, "A"]]
+  pbSetQuest("goldenrod_2", true) if $game_self_switches[[244, 8, "B"]]
 
-  #Violet
-  pbSetQuest(33, true) if $game_self_switches[[274, 5, "A"]]
-  pbSetQuest(34, true) if $game_self_switches[[274, 8, "A"]] || $game_self_switches[[274, 8, "B"]]
+  # Violet
+  pbSetQuest("violet_1", true) if $game_self_switches[[274, 5, "A"]]
+  pbSetQuest("violet_2", true) if $game_self_switches[[274, 8, "A"]] || $game_self_switches[[274, 8, "B"]]
 
-  #Blackthorn
-  pbSetQuest(35, true) if $game_self_switches[[332, 10, "A"]]
-  pbSetQuest(36, true) if $game_switches[337]
-  pbSetQuest(37, true) if $game_self_switches[[332, 5, "A"]]
+  # Blackthorn
+  pbSetQuest("blackthorn_1", true) if $game_self_switches[[332, 10, "A"]]
+  pbSetQuest("blackthorn_2", true) if $game_switches[337]
+  pbSetQuest("blackthorn_3", true) if $game_self_switches[[332, 5, "A"]]
 
-  #Ecruteak
-  pbSetQuest(38, true) if $game_self_switches[[576, 9, "A"]]
-  pbSetQuest(39, true) if $game_self_switches[[576, 8, "A"]]
+  # Ecruteak
+  pbSetQuest("ecruteak_1", true) if $game_self_switches[[576, 9, "A"]]
+  pbSetQuest("ecruteak_2", true) if $game_self_switches[[576, 8, "A"]]
 
-  #Kin
-  pbSetQuest(40, true) if $game_self_switches[[565, 9, "A"]]
-  pbSetQuest(41, true) if $game_self_switches[[565, 10, "A"]]
+  # Kin
+  pbSetQuest("kin_1", true) if $game_self_switches[[565, 9, "A"]]
+  pbSetQuest("kin_2", true) if $game_self_switches[[565, 10, "A"]]
+
+  pbSetQuest("pewter_field_1", true) if $game_self_switches[[380, 62, "C"]]
+  pbSetQuest("pewter_field_2", true) if $game_switches[1073]
+  pbSetQuest("pewter_field_3", true) if $game_self_switches[[381, 9, "A"]]
+
+  pbSetQuest("cerulean_field_1", true) if $game_self_switches[[8, 19, "A"]]
+  pbSetQuest("cerulean_field_2", true) if $game_self_switches[[8, 19, "C"]]
+  pbSetQuest("cerulean_field_3", true) if $game_self_switches[[8, 19, "D"]]
+
+  pbSetQuest("vermillion_field_1", true) if $game_self_switches[[19, 19, "B"]] || $game_self_switches[[19, 19, "C"]]
+  pbSetQuest("vermillion_field_2", true) if $game_self_switches[[29, 12, "C"]]
+
+  pbSetQuest("celadon_field_1", true) if $game_self_switches[[509, 5, "D"]]
+
+  pbSetQuest("fuchsia_4", true) if $game_self_switches[[478, 12, "B"]]
+
+  pbSetQuest("crimson_4", true) if $game_self_switches[[177, 11, "A"]]
+
+  pbSetQuest("saffron_field_1", true) if $game_switches[938]
+
+  pbSetQuest("cinnabar_3", true) if $game_self_switches[[136, 9, "B"]]
+
+  pbSetQuest("saffron_field_1", true) if $game_switches[938]
+
+  pbSetQuest("kin_field_1", true) if $game_self_switches[[563, 25, "B"]]
+
+  pbSetQuest("legendary_deoxys_1", true) if $game_switches[839]
+  pbSetQuest("legendary_deoxys_2", true) if $game_self_switches[[607, 2, "C"]]
+
+  pbSetQuest("legendary_necrozma_1", true) if $game_switches[710]
+  pbSetQuest("legendary_necrozma_2", true) if $game_switches[711]
+  pbSetQuest("legendary_necrozma_3", true) if $game_switches[719]
+  pbSetQuest("legendary_necrozma_4", true) if $game_switches[716]
+  pbSetQuest("legendary_necrozma_5", true) if $game_switches[718]
+  pbSetQuest("legendary_necrozma_6", true) if $game_self_switches[[42, 43, "A"]]
+  pbSetQuest("legendary_necrozma_7", true) if $game_switches[760] || $game_switches[761]
+
+  pbSetQuest("legendary_meloetta_1", true) if $game_switches[1011]
+  pbSetQuest("legendary_meloetta_2", true) if $game_switches[1014]
+  pbSetQuest("legendary_meloetta_3", true) if $game_switches[1015]
+  pbSetQuest("legendary_meloetta_4", true) if $game_switches[750]
+
+
+  pbSetQuest("pokemart_johto", true) if $game_switches[SWITCH_JOHTO_HAIR_COLLECTION]
+  pbSetQuest("pokemart_hoenn", true) if $game_switches[SWITCH_HOENN_HAIR_COLLECTION]
+  pbSetQuest("pokemart_sinnoh", true) if $game_switches[SWITCH_SINNOH_HAIR_COLLECTION]
+  pbSetQuest("pokemart_unova", true) if $game_switches[SWITCH_UNOVA_HAIR_COLLECTION]
+  pbSetQuest("pokemart_kalos", true) if $game_switches[SWITCH_KALOS_HAIR_COLLECTION]
+  pbSetQuest("pokemart_alola", true) if $game_switches[SWITCH_ALOLA_HAIR_COLLECTION]
 
 end
 
+
+
+def fix_quest_ids
+  $Trainer.quests.each do |quest|
+    new_id = get_new_quest_id(quest.id)
+    if new_id != quest.id
+      echoln "BEFORE FIX"
+      echoln "ID: #{quest.id} "
+      echoln "Name: #{quest.name}"
+      echoln "Completed: #{quest.completed}"
+      echoln ""
+
+      quest.id = new_id
+
+
+      echoln "AFTER FIX"
+      echoln "ID: #{quest.id} "
+      echoln "Name: #{quest.name}"
+      echoln "Completed: #{quest.completed}"
+      echoln ""
+    end
+  end
+  pbSynchronizeQuestLog
+end
+
+
+def get_new_quest_id(old_quest_id)
+  quest_id_map = {
+      3 => "cerulean_1",
+      4 => "vermillion_2",
+      5 => "pokemart_johto",
+
+      6 => "cerulean_field_1",
+      7 => "cerulean_field_2",
+      8 => "cerulean_field_3",
+
+      9 => "vermillion_1",
+      12 => "vermillion_3",
+      13 => "vermillion_field_1",
+
+      14 => "celadon_1",
+      15 => "celadon_2",
+      16 => "celadon_3",
+      17 => "celadon_field_1",
+
+      18 => "fuchsia_3",
+      19 => "fuchsia_2",
+      20 => "fuchsia_1",
+
+      21 => "crimson_1",
+      22 => "crimson_2",
+      23 => "crimson_3",
+
+      24 => "saffron_field_1",
+      25 => "pokemart_sinnoh",
+      26 => "saffron_1",
+      27 => "saffron_2",
+      28 => "saffron_3",
+
+      29 => "cinnabar_1",
+      30 => "cinnabar_2",
+
+      31 => "pokemart_hoenn",
+
+      32 => "goldenrod_1",
+
+      33 => "violet_1",
+      34 => "violet_2",
+
+      35 => "blackthorn_1",
+      36 => "blackthorn_2",
+      37 => "blackthorn_3",
+
+      38 => "pokemart_kalos",
+
+      39 => "ecruteak_1",
+      40 => "kin_1",
+      41 => "pokemart_unova",
+      42 => "cinnabar_3",
+      43 => "kin_2",
+      44 => "bond_1",
+      45 => "bond_2",
+      46 => "kin_3",
+      47 => "tower_1",
+      48 => "lavender_darkness_1",
+      49 => "celadon_darkness_2",
+      50 => "fuchsia_darkness_3",
+      51 => "fuchsia_darkness_4",
+      52 => "safari_darkness_5",
+      53 => "pallet_darkness_6",
+      54 => "pewter_field_1",
+      55 => "goldenrod_2",
+      56 => "fuchsia_4",
+      57 => "saffron_band_1",
+      58 => "saffron_band_2",
+      59 => "saffron_band_3",
+      60 => "saffron_band_4",
+      61 => "lavender_lunar",
+      62 => "pokemart_alola",
+      63 => "pewter_field_2",
+      64 => "vermillion_field_2",
+      65 => "goldenrod_police_1",
+      66 => "pinkan_police"
+  }
+  return quest_id_map[old_quest_id] || old_quest_id
+end
 
 
 def showQuestStatistics(eventId,includeRocketQuests=false)
