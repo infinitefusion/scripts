@@ -56,6 +56,7 @@ class StorageTransferBox < PokemonBox
 
 end
 
-def enableTransferBox()
+#Never add more than 1, it would just be a copy
+def addPokemonStorageTransferBox()
   $PokemonStorage.boxes << StorageTransferBox.new
 end
