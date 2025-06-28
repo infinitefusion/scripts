@@ -576,7 +576,7 @@ module Settings
     "speech hgss 18",
     "speech hgss 19",
     "speech hgss 20",
-    "speech pl 18"
+    "speech pl 18",
   ]
 
   # Available menu frames. These are graphic files in "Graphics/Windowskins/".

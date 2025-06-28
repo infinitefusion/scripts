@@ -942,6 +942,10 @@ Events.onAction += proc { |_sender, _e|
       pbWildBattle(:TRUBBISH, 10)
       $PokemonGlobal.stepcount += 1
     end
+  else
+    if Settings::GAME_ID == :IF_HOENN
+      pbMessage(_INTL("There's nothing but trash..."))
+    end
   end
 }
 

@@ -92,7 +92,8 @@ class TilemapRenderer
     },
 
     7 => {  #Sea Route
-
+            #water rocks
+            1173 => "water_rock_medium[15]",
             #water cliffs
             1363 => "water_rock10", 1364 => "water_rock11",
             1389 => "water_rock01",   1391 => "water_rock09",
