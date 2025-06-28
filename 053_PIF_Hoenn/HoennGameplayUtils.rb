@@ -1,8 +1,11 @@
 # available channels
+# :RANDOM
 # :NEWS
 # :WEATHER
-#
-def showTVText(channel = :NEWS)
+
+TV_CHANNELS = [:NEWS]
+def showTVText(channel = :RANDOM)
+  channel = TV_CHANNELS.sample if channel == :RANDOM
   case channel
   when :NEWS
     pbMessage(getTVNewsCaption())
