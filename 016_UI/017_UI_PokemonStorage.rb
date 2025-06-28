@@ -2118,21 +2118,28 @@ class PokemonStorageScreen
   end
 
   def pbBoxCommands
-    commands = [
-      _INTL("Jump"),
-      _INTL("Wallpaper"),
-      _INTL("Name"),
-      _INTL("Cancel"),
-    ]
+    cmd_jump= _INTL("Jump")
+    cmd_wallpaper = _INTL("Wallpaper")
+    cmd_name = _INTL("Name")
+    cmd_info = _INTL("Info")
+    cmd_cancel = _INTL("Cancel")
+
+    commands = []
+    commands << cmd_jump
+    commands << cmd_wallpaper
+    commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_info if @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_cancel
+
     command = pbShowCommands(
       _INTL("What do you want to do?"), commands)
-    case command
-    when 0
+    case commands[command]
+    when cmd_jump
       destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
       if destbox >= 0
         @scene.pbJumpToBox(destbox)
       end
-    when 1
+    when cmd_wallpaper
       papers = @storage.availableWallpapers
       index = 0
       for i in 0...papers[1].length
@@ -2144,8 +2151,11 @@ class PokemonStorageScreen
       if wpaper >= 0
         @scene.pbChangeBackground(papers[1][wpaper])
       end
-    when 2
+    when cmd_name
       @scene.pbBoxName(_INTL("Box name?"), 0, 12)
+    when cmd_info
+      pbMessage("This is the Transfer Box. It's used to transfer Pokémon between savefiles!")
+      pbMessage("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2.")
     end
   end
 

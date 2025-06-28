@@ -1,0 +1,61 @@
+
+class PokemonStorage
+end
+
+
+class StorageTransferBox < PokemonBox
+  TRANSFER_BOX_NAME = "Transfer Box"
+  def initialize()
+    super(TRANSFER_BOX_NAME,PokemonBox::BOX_SIZE)
+    @pokemon = []
+    @background = 16
+    for i in 0...PokemonBox::BOX_SIZE
+      @pokemon[i] = nil
+    end
+    loadTransferBoxPokemon
+  end
+
+
+  def loadTransferBoxPokemon
+    path = transferBoxSavePath
+    if File.exist?(path)
+      File.open(path, "rb") do |f|
+        @pokemon = Marshal.load(f)
+      end
+    end
+  rescue => e
+    echoln "Failed to load transfer box: #{e}"
+    @pokemon = Array.new(PokemonBox::BOX_SIZE, nil)
+  end
+
+  def []=(i,value)
+    @pokemon[i] = value
+    saveTransferBox()
+  end
+
+  def saveTransferBox
+    path = transferBoxSavePath
+    dir = File.dirname(path)
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+    File.open(path, "wb") do |f|
+      Marshal.dump(@pokemon, f)
+    end
+    echoln "Transfer box saved to #{path}"
+  rescue => e
+    echoln "Failed to save transfer box: #{e}"
+  end
+
+
+  private
+
+  def transferBoxSavePath
+    save_dir = System.data_directory  # e.g., %appdata%/infinitefusion
+    parent_dir = File.expand_path("..", save_dir)
+    File.join(parent_dir, "infinitefusion_common", "transfer_pokemon_storage")
+  end
+
+end
+
+def enableTransferBox()
+  $PokemonStorage.boxes << StorageTransferBox.new
+end

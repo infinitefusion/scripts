@@ -54,7 +54,8 @@ end
 
 
 class PokemonStorage
-  attr_reader   :boxes
+  attr_accessor   :boxes
+  attr_accessor   :transfer_box
   attr_accessor :currentBox
   attr_writer   :unlockedWallpapers
   BASICWALLPAPERQTY = 16
@@ -65,6 +66,7 @@ class PokemonStorage
       @boxes[i] = PokemonBox.new(_INTL("Box {1}",i+1),maxPokemon)
       @boxes[i].background = i % BASICWALLPAPERQTY
     end
+    @boxes
     @currentBox = 0
     @boxmode = -1
     @unlockedWallpapers = []
@@ -99,10 +101,11 @@ class PokemonStorage
   end
 
   def isAvailableWallpaper?(i)
-    @unlockedWallpapers = [] if !@unlockedWallpapers
-    return true if i<BASICWALLPAPERQTY
-    return true if @unlockedWallpapers[i]
-    return false
+    return true
+    # @unlockedWallpapers = [] if !@unlockedWallpapers
+    # return true if i<BASICWALLPAPERQTY
+    # return true if @unlockedWallpapers[i]
+    # return false
   end
 
   def availableWallpapers
@@ -133,7 +136,7 @@ class PokemonStorage
   end
 
   def maxPokemon(box)
-    return 0 if box >= self.maxBoxes
+    return 0 if box >= self.maxBoxes && !self[box].is_a?(StorageTransferBox)
     return (box < 0) ? Settings::MAX_PARTY_SIZE : self[box].length
   end
 
