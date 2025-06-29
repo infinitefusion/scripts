@@ -230,6 +230,11 @@ class PokemonStorage
   end
 
   def pbStoreCaught(pkmn)
+
+    if self[@currentBox].is_a?(StorageTransferBox)
+      @currentBox = 0
+    end
+
     if @currentBox>=0
       pkmn.time_form_set = nil
       #pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)

@@ -1621,6 +1621,7 @@ class PokemonStorageScreen
 
   def pbStartScreen(command)
     @heldpkmn = nil
+    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
     if command == 0 # Organise
       @scene.pbStartBox(self, command)
       loop do
@@ -1678,7 +1679,7 @@ class PokemonStorageScreen
                 commands[cmdMove = commands.length] = _INTL("Move")
               end
               commands[cmdSummary = commands.length] = _INTL("Summary")
-              if pokemon != nil
+              if pokemon != nil && !isTransferBox
                 if dexNum(pokemon.species) > NB_POKEMON
                   commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
                   commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0 || $PokemonBag.pbQuantity(:INFINITEREVERSERS) > 0
@@ -1686,11 +1687,11 @@ class PokemonStorageScreen
                   commands[cmdFuse = commands.length] = _INTL("Fuse") if !@heldpkmn
                 end
               end
-              commands[cmdNickname = commands.length] = _INTL("Nickname") if !@heldpkmn
+              commands[cmdNickname = commands.length] = _INTL("Nickname") if !@heldpkmn && !isTransferBox
               commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
-              commands[cmdItem = commands.length] = _INTL("Item")
+              commands[cmdItem = commands.length] = _INTL("Item") if !isTransferBox
 
-              commands[cmdRelease = commands.length] = _INTL("Release")
+              commands[cmdRelease = commands.length] = _INTL("Release")  if !isTransferBox
               commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
               commands[cmdCancel = commands.length] = _INTL("Cancel")
               command = pbShowCommands(helptext, commands)
@@ -1899,6 +1900,13 @@ class PokemonStorageScreen
       pbDisplay(_INTL("Your party's full!"))
       return false
     end
+
+    if @storage[box].is_a?(StorageTransferBox)
+      unless verifyTransferBoxAutosave
+        return
+      end
+    end
+
     @scene.pbWithdraw(selected, heldpoke, @storage.party.length)
     if heldpoke
       @storage.pbMoveCaughtToParty(heldpoke)
@@ -1955,6 +1963,13 @@ class PokemonStorageScreen
   def pbHold(selected)
     box = selected[0]
     index = selected[1]
+
+    if @storage[box].is_a?(StorageTransferBox)
+      unless verifyTransferBoxAutosave
+        return
+      end
+    end
+
     if box == -1 && pbAble?(@storage[box, index]) && pbAbleCount <= 1
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
@@ -1971,6 +1986,10 @@ class PokemonStorageScreen
     index = selected[1]
 
     if @storage[box].is_a?(StorageTransferBox)
+      if @heldpkmn.owner.name  == "RENTAL"
+        pbMessage("This Pokémon cannot be transferred.")
+        return
+      end
       unless verifyTransferBoxAutosave
         return
       end
@@ -2006,9 +2025,21 @@ class PokemonStorageScreen
   def pbSwap(selected)
     box = selected[0]
     index = selected[1]
+
     if !@storage[box, index]
       raise _INTL("Position {1},{2} is empty...", box, index)
     end
+
+    if @storage[box].is_a?(StorageTransferBox)
+      if @heldpkmn.owner.name  == "RENTAL"
+        pbMessage("This Pokémon cannot be transferred.")
+        return
+      end
+      unless verifyTransferBoxAutosave
+        return
+      end
+    end
+
     if box == -1 && pbAble?(@storage[box, index]) && pbAbleCount <= 1 && !pbAble?(@heldpkmn)
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))

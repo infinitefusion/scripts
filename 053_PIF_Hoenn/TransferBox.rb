@@ -31,6 +31,7 @@ class StorageTransferBox < PokemonBox
   def []=(i,value)
     @pokemon[i] = value
     saveTransferBox()
+    Game.save()
   end
 
   def saveTransferBox
@@ -64,7 +65,9 @@ end
 
 def verifyTransferBoxAutosave()
   if !$game_temp.transfer_box_autosave
-    return pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
+    confirmed = pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
+    $game_temp.transfer_box_autosave=true if confirmed
+    return confirmed
   end
   return true
 end
