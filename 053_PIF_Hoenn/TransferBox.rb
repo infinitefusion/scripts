@@ -29,12 +29,6 @@ class StorageTransferBox < PokemonBox
   end
 
   def []=(i,value)
-    if !$game_temp.transfer_box_autosave
-      if !pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
-        return
-      end
-    end
-
     @pokemon[i] = value
     saveTransferBox()
   end
@@ -66,4 +60,11 @@ end
 #Never add more than 1, it would just be a copy
 def addPokemonStorageTransferBox()
   $PokemonStorage.boxes << StorageTransferBox.new
+end
+
+def verifyTransferBoxAutosave()
+  if !$game_temp.transfer_box_autosave
+    return pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
+  end
+  return true
 end

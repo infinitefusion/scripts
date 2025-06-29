@@ -1969,6 +1969,13 @@ class PokemonStorageScreen
   def pbPlace(selected)
     box = selected[0]
     index = selected[1]
+
+    if @storage[box].is_a?(StorageTransferBox)
+      unless verifyTransferBoxAutosave
+        return
+      end
+    end
+
     if @storage[box, index]
       pbDisplay("Can't place that there.")
       return
