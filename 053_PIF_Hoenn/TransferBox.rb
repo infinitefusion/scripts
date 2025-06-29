@@ -29,6 +29,12 @@ class StorageTransferBox < PokemonBox
   end
 
   def []=(i,value)
+    if !$game_temp.transfer_box_autosave
+      if !pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
+        return
+      end
+    end
+
     @pokemon[i] = value
     saveTransferBox()
   end
@@ -41,6 +47,7 @@ class StorageTransferBox < PokemonBox
       Marshal.dump(@pokemon, f)
     end
     echoln "Transfer box saved to #{path}"
+    $game_temp.must_save_now=true
   rescue => e
     echoln "Failed to save transfer box: #{e}"
   end

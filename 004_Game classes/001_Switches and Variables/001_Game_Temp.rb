@@ -30,6 +30,7 @@ class Game_Temp
   attr_accessor :loading_screen
   attr_accessor :custom_sprites_list
   attr_accessor :base_sprites_list
+  attr_accessor :transfer_box_autosave
 
   #-----------------------------------------------------------------------------
   # * Object Initialization
