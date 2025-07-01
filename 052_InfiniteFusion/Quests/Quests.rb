@@ -127,6 +127,9 @@ QUESTS = {
 # HOENN QUESTS   ##
 # ################
 
+#route 102
+define_quest("route_102_rematch",:FIELD_QUEST,"Trainer Rematches", "A lass you battled wants to switch up her team and rematch you!","Route 102","NPC_Hoenn_Lass")
+
     #Route 116
 define_quest("route116_glasses",:FIELD_QUEST,"Lost glasses", "A trainer has lost their glasses, help him find them!","Route 116","NPC_Hoenn_BugManiac")
 

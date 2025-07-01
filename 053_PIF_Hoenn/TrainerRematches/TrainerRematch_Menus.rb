@@ -32,7 +32,7 @@ def doPostBattleAction(actionType)
   return if !trainer
   case actionType
   when :BATTLE
-    trainer = doNPCTrainerRematch(trainer)
+    trainer,player_won = doNPCTrainerRematch(trainer)
   when :TRADE
     trainer = doNPCTrainerTrade(trainer)
   when :PARTNER
@@ -116,3 +116,20 @@ def postBattleActionsMenu()
   end
 end
 
+def forceRandomRematchEventOnTrainer()
+  event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
+  trainer = getRebattledTrainer(event.id,map_id)
+  while !trainer.has_pending_action
+    trainer = applyTrainerRandomEvents(trainer)
+  end
+  updateRebattledTrainer(event.id,map_id,trainer)
+end
+
+def forceTrainerFriendshipOnTrainer(friendship=0)
+  event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
+  trainer = getRebattledTrainer(event.id,map_id)
+  trainer.friendship = friendship
+  updateRebattledTrainer(event.id,map_id,trainer)
+end

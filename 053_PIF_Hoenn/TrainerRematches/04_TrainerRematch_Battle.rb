@@ -59,16 +59,18 @@ def generateTrainerRematch(trainer)
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
 
   loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
+  player_won = false
   if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
     updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
     updated_trainer = healRebattledTrainerPokemon(updated_trainer)
+    player_won=true
   else
     updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
   end
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
   trainer.increase_friendship(5)
-  return updated_trainer
+  return updated_trainer, player_won
 end
 
 def showPrerematchDialog()

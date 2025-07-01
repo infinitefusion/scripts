@@ -42,6 +42,7 @@ def applyTrainerRandomEvents(trainer)
 
 
   return trainer if selected_event.nil?
+  original_team = trainer.currentTeam.clone
 
   case selected_event
   when :CATCH
@@ -53,7 +54,12 @@ def applyTrainerRandomEvents(trainer)
   when :REVERSE
     trainer = reverse_random_team_pokemon(trainer)
   end
-  trainer.set_pending_action(true)
+  new_team = trainer.currentTeam
+
+  echoln original_team
+  echoln new_team
+  team_changed = original_team != new_team
+  trainer.set_pending_action(team_changed)
   printNPCTrainerCurrentTeam(trainer)
   return trainer
 end
