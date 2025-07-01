@@ -116,12 +116,13 @@ def postBattleActionsMenu()
   end
 end
 
-def forceRandomRematchEventOnTrainer()
+#leave event_type empty for random
+def forceRandomRematchEventOnTrainer(event_type=nil)
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
   while !trainer.has_pending_action
-    trainer = applyTrainerRandomEvents(trainer)
+    trainer = applyTrainerRandomEvents(trainer,event_type)
   end
   updateRebattledTrainer(event.id,map_id,trainer)
 end
@@ -131,5 +132,6 @@ def forceTrainerFriendshipOnTrainer(friendship=0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
   trainer.friendship = friendship
+  trainer.increase_friendship(0)
   updateRebattledTrainer(event.id,map_id,trainer)
 end
