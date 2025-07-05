@@ -70,7 +70,10 @@ module PokeBattle_BattleCommon
       # Record a Shadow Pokémon's species as having been caught
       pbPlayer.pokedex.set_shadow_pokemon_owned(pkmn.species) if pkmn.shadowPokemon?
       # Store caught Pokémon
-      promptCaughtPokemonAction(pkmn)
+
+      gave_away_pokemon = promptGiveToPartner(pkmn) if isPartneredWithTrainer()
+
+      promptCaughtPokemonAction(pkmn) if !gave_away_pokemon
       if $game_switches[AUTOSAVE_CATCH_SWITCH]
         Kernel.tryAutosave()
       end

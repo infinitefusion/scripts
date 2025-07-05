@@ -399,6 +399,14 @@ def getSpeciesRealName(species_symbol)
   return species.real_name
 end
 
+def playerHasFusedPokemonInTeam()
+  $Trainer.party.each do |pokemon|
+    if pokemon.isFusion?
+      return true
+    end
+  end
+  return false
+end
 
 def get_triple_fusion_components(species_id)
   dex_num = GameData::Species.get(species_id).id_number
