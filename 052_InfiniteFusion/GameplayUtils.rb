@@ -1613,6 +1613,10 @@ def turnEventTowardsEvent(turning, turnedTowards)
 end
 
 def turnPlayerTowardsEvent(event)
+  if event.is_a?(Integer)
+    event = $game_map.events[event]
+  end
+
   event_x = event.x
   event_y = event.y
   if $game_player.x < event_x

@@ -217,7 +217,7 @@ def generateTrainerTradeOffer(trainer)
 
   wanted_type_name = GameData::Type.get(wanted_type).real_name
   trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
-  pbMessage(_INTL("#{trainerClassName} #{trainer.trainerName} is looking for \\C[1]#{wanted_type_name}-type Pokémon\\C[0]. Which Pokémon do you want to trade?."),)
+  pbMessage(_INTL("#{trainerClassName} #{trainer.trainerName} is looking for \\C[1]#{wanted_type_name}-type Pokémon\\C[0]. Which Pokémon do you want to trade?"),)
   pbChoosePokemon(1,2,
                   proc {|pokemon|
                     pokemon.hasType?(wanted_type)
