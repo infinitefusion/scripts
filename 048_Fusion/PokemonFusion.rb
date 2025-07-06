@@ -677,6 +677,10 @@ class PokemonFusionScene
     poke_body_number = GameData::Species.get(@pokemon1.species).id_number
     poke_head_number = GameData::Species.get(@pokemon2.species).id_number
 
+    echoln poke_body_number
+    echoln poke_head_number
+
+
     @sprites["rsprite1"] = PokemonSprite.new(@viewport)
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite3"] = PokemonSprite.new(@viewport)
@@ -804,7 +808,7 @@ class PokemonFusionScene
 
   # Opens the fusion screen
 
-  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false)
+  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false, isPlayerPokemon= true)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
     metaplayer3 = SpriteMetafilePlayer.new(@metafile3, @sprites["rsprite3"])
@@ -867,8 +871,15 @@ class PokemonFusionScene
 
       drawSpriteCredits(@fusion_pif_sprite, @viewport)
       pbBGMPlay(pbGetWildVictoryME)
-      Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                              _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+
+      if isPlayerPokemon
+        Kernel.pbMessageDisplay(@sprites["msgwindow"],
+                                _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+      else
+        Kernel.pbMessageDisplay(@sprites["msgwindow"],
+                                _INTL("\\se[]The Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+      end
+
 
       #exp
       @pokemon1.exp_when_fused_head = @pokemon2.exp
@@ -885,7 +896,7 @@ class PokemonFusionScene
 
       setFusionIVs(superSplicer)
       #add to pokedex
-      if !$Trainer.pokedex.owned?(newSpecies)
+      if !$Trainer.pokedex.owned?(newSpecies) && isPlayerPokemon
         $Trainer.pokedex.set_seen(newSpecies)
         $Trainer.pokedex.set_owned(newSpecies)
         Kernel.pbMessageDisplay(@sprites["msgwindow"],
@@ -911,9 +922,9 @@ class PokemonFusionScene
       end
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       #
-      pbChooseAbility(ability1,ability2)
+      pbChooseAbility(ability1,ability2) if isPlayerPokemon
 
-      setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves
+      setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves && isPlayerPokemon
 
       # if superSplicer
       #   @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
@@ -936,7 +947,7 @@ class PokemonFusionScene
 
       #make it untraded, pour qu'on puisse le unfused après, même si un des 2 était traded
       @pokemon1.obtain_method = 0
-      @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer)
+      @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer) if isPlayerPokemon
 
       pbSEPlay("Voltorb Flip Point")
 

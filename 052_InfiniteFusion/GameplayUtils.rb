@@ -1881,6 +1881,13 @@ def sign(message,type=0)
 end
 
 
+def setEventGraphicsToPokemon(species,eventId)
+  event = $game_map.events[eventId]
+  return if !event
+  event.character_name= "Followers/#{species.to_s}"
+  event.refresh
+end
+
 
 
 

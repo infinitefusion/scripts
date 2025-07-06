@@ -28,7 +28,7 @@ end
 
 def promptGiveToPartner(caughtPokemon)
   return false if !$Trainer.npcPartner
-
+  return false if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && $game_switches[SWITCH_WALLY_GAVE_POKEMON]
   if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && caughtPokemon.isFusion?
     pbMessage("I... I don't think I can handle a fused Pokémon. Can we try to catch a different one?")
     return
@@ -43,8 +43,12 @@ def promptGiveToPartner(caughtPokemon)
     else
       # Give
       pbMessage("You gave the #{caughtPokemon.name} to #{partnerTrainer.trainerName}!")
-      partnerTrainer.currentTeam[-1] = caughtPokemon
-      partnerTrainer.increase_friendship(5)
+      if partnerTrainer.currentTeam.length == 6
+        partnerTrainer.currentTeam[-1] = caughtPokemon
+      else
+        partnerTrainer.currentTeam << caughtPokemon
+      end
+      partnerTrainer.increase_friendship(10)
       updateRebattledTrainerWithKey($Trainer.npcPartner,partnerTrainer)
       if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY
         $game_switches[SWITCH_WALLY_GAVE_POKEMON_DIALOGUE]=true
@@ -55,5 +59,5 @@ end
 
 
 def isPartneredWithTrainer()
-  return $game_switches[SWITCH_PARTNERED_WITH_NPC_TRAINER]
+  return $Trainer.npcPartner != nil
 end
