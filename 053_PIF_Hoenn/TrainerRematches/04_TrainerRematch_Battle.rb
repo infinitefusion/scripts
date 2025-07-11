@@ -118,6 +118,7 @@ def showPrerematchDialog()
     split_messages = message_text.split("<br>")
     split_messages.each do |msg|
       pbCallBub(2,event.id)
+      pbCallBub(3) if isPartneredWithTrainer(trainer)
       pbMessage(msg)
     end
   end

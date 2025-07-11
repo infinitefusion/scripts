@@ -56,8 +56,9 @@ def promptGiveToPartner(caughtPokemon)
     end
 end
 
-
-
-def isPartneredWithTrainer()
+def isPartneredWithTrainer(trainer)
+  return $Trainer.npcPartner == trainer.trainerKey
+end
+def isPartneredWithAnyTrainer()
   return $Trainer.npcPartner != nil
 end

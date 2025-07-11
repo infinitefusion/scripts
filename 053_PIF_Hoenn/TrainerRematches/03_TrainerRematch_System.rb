@@ -30,7 +30,7 @@ end
 def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion=0)
   key = [event_id,mapId]
   $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
-  trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion)
+  trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion,key)
   $PokemonGlobal.battledTrainers[key] = trainer
   return trainer
 end

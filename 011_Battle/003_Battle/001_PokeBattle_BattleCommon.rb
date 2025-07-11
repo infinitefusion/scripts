@@ -71,7 +71,7 @@ module PokeBattle_BattleCommon
       pbPlayer.pokedex.set_shadow_pokemon_owned(pkmn.species) if pkmn.shadowPokemon?
       # Store caught Pokémon
 
-      gave_away_pokemon = promptGiveToPartner(pkmn) if isPartneredWithTrainer()
+      gave_away_pokemon = promptGiveToPartner(pkmn) if isPartneredWithAnyTrainer()
 
       promptCaughtPokemonAction(pkmn) if !gave_away_pokemon
       if $game_switches[AUTOSAVE_CATCH_SWITCH]

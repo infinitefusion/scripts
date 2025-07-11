@@ -3,12 +3,15 @@
 # :NEWS
 # :WEATHER
 
-TV_CHANNELS = [:NEWS]
+TV_CHANNELS = [:NEWS, :WEATHER]
 def showTVText(channel = :RANDOM)
   channel = TV_CHANNELS.sample if channel == :RANDOM
   case channel
   when :NEWS
     pbMessage(getTVNewsCaption())
+  when :WEATHER
+    pbMessage(_INTL("It's the weather channel! Let's see how things are looking out today."))
+    pbWeatherMapMap()
   end
 end
 

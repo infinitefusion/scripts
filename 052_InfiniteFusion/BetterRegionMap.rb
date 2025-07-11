@@ -26,6 +26,12 @@ def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap 
   return scene.flydata
 end
 
+def pbWeatherMapMap()
+  scene = BetterRegionMap.new(-1, true, false, true, nil, false,true)
+  return scene.flydata
+end
+
+
 class PokemonGlobalMetadata
   attr_writer :regionMapSel
   attr_writer :region
@@ -54,7 +60,7 @@ class BetterRegionMap
 
   attr_reader :flydata
 
-  def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false)
+  def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false, show_weather=false)
     region = 0
     showBlk
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
@@ -243,7 +249,7 @@ class BetterRegionMap
       end
     end
 
-    draw_all_weather if DEBUG_WEATHER && $game_weather
+    draw_all_weather if show_weather && $game_weather
     initial_position = calculate_initial_position(player)
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()
