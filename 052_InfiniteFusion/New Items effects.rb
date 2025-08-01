@@ -1651,21 +1651,30 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       scene.pbDisplay(_INTL(" ... "))
       scene.pbDisplay(_INTL(" ... "))
 
+      # If levelCap is not a whole number, round up since Gym Leader Ace levels do this
+      # I.e if the level cap is 13.2, the Gym Leader's Ace is 14. So the player's level cap is also 14
+      levelCap = getCurrentLevelCap().to_f.ceil
+
       if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
         new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
-        body_level = new_level
-        head_level = new_level
-        poke1 = Pokemon.new(bodyPoke, body_level)
-        poke2 = Pokemon.new(headPoke, head_level)
+        new_level = levelCap if ($PokemonSystem.level_caps==1 && new_level > levelCap)
       else
+        new_level = pokemon.level
         exp_body = pokemon.exp_when_fused_body + pokemon.exp_gained_since_fused
         exp_head = pokemon.exp_when_fused_head + pokemon.exp_gained_since_fused
 
-        poke1 = Pokemon.new(bodyPoke, pokemon.level)
-        poke2 = Pokemon.new(headPoke, pokemon.level)
+        # Recalculate level and exp if pokemon would be over the level cap
+        if ($PokemonSystem.level_caps==1)
+          new_level = levelCap if new_level > levelCap
+          exp_body = poke1.growth_rate.minimum_exp_for_level(levelCap) if poke1.growth_rate.minimum_exp_for_level(levelCap) < exp_body
+          exp_head = poke2.growth_rate.minimum_exp_for_level(levelCap) if poke2.growth_rate.minimum_exp_for_level(levelCap) < exp_head
+        end
+        
         poke1.exp = exp_body
         poke2.exp = exp_head
       end
+      poke1 = Pokemon.new(bodyPoke, new_level)
+      poke2 = Pokemon.new(headPoke, new_level)
       body_level = poke1.level
       head_level = poke2.level
 

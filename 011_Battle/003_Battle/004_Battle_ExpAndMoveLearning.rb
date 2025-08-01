@@ -153,11 +153,27 @@ class PokeBattle_Battle
       i = BattleHandlers.triggerExpGainModifierItem(@initialItems[0][idxParty], pkmn, exp)
     end
     exp = i if i >= 0
+
     # Make sure Exp doesn't exceed the maximum
-
     exp = 0 if $PokemonSystem.level_caps==1 && pokemonExceedsLevelCap(pkmn)
-
     expFinal = growth_rate.add_exp(pkmn.exp, exp)
+
+    # If levelCap is not a whole number, round up since Gym Leader Ace levels do this
+    # I.e if the level cap is 13.2, the Gym Leader's Ace is 14. So the player's level cap is also 14
+    levelCap = getCurrentLevelCap().to_f.ceil
+    
+    # Recalculate exp if pokemon will go above the cap
+    if (growth_rate.level_from_exp(expFinal) > levelCap && $PokemonSystem.level_caps==1 && exp > 0)
+      # Get minimum exp to meet the level cap
+      minExpForLevel = growth_rate.minimum_exp_for_level(levelCap)
+      
+      # Handle edgecase where minExpForLevel is negative
+      minExpForLevel = 0 if minExpForLevel < 0
+
+      # Overwrite expFinal
+      expFinal = minExpForLevel
+    end
+
     expGained = expFinal - pkmn.exp
 
 
