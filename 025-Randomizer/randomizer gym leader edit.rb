@@ -150,10 +150,10 @@ end
 
 def getLeaderType()
   currentGym = $game_variables[VAR_CURRENT_GYM_TYPE]
-  if currentGym > $game_variables[151].length
+  if currentGym > $game_variables[VAR_GYM_TYPES_ARRAY].length
     return nil
   else
-    typeIndex = $game_variables[151][currentGym]
+    typeIndex = $game_variables[VAR_GYM_TYPES_ARRAY][currentGym]
     type = PBTypes.getName(typeIndex)
   end
   return typeIndex
@@ -273,9 +273,17 @@ def Kernel.pbRandomizeTM()
 end
 
 def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries=true)
+
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
+
+  if $game_switches[SWITCH_LEGENDARY_MODE]
+    new_species= convert_species_to_legendary(oldSpecies)
+    newspecies_dex = dexNum(new_species)
+    return newspecies_dex
+  end
+
   newspecies_dex = rand(maxDexNumber - 1) + 1
   i = 0
   while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
@@ -289,6 +297,15 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
 end
 
 def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false,includeLegendaries=true)
+  if $game_switches[SWITCH_LEGENDARY_MODE]
+    new_species= convert_species_to_legendary(oldSpecies)
+
+    echoln "CHOSEN  #{get_readable_fusion_name(oldSpecies)} -> #{get_readable_fusion_name(new_species)}"
+
+    newspecies_dex = dexNum(new_species)
+    return newspecies_dex
+  end
+
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
@@ -333,6 +350,8 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
   trainers_data = GameData::Trainer.list_all
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
+    echoln "------"
+    echoln "Processing [#{trainer.id}#] {trainer.traiàner_type} ##{trainer.real_name}"
     i = 0
     new_party = []
     for poke in trainer.pokemon

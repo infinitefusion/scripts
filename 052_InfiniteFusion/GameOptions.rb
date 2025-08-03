@@ -136,11 +136,11 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               ]
     ) ? 1 : 0
 
-    custom_eggs_option_selected = $PokemonSystem.use_custom_eggs ? 1 : 0
+    custom_eggs_option_selected = $PokemonSystem.hide_custom_eggs ? 1 : 0
     options << EnumOption.new(_INTL("Custom Eggs"), [_INTL("On"), _INTL("Off")],
                               proc { custom_eggs_option_selected },
                               proc { |value|
-                                $PokemonSystem.use_custom_eggs = value == 1
+                                $PokemonSystem.hide_custom_eggs = value == 1
                               },
                               ["Eggs have different sprites for each Pokémon.",
                                "Eggs all use the same sprite."]

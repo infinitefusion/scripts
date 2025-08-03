@@ -304,7 +304,27 @@ def get_head_number_from_symbol(id)
 end
 
 def get_fusion_symbol(head_id, body_id)
+  if head_id.is_a?(Symbol)
+    head_id = get_head_number_from_symbol(head_id)
+  end
+  if body_id.is_a?(Symbol)
+    body_id = get_body_number_from_symbol(body_id)
+  end
+
   return "B#{body_id}H#{head_id}".to_sym
+end
+
+def get_readable_fusion_name(fusion_species)
+  head_dex = get_head_number_from_symbol(fusion_species)
+  body_dex = get_body_number_from_symbol(fusion_species)
+
+  return fusion_species if head_dex > NB_POKEMON || body_dex > NB_POKEMON
+
+  head_species = GameData::Species.get(head_dex)
+  body_species = GameData::Species.get(body_dex)
+
+  return "#{head_species.name}/#{body_species.name}"
+
 end
 
 def getFusionSpecies(body, head)
@@ -484,3 +504,7 @@ def get_triple_fusion_components(species_id)
 
 end
 
+
+def gotFusedPokemonAsStarter()
+  return $game_switches[SWITCH_RANDOM_WILD_TO_FUSION] || $game_switches[SWITCH_LEGENDARY_MODE]
+end

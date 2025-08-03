@@ -740,6 +740,7 @@ def getPlayerDefaultName(gender)
     return Settings::GAME_ID == :IF_HOENN ? "May" : "Green"
   end
 end
+
 def getDefaultClothes(gender)
   if gender == GENDER_MALE
     return Settings::GAME_ID == :IF_HOENN ? CLOTHES_BRENDAN : DEFAULT_OUTFIT_MALE
@@ -747,6 +748,7 @@ def getDefaultClothes(gender)
     return Settings::GAME_ID == :IF_HOENN ? CLOTHES_MAY : DEFAULT_OUTFIT_FEMALE
   end
 end
+
 def getDefaultHat(gender)
   if gender == GENDER_MALE
     return Settings::GAME_ID == :IF_HOENN ? HAT_BRENDAN : DEFAULT_OUTFIT_MALE
@@ -1193,13 +1195,16 @@ def isPostgame?()
 end
 
 def obtainStarter(starterIndex = 0)
-  if ($game_switches[SWITCH_RANDOM_STARTERS])
+  if ($game_switches[SWITCH_LEGENDARY_MODE])
+    startersList = [:B1H341, :B4H150, :B7H343]
+    starter = startersList[starterIndex]
+  elsif ($game_switches[SWITCH_RANDOM_STARTERS])
     starter = obtainRandomizedStarter(starterIndex)
   else
     startersList = Settings::KANTO_STARTERS
     if $game_switches[SWITCH_JOHTO_STARTERS]
       startersList = Settings::JOHTO_STARTERS
-    elsif $game_switches[SWITCH_HOENN_STARTERS]
+    elsif $game_switches[SWITCH_HENN_STARTERS]
       startersList = Settings::HOENN_STARTERS
     elsif $game_switches[SWITCH_SINNOH_STARTERS]
       startersList = Settings::SINNOH_STARTERS
@@ -1219,7 +1224,7 @@ def setRivalStarter(starterIndex1, starterIndex2)
   starter2 = obtainStarter(starterIndex2)
 
   ensureRandomHashInitialized()
-  if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION] # if fused starters, only take index 1
+  if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION] || $game_switches[SWITCH_LEGENDARY_MODE] # if fused starters, only take index 1
     starter = obtainStarter(starterIndex1)
   else
     starter_body = starter1.id_number
@@ -1520,7 +1525,7 @@ def getMappedKeyFor(internalKey)
 end
 
 # if need to play animation from event route
-def playAnimation(animationId, x=nil, y=nil)
+def playAnimation(animationId, x = nil, y = nil)
   return if !$scene.is_a?(Scene_Map)
   x = @event.x unless x
   y = @event.y unless y
@@ -1562,7 +1567,7 @@ end
 def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)
   cmdIfCancel = -1 if !cmdIfCancel
   result = pbShowCommands(nil, options, cmdIfCancel, startingOption)
-  #echoln "menuResult :#{result}"
+  # echoln "menuResult :#{result}"
   return result
 end
 
@@ -1630,7 +1635,7 @@ def turnPlayerTowardsEvent(event)
   end
 end
 
-def displayPicture(image,x,y,z=0)
+def displayPicture(image, x, y, z = 0)
   pictureWindow = PictureWindow.new(image)
   pictureWindow.z = z
   pictureWindow.x = x
@@ -1639,16 +1644,17 @@ def displayPicture(image,x,y,z=0)
   return pictureWindow
 end
 
-def showPokemonInPokeballWithMessage(pif_sprite, message, x_position=nil, y_position=nil)
-  x_position = Graphics.width/4 if !x_position
+def showPokemonInPokeballWithMessage(pif_sprite, message, x_position = nil, y_position = nil)
+  x_position = Graphics.width / 4 if !x_position
   y_position = 10 if !y_position
 
-  background_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_back",x_position, y_position,1)
-  foreground_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_front",x_position, y_position,9999)
+  background_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_back", x_position, y_position, 1)
+  foreground_sprite = displayPicture("Graphics/Pictures/Trades/trade_pokeball_open_front", x_position, y_position, 9999)
   displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
   background_sprite.dispose
   foreground_sprite.dispose
 end
+
 def displaySpriteWindowWithMessage(pif_sprite, message = "", x = 0, y = 0, z = 0)
   spriteLoader = BattleSpriteLoader.new
   sprite_bitmap = spriteLoader.load_pif_sprite_directly(pif_sprite)
@@ -1794,8 +1800,7 @@ def qmarkMaskCheck()
   end
 end
 
-
-def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
+def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
 
   commands = []
   command_hats = "Hats Dye Kit ($#{hats_kit_price})"
@@ -1807,27 +1812,27 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
   commands << command_cancel
 
   if commands.length <= 1
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!")
 
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("You can use them at any time when you change clothes.")
     return
   end
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("\\GWelcome! Are you interested in dyeing your outfits different colours?")
 
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!")
 
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?")
 
-  choice = optionsMenu(commands,commands.length)
+  choice = optionsMenu(commands, commands.length)
   case commands[choice]
   when command_hats
     if $Trainer.money < hats_kit_price
-      pbCallBub(2,@event_id)
+      pbCallBub(2, @event_id)
       pbMessage("Oh, you don't have enough money...")
       return
     end
@@ -1835,11 +1840,11 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
     $Trainer.money -= hats_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:HATSDYEKIT)
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\GHere you go! Have fun dyeing your hats!")
   when command_clothes
     if $Trainer.money < clothes_kit_price
-      pbCallBub(2,@event_id)
+      pbCallBub(2, @event_id)
       pbMessage("Oh, you don't have enough money...")
       return
     end
@@ -1847,48 +1852,46 @@ def purchaseDyeKitMenu(hats_kit_price=0,clothes_kit_price=0)
     $Trainer.money -= clothes_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:CLOTHESDYEKIT)
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage("\\GHere you go! Have fun dyeing your clothes!")
   end
-  pbCallBub(2,@event_id)
+  pbCallBub(2, @event_id)
   pbMessage("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes.")
 end
 
-def giveJigglypuffScribbles(possible_versions = [1,2,3,4])
+def giveJigglypuffScribbles(possible_versions = [1, 2, 3, 4])
   selected_scribbles_version = possible_versions.sample
   case selected_scribbles_version
   when 1
-    scribbles_id= HAT_SCRIBBLES1
+    scribbles_id = HAT_SCRIBBLES1
   when 2
-    scribbles_id= HAT_SCRIBBLES2
+    scribbles_id = HAT_SCRIBBLES2
   when 3
-    scribbles_id= HAT_SCRIBBLES3
+    scribbles_id = HAT_SCRIBBLES3
   when 4
-    scribbles_id= HAT_SCRIBBLES4
+    scribbles_id = HAT_SCRIBBLES4
   end
   return if !scribbles_id
 
   if !hasHat?(scribbles_id)
     $Trainer.unlocked_hats << scribbles_id
   end
-  putOnHat(scribbles_id,true,true)
+  putOnHat(scribbles_id, true, true)
 end
 
-
-#type:
+# type:
 # 0: default
 # 1: wood
-def sign(message,type=0)
-  signId= "sign_#{type}"
+def sign(message, type = 0)
+  signId = "sign_#{type}"
   formatted_message = "\\sign[#{signId}]#{message}"
   pbMessage(formatted_message)
 end
 
-
-def setEventGraphicsToPokemon(species,eventId)
+def setEventGraphicsToPokemon(species, eventId)
   event = $game_map.events[eventId]
   return if !event
-  event.character_name= "Followers/#{species.to_s}"
+  event.character_name = "Followers/#{species.to_s}"
   event.refresh
 end
 

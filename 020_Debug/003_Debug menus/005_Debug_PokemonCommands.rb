@@ -900,7 +900,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         pbMessage('Body species?')
         body_species = pbChooseSpeciesList(old_body_dex,NB_POKEMON)
 
-        fused_species_dex = getFusionSpecies(body_species.species,head_species.species)
+        fused_species_dex = getFusionSpecies(body_species.species, head_species.species)
         species = GameData::Species.get(fused_species_dex)
 
         if species && species != pkmn.species
