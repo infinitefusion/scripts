@@ -129,6 +129,7 @@ def getNewLegendaryFusionForGymType(original_species, nb_retries = 0)
   else
     body_species_id = legendary_species
   end
+  echoln "picked #{head_species_id}/#{body_species_id}"
   echoln "custom sprite exists: #{customSpriteExists(body_species_id, head_species_id)}"
   if customSpriteExists(body_species_id, head_species_id)
     return getFusionSpecies(body_species_id, head_species_id).species

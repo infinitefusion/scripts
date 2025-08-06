@@ -347,11 +347,13 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
     customsOnly = false
   end
   randomTrainersHash = Hash.new
-  trainers_data = GameData::Trainer.list_all
+
+
+  trainers_data = getTrainersDataMode.list_all
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
     echoln "------"
-    echoln "Processing [#{trainer.id}#] {trainer.traiàner_type} ##{trainer.real_name}"
+    echoln "Processing [#{trainer.id}#] {trainer.trainer_type} ##{trainer.real_name}"
     i = 0
     new_party = []
     for poke in trainer.pokemon

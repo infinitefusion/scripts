@@ -1,5 +1,6 @@
 class PokemonGameOption_Scene < PokemonOption_Scene
   def pbGetOptions(inloadscreen = false)
+    @current_game_mode = getTrainersDataMode
     options = []
     options << SliderOption.new(_INTL("Music Volume"), 0, 100, 5,
                                 proc { $PokemonSystem.bgmvolume },
@@ -243,6 +244,16 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                "Disables some options that aren't supported when playing on mobile."]
     )
 
+    selected_game_mode = $game_switches[SWITCH_MODERN_MODE] ? 1 : 0
+    options << EnumOption.new(_INTL("Game Mode"), [_INTL("Classic"), _INTL("Remix")],
+                              proc { selected_game_mode },
+                              proc { |value|
+                                $game_switches[SWITCH_MODERN_MODE] = value == 1
+                                @manually_changed_gamemode = true
+                              },
+                              ["Use trainers from Classic Mode for Legendary Mode",
+                               "Use trainers from Remix Mode for Legendary Mode"]
+    ) if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]
     return options
   end
 
@@ -256,6 +267,13 @@ class PokemonGameOption_Scene < PokemonOption_Scene
         @manually_changed_difficulty = false
       end
     end
+
+    if getTrainersDataMode != @current_game_mode
+      pbMessage(_INTL("The game was mode changed - Reshuffling trainers."))
+      Kernel.pbShuffleTrainers
+      @manually_changed_gamemode = false
+    end
+
     super
   end
 end

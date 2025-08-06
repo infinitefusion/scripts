@@ -29,22 +29,22 @@ def getTypeExpertAppearance(trainer_type)
 end
 
 TYPE_EXPERTS_APPEARANCES = {
-  :TYPE_EXPERT_NORMAL => TrainerAppearance.new(5, "snorlaxhat", "normal", "1_painter", 0, 0, 0), #todo TEAM
+  :TYPE_EXPERT_NORMAL => TrainerAppearance.new(5, "snorlaxhat", "normal", "1_painter", 0, 0, 0), #OK
   :TYPE_EXPERT_FIGHTING => TrainerAppearance.new(1, "karateHeadband", "fighting", "4_samurai", 0, 0, 0), #OK
   :TYPE_EXPERT_FLYING	=>TrainerAppearance.new(6,"swablu","flying","1_lass",1260,0,0),
-  :TYPE_EXPERT_POISON => TrainerAppearance.new(5, "parashroom", "deadlypoisondanger", "3_lowbraids", 270, 0, 0), #todo TEAM
-  :TYPE_EXPERT_GROUND => TrainerAppearance.new(5, "sandshrewbeanie", "groundcowboy", "3_shortspike", 0, 0, 0), #todo TEAM
+  :TYPE_EXPERT_POISON => TrainerAppearance.new(5, "parashroom", "deadlypoisondanger", "3_lowbraids", 270, 0, 0), #OK
+  :TYPE_EXPERT_GROUND => TrainerAppearance.new(5, "sandshrewbeanie", "groundcowboy", "3_shortspike", 0, 0, 0), #OK
   # TYPE_EXPERT_ROCK	=>#TODO NEEDS OUTFIT, LOCATION, TEAM
   :TYPE_EXPERT_BUG => TrainerAppearance.new("0", "bugantenna", "bughakama", "3_hime", 60, 0,), #OK
-  #:TYPE_EXPERT_GHOST	=>	TrainerAppearance.new(6,"duskullmask","gothhoodie","4_hime",0,0,0), #NO CLOTHES - DISABLED #TODO NEEDS OUTFIT, TEAM
-  :TYPE_EXPERT_STEEL => TrainerAppearance.new(2, "veteranM", "steelworkerF", "4_highpony", 0, 0, 0), #todo TEAM
-  :TYPE_EXPERT_FIRE => TrainerAppearance.new(4, "firefigther", "fire", "2_bob", 330, 0, 0), #todo  TEAM
+  :TYPE_EXPERT_GHOST	=>	TrainerAppearance.new(6,"pumpkaboohelmet","ghostoutfit","4_punktails",0,0,960),# todo Needs location, TEAM
+  :TYPE_EXPERT_STEEL => TrainerAppearance.new(2, "veteranM", "steelworkerF", "4_highpony", 0, 0, 0), #OK
+  :TYPE_EXPERT_FIRE => TrainerAppearance.new(4, "firefigther", "fire", "2_bob", 330, 0, 0), #OK
   :TYPE_EXPERT_WATER => TrainerAppearance.new(5, "waterdress", "waterdress", "1_pixie", 180, 0, 0),
-  # TYPE_EXPERT_GRASS	=>	TrainerAppearance.new("0","aerodactylSkull","red","","","")	, #TODO NEEDS OUTFIT, LOCATION, TEAM
+  :TYPE_EXPERT_GRASS	=>	TrainerAppearance.new(4,"grassexpert","grassexpert","1_roseradeM",-300,0,0), #TODO NEEDS LOCATION, TEAM
   :TYPE_EXPERT_ELECTRIC => TrainerAppearance.new(3, "designerheadphones", "urbanelectric", "1_dancer", 10, 0, 0), #OK
   # TYPE_EXPERT_PSYCHIC	=># TODO NEEDS OUTFIT, LOCATION, TEAM
   :TYPE_EXPERT_ICE	=>	TrainerAppearance.new(6,"skierF","iceoutfit","1_wavy",0,0,210),
-  :TYPE_EXPERT_DRAGON => TrainerAppearance.new(5, "aerodactylSkull", "dragonconqueror", "2_SpecialLatias", 670, 0, 510), #todo NEEDS LOCATION, TEAM
+  :TYPE_EXPERT_DRAGON => TrainerAppearance.new(5, "aerodactylSkull", "dragonconqueror", "2_SpecialLatias", 670, 0, 510), #OK
   :TYPE_EXPERT_DARK	=>  TrainerAppearance.new(4,"cynthiaaccessory","darkoutfit","3_emo",330,0,0),
   :TYPE_EXPERT_FAIRY => TrainerAppearance.new(6, "mikufairy", "mikufairyf", "5_mikufairy", 0, 0, 0) #OK
 }
@@ -58,7 +58,7 @@ TYPE_EXPERT_TRAINERS = {
   :FIGHTING => ["Floyd", "I have to throw in the towel."],
   :GROUND => ["Pedro", "I’m buried under this loss."],
   :FIRE => ["Blaze", "I guess I got burned out."],
-  :GRASS => ["Ivy", "ou really cut me down to size!"],
+  :GRASS => ["Basil", "You really cut me down to size!"],
   :ICE => ["Crystal", "I’m skating on thin ice!"],
   :ROCK => ["Slate", "Looks like I’ve hit rock bottom..."],
   :WATER => ["Marina", "You really made a splash!"],
