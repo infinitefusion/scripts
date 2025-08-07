@@ -31,7 +31,7 @@ def initializeLegendaryMode()
   addLegendaryEggsToPC
   $PokemonSystem.hide_custom_eggs = true
   $PokemonSystem.type_icons = true
-
+  $PokemonBag.pbStoreItem(:MAGICBOOTS)
 end
 
 def convert_species_to_legendary(dex_number)

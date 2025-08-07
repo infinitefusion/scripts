@@ -25,6 +25,8 @@ class Pokemon
   attr_accessor :hat
   attr_accessor :hat_x
   attr_accessor :hat_y
+  attr_accessor :hat_mirrored_horizontal
+  attr_accessor :hat_mirrored_vertical
 
   # @return [Integer] the number of steps until this Pokémon hatches, 0 if this Pokémon is not an egg
   attr_accessor :steps_to_hatch
@@ -1599,6 +1601,9 @@ class Pokemon
     @hat = nil
     @hat_x = 0
     @hat_y = 0
+    @hat_mirrored_horizontal = false
+    @hat_mirrored_vertical = false
+
     @size_category = determine_size_category()
     @sprite_scale=determine_scale()
     calc_stats
