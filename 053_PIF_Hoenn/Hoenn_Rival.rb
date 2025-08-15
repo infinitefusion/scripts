@@ -8,20 +8,19 @@ class Player < Trainer
   alias pokemonEssentials_player_initialize initialize
   def initialize(*args)
     pokemonEssentials_player_initialize(*args)
-    @rival_appearance = init_rival_appearance
   end
 
 
 
   def init_rival_appearance
     if isPlayerMale
-      return TrainerAppearance.new(5,
+      @rival_appearance= TrainerAppearance.new(5,
                             HAT_MAY,
                             CLOTHES_MAY,
                             getFullHairId(HAIR_MAY,3) ,
                             0, 0, 0)
     else
-      return TrainerAppearance.new(5,
+      @rival_appearance= TrainerAppearance.new(5,
                                    HAT_BRENDAN,
                                    CLOTHES_BRENDAN,
                                    getFullHairId(HAIR_BRENDAN,3),
