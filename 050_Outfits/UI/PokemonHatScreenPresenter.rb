@@ -59,8 +59,8 @@ class PokemonHatPresenter
       Input.update
       @hat_id = selector.selectNextOutfit(@hat_id, 1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::RIGHT)
       @hat_id = selector.selectNextOutfit(@hat_id, -1, selector.hats_list, [], false, "hat",$Trainer.unlocked_hats,false) if Input.trigger?(Input::LEFT)
-      flipHatHorizontally if Input.trigger?(Input::JUMPDOWN)
       flipHatVertically if Input.trigger?(Input::JUMPUP)
+      flipHatHorizontally if Input.trigger?(Input::JUMPDOWN)
       resetHatPosition if Input.trigger?(Input::SPECIAL)
       break if Input.trigger?(Input::USE)
       return false if Input.trigger?(Input::BACK)
@@ -93,6 +93,8 @@ class PokemonHatPresenter
     return true
   end
 
+
+
   def flipHatHorizontally()
     @hat_mirrored_horizontal = !@hat_mirrored_horizontal
     pbSEPlay("GUI storage pick up")
@@ -100,17 +102,7 @@ class PokemonHatPresenter
     pbWait(8)
   end
 
-  def resetHatPosition
-    if pbConfirmMessage("Reset hat position?")
-      pbSEPlay("GUI naming tab swap end")
-      @x_pos=0
-      @y_pos=0
-      @hatBitmapWrapper.mirror_horizontally if @hat_mirrored_horizontal
-      @hatBitmapWrapper.mirror_vertically if @hat_mirrored_vertical
-      @hat_mirrored_horizontal = false
-      @hat_mirrored_vertical = false
-    end
-  end
+
   def flipHatVertically()
     pbSEPlay("GUI storage pick up")
     @hat_mirrored_vertical = !@hat_mirrored_vertical
@@ -127,6 +119,18 @@ class PokemonHatPresenter
     end
     @y_pos = [[@y_pos, @min_y].max, @max_y].min
     pbWait(8)
+  end
+
+  def resetHatPosition
+    if pbConfirmMessage("Reset hat position?")
+      pbSEPlay("GUI naming tab swap end")
+      @x_pos=0
+      @y_pos=0
+      @hatBitmapWrapper.mirror_horizontally if @hat_mirrored_horizontal
+      @hatBitmapWrapper.mirror_vertically if @hat_mirrored_vertical
+      @hat_mirrored_horizontal = false
+      @hat_mirrored_vertical = false
+    end
   end
 
   def initialize_bitmap()

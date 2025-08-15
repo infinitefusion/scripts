@@ -24,7 +24,7 @@ module Settings
   ANIMATE_REFLECTIONS= false#GAME_ID == :IF_HOENN #true
   USE_REFLECTIONS = false
   #Infinite fusion settings
-  NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 565#501
+  NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
   CUSTOM_SPRITES_TO_IMPORT_FOLDER = "Graphics/CustomBattlers/Sprites to import/"
