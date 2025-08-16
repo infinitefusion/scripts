@@ -2105,3 +2105,69 @@ ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
   end
   next 1
 })
+
+def changeOricorioFormFromItem(pokemon,form_name,new_form)
+  if !(Kernel.isPartPokemon(pokemon, :ORICORIO_1) ||
+    Kernel.isPartPokemon(pokemon, :ORICORIO_2) ||
+    Kernel.isPartPokemon(pokemon, :ORICORIO_3) ||
+    Kernel.isPartPokemon(pokemon, :ORICORIO_4))
+    scene.pbDisplay(_INTL("It had no effect."))
+    return false
+  end
+  if changeOricorioForm(pokemon, new_form)
+    pbMessage(_INTL("{1} switched to the {2} style", pokemon.name, form_name))
+    pbSet(1, pokemon.name)
+    return true
+  else
+    pbMessage(_INTL("{1} remained the same...", pokemon.name, form_name))
+    return false
+  end
+end
+
+ItemHandlers::UseOnPokemon.add(:REDNECTAR, proc { |item, poke, scene|
+  form_name = "Baile"
+  form = 1
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::BattleUseOnPokemon.add(:REDNECTAR, proc { |item, poke, scene|
+  form_name = "Baile"
+  form = 1
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
+  form_name = "Pom-Pom"
+  form = 2
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::BattleUseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
+  form_name = "Pom-Pom"
+  form = 1
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::UseOnPokemon.add(:PINKNECTAR, proc { |item, poke, scene|
+  form_name = "Pa'u"
+  form = 3
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::BattleUseOnPokemon.add(:PINKNECTAR, proc { |item, poke, scene|
+  form_name = "Pa'u"
+  form = 3
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::UseOnPokemon.add(:BLUENECTAR, proc { |item, poke, scene|
+  form_name = "Sensu"
+  form = 4
+  next changeOricorioFormFromItem(poke,form_name,form)
+})
+
+ItemHandlers::BattleUseOnPokemon.add(:BLUENECTAR, proc { |item, poke, scene|
+  form_name = "Sensu"
+  form = 4
+  next changeOricorioFormFromItem(poke,form_name,form)
+})

@@ -24,6 +24,10 @@ def oricorioEventPickFlower(flower_color)
 
 end
 
+def hasOricorioInParty()
+  return $Trainer.has_species_or_fusion?(:ORICORIO_1) || $Trainer.has_species_or_fusion?(:ORICORIO_2) || $Trainer.has_species_or_fusion?(:ORICORIO_3) || $Trainer.has_species_or_fusion?(:ORICORIO_4)
+end
+
 def changeOricorioFlower(form = 1)
   if $PokemonGlobal.stepcount % 25 == 0
     if !hatUnlocked?(HAT_FLOWER) && rand(2) == 0
@@ -35,7 +39,7 @@ def changeOricorioFlower(form = 1)
       $PokemonGlobal.stepcount += 1
     end
   end
-  return if !($Trainer.has_species_or_fusion?(:ORICORIO_1) || $Trainer.has_species_or_fusion?(:ORICORIO_2) || $Trainer.has_species_or_fusion?(:ORICORIO_3) || $Trainer.has_species_or_fusion?(:ORICORIO_4))
+  return unless hasOricorioInParty
   message = ""
   form_name = ""
   if form == 1
@@ -81,6 +85,17 @@ def changeOricorioForm(pokemon, form = nil)
 
   oricorio_body = oricorio_forms.include?(body_id)
   oricorio_head = oricorio_forms.include?(head_id)
+
+  target_form = case form
+                when 1 then :ORICORIO_1
+                when 2 then :ORICORIO_2
+                when 3 then :ORICORIO_3
+                when 4 then :ORICORIO_4
+                else return false
+                end
+  if oricorio_body && oricorio_head && body_id == target_form && head_id == target_form
+    return false
+  end
 
   if form == 1
     body_id = :ORICORIO_1 if oricorio_body
