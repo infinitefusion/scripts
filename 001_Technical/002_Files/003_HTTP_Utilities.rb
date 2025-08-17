@@ -3,7 +3,6 @@
 # HTTP utility functions
 #
 #############################
-#
 
 def pbPostData(url, postdata, filename=nil, depth=0)
   if url[/^http:\/\/([^\/]+)(.*)$/]
@@ -11,25 +10,25 @@ def pbPostData(url, postdata, filename=nil, depth=0)
     path = $2
     path = "/" if path.length==0
     userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
+
+    # Build the body without modifying frozen strings
     body = postdata.map { |key, value|
-      keyString   = key.to_s
-      valueString = value.to_s
-      keyString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
-      valueString.gsub!(/[^a-zA-Z0-9_\.\-]/n) { |s| sprintf('%%%02x', s[0]) }
-      next "#{keyString}=#{valueString}"
+      "#{key}=#{value}"
     }.join('&')
+
     ret = HTTPLite.post_body(
       url,
       body,
       "application/x-www-form-urlencoded",
       {
-        "Host" => host, # might not be necessary
+        "Host" => host,
         "Proxy-Connection" => "Close",
         "Content-Length" => body.bytesize.to_s,
         "Pragma" => "no-cache",
         "User-Agent" => userAgent
       }
     ) rescue ""
+
     return ret if !ret.is_a?(Hash)
     return "" if ret[:status] != 200
     return ret[:body] if !filename
@@ -38,6 +37,7 @@ def pbPostData(url, postdata, filename=nil, depth=0)
   end
   return ""
 end
+
 
 def pbDownloadData(url, filename = nil, authorization = nil, depth = 0, &block)
   return nil if !downloadAllowed?()
@@ -73,14 +73,24 @@ def pbDownloadToFile(url, file)
   end
 end
 
-def pbPostToString(url, postdata)
-  begin
-    data = pbPostData(url, postdata)
-    return data
-  rescue
-    return ""
+def pbPostToString(url, postdata, timeout = 30)
+  start_time = Time.now
+  loop do
+    begin
+      safe_postdata = postdata.transform_values(&:to_s)
+      data = pbPostData(url, safe_postdata)
+      return data unless data.empty?
+    rescue MKXPError => e
+      # ignore and retry
+    end
+    break if (Time.now - start_time) > timeout
+    sleep(0.05)
   end
+  echoln("[Remote AI] No response after #{timeout} seconds")
+  ""
 end
+
+
 
 def pbPostToFile(url, postdata, file)
   begin
@@ -139,6 +149,42 @@ def clean_json_string(str)
   }
   return cleaned_str
 end
+
+
+# json.rb - lightweight JSON parser for MKXP/RGSS XP
+
+# Lightweight JSON for MKXP/RGSS XP
+module JSON
+  module_function
+
+  # Convert Ruby object (hash/array/etc) into JSON string
+  def generate(obj)
+    case obj
+    when Hash
+      "{" + obj.map { |k, v| "\"#{k}\":#{generate(v)}" }.join(",") + "}"
+    when Array
+      "[" + obj.map { |v| generate(v) }.join(",") + "]"
+    when String, Symbol
+      "\"#{obj.to_s}\""
+    when TrueClass, FalseClass
+      obj.to_s
+    when NilClass
+      "null"
+    when Numeric
+      obj.to_s
+    else
+      raise "Unsupported type #{obj.class}"
+    end
+  end
+
+  # Simple parser (not full JSON) — optional
+  def parse(str)
+    return nil if str.nil? || str.strip.empty?
+    eval(str)
+  end
+end
+
+
 
 
 
