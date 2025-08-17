@@ -1,4 +1,3 @@
-
 class PokemonTemp
   attr_accessor :tempEvents
   attr_accessor :silhouetteDirection
@@ -8,27 +7,44 @@ class PokemonTemp
     return @tempEvents
   end
 
-
-
   def pbClearTempEvents()
-    @tempEvents.keys.each {|map_id|
+    @tempEvents.keys.each { |map_id|
       map = $MapFactory.getMap(map_id)
       @tempEvents[map_id].each { |event|
         map.events[event.id].erase if map.events[event.id]
       }
     }
-    @tempEvents={}
-    @silhouetteDirection=nil
+    @tempEvents = {}
+    @silhouetteDirection = nil
   end
 
+  def createTempEvent(eventTemplateID, map_id, position = [0, 0])
+    template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events[eventTemplateID]
+    key_id = ($game_map.events.keys.max || -1) + 1
 
-  def addTempEvent(map,event)
+
+    rpgEvent= template_event.event.dup
+    rpgEvent.id = key_id
+    gameEvent = Game_Event.new($game_map.map_id, rpgEvent, $game_map)
+
+    gameEvent.moveto(position[0], position[1])
+    gameEvent.direction = DIRECTION_DOWN
+
+    addTempEvent(map_id,gameEvent)
+
+    $game_map.events[key_id] = gameEvent
+    sprite = Sprite_Character.new(Spriteset_Map.viewport, $game_map.events[key_id])
+    $scene.spritesets[$game_map.map_id] = Spriteset_Map.new($game_map) if $scene.spritesets[$game_map.map_id] == nil
+    $scene.spritesets[$game_map.map_id].character_sprites.push(sprite)
+    return gameEvent
+  end
+
+  def addTempEvent(map, event)
     @tempEvents = {} if !@tempEvents
     mapEvents = @tempEvents.has_key?(map) ? @tempEvents[map] : []
     mapEvents.push(event)
     @tempEvents[map] = mapEvents
   end
-
 
 end
 
