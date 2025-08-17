@@ -1,5 +1,5 @@
 class SecretBaseLayout
-  attr_accessor :items
+  attr_accessor :items  #SecretBaseItemInstance
   attr_accessor :tileset #todo Reuse the same layouts map for all bases and change the tileset depending on the type
   def initialize()
     @items = []
@@ -40,6 +40,14 @@ class SecretBaseLayout
       if item.position == position
         @items.delete(item)
       end
+    end
+  end
+
+  # returns a list of ids of the items that are currently in the base's layout
+  def list_items_instances()
+    list = []
+    @items.each do |item|
+      list << item.instanceId
     end
   end
 end

@@ -26,7 +26,7 @@ class Game_Character
   attr_accessor :walk_anime
   attr_writer :bob_height
   attr_accessor :under_everything
-
+  attr_accessor :direction_fix
   def initialize(map = nil)
     @map = map
     @id = 0

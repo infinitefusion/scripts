@@ -9,7 +9,7 @@ module GameData
 
   register_base_item(
     :PC,
-    graphics: "/SecretBases/Furniture/pc.png",
+    graphics: "Furniture/pc.png",
     real_name: "PC",
     deletable: false,
     price: 0,
@@ -20,24 +20,25 @@ module GameData
 
   register_base_item(
     :PLANT,
-    graphics: "/SecretBases/Furniture/plant.png",
+    graphics: "Furniture/plant.png",
     real_name: "Decorative Plant",
     price: 500
   )
 
   register_base_item(
-    :BED,
-    graphics: "/SecretBase/bed.png",
-    real_name: "Cozy Bed",
-    price: 1000,
-    behavior: -> {
-      pbMessage("You lie down on the bed. It feels soft and comfy.")
-      pbFadeOutIn {
-        $Trainer.heal_party
-        pbMessage("Your Pokémon are fully healed!")
-      }
-    }
+    :RED_CHAIR,
+    graphics: "Furniture/red_chair.png",
+    real_name: "Red Chair",
+    price: 350,
   )
+
+  register_base_item(
+    :FANCY_CARPET,
+    graphics: "Carpets/fancy_carpet.png",
+    real_name: "Fancy Carpet",
+    price: 5000,
+    pass_through: true
+    )
 
 end
 

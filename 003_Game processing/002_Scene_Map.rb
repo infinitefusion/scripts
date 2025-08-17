@@ -219,6 +219,9 @@ class Scene_Map
     return if $game_temp.message_window_showing
     if !pbMapInterpreterRunning?
       if Input.trigger?(Input::USE)
+        if $game_temp.moving_furniture
+          placeFurnitureMenu()
+        end
         $PokemonTemp.hiddenMoveEventCalling = true
       elsif Input.trigger?(Input::BACK)
         unless $game_system.menu_disabled || $game_player.moving?

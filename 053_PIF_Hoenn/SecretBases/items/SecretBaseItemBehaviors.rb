@@ -1,7 +1,10 @@
 #For more complex item behaviors - to keep things organized
+
+
+#Unused: Done directly in the interact menu
 def useSecretBasePC()
   pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
-  cmd_furnish = _INTL("Add decorations")
+  cmd_furnish = _INTL("Decorate!")
   cmd_storage = _INTL("Pokémon Storage")
   cmd_item_storage = _INTL("Item Storage")
   cmd_cancel = _INTL("Cancel")
@@ -14,7 +17,7 @@ def useSecretBasePC()
   choice = optionsMenu(commands)
   case commands[choice]
   when cmd_furnish
-    return
+    addSecretBaseItem
   when cmd_storage
     pbFadeOutIn {
       scene = PokemonStorageScene.new

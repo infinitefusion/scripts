@@ -1,5 +1,17 @@
 class PokemonTemp
-  def pbClearAllTempEvents()
+  # def pbClearAllTempEvents()
+  #   echoln @tempEvents
+  #   @tempEvents.keys.each {|map_id|
+  #     map = $MapFactory.getMap(map_id,false)
+  #     @tempEvents[map_id].each { |event|
+  #        map.events[event.id] = nil
+  #     }
+  #   }
+  #   @tempEvents={}
+  #   @silhouetteDirection=nil
+  # end
+
+  def pbClearSilhouetteTempEvents()
     echoln @tempEvents
     @tempEvents.keys.each {|map_id|
       map = $MapFactory.getMap(map_id,false)
@@ -36,7 +48,7 @@ end
 Events.onStepTaken += proc { |sender, e|
   next if !$PokemonTemp.silhouetteDirection
   if $PokemonTemp.silhouetteDirection && $PokemonTemp.silhouetteDirection == $game_player.direction
-    $PokemonTemp.pbClearAllTempEvents
+    $PokemonTemp.pbClearSilhouetteTempEvents
     $PokemonTemp.silhouetteDirection = nil
   end
 }
@@ -52,7 +64,7 @@ Events.onStepTaken += proc { |sender, e|
   steps_nb = minimum_steps if steps_nb<minimum_steps
   next if $PokemonGlobal.stepcount % steps_nb != 0
   next if !isOutdoor()
-  $PokemonTemp.pbClearAllTempEvents
+  $PokemonTemp.pbClearSilhouetteTempEvents
   spawnSilhouette()
 }
 Events.onMapChange += proc { |sender, e|
