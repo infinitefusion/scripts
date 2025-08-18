@@ -18,7 +18,7 @@ class PokemonTemp
     @silhouetteDirection = nil
   end
 
-  def createTempEvent(eventTemplateID, map_id, position = [0, 0])
+  def createTempEvent(eventTemplateID, map_id, position = [0, 0],direction=nil)
     template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events[eventTemplateID]
     key_id = ($game_map.events.keys.max || -1) + 1
 
@@ -28,7 +28,7 @@ class PokemonTemp
     gameEvent = Game_Event.new($game_map.map_id, rpgEvent, $game_map)
 
     gameEvent.moveto(position[0], position[1])
-    gameEvent.direction = DIRECTION_DOWN
+    gameEvent.direction = direction if direction
 
     addTempEvent(map_id,gameEvent)
 
