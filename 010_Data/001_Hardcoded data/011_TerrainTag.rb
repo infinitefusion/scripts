@@ -95,6 +95,7 @@ module GameData
     end
 
     def can_secret_base
+      return false if Settings::GAME_ID != :IF_HOENN
       return @secretBase_tree# ||
     end
   end

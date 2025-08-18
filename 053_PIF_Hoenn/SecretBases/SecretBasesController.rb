@@ -43,7 +43,7 @@ end
 def createSecretBaseHere(type, secretBaseMap = 0, secretBaseCoordinates = [0, 0])
   if pbConfirmMessage("Do you want to create a new secret base here?")
     if $Trainer.secretBase
-      unless pbConfirmMessage("This will overwrite your secret base in #{$Trainer.secretBase.location_name}. Do you still wish to continue?")
+      unless pbConfirmMessage("This will overwrite your current secret base. Do you still wish to continue?")
         return
       end
     end
