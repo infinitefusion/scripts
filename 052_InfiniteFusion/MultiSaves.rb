@@ -1,6 +1,7 @@
 # Auto Multi Save by http404error
 # For Pokemon Essentials v19.1
 
+
 # Description:
 #   Adds multiple save slots and the abliity to auto-save.
 #   Included is code to autosave every 30 overworld steps. Feel free to edit or delete it (it's right at the top).
@@ -316,22 +317,76 @@ class PokemonLoadScreen
   end
 
   def try_load_backup(file_path)
-    if File.file?(file_path + ".bak")
-      pbMessage(_INTL("The save file is corrupt. A backup will be loaded."))
-      save_data = load_save_file(file_path + ".bak")
-    else
+    file_name = File.basename(file_path, ".rxdata")   # e.g. "File A"
+    save_folder = File.dirname(file_path)
+    backup_dir = File.join(save_folder, "backups", file_name)
+
+    echoln file_path
+    unless Dir.exist?(backup_dir)
       self.prompt_save_deletion(file_path)
       return {}
     end
-    return save_data
+
+    backups = Dir.children(backup_dir).select { |f|
+      f.start_with?(file_name + "_") && f.end_with?(".rxdata")
+    }
+
+    echoln backups
+    echoln file_name + "_"
+
+    if backups.empty?
+      self.prompt_save_deletion(file_path)
+      return {}
+    end
+
+    # Sort by numeric timestamp
+    backups.sort_by! do |fname|
+      timestamp = fname.sub(/^#{Regexp.escape(file_name)}_/, "").sub(/\.rxdata$/, "")
+      timestamp.to_i
+    end
+
+    latest = backups.last
+    timestamp_str = latest.sub(/^#{Regexp.escape(file_name)}_/, "").sub(/\.rxdata$/, "")
+
+    # Convert numeric timestamp to readable date (custom formatting)
+    if timestamp_str.length >= 12
+      year   = timestamp_str[0,4]
+      month  = timestamp_str[4,2]
+      day    = timestamp_str[6,2]
+      hour   = timestamp_str[8,2]
+      minute = timestamp_str[10,2]
+      formatted_time = "#{year}-#{month}-#{day} #{hour}:#{minute}"
+    else
+      formatted_time = timestamp_str
+    end
+
+    pbMessage(_INTL(
+                "The save file is corrupt. The most recent backup will be loaded instead.\n" +
+                  "\\C[2]{1}\\C[0]\nBackup date: \\C[3]{2}",
+                latest, formatted_time
+              ))
+
+    latest_backup = File.join(backup_dir, latest)
+    return load_save_file(latest_backup)
   end
+
+
+  def formatSaveDate(str)
+    year   = str[0,4]
+    month  = str[4,2]
+    day    = str[6,2]
+    hour   = str[8,2]
+    minute = str[10,2]
+    return "#{year}-#{month}-#{day} #{hour}:#{minute}"
+  end
+
 
   # Called if save file is invalid.
   # Prompts the player to delete the save files.
   def prompt_save_deletion(file_path)
     pbMessage(_INTL("A save file is corrupt, or is incompatible with this game."))
     self.delete_save_data(file_path) if pbConfirmMessageSerious(
-      _INTL("Do you want to delete that save file? The game will exit afterwards either way.")
+      _INTL("No backup was found. Do you want to delete that save file? The game will exit afterwards either way.")
     )
     exit
   end
