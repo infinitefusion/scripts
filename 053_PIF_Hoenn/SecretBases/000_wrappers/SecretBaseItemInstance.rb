@@ -11,13 +11,15 @@ class SecretBaseItemInstance
     @itemId = itemId
     @instanceId = generate_new_instance_id()
     @position = position
-    @itemTemplate = GameData::SECRET_BASE_ITEMS[@itemId]
   end
 
   def getGraphics()
-    return @itemTemplate.graphics
+    return itemTemplate.graphics
   end
 
+  def itemTemplate
+    GameData::SECRET_BASE_ITEMS[@itemId]
+  end
   def generate_new_instance_id()
     randomId = rand(36 ** RANDOM_ID_LENGTH).to_s(36)
     return "#{@itemId}_#{randomId}"
@@ -46,16 +48,16 @@ class SecretBaseItemInstance
       options << cmd_storage
       options << cmd_item_storage
     else
-      options << cmd_use if @itemTemplate.behavior
+      options << cmd_use if itemTemplate.behavior
     end
     options << cmd_move
-    options << cmd_delete if @itemTemplate.deletable
+    options << cmd_delete if itemTemplate.deletable
     options << cmd_cancel
 
     choice = optionsMenu(options)
     case options[choice]
     when cmd_use
-      @itemTemplate.behavior.call
+      itemTemplate.behavior.call
     when cmd_move
       moveSecretBaseItem(@instanceId, @position)
       return

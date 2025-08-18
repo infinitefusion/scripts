@@ -100,8 +100,8 @@ def enterSecretBase()
 end
 
 def loadSecretBaseFurniture()
-  return if !$Trainer.secretBase
-
+  return unless $Trainer.secretBase
+  return unless $scene.is_a?(Scene_Map)
   $Trainer.secretBase.layout.items.each do |item_instance|
     next unless item_instance
     next unless GameData::SECRET_BASE_ITEMS[item_instance.itemId]
@@ -213,13 +213,17 @@ def moveSecretBaseItem(itemInstanceId, oldPosition = [0, 0])
   itemInstance = $Trainer.secretBase.layout.get_item_by_id(itemInstanceId)
 
   event = itemInstance.getEvent
-  event.opacity = 50 if event
-  event.through = true if event
+
   $game_player.setPlayerGraphicsOverride("SecretBases/#{itemInstance.getGraphics}")
   $game_player.direction_fix = true
+  $game_player.under_player = event.under_player
+  $game_player.through = event.through  #todo: Make it impossible to go past the walls
   $game_temp.moving_furniture = itemInstanceId
   $game_temp.moving_furniture_oldPlayerPosition = [$game_player.x, $game_player.y]
   $game_temp.moving_furniture_oldItemPosition = itemInstance.position
+
+  event.opacity = 50 if event
+  event.through = true if event
 
   $game_player.x, $game_player.y = itemInstance.position
   $game_system.menu_disabled = true
@@ -279,7 +283,11 @@ def placeFurnitureAtCurrentPosition(furnitureInstanceId)
   $game_player.removeGraphicsOverride
   pbFadeOutIn {
     $game_player.direction_fix = false
-    $game_player.direction = $game_temp.original_direction
+    if $game_temp.original_direction
+      $game_player.direction = $game_temp.original_direction
+    end
+    $game_player.through = false
+    $game_player.under_player = false
     $game_temp.player_new_map_id = $game_map.map_id
     $game_temp.player_new_x = $game_temp.moving_furniture_oldPlayerPosition[0]
     $game_temp.player_new_y = $game_temp.moving_furniture_oldPlayerPosition[1]
