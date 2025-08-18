@@ -587,6 +587,31 @@ def pbFly(move, pokemon)
   return true
 end
 
+
+
+Events.onAction += proc { |_sender, _e|
+  terrain = $game_player.pbFacingTerrainTag
+  if terrain.can_secret_base
+    pbSecretPower(terrain)
+  end
+}
+
+def pbSecretPower(terrain)
+  move = :SECRETPOWER
+  movefinder = $Trainer.get_pokemon_with_move(move)
+  return if !movefinder
+  speciesname = (movefinder) ? movefinder.name : $Trainer.name
+  baseType = getSecretBaseType(terrain)
+  baseMapId = getSecretBaseMapId(baseType)
+  baseEntrancePosition = getSecretBaseEntrance(baseType,baseMapId)
+  if baseType && baseMapId && baseEntrancePosition
+    pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
+    pbHiddenMoveAnimation(movefinder)
+    pbSecretBase(baseType,baseMapId,baseEntrancePosition)
+  end
+end
+
+
 #===============================================================================
 # Headbutt
 #===============================================================================
@@ -646,6 +671,13 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
   facingEvent = $game_player.pbFacingEvent
   pbHeadbuttEffect(facingEvent)
 })
+
+HiddenMoveHandlers::UseMove.add(:SECRETPOWER, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+})
+
 
 HiddenMoveHandlers::CanUseMove.add(:RELICSONG, proc { |move, pokemon, showmsg|
   if  !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))

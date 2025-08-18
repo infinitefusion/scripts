@@ -27,9 +27,13 @@ module GameData
     attr_reader :flowerYellow
     attr_reader :flowerBlue
     attr_reader :flower
+
     attr_reader :trashcan
     attr_reader :sharpedoObstacle
     attr_reader :underwater #only visible when diving
+
+    attr_reader :secretBase_tree
+
 
     DATA = {}
 
@@ -82,10 +86,16 @@ module GameData
       @sharpedoObstacle = hash[:sharpedoObstacle] || false
       @underwater = hash[:underwater] || false
 
+      @secretBase_tree = hash[:secretBase_tree] || false
+
     end
 
     def can_surf_freely
       return @can_surf && !@waterfall && !@waterfall_crest
+    end
+
+    def can_secret_base
+      return @secretBase_tree# ||
     end
   end
 end
@@ -299,4 +309,11 @@ GameData::TerrainTag.register({
                                 :id_number => 28,
                                 :battle_environment => :underwater,
                                 :underwater => true,
+                              })
+
+
+GameData::TerrainTag.register({
+                                :id => :Secretbase_Tree,
+                                :id_number => 29,
+                                :secretBase_tree => true,
                               })

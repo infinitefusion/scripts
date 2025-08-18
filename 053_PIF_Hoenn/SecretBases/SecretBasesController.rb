@@ -2,6 +2,24 @@ class Trainer
   attr_accessor :secretBase
   attr_accessor :owned_decorations
 end
+def getSecretBaseType(terrainTag)
+  return :TREE if terrainTag.secretBase_tree
+  #todo: other types
+  return nil
+end
+
+
+#todo
+def getSecretBaseMapId(baseType)
+  case baseType
+  when :TREE
+    return 65
+  end
+end
+
+def getSecretBaseEntrance(baseType, mapId)
+  return [12,15] #todo
+end
 
 def pbSecretBase(base_type, base_map_id, base_entrance_coordinates)
   player_map_id = $game_map.map_id
@@ -68,6 +86,7 @@ def enterSecretBase()
   $PokemonTemp.pbClearTempEvents
   base_map_id = $Trainer.secretBase.inside_map_id
   base_entrance_position = $Trainer.secretBase.inside_entrance_position
+
   pbFadeOutIn {
     $game_temp.player_new_map_id = base_map_id
     $game_temp.player_new_x = base_entrance_position[0]
