@@ -3,8 +3,6 @@ class Trainer
   attr_accessor :owned_decorations
 end
 
-
-
 def pbSecretBase(base_type, base_map_id, base_entrance_coordinates)
   player_map_id = $game_map.map_id
   player_position = [$game_player.x, $game_player.y]
@@ -87,8 +85,11 @@ def loadSecretBaseFurniture()
     next unless item_instance
     next unless GameData::SECRET_BASE_ITEMS[item_instance.itemId]
 
+    template = item_instance.itemTemplate
     event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position)
-    event.character_name = "player/SecretBases/#{item_instance.itemTemplate.graphics}"
+    event.character_name = "player/SecretBases/#{template.graphics}"
+    event.through = template.pass_through
+    event.under_player = template.under_player
     item_instance.setEventId(event.id)
     event.refresh
   end
@@ -107,10 +108,33 @@ def isMovingFurniture?
   return $game_temp.moving_furniture
 end
 
-def addSecretBaseItem()
-  item_id = selectSecretBaseItem
+def decorateSecretBase
+  cmd_addItem = _INTL("Add a decoration")
+  cmd_moveItem = _INTL("Move a decoration")
+  cmd_cancel = _INTL("Back")
+
+  commands = []
+  commands << cmd_addItem
+  commands << cmd_moveItem
+  commands << cmd_cancel
+
+  choice = optionsMenu(commands)
+  case commands[choice]
+  when cmd_addItem
+    item_id = selectAnySecretBaseItem
+    addSecretBaseItem(item_id)
+  when cmd_moveItem
+    item_instance = selectPlacedSecretBaseItemInstance
+    moveSecretBaseItem(item_instance.instanceId, item_instance.position)
+  when cmd_cancel
+    return
+  end
+
+end
+
+def addSecretBaseItem(item_id)
   if item_id
-    new_item_instance = $Trainer.secretBase.layout.add_item(item_id,[$game_player.x,$game_player.y])
+    new_item_instance = $Trainer.secretBase.layout.add_item(item_id, [$game_player.x, $game_player.y])
     loadSecretBaseFurniture
     $game_temp.original_direction = $game_player.direction
     $game_player.direction = DIRECTION_DOWN
@@ -118,7 +142,24 @@ def addSecretBaseItem()
   end
 end
 
-def selectSecretBaseItem()
+def selectPlacedSecretBaseItemInstance()
+  options = []
+  $Trainer.secretBase.layout.items.each do |item_instance|
+    item_id = item_instance.itemId
+    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    options << item_name
+  end
+  options << _INTL("Cancel")
+  chosen = optionsMenu(options)
+  $Trainer.secretBase.layout.items.each do |item_instance|
+    item_id = item_instance.itemId
+    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    return item_instance if item_name == options[chosen]
+  end
+  return nil
+end
+
+def selectAnySecretBaseItem()
   options = []
   $Trainer.owned_decorations = [] if $Trainer.owned_decorations.nil?
   $Trainer.owned_decorations.each do |item_id|
@@ -145,21 +186,21 @@ end
 #  -Cancel: closes menu, reloads map
 # Press B: Exit moving mode
 
-#todo: cancel! (delete the item when cancel if oldPosition is nil (when adding a new item))
+# todo: cancel! (delete the item when cancel if oldPosition is nil (when adding a new item))
 def moveSecretBaseItem(itemInstanceId, oldPosition = [0, 0])
 
   itemInstance = $Trainer.secretBase.layout.get_item_by_id(itemInstanceId)
 
   event = itemInstance.getEvent
-  event.opacity = 50  if event
+  event.opacity = 50 if event
   event.through = true if event
   $game_player.setPlayerGraphicsOverride("SecretBases/#{itemInstance.getGraphics}")
-  $game_player.direction_fix=true
+  $game_player.direction_fix = true
   $game_temp.moving_furniture = itemInstanceId
   $game_temp.moving_furniture_oldPlayerPosition = [$game_player.x, $game_player.y]
   $game_temp.moving_furniture_oldItemPosition = itemInstance.position
 
-  $game_player.x,$game_player.y = itemInstance.position
+  $game_player.x, $game_player.y = itemInstance.position
   $game_system.menu_disabled = true
   $game_map.refresh
 end
@@ -170,13 +211,13 @@ def cancelMovingFurniture()
   $game_temp.moving_furniture = nil
 end
 
-def placeFurnitureMenu(menu_position=0)
+def placeFurnitureMenu(menu_position = 0)
   if !$Trainer.secretBase || !$game_temp.moving_furniture
     cancelMovingFurniture()
   end
 
   cmd_place = _INTL("Place here")
-  cmd_rotate= _INTL("Rotate")
+  cmd_rotate = _INTL("Rotate")
   cmd_reset = _INTL("Reset")
   cmd_cancel = _INTL("Cancel")
 
@@ -186,7 +227,7 @@ def placeFurnitureMenu(menu_position=0)
   options << cmd_reset
   options << cmd_cancel
 
-  choice = optionsMenu(options,-1,menu_position)
+  choice = optionsMenu(options, -1, menu_position)
   case options[choice]
   when cmd_place
     placeFurnitureAtCurrentPosition($game_temp.moving_furniture)
@@ -209,14 +250,14 @@ def placeFurnitureAtCurrentPosition(furnitureInstanceId)
   $PokemonTemp.pbClearTempEvents
   loadSecretBaseFurniture
 
-  #Roload after items update
+  # Roload after items update
   itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
   event = itemInstance.getEvent
   event.direction = $game_player.direction
 
   $game_player.removeGraphicsOverride
   pbFadeOutIn {
-    $game_player.direction_fix=false
+    $game_player.direction_fix = false
     $game_player.direction = $game_temp.original_direction
     $game_temp.player_new_map_id = $game_map.map_id
     $game_temp.player_new_x = $game_temp.moving_furniture_oldPlayerPosition[0]

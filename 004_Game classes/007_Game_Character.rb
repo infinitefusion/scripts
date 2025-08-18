@@ -25,7 +25,8 @@ class Game_Character
   attr_reader :move_speed
   attr_accessor :walk_anime
   attr_writer :bob_height
-  attr_accessor :under_everything
+  attr_accessor :under_everything #under even grass
+  attr_accessor :under_player     #always under the player, but over grass, etc.
   attr_accessor :direction_fix
   def initialize(map = nil)
     @map = map
@@ -77,6 +78,7 @@ class Game_Character
     @locked = false
     @prelock_direction = 0
     @under_everything=false
+    @under_player = false
     @forced_z=nil
   end
 
@@ -339,6 +341,7 @@ class Game_Character
 
   def screen_z(height = 0)
     return -1 if @under_everything
+    return 0 if @under_player
     return 999 if @always_on_top
     return @forced_z if @forced_z
     z = screen_y_ground

@@ -37,8 +37,9 @@ module GameData
     graphics: "Carpets/fancy_carpet.png",
     real_name: "Fancy Carpet",
     price: 5000,
-    pass_through: true
-    )
+    pass_through: true,
+    under_player: true
+  )
 
 end
 
