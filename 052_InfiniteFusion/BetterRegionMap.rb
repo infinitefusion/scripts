@@ -241,6 +241,7 @@ class BetterRegionMap
         secretGameBaseMapId = $Trainer.secretBase.outside_map_id
         secretBaseCoordinates = $Trainer.secretBase.outside_entrance_position
         secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
+        secret_base_town_map_coordinates = [1,1] if !secret_base_town_map_coordinates || secret_base_town_map_coordinates.empty?
         healspot = [secretGameBaseMapId, secretBaseCoordinates[0], secretBaseCoordinates[1]]
         add_fly_location(healspot, secret_base_town_map_coordinates, "secretBase_")
       end
@@ -441,6 +442,7 @@ class BetterRegionMap
       location_map_id = location_data[4]
       return [map_x, map_y] if location_map_id == map_id
     end
+    return nil
   end
 
   # Returns an array like [mapId,x,y]
