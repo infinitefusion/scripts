@@ -2,7 +2,7 @@ class Trainer
   attr_accessor :secretBase
   attr_accessor :owned_decorations
 end
-def getSecretBaseType(terrainTag)
+def getSecretBaseBiome(terrainTag)
   return :TREE if terrainTag.secretBase_tree
   #todo: other types
   return nil
@@ -13,15 +13,15 @@ end
 def getSecretBaseMapId(baseType)
   case baseType
   when :TREE
-    return 65
+    return MAP_SECRET_BASES
   end
 end
 
-def getSecretBaseEntrance(baseType, mapId)
-  return [12,15] #todo
+def pickSecretBaseLayout(baseType, mapId)
+  return SecretBasesData::SECRET_BASE_ENTRANCES.keys.sample #todo: Make it seed based so that a secret base at a specific position always has the same value
 end
 
-def pbSecretBase(base_type, base_map_id, base_entrance_coordinates)
+def pbSecretBase(biome_type, base_map_id, base_layout_type)
   player_map_id = $game_map.map_id
   player_position = [$game_player.x, $game_player.y]
 
@@ -29,7 +29,7 @@ def pbSecretBase(base_type, base_map_id, base_entrance_coordinates)
     enterSecretBase
   else
     # Todo: Determine the secret base's map ids and coordinates from a seed using the current map and the base type instead of passing it manually.
-    createSecretBaseHere(base_type, base_map_id, base_entrance_coordinates)
+    createSecretBaseHere(biome_type, base_map_id, base_layout_type)
   end
 end
 
@@ -40,7 +40,7 @@ def secretBaseExistsAtPosition(map_id, position)
   return current_outdoor_id == map_id && current_outdoor_coordinates == position
 end
 
-def createSecretBaseHere(type, secretBaseMap = 0, secretBaseCoordinates = [0, 0])
+def createSecretBaseHere(type, secretBaseMap = 0, baseLayoutType = :TYPE_1)
   if pbConfirmMessage("Do you want to create a new secret base here?")
     if $Trainer.secretBase
       unless pbConfirmMessage("This will overwrite your current secret base. Do you still wish to continue?")
@@ -49,18 +49,18 @@ def createSecretBaseHere(type, secretBaseMap = 0, secretBaseCoordinates = [0, 0]
     end
     current_map_id = $game_map.map_id
     current_position = [$game_player.x, $game_player.y]
-    $Trainer.secretBase = initialize_secret_base(type, current_map_id, current_position, secretBaseMap, secretBaseCoordinates)
+    $Trainer.secretBase = initialize_secret_base(type, current_map_id, current_position, secretBaseMap, baseLayoutType)
     setupSecretBaseEntranceEvent
   end
 end
 
-def initialize_secret_base(base_type, outside_map_id, outside_position, base_map_id, base_entrance_position)
+def initialize_secret_base(base_type, outside_map_id, outside_position, base_map_id, baseLayoutType)
   return SecretBase.new(
     base_type,
     outside_map_id,
     outside_position,
     base_map_id,
-    base_entrance_position
+    baseLayoutType
   )
 end
 
@@ -95,16 +95,20 @@ def enterSecretBase()
     $game_temp.player_new_y = base_entrance_position[1]
     $scene.transfer_player(true)
     $game_map.autoplay
+    loadSecretBaseFurniture
     $game_map.refresh
   }
+
 end
 
 def loadSecretBaseFurniture()
   return unless $Trainer.secretBase
   return unless $scene.is_a?(Scene_Map)
   $Trainer.secretBase.layout.items.each do |item_instance|
+    echoln item_instance
+    echoln SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
     next unless item_instance
-    next unless GameData::SECRET_BASE_ITEMS[item_instance.itemId]
+    next unless SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
 
     template = item_instance.itemTemplate
     event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position, DIRECTION_DOWN)
@@ -167,14 +171,14 @@ def selectPlacedSecretBaseItemInstance()
   options = []
   $Trainer.secretBase.layout.items.each do |item_instance|
     item_id = item_instance.itemId
-    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    item_name = SecretBasesData::SECRET_BASE_ITEMS[item_id].real_name
     options << item_name
   end
   options << _INTL("Cancel")
   chosen = optionsMenu(options)
   $Trainer.secretBase.layout.items.each do |item_instance|
     item_id = item_instance.itemId
-    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    item_name = SecretBasesData::SECRET_BASE_ITEMS[item_id].real_name
     return item_instance if item_name == options[chosen]
   end
   return nil
@@ -184,13 +188,13 @@ def selectAnySecretBaseItem()
   options = []
   $Trainer.owned_decorations = [] if $Trainer.owned_decorations.nil?
   $Trainer.owned_decorations.each do |item_id|
-    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    item_name = SecretBasesData::SECRET_BASE_ITEMS[item_id].real_name
     options << item_name
   end
   options << _INTL("Cancel")
   chosen = optionsMenu(options)
   $Trainer.owned_decorations.each do |item_id|
-    item_name = GameData::SECRET_BASE_ITEMS[item_id].real_name
+    item_name = SecretBasesData::SECRET_BASE_ITEMS[item_id].real_name
     return item_id if item_name == options[chosen]
   end
   return nil

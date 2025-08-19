@@ -11,6 +11,11 @@ class PokemonTemp
     @tempEvents.keys.each { |map_id|
       map = $MapFactory.getMap(map_id)
       @tempEvents[map_id].each { |event|
+        $game_self_switches[[map_id, event.id, "A"]] = false
+        $game_self_switches[[map_id, event.id, "B"]] = false
+        $game_self_switches[[map_id, event.id, "C"]] = false
+        $game_self_switches[[map_id, event.id, "D"]] = false
+
         map.events[event.id].erase if map.events[event.id]
       }
     }

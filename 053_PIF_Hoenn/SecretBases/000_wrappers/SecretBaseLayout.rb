@@ -1,7 +1,10 @@
 class SecretBaseLayout
   attr_accessor :items  #SecretBaseItemInstance
   attr_accessor :tileset #todo Reuse the same layouts map for all bases and change the tileset depending on the type
-  def initialize()
+  attr_accessor :layout_template
+
+  def initialize(layout_template)
+    @layout_template = layout_template
     @items = []
   end
 

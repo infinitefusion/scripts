@@ -18,7 +18,7 @@ class SecretBaseItemInstance
   end
 
   def itemTemplate
-    GameData::SECRET_BASE_ITEMS[@itemId]
+    return SecretBasesData::SECRET_BASE_ITEMS[@itemId]
   end
   def generate_new_instance_id()
     randomId = rand(36 ** RANDOM_ID_LENGTH).to_s(36)

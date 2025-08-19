@@ -16,23 +16,25 @@ class SecretBase
   attr_accessor :layout
 
 
-  def initialize(type,outside_map_id,outside_entrance_position, inside_map_id,inside_entrance_position)
+  def initialize(type,outside_map_id,outside_entrance_position, inside_map_id,base_layout_type)
     @type = type
     @outside_map_id = outside_map_id
     @inside_map_id = inside_map_id
 
     @outside_entrance_position = outside_entrance_position
-    @inside_entrance_position = inside_entrance_position
+    @base_layout_type = base_layout_type
+    @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type]
+
 
     initializeLayout
   end
 
   def initializeLayout
-    @layout = SecretBaseLayout.new
+    @layout = SecretBaseLayout.new(@base_layout_type)
 
     entrance_x = @inside_entrance_position[0]
     entrance_y = @inside_entrance_position[1]
 
-    @layout.add_item(:PC,[entrance_x,entrance_y-2])
+    @layout.add_item(:PC,[entrance_x,entrance_y-3])
   end
 end

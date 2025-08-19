@@ -602,13 +602,13 @@ def pbSecretPower(terrain)
   movefinder = $Trainer.get_pokemon_with_move(move)
   return if !movefinder
   speciesname = (movefinder) ? movefinder.name : $Trainer.name
-  baseType = getSecretBaseType(terrain)
-  baseMapId = getSecretBaseMapId(baseType)
-  baseEntrancePosition = getSecretBaseEntrance(baseType,baseMapId)
-  if baseType && baseMapId && baseEntrancePosition
+  biomeType = getSecretBaseBiome(terrain)
+  baseMapId = getSecretBaseMapId(biomeType)
+  baseLayoutType = pickSecretBaseLayout(biomeType, baseMapId)
+  if biomeType && baseMapId && baseLayoutType
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
-    pbSecretBase(baseType,baseMapId,baseEntrancePosition)
+    pbSecretBase(biomeType,baseMapId,baseLayoutType)
   end
 end
 

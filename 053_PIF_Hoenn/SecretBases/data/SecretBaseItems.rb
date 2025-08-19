@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-module GameData
+module SecretBasesData
 
   SECRET_BASE_ITEMS = {}
 
-  def GameData::register_base_item(id, **kwargs)
+  def SecretBasesData::register_base_item(id, **kwargs)
     SECRET_BASE_ITEMS[id] = SecretBaseItem.new(id: id, **kwargs)
   end
 
@@ -37,6 +37,15 @@ module GameData
     graphics: "Carpets/fancy_carpet.png",
     real_name: "Fancy Carpet",
     price: 5000,
+    pass_through: true,
+    under_player: true
+  )
+
+  register_base_item(
+    :FANCY_CARPET_CONNECT,
+    graphics: "Carpets/fancy_carpet_connect.png",
+    real_name: "Fancy Carpet (Connection)",
+    price: 100,
     pass_through: true,
     under_player: true
   )
