@@ -351,7 +351,9 @@ def setupSecretBaseEntranceEvent
 end
 
 Events.onMapSceneChange += proc { |_sender, e|
+  $PokemonTemp.pbClearTempEvents()
   next unless $PokemonTemp.tempEvents.empty?
+  echoln "coolio"
   if $Trainer && $Trainer.secretBase && $game_map.map_id == $Trainer.secretBase.outside_map_id
     setupSecretBaseEntranceEvent
   end

@@ -8,8 +8,9 @@ class PokemonTemp
   end
 
   def pbClearTempEvents()
+    return if !@tempEvents || @tempEvents.empty?
     @tempEvents.keys.each { |map_id|
-      map = $MapFactory.getMap(map_id)
+      map = $MapFactory.getMapNoAdd(map_id)
       @tempEvents[map_id].each { |event|
         $game_self_switches[[map_id, event.id, "A"]] = false
         $game_self_switches[[map_id, event.id, "B"]] = false
@@ -27,7 +28,6 @@ class PokemonTemp
     template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events[eventTemplateID]
     key_id = ($game_map.events.keys.max || -1) + 1
 
-
     rpgEvent= template_event.event.dup
     rpgEvent.id = key_id
     gameEvent = Game_Event.new($game_map.map_id, rpgEvent, $game_map)
@@ -35,7 +35,7 @@ class PokemonTemp
     gameEvent.moveto(position[0], position[1])
     gameEvent.direction = direction if direction
 
-    addTempEvent(map_id,gameEvent)
+    registerTempEvent(map_id, gameEvent)
 
     $game_map.events[key_id] = gameEvent
     sprite = Sprite_Character.new(Spriteset_Map.viewport, $game_map.events[key_id])
@@ -44,7 +44,7 @@ class PokemonTemp
     return gameEvent
   end
 
-  def addTempEvent(map, event)
+  def registerTempEvent(map, event)
     @tempEvents = {} if !@tempEvents
     mapEvents = @tempEvents.has_key?(map) ? @tempEvents[map] : []
     mapEvents.push(event)
