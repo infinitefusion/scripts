@@ -468,7 +468,7 @@ def switchToFavoriteOutfit()
       last_worn_hat_is_favorite = $Trainer.last_worn_hat == $Trainer.favorite_hat
       last_worn_hat2_is_favorite = $Trainer.last_worn_hat2 == $Trainer.favorite_hat2
       if (last_worn_clothes_is_favorite && last_worn_hat_is_favorite && last_worn_hat2_is_favorite)
-        $Trainer.last_worn_outfit = getDefaultClothes()
+        $Trainer.last_worn_outfit = getDefaultClothes(getPlayerGenderId)
       end
       playOutfitChangeAnimation()
       putOnClothes($Trainer.last_worn_outfit, true) #if $Trainer.favorite_clothes
