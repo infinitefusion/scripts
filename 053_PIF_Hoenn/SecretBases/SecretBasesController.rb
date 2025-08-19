@@ -2,14 +2,14 @@ class Trainer
   attr_accessor :secretBase
   attr_accessor :owned_decorations
 end
+
 def getSecretBaseBiome(terrainTag)
   return :TREE if terrainTag.secretBase_tree
-  #todo: other types
+  # todo: other types
   return nil
 end
 
-
-#todo
+# todo
 def getSecretBaseMapId(baseType)
   case baseType
   when :TREE
@@ -18,8 +18,36 @@ def getSecretBaseMapId(baseType)
 end
 
 def pickSecretBaseLayout(baseType, mapId)
-  return SecretBasesData::SECRET_BASE_ENTRANCES.keys.sample #todo: Make it seed based so that a secret base at a specific position always has the same value
+  # Distance is how far away the same coordinates will share the same seed
+  case baseType
+  when :TREE
+    distance = 2
+  else
+    distance = 4
+  end
+  # Snap to 2x2 blocks
+  block_x = $game_player.x / distance
+  block_y = $game_player.y / distance
+
+  # Universal deterministic seed
+  seed_str = "#{baseType}-#{mapId}-#{block_x}-#{block_y}"
+  seed = Zlib.crc32(seed_str)
+
+  rng = Random.new(seed)
+  layoutType = weighted_sample(SecretBasesData::SECRET_BASE_ENTRANCES, rng)
+  return layoutType
 end
+
+def weighted_sample(entries, rng)
+  total = entries.values.sum { |v| v[:rareness] }
+  pick  = rng.rand * total
+  entries.each do |key, v|
+    return key if (pick -= v[:rareness]) <= 0
+  end
+  # Fallback: return the last key
+  return entries.keys.last
+end
+
 
 def pbSecretBase(biome_type, base_map_id, base_layout_type)
   player_map_id = $game_map.map_id
@@ -221,7 +249,7 @@ def moveSecretBaseItem(itemInstanceId, oldPosition = [0, 0])
   $game_player.setPlayerGraphicsOverride("SecretBases/#{itemInstance.getGraphics}")
   $game_player.direction_fix = true
   $game_player.under_player = event.under_player
-  $game_player.through = event.through  #todo: Make it impossible to go past the walls
+  $game_player.through = event.through # todo: Make it impossible to go past the walls
   $game_temp.moving_furniture = itemInstanceId
   $game_temp.moving_furniture_oldPlayerPosition = [$game_player.x, $game_player.y]
   $game_temp.moving_furniture_oldItemPosition = itemInstance.position
@@ -312,12 +340,11 @@ def rotateFurniture()
   $game_player.direction_fix = true
 end
 
-
-#Called on map load
+# Called on map load
 def setupSecretBaseEntranceEvent
   $PokemonTemp.pbClearTempEvents
   warpPosition = $Trainer.secretBase.outside_entrance_position
-  entrancePosition = [warpPosition[0], warpPosition[1]-1]
+  entrancePosition = [warpPosition[0], warpPosition[1] - 1]
   event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE, $game_map.map_id, entrancePosition)
   event.refresh
 

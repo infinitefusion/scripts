@@ -23,7 +23,7 @@ class SecretBase
 
     @outside_entrance_position = outside_entrance_position
     @base_layout_type = base_layout_type
-    @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type]
+    @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type][:position]
 
 
     initializeLayout
