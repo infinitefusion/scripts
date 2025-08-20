@@ -68,7 +68,7 @@ def secretBaseExistsAtPosition(map_id, position)
   return current_outdoor_id == map_id && current_outdoor_coordinates == position
 end
 
-def createSecretBaseHere(type, secretBaseMap = 0, baseLayoutType = :TYPE_1)
+def createSecretBaseHere(biomeType, secretBaseMap = 0, baseLayoutType = :TYPE_1)
   if pbConfirmMessage("Do you want to create a new secret base here?")
     if $Trainer.secretBase
       unless pbConfirmMessage("This will overwrite your current secret base. Do you still wish to continue?")
@@ -77,18 +77,18 @@ def createSecretBaseHere(type, secretBaseMap = 0, baseLayoutType = :TYPE_1)
     end
     current_map_id = $game_map.map_id
     current_position = [$game_player.x, $game_player.y]
-    $Trainer.secretBase = initialize_secret_base(type, current_map_id, current_position, secretBaseMap, baseLayoutType)
+    $Trainer.secretBase = initialize_secret_base(biomeType, current_map_id, current_position, secretBaseMap, baseLayoutType)
     setupSecretBaseEntranceEvent
   end
 end
 
-def initialize_secret_base(base_type, outside_map_id, outside_position, base_map_id, baseLayoutType)
+def initialize_secret_base(biome_type, outside_map_id, outside_position, base_map_id, layout_shape)
   return SecretBase.new(
-    base_type,
+    biome_type,
     outside_map_id,
     outside_position,
     base_map_id,
-    baseLayoutType
+    layout_shape
   )
 end
 
@@ -133,8 +133,6 @@ def loadSecretBaseFurniture()
   return unless $Trainer.secretBase
   return unless $scene.is_a?(Scene_Map)
   $Trainer.secretBase.layout.items.each do |item_instance|
-    echoln item_instance
-    echoln SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
     next unless item_instance
     next unless SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
 
@@ -351,9 +349,7 @@ def setupSecretBaseEntranceEvent
 end
 
 Events.onMapSceneChange += proc { |_sender, e|
-  $PokemonTemp.pbClearTempEvents()
   next unless $PokemonTemp.tempEvents.empty?
-  echoln "coolio"
   if $Trainer && $Trainer.secretBase && $game_map.map_id == $Trainer.secretBase.outside_map_id
     setupSecretBaseEntranceEvent
   end

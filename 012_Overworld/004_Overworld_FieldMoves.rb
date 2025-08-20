@@ -598,6 +598,7 @@ Events.onAction += proc { |_sender, _e|
 
 def pbSecretPower(terrain)
   return if $PokemonGlobal.surfing
+  return unless $game_player.direction == DIRECTION_UP
   move = :SECRETPOWER
   movefinder = $Trainer.get_pokemon_with_move(move)
   return if !movefinder

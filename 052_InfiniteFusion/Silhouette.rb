@@ -67,10 +67,10 @@ Events.onStepTaken += proc { |sender, e|
   $PokemonTemp.pbClearSilhouetteTempEvents
   spawnSilhouette()
 }
-# Events.onMapSceneChange += proc { |sender, e|
-#   next if $PokemonTemp.tempEvents.empty?
-#   $PokemonTemp.pbClearTempEvents()
-# }
+Events.onMapChange += proc { |sender, e|
+  next if $PokemonTemp.tempEvents.empty?
+  $PokemonTemp.pbClearTempEvents()
+}
 
 
 
