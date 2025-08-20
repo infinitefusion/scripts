@@ -1,12 +1,15 @@
-#For more complex item behaviors - to keep things organized
+# For more complex item behaviors - to keep things organized
 
 def useSecretBaseMannequin
-  #Todo: This is the item that players can use to "place themselves" in the base.
+  # Todo: This is the item that players can use to "place themselves" in the base.
   # When a base has a mannequin, the base will be shared online and
   # the mannequin will appear as the player in other people's games.
+  export = export_secret_base($Trainer.secretBase)
+  Input.clipboard = export
   return
 end
-#Unused: Done directly in the interact menu
+
+# Unused: Done directly in the interact menu
 # def useSecretBasePC()
 #   pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
 #   cmd_furnish = _INTL("Decorate!")

@@ -99,7 +99,7 @@ def pbPostToFile(url, postdata, file)
   end
 end
 
-def serialize_value(value)
+def serialize_value_legacy(value)
   if value.is_a?(Hash)
     serialize_json(value)
   elsif value.is_a?(String)
@@ -112,16 +112,46 @@ end
 
 
 def serialize_json(data)
-  #echoln data
-  # Manually serialize the JSON data into a string
-  parts = ["{"]
-  data.each_with_index do |(key, value), index|
-    parts << "\"#{key}\":#{serialize_value(value)}"
-    parts << "," unless index == data.size - 1
+  if data.is_a?(Hash)
+    parts = ["{"]
+    data.each_with_index do |(key, value), index|
+      parts << "\"#{key}\":#{serialize_value(value)}"
+      parts << "," unless index == data.size - 1
+    end
+    parts << "}"
+    return parts.join
+  else
+    return serialize_value(data)
   end
-  parts << "}"
-  return parts.join
 end
+
+def serialize_value(value)
+  case value
+  when String
+    "\"#{escape_json_string(value)}\""
+  when Numeric
+    value.to_s
+  when TrueClass, FalseClass
+    value.to_s
+  when NilClass
+    "null"
+  when Array
+    "[" + value.map { |v| serialize_value(v) }.join(",") + "]"
+  when Hash
+    serialize_json(value)
+  else
+    raise "Unsupported type: #{value.class}"
+  end
+end
+
+def escape_json_string(str)
+  # Minimal escape handling
+  str.gsub(/["\\]/) { |m| "\\#{m}" }
+    .gsub("\n", "\\n")
+    .gsub("\t", "\\t")
+    .gsub("\r", "\\r")
+end
+
 
 
 def downloadAllowed?()

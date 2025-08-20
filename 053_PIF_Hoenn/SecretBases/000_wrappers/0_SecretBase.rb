@@ -11,7 +11,9 @@ class SecretBase
   attr_reader :inside_entrance_position #Where the player gets warped
 
   attr_reader :biome_type #:CAVE, :TREE,
+  attr_reader :base_layout_type
   attr_accessor :base_name
+  attr_accessor :base_message
 
   attr_accessor :layout
 
@@ -25,10 +27,18 @@ class SecretBase
     @base_layout_type = base_layout_type
     @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type][:position]
 
-
+    @base_name=initializeBaseName
+    @base_message=initialize_base_message #For a book or sign item that allows to set a custom message
     initializeLayout
   end
 
+  def initializeBaseName
+    return _INTL("#{$Trainer.name}'s secret base")
+  end
+
+  def initialize_base_message
+    return "Welcome to my secret base!"
+  end
   def initializeLayout
     @layout = SecretBaseLayout.new(@base_layout_type)
 

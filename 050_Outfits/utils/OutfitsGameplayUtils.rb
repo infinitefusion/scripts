@@ -274,6 +274,22 @@ def export_current_outfit()
   Input.clipboard = exportedString
 end
 
+def export_current_outfit_to_json
+  appearance = {
+    skin_color:     $Trainer.skin_tone || 0,
+    hat:            $Trainer.hat || nil,
+    hat2:           $Trainer.hat2 || nil,
+    clothes:        $Trainer.clothes,
+    hair:           $Trainer.hair,
+    hair_color:     $Trainer.hair_color || 0,
+    clothes_color:  $Trainer.clothes_color || 0,
+    hat_color:      $Trainer.hat_color || 0,
+    hat2_color:     $Trainer.hat2_color || 0
+  }
+  return appearance
+end
+
+
 def clearEventCustomAppearance(event_id)
   return if !$scene.is_a?(Scene_Map)
   event_sprite = $scene.spriteset.character_sprites[@event_id]
