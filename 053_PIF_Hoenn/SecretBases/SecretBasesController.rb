@@ -5,19 +5,13 @@ end
 
 def getSecretBaseBiome(terrainTag)
   return :TREE if terrainTag.secretBase_tree
+  return :CAVE if terrainTag.secretBase_cave
   # todo: other types
   return nil
 end
 
-# todo
-def getSecretBaseMapId(baseType)
-  case baseType
-  when :TREE
-    return MAP_SECRET_BASES
-  end
-end
-
-def pickSecretBaseLayout(baseType, mapId)
+def pickSecretBaseLayout(baseType)
+  mapId = MAP_SECRET_BASES
   # Distance is how far away the same coordinates will share the same seed
   case baseType
   when :TREE
@@ -49,7 +43,8 @@ def weighted_sample(entries, rng)
 end
 
 
-def pbSecretBase(biome_type, base_map_id, base_layout_type)
+def pbSecretBase(biome_type, base_layout_type)
+  base_map_id = MAP_SECRET_BASES
   player_map_id = $game_map.map_id
   player_position = [$game_player.x, $game_player.y]
 
@@ -343,7 +338,15 @@ def setupSecretBaseEntranceEvent
   $PokemonTemp.pbClearTempEvents
   warpPosition = $Trainer.secretBase.outside_entrance_position
   entrancePosition = [warpPosition[0], warpPosition[1] - 1]
-  event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE, $game_map.map_id, entrancePosition)
+  case $Trainer.secretBase.biome_type
+  when :TREE
+    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE
+  when :CAVE
+    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
+  else
+    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
+  end
+  event = $PokemonTemp.createTempEvent(template_event_id, $game_map.map_id, entrancePosition)
   event.refresh
 
 end

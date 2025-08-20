@@ -33,6 +33,7 @@ module GameData
     attr_reader :underwater #only visible when diving
 
     attr_reader :secretBase_tree
+    attr_reader :secretBase_cave
 
 
     DATA = {}
@@ -87,6 +88,7 @@ module GameData
       @underwater = hash[:underwater] || false
 
       @secretBase_tree = hash[:secretBase_tree] || false
+      @secretBase_cave = hash[:secretBase_cave] || false
 
     end
 
@@ -96,7 +98,7 @@ module GameData
 
     def can_secret_base
       return false if Settings::GAME_ID != :IF_HOENN
-      return @secretBase_tree# ||
+      return @secretBase_tree || @secretBase_cave# ||
     end
   end
 end
@@ -317,4 +319,10 @@ GameData::TerrainTag.register({
                                 :id => :Secretbase_Tree,
                                 :id_number => 29,
                                 :secretBase_tree => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Secretbase_Cave,
+                                :id_number => 30,
+                                :secretBase_cave => true,
                               })

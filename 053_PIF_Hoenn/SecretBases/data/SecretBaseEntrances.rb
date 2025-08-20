@@ -1,3 +1,6 @@
+TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE = 4
+TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE = 5
+
 module SecretBasesData
   # rareness: The higher, the more common
   SECRET_BASE_ENTRANCES = {
