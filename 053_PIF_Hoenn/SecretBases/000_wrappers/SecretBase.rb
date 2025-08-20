@@ -10,14 +10,14 @@ class SecretBase
   attr_reader :outside_entrance_position #Fly coordinates
   attr_reader :inside_entrance_position #Where the player gets warped
 
-  attr_reader :type #:CAVE, :TREE,
+  attr_reader :biome_type #:CAVE, :TREE,
   attr_accessor :base_name
 
   attr_accessor :layout
 
 
-  def initialize(type,outside_map_id,outside_entrance_position, inside_map_id,base_layout_type)
-    @type = type
+  def initialize(biome,outside_map_id,outside_entrance_position, inside_map_id,base_layout_type)
+    @biome_type = biome
     @outside_map_id = outside_map_id
     @inside_map_id = inside_map_id
 

@@ -19,6 +19,17 @@ module SecretBasesData
   )
 
   register_base_item(
+    :MANNEQUIN,
+    graphics: "Furniture/mannequin.png",
+    real_name: "Mannequin",
+    price: 500,
+    behavior: -> {
+      useSecretBaseMannequin
+    }
+
+  )
+
+  register_base_item(
     :PLANT,
     graphics: "Furniture/plant.png",
     real_name: "Decorative Plant",
