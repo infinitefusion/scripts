@@ -24,7 +24,8 @@ class SecretBase
     @inside_map_id = inside_map_id
 
     @outside_entrance_position = outside_entrance_position
-    @base_layout_type = base_layout_type
+    @base_layout_type = base_layout_type.to_sym
+
     @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type][:position]
 
     @base_name=initializeBaseName

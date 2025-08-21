@@ -1,20 +1,3 @@
-def exportTeamForShowdown()
-  message = ""
-  for pokemon in $Trainer.party
-    message << exportFusedPokemonForShowdown(pokemon)
-    message << "\n"
-  end
-  Input.clipboard = message
-end
-
-def exportTeamAsJson
-  team_string = ""
-  for pokemon in $Trainer.party
-    team_string << exportFusedPokemonAsJson(pokemon)
-    team_string << "\n"
-  end
-  return team_string
-end
 
 # Output example
 # Clefnair (Clefable) @ Life Orb
@@ -76,52 +59,6 @@ def exportFusedPokemonForShowdown(pokemon)
 end
 
 
-def exportFusedPokemonAsJson(pokemon)
-  data = {}
-  data[:species] = pokemon.species.to_s
-  data[:name] = pokemon.name
-  data[:item] = pokemon.item ? pokemon.item.name : nil
-  data[:ability] = pokemon.ability ? pokemon.ability.name : nil
-  data[:level] = pokemon.level
-
-  # EVs & IVs (todo: Currently just reusing showdown calculation helpers)
-  data[:evs] = calculateEvLineForShowdown(pokemon) # string like "252 HP / 252 SpD / 4 Spe"
-  data[:ivs] = calculateIvLineForShowdown(pokemon)
-
-  # Nature
-  data[:nature] = GameData::Nature.get(pokemon.nature).id
-
-  # Moves
-  moves = []
-  pokemon.moves.each do |move_slot|
-    next unless move_slot
-    moves << GameData::Move.get(move_slot.id).id
-  end
-  data[:moves] = moves
-
-  return JSON.generate(data)
-end
-
-def export_team_as_array
-  $Trainer.party.compact.map { |p| export_fused_pokemon_hash(p) }
-end
-
-def export_fused_pokemon_hash(pokemon)
-  data = {
-    species: pokemon.species.to_s,
-    name:    pokemon.name,
-    item:    (pokemon.item ? pokemon.item.name : nil),
-    ability: (pokemon.ability ? pokemon.ability.name : nil),
-    level:   pokemon.level,
-    # Todo: currently just uses Showdown text info
-    evs:     calculateEvLineForShowdown(pokemon),
-    ivs:     calculateIvLineForShowdown(pokemon),
-    nature:  GameData::Nature.get(pokemon.nature).id.to_s,
-    moves:   pokemon.moves.compact.map { |m| GameData::Move.get(m.id).id.to_s }
-  }
-  return data
-end
-
 
 
 def calculateEvLineForShowdown(pokemon)
@@ -147,16 +84,4 @@ def calculateIvLineForShowdown(pokemon)
 end
 
 
-
-
-def build_pokemon_from_json(data)
-  poke = Pokemon.new(data[:species].to_sym, data[:level])
-  poke.name     = data[:name]
-  poke.item     = data[:item] if data[:item]
-  poke.ability  = data[:ability]
-  poke.nature   = data[:nature].to_sym
-  poke.moves    = data[:moves].map { |m| Move.new(m.to_sym) }
-  # Todo parse EVs/IVs
-  return poke
-end
 

@@ -4,8 +4,9 @@ def useSecretBaseMannequin
   # Todo: This is the item that players can use to "place themselves" in the base.
   # When a base has a mannequin, the base will be shared online and
   # the mannequin will appear as the player in other people's games.
-  export = export_secret_base($Trainer.secretBase)
-  Input.clipboard = export
+  exporter = SecretBaseExporter.new
+  json = exporter.export_secret_base($Trainer.secretBase)
+  Input.clipboard = json
   return
 end
 
