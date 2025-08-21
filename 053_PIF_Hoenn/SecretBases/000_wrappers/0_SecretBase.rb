@@ -16,6 +16,7 @@ class SecretBase
   attr_accessor :base_message
 
   attr_accessor :layout
+  attr_accessor :is_visitor
 
 
   def initialize(biome,outside_map_id,outside_entrance_position, inside_map_id,base_layout_type)
@@ -30,6 +31,7 @@ class SecretBase
 
     @base_name=initializeBaseName
     @base_message=initialize_base_message #For a book or sign item that allows to set a custom message
+    @is_visitor=false
     initializeLayout
   end
 

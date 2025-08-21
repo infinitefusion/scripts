@@ -17,15 +17,16 @@ class SecretBaseImporter
 
   # Load all bases from the JSON
   def load_bases
-    all_bases = read_secret_base_json
-    return [] unless all_bases.is_a?(Array)
+    all_bases_data = read_secret_base_json
+    return [] unless all_bases_data.is_a?(Array)
 
     # Only keep entries with a trainer
-    all_bases.map do |entry|
+    visitor_bases = []
+    all_bases_data.map do |entry|
       base_data    = entry[:base]
       trainer_data = entry[:trainer]
 
-      OtherPlayerSecretBase.new(
+      base = VisitorSecretBase.new(
         biome: base_data[:biome],
         outside_map_id: base_data[:entrance_map],
         outside_entrance_position: base_data[:outside_entrance_position],
@@ -34,7 +35,11 @@ class SecretBaseImporter
         trainer_data: import_trainer_from_json(trainer_data),
         base_message: base_data[:message],
       )
+      visitor_bases << base
+      base.dump_info
     end
+    echoln visitor_bases
+    return visitor_bases
   end
 
   def import_trainer_from_json(trainer_json)

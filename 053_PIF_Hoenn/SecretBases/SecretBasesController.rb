@@ -73,7 +73,7 @@ def createSecretBaseHere(biomeType, secretBaseMap = 0, baseLayoutType = :TYPE_1)
     current_map_id = $game_map.map_id
     current_position = [$game_player.x, $game_player.y]
     $Trainer.secretBase = initialize_secret_base(biomeType, current_map_id, current_position, secretBaseMap, baseLayoutType)
-    setupSecretBaseEntranceEvent
+    setupAllSecretBaseEntrances
   end
 end
 
@@ -104,7 +104,7 @@ def exitSecretBase()
     $game_map.refresh
   }
   $PokemonTemp.pbClearTempEvents
-  setupSecretBaseEntranceEvent
+  setupAllSecretBaseEntrances
 end
 
 def enterSecretBase()
@@ -333,27 +333,4 @@ def rotateFurniture()
   $game_player.direction_fix = true
 end
 
-# Called on map load
-def setupSecretBaseEntranceEvent
-  $PokemonTemp.pbClearTempEvents
-  warpPosition = $Trainer.secretBase.outside_entrance_position
-  entrancePosition = [warpPosition[0], warpPosition[1] - 1]
-  case $Trainer.secretBase.biome_type
-  when :TREE
-    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE
-  when :CAVE
-    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
-  else
-    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
-  end
-  event = $PokemonTemp.createTempEvent(template_event_id, $game_map.map_id, entrancePosition)
-  event.refresh
-
-end
-
-Events.onMapSceneChange += proc { |_sender, e|
-  next unless $PokemonTemp.tempEvents.empty?
-  if $Trainer && $Trainer.secretBase && $game_map.map_id == $Trainer.secretBase.outside_map_id
-    setupSecretBaseEntranceEvent
-  end
-}
+#
