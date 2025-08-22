@@ -23,6 +23,7 @@ class SecretBaseImporter
     # Only keep entries with a trainer
     visitor_bases = []
     all_bases_data.map do |entry|
+      begin
       base_data    = entry[:base]
       trainer_data = entry[:trainer]
 
@@ -35,11 +36,14 @@ class SecretBaseImporter
         layout: import_layout_from_json(base_data[:layout],biome),
         base_layout_type: base_data[:layout_type],
         trainer_data: import_trainer_from_json(trainer_data),
-        base_message: base_data[:message],
+        base_message: base_data[:base_message],
       )
       echoln base.layout
       visitor_bases << base
       base.dump_info
+      rescue Exception => e
+        echoln "COULD NOT LOAD BASE: #{e}"
+      end
     end
     return visitor_bases
   end

@@ -19,7 +19,7 @@ class SecretBase
   attr_accessor :is_visitor
 
 
-  def initialize(biome:,outside_map_id:,outside_entrance_position:, inside_map_id:, layout:, base_layout_type:, is_visitor:)
+  def initialize(biome:,outside_map_id:,outside_entrance_position:, inside_map_id:, layout:, visitor_message:, base_layout_type:, is_visitor:)
     @biome_type = biome
     @outside_map_id = outside_map_id
     @inside_map_id = inside_map_id
@@ -30,7 +30,8 @@ class SecretBase
     @inside_entrance_position = SecretBasesData::SECRET_BASE_ENTRANCES[@base_layout_type][:position]
 
     @base_name=initializeBaseName
-    @base_message=initialize_base_message #For a book or sign item that allows to set a custom message
+    @base_message=visitor_message
+    initialize_base_message unless @base_message #Message that people see when visiting the secret base
     @is_visitor=is_visitor
     @layout = layout
     initializeLayout unless @layout
@@ -52,23 +53,18 @@ class SecretBase
   end
 
   def load_furniture
-    echoln "Loading Furniture..."
-    echoln @layout.items
     @layout.items.each do |item_instance|
-      echoln item_instance.itemId
-      echoln item_instance.position
-
       next unless item_instance.is_a?(SecretBaseItemInstance)
       next unless SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
-
-      echoln item_instance.itemId
-      echoln item_instance.position
 
       template = item_instance.itemTemplate
       event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position, DIRECTION_DOWN)
       event.character_name = "player/SecretBases/#{template.graphics}"
       event.through = template.pass_through
       event.under_player = template.under_player
+      if template.id == :MANNEQUIN && @is_visitor
+        setEventAppearance(event.id, @trainer_appearance) if @trainer_appearance
+      end
       item_instance.setEventId(event.id)
       event.refresh
     end

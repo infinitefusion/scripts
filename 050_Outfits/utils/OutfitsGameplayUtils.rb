@@ -304,7 +304,7 @@ end
 
 def setEventAppearance(event_id, trainerAppearance)
   return if !$scene.is_a?(Scene_Map)
-  event_sprite = $scene.spriteset.character_sprites[@event_id]
+  event_sprite = $scene.spriteset.character_sprites[event_id]
   for sprite in $scene.spriteset.character_sprites
     if sprite.character.id == event_id
       event_sprite = sprite

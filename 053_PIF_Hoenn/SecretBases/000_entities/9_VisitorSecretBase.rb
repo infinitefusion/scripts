@@ -9,6 +9,7 @@ class VisitorSecretBase < SecretBase
           inside_map_id: inside_map_id,
           layout: layout,
           base_layout_type: base_layout_type,
+          visitor_message: base_message,
           is_visitor: true,)
 
     @trainer_name = trainer_data.name
@@ -16,7 +17,6 @@ class VisitorSecretBase < SecretBase
     @trainer_game_mode = trainer_data.game_mode || 0
     @trainer_appearance = trainer_data.appearance
     @trainer_team = trainer_data.team
-    @base_message = base_message
   end
 
   def dump_info

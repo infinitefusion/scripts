@@ -7,6 +7,7 @@ class SecretBaseExporter
         entrance_map: secretBase.outside_map_id || 0,
         outside_entrance_position: secretBase.outside_entrance_position || [0, 0],
         layout_type: secretBase.base_layout_type || "",
+        base_message: secretBase.base_message || "",
         layout: {
           items: list_base_items(secretBase)
         }

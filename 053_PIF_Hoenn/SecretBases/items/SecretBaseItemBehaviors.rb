@@ -7,7 +7,25 @@ def useSecretBaseMannequin
   exporter = SecretBaseExporter.new
   json = exporter.export_secret_base($Trainer.secretBase)
   Input.clipboard = json
+
+  secretBase = getEnteredSecretBase
+  if secretBase && secretBase.is_visitor
+    interact_other_player(secretBase)
+
+  end
   return
+end
+
+#todo: find a way to pass the event somehow
+def interact_other_player(secretBase)
+  event = pbMapInterpreter.get_character(0)
+  event.direction_fix=false
+  event.turn_toward_player
+  message = secretBase.base_message
+  pbCallBub(3)
+  pbMessage(_INTL("Hey, I'm \\C[1]#{secretBase.trainer_name}\\C[0], welcome to my secret base!",))
+  pbCallBub(3)
+  pbMessage(message)
 end
 
 # Unused: Done directly in the interact menu
