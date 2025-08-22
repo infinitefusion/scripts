@@ -14,7 +14,8 @@ module SecretBasesData
     deletable: false,
     price: 0,
     behavior: -> {
-      useSecretBasePC
+      #Behavior for PC is handled in SecretBasesController
+      #useSecretBasePC
     }
   )
 

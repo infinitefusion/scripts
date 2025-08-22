@@ -2,10 +2,11 @@ class SecretBaseLayout
   attr_accessor :items  #SecretBaseItemInstance
   attr_accessor :tileset #todo Reuse the same layouts map for all bases and change the tileset depending on the type
   attr_accessor :biome_type #:TREES, :CLIFF, :CLIFF_BEACH, :BUSH, etc. -> Determines which tiles are used in the base
-
-  def initialize(layout_biome)
+  attr_accessor :is_player_base
+  def initialize(layout_biome,is_player_base=fase)
     @biome_type = layout_biome
     @items = []
+    @is_player_base = is_player_base
   end
 
   def add_item(itemId, position = [0, 0])

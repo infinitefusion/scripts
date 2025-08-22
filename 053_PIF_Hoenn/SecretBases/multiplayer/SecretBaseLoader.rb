@@ -12,6 +12,10 @@ class SecretBaseLoader
     $game_temp.visitor_secret_bases = all_bases
   end
 
+  def loadSecretBaseFurniture(secretBase)
+    return unless $scene.is_a?(Scene_Map)
+    secretBase.load_furniture($scene)
+  end
 end
 
 class Game_Temp
@@ -37,8 +41,6 @@ end
 # Called on map load
 def setupSecretBaseEntranceEvent(secretBase)
   warpPosition = secretBase.outside_entrance_position
-  echoln secretBase.outside_entrance_position
-
   entrancePosition = [warpPosition[0], warpPosition[1] - 1]
   case secretBase.biome_type
   when :TREE
@@ -49,6 +51,7 @@ def setupSecretBaseEntranceEvent(secretBase)
     template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
   end
   event = $PokemonTemp.createTempEvent(template_event_id, $game_map.map_id, entrancePosition)
+  event.setVariable(secretBase)
   event.refresh
 
 end

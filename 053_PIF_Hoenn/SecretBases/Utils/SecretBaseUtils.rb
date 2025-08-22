@@ -1,0 +1,146 @@
+def getSecretBaseBiome(terrainTag)
+  return :TREE if terrainTag.secretBase_tree
+  return :CAVE if terrainTag.secretBase_cave
+  # todo: other types
+  return nil
+end
+
+def pickSecretBaseLayout(baseType)
+  mapId = MAP_SECRET_BASES
+  # Distance is how far away the same coordinates will share the same seed
+  case baseType
+  when :TREE
+    distance = 2
+  else
+    distance = 4
+  end
+  # Snap to 2x2 blocks
+  block_x = $game_player.x / distance
+  block_y = $game_player.y / distance
+
+  # Universal deterministic seed
+  seed_str = "#{baseType}-#{mapId}-#{block_x}-#{block_y}"
+  seed = Zlib.crc32(seed_str)
+
+  rng = Random.new(seed)
+  layoutType = weighted_sample(SecretBasesData::SECRET_BASE_ENTRANCES, rng)
+  return layoutType
+end
+
+def weighted_sample(entries, rng)
+  total = entries.values.sum { |v| v[:rareness] }
+  pick  = rng.rand * total
+  entries.each do |key, v|
+    return key if (pick -= v[:rareness]) <= 0
+  end
+  # Fallback: return the last key
+  return entries.keys.last
+end
+
+
+def pbSecretBase(biome_type, base_layout_type)
+  base_map_id = MAP_SECRET_BASES
+  player_map_id = $game_map.map_id
+  player_position = [$game_player.x, $game_player.y]
+
+  if secretBaseExistsAtPosition(player_map_id, player_position)
+    enterSecretBase
+  else
+    # Todo: Determine the secret base's map ids and coordinates from a seed using the current map and the base type instead of passing it manually.
+    createSecretBaseHere(biome_type, base_map_id, base_layout_type)
+  end
+end
+
+def secretBaseExistsAtPosition(map_id, position)
+  return false unless $Trainer.secretBase
+  current_outdoor_id = $Trainer.secretBase.outside_map_id
+  current_outdoor_coordinates = $Trainer.secretBase.outside_entrance_position
+  return current_outdoor_id == map_id && current_outdoor_coordinates == position
+end
+
+def createSecretBaseHere(biomeType, secretBaseMap = 0, baseLayoutType = :TYPE_1)
+  if pbConfirmMessage("Do you want to create a new secret base here?")
+    if $Trainer.secretBase
+      unless pbConfirmMessage("This will overwrite your current secret base. Do you still wish to continue?")
+        return
+      end
+    end
+    current_map_id = $game_map.map_id
+    current_position = [$game_player.x, $game_player.y]
+    $Trainer.secretBase = initialize_player_secret_base(biomeType, current_map_id, current_position, secretBaseMap, baseLayoutType)
+    setupAllSecretBaseEntrances
+  end
+end
+
+def initialize_player_secret_base(biome_type, outside_map_id, outside_position, base_map_id, layout_shape)
+  return SecretBase.new(
+    biome: biome_type,
+    outside_map_id: outside_map_id,
+    outside_entrance_position: outside_position,
+    inside_map_id: base_map_id,
+    base_layout_type: layout_shape,
+    is_visitor: false
+  )
+end
+
+#For when called from Scene_Map
+def placeFurnitureMenu
+  controller = getSecretBaseController
+  controller.placeFurnitureMenu
+end
+def exitSecretBase()
+  controller = getSecretBaseController
+  return if controller&.isMovingFurniture?
+  pbStartOver if !$Trainer.secretBase || !$Trainer.secretBase.outside_map_id || !$Trainer.secretBase.outside_entrance_position
+  # Should never happen, but just in case
+  enteredSecretBase = getEnteredSecretBase
+  if enteredSecretBase && enteredSecretBase.is_a?(SecretBase)
+    outdoor_id = enteredSecretBase.outside_map_id
+    outdoor_coordinates = enteredSecretBase.outside_entrance_position
+  else
+    #Fallback on player's base
+    outdoor_id = $Trainer.secretBase.outside_map_id
+    outdoor_coordinates = $Trainer.secretBase.outside_entrance_position
+  end
+
+
+  $PokemonTemp.pbClearTempEvents
+  pbFadeOutIn {
+    $game_temp.player_new_map_id = outdoor_id
+    $game_temp.player_new_x = outdoor_coordinates[0]
+    $game_temp.player_new_y = outdoor_coordinates[1]
+    $scene.transfer_player(true)
+    $game_map.autoplay
+    $game_map.refresh
+  }
+  $PokemonTemp.pbClearTempEvents
+  $PokemonTemp.enteredSecretBaseController=nil
+  setupAllSecretBaseEntrances
+end
+
+def enterSecretBase()
+  event = $game_map.events[@event_id]
+
+  if event.variable && event.variable.is_a?(SecretBase)
+    secretBase = event.variable
+  else
+    secretBase= $Trainer.secretBase
+  end
+  controller = SecretBaseController.new(secretBase)
+  $PokemonTemp.enteredSecretBaseController = controller
+
+  return unless secretBase.is_a?(SecretBase)
+  $PokemonTemp.pbClearTempEvents
+  pbFadeOutIn {
+    $game_temp.player_new_map_id = MAP_SECRET_BASES
+    $game_temp.player_new_x = secretBase.inside_entrance_position[0]
+    $game_temp.player_new_y = secretBase.inside_entrance_position[1]
+    $scene.transfer_player(true)
+    $game_map.autoplay
+    SecretBaseLoader.new.loadSecretBaseFurniture(secretBase)
+    $game_map.refresh
+  }
+
+end
+# frozen_string_literal: true
+

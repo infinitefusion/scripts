@@ -27,7 +27,7 @@ class SecretBaseImporter
       trainer_data = entry[:trainer]
 
       base = VisitorSecretBase.new(
-        biome: base_data[:biome],
+        biome: base_data[:biome].to_sym,
         outside_map_id: base_data[:entrance_map],
         outside_entrance_position: base_data[:outside_entrance_position],
         inside_map_id: base_data[:inside_map_id],
@@ -35,6 +35,7 @@ class SecretBaseImporter
         trainer_data: import_trainer_from_json(trainer_data),
         base_message: base_data[:message],
       )
+
       visitor_bases << base
       base.dump_info
     end

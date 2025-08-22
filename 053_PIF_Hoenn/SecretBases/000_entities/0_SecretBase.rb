@@ -19,7 +19,7 @@ class SecretBase
   attr_accessor :is_visitor
 
 
-  def initialize(biome,outside_map_id,outside_entrance_position, inside_map_id,base_layout_type)
+  def initialize(biome:,outside_map_id:,outside_entrance_position:, inside_map_id:,base_layout_type:, is_visitor:)
     @biome_type = biome
     @outside_map_id = outside_map_id
     @inside_map_id = inside_map_id
@@ -31,7 +31,7 @@ class SecretBase
 
     @base_name=initializeBaseName
     @base_message=initialize_base_message #For a book or sign item that allows to set a custom message
-    @is_visitor=false
+    @is_visitor=is_visitor
     initializeLayout
   end
 
@@ -43,11 +43,26 @@ class SecretBase
     return "Welcome to my secret base!"
   end
   def initializeLayout
-    @layout = SecretBaseLayout.new(@base_layout_type)
-
+    @layout = SecretBaseLayout.new(@base_layout_type,!@is_visitor)
     entrance_x = @inside_entrance_position[0]
     entrance_y = @inside_entrance_position[1]
 
     @layout.add_item(:PC,[entrance_x,entrance_y-3])
   end
+
+  def load_furniture(scene)
+    @layout.items.each do |item_instance|
+      next unless item_instance
+      next unless SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
+
+      template = item_instance.itemTemplate
+      event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position, DIRECTION_DOWN)
+      event.character_name = "player/SecretBases/#{template.graphics}"
+      event.through = template.pass_through
+      event.under_player = template.under_player
+      item_instance.setEventId(event.id)
+      event.refresh
+    end
+  end
+
 end
