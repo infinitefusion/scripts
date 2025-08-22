@@ -40,7 +40,7 @@ class SecretBaseImporter
       )
       echoln base.layout
       visitor_bases << base
-      base.dump_info
+      #base.dump_info
       rescue Exception => e
         echoln "COULD NOT LOAD BASE: #{e}"
       end
@@ -58,7 +58,10 @@ class SecretBaseImporter
     (layout_json[:items] || []).each do |item_data|
       id       = item_data[:id].to_sym
       position = item_data[:position]
-      item_instance = SecretBaseItemInstance.new(id,position)
+      direction = item_data[:direction]
+      item_instance = SecretBaseItemInstance.new(id,position,direction)
+
+      echoln item_instance.direction
       items << item_instance
     end
 

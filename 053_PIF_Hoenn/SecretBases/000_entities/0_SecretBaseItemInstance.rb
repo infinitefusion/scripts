@@ -3,13 +3,16 @@ class SecretBaseItemInstance
   attr_reader :itemId
   attr_reader :instanceId
   attr_accessor :position
+  attr_accessor :direction
+
   attr_accessor :itemTemplate
   attr_accessor :event_id
   RANDOM_ID_LENGTH = 6
 
-  def initialize(itemId, position = [0, 0])
+  def initialize(itemId, position = [0, 0], direction= DIRECTION_DOWN)
     @itemId = itemId
     @instanceId = generate_new_instance_id()
+    @direction = direction
     @position = position
   end
 

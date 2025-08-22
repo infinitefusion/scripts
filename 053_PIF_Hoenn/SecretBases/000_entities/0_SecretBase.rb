@@ -19,7 +19,7 @@ class SecretBase
   attr_accessor :is_visitor
 
 
-  def initialize(biome:,outside_map_id:,outside_entrance_position:, inside_map_id:, layout:, visitor_message:, base_layout_type:, is_visitor:)
+  def initialize(biome:,outside_map_id:,outside_entrance_position:, inside_map_id:, base_layout_type:, is_visitor:, layout: nil, visitor_message:nil)
     @biome_type = biome
     @outside_map_id = outside_map_id
     @inside_map_id = inside_map_id
@@ -62,6 +62,7 @@ class SecretBase
       event.character_name = "player/SecretBases/#{template.graphics}"
       event.through = template.pass_through
       event.under_player = template.under_player
+      event.direction = item_instance.direction
       if template.id == :MANNEQUIN && @is_visitor
         setEventAppearance(event.id, @trainer_appearance) if @trainer_appearance
       end

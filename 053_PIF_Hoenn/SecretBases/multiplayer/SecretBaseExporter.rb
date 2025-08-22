@@ -30,9 +30,11 @@ class SecretBaseExporter
     secretBase.layout.items.map do |item|
       {
         id: item.itemId || "",
-        position: item.position || [0, 0]
+        position: item.position || [0, 0],
+        direction: item.direction || DIRECTION_DOWN,
       }
     end
+
   end
 
   # Export the trainer's Pokémon party
@@ -44,12 +46,12 @@ class SecretBaseExporter
   def export_fused_pokemon_hash(pokemon)
     {
       species: pokemon.species.to_s,
-      name:    pokemon.name || "",
-      item:    pokemon.item ? pokemon.item.id.to_s : "",
+      name: pokemon.name || "",
+      item: pokemon.item ? pokemon.item.id.to_s : "",
       ability: pokemon.ability ? pokemon.ability.id.to_s : "",
-      level:   pokemon.level || 1,
+      level: pokemon.level || 1,
       evs: {
-        hp:  pokemon.ev[:HP] || 0,
+        hp: pokemon.ev[:HP] || 0,
         atk: pokemon.ev[:ATTACK] || 0,
         def: pokemon.ev[:DEFENSE] || 0,
         spa: pokemon.ev[:SPECIAL_ATTACK] || 0,
@@ -57,7 +59,7 @@ class SecretBaseExporter
         spe: pokemon.ev[:SPEED] || 0
       },
       ivs: {
-        hp:  pokemon.iv[:HP] || 0,
+        hp: pokemon.iv[:HP] || 0,
         atk: pokemon.iv[:ATTACK] || 0,
         def: pokemon.iv[:DEFENSE] || 0,
         spa: pokemon.iv[:SPECIAL_ATTACK] || 0,
@@ -65,7 +67,7 @@ class SecretBaseExporter
         spe: pokemon.iv[:SPEED] || 0
       },
       nature: GameData::Nature.get(pokemon.nature).id.to_s,
-      moves:  pokemon.moves.compact.map { |m| GameData::Move.get(m.id).id.to_s }
+      moves: pokemon.moves.compact.map { |m| GameData::Move.get(m.id).id.to_s }
     }
   end
 

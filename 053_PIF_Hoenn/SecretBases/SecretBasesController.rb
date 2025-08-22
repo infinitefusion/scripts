@@ -28,6 +28,7 @@ class SecretBaseController
 
     options = []
     if item.itemId == :PC
+      pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
       options << cmd_decorate unless @secretBase.is_visitor
       options << cmd_storage
       options << cmd_item_storage
@@ -72,11 +73,6 @@ class SecretBaseController
   end
 
 
-
-
-  def placeSecretBaseFurniture()
-    # todo
-  end
 
   def isMovingFurniture?
     return $game_temp.moving_furniture
@@ -166,7 +162,7 @@ class SecretBaseController
     choice = optionsMenu(options, -1, menu_position)
     case options[choice]
     when cmd_place
-      placeFurnitureAtCurrentPosition($game_temp.moving_furniture)
+      placeFurnitureAtCurrentPosition($game_temp.moving_furniture,$game_player.direction)
     when cmd_rotate
       rotateFurniture
       placeFurnitureMenu(choice)
@@ -177,9 +173,10 @@ class SecretBaseController
     end
   end
 
-  def placeFurnitureAtCurrentPosition(furnitureInstanceId)
+  def placeFurnitureAtCurrentPosition(furnitureInstanceId, direction)
     itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
     itemInstance.position = [$game_player.x, $game_player.y]
+    itemInstance.direction = direction
     event = itemInstance.getEvent
     event.direction = $game_player.direction
 
@@ -220,12 +217,6 @@ class SecretBaseController
   end
 
 end
-
-
-
-
-
-
 
 
 

@@ -120,7 +120,7 @@ end
 
 def enterSecretBase()
   event = $game_map.events[@event_id]
-
+  return if event.nil?
   if event.variable && event.variable.is_a?(SecretBase)
     secretBase = event.variable
   else
