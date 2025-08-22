@@ -18,14 +18,14 @@ class SecretBaseController
   def furnitureInteract(position = [])
     item = @secretBase.layout.get_item_at_position(position)
 
-    cmd_use = _INTL("Use")
-    cmd_move = _INTL("Move")
-    cmd_delete = _INTL("Put away")
-    cmd_cancel = _INTL("Cancel")
-
-    cmd_decorate = _INTL("Decorate!")
-    cmd_storage = _INTL("Pokémon Storage")
+    cmd_use          = _INTL("Use")
+    cmd_move         = _INTL("Move")
+    cmd_delete       = _INTL("Put away")
+    cmd_cancel       = _INTL("Cancel")
+    cmd_decorate     = _INTL("Decorate!")
+    cmd_storage      = _INTL("Pokémon Storage")
     cmd_item_storage = _INTL("Item Storage")
+
     options = []
     if item.itemId == :PC
       options << cmd_decorate unless @secretBase.is_visitor
@@ -35,30 +35,42 @@ class SecretBaseController
       options << cmd_use if item.itemTemplate.behavior
     end
     options << cmd_move unless @secretBase.is_visitor
-    options << cmd_delete if item.itemTemplate.deletable
+    options << cmd_delete if item.itemTemplate.deletable && !@secretBase.is_visitor
     options << cmd_cancel
 
-    choice = optionsMenu(options)
-    case options[choice]
-    when cmd_use
-      item.itemTemplate.behavior.call
-    when cmd_move
-      moveSecretBaseItem(item.instanceId, item.position)
-      return
-    when cmd_delete
+    # --- Auto-execute if only one actionable option (ignoring cancel) ---
+    actionable = options - [cmd_cancel]
+    if actionable.length == 1
+      return executeFurnitureCommand(item, actionable.first)
+    end
 
-    when cmd_decorate
+    # Otherwise, show the menu
+    choice = optionsMenu(options)
+    executeFurnitureCommand(item, options[choice], position)
+  end
+
+  # Extracted for clarity
+  def executeFurnitureCommand(item, command, position = nil)
+    case command
+    when _INTL("Use")
+      item.itemTemplate.behavior.call
+    when _INTL("Move")
+      moveSecretBaseItem(item.instanceId, item.position)
+    when _INTL("Put away")
+      # TODO: implement delete behavior
+    when _INTL("Decorate!")
       decorateSecretBase
-    when cmd_storage
+    when _INTL("Pokémon Storage")
       pbFadeOutIn {
-        scene = PokemonStorageScene.new
+        scene  = PokemonStorageScene.new
         screen = PokemonStorageScreen.new(scene, $PokemonStorage)
         screen.pbStartScreen(0) # Boot PC in organize mode
       }
-    when cmd_item_storage
+    when _INTL("Item Storage")
       pbPCItemStorage
     end
   end
+
 
 
 

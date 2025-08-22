@@ -26,22 +26,43 @@ class SecretBaseImporter
       base_data    = entry[:base]
       trainer_data = entry[:trainer]
 
+      biome = base_data[:biome].to_sym
       base = VisitorSecretBase.new(
-        biome: base_data[:biome].to_sym,
+        biome: biome,
         outside_map_id: base_data[:entrance_map],
         outside_entrance_position: base_data[:outside_entrance_position],
         inside_map_id: base_data[:inside_map_id],
+        layout: import_layout_from_json(base_data[:layout],biome),
         base_layout_type: base_data[:layout_type],
         trainer_data: import_trainer_from_json(trainer_data),
         base_message: base_data[:message],
       )
-
+      echoln base.layout
       visitor_bases << base
       base.dump_info
     end
-    echoln visitor_bases
     return visitor_bases
   end
+
+  def import_layout_from_json(layout_json, biome)
+    layout = SecretBaseLayout.new(
+      biome,
+      false
+    )
+
+    items = []
+    (layout_json[:items] || []).each do |item_data|
+      id       = item_data[:id].to_sym
+      position = item_data[:position]
+      item_instance = SecretBaseItemInstance.new(id,position)
+      items << item_instance
+    end
+
+    echoln items
+    layout.items = items
+    return layout
+  end
+
 
   def import_trainer_from_json(trainer_json)
     app = trainer_json[:appearance]

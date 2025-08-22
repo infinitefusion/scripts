@@ -14,7 +14,7 @@ class SecretBaseLoader
 
   def loadSecretBaseFurniture(secretBase)
     return unless $scene.is_a?(Scene_Map)
-    secretBase.load_furniture($scene)
+    secretBase.load_furniture
   end
 end
 

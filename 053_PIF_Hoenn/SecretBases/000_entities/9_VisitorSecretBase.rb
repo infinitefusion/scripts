@@ -2,11 +2,12 @@ class VisitorSecretBase < SecretBase
   attr_reader :trainer_name, :trainer_badges, :trainer_game_mode
   attr_reader :trainer_appearance, :trainer_team
 
-  def initialize(biome:, outside_map_id:, outside_entrance_position:, inside_map_id:, base_layout_type:, base_message:, trainer_data:)
+  def initialize(biome:, outside_map_id:, outside_entrance_position:, inside_map_id:, layout:, base_layout_type:, base_message:, trainer_data:)
     super(biome: biome,
           outside_map_id: outside_map_id,
           outside_entrance_position: outside_entrance_position,
           inside_map_id: inside_map_id,
+          layout: layout,
           base_layout_type: base_layout_type,
           is_visitor: true,)
 
