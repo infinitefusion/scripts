@@ -47,6 +47,8 @@ def setupSecretBaseEntranceEvent(secretBase)
     template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_TREE
   when :CAVE
     template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
+  when :BUSH
+    template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_BUSH
   else
     template_event_id = TEMPLATE_EVENT_SECRET_BASE_ENTRANCE_CAVE
   end

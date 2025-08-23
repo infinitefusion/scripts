@@ -34,6 +34,7 @@ module GameData
 
     attr_reader :secretBase_tree
     attr_reader :secretBase_cave
+    attr_reader :secretBase_bush
 
 
     DATA = {}
@@ -89,6 +90,7 @@ module GameData
 
       @secretBase_tree = hash[:secretBase_tree] || false
       @secretBase_cave = hash[:secretBase_cave] || false
+      @secretBase_bush = hash[:secretBase_bush] || false
 
     end
 
@@ -98,7 +100,7 @@ module GameData
 
     def can_secret_base
       return false if Settings::GAME_ID != :IF_HOENN
-      return @secretBase_tree || @secretBase_cave# ||
+      return @secretBase_tree || @secretBase_cave || @secretBase_bush
     end
   end
 end
@@ -325,4 +327,10 @@ GameData::TerrainTag.register({
                                 :id => :Secretbase_Cave,
                                 :id_number => 30,
                                 :secretBase_cave => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Secretbase_Bush,
+                                :id_number => 31,
+                                :secretBase_bush => true,
                               })

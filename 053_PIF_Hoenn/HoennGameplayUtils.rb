@@ -31,3 +31,21 @@ def hoennSelectStarter
   pbAddPokemonSilent(selected_starter)
   return selected_starter
 end
+
+
+def secretBaseQuest_pickedNearbySpot()
+  return false if !$Trainer.secretBase
+  expected_map = 65
+  expected_positions = [
+    [30,43],[31,43],[32,42],[33,42],[34,42],[35,42],[36,40],[37,40],#trees
+    [41,40] #cliff
+  ]
+
+  picked_base_map =  $Trainer.secretBase.outside_map_id
+  picked_position = $Trainer.secretBase.outside_entrance_position
+
+  echoln picked_base_map
+  echoln picked_position
+  echoln picked_base_map == expected_map && expected_positions.include?(picked_position)
+  return picked_base_map == expected_map && expected_positions.include?(picked_position)
+end

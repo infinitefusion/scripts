@@ -1,3 +1,5 @@
+SWITCH_SECRET_BASE_PLACED_FIRST_DECORATION = 2047
+
 class Trainer
   attr_accessor :secretBase
   attr_accessor :owned_decorations
@@ -6,7 +8,6 @@ end
 class PokemonTemp
   attr_accessor :enteredSecretBaseController
 end
-
 
 class SecretBaseController
   attr_accessor :secretBase
@@ -18,17 +19,17 @@ class SecretBaseController
   def furnitureInteract(position = [])
     item = @secretBase.layout.get_item_at_position(position)
 
-    cmd_use          = _INTL("Use")
-    cmd_move         = _INTL("Move")
-    cmd_delete       = _INTL("Put away")
-    cmd_cancel       = _INTL("Cancel")
-    cmd_decorate     = _INTL("Decorate!")
-    cmd_storage      = _INTL("Pokémon Storage")
+    cmd_use = _INTL("Use")
+    cmd_move = _INTL("Move")
+    cmd_delete = _INTL("Put away")
+    cmd_cancel = _INTL("Cancel")
+    cmd_decorate = _INTL("Decorate!")
+    cmd_storage = _INTL("Pokémon Storage")
     cmd_item_storage = _INTL("Item Storage")
 
     options = []
     if item.itemId == :PC
-      pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
+      pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $Trainer.name))
       options << cmd_decorate unless @secretBase.is_visitor
       options << cmd_storage
       options << cmd_item_storage
@@ -63,7 +64,7 @@ class SecretBaseController
       decorateSecretBase
     when _INTL("Pokémon Storage")
       pbFadeOutIn {
-        scene  = PokemonStorageScene.new
+        scene = PokemonStorageScene.new
         screen = PokemonStorageScreen.new(scene, $PokemonStorage)
         screen.pbStartScreen(0) # Boot PC in organize mode
       }
@@ -72,12 +73,9 @@ class SecretBaseController
     end
   end
 
-
-
   def isMovingFurniture?
     return $game_temp.moving_furniture
   end
-
 
   def decorateSecretBase
     cmd_addItem = _INTL("Add a decoration")
@@ -113,7 +111,6 @@ class SecretBaseController
       moveSecretBaseItem(new_item_instance, nil)
     end
   end
-
 
   def moveSecretBaseItem(itemInstanceId, oldPosition = [0, 0])
     return if @secretBase.is_a?(VisitorSecretBase)
@@ -162,7 +159,7 @@ class SecretBaseController
     choice = optionsMenu(options, -1, menu_position)
     case options[choice]
     when cmd_place
-      placeFurnitureAtCurrentPosition($game_temp.moving_furniture,$game_player.direction)
+      placeFurnitureAtCurrentPosition($game_temp.moving_furniture, $game_player.direction)
     when cmd_rotate
       rotateFurniture
       placeFurnitureMenu(choice)
@@ -174,6 +171,7 @@ class SecretBaseController
   end
 
   def placeFurnitureAtCurrentPosition(furnitureInstanceId, direction)
+    $game_switches[SWITCH_SECRET_BASE_PLACED_FIRST_DECORATION] = true
     itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
     itemInstance.position = [$game_player.x, $game_player.y]
     itemInstance.direction = direction
@@ -207,7 +205,6 @@ class SecretBaseController
     $game_temp.moving_furniture_oldItemPosition = nil
     $game_temp.moving_furniture = nil
     $game_system.menu_disabled = false
-
   end
 
   def rotateFurniture()
@@ -218,18 +215,14 @@ class SecretBaseController
 
 end
 
-
-
-
 def getEnteredSecretBase
   controller = $PokemonTemp.enteredSecretBaseController
-  return controller.secretBase
+  return controller.secretBase if controller
 end
 
 def getSecretBaseController
   return $PokemonTemp.enteredSecretBaseController
 end
-
 
 def selectPlacedSecretBaseItemInstance()
   options = []
@@ -276,6 +269,5 @@ end
 # Press B: Exit moving mode
 
 # todo: cancel! (delete the item when cancel if oldPosition is nil (when adding a new item))
-
 
 #

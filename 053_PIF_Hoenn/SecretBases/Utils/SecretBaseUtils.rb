@@ -1,6 +1,7 @@
 def getSecretBaseBiome(terrainTag)
   return :TREE if terrainTag.secretBase_tree
   return :CAVE if terrainTag.secretBase_cave
+  return :BUSH if terrainTag.secretBase_bush
   # todo: other types
   return nil
 end
@@ -142,5 +143,85 @@ def enterSecretBase()
   }
 
 end
-# frozen_string_literal: true
+
+def obtain_decoration(item_id)
+  $Trainer.owned_decorations = [] unless $Trainer.owned_decorations
+  if SecretBasesData::SECRET_BASE_ITEMS[item_id]
+    obtainDecorationMessage(item_id)
+    $Trainer.owned_decorations << item_id
+  end
+end
+
+
+def obtain_decoration_silent(item_id)
+  $Trainer.owned_decorations = [] unless $Trainer.owned_decorations
+  if SecretBasesData::SECRET_BASE_ITEMS[item_id]
+    $Trainer.owned_decorations << item_id
+  end
+end
+
+def give_starting_decorations
+  furniture = [
+    :PLANT,:RED_CHAIR
+  ]
+  obtain_decoration_silent(:PC)
+  furniture.each do |item|
+    obtain_decoration(item)
+  end
+end
+
+
+def obtainDecorationMessage(item_id)
+  decoration = SecretBasesData::SECRET_BASE_ITEMS[item_id]
+  pictureViewport = showDecorationPicture(item_id)
+  musical_effect = "Key item get"
+  pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!", musical_effect, decoration.real_name))
+  pictureViewport.dispose if pictureViewport
+end
+
+def showDecorationPicture(item_id)
+  begin
+    decoration = SecretBasesData::SECRET_BASE_ITEMS[item_id]
+    path = "Graphics/Characters/player/secretBases/#{decoration.graphics}"
+
+    viewport = Viewport.new(Graphics.width / 4, 0, Graphics.width / 2, Graphics.height)
+    bg_sprite = Sprite.new(viewport)
+    decoration_sprite = Sprite.new(viewport)
+
+    echoln path
+    echoln pbResolveBitmap(path)
+
+    if pbResolveBitmap(path)
+      sheet = Bitmap.new(path)
+
+      # Character sheets are 4x4
+      frame_width  = sheet.width / 4
+      frame_height = sheet.height / 4
+
+      # First frame = top-left corner (row 0, col 0)
+      rect = Rect.new(0, 0, frame_width, frame_height)
+
+      # Copy that frame into its own bitmap
+      cropped = Bitmap.new(frame_width, frame_height)
+      cropped.blt(0, 0, sheet, rect)
+
+      decoration_sprite.bitmap = cropped
+    end
+
+    bg_bitmap = AnimatedBitmap.new("Graphics/Pictures/Outfits/obtain_bg")
+    bg_sprite.bitmap = bg_bitmap.bitmap
+
+    decoration_sprite.x = 92
+    decoration_sprite.y = 50
+    decoration_sprite.zoom_x = 2
+    decoration_sprite.zoom_y = 2
+
+    bg_sprite.x = 0
+    viewport.z = 99999
+
+    return viewport
+  rescue
+  end
+end
+
 

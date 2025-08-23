@@ -1,7 +1,8 @@
 class Game_Map
   SECRET_BASE_TILESET_OVERRIDES = {
-    :TREE => 100,
-    :CAVE => 101
+    :BUSH => 100,
+    :CAVE => 101,
+    :TREE => 102,
   }
 
   alias __tileset_swap_updateTileset updateTileset

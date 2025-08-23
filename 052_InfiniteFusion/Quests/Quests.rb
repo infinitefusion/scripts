@@ -143,4 +143,6 @@ define_quest("petalburgwoods_spores",:FIELD_QUEST,"Spores Harvest", "A scientist
 define_quest("route104_oricorio",:FIELD_QUEST,"Special Flowery Grass", "Find an Oricorio in the flowery grass behind the flower shop.","Route 104","NPC_Hoenn_AromaLady")
 define_quest("route104_oricorio_forms",:FIELD_QUEST,"Nectar Flowers", "Find all 4 types of nectar flowers to transform Oricorio.","Route 104","NPC_Hoenn_AromaLady")
 
+#Route 115
+define_quest("route115_secretBase",:FIELD_QUEST,"Your Very Own Secret Base!", "Talk to Aarune near his secret base to learn how to make your own.","Route 115","NPC_Hoenn_AromaLady")
 
