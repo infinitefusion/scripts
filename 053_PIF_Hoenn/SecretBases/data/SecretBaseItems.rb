@@ -13,7 +13,7 @@ module SecretBasesData
     real_name: "PC",
     deletable: false,
     price: 0,
-    behavior: -> {
+    behavior: ->(event = nil) {
       #Behavior for PC is handled in SecretBasesController
       #useSecretBasePC
     }
@@ -24,7 +24,7 @@ module SecretBasesData
     graphics: "Furniture/mannequin.png",
     real_name: "Mannequin",
     price: 500,
-    behavior: -> {
+    behavior: ->(event = nil) {
       useSecretBaseMannequin
     }
 
@@ -42,6 +42,20 @@ module SecretBasesData
     graphics: "Furniture/red_chair.png",
     real_name: "Red Chair",
     price: 350,
+    under_player: true,
+    behavior: ->(event = nil) {
+      pbSEPlay("jump", 80, 100)
+      $game_player.through =true
+      $game_player.jump_forward
+      #$game_player.direction = event.opposite_direction
+      case event.direction
+      when DIRECTION_LEFT; $game_player.direction = DIRECTION_RIGHT
+      when DIRECTION_RIGHT; $game_player.direction = DIRECTION_LEFT
+      when DIRECTION_UP; $game_player.direction = DIRECTION_UP
+      when DIRECTION_DOWN; $game_player.direction = DIRECTION_DOWN
+      end
+      $game_player.through =false
+    }
   )
 
   register_base_item(

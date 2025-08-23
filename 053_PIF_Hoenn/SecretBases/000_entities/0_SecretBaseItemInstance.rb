@@ -7,6 +7,7 @@ class SecretBaseItemInstance
 
   attr_accessor :itemTemplate
   attr_accessor :event_id
+  attr_reader :disposed
   RANDOM_ID_LENGTH = 6
 
   def initialize(itemId, position = [0, 0], direction= DIRECTION_DOWN)
@@ -16,6 +17,9 @@ class SecretBaseItemInstance
     @position = position
   end
 
+  def name
+    return itemTemplate&.real_name
+  end
   def getGraphics()
     return itemTemplate.graphics
   end
@@ -34,5 +38,18 @@ class SecretBaseItemInstance
 
   def getEvent()
     return $game_map.events[@event_id]
+  end
+
+  def disposed?
+    return @disposed
+  end
+
+  def dispose
+    @itemId     = nil
+    @position   = nil
+    @direction  = nil
+    @event_id   = nil
+    @itemTemplate = nil
+    @disposed = true
   end
 end

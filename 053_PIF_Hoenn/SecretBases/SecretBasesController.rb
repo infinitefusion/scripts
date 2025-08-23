@@ -16,62 +16,76 @@ class SecretBaseController
     @secretBase = secretBase
   end
 
-  def furnitureInteract(position = [])
-    item = @secretBase.layout.get_item_at_position(position)
+  def furnitureInteract(item_position = [], menuStartIndex=0)
+    cmd_labels = {
+      use:          _INTL("Use"),
+      move:         _INTL("Move"),
+      rotate:         _INTL("Rotate"),
+      delete:       _INTL("Put away"),
+      cancel:       _INTL("Cancel"),
+      decorate:     _INTL("Decorate!"),
+      storage:      _INTL("Pokémon Storage"),
+      item_storage: _INTL("Item Storage")
+    }
 
-    cmd_use = _INTL("Use")
-    cmd_move = _INTL("Move")
-    cmd_delete = _INTL("Put away")
-    cmd_cancel = _INTL("Cancel")
-    cmd_decorate = _INTL("Decorate!")
-    cmd_storage = _INTL("Pokémon Storage")
-    cmd_item_storage = _INTL("Item Storage")
-
+    item = @secretBase.layout.get_item_at_position(item_position)
     options = []
+
     if item.itemId == :PC
       pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $Trainer.name))
-      options << cmd_decorate unless @secretBase.is_visitor
-      options << cmd_storage
-      options << cmd_item_storage
+      options << :decorate unless @secretBase.is_visitor
+      options << :storage
+      options << :item_storage
     else
-      options << cmd_use if item.itemTemplate.behavior
+      options << :use if item.itemTemplate.behavior
     end
-    options << cmd_move unless @secretBase.is_visitor
-    options << cmd_delete if item.itemTemplate.deletable && !@secretBase.is_visitor
-    options << cmd_cancel
 
-    # --- Auto-execute if only one actionable option (ignoring cancel) ---
-    actionable = options - [cmd_cancel]
+    options << :move unless @secretBase.is_visitor
+    options << :rotate unless @secretBase.is_visitor || item.itemId == :PC
+    options << :delete if item.itemTemplate.deletable && !@secretBase.is_visitor
+    options << :cancel
+
+    actionable = options - [:cancel]
     if actionable.length == 1
-      return executeFurnitureCommand(item, actionable.first)
+      return executeFurnitureCommand(item, actionable.first,-1)
     end
 
-    # Otherwise, show the menu
-    choice = optionsMenu(options)
-    executeFurnitureCommand(item, options[choice], position)
+    choice = optionsMenu(options.map { |cmd| cmd_labels[cmd] },-1,menuStartIndex)
+    executeFurnitureCommand(item, options[choice],choice, item_position)
   end
 
-  # Extracted for clarity
-  def executeFurnitureCommand(item, command, position = nil)
+  def executeFurnitureCommand(item, command, commandIndex, position = nil)
     case command
-    when _INTL("Use")
-      item.itemTemplate.behavior.call
-    when _INTL("Move")
+    when :use
+      item.itemTemplate.behavior.call(item.getEvent)
+    when :move
       moveSecretBaseItem(item.instanceId, item.position)
-    when _INTL("Put away")
-      # TODO: implement delete behavior
-    when _INTL("Decorate!")
+    when :rotate
+      rotateSecretBaseItem(item.getEvent)
+      furnitureInteract(position,commandIndex)
+    when :delete
+      if pbConfirmMessage(_INTL("Put away the #{item.name}?"))
+        pbSEPlay("GUI storage put down", 80, 100)
+        resetFurniture(item.instanceId)
+      else
+        furnitureInteract(position,commandIndex)
+      end
+    when :decorate
       decorateSecretBase
-    when _INTL("Pokémon Storage")
+    when :storage
       pbFadeOutIn {
         scene = PokemonStorageScene.new
         screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-        screen.pbStartScreen(0) # Boot PC in organize mode
+        screen.pbStartScreen(0)
       }
-    when _INTL("Item Storage")
+    when :item_storage
       pbPCItemStorage
+    when :cancel
+      return
     end
   end
+
+
 
   def isMovingFurniture?
     return $game_temp.moving_furniture
@@ -112,7 +126,15 @@ class SecretBaseController
     end
   end
 
-  def moveSecretBaseItem(itemInstanceId, oldPosition = [0, 0])
+  def rotateSecretBaseItem(event)
+    pbSEPlay("GUI party switch", 80, 100)
+    direction_fix = event.direction_fix
+    event.direction_fix = false
+    event.turn_left_90
+    event.direction_fix = direction_fix
+  end
+
+  def moveSecretBaseItem(itemInstanceId, oldPosition = nil)
     return if @secretBase.is_a?(VisitorSecretBase)
     itemInstance = @secretBase.layout.get_item_by_id(itemInstanceId)
 
@@ -124,7 +146,7 @@ class SecretBaseController
     $game_player.through = event.through # todo: Make it impossible to go past the walls
     $game_temp.moving_furniture = itemInstanceId
     $game_temp.moving_furniture_oldPlayerPosition = [$game_player.x, $game_player.y]
-    $game_temp.moving_furniture_oldItemPosition = itemInstance.position
+    $game_temp.moving_furniture_oldItemPosition = oldPosition
 
     event.opacity = 50 if event
     event.through = true if event
@@ -139,6 +161,7 @@ class SecretBaseController
     $game_player.removeGraphicsOverride()
     $game_temp.moving_furniture = nil
   end
+
 
   def placeFurnitureMenu(menu_position = 0)
     if !$Trainer.secretBase || !$game_temp.moving_furniture
@@ -164,7 +187,7 @@ class SecretBaseController
       rotateFurniture
       placeFurnitureMenu(choice)
     when cmd_reset
-      return # todo
+      resetFurniture($game_temp.moving_furniture)
     when cmd_cancel
 
     end
@@ -185,7 +208,20 @@ class SecretBaseController
     itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
     event = itemInstance.getEvent
     event.direction = $game_player.direction
+    resetPlayerPosition
+  end
 
+  def resetFurniture(furnitureInstanceId)
+    adding_new_item = $game_temp.moving_furniture_oldItemPosition == nil
+    itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
+    $Trainer.secretBase.layout.remove_item_by_instance(itemInstance.instanceId) if adding_new_item
+    $PokemonTemp.pbClearTempEvents
+    SecretBaseLoader.new.loadSecretBaseFurniture(@secretBase)
+    resetPlayerPosition
+    itemInstance.dispose if adding_new_item
+  end
+  def resetPlayerPosition
+    return unless $game_temp.moving_furniture
     $game_player.removeGraphicsOverride
     pbFadeOutIn {
       $game_player.direction_fix = false

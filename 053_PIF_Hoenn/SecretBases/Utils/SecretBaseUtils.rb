@@ -89,6 +89,26 @@ def placeFurnitureMenu
   controller = getSecretBaseController
   controller.placeFurnitureMenu
 end
+
+
+def rotate_held_furniture_right
+  return unless $game_temp.moving_furniture
+  pbSEPlay("GUI party switch", 80, 100)
+  directionFix = $game_player.direction_fix
+  $game_player.direction_fix = false
+  $game_player.turn_right_90
+  $game_player.direction_fix=directionFix
+end
+def rotate__held_furniture_left
+  return unless $game_temp.moving_furniture
+  pbSEPlay("GUI party switch", 80, 100)
+  directionFix = $game_player.direction_fix
+  $game_player.direction_fix = false
+  $game_player.turn_left_90
+  $game_player.direction_fix=directionFix
+end
+
+
 def exitSecretBase()
   controller = getSecretBaseController
   return if controller&.isMovingFurniture?

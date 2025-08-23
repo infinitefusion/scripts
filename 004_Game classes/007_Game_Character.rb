@@ -357,6 +357,17 @@ class Game_Character
     return z + ((height > Game_Map::TILE_HEIGHT) ? Game_Map::TILE_HEIGHT - 1 : 0)
   end
 
+  def opposite_direction
+    case @direction
+    when DIRECTION_LEFT; return DIRECTION_RIGHT
+    when DIRECTION_RIGHT; return DIRECTION_LEFT
+    when DIRECTION_UP; return DIRECTION_DOWN
+    when DIRECTION_DOWN; return DIRECTION_UP
+    else
+      return DIRECTION_ALL
+    end
+  end
+
   #=============================================================================
   # Movement
   #=============================================================================
@@ -900,6 +911,27 @@ class Game_Character
       move_down(false)
     end
     @direction_fix = last_direction_fix
+  end
+
+  def jump_forward
+    case $game_player.direction
+    when DIRECTION_DOWN
+      x_direction = 0
+      y_direction = 1
+    when DIRECTION_UP
+      x_direction = 0
+      y_direction = -1
+    when DIRECTION_LEFT
+      x_direction = -1
+      y_direction = 0
+    when DIRECTION_RIGHT
+      x_direction = 1
+      y_direction = 0
+    else
+      x_direction = 0
+      y_direction = 0
+    end
+    jump(x_direction, y_direction)
   end
 
   def jump(x_plus, y_plus)
