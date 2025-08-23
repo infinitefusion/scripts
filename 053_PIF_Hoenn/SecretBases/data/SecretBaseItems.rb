@@ -43,11 +43,11 @@ module SecretBasesData
     real_name: "Red Chair",
     price: 350,
     under_player: true,
-    behavior: ->(event = nil) {
+    behavior: ->(itemInstance = nil) {
+      event=itemInstance.getEvent
       pbSEPlay("jump", 80, 100)
       $game_player.through =true
       $game_player.jump_forward
-      #$game_player.direction = event.opposite_direction
       case event.direction
       when DIRECTION_LEFT; $game_player.direction = DIRECTION_RIGHT
       when DIRECTION_RIGHT; $game_player.direction = DIRECTION_LEFT
@@ -74,6 +74,20 @@ module SecretBasesData
     price: 100,
     pass_through: true,
     under_player: true
+  )
+
+  register_base_item(
+    :BOULDER,
+    graphics: "Furniture/boulder.png",
+    real_name: "Boulder",
+    price: 600,
+    under_player: false,
+    behavior: ->(itemInstance = nil) {
+      pbStrength
+      if $PokemonMap.strengthUsed
+        pushEvent(itemInstance)
+      end
+    }
   )
 
 end

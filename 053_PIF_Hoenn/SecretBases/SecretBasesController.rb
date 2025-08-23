@@ -57,7 +57,7 @@ class SecretBaseController
   def executeFurnitureCommand(item, command, commandIndex, position = nil)
     case command
     when :use
-      item.itemTemplate.behavior.call(item.getEvent)
+      item.itemTemplate.behavior.call(item)
     when :move
       moveSecretBaseItem(item.instanceId, item.position)
     when :rotate
@@ -85,6 +85,10 @@ class SecretBaseController
     end
   end
 
+  def reloadItems()
+    $PokemonTemp.pbClearTempEvents
+    SecretBaseLoader.new.loadSecretBaseFurniture(@secretBase)
+  end
 
 
   def isMovingFurniture?
@@ -215,8 +219,7 @@ class SecretBaseController
     adding_new_item = $game_temp.moving_furniture_oldItemPosition == nil
     itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
     $Trainer.secretBase.layout.remove_item_by_instance(itemInstance.instanceId) if adding_new_item
-    $PokemonTemp.pbClearTempEvents
-    SecretBaseLoader.new.loadSecretBaseFurniture(@secretBase)
+    reloadItems
     resetPlayerPosition
     itemInstance.dispose if adding_new_item
   end
