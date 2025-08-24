@@ -49,3 +49,23 @@ def secretBaseQuest_pickedNearbySpot()
   echoln picked_base_map == expected_map && expected_positions.include?(picked_position)
   return picked_base_map == expected_map && expected_positions.include?(picked_position)
 end
+
+
+#To scroll a picture on screen in a seamless, continuous loop (used in the truck scene in the intro)
+# Provide 2 pictures (so that the loop isn't choppy)
+# Speed in pixels per frame
+def scroll_picture_loop(pic_a_nb, pic_b_nb, width, speed)
+  pic_a = $game_screen.pictures[pic_a_nb]
+  pic_b = $game_screen.pictures[pic_b_nb]
+
+  # move both
+  pic_a.x -= speed
+  pic_b.x -= speed
+
+  # wrap-around: always place offscreen one after the other
+  if pic_a.x <= -width
+    pic_a.x = pic_b.x + width
+  elsif pic_b.x <= -width
+    pic_b.x = pic_a.x + width
+  end
+end
