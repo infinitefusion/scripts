@@ -140,7 +140,7 @@ def getNewLegendaryFusionForGymType(original_species, nb_retries = 0)
 end
 
 def isInGym?()
-  return $game_variables[VAR_CURRENT_GYM_TYPE] != -1
+  return $game_variables[VAR_CURRENT_GYM_TYPE] != -1 && $game_variables[VAR_CURRENT_GYM_TYPE]<= GYM_TYPES_ARRAY.length
 end
 
 def pokemonHasCorrectType(species)
