@@ -27,10 +27,9 @@ def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap 
 end
 
 def pbWeatherMapMap()
-  scene = BetterRegionMap.new(-1, true, false, true, nil, false,true)
+  scene = BetterRegionMap.new(-1, true, false, true, nil, false, true)
   return scene.flydata
 end
-
 
 class PokemonGlobalMetadata
   attr_writer :regionMapSel
@@ -60,13 +59,13 @@ class BetterRegionMap
 
   attr_reader :flydata
 
-  def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false, show_weather=false)
+  def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false, show_weather = false)
     region = 0
     showBlk
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
 
     if map_metadata
-      playerpos = $game_map ? map_metadata.town_map_position : nil #pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
+      playerpos = $game_map ? map_metadata.town_map_position : nil # pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
     end
     if playerpos == nil
       playerpos = [0, 0]
@@ -120,7 +119,7 @@ class BetterRegionMap
     if @show_player
       if map_metadata
         player = map_metadata.town_map_position
-        if true #player && player[0] == @region  #only use 1 region
+        if true # player && player[0] == @region  #only use 1 region
           $PokemonGlobal.regionMapSel = [0, 0]
           gender = $Trainer.gender.to_digits(3)
           # @window["player"].bmp("Graphics/Pictures/map/Player#{gender}")
@@ -181,15 +180,12 @@ class BetterRegionMap
     @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
     @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
 
-
     @sprites["weather"] = Sprite.new(@viewport2)
     @sprites["weather"].bmp(get_current_map_weather_icon)
 
-    @sprites["weather"].x=446
-    @sprites["weather"].y=34
-    @sprites["weather"].z=5000
-
-
+    @sprites["weather"].x = 446
+    @sprites["weather"].y = 34
+    @sprites["weather"].z = 5000
 
     if !$PokemonGlobal.regionMapSel
       $PokemonGlobal.regionMapSel = [0, 0]
@@ -234,18 +230,20 @@ class BetterRegionMap
       for x in 0...(@window["map"].bmp.width / TileWidth)
         for y in 0...(@window["map"].bmp.height / TileHeight)
           healspot = pbGetHealingSpot(x, y)
+          echoln healspot if healspot
           if can_fly_to_location(healspot)
-            @window["point#{n}"] = Sprite.new(@mapvp)
-            @window["point#{n}"].bmp("Graphics/Pictures/map/mapFly")
-            @window["point#{n}"].src_rect.width = @window["point#{n}"].bmp.height
-            @window["point#{n}"].x = TileWidth * x + (TileWidth / 2)
-            @window["point#{n}"].y = TileHeight * y + (TileHeight / 2)
-            @window["point#{n}"].oy = @window["point#{n}"].bmp.height / 2.0
-            @window["point#{n}"].ox = @window["point#{n}"].oy
-            @spots[[x, y]] = healspot
+            add_fly_location(healspot, [x, y], n)
             n += 1
           end
         end
+      end
+      if $Trainer.secretBase
+        secretGameBaseMapId = $Trainer.secretBase.outside_map_id
+        secretBaseCoordinates = $Trainer.secretBase.outside_entrance_position
+        secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
+        secret_base_town_map_coordinates = [1,1] if !secret_base_town_map_coordinates || secret_base_town_map_coordinates.empty?
+        healspot = [secretGameBaseMapId, secretBaseCoordinates[0], secretBaseCoordinates[1]]
+        add_fly_location(healspot, secret_base_town_map_coordinates, "secretBase_")
       end
     end
 
@@ -256,6 +254,21 @@ class BetterRegionMap
 
     hideBlk { update(false) }
     main
+  end
+
+  def add_fly_location(healspot, position, n)
+    @window["point#{n}"] = Sprite.new(@mapvp)
+    if n.to_s.include?("secretBase")
+      @window["point#{n}"].bmp("Graphics/Pictures/map/mapFly_base")
+    else
+      @window["point#{n}"].bmp("Graphics/Pictures/map/mapFly")
+    end
+    @window["point#{n}"].src_rect.width = @window["point#{n}"].bmp.height
+    @window["point#{n}"].x = TileWidth * position[0] + (TileWidth / 2)
+    @window["point#{n}"].y = TileHeight * position[1] + (TileHeight / 2)
+    @window["point#{n}"].oy = @window["point#{n}"].bmp.height / 2.0
+    @window["point#{n}"].ox = @window["point#{n}"].oy
+    @spots[position] = healspot
   end
 
   def calculate_initial_position(player)
@@ -276,7 +289,7 @@ class BetterRegionMap
     for new_x in current_x - range..current_x + range
       for new_y in current_y - range..current_y + range
         if can_fly_to_location(pbGetHealingSpot(new_x, new_y))
-          distance = Math.sqrt((new_x - current_x)**2 + (new_y - current_y)**2)
+          distance = Math.sqrt((new_x - current_x) ** 2 + (new_y - current_y) ** 2)
           if distance < min_distance && !(new_x == current_x && new_y == current_y)
             min_distance = distance
             closest_spot = [new_x, new_y]
@@ -288,7 +301,6 @@ class BetterRegionMap
     echoln "Closest spot: #{closest_spot.inspect}" if closest_spot
     return closest_spot
   end
-
 
   def synchronize_cursor
     # Sync logical position to visual cursor position
@@ -304,7 +316,6 @@ class BetterRegionMap
     @sprites["cursor"].x = visual_cursor_x + @window.x
     @sprites["cursor"].y = visual_cursor_y + @window.y
   end
-
 
   def move_cursor_to(x, y)
     # Update the logical position
@@ -323,16 +334,16 @@ class BetterRegionMap
     window_min_y = 0 if window_min_y > 0
 
     # Adjust the map window X-axis to center the cursor
-    if visual_cursor_x < 16  # Too far left
+    if visual_cursor_x < 16 # Too far left
       @window.x = [@window.x + (16 - visual_cursor_x), 0].min
-    elsif visual_cursor_x > Settings::SCREEN_WIDTH - 16  # Too far right
+    elsif visual_cursor_x > Settings::SCREEN_WIDTH - 16 # Too far right
       @window.x = [@window.x - (visual_cursor_x - (Settings::SCREEN_WIDTH - 16)), window_min_x].max
     end
 
     # Adjust the map window Y-axis to center the cursor
-    if visual_cursor_y < 32  # Too far up
+    if visual_cursor_y < 32 # Too far up
       @window.y = [@window.y + (32 - visual_cursor_y), 0].min
-    elsif visual_cursor_y > Settings::SCREEN_HEIGHT - 32  # Too far down
+    elsif visual_cursor_y > Settings::SCREEN_HEIGHT - 32 # Too far down
       @window.y = [@window.y - (visual_cursor_y - (Settings::SCREEN_HEIGHT - 32)), window_min_y].max
     end
 
@@ -342,10 +353,6 @@ class BetterRegionMap
     @sprites["cursor"].y = visual_cursor_y + @window.y
     adjust_window_if_not_visited_regions
   end
-
-
-
-
 
   def init_cursor_position(x, y)
     $PokemonGlobal.regionMapSel[0] = x
@@ -361,12 +368,12 @@ class BetterRegionMap
   end
 
   def been_to_johto()
-    first_visited_map = 248 #goldenrod train station
+    first_visited_map = 248 # goldenrod train station
     return $PokemonGlobal.visitedMaps[first_visited_map]
   end
 
   def been_to_sevii()
-    offshore_road_map = 762 #offshore road
+    offshore_road_map = 762 # offshore road
     knot_island_map = 526
     return $PokemonGlobal.visitedMaps[offshore_road_map] || $PokemonGlobal.visitedMaps[knot_island_map]
   end
@@ -427,6 +434,22 @@ class BetterRegionMap
     return healspot && $PokemonGlobal.visitedMaps[healspot[0]]
   end
 
+  def getTownMapCoordinates(map_id)
+    return nil if !@data[2]
+    for location_data in @data[2]
+      map_x = location_data[0]
+      map_y = location_data[1]
+      location_map_id = location_data[4]
+      return [map_x, map_y] if location_map_id == map_id
+    end
+    return nil
+  end
+
+  # Returns an array like [mapId,x,y]
+  # data[2] is an array of arrays containing the lines in townmap.txt
+  # ex:
+  #    [[5, 13, "Littleroot Town", "Professor Birch's lab", 9, 16, 26, nil], [...]]
+  # [x_on_map,y_on_map, "display name" , "point of interest", map_id, fly_x, fly_y, switch]
   def pbGetHealingSpot(x, y)
     return nil if !@data[2]
     for loc in @data[2]
@@ -442,7 +465,7 @@ class BetterRegionMap
   end
 
   def main
-    frame=0
+    frame = 0
     loop do
       update
       if Input.press?(Input::RIGHT) && ![4, 6].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
@@ -491,8 +514,8 @@ class BetterRegionMap
       end
       if Input.repeat?(Input::AUX1)
         print_current_position()
-        new_weather_cycle if DEBUG_WEATHER && frame%12==0
-        frame+=1
+        new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
+        frame += 1
       end
 
       if Input.trigger?(Input::C) && @dirs.empty?
@@ -577,7 +600,7 @@ class BetterRegionMap
         @hor_count = nil
         @sx = nil
       end
-      #print_current_position()
+      # print_current_position()
     end
     if @dirs.include?(DIRECTION_LEFT)
       @hor_count ||= 0
@@ -589,7 +612,7 @@ class BetterRegionMap
         @hor_count = nil
         @sx = nil
       end
-      #print_current_position()
+      # print_current_position()
     end
     if @dirs.include?(DIRECTION_UP)
       @ver_count ||= 0
@@ -601,7 +624,7 @@ class BetterRegionMap
         @ver_count = nil
         @sy = nil
       end
-      #print_current_position()
+      # print_current_position()
     end
     if @dirs.include?(DIRECTION_DOWN)
       @ver_count ||= 0
@@ -613,7 +636,7 @@ class BetterRegionMap
         @ver_count = nil
         @sy = nil
       end
-      #print_current_position()
+      # print_current_position()
     end
 
     # Map movement
@@ -667,7 +690,6 @@ class BetterRegionMap
     echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
-
   def update_text
     location = @data[2].find do |e|
       e[0] == $PokemonGlobal.regionMapSel[0] &&
@@ -686,6 +708,16 @@ class BetterRegionMap
     text = location[2] if location
     poi = ""
     poi = location[3] if location && location[3]
+
+    if $Trainer.secretBase
+      secretGameBaseMapId = $Trainer.secretBase.outside_map_id
+      secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
+      if location && secret_base_town_map_coordinates
+        if secret_base_town_map_coordinates[0] == location[0] && secret_base_town_map_coordinates[1] == location[1]
+          poi = "Secret Base"
+        end
+      end
+    end
     @sprites["txt"].draw([
                            [pbGetMessage(MessageTypes::RegionNames, @region), 16, 0, 0,
                             Color.new(255, 255, 255), Color.new(0, 0, 0)],
@@ -735,14 +767,14 @@ def calculatePointsAndCenter(mapwidth)
     if pbFindEncounter(enctypes, @species)
       mappos = GameData::MapMetadata.get(enc).town_map_position
 
-      if true #mappos && mappos[0] == @region  #only use 1 region heheh
+      if true # mappos && mappos[0] == @region  #only use 1 region heheh
         showpoint = true
         for loc in @mapdata[@region][2]
           showpoint = false if loc[0] == mappos[1] && loc[1] == mappos[2] &&
             loc[7] && !$game_switches[loc[7]]
         end
         if showpoint
-          #mapsize = pbGetMetadata(enc, MetadataMapSize)
+          # mapsize = pbGetMetadata(enc, MetadataMapSize)
           mapsize = GameData::MapMetadata.get(enc).town_map_size
 
           if mapsize && mapsize[0] && mapsize[0] > 0

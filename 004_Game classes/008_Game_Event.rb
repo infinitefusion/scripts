@@ -4,7 +4,10 @@ class Game_Event < Game_Character
   attr_reader   :list
   attr_reader   :starting
   attr_reader   :tempSwitches   # Temporary self-switches
+  attr_reader :character_name
   attr_accessor :need_refresh
+  attr_accessor :opacity
+  attr_accessor :through
 
   def initialize(map_id, event, map=nil)
     super(map)

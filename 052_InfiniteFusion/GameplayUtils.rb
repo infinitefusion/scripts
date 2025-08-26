@@ -24,6 +24,10 @@ def oricorioEventPickFlower(flower_color)
 
 end
 
+def hasOricorioInParty()
+  return $Trainer.has_species_or_fusion?(:ORICORIO_1) || $Trainer.has_species_or_fusion?(:ORICORIO_2) || $Trainer.has_species_or_fusion?(:ORICORIO_3) || $Trainer.has_species_or_fusion?(:ORICORIO_4)
+end
+
 def changeOricorioFlower(form = 1)
   if $PokemonGlobal.stepcount % 25 == 0
     if !hatUnlocked?(HAT_FLOWER) && rand(2) == 0
@@ -35,7 +39,7 @@ def changeOricorioFlower(form = 1)
       $PokemonGlobal.stepcount += 1
     end
   end
-  return if !($Trainer.has_species_or_fusion?(:ORICORIO_1) || $Trainer.has_species_or_fusion?(:ORICORIO_2) || $Trainer.has_species_or_fusion?(:ORICORIO_3) || $Trainer.has_species_or_fusion?(:ORICORIO_4))
+  return unless hasOricorioInParty
   message = ""
   form_name = ""
   if form == 1
@@ -81,6 +85,17 @@ def changeOricorioForm(pokemon, form = nil)
 
   oricorio_body = oricorio_forms.include?(body_id)
   oricorio_head = oricorio_forms.include?(head_id)
+
+  target_form = case form
+                when 1 then :ORICORIO_1
+                when 2 then :ORICORIO_2
+                when 3 then :ORICORIO_3
+                when 4 then :ORICORIO_4
+                else return false
+                end
+  if oricorio_body && oricorio_head && body_id == target_form && head_id == target_form
+    return false
+  end
 
   if form == 1
     body_id = :ORICORIO_1 if oricorio_body
@@ -1073,94 +1088,7 @@ def clear_all_images()
   end
 end
 
-def exportTeamForShowdown()
-  message = ""
-  for pokemon in $Trainer.party
-    message << exportFusedPokemonForShowdown(pokemon)
-    message << "\n"
-  end
-  Input.clipboard = message
-end
 
-# Clefnair (Clefable) @ Life Orb
-# Ability: Magic Guard
-# Level: 33
-# Fusion: Dragonair
-# EVs: 252 HP / 252 SpD / 4 Spe
-# Modest Nature
-# - Dazzling Gleam
-# - Dragon Breath
-# - Wish
-# - Water Pulse
-def exportFusedPokemonForShowdown(pokemon)
-
-  if pokemon.species_data.is_a?(GameData::FusedSpecies)
-    head_pokemon_species = pokemon.species_data.head_pokemon
-    species_name = head_pokemon_species.name
-  else
-    species_name = pokemon.species_data.real_name
-  end
-
-  if pokemon.item
-    nameLine = _INTL("{1} ({2}) @ {3}", pokemon.name, species_name, pokemon.item.name)
-  else
-    nameLine = _INTL("{1} ({2})", pokemon.name, species_name)
-  end
-
-  abilityLine = _INTL("Ability: {1}", pokemon.ability.name)
-  levelLine = _INTL("Level: {1}", pokemon.level)
-
-  fusionLine = ""
-  if pokemon.species_data.is_a?(GameData::FusedSpecies)
-    body_pokemon_species = pokemon.species_data.body_pokemon
-    fusionLine = _INTL("Fusion: {1}\n", body_pokemon_species.name)
-  end
-  evsLine = calculateEvLineForShowdown(pokemon)
-  natureLine = "#{GameData::Nature.get(pokemon.nature).real_name} Nature"
-  ivsLine = calculateIvLineForShowdown(pokemon)
-
-  move1 = "", move2 = "", move3 = "", move4 = ""
-  move1 = _INTL("- {1}", GameData::Move.get(pokemon.moves[0].id).real_name) if pokemon.moves[0]
-  move2 = _INTL("- {1}", GameData::Move.get(pokemon.moves[1].id).real_name) if pokemon.moves[1]
-  move3 = _INTL("- {1}", GameData::Move.get(pokemon.moves[2].id).real_name) if pokemon.moves[2]
-  move4 = _INTL("- {1}", GameData::Move.get(pokemon.moves[3].id).real_name) if pokemon.moves[3]
-
-  ret = nameLine + "\n" +
-    abilityLine + "\n" +
-    levelLine + "\n" +
-    fusionLine +
-    evsLine + "\n" +
-    natureLine + "\n" +
-    ivsLine + "\n" +
-    move1 + "\n" +
-    move2 + "\n" +
-    move3 + "\n" +
-    move4 + "\n"
-
-  return ret
-end
-
-def calculateEvLineForShowdown(pokemon)
-  evsLine = "EVs: "
-  evsLine << _INTL("{1} HP /", pokemon.ev[:HP])
-  evsLine << _INTL("{1} Atk / ", pokemon.ev[:ATTACK])
-  evsLine << _INTL("{1} Def / ", pokemon.ev[:DEFENSE])
-  evsLine << _INTL("{1} SpA / ", pokemon.ev[:SPECIAL_ATTACK])
-  evsLine << _INTL("{1} SpD / ", pokemon.ev[:SPECIAL_DEFENSE])
-  evsLine << _INTL("{1} Spe / ", pokemon.ev[:SPEED])
-  return evsLine
-end
-
-def calculateIvLineForShowdown(pokemon)
-  ivLine = "IVs: "
-  ivLine << _INTL("{1} HP / ", pokemon.iv[:HP])
-  ivLine << _INTL("{1} Atk / ", pokemon.iv[:ATTACK])
-  ivLine << _INTL("{1} Def / ", pokemon.iv[:DEFENSE])
-  ivLine << _INTL("{1} SpA / ", pokemon.iv[:SPECIAL_ATTACK])
-  ivLine << _INTL("{1} SpD / ", pokemon.iv[:SPECIAL_DEFENSE])
-  ivLine << _INTL("{1} Spe", pokemon.iv[:SPEED])
-  return ivLine
-end
 
 def addWaterCausticsEffect(fog_name = "caustic1", opacity = 16)
   $game_map.fog_name = fog_name
@@ -1204,7 +1132,7 @@ def obtainStarter(starterIndex = 0)
     startersList = Settings::KANTO_STARTERS
     if $game_switches[SWITCH_JOHTO_STARTERS]
       startersList = Settings::JOHTO_STARTERS
-    elsif $game_switches[SWITCH_HENN_STARTERS]
+    elsif $game_switches[SWITCH_HOENN_STARTERS]
       startersList = Settings::HOENN_STARTERS
     elsif $game_switches[SWITCH_SINNOH_STARTERS]
       startersList = Settings::SINNOH_STARTERS
@@ -1562,6 +1490,10 @@ end
 
 def isPlayerFemale()
   return pbGet(VAR_TRAINER_GENDER) == GENDER_FEMALE
+end
+
+def getPlayerGenderId()
+  return pbGet(VAR_TRAINER_GENDER)
 end
 
 def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)

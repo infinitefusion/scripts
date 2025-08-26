@@ -122,6 +122,7 @@ class GameWeather
   def try_propagate_weather_to_neighbors(map_id,propagating_map_weather_type,propagating_map_weather_intensity)
     propagating_map_neighbors = @neighbors_maps[map_id]
 
+    return unless propagating_map_neighbors
     return if propagating_map_weather_type == :None
     return unless can_weather_spread(propagating_map_weather_type)
     propagating_map_weather_type, propagating_map_weather_intensity = normalize_legendary_weather(propagating_map_weather_type, propagating_map_weather_intensity)

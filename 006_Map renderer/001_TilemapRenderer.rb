@@ -189,6 +189,22 @@ class TilemapRenderer
             875 => "tree_sway_group_4",
     },
 
+    9 => {  #Route Forest
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
   }
 
   #=============================================================================

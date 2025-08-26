@@ -9,9 +9,9 @@
 # Fix event comment
 def pbEventCommentInput(*args)
   parameters = []
-  list = *args[0].list   # Event or event page
-  elements = *args[1]    # Number of elements
-  trigger = *args[2]     # Trigger
+  list = *args[0].list # Event or event page
+  elements = *args[1] # Number of elements
+  trigger = *args[2] # Trigger
   return nil if list == nil
   return nil unless list.is_a?(Array)
   for item in list
@@ -67,12 +67,12 @@ module FootprintVariables
     viewport = $scene.spriteset.viewport1
     footsprites = $scene.spriteset.footsprites
     nid = self.get_new_id
-    rpgEvent    = RPG::Event.new(position[0], position[1])
+    rpgEvent = RPG::Event.new(position[0], position[1])
     rpgEvent.id = nid
     fev = Game_Event.new($game_map.map_id, rpgEvent, $game_map)
     eventsprite = Sprite_Character.new(viewport, fev)
     character_sprites.push(eventsprite)
-    footsprites.push(Footsprite.new(eventsprite, fev, viewport, $game_map, position[2], nid, character_sprites, (event==$game_player)))
+    footsprites.push(Footsprite.new(eventsprite, fev, viewport, $game_map, position[2], nid, character_sprites, (event == $game_player)))
   end
 
 end
@@ -83,18 +83,21 @@ end
 
 class Sprite_Character
   alias old_initialize_foot initialize
-  def initialize(viewport, character=nil)
+
+  def initialize(viewport, character = nil)
     old_initialize_foot(viewport, character)
     @disposed = false
   end
 
   alias old_update_foot update
+
   def update
     return if @disposed
     old_update_foot
   end
 
   alias old_dispose_foot dispose
+
   def dispose
     old_dispose_foot
     @disposed = true
@@ -106,7 +109,8 @@ class Spriteset_Map
   attr_accessor :footsprites
 
   alias old_initialize initialize
-  def initialize(map=nil)
+
+  def initialize(map = nil)
     old_initialize(map)
     @footsprites = []
   end
@@ -120,6 +124,7 @@ class Spriteset_Map
   end
 
   alias old_dispose dispose
+
   def dispose
     old_dispose
     @footsprites.each { |sprite| sprite.dispose } if !@footsprites.nil?
@@ -127,10 +132,11 @@ class Spriteset_Map
   end
 
   alias old_update update
+
   def update
     old_update
     return if @footsprites.nil?
-    @footsprites.each { |sprite| sprite.update  }
+    @footsprites.each { |sprite| sprite.update }
   end
 end
 
@@ -144,19 +150,24 @@ class Game_Character
 
   def get_last_pos
     case direction
-    when 2 then return [@x,   @y-1, direction] # Move down
-    when 4 then return [@x+1, @y,   direction] # Move left
-    when 6 then return [@x-1, @y,   direction] # Move right
-    when 8 then return [@x,   @y+1, direction] # Move up
+    when 2 then return [@x, @y - 1, direction] # Move down
+    when 4 then return [@x + 1, @y, direction] # Move left
+    when 6 then return [@x - 1, @y, direction] # Move right
+    when 8 then return [@x, @y + 1, direction] # Move up
     end
     return false
   end
 
   def foot_prints?
-    return $game_map.terrain_tag(get_last_pos[0], get_last_pos[1]) == FootprintVariables::TERRAIN_FOOT && $scene.is_a?(Scene_Map) && $scene.spriteset?
+    begin
+      return $game_map.terrain_tag(get_last_pos[0], get_last_pos[1]) == FootprintVariables::TERRAIN_FOOT && $scene.is_a?(Scene_Map) && $scene.spriteset?
+    rescue
+      return false
+    end
   end
 
   alias leave_tile_footprints triggerLeaveTile
+
   def triggerLeaveTile
     leave_tile_footprints
     $scene.spriteset.putFootprint(self, get_last_pos) if foot_prints?
@@ -165,14 +176,14 @@ class Game_Character
 end
 
 class Footsprite
-  def initialize(sprite,event,viewport,map,direction,nid,chardata,player)
+  def initialize(sprite, event, viewport, map, direction, nid, chardata, player)
     @rsprite = sprite
     # Sprite
-    @sprite  = Sprite.new(viewport)
+    @sprite = Sprite.new(viewport)
     file = player && $PokemonGlobal.bicycle ? "footsetbike.png" : "footset.png"
     @sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Pictures/", file)
     # Set position
-    @realwidth = @sprite.bitmap.width/4
+    @realwidth = @sprite.bitmap.width / 4
     @sprite.src_rect.width = @realwidth
     @opacity = FootprintVariables::FOOT_OPACITY
     setFootset(direction)
@@ -180,7 +191,7 @@ class Footsprite
     @map = map
     @event = event
     @disposed = false
-    @eventid  = nid
+    @eventid = nid
     @viewport = viewport
     @chardata = chardata
     update
@@ -189,10 +200,10 @@ class Footsprite
   def setFootset(direction)
     @sprite.src_rect.x =
       case direction
-      when 2 then 0              # Move down
+      when 2 then 0 # Move down
       when 4 then @realwidth * 3 # Move left
       when 6 then @realwidth * 2 # Move right
-      when 8 then @realwidth     # Move up
+      when 8 then @realwidth # Move up
       end
     @sprite.opacity = @opacity
   end
@@ -211,14 +222,14 @@ class Footsprite
     return if @disposed
     x = @rsprite.x - @rsprite.ox
     y = @rsprite.y - @rsprite.oy
-    width  = @rsprite.src_rect.width
+    width = @rsprite.src_rect.width
     height = @rsprite.src_rect.height
-    @sprite.x  = x + width / 2
-    @sprite.y  = y + height
+    @sprite.x = x + width / 2
+    @sprite.y = y + height
     @sprite.ox = @realwidth / 2
     @sprite.oy = @sprite.bitmap.height
-    @sprite.z  = @rsprite.z - 2
-    @opacity  -= FootprintVariables::FOOT_DELAY
+    @sprite.z = @rsprite.z - 2
+    @opacity -= FootprintVariables::FOOT_DELAY
     @sprite.opacity = @opacity
     dispose if @sprite.opacity <= 0
   end

@@ -137,7 +137,12 @@ define_quest("route116_glasses",:FIELD_QUEST,"Lost glasses", "A trainer has lost
 define_quest("route104_rivalWeather",:FIELD_QUEST,"Weather Watch", "Help your rival with fieldwork and find a Pokémon that only appears when it's windy!","Route 104","rival")
 
 #Petalburg woods
-define_quest("petalburgwoods_spores",:FIELD_QUEST,"Spores harvest", "A scientist has tasked you to collect 4 spore samples from the large mushrooms that can be found in the woods!","Petalburg Woods","NPC_Hoenn_Scientist")
+define_quest("petalburgwoods_spores",:FIELD_QUEST,"Spores Harvest", "A scientist has tasked you to collect 4 spore samples from the large mushrooms that can be found in the woods!","Petalburg Woods","NPC_Hoenn_Scientist")
 
+#Route 104 (North)
+define_quest("route104_oricorio",:FIELD_QUEST,"Special Flowery Grass", "Find an Oricorio in the flowery grass behind the flower shop.","Route 104","NPC_Hoenn_AromaLady")
+define_quest("route104_oricorio_forms",:FIELD_QUEST,"Nectar Flowers", "Find all 4 types of nectar flowers to transform Oricorio.","Route 104","NPC_Hoenn_AromaLady")
 
+#Route 115
+define_quest("route115_secretBase",:FIELD_QUEST,"Your Very Own Secret Base!", "Talk to Aarune near his secret base to learn how to make your own.","Route 115","NPC_Hoenn_AromaLady")
 

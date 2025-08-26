@@ -125,7 +125,7 @@ end
 def pbCreateMessageWindow(viewport=nil,skin=nil)
   arrow = nil
   if $PokemonTemp.speechbubble_bubble==2 && $game_map.events[$PokemonTemp.speechbubble_talking] != nil # Message window set to floating bubble.
-    if ($game_player.direction==8 && !$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp# Player facing up, message window top.
+    if ($game_player.direction==DIRECTION_UP && (!$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp)# Player facing up, message window top.
       $PokemonTemp.speechbubble_vp = Viewport.new(0, 104, Graphics.width, 280)
       $PokemonTemp.speechbubble_vp.z = 999999
       arrow = Sprite.new($PokemonTemp.speechbubble_vp)

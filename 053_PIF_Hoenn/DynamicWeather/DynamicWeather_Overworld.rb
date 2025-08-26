@@ -3,7 +3,6 @@
 Events.onMapChange+= proc { |_old_map_id|
     next if !$game_weather || !$game_weather.current_weather || !$game_weather.last_update_time
     next if !$game_map
-    echoln pbGetTimeNow.to_i
     update_overworld_weather($game_map.map_id)
     next if  $game_weather.last_update_time.to_i + GameWeather::TIME_BETWEEN_WEATHER_UPDATES > pbGetTimeNow.to_i
 

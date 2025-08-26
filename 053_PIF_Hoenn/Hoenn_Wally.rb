@@ -10,7 +10,7 @@ COMMON_EVENT_WALLY_FOLLOWING_DIALOGUE = 199
 def wally_initialize()
   trainer_type = :RIVAL2
   trainer_name = "Wally"
-  battledTrainer = BattledTrainer.new(trainer_type,trainer_name,0)
+  battledTrainer = BattledTrainer.new(trainer_type,trainer_name,0,BATTLED_TRAINER_WALLY_KEY)
   battledTrainer.currentTeam =[]#team
   $PokemonGlobal.battledTrainers={} if !$PokemonGlobal.battledTrainers
   $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY] = battledTrainer

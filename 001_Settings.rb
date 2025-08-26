@@ -547,7 +547,11 @@ module Settings
     #  ["Deutsch", "deutsch.dat"]
   ]
 
-
+  #Experimental
+  REMOTE_BATTLES_CONTROL = false
+  REMOTE_NPC_DIALOG = false
+  REMOTE_BATTLE_CONTROL_SERVER_URL = "http://127.0.0.1:5000/choose_move"
+  REMOTE_NPC_DIALOG_SERVER_URL = "http://127.0.0.1:5000"
   #Technical
   SPRITE_CACHE_MAX_NB=100
   NEWEST_SPRITEPACK_MONTH = 12
