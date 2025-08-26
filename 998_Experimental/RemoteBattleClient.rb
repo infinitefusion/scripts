@@ -130,24 +130,6 @@ class RemotePokeBattle_AI < PokeBattle_AI
 
 
 
-  #------------------------------
-  # Convert objects to JSON-safe
-  # ------------------------------
-  def convert_to_json_safe(obj)
-    case obj
-    when Hash
-      obj.each_with_object({}) { |(k,v), h| h[k.to_s] = convert_to_json_safe(v) }
-    when Array
-      obj.compact.map { |v| convert_to_json_safe(v) }
-    when Symbol
-      obj.to_s
-    when TrueClass, FalseClass, NilClass, Numeric
-      obj
-    else
-      obj.to_s
-    end
-  end
-
 
 
   def fetch_sprite_from_web(url, destinationPath = nil)
@@ -170,5 +152,24 @@ class RemotePokeBattle_AI < PokeBattle_AI
       echoln "File Error: #{e.message}"
       return nil
     end
+  end
+end
+
+
+#------------------------------
+# Convert objects to JSON-safe
+# ------------------------------
+def convert_to_json_safe(obj)
+  case obj
+  when Hash
+    obj.each_with_object({}) { |(k,v), h| h[k.to_s] = convert_to_json_safe(v) }
+  when Array
+    obj.compact.map { |v| convert_to_json_safe(v) }
+  when Symbol
+    obj.to_s
+  when TrueClass, FalseClass, NilClass, Numeric
+    obj
+  else
+    obj.to_s
   end
 end
