@@ -53,11 +53,6 @@ class Window_AdvancedTextPokemon
   alias _remoteNPCDialog_dispose_original dispose
   def dispose
     _remoteNPCDialog_dispose_original
-    # Run finalizer if this is the last message being displayed
-    if $game_temp.active_event_finalizer
-      $game_temp.active_event_finalizer.call
-      $game_temp.active_event_finalizer = nil
-    end
   end
 end
 
@@ -71,12 +66,10 @@ class Interpreter
     _remoteNPCDialog_setup(list, event_id, map_id)
     return unless Settings::REMOTE_NPC_DIALOG
 
-    # Only track map events, ignore common events for now if you want
     if event_id > 0 && map_id
-      echoln("Event #{event_id} on map #{map_id} started.")
       $game_temp.talking_npc_id = event_id
-
-      # Finalizer to run after all messages for this event are displayed
+      return unless $game_temp.talking_npc_id
+      # Prepare finalizer for end-of-event
       $game_temp.active_event_finalizer = Proc.new {
         extraDialogPrompt(event_id)
         $game_temp.talking_npc_id = nil
@@ -84,16 +77,22 @@ class Interpreter
     end
   end
 
-  alias _remoteNPCDialog_clear clear
-  def clear
-    # Avoid logging mid-event; the finalizer handles true "finished" timing
-    _remoteNPCDialog_clear
+  alias _remoteNPCDialog_command_end command_end
+  def command_end
+    _remoteNPCDialog_command_end
+    # Run finalizer once when the event’s interpreter finishes
+    if $game_temp.active_event_finalizer
+      $game_temp.active_event_finalizer.call
+      $game_temp.active_event_finalizer = nil
+    end
   end
 end
 
 
+
 def extraDialogPrompt(event_id)
   return unless Settings::REMOTE_NPC_DIALOG
+  return unless $game_temp.dialog_context
   npc_context_key = getNPCContextKey(event_id)
   npc_context = $game_temp.dialog_context[npc_context_key]
   return unless npc_context
@@ -109,6 +108,7 @@ def extraDialogPrompt(event_id)
     add_npc_context(event_id, text, true)
     response = getRemoteNPCResponse(event_id)
     add_npc_context(event_id, response, false)
+    extraDialogPrompt(event_id)
   else
   end
 end

@@ -19,7 +19,7 @@ def getRemoteNPCResponse(event_id)
   json_data   = JSON.generate(safe_params)
 
   # Send to your remote dialogue server
-  response = pbPostToString(Settings::REMOTE_NPC_DIALOG_SERVER_URL, { "npc_state" => json_data })
+  response = pbPostToString(Settings::REMOTE_NPC_DIALOG_SERVER_URL, { "npc_state" => json_data },10)
   response = clean_json_string(response)
 
   echoln "npc sprite name: #{npc_sprite_name}"
