@@ -208,6 +208,11 @@ def getEvolution(speciesParam, halfToEvolve=nil)
   end
 end
 
+#just a shortcut
+def fusionOf(head,body)
+  return getFusionSpeciesSymbol(body,head)
+end
+
 def getFusionSpeciesSymbol(body, head)
   body_num = dexNum(body)
   head_num = dexNum(head)
