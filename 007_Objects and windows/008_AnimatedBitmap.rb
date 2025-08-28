@@ -129,6 +129,10 @@ class AnimatedBitmap
     @bitmap.bitmap = new_bitmap
   end
 
+  def mirror
+    mirror_horizontally
+  end
+
   def mirror_horizontally
     bmp = @bitmap.bitmap
     half_width = bmp.width / 2

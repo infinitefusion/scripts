@@ -6,11 +6,11 @@
 E4_POKEMON_POOL = {
   :ELITEFOUR_Lorelei => [
     #original league team
-    {:species => [:MAGMORTAR,:DEWGONG],   :level => 4, :ability => :FLAMEBODY,  :moves => [:BUBBLEBEAM,:FLAMETHROWER,:HAIL,:PROTECT],        :item => :NEVERMELTICE},   # Magmortar / Dewgong
-    {:species => [:MAMOSWINE,:SLOWBRO],   :level => 4, :ability => :OBLIVIOUS,  :moves => [:HAIL,:SLACKOFF,:TAKEDOWN,:ICEFANG],              :item => :NEVERMELTICE},   # Mamoswine / Slowbro
-    {:species => [:TENTACRUEL,:CLOYSTER], :level => 3, :ability => :SHELLARMOR, :moves => [:SPIKES,:STEALTHROCK,:WATERPULSE,:ICICLECRASH],  :item => :NEVERMELTICE},   # Tentacruel / Cloyster
-    {:species => [:JYNX,:TANGROWTH],      :level => 7, :ability => :OBLIVIOUS,  :moves => [:LEECHSEED,:DRAININGKISS,:SLEEPPOWDER,:ICEPUNCH],:item => :NEVERMELTICE},   # Jynx / Tangrowth
-    {:species => [:WEAVILE,:LAPRAS],      :level => 7, :ability => :PRESSURE,   :moves => [:PERISHSONG,:NIGHTSLASH,:SURF,:EMBARGO],           :item => :NEVERMELTICE},   # Weavile / Lapras
+    {:species => [:MAGMORTAR,:DEWGONG],   :level => 4, :ability => :FLAMEBODY,  :moves => [:BUBBLEBEAM,:FLAMETHROWER,:HAIL,:PROTECT],         :item => :NEVERMELTICE , :tier => 1},   # Magmortar / Dewgong
+    {:species => [:MAMOSWINE,:SLOWBRO],   :level => 4, :ability => :OBLIVIOUS,  :moves => [:HAIL,:SLACKOFF,:TAKEDOWN,:ICEFANG],               :item => :NEVERMELTICE, :tier => 1},   # Mamoswine / Slowbro
+    {:species => [:TENTACRUEL,:CLOYSTER], :level => 3, :ability => :SHELLARMOR, :moves => [:SPIKES,:STEALTHROCK,:WATERPULSE,:ICICLECRASH],    :item => :NEVERMELTICE, :tier => 1},   # Tentacruel / Cloyster
+    {:species => [:JYNX,:TANGROWTH],      :level => 7, :ability => :OBLIVIOUS,  :moves => [:LEECHSEED,:DRAININGKISS,:SLEEPPOWDER,:ICEPUNCH],  :item => :NEVERMELTICE, :tier => 1},   # Jynx / Tangrowth
+    {:species => [:WEAVILE,:LAPRAS],      :level => 7, :ability => :PRESSURE,   :moves => [:PERISHSONG,:NIGHTSLASH,:SURF,:EMBARGO],           :item => :NEVERMELTICE, :tier => 1},   # Weavile / Lapras
     #reserve
 
   ],
@@ -53,7 +53,7 @@ E4_POKEMON_POOL = {
     #original league team
     {:species => [:MAROWAK,:PIDGEOT],      :level => 9, :ability => :SAMPLE,     :moves => [:EARTHQUAKE,:WINGATTACK,:DOUBLETEAM,:SWORDSDANCE],:item => :LAXINCENSE, :tier => 1}, # Marowak / Pidgeot
     {:species => [:TAUROS,:EXEGGUTOR],     :level => 9, :ability => :SAMPLE,     :moves => [:ZENHEADBUTT,:GIGAIMPACT,:SCARYFACE,:SWAGGER],    :item => :KINGSROCK, :tier => 1}, # Tauros / Exeggutor
-    {:species => [:RHYDON,:MAGMORTAR],     :level => 10,:ability => :SAMPLE,     :moves => [:FIREBLAST,:DRILLRUN,:WILLOWISP,:STONEEDGE],      :item => :ABSORBBULB, :tier => 1}, # Rhydon / Magmortar
+    {:species => [:RHYPERIOR,:MAGMORTAR],     :level => 10,:ability => :SAMPLE,     :moves => [:FIREBLAST,:DRILLRUN,:WILLOWISP,:STONEEDGE],      :item => :ABSORBBULB, :tier => 1}, # Rhydon / Magmortar
     {:species => [:ELECTABUZZ,:GYARADOS],  :level => 11,:ability => :SAMPLE,     :moves => [:RAINDANCE,:THUNDERPUNCH,:WATERFALL,:DRAGONDANCE],:item => :DAMPROCK, :tier => 1}, # Electabuzz / Gyarados
     {:species => [:STARMIE,:ALAKAZAM],     :level => 8, :ability => :SAMPLE,     :moves => [:PSYCHIC,:REFLECT,:SURF,:COSMICPOWER],            :item => :WISEGLASSES, :tier => 1}, # Starmie / Alakazam
     #original mt. silver team
@@ -66,7 +66,6 @@ E4_POKEMON_POOL = {
   ],
 }
 
-RIVAL_STARTER_E4_TEMPLATE =  {:species => :MEW, :level => 12,  :item => :LEFTOVERS}
 
 
 

@@ -422,13 +422,13 @@ class HallOfFame_Scene
     if $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
       gameMode = "Randomized mode"
     end
-    if $game_switches[ENABLED_DEBUG_MODE_AT_LEAST_ONCE] || $DEBUG
-      gameMode = "Debug mode"
+
+    if $game_switches[SWITCH_LEGENDARY_MODE]
+      gameMode = "Legendary mode"
     end
 
-    #todo: Move above of debug mode
-    if $game_switches[SWITCH_LEGENDARY_MODE] || $DEBUG
-      gameMode = "Legendary mode"
+    if $game_switches[ENABLED_DEBUG_MODE_AT_LEAST_ONCE] || $DEBUG
+      gameMode = "Debug mode"
     end
     return gameMode
   end
