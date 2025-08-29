@@ -36,6 +36,7 @@ end
 def get_rival_starter(base_line_level)
   species = pbGet(VAR_RIVAL_STARTER)
   level = base_line_level +12
+  level = 100 if level > 100
   pokemon = Pokemon.new(species,level)
   pokemon.item = :LEFTOVERS
   return pokemon
@@ -44,27 +45,32 @@ end
 def build_e4_trainer_party(selected_pokemon,base_line_level)
   party = []
   selected_pokemon.each do |pokemon_data|
-      level = pokemon_data[:level] + base_line_level
-      level = 100 if level > 100
-      species_data = pokemon_data[:species]
-      if species_data.is_a?(Array)
-        species = fusionOf(species_data[0],species_data[1])
-      else
-        species = species_data
-      end
-      pokemon = Pokemon.new(species, level)
-      pokemon.ability = pokemon_data[:ability] if pokemon_data[:ability]
-      pokemon.item = pokemon_data[:item] if pokemon_data[:item]
-      moves = []
-      if pokemon_data[:moves]
-        pokemon_data[:moves].each do |move_id|
-          moves << Pokemon::Move.new(move_id)
-        end
-      end
-      pokemon.moves = moves
-      party << pokemon
+      party << build_e4_pokemon(pokemon_data,base_line_level)
     end
   return party
+end
+
+def build_e4_pokemon(pokemon_data,base_line_level)
+  level = pokemon_data[:level] + base_line_level
+  level = 100 if level > 100
+  species_data = pokemon_data[:species]
+  if species_data.is_a?(Array)
+    species = fusionOf(species_data[0],species_data[1])
+  else
+    species = species_data
+  end
+  pokemon = Pokemon.new(species, level)
+  pokemon.ability = pokemon_data[:ability] if pokemon_data[:ability]
+  pokemon.item = pokemon_data[:item] if pokemon_data[:item]
+  pokemon.nature = pokemon_data[:nature] if pokemon_data[:nature]
+  moves = []
+  if pokemon_data[:moves]
+    pokemon_data[:moves].each do |move_id|
+      moves << Pokemon::Move.new(move_id)
+    end
+  end
+  pokemon.moves = moves
+  return pokemon
 end
 
 # Todo: smart select depending on the player's team
@@ -88,6 +94,7 @@ def list_unlocked_league_tiers
   return unlocked_tiers
 end
 def select_league_tier
+  validateE4Data
   available_tiers = list_unlocked_league_tiers
   return 0 if available_tiers.empty?
   return available_tiers[0] if available_tiers.length == 1
@@ -113,9 +120,6 @@ def unlock_new_league_tiers
   tiers_to_unlock << 4 if current_tier == 3 && $game_variables[VAR_NB_GYM_REMATCHES] >= 16
   tiers_to_unlock << 5 if current_tier == 4
 
-  echoln currently_unlocked_tiers
-  echoln tiers_to_unlock
-
   tiers_to_unlock.each do |tier|
     next if tier == 1 || tier == 0
 
@@ -126,6 +130,17 @@ def unlock_new_league_tiers
     unless currently_unlocked_tiers.include?(tier)
       pbMEPlay("Key item get")
       pbMessage(_INTL("#{$Trainer.name} unlocked the \\C[1]Tier #{tier} League Rematches\\C[0]!"))
+    end
+  end
+end
+
+
+def validateE4Data
+  E4_POKEMON_POOL.keys.each do |key|
+    available_pokemon = E4_POKEMON_POOL[key]
+    available_pokemon.each do |pokemon_data|
+      build_e4_pokemon(pokemon_data,0)
+      echoln "#{pokemon_data[:species]} is valid"
     end
   end
 end
