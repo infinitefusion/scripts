@@ -590,12 +590,13 @@ class PokemonLoadScreen
           return
         when cmd_new_game
           @scene.pbEndScene
-          Game.start_new
+          Game.start_new(new_game_plus)
           initialize_alt_sprite_substitutions()
+          @save_data[:player].new_game_plus_unlocked=new_game_plus
           return
         when cmd_new_game_plus
           @scene.pbEndScene
-          Game.start_new(@save_data[:bag], @save_data[:storage_system], @save_data[:player])
+          Game.start_new(true,@save_data[:bag], @save_data[:storage_system], @save_data[:player])
           initialize_alt_sprite_substitutions()
           @save_data[:player].new_game_plus_unlocked = true
           return
@@ -808,7 +809,7 @@ end
 module Game
   # Fix New Game bug (if you saved during an event script)
   # This fix is from Essentials v20.1 Hotfixes 1.0.5
-  def self.start_new(ngp_bag = nil, ngp_storage = nil, ngp_trainer = nil)
+  def self.start_new(ngp_unlocked=false,ngp_bag = nil, ngp_storage = nil, ngp_trainer = nil)
     if $game_map && $game_map.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
@@ -832,12 +833,11 @@ module Game
     if ngp_storage != nil
       $PokemonStorage = ngp_clean_pc_data(ngp_storage, ngp_trainer.party)
     end
-
     if ngp_trainer
       $Trainer.unlocked_hats = ngp_trainer.unlocked_hats
       $Trainer.unlocked_clothes = ngp_trainer.unlocked_clothes
     end
-
+    $Trainer.new_game_plus_unlocked = ngp_unlocked
   end
 
   # Loads bootup data from save file (if it exists) or creates bootup data (if
