@@ -1129,10 +1129,11 @@ def obtainStarter(starterIndex = 0)
   elsif ($game_switches[SWITCH_RANDOM_STARTERS])
     starter = obtainRandomizedStarter(starterIndex)
   else
-    startersList = Settings::KANTO_STARTERS
+    startersList = Settings::DEFAULT_STARTERS
     if $game_switches[SWITCH_JOHTO_STARTERS]
       startersList = Settings::JOHTO_STARTERS
     elsif $game_switches[SWITCH_HOENN_STARTERS]
+      echoln "HOENN"
       startersList = Settings::HOENN_STARTERS
     elsif $game_switches[SWITCH_SINNOH_STARTERS]
       startersList = Settings::SINNOH_STARTERS
@@ -1146,6 +1147,7 @@ def obtainStarter(starterIndex = 0)
         startersList = $game_temp.starter_options
       end
     end
+    echoln startersList
     starter = startersList[starterIndex]
   end
   return GameData::Species.get(starter)

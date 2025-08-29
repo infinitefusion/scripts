@@ -20,8 +20,7 @@ def select_game_mode
     case commands[chosen_index]
     when cmd_mode_classic
       commands_choose_mode = ["Back","Play Classic Mode"]
-      confirmed_index = pbMessage(_INTL("\\C[1]Classic\\C[0] is the default game mode. All of the player teams and encounters are based on the original generation 1 games, but every Pokémon is still available."),commands_choose_mode)
-      echoln confirmed_index
+      confirmed_index = pbMessage(_INTL("\\C[1]Classic\\C[0] is the default game mode. All of the player teams and encounters are based on the original games. Every Pokémon is still available."),commands_choose_mode)
       game_mode = :CLASSIC if confirmed_index ==1
     when cmd_mode_remix
       commands_choose_mode = ["Back","Play Remix Mode"]
