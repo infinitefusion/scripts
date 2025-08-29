@@ -36,6 +36,7 @@ class Game_Temp
   attr_accessor :moving_furniture_oldItemPosition
   attr_accessor :original_direction   #generic - for if we need to save a direction for whatever reason
 
+  attr_accessor :starter_options
 
 
   #-----------------------------------------------------------------------------

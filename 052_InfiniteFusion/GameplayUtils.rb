@@ -1138,11 +1138,24 @@ def obtainStarter(starterIndex = 0)
       startersList = Settings::SINNOH_STARTERS
     elsif $game_switches[SWITCH_KALOS_STARTERS]
       startersList = Settings::KALOS_STARTERS
+    elsif $game_switches[SWITCH_MIXED_STARTERS]
+      if $game_temp.starter_options
+        startersList = $game_temp.starter_options
+      else
+        $game_temp.starter_options = generate_mixed_starters_list
+        startersList = $game_temp.starter_options
+      end
     end
     starter = startersList[starterIndex]
   end
-  echoln startersList
   return GameData::Species.get(starter)
+end
+
+def generate_mixed_starters_list
+  grass_option = Settings::GRASS_STARTERS.sample
+  fire_option = Settings::FIRE_STARTERS.sample
+  water_option = Settings::WATER_STARTERS.sample
+  return [grass_option, fire_option, water_option]
 end
 
 # body0

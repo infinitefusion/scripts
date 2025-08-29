@@ -164,12 +164,8 @@ def addLegendaryEggsToPC()
 end
 
 def generate_legendary_mode_starters
-  grass_starters = [:BULBASAUR,:CHIKORITA,:TREECKO,:TURTWIG,:CHESPIN]
-  fire_starters = [:CHARMANDER,:CYNDAQUIL, :TORCHIC, :CHIMCHAR, :FENNEKIN]
-  water_starters = [:SQUIRTLE, :TOTODILE, :MUDKIP, :PIPLUP, :FROAKIE]
-
-  grass_option = getFusionSpecies(grass_starters.sample,LEGENDARIES_LIST.sample)
-  fire_option = getFusionSpecies(fire_starters.sample,LEGENDARIES_LIST.sample)
-  water_option = getFusionSpecies(water_starters.sample,LEGENDARIES_LIST.sample)
+  grass_option = getFusionSpecies(Settings::GRASS_STARTERS.sample,LEGENDARIES_LIST.sample)
+  fire_option = getFusionSpecies(Settings::FIRE_STARTERS.sample,LEGENDARIES_LIST.sample)
+  water_option = getFusionSpecies(Settings::WATER_STARTERS.sample,LEGENDARIES_LIST.sample)
   return [grass_option, fire_option, water_option]
 end
