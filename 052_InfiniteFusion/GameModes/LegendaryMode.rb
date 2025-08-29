@@ -162,3 +162,14 @@ def addLegendaryEggsToPC()
     $PokemonStorage.pbStoreCaught(pokemon)
   end
 end
+
+def generate_legendary_mode_starters
+  grass_starters = [:BULBASAUR,:CHIKORITA,:TREECKO,:TURTWIG,:CHESPIN]
+  fire_starters = [:CHARMANDER,:CYNDAQUIL, :TORCHIC, :CHIMCHAR, :FENNEKIN]
+  water_starters = [:SQUIRTLE, :TOTODILE, :MUDKIP, :PIPLUP, :FROAKIE]
+
+  grass_option = getFusionSpecies(grass_starters.sample,LEGENDARIES_LIST.sample)
+  fire_option = getFusionSpecies(fire_starters.sample,LEGENDARIES_LIST.sample)
+  water_option = getFusionSpecies(water_starters.sample,LEGENDARIES_LIST.sample)
+  return [grass_option, fire_option, water_option]
+end

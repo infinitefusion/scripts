@@ -1124,7 +1124,7 @@ end
 
 def obtainStarter(starterIndex = 0)
   if ($game_switches[SWITCH_LEGENDARY_MODE])
-    startersList = [:B1H341, :B4H150, :B7H343]
+    startersList = generate_legendary_mode_starters
     starter = startersList[starterIndex]
   elsif ($game_switches[SWITCH_RANDOM_STARTERS])
     starter = obtainRandomizedStarter(starterIndex)
