@@ -1133,7 +1133,6 @@ def obtainStarter(starterIndex = 0)
     if $game_switches[SWITCH_JOHTO_STARTERS]
       startersList = Settings::JOHTO_STARTERS
     elsif $game_switches[SWITCH_HOENN_STARTERS]
-      echoln "HOENN"
       startersList = Settings::HOENN_STARTERS
     elsif $game_switches[SWITCH_SINNOH_STARTERS]
       startersList = Settings::SINNOH_STARTERS
@@ -1147,7 +1146,6 @@ def obtainStarter(starterIndex = 0)
         startersList = $game_temp.starter_options
       end
     end
-    echoln startersList
     starter = startersList[starterIndex]
   end
   return GameData::Species.get(starter)
@@ -1840,6 +1838,32 @@ def setEventGraphicsToPokemon(species, eventId)
   return if !event
   event.character_name = "Followers/#{species.to_s}"
   event.refresh
+end
+
+def getCurrentGameModeSymbol()
+  gameMode = :CLASSIC
+  if $game_switches[SWITCH_MODERN_MODE]
+    gameMode = :REMIX
+  end
+  if $game_switches[SWITCH_EXPERT_MODE]
+    gameMode = :EXPERT
+  end
+  if $game_switches[SWITCH_SINGLE_POKEMON_MODE]
+    pokemon_number = pbGet(VAR_SINGLE_POKEMON_MODE)
+    if pokemon_number.is_a?(Integer) && pokemon_number > 0
+      gameMode = :SINGLE_SPECIES
+    else
+      gameMode = :DEBUG
+    end
+  end
+  if $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
+    gameMode = :RANDOMIZED
+  end
+
+  if $game_switches[SWITCH_LEGENDARY_MODE]
+    gameMode = :LEGENDARY
+  end
+  return gameMode
 end
 
 

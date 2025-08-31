@@ -433,6 +433,7 @@ class HallOfFame_Scene
     return gameMode
   end
 
+
   def writeGameMode(overlay, x, y, gameMode = nil, difficulty = nil)
     gameMode = getCurrentGameMode() if !gameMode
     difficulty = getDifficulty() if !difficulty

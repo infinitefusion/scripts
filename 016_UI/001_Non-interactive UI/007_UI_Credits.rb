@@ -108,7 +108,7 @@ UnworthyPie<s>Doctor Miawoo
 Chardub<s>TCGrunler#4583
 
 Elite 4 rematch teams
-duskrd<s>anaconja
+duskrd<s>anaconja<s>taraline
 
 The following free ressources were also used 
 with their respective authors' consent:

@@ -82,6 +82,16 @@ def select_e4_pokemon(all_available_pokemon,tier, number_to_select)
   return available_pokemon.sample(number_to_select)
 end
 
+def league_rematch_tiers_supported
+  game_mode = getCurrentGameModeSymbol
+  return true if game_mode == :CLASSIC || game_mode == :DEBUG
+  if game_mode == :RANDOMIZED
+    return true unless $game_switches[SWITCH_RANDOM_TRAINERS] || $game_switches[SWITCH_RANDOMIZED_GYM_TYPES]
+  end
+
+  return false
+end
+
 
 
 def list_unlocked_league_tiers
@@ -94,7 +104,8 @@ def list_unlocked_league_tiers
   return unlocked_tiers
 end
 def select_league_tier
-  validateE4Data
+  return 0 unless league_rematch_tiers_supported
+  #validateE4Data
   available_tiers = list_unlocked_league_tiers
   return 0 if available_tiers.empty?
   return available_tiers[0] if available_tiers.length == 1
@@ -104,13 +115,19 @@ def select_league_tier
   available_tiers.each do |tier_nb|
     commands << _INTL("Tier #{tier_nb}")
   end
-
-  choice = pbMessage("Which League Rematch difficulty tier will you choose?",commands)
+  cmd_cancel = _INTL("Cancel")
+  commands << cmd_cancel
+  choice = pbMessage(_INTL("Which League Rematch difficulty tier will you choose?"),commands)
+  if commands[choice] == cmd_cancel
+    return -1
+  end
   return available_tiers[choice]
 end
 
 #called when the player just beat the league
 def unlock_new_league_tiers
+  return unless league_rematch_tiers_supported
+
   current_tier = pbGet(VAR_LEAGUE_REMATCH_TIER)
   currently_unlocked_tiers = list_unlocked_league_tiers
   tiers_to_unlock = []
