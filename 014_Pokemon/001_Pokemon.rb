@@ -58,7 +58,7 @@ class Pokemon
   attr_accessor :moves
 
   # @return [Array<Symbol>] All the move (ids) ever learned by this Pokémon
-  attr_accessor :learned_moves
+  attr_reader :learned_moves
 
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :first_moves
@@ -891,6 +891,7 @@ class Pokemon
       end
     end
   end
+
 
 
   # Silently learns the given move. Will erase the first known move if it has to.

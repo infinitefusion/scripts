@@ -1609,7 +1609,7 @@ def pbFuse(pokemon_body, pokemon_head, splicer_item)
   end
 end
 
-# Todo: refactor this, holy shit this is a mess
+# Todo: refactor this, this is a mess
 def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
   if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON # triple fusion
     scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
@@ -1699,8 +1699,13 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       end
 
       fused_pokemon_learned_moved = pokemon.learned_moves
-      pokemon.learned_moves = fused_pokemon_learned_moved
-      poke2.learned_moves = fused_pokemon_learned_moved
+      pokemon.moves.each do |move|
+        fused_pokemon_learned_moved << move.id unless fused_pokemon_learned_moved.include?(move.id)
+      end
+      fused_pokemon_learned_moved.each do |move|
+        pokemon.add_learned_move(move)
+        poke2.add_learned_move(move)
+      end
 
       pokemon.ability_index = pokemon.body_original_ability_index if pokemon.body_original_ability_index
       poke2.ability_index = pokemon.head_original_ability_index if pokemon.head_original_ability_index

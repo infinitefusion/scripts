@@ -956,6 +956,20 @@ class PokemonFusionScene
       @pokemon1.level = setPokemonLevel(@pokemon1.level, @pokemon2.level, superSplicer)
       @pokemon1.calc_stats
       @pokemon1.obtain_method = 0
+
+      learned_moves = @pokemon1.learned_moves + @pokemon2.learned_moves
+      @pokemon1.moves.each do |move|
+        learned_moves << move.id unless learned_moves.include?(move.id)
+      end
+      @pokemon2.moves.each do |move|
+        learned_moves << move.id unless learned_moves.include?(move.id)
+      end
+
+      learned_moves.each do |move|
+        @pokemon1.add_learned_move(move)
+        @pokemon2.add_learned_move(move)
+      end
+
       pbBGMStop
       pbBGMPlay($PokemonTemp.cueBGM)
     end
