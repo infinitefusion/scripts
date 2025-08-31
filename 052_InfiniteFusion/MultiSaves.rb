@@ -592,7 +592,7 @@ class PokemonLoadScreen
           @scene.pbEndScene
           Game.start_new(new_game_plus)
           initialize_alt_sprite_substitutions()
-          @save_data[:player].new_game_plus_unlocked=new_game_plus
+          @save_data[:player].new_game_plus_unlocked=new_game_plus if @save_data[:player]
           return
         when cmd_new_game_plus
           @scene.pbEndScene
