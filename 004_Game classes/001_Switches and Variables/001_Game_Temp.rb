@@ -25,19 +25,6 @@ class Game_Temp
   attr_accessor :fadestate                # for sprite hashes
   attr_accessor :background_bitmap
   attr_accessor :mart_prices
-  attr_accessor :unimportedSprites
-  attr_accessor :nb_imported_sprites
-  attr_accessor :loading_screen
-  attr_accessor :custom_sprites_list
-  attr_accessor :base_sprites_list
-  attr_accessor :transfer_box_autosave
-  attr_accessor :moving_furniture
-  attr_accessor :moving_furniture_oldPlayerPosition
-  attr_accessor :moving_furniture_oldItemPosition
-  attr_accessor :original_direction   #generic - for if we need to save a direction for whatever reason
-
-  attr_accessor :starter_options
-
 
   #-----------------------------------------------------------------------------
   # * Object Initialization
@@ -65,10 +52,6 @@ class Game_Temp
     @message_window_showing = false
     @transition_processing  = false
     @mart_prices            = {}
-    @custom_sprites_list    ={}
-    @base_sprites_list    ={}
-    @moving_furniture    = nil
-    @original_direction = nil
   end
 
   def clear_mart_prices

@@ -9,7 +9,7 @@
 #    though, so after getting the suggestion I thought it would be cool if I   #
 #   could make something of my own that would work with v16, as well as v17.   #
 #==============================================================================#
-#                                  Features:                                   #
+#                                  Gameplay:                                   #
 #                - Blacklisting events from receiving shadows                  #
 #                - Whitelisting events to always receive shadows               #
 #                - A scaling animation when an event jumps                     #

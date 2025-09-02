@@ -21,6 +21,8 @@
 #                          :link => "https://reliccastle.com/resources/174/"
 #                        })
 
+
+
 def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false)
   scene = BetterRegionMap.new(-1, show_player, can_fly, wallmap, species, fly_anywhere)
   return scene.flydata

@@ -1,0 +1,59 @@
+def pbPokemonIconFile(pokemon)
+  bitmapFileName = pbCheckPokemonIconFiles(pokemon.species, pokemon.isEgg?)
+  return bitmapFileName
+end
+
+def pbCheckPokemonIconFiles(speciesID, egg = false, dna = false)
+  if egg
+    bitmapFileName = sprintf("Graphics/Icons/iconEgg")
+    return pbResolveBitmap(bitmapFileName)
+  else
+    bitmapFileName = _INTL("Graphics/Pokemon/Icons/{1}", speciesID)
+    ret = pbResolveBitmap(bitmapFileName)
+    return ret if ret
+  end
+  ret = pbResolveBitmap("Graphics/Icons/iconDNA.png")
+  return ret if ret
+  return pbResolveBitmap("Graphics/Icons/iconDNA.png")
+end
+
+def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, debugShiny, srcx = nil, srcy = nil, width = nil, height = nil,
+                                 showSecondStarUnder = false, showSecondStarAbove = false)
+  color = debugShiny ? Color.new(0, 0, 0, 255) : nil
+  imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+  if shinyBody && shinyHead
+    if showSecondStarUnder
+      yPos += 15
+    elsif showSecondStarAbove
+      yPos -= 15
+    else
+      xPos -= 15
+    end
+    imageArray.push(["Graphics/Pictures/shiny", xPos, yPos, srcx, srcy, width, height, color])
+  end
+  # if onlyOutline
+  #   imageArray.push(["Graphics/Pictures/shiny_black",xPos,yPos,srcx,srcy,width,height,color])
+  # end
+
+end
+
+def pbBitmap(path)
+  if !pbResolveBitmap(path).nil?
+    bmp = RPG::Cache.load_bitmap_path(path)
+    bmp.storedPath = path
+  else
+    p "Image located at '#{path}' was not found!" if $DEBUG
+    bmp = Bitmap.new(1, 1)
+  end
+  return bmp
+end
+
+
+
+# if need to play animation from event route
+def playAnimation(animationId, x = nil, y = nil)
+  return if !$scene.is_a?(Scene_Map)
+  x = @event.x unless x
+  y = @event.y unless y
+  $scene.spriteset.addUserAnimation(animationId, x, y, true)
+end
