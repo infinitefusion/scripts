@@ -118,9 +118,11 @@ end
 
 
 def finishQuest(id, silent=false)
+  $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
+  $Trainer.quest_points+=1
   pbMEPlay("Register phone") if !silent
-  Kernel.pbMessage("\\C[6]Quest completed!") if !silent
+  Kernel.pbMessage("\\qp\\C[6]Quest completed!") if !silent
 
 
   $game_variables[VAR_KARMA] += 1 # karma

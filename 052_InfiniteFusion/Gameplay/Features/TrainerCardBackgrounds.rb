@@ -80,7 +80,7 @@ CARD_BACKGROUND_UNLOCKABLES = {
   "BLASTOISE" => SWITCH_BEAT_THE_LEAGUE,
   "CHARIZARD" => SWITCH_BEAT_THE_LEAGUE,
   "VENUSAUR" => SWITCH_BEAT_THE_LEAGUE,
-  "COMPUTER_HILL" => SWITCH_BEAT_THE_LEAGUE,
+  "COMPUTER_HILLS" => SWITCH_BEAT_THE_LEAGUE,
   "GAMEBOY_FUSIONS" => SWITCH_BEAT_THE_LEAGUE,
 
   "GROUDON" => SWITCH_HOENN_HAIR_COLLECTION,
@@ -161,15 +161,16 @@ def purchaseCardBackground(price = 1000)
   purchasable_cards = []
   current_city = pbGet(VAR_CURRENT_MART)
   current_city = :PEWTER if !current_city.is_a?(Symbol)
+  for card in CARD_BACKGROUND_CITY_EXCLUSIVES.keys
+    purchasable_cards << card if current_city == CARD_BACKGROUND_CITY_EXCLUSIVES[card]
+  end
   for card in CARD_BACKGROUND_DEFAULT_PURCHASABLE
     purchasable_cards << card if !$Trainer.unlocked_card_backgrounds.include?(card)
   end
   for card in CARD_BACKGROUND_UNLOCKABLES.keys
     purchasable_cards << card if $game_switches[CARD_BACKGROUND_UNLOCKABLES[card]] && !$Trainer.unlocked_card_backgrounds.include?(card)
   end
-  for card in CARD_BACKGROUND_CITY_EXCLUSIVES.keys
-    purchasable_cards << card if current_city == CARD_BACKGROUND_CITY_EXCLUSIVES[card]
-  end
+
 
   if purchasable_cards.length <= 0
     pbMessage("There are no more Trainer Card backgrounds available for purchase!")

@@ -14,6 +14,7 @@ class Trainer
   attr_accessor :lowest_difficulty
   attr_accessor :selected_difficulty
   attr_accessor :game_mode
+  attr_accessor :quest_points
 
   def inspect
     str = super.chop
@@ -225,6 +226,7 @@ class Trainer
     @lowest_difficulty=2  #On hard by default, lowered whenever the player selects another difficulty
     @selected_difficulty=2  #On hard by default, lowered whenever the player selects another difficulty
     @game_mode =0  #classic
+    @quest_points = 0
   end
 end
 

@@ -57,3 +57,23 @@ def playAnimation(animationId, x = nil, y = nil)
   y = @event.y unless y
   $scene.spriteset.addUserAnimation(animationId, x, y, true)
 end
+
+#Shows a picture, centered in the middle of the screen in a new viewport
+# Returns the viewport. Use viewport.dispose to get rid of the picture
+def showPicture(path,x,y)
+  begin
+    echoln path
+    viewport = Viewport.new(Graphics.width / 4, 0, Graphics.width, Graphics.height)
+    sprite = Sprite.new(viewport)
+
+    bitmap = AnimatedBitmap.new(path) if pbResolveBitmap(path)
+
+    sprite.bitmap = bitmap.bitmap
+    sprite.x = x
+    sprite.y = y
+
+    viewport.z = 99999
+    return viewport
+  rescue
+  end
+end

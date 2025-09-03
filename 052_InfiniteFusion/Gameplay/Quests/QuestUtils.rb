@@ -21,3 +21,12 @@ def Kernel.setRocketPassword(variableNum)
   password = _INTL("{1}'s {2}", word1, word2)
   pbSet(variableNum, password)
 end
+
+def initialize_quest_points
+  return if $Trainer.quest_points
+  $Trainer.quest_points = get_completed_quests(false).length
+end
+
+def player_has_quest_journal?
+  return $PokemonBag.pbHasItem?(:DEVONSCOPE)
+end
