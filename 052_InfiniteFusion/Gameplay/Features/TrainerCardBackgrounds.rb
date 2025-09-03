@@ -39,7 +39,7 @@ CARD_BACKGROUND_CITY_EXCLUSIVES = {
 
   "SPHEAL_MOON" => :CRIMSON,
 
-  "EEVEEFLOWERS" => :KNOTISLAND,
+  "EEVEE_FLOWERS" => :KNOTISLAND,
   "DESERT_SUNSET" => :KNOTISLAND,
   "ROCKRUFF_EVO" => :KNOTISLAND,
 
@@ -182,7 +182,7 @@ def purchaseCardBackground(price = 1000)
   current_city = pbGet(VAR_CURRENT_MART)
   current_city = :PEWTER if !current_city.is_a?(Symbol)
   for card in CARD_BACKGROUND_CITY_EXCLUSIVES.keys
-    purchasable_cards << card if current_city == CARD_BACKGROUND_CITY_EXCLUSIVES[card]
+    purchasable_cards << card if current_city == CARD_BACKGROUND_CITY_EXCLUSIVES[card] && !$Trainer.unlocked_card_backgrounds.include?(card)
   end
   for card in CARD_BACKGROUND_DEFAULT_PURCHASABLE
     purchasable_cards << card if !$Trainer.unlocked_card_backgrounds.include?(card)
@@ -191,6 +191,7 @@ def purchaseCardBackground(price = 1000)
     purchasable_cards << card if $game_switches[CARD_BACKGROUND_UNLOCKABLES[card]] && !$Trainer.unlocked_card_backgrounds.include?(card)
   end
 
+  echoln $Trainer.unlocked_card_backgrounds
 
   if purchasable_cards.length <= 0
     pbMessage("There are no more Trainer Card backgrounds available for purchase!")

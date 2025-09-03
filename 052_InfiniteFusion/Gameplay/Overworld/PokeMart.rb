@@ -74,8 +74,7 @@ def exit_pokemart()
   entrance_x = pokemart_entrances[current_city][1]
   entrance_y = pokemart_entrances[current_city][2]
 
-  pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, 0)
-  pbSet(VAR_CURRENT_MART, 0)
+  reset_pokemart_variables
   pbFadeOutIn {
     $game_temp.player_new_map_id = entrance_map
     $game_temp.player_new_x = entrance_x
@@ -87,6 +86,10 @@ def exit_pokemart()
 
 end
 
+def reset_pokemart_variables
+  pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, 0)
+  pbSet(VAR_CURRENT_MART, 0)
+end
 def pokemart_clothes_shop(current_city = nil, include_defaults = true)
   current_city = pbGet(VAR_CURRENT_MART) if !current_city
   echoln current_city
