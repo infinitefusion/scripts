@@ -209,6 +209,7 @@ end
 
 def displayTeamFlag(frame)
   selected_flags = pbGet(VAR_GALLERY_TEAM_FLAGS)
+  echoln pbGet(VAR_GALLERY_TEAM_FLAGS)
   flag_image_id = 10
   frame_image_id = 9
   flag = selected_flags[frame]

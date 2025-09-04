@@ -26,6 +26,15 @@ class PokemonStorage
 
       unlocked_index = locked_wallpapers.sample
       $Trainer.quest_points -= 1
+
+
+      $game_system.bgm_memorize
+      $game_system.bgm_stop
+
+      pbWait(8)
+      pbSEPlay("BW_exp")
+      pbWait(90)
+      $game_system.bgm_restore
       obtain_wallpaper(unlocked_index)
     when cmd_info
       pbMessage("The Wallpaper Lottery allows you to unlock \\C[1]new wallpapers\\C[0] for your PC boxes background.")
