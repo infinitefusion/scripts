@@ -2,6 +2,7 @@ class PokemonBoxArrow < SpriteWrapper
   attr_accessor :cursormode
 
   alias _multiSelect_PokemonBoxArrow_initialize initialize
+
   def initialize(*args)
     _multiSelect_PokemonBoxArrow_initialize(*args)
     @cursormode = "default"
@@ -12,7 +13,6 @@ class PokemonBoxArrow < SpriteWrapper
     @multiheldpkmn = []
   end
 
-
   alias _multiSelect_PokemonBoxArrow_dispose dispose
 
   def dispose
@@ -21,24 +21,28 @@ class PokemonBoxArrow < SpriteWrapper
   end
 
   alias _multiSelect_PokemonBoxArrow_visible_eq visible=
+
   def visible=(value)
     _multiSelect_PokemonBoxArrow_visible_eq(value)
     multiHeldPokemon.each { |pkmn| pkmn.visible = value }
   end
 
   alias _multiSelect_PokemonBoxArrow_color_eq color=
-    def color=(value)
-      _multiSelect_PokemonBoxArrow_color_eq(value)
-      multiHeldPokemon.each { |pkmn| pkmn.color = value }
-    end
+
+  def color=(value)
+    _multiSelect_PokemonBoxArrow_color_eq(value)
+    multiHeldPokemon.each { |pkmn| pkmn.color = value }
+  end
 
   alias _multiSelect_PokemonBoxArrow_x_eq x=
+
   def x=(value)
     _multiSelect_PokemonBoxArrow_x_eq(value)
     multiHeldPokemon.each { |pkmn| pkmn.x = self.x + (pkmn.heldox * 48) } if holdingMulti?
   end
 
   alias _multiSelect_PokemonBoxArrow_y_eq y=
+
   def y=(value)
     _multiSelect_PokemonBoxArrow_y_eq(value)
     multiHeldPokemon.each { |pkmn| pkmn.y = self.y + 16 + (pkmn.heldoy * 48) } if holdingMulti?
@@ -67,6 +71,7 @@ class PokemonBoxArrow < SpriteWrapper
   end
 
   alias _multiSelect_PokemonBoxArrow_deleteSprite deleteSprite
+
   def deleteSprite
     _multiSelect_PokemonBoxArrow_deleteSprite
     @multiheldpkmn.each { |pkmn| pkmn.dispose }
@@ -85,18 +90,15 @@ class PokemonBoxArrow < SpriteWrapper
     self.y = @spriteY
   end
 
-
   def holdingMulti?
     return @multiheldpkmn.length > 0 && @holding
   end
-
 
   def heldPokemon
     @heldpkmn = nil if @heldpkmn && @heldpkmn.disposed?
     @holding = false if !@heldpkmn && @multiheldpkmn.length == 0
     return @heldpkmn
   end
-
 
   def getModeSprites
     case @cursormode
@@ -173,8 +175,6 @@ class PokemonBoxArrow < SpriteWrapper
     return self.heldPokemon && @holding
   end
 
-
-
   def grabMulti(sprites)
     @grabbingState = 1
     @multiheldpkmn = sprites
@@ -184,6 +184,5 @@ class PokemonBoxArrow < SpriteWrapper
     end
     self.z = 2
   end
-
 
 end

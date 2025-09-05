@@ -6,6 +6,7 @@ class PokemonStorageScene
   attr_reader :sprites
 
   alias _storageMultiselect_pbStartBox pbStartBox
+
   def pbStartBox(*args)
     _storageMultiselect_pbStartBox(*args)
     @cursormode = "default"
@@ -76,8 +77,6 @@ class PokemonStorageScene
       end
     end
   end
-
-
 
   def pbSelectBoxInternal(_party)
     selection = @selection
@@ -157,16 +156,14 @@ class PokemonStorageScene
     end
   end
 
-
-  def restartBox(screen, command, animate=true)
+  def restartBox(screen, command, animate = true)
     pbCloseBox(animate)
     cursormode = @cursormode
     selection = @selection
-    pbStartBox(screen,command, animate)
+    pbStartBox(screen, command, animate)
     pbSetCursorMode(cursormode)
     @selection = selection
   end
-
 
   def pbNextCursorMode()
     case @cursormode
@@ -206,7 +203,7 @@ class PokemonStorageScene
     bmp.clear
 
     color = Color.new(0, 255, 0, 50) # semi-transparent green
-    radius = 12                        # corner roundness in pixels
+    radius = 12 # corner roundness in pixels
 
     draw_rounded_rect(bmp, rect.x, rect.y, rect.width, rect.height, radius, color)
     @sprites["selectionrect"].visible = true
@@ -215,24 +212,22 @@ class PokemonStorageScene
   # helper method (add to PokemonStorageScene)
   def draw_rounded_rect(bmp, x, y, w, h, r, color)
     # central rectangle
-    bmp.fill_rect(x + r, y, w - 2*r, h, color)
-    bmp.fill_rect(x, y + r, w, h - 2*r, color)
+    bmp.fill_rect(x + r, y, w - 2 * r, h, color)
+    bmp.fill_rect(x, y + r, w, h - 2 * r, color)
 
     # corner circles
     (0..r).each do |dy|
-      dx = (r*r - dy*dy) ** 0.5
+      dx = (r * r - dy * dy) ** 0.5
       # top-left
-      bmp.fill_rect(x + r - dx, y + r - dy, 2*dx, 1, color)
+      bmp.fill_rect(x + r - dx, y + r - dy, 2 * dx, 1, color)
       # top-right
-      bmp.fill_rect(x + w - r - dx, y + r - dy, 2*dx, 1, color)
+      bmp.fill_rect(x + w - r - dx, y + r - dy, 2 * dx, 1, color)
       # bottom-left
-      bmp.fill_rect(x + r - dx, y + h - r + dy - 1, 2*dx, 1, color)
+      bmp.fill_rect(x + r - dx, y + h - r + dy - 1, 2 * dx, 1, color)
       # bottom-right
-      bmp.fill_rect(x + w - r - dx, y + h - r + dy - 1, 2*dx, 1, color)
+      bmp.fill_rect(x + w - r - dx, y + h - r + dy - 1, 2 * dx, 1, color)
     end
   end
-
-
 
   # --- Animation methods (Scene-only) ---
   # The scene only animates; it does not change game state or run rules.
@@ -249,8 +244,6 @@ class PokemonStorageScene
       self.update
     end
   end
-
-
 
   def animate_place_multi(box, index)
     pbSEPlay("GUI storage put down")
@@ -313,9 +306,8 @@ class PokemonStorageScene
     @arrowviewport.dispose
   end
 
-
   # Convenience wrapper for external code that expects pbPlaceMulti/pbHoldMulti naming:
   alias pbPlaceMulti animate_place_multi
-  alias pbHoldMulti  animate_hold_multi
+  alias pbHoldMulti animate_hold_multi
   alias pbReleaseMulti animate_release_multi
 end

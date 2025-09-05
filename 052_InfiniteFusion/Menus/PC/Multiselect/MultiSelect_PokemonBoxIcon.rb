@@ -3,6 +3,7 @@ class PokemonBoxIcon < IconSprite
   attr_accessor :heldoy
 
   alias _pokemonBoxIconInitialize initialize
+
   def initialize(*args)
     @heldox = 0
     @heldoy = 0

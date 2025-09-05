@@ -177,14 +177,12 @@ class PokemonStorageScreen
       if need_fill
         store_result = @storage.pbStoreCaughtBatch(@multiheldpkmn,box,selected_pos[0],selected_pos[1])
         if store_result == -1
-          pbDisplay(_INTL("Not enough room in the box to place that there."))
+          pbDisplay(_INTL("Not enough room in the box to place the selected Pokémon."))
           return
         end
         @scene.animate_place_multi(box, selected_index)
         @multiheldpkmn = []
         @scene.pbHardRefresh
-        cursor_mode =@cursormode
-        #pbStartScreen(@command, false)
 
         @scene.restartBox(self,@command, false)
         @storage =$PokemonStorage
@@ -219,7 +217,6 @@ class PokemonStorageScreen
         @storage.party.push(pokemon)
       end
     end
-
     @scene.pbRefresh
     @multiheldpkmn = []
   end
@@ -271,7 +268,6 @@ class PokemonStorageScreen
     return
   end
 
-  # --- Validation helpers (screen-side) ---
   def out_of_bounds?(box, x, y)
     width = (box == BOX_NAME ? 2 : PokemonBox::BOX_WIDTH)
     height = (box == BOX_NAME ? (Settings::MAX_PARTY_SIZE / 2.0).ceil : PokemonBox::BOX_HEIGHT)
@@ -283,7 +279,6 @@ class PokemonStorageScreen
     !!@storage[box, idx]
   end
 
-  # --- Small compatibility accessors ---
   def pbMultiHeldPokemon
     @multiheldpkmn
   end
@@ -292,7 +287,6 @@ class PokemonStorageScreen
     return @heldpkmn != nil || (@multiheldpkmn && @multiheldpkmn.length > 0)
   end
 
-  # --- Selection rectangle & selection math (screen-side state) ---
   def getSelectionRect(box, currentSelected)
     range_end = (currentSelected != nil ? currentSelected : @multiSelectRange && @multiSelectRange[1])
     return nil unless @multiSelectRange && @multiSelectRange[0] && range_end

@@ -26,18 +26,41 @@ class PokemonStorage
       end
     end
 
-    # Sort coordinates by Manhattan distance from (x, y)
-    coords.sort_by! { |cx, cy| (cx - x).abs + (cy - y).abs }
+    # Determine priority coordinates if a selection rectangle exists
+    selection_coords = if @scene&.screen&.multiSelectRange
+                         rect = @scene.screen.multiSelectRange
+                         sel_coords = []
+                         (rect.x...(rect.x + rect.width)).each do |sx|
+                           (rect.y...(rect.y + rect.height)).each do |sy|
+                             sel_coords << [sx, sy] if sx < box_width && sy < box_height
+                           end
+                         end
+                         sel_coords
+                       else
+                         []
+                       end
 
-    # Track which coordinates are available
-    available_coords = coords.select do |cx, cy|
+    # Available coordinates inside selection rectangle
+    available_coords = selection_coords.select do |cx, cy|
       index = cy * box_width + cx
       self[box_index, index].nil?
     end
 
+    # If not enough slots inside rectangle, fill rest from the rest of the box
+    if available_coords.length < pk_array.length
+      remaining = pk_array.length - available_coords.length
+
+      # Sort the other coordinates by distance from (x, y), skipping those already taken
+      other_coords = coords - available_coords
+      other_available = other_coords.select { |cx, cy| self[box_index, cy * box_width + cx].nil? }
+      other_available.sort_by! { |cx, cy| (cx - x).abs + (cy - y).abs }
+
+      available_coords += other_available.take(remaining)
+    end
+
     return -1 if available_coords.length < pk_array.length
 
-    # Assign each Pokémon to the closest available slot
+    # Assign each Pokémon to the chosen slot
     assignments = []
     pk_array.each do |pkmn|
       slot = available_coords.shift
@@ -53,8 +76,4 @@ class PokemonStorage
     @currentBox = box_index
     return box_index
   end
-
-
-
-
 end
