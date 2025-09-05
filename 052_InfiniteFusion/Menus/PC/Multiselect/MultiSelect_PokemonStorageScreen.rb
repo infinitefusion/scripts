@@ -1,6 +1,6 @@
-
-
 class PokemonStorageScreen
+  include SelectionConstants
+
   attr_accessor :multiheldpkmn
   attr_accessor :multiSelectRange
 
@@ -9,15 +9,16 @@ class PokemonStorageScreen
   def initialize(*args)
     _storageMultiSelect_initialize(*args)
     @multiheldpkmn = []
+    @multiSelectRange = nil
   end
 
-
+  # Top-level loop: delegates move and release actions to screen-level methods.
   def pcOrganizeCommand()
     isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
     loop do
       selected = @scene.pbSelectBox(@storage.party)
       if selected == nil
-        if pbHeldPokemon
+        if pbHolding?
           pbDisplay(_INTL("You're holding a Pokémon!"))
           next
         end
@@ -29,8 +30,8 @@ class PokemonStorageScreen
         end
         next if pbConfirm(_INTL("Continue Box operations?"))
         break
-      elsif selected[0] == -3 # Close box
-        if pbHeldPokemon
+      elsif selected[0] == SelectionConstants::CLOSE
+        if pbHolding?
           pbDisplay(_INTL("You're holding a Pokémon!"))
           next
         end
@@ -39,11 +40,12 @@ class PokemonStorageScreen
           break
         end
         next
-      elsif selected[0] == -4 # Box name
+      elsif selected[0] == SelectionConstants::PREV_BOX
         pbBoxCommands
       else
         pokemon = @storage[selected[0], selected[1]]
         heldpoke = pbHeldPokemon
+        next if !heldpoke && !pokemon && @scene.cursormode != "multiselect"
         if @scene.cursormode == "multiselect"
           multiSelectAction(selected)
         elsif @scene.cursormode == "quickswap"
@@ -58,171 +60,84 @@ class PokemonStorageScreen
     @scene.pbCloseBox
   end
 
+  # Multi-select flow: validates and delegates animations to scene.
   def multiSelectAction(selected)
-    echoln "okay?"
-    echoln @scene.cursormode
-    if @scene.cursormode == "multiselect"
-      echoln pbMultiHeldPokemon
-      if pbMultiHeldPokemon.length > 0
-        pbPlaceMulti(selected[0], selected[1])
-      elsif !@multiSelectRange
-        pbPlayDecisionSE
-        @multiSelectRange = [selected[1], nil]
-        @scene.pbUpdateSelectionRect(selected[0], selected[1])
-        return
-      elsif !@multiSelectRange[1]
-        @multiSelectRange[1] = selected[1]
+    echoln "multiSelectAction called; mode=#{@scene.cursormode}"
+    return unless @scene.cursormode == "multiselect"
 
-        pokemonCount = 0
-        noneggCount = 0
-        for index in getMultiSelection(selected[0], nil)
-          pokemonCount += 1 if @storage[selected[0], index]
-          if @storage[selected[0], index]
-            unless @storage[selected[0], index].egg?
-              noneggCount += 1
-            end
-          end
+    if pbMultiHeldPokemon.length > 0
+      # placing multi-held from screen's held list
+      pbPlaceMulti(selected[0], selected[1])
+    elsif !@multiSelectRange
+      pbPlayDecisionSE
+      @multiSelectRange = [selected[1], nil]
+      @scene.pbUpdateSelectionRect(selected[0], selected[1])
+      return
+    elsif !@multiSelectRange[1]
+      @multiSelectRange[1] = selected[1]
+      pokemonCount = 0
+      noneggCount = 0
+      for index in getMultiSelection(selected[0], nil)
+        pokemonCount += 1 if @storage[selected[0], index]
+        if @storage[selected[0], index]
+          noneggCount += 1 unless @storage[selected[0], index].egg?
         end
+      end
 
-        if pokemonCount == 0
-          pbPlayCancelSE
-          @multiSelectRange = nil
-          @scene.pbUpdateSelectionRect(selected[0], selected[1])
-          return
-        end
-
-        commands = []
-        cmdMove = -1
-        cmdRelease = -1
-        cmdCancel = -1
-        cmdExport = -1
-        cmdBattle = -1
-
-        helptext = _INTL("Selected {1} Pokémon.", pokemonCount)
-
-        commands[cmdMove = commands.length] = _INTL("Move")
-        commands[cmdRelease = commands.length] = _INTL("Release")
-
-        command = pbShowCommands(helptext, commands)
-
-        if command == cmdMove
-          pbHoldMulti(selected[0], selected[1])
-        elsif command == cmdRelease
-          pbReleaseMulti(selected[0])
-        end
+      if pokemonCount == 0
+        pbPlayCancelSE
         @multiSelectRange = nil
         @scene.pbUpdateSelectionRect(selected[0], selected[1])
+        return
       end
+
+      commands = []
+      cmdMove = -1
+      cmdRelease = -1
+
+      helptext = _INTL("Selected {1} Pokémon.", pokemonCount)
+
+      commands[cmdMove = commands.length] = _INTL("Move")
+      commands[cmdRelease = commands.length] = _INTL("Release")
+
+      command = pbShowCommands(helptext, commands)
+
+      if command == cmdMove
+        pbHoldMulti(selected[0], selected[1])
+      elsif command == cmdRelease
+        pbReleaseMulti(selected[0])
+      end
+      @multiSelectRange = nil
+      @scene.pbUpdateSelectionRect(selected[0], selected[1])
     end
   end
 
-  def pbReleaseMulti(box)
+  # --- Screen-side game-rule methods (validate, commit, then animate) ---
+  # Validate & pick up a selection of multiple Pokémon (logical)
+  def pbHoldMulti(box, selected_index)
     selected = getMultiSelection(box, nil)
     return if selected.length == 0
-    ableCount = 0
-    finalReleased = []
+    selected_pos = getBoxPosition(box, selected_index)
+    able_count = 0
+    new_held = []
+    final_selected = []
     for index in selected
       pokemon = @storage[box, index]
       next if !pokemon
-      if pokemon.owner.name  == "RENTAL"
-        pbDisplay(_INTL("This Pokémon cannot be released"))
-        return
-      elsif pokemon.egg?
-        pbDisplay(_INTL("You can't release an Egg."))
-        return false
-      elsif pokemon.mail
-        pbDisplay(_INTL("Please remove the mail."))
-        return false
-      end
-      ableCount += 1 if pbAble?(pokemon)
-      finalReleased.push(index)
-    end
-    if box == -1 && pbAbleCount == ableCount
-      pbPlayBuzzerSE
-      pbDisplay(_INTL("That's your last Pokémon!"))
-      return
-    end
-    command = pbShowCommands(_INTL("Release {1} Pokémon?", finalReleased.length), [_INTL("No"), _INTL("Yes")])
-    if command == 1
-      commandConfirm = pbShowCommands(_INTL("The {1} Pokémon will be lost forever. Release them?", finalReleased.length), [_INTL("No"), _INTL("Yes")])
-      if commandConfirm == 1
-        @multiSelectRange = nil
-        @scene.pbUpdateSelectionRect(0, 0)
-        @scene.pbReleaseMulti(box, finalReleased)
-        @storage.pbDeleteMulti(box, finalReleased)
-        @scene.pbRefresh
-        pbDisplay(_INTL("The Pokémon were released."))
-        pbDisplay(_INTL("Bye-bye!"))
-        @scene.pbRefresh
-      end
-    end
-    return
-  end
-
-  def pbUpdateSelectionRect(box, selected)
-    if !@screen.multiSelectRange
-      @sprites["selectionrect"].visible = false
-      return
-    end
-
-    displayRect = Rect.new(0, 0, 1, 1)
-
-    if box == -1
-      xvalues = [] # [18, 90, 18, 90, 18, 90]
-      yvalues = [] # [2, 18, 66, 82, 130, 146]
-      for i in 0...Settings::MAX_PARTY_SIZE
-        xvalues.push(@sprites["boxparty"].x + 18 + 72 * (i % 2))
-        yvalues.push(@sprites["boxparty"].y + 2 + 16 * (i % 2) + 64 * (i / 2))
-      end
-      indexes = @screen.getMultiSelection(box, selected)
-      minx = xvalues[indexes[0]]
-      miny = yvalues[indexes[0]] + 16
-      maxx = xvalues[indexes[indexes.length - 1]] + 72 - 8
-      maxy = yvalues[indexes[indexes.length - 1]] + 64
-      displayRect.set(minx, miny, maxx - minx, maxy - miny)
-    else
-      indexRect = @screen.getSelectionRect(box, selected)
-      displayRect.x = @sprites["box"].x + 10 + (48 * indexRect.x)
-      displayRect.y = @sprites["box"].y + 30 + (48 * indexRect.y) + 16
-      displayRect.width = indexRect.width * 48 + 16
-      displayRect.height = indexRect.height * 48
-    end
-
-    @sprites["selectionrect"].bitmap.clear
-    @sprites["selectionrect"].bitmap.fill_rect(displayRect.x, displayRect.y, displayRect.width, displayRect.height, Color.new(0, 255, 0, 100))
-    @sprites["selectionrect"].visible = true
-  end
-
-  def pbMultiHeldPokemon
-    return @multiheldpkmn
-  end
-
-  def pbHolding?
-    return @heldpkmn != nil || @multiheldpkmn.length > 0
-  end
-
-  def pbHoldMulti(box, selectedIndex)
-    selected = getMultiSelection(box, nil)
-    return if selected.length == 0
-    selectedPos = getBoxPosition(box, selectedIndex)
-    ableCount = 0
-    newHeld = []
-    finalSelected = []
-    for index in selected
-      pokemon = @storage[box, index]
-      next if !pokemon
-      ableCount += 1 if pbAble?(pokemon)
+      able_count += 1 if pbAble?(pokemon)
       pos = getBoxPosition(box, index)
-      newHeld.push([pokemon, pos[0] - selectedPos[0], pos[1] - selectedPos[1]])
-      finalSelected.push(index)
+      new_held << [pokemon, pos[0] - selected_pos[0], pos[1] - selected_pos[1]]
+      final_selected << index
     end
-    if box == -1 && pbAbleCount == ableCount
-      if newHeld.length > 1
-        # For convenience: if you selected every Pokémon in the party, deselect the first one
-        for i in 0...newHeld.length
-          if pbAble?(newHeld[i][0])
-            newHeld.delete_at(i)
-            finalSelected.delete_at(i)
+
+    # Prevent taking last pokemon out of party
+    if box == BOX_NAME && pbAbleCount == able_count
+      if new_held.length > 1
+        # deselect first able pokemon for convenience
+        for i in 0...new_held.length
+          if pbAble?(new_held[i][0])
+            new_held.delete_at(i)
+            final_selected.delete_at(i)
             break
           end
         end
@@ -232,109 +147,196 @@ class PokemonStorageScreen
         return
       end
     end
+
+    # Clear selection, animate pickup, update logical state
     @multiSelectRange = nil
     @scene.pbUpdateSelectionRect(0, 0)
-    @scene.pbHoldMulti(box, finalSelected, selectedIndex)
-    @multiheldpkmn = newHeld
-    @storage.pbDeleteMulti(box, finalSelected)
+    @scene.animate_hold_multi(box, final_selected, selected_index) # animation
+    @multiheldpkmn = new_held
+    @storage.pbDeleteMulti(box, final_selected)
     @scene.pbRefresh
   end
 
 
+  # Check if all held pokémon can strictly fit at the target positions (no overlap, no OOB).
+  # Commit them to storage and animate the placement.
+  def pbPlaceMulti(box, selected_index)
+    return if @multiheldpkmn.nil? || @multiheldpkmn.empty?
 
-  def getSelectionRect(box, currentSelected)
-    rangeEnd = (currentSelected != nil ? currentSelected : @multiSelectRange[1])
+    selected_pos = getBoxPosition(box, selected_index)
+    if box >= 0
+      # Validate every target slot is in-bounds and unoccupied
+      need_fill = false
+      for held in @multiheldpkmn
+        held_x = held[1] + selected_pos[0]
+        held_y = held[2] + selected_pos[1]
+        if out_of_bounds?(box, held_x, held_y) || occupied?(box, held_x, held_y)
+          need_fill = true
+        end
+      end
+      if need_fill
+        store_result = @storage.pbStoreCaughtBatch(@multiheldpkmn,box,selected_pos[0],selected_pos[1])
+        if store_result == -1
+          pbDisplay(_INTL("Not enough room in the box to place that there."))
+          return
+        end
+        @scene.animate_place_multi(box, selected_index)
+        @multiheldpkmn = []
+        @scene.pbHardRefresh
+        cursor_mode =@cursormode
+        #pbStartScreen(@command, false)
 
-    if !@multiSelectRange || !@multiSelectRange[0] || !rangeEnd
-      return nil
+        @scene.restartBox(self,@command, false)
+        @storage =$PokemonStorage
+        @scene.pbRefresh
+        @multiheldpkmn = []
+        @boxForMosaic = @storage.currentBox
+        @selectionForMosaic = selected_index
+        return
+        #@scene.pbStartBox(self,@command,false)
+        # @cursormode = cursor_mode
+        #@scene.pbSetCursor(box, selected_index)
+        # pbUpdate
+        # return
+      end
+
+
+      # All validated: animate then commit
+      @scene.animate_place_multi(box, selected_index)
+      for held in @multiheldpkmn
+        pokemon = held[0]
+        held_x = held[1] + selected_pos[0]
+        held_y = held[2] + selected_pos[1]
+        idx = held_x + held_y * PokemonBox::BOX_WIDTH
+        @storage[box, idx] = pokemon
+      end
+    else
+      # Party placement: validate space
+      party_count = @storage.party.length
+      if party_count + @multiheldpkmn.length > Settings::MAX_PARTY_SIZE
+        pbDisplay(_INTL("Can't place that there."))
+        return
+      end
+
+      @scene.animate_place_multi(box, selected_index)
+      for held in @multiheldpkmn
+        pokemon = held[0]
+        @storage.party.push(pokemon)
+      end
     end
 
-    boxWidth = box == -1 ? 2 : PokemonBox::BOX_WIDTH
+    @scene.pbRefresh
+    @multiheldpkmn = []
+  end
 
-    ax = @multiSelectRange[0] % boxWidth
-    ay = (@multiSelectRange[0].to_f / boxWidth).floor
-    bx = rangeEnd % boxWidth
-    by = (rangeEnd.to_f / boxWidth).floor
+
+
+  # Validate release rules, animate release, then delete from storage
+  def pbReleaseMulti(box)
+    selected = getMultiSelection(box, nil)
+    return if selected.length == 0
+    able_count = 0
+    final_released = []
+    for index in selected
+      pokemon = @storage[box, index]
+      next if !pokemon
+      if pokemon.owner.name == "RENTAL"
+        pbDisplay(_INTL("This Pokémon cannot be released"))
+        return
+      elsif pokemon.egg?
+        pbDisplay(_INTL("You can't release an Egg."))
+        return false
+      elsif pokemon.mail
+        pbDisplay(_INTL("Please remove the mail."))
+        return false
+      end
+      able_count += 1 if pbAble?(pokemon)
+      final_released << index
+    end
+
+    if box == BOX_NAME && pbAbleCount == able_count
+      pbPlayBuzzerSE
+      pbDisplay(_INTL("That's your last Pokémon!"))
+      return
+    end
+    command = pbShowCommands(_INTL("Release {1} Pokémon?", final_released.length), [_INTL("No"), _INTL("Yes")])
+    if command == 1
+      command_confirm = pbShowCommands(_INTL("The {1} Pokémon will be lost forever. Release them?", final_released.length), [_INTL("No"), _INTL("Yes")])
+      if command_confirm == 1
+        @multiSelectRange = nil
+        @scene.pbUpdateSelectionRect(0, 0)
+        @scene.animate_release_multi(box, final_released)
+        @storage.pbDeleteMulti(box, final_released)
+        @scene.pbRefresh
+        pbDisplay(_INTL("The Pokémon were released."))
+        pbDisplay(_INTL("Bye-bye!"))
+        @scene.pbRefresh
+      end
+    end
+    return
+  end
+
+  # --- Validation helpers (screen-side) ---
+  def out_of_bounds?(box, x, y)
+    width = (box == BOX_NAME ? 2 : PokemonBox::BOX_WIDTH)
+    height = (box == BOX_NAME ? (Settings::MAX_PARTY_SIZE / 2.0).ceil : PokemonBox::BOX_HEIGHT)
+    x < 0 || y < 0 || x >= width || y >= height
+  end
+
+  def occupied?(box, x, y)
+    idx = x + y * PokemonBox::BOX_WIDTH
+    !!@storage[box, idx]
+  end
+
+  # --- Small compatibility accessors ---
+  def pbMultiHeldPokemon
+    @multiheldpkmn
+  end
+
+  def pbHolding?
+    return @heldpkmn != nil || (@multiheldpkmn && @multiheldpkmn.length > 0)
+  end
+
+  # --- Selection rectangle & selection math (screen-side state) ---
+  def getSelectionRect(box, currentSelected)
+    range_end = (currentSelected != nil ? currentSelected : @multiSelectRange && @multiSelectRange[1])
+    return nil unless @multiSelectRange && @multiSelectRange[0] && range_end
+
+    box_width = box == BOX_NAME ? 2 : PokemonBox::BOX_WIDTH
+
+    ax = @multiSelectRange[0] % box_width
+    ay = (@multiSelectRange[0].to_f / box_width).floor
+    bx = range_end % box_width
+    by = (range_end.to_f / box_width).floor
 
     minx = [ax, bx].min
     miny = [ay, by].min
     maxx = [ax, bx].max
     maxy = [ay, by].max
 
-    return Rect.new(minx, miny, maxx-minx+1, maxy-miny+1)
+    Rect.new(minx, miny, maxx - minx + 1, maxy - miny + 1)
   end
 
   def getMultiSelection(box, currentSelected)
     rect = getSelectionRect(box, currentSelected)
+    return [] if rect.nil?
 
     ret = []
-
-    for j in (rect.y)..(rect.y+rect.height-1)
-      for i in (rect.x)..(rect.x+rect.width-1)
-        ret.push(getBoxIndex(box, i, j))
+    for j in (rect.y)..(rect.y + rect.height - 1)
+      for i in (rect.x)..(rect.x + rect.width - 1)
+        ret << getBoxIndex(box, i, j)
       end
     end
-
-    return ret
+    ret
   end
 
   def getBoxIndex(box, x, y)
-    boxWidth = box == -1 ? 2 : PokemonBox::BOX_WIDTH
-    return x + y * boxWidth
+    box_width = box == BOX_NAME ? 2 : PokemonBox::BOX_WIDTH
+    x + y * box_width
   end
 
   def getBoxPosition(box, index)
-    boxWidth = box == -1 ? 2 : PokemonBox::BOX_WIDTH
-    return index % boxWidth, (index.to_f / boxWidth).floor
+    box_width = box == BOX_NAME ? 2 : PokemonBox::BOX_WIDTH
+    [index % box_width, (index.to_f / box_width).floor]
   end
-
-  def pbPlaceMulti(box, selectedIndex)
-    selectedPos = getBoxPosition(box, selectedIndex)
-    echoln selectedPos
-    boxWidth = box == -1 ? 2 : PokemonBox::BOX_WIDTH
-    boxHeight = box == -1 ? (Settings::MAX_PARTY_SIZE / 2).ceil : PokemonBox::BOX_HEIGHT
-    if box >= 0
-      for held in @multiheldpkmn
-        heldX = held[1] + selectedPos[0]
-        heldY = held[2] + selectedPos[1]
-        if heldX < 0 || heldX >= PokemonBox::BOX_WIDTH || heldY < 0 || heldY >= PokemonBox::BOX_HEIGHT
-          pbDisplay("Can't place that there.")
-          return
-        end
-        if @storage[box, heldX + heldY * PokemonBox::BOX_WIDTH]
-          pbDisplay("Can't place that there.")
-          return
-        end
-      end
-      @scene.pbPlaceMulti(box, selectedIndex)
-      for held in @multiheldpkmn
-        pokemon = held[0]
-        heldX = held[1] + selectedPos[0]
-        heldY = held[2] + selectedPos[1]
-        pokemon.time_form_set = nil
-        pokemon.form = 0 if pokemon.isSpecies?(:SHAYMIN)
-        @storage[box, heldX + heldY * PokemonBox::BOX_WIDTH] = pokemon
-      end
-    else
-      partyCount = @storage.party.length
-      if partyCount + @multiheldpkmn.length > Settings::MAX_PARTY_SIZE
-        pbDisplay("Can't place that there.")
-        return
-      end
-      @scene.pbPlaceMulti(box, selectedIndex)
-      for held in @multiheldpkmn
-        pokemon = held[0]
-        pokemon.time_form_set = nil
-        pokemon.form = 0 if pokemon.isSpecies?(:SHAYMIN)
-        pokemon.heal if !$game_temp.fromkurayshop
-        @storage.party.push(pokemon)
-      end
-    end
-    @scene.pbRefresh
-    @multiheldpkmn = []
-  end
-
 end
-
-
-

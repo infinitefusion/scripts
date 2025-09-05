@@ -1,119 +1,29 @@
 class PokemonStorageScene
+  include SelectionConstants
+
   attr_reader :cursormode
   attr_reader :screen
+  attr_reader :sprites
 
   alias _storageMultiselect_pbStartBox pbStartBox
   def pbStartBox(*args)
     _storageMultiselect_pbStartBox(*args)
     @cursormode = "default"
+    # create a single selection rect sprite used when needed
     @sprites["selectionrect"] = BitmapSprite.new(Graphics.width, Graphics.height, @arrowviewport)
     @sprites["selectionrect"].visible = false
   end
 
-
   def pbChangeSelection(key, selection)
-    case key
-    when Input::UP
-      if @screen.multiSelectRange
-        selection -= PokemonBox::BOX_WIDTH
-        selection += PokemonBox::BOX_SIZE if selection < 0
-      elsif selection == -1 # Box name
-        selection = -2
-      elsif selection == -2 # Party
-        selection = PokemonBox::BOX_SIZE - 1 - PokemonBox::BOX_WIDTH * 2 / 3 # 25
-      elsif selection == -3 # Close Box
-        selection = PokemonBox::BOX_SIZE - PokemonBox::BOX_WIDTH / 3 # 28
-      else
-        selection -= PokemonBox::BOX_WIDTH
-        selection = -1 if selection < 0
-      end
-    when Input::DOWN
-      if @screen.multiSelectRange
-        selection += PokemonBox::BOX_WIDTH
-        selection -= PokemonBox::BOX_SIZE if selection >= PokemonBox::BOX_SIZE
-      elsif selection == -1 # Box name
-        selection = PokemonBox::BOX_WIDTH / 3 # 2
-      elsif selection == -2 # Party
-        selection = -1
-      elsif selection == -3 # Close Box
-        selection = -1
-      else
-        selection += PokemonBox::BOX_WIDTH
-        if selection >= PokemonBox::BOX_SIZE
-          if selection < PokemonBox::BOX_SIZE + PokemonBox::BOX_WIDTH / 2
-            selection = -2 # Party
-          else
-            selection = -3 # Close Box
-          end
-        end
-      end
-    when Input::LEFT
-      if @screen.multiSelectRange
-        if (selection % PokemonBox::BOX_WIDTH) == 0 # Wrap around
-          selection += PokemonBox::BOX_WIDTH - 1
-        else
-          selection -= 1
-        end
-      elsif selection == -1 # Box name
-        selection = -4 # Move to previous box
-      elsif selection == -2
-        selection = -3
-      elsif selection == -3
-        selection = -2
-      elsif (selection % PokemonBox::BOX_WIDTH) == 0 # Wrap around
-        selection += PokemonBox::BOX_WIDTH - 1
-      else
-        selection -= 1
-      end
-    when Input::RIGHT
-      if @screen.multiSelectRange
-        if (selection % PokemonBox::BOX_WIDTH) == PokemonBox::BOX_WIDTH - 1 # Wrap around
-          selection -= PokemonBox::BOX_WIDTH - 1
-        else
-          selection += 1
-        end
-      elsif selection == -1 # Box name
-        selection = -5 # Move to next box
-      elsif selection == -2
-        selection = -3
-      elsif selection == -3
-        selection = -2
-      elsif (selection % PokemonBox::BOX_WIDTH) == PokemonBox::BOX_WIDTH - 1 # Wrap around
-        selection -= PokemonBox::BOX_WIDTH - 1
-      else
-        selection += 1
-      end
+    if @choseFromParty
+      return SelectionNavigator.navigate_party(key, selection, @screen)
+    else
+      return SelectionNavigator.navigate_box(key, selection, @screen)
     end
-    return selection
   end
 
   def pbPartyChangeSelection(key, selection)
-    maxIndex = @screen.multiSelectRange ? Settings::MAX_PARTY_SIZE - 1 : Settings::MAX_PARTY_SIZE
-    case key
-    when Input::LEFT
-      selection -= 1
-      selection = maxIndex if selection < 0
-    when Input::RIGHT
-      selection += 1
-      selection = 0 if selection > maxIndex
-    when Input::UP
-      if selection == Settings::MAX_PARTY_SIZE
-        selection = Settings::MAX_PARTY_SIZE - 1
-      else
-        selection -= 2
-        selection = selection % Settings::MAX_PARTY_SIZE if @screen.multiSelectRange
-        selection = maxIndex if selection < 0
-      end
-    when Input::DOWN
-      if selection == Settings::MAX_PARTY_SIZE
-        selection = 0
-      else
-        selection += 2
-        selection = selection % Settings::MAX_PARTY_SIZE if @screen.multiSelectRange
-        selection = maxIndex if selection > maxIndex
-      end
-    end
-    return selection
+    SelectionNavigator.navigate_party(key, selection, @screen)
   end
 
   def pbSelectBoxInternal(_party)
@@ -133,16 +43,16 @@ class PokemonStorageScene
         pbPlayCursorSE
         selection = pbChangeSelection(key, selection)
         pbSetArrow(@sprites["arrow"], selection)
-        if selection == -4
+        if selection == SelectionConstants::PREV_BOX
           nextbox = (@storage.currentBox + @storage.maxBoxes - 1) % @storage.maxBoxes
           pbSwitchBoxToLeft(nextbox)
           @storage.currentBox = nextbox
-        elsif selection == -5
+        elsif selection == SelectionConstants::NEXT_BOX
           nextbox = (@storage.currentBox + 1) % @storage.maxBoxes
           pbSwitchBoxToRight(nextbox)
           @storage.currentBox = nextbox
         end
-        selection = -1 if selection == -4 || selection == -5
+        selection = BOX_NAME if selection == SelectionConstants::PREV_BOX || selection == SelectionConstants::NEXT_BOX
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
         if @screen.multiSelectRange
@@ -165,9 +75,9 @@ class PokemonStorageScene
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
       elsif Input.trigger?(Input::SPECIAL) # Jump to box name
-        if selection != -1
+        if selection != BOX_NAME
           pbPlayCursorSE
-          selection = -1
+          selection = BOX_NAME
           pbSetArrow(@sprites["arrow"], selection)
           pbUpdateOverlay(selection)
           pbSetMosaic(selection)
@@ -182,16 +92,27 @@ class PokemonStorageScene
         @selection = selection
         if selection >= 0
           return [@storage.currentBox, selection]
-        elsif selection == -1 # Box name
-          return [-4, -1]
-        elsif selection == -2 # Party Pokémon
-          return [-2, -1]
-        elsif selection == -3 # Close Box
-          return [-3, -1]
+        elsif selection == BOX_NAME
+          return [SelectionConstants::PREV_BOX, BOX_NAME]
+        elsif selection == PARTY
+          return [SelectionConstants::PARTY, BOX_NAME]
+        elsif selection == CLOSE
+          return [SelectionConstants::CLOSE, BOX_NAME]
         end
       end
     end
   end
+
+
+  def restartBox(screen, command, animate=true)
+    pbCloseBox(animate)
+    cursormode = @cursormode
+    selection = @selection
+    pbStartBox(screen,command, animate)
+    pbSetCursorMode(cursormode)
+    @selection = selection
+  end
+
 
   def pbNextCursorMode()
     case @cursormode
@@ -218,46 +139,55 @@ class PokemonStorageScene
     @sprites["arrow"].grabImmediate(pokesprite)
   end
 
+  # Scene draws the rect by asking SelectionHelper for the rect
+  # in PokemonStorageScene
   def pbUpdateSelectionRect(box, selected)
-    if !@screen.multiSelectRange
+    rect = SelectionHelper.compute_rect(self, @screen, box, selected)
+    if rect.nil?
       @sprites["selectionrect"].visible = false
       return
     end
 
-    displayRect = Rect.new(0, 0, 1, 1)
+    bmp = @sprites["selectionrect"].bitmap
+    bmp.clear
 
-    if box == -1
-      xvalues = [] # [18, 90, 18, 90, 18, 90]
-      yvalues = [] # [2, 18, 66, 82, 130, 146]
-      for i in 0...Settings::MAX_PARTY_SIZE
-        xvalues.push(@sprites["boxparty"].x + 18 + 72 * (i % 2))
-        yvalues.push(@sprites["boxparty"].y + 2 + 16 * (i % 2) + 64 * (i / 2))
-      end
-      indexes = @screen.getMultiSelection(box, selected)
-      minx = xvalues[indexes[0]]
-      miny = yvalues[indexes[0]] + 16
-      maxx = xvalues[indexes[indexes.length-1]] + 72 - 8
-      maxy = yvalues[indexes[indexes.length-1]] + 64
-      displayRect.set(minx, miny, maxx-minx, maxy-miny)
-    else
-      indexRect = @screen.getSelectionRect(box, selected)
-      displayRect.x = @sprites["box"].x + 10 + (48 * indexRect.x)
-      displayRect.y = @sprites["box"].y + 30 + (48 * indexRect.y) + 16
-      displayRect.width = indexRect.width * 48 + 16
-      displayRect.height = indexRect.height * 48
-    end
+    color = Color.new(0, 255, 0, 100) # semi-transparent green
+    radius = 12                        # corner roundness in pixels
 
-    @sprites["selectionrect"].bitmap.clear
-    @sprites["selectionrect"].bitmap.fill_rect(displayRect.x, displayRect.y, displayRect.width, displayRect.height, Color.new(0, 255, 0, 100))
+    draw_rounded_rect(bmp, rect.x, rect.y, rect.width, rect.height, radius, color)
     @sprites["selectionrect"].visible = true
   end
 
-  def pbHoldMulti(box, selected, selectedIndex)
+  # helper method (add to PokemonStorageScene)
+  def draw_rounded_rect(bmp, x, y, w, h, r, color)
+    # central rectangle
+    bmp.fill_rect(x + r, y, w - 2*r, h, color)
+    bmp.fill_rect(x, y + r, w, h - 2*r, color)
+
+    # corner circles
+    (0..r).each do |dy|
+      dx = (r*r - dy*dy) ** 0.5
+      # top-left
+      bmp.fill_rect(x + r - dx, y + r - dy, 2*dx, 1, color)
+      # top-right
+      bmp.fill_rect(x + w - r - dx, y + r - dy, 2*dx, 1, color)
+      # bottom-left
+      bmp.fill_rect(x + r - dx, y + h - r + dy - 1, 2*dx, 1, color)
+      # bottom-right
+      bmp.fill_rect(x + w - r - dx, y + h - r + dy - 1, 2*dx, 1, color)
+    end
+  end
+
+
+
+  # --- Animation methods (Scene-only) ---
+  # The scene only animates; it does not change game state or run rules.
+  def animate_hold_multi(box, selected, selected_index)
     pbSEPlay("GUI storage pick up")
-    if box == -1
-      @sprites["boxparty"].grabPokemonMulti(selected, selectedIndex, @sprites["arrow"])
+    if box == BOX_NAME
+      @sprites["boxparty"].grabPokemonMulti(selected, selected_index, @sprites["arrow"])
     else
-      @sprites["box"].grabPokemonMulti(selected, selectedIndex, @sprites["arrow"])
+      @sprites["box"].grabPokemonMulti(selected, selected_index, @sprites["arrow"])
     end
     while @sprites["arrow"].grabbing?
       Graphics.update
@@ -266,7 +196,9 @@ class PokemonStorageScene
     end
   end
 
-  def pbPlaceMulti(box, index)
+
+
+  def animate_place_multi(box, index)
     pbSEPlay("GUI storage put down")
     heldpokesprites = @sprites["arrow"].multiHeldPokemon
     @sprites["arrow"].place
@@ -275,7 +207,7 @@ class PokemonStorageScene
       Input.update
       self.update
     end
-    if box == -1
+    if box == BOX_NAME
       @sprites["boxparty"].placePokemonMulti(index, heldpokesprites)
     else
       @sprites["box"].placePokemonMulti(index, heldpokesprites)
@@ -284,24 +216,24 @@ class PokemonStorageScene
     @selectionForMosaic = index
   end
 
-  def pbReleaseMulti(box, selected)
-    releaseSprites = []
+  def animate_release_multi(box, selected)
+    release_sprites = []
     for index in selected
       sprite = nil
-      if box == -1
+      if box == BOX_NAME
         sprite = @sprites["boxparty"].getPokemon(index)
       else
         sprite = @sprites["box"].getPokemon(index)
       end
-      releaseSprites.push(sprite) if sprite
+      release_sprites << sprite if sprite
     end
-    if releaseSprites.length > 0
-      for sprite in releaseSprites
+    if release_sprites.length > 0
+      for sprite in release_sprites
         sprite.release
       end
-      while releaseSprites[0].releasing?
+      while release_sprites[0].releasing?
         Graphics.update
-        for sprite in releaseSprites
+        for sprite in release_sprites
           sprite.update
         end
         self.update
@@ -309,4 +241,27 @@ class PokemonStorageScene
     end
   end
 
+  def pbHardRefresh
+    oldPartyY = @sprites["boxparty"].y
+    @sprites["box"].dispose
+    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
+    @sprites["boxparty"].dispose
+    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport)
+    @sprites["boxparty"].y = oldPartyY
+  end
+
+  def pbCloseBox(animate = true)
+    pbFadeOutAndHide(@sprites) if animate
+    pbDisposeSpriteHash(@sprites)
+    @markingbitmap.dispose if @markingbitmap
+    @boxviewport.dispose
+    @boxsidesviewport.dispose
+    @arrowviewport.dispose
+  end
+
+
+  # Convenience wrapper for external code that expects pbPlaceMulti/pbHoldMulti naming:
+  alias pbPlaceMulti animate_place_multi
+  alias pbHoldMulti  animate_hold_multi
+  alias pbReleaseMulti animate_release_multi
 end
