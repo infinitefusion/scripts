@@ -193,11 +193,6 @@ class PokemonStorageScreen
         @boxForMosaic = @storage.currentBox
         @selectionForMosaic = selected_index
         return
-        #@scene.pbStartBox(self,@command,false)
-        # @cursormode = cursor_mode
-        #@scene.pbSetCursor(box, selected_index)
-        # pbUpdate
-        # return
       end
 
 

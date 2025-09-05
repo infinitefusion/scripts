@@ -26,6 +26,59 @@ class PokemonStorageScene
     SelectionNavigator.navigate_party(key, selection, @screen)
   end
 
+  def pbSelectPartyInternal(party, depositing)
+    selection = @selection
+    pbPartySetArrow(@sprites["arrow"], selection)
+    pbUpdateOverlay(selection, party)
+    pbSetMosaic(selection)
+    lastsel = 1
+    loop do
+      Graphics.update
+      Input.update
+      key = -1
+      key = Input::DOWN if Input.repeat?(Input::DOWN)
+      key = Input::RIGHT if Input.repeat?(Input::RIGHT)
+      key = Input::LEFT if Input.repeat?(Input::LEFT)
+      key = Input::UP if Input.repeat?(Input::UP)
+      if key >= 0
+        pbPlayCursorSE
+        newselection = pbPartyChangeSelection(key, selection)
+        if newselection == -1
+          return -1 if !depositing
+        elsif newselection == -2
+          selection = lastsel
+        else
+          selection = newselection
+        end
+        pbPartySetArrow(@sprites["arrow"], selection)
+        lastsel = selection if selection > 0
+        pbUpdateOverlay(selection, party)
+        pbSetMosaic(selection)
+        if @screen.multiSelectRange
+          pbUpdateSelectionRect(-1, selection)
+        end
+      end
+      self.update
+      if Input.trigger?(Input::ACTION) && @command == 0 # Organize only
+        pbPlayDecisionSE
+        pbNextCursorMode
+      elsif Input.trigger?(Input::BACK)
+        @selection = selection
+        return -1
+      elsif Input.trigger?(Input::USE)
+        if selection >= 0 && selection < Settings::MAX_PARTY_SIZE
+          @selection = selection
+          return selection
+        elsif selection == Settings::MAX_PARTY_SIZE # Close Box
+          @selection = selection
+          return (depositing) ? -3 : -1
+        end
+      end
+    end
+  end
+
+
+
   def pbSelectBoxInternal(_party)
     selection = @selection
     pbSetArrow(@sprites["arrow"], selection)
@@ -39,6 +92,7 @@ class PokemonStorageScene
       key = Input::RIGHT if Input.repeat?(Input::RIGHT)
       key = Input::LEFT if Input.repeat?(Input::LEFT)
       key = Input::UP if Input.repeat?(Input::UP)
+
       if key >= 0
         pbPlayCursorSE
         selection = pbChangeSelection(key, selection)
@@ -151,7 +205,7 @@ class PokemonStorageScene
     bmp = @sprites["selectionrect"].bitmap
     bmp.clear
 
-    color = Color.new(0, 255, 0, 100) # semi-transparent green
+    color = Color.new(0, 255, 0, 50) # semi-transparent green
     radius = 12                        # corner roundness in pixels
 
     draw_rounded_rect(bmp, rect.x, rect.y, rect.width, rect.height, radius, color)
