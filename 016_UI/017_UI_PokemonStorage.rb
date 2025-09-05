@@ -3,6 +3,7 @@
 #===============================================================================
 class PokemonBoxIcon < IconSprite
   attr_accessor :pokemon
+
   def initialize(pokemon, viewport = nil)
     super(0, 0, viewport)
     @pokemon = pokemon
@@ -25,22 +26,22 @@ class PokemonBoxIcon < IconSprite
     return false
   end
 
-  def createFusionIcon(species,spriteform_head=nil,spriteform_body=nil)
+  def createFusionIcon(species, spriteform_head = nil, spriteform_body = nil)
     bodyPoke_number = getBodyID(species)
     headPoke_number = getHeadID(species, bodyPoke_number)
 
     bodyPoke = GameData::Species.get(bodyPoke_number).species
     headPoke = GameData::Species.get(headPoke_number).species
 
-    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke,spriteform_head))
-    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke,spriteform_body))
+    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke, spriteform_head))
+    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke, spriteform_body))
 
     dexNum = getDexNumberForSpecies(species)
     ensureFusionIconExists
     bitmapFileName = sprintf("Graphics/Pokemon/FusionIcons/icon%03d", dexNum)
-    headPokeFileName = GameData::Species.icon_filename(headPoke,spriteform_head)
+    headPokeFileName = GameData::Species.icon_filename(headPoke, spriteform_head)
     bitmapPath = sprintf("%s.png", bitmapFileName)
-    generated_new_icon = generateFusionIcon(headPokeFileName,bitmapPath)
+    generated_new_icon = generateFusionIcon(headPokeFileName, bitmapPath)
     result_icon = generated_new_icon ? AnimatedBitmap.new(bitmapPath) : icon1
 
     for i in 0..icon1.width - 1
@@ -70,7 +71,7 @@ class PokemonBoxIcon < IconSprite
     if useRegularIcon(@pokemon.species) || @pokemon.egg?
       self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
     else
-      self.setBitmapDirectly(createFusionIcon(@pokemon.species,@pokemon.spriteform_head, @pokemon.spriteform_body))
+      self.setBitmapDirectly(createFusionIcon(@pokemon.species, @pokemon.spriteform_head, @pokemon.spriteform_body))
       if fusion_enabled
         self.visible = true
       else
@@ -362,7 +363,7 @@ class PokemonBoxSprite < SpriteWrapper
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
 
-  def initialize(storage, boxnumber, viewport = nil, fusionsEnabled=true )
+  def initialize(storage, boxnumber, viewport = nil, fusionsEnabled = true)
     super(viewport)
     @storage = storage
     @boxnumber = boxnumber
@@ -522,7 +523,7 @@ class PokemonBoxSprite < SpriteWrapper
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].refresh(@fusions_enabled)
       end
-      #spriteLoader.preload_sprite_from_pokemon(@pokemonsprites[i].pokemon) if @pokemonsprites[i].pokemon
+      # spriteLoader.preload_sprite_from_pokemon(@pokemonsprites[i].pokemon) if @pokemonsprites[i].pokemon
     end
   end
 
@@ -1112,7 +1113,7 @@ class PokemonStorageScene
   end
 
   def pbSwitchBoxToRight(newbox)
-    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport,@sprites["box"].isFusionEnabled)
+    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled)
     newbox.x = 520
     Graphics.frame_reset
     distancePerFrame = 64 * 20 / Graphics.frame_rate
@@ -1133,7 +1134,7 @@ class PokemonStorageScene
   end
 
   def pbSwitchBoxToLeft(newbox)
-    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport,@sprites["box"].isFusionEnabled)
+    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled)
     newbox.x = -152
     Graphics.frame_reset
     distancePerFrame = 64 * 20 / Graphics.frame_rate
@@ -1557,8 +1558,8 @@ class PokemonStorageScene
         textstrings.push([_INTL("No item"), 86, 336, 2, nonbase, nonshadow])
       end
       if pokemon.shiny?
-        addShinyStarsToGraphicsArray(imagepos,156,198,pokemon.bodyShiny?,pokemon.headShiny?,pokemon.debugShiny?,nil,nil,nil,nil,false,true)
-        #imagepos.push(["Graphics/Pictures/shiny", 156, 198])
+        addShinyStarsToGraphicsArray(imagepos, 156, 198, pokemon.bodyShiny?, pokemon.headShiny?, pokemon.debugShiny?, nil, nil, nil, nil, false, true)
+        # imagepos.push(["Graphics/Pictures/shiny", 156, 198])
       end
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
       type1_number = GameData::Type.get(pokemon.type1).id_number
@@ -1621,199 +1622,220 @@ class PokemonStorageScreen
 
   def pbStartScreen(command)
     @heldpkmn = nil
-    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
     if command == 0 # Organise
       @scene.pbStartBox(self, command)
-      loop do
-        selected = @scene.pbSelectBox(@storage.party)
-        if selected == nil
-          if pbHeldPokemon
-            pbDisplay(_INTL("You're holding a Pokémon!"))
-            next
-          end
-          next if pbConfirm(_INTL("Continue Box operations?"))
-          break
-        elsif selected[0] == -3 # Close box
-          if pbHeldPokemon
-            pbDisplay(_INTL("You're holding a Pokémon!"))
-            next
-          end
-          if pbConfirm(_INTL("Exit from the Box?"))
-            pbSEPlay("PC close")
-            break
-          end
-          next
-        elsif selected[0] == -4 # Box name
-          pbBoxCommands
-        else
-          pokemon = @storage[selected[0], selected[1]]
-          heldpoke = pbHeldPokemon
-          next if !pokemon && !heldpoke
-          if @scene.quickswap
-            if @heldpkmn
-              (pokemon) ? pbSwap(selected) : pbPlace(selected)
-            else
-              pbHold(selected)
-            end
-          else
-            if @fusionMode
-              pbFusionCommands(selected)
-            else
-              commands = []
-              cmdMove = -1
-              cmdSummary = -1
-              cmdWithdraw = -1
-              cmdItem = -1
-              cmdFuse = -1
-              cmdUnfuse = -1
-              cmdReverse = -1
-              cmdRelease = -1
-              cmdDebug = -1
-              cmdCancel = -1
-              cmdNickname = -1
-              if heldpoke
-                helptext = _INTL("{1} is selected.", heldpoke.name)
-                commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
-              elsif pokemon
-                helptext = _INTL("{1} is selected.", pokemon.name)
-                commands[cmdMove = commands.length] = _INTL("Move")
-              end
-              commands[cmdSummary = commands.length] = _INTL("Summary")
-              if pokemon != nil && !isTransferBox
-                if dexNum(pokemon.species) > NB_POKEMON
-                  commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
-                  commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0 || $PokemonBag.pbQuantity(:INFINITEREVERSERS) > 0
-                else
-                  commands[cmdFuse = commands.length] = _INTL("Fuse") if !@heldpkmn
-                end
-              end
-              commands[cmdNickname = commands.length] = _INTL("Nickname") if !@heldpkmn && !isTransferBox
-              commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
-              commands[cmdItem = commands.length] = _INTL("Item") if !isTransferBox
-
-              commands[cmdRelease = commands.length] = _INTL("Release")  if !isTransferBox
-              commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
-              commands[cmdCancel = commands.length] = _INTL("Cancel")
-              command = pbShowCommands(helptext, commands)
-              if cmdMove >= 0 && command == cmdMove # Move/Shift/Place
-                if @heldpkmn
-                  (pokemon) ? pbSwap(selected) : pbPlace(selected)
-                else
-                  pbHold(selected)
-                end
-              elsif cmdSummary >= 0 && command == cmdSummary # Summary
-                pbSummary(selected, @heldpkmn)
-              elsif cmdNickname >= 0 && command == cmdNickname # Summary
-                renamePokemon(selected)
-              elsif cmdWithdraw >= 0 && command == cmdWithdraw # Store/Withdraw
-                (selected[0] == -1) ? pbStore(selected, @heldpkmn) : pbWithdraw(selected, @heldpkmn)
-              elsif cmdItem >= 0 && command == cmdItem # Item
-                pbItem(selected, @heldpkmn)
-              elsif cmdFuse >= 0 && command == cmdFuse # fuse
-                pbFuseFromPC(selected, @heldpkmn)
-              elsif cmdUnfuse >= 0 && command == cmdUnfuse # unfuse
-                pbUnfuseFromPC(selected)
-              elsif cmdReverse >= 0 && command == cmdReverse # unfuse
-                reverseFromPC(selected)
-              elsif cmdRelease >= 0 && command == cmdRelease # Release
-                pbRelease(selected, @heldpkmn)
-              elsif cmdDebug >= 0 && command == cmdDebug # Debug
-                pbPokemonDebug((@heldpkmn) ? @heldpkmn : pokemon, selected, heldpoke)
-              end
-            end
-          end
-        end
-      end
-      @scene.pbCloseBox
+      pcOrganizeCommand
     elsif command == 1 # Withdraw
       @scene.pbStartBox(self, command)
-      loop do
-        selected = @scene.pbSelectBox(@storage.party)
-        if selected == nil
-          next if pbConfirm(_INTL("Continue Box operations?"))
-          break
-        else
-          case selected[0]
-          when -2 # Party Pokémon
-            pbDisplay(_INTL("Which one will you take?"))
-            next
-          when -3 # Close box
-            if pbConfirm(_INTL("Exit from the Box?"))
-              pbSEPlay("PC close")
-              break
-            end
-            next
-          when -4 # Box name
-            pbBoxCommands
-            next
-          end
-          if @fusionMode
-            pbFusionCommands(selected)
-          else
-            pokemon = @storage[selected[0], selected[1]]
-            next if !pokemon
-            command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
-              _INTL("Withdraw"),
-              _INTL("Summary"),
-              _INTL("Release"),
-              _INTL("Cancel")
-            ])
-            case command
-            when 0 then
-              pbWithdraw(selected, nil)
-            when 1 then
-              pbSummary(selected, nil)
-              #when 2 then pbMark(selected, nil)
-            when 2 then
-              pbRelease(selected, nil)
-            end
-
-          end
-        end
-      end
-      @scene.pbCloseBox
+      pcWithdrawCommand
     elsif command == 2 # Deposit
       @scene.pbStartBox(self, command)
-      loop do
-        selected = @scene.pbSelectParty(@storage.party)
-        if selected == -3 # Close box
-          if pbConfirm(_INTL("Exit from the Box?"))
-            pbSEPlay("PC close")
-            break
-          end
-          next
-        elsif selected < 0
-          next if pbConfirm(_INTL("Continue Box operations?"))
-          break
-        else
-          pokemon = @storage[-1, selected]
-          next if !pokemon
-          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
-            _INTL("Store"),
-            _INTL("Summary"),
-            _INTL("Mark"),
-            _INTL("Release"),
-            _INTL("Cancel")
-          ])
-          case command
-          when 0 then
-            pbStore([-1, selected], nil)
-          when 1 then
-            pbSummary([-1, selected], nil)
-          when 2 then
-            pbMark([-1, selected], nil)
-          when 3 then
-            pbRelease([-1, selected], nil)
-          end
-        end
-      end
-      @scene.pbCloseBox
+      pcDepositCommand
     elsif command == 3
       @scene.pbStartBox(self, command)
       @scene.pbCloseBox
     end
   end
 
+  def pcOrganizeCommand()
+    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    loop do
+      selected = @scene.pbSelectBox(@storage.party)
+      if selected == nil
+        if pbHeldPokemon
+          pbDisplay(_INTL("You're holding a Pokémon!"))
+          next
+        end
+        next if pbConfirm(_INTL("Continue Box operations?"))
+        break
+      elsif selected[0] == -3 # Close box
+        if pbHeldPokemon
+          pbDisplay(_INTL("You're holding a Pokémon!"))
+          next
+        end
+        if pbConfirm(_INTL("Exit from the Box?"))
+          pbSEPlay("PC close")
+          break
+        end
+        next
+      elsif selected[0] == -4 # Box name
+        pbBoxCommands
+      else
+        pokemon = @storage[selected[0], selected[1]]
+        heldpoke = pbHeldPokemon
+        next if !pokemon && !heldpoke
+        if @scene.quickswap
+          quickSwap(selected, pokemon)
+        else
+          if @fusionMode
+            pbFusionCommands(selected)
+          else
+            organizeActions(selected, pokemon, heldpoke, isTransferBox)
+          end
+        end
+      end
+    end
+    @scene.pbCloseBox
+  end
+
+  def organizeActions(selected, pokemon, heldpoke, isTransferBox)
+    commands = []
+    cmdMove = -1
+    cmdSummary = -1
+    cmdWithdraw = -1
+    cmdItem = -1
+    cmdFuse = -1
+    cmdUnfuse = -1
+    cmdReverse = -1
+    cmdRelease = -1
+    cmdDebug = -1
+    cmdCancel = -1
+    cmdNickname = -1
+    if heldpoke
+      helptext = _INTL("{1} is selected.", heldpoke.name)
+      commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
+    elsif pokemon
+      helptext = _INTL("{1} is selected.", pokemon.name)
+      commands[cmdMove = commands.length] = _INTL("Move")
+    end
+    commands[cmdSummary = commands.length] = _INTL("Summary")
+    if pokemon != nil && !isTransferBox
+      if dexNum(pokemon.species) > NB_POKEMON
+        commands[cmdUnfuse = commands.length] = _INTL("Unfuse")
+        commands[cmdReverse = commands.length] = _INTL("Reverse") if $PokemonBag.pbQuantity(:DNAREVERSER) > 0 || $PokemonBag.pbQuantity(:INFINITEREVERSERS) > 0
+      else
+        commands[cmdFuse = commands.length] = _INTL("Fuse") if !@heldpkmn
+      end
+    end
+    commands[cmdNickname = commands.length] = _INTL("Nickname") if !@heldpkmn && !isTransferBox
+    commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
+    commands[cmdItem = commands.length] = _INTL("Item") if !isTransferBox
+
+    commands[cmdRelease = commands.length] = _INTL("Release") if !isTransferBox
+    commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
+    commands[cmdCancel = commands.length] = _INTL("Cancel")
+    command = pbShowCommands(helptext, commands)
+    if cmdMove >= 0 && command == cmdMove # Move/Shift/Place
+      if @heldpkmn
+        (pokemon) ? pbSwap(selected) : pbPlace(selected)
+      else
+        pbHold(selected)
+      end
+    elsif cmdSummary >= 0 && command == cmdSummary # Summary
+      pbSummary(selected, @heldpkmn)
+    elsif cmdNickname >= 0 && command == cmdNickname # Summary
+      renamePokemon(selected)
+    elsif cmdWithdraw >= 0 && command == cmdWithdraw # Store/Withdraw
+      (selected[0] == -1) ? pbStore(selected, @heldpkmn) : pbWithdraw(selected, @heldpkmn)
+    elsif cmdItem >= 0 && command == cmdItem # Item
+      pbItem(selected, @heldpkmn)
+    elsif cmdFuse >= 0 && command == cmdFuse # fuse
+      pbFuseFromPC(selected, @heldpkmn)
+    elsif cmdUnfuse >= 0 && command == cmdUnfuse # unfuse
+      pbUnfuseFromPC(selected)
+    elsif cmdReverse >= 0 && command == cmdReverse # unfuse
+      reverseFromPC(selected)
+    elsif cmdRelease >= 0 && command == cmdRelease # Release
+      pbRelease(selected, @heldpkmn)
+    elsif cmdDebug >= 0 && command == cmdDebug # Debug
+      pbPokemonDebug((@heldpkmn) ? @heldpkmn : pokemon, selected, heldpoke)
+    end
+  end
+
+  def quickSwap(selected, pokemon)
+    if @heldpkmn
+      (pokemon) ? pbSwap(selected) : pbPlace(selected)
+    else
+      pbHold(selected)
+    end
+  end
+
+  def pcWithdrawCommand
+    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    loop do
+      selected = @scene.pbSelectBox(@storage.party)
+      if selected == nil
+        next if pbConfirm(_INTL("Continue Box operations?"))
+        break
+      else
+        case selected[0]
+        when -2 # Party Pokémon
+          pbDisplay(_INTL("Which one will you take?"))
+          next
+        when -3 # Close box
+          if pbConfirm(_INTL("Exit from the Box?"))
+            pbSEPlay("PC close")
+            break
+          end
+          next
+        when -4 # Box name
+          pbBoxCommands
+          next
+        end
+        if @fusionMode
+          pbFusionCommands(selected)
+        else
+          pokemon = @storage[selected[0], selected[1]]
+          next if !pokemon
+          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
+            _INTL("Withdraw"),
+            _INTL("Summary"),
+            _INTL("Release"),
+            _INTL("Cancel")
+          ])
+          case command
+          when 0 then
+            pbWithdraw(selected, nil)
+          when 1 then
+            pbSummary(selected, nil)
+            # when 2 then pbMark(selected, nil)
+          when 2 then
+            pbRelease(selected, nil)
+          end
+
+        end
+      end
+    end
+    @scene.pbCloseBox
+  end
+
+  def pcDepositCommand
+    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    loop do
+      selected = @scene.pbSelectParty(@storage.party)
+      if selected == -3 # Close box
+        if pbConfirm(_INTL("Exit from the Box?"))
+          pbSEPlay("PC close")
+          break
+        end
+        next
+      elsif selected < 0
+        next if pbConfirm(_INTL("Continue Box operations?"))
+        break
+      else
+        pokemon = @storage[-1, selected]
+        next if !pokemon
+        command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
+          _INTL("Store"),
+          _INTL("Summary"),
+          _INTL("Mark"),
+          _INTL("Release"),
+          _INTL("Cancel")
+        ])
+        case command
+        when 0 then
+          pbStore([-1, selected], nil)
+        when 1 then
+          pbSummary([-1, selected], nil)
+        when 2 then
+          pbMark([-1, selected], nil)
+        when 3 then
+          pbRelease([-1, selected], nil)
+        end
+      end
+    end
+    @scene.pbCloseBox
+  end
 
   def renamePokemon(selected)
     box = selected[0]
@@ -1943,8 +1965,8 @@ class PokemonStorageScreen
           if heldpoke || selected[0] == -1
             p = (heldpoke) ? heldpoke : @storage[-1, index]
             p.time_form_set = nil
-            #p.form = 0 if p.isSpecies?(:SHAYMIN)
-            #p.heal
+            # p.form = 0 if p.isSpecies?(:SHAYMIN)
+            # p.heal
           end
           @scene.pbStore(selected, heldpoke, destbox, firstfree)
           if heldpoke
@@ -1986,7 +2008,7 @@ class PokemonStorageScreen
     index = selected[1]
 
     if @storage[box].is_a?(StorageTransferBox)
-      if @heldpkmn.owner.name  == "RENTAL"
+      if @heldpkmn.owner.name == "RENTAL"
         pbMessage("This Pokémon cannot be transferred.")
         return
       end
@@ -2031,7 +2053,7 @@ class PokemonStorageScreen
     end
 
     if @storage[box].is_a?(StorageTransferBox)
-      if @heldpkmn.owner.name  == "RENTAL"
+      if @heldpkmn.owner.name == "RENTAL"
         pbMessage("This Pokémon cannot be transferred.")
         return
       end
@@ -2081,7 +2103,7 @@ class PokemonStorageScreen
     end
     command = pbShowCommands(_INTL("Release this Pokémon?"), [_INTL("No"), _INTL("Yes")])
     if command == 1
-      if pokemon.owner.name  == "RENTAL"
+      if pokemon.owner.name == "RENTAL"
         pbDisplay(_INTL("This Pokémon cannot be released"))
         return
       end
@@ -2156,7 +2178,7 @@ class PokemonStorageScreen
   end
 
   def pbBoxCommands
-    cmd_jump= _INTL("Jump")
+    cmd_jump = _INTL("Jump")
     cmd_wallpaper = _INTL("Wallpaper")
     cmd_name = _INTL("Name")
     cmd_info = _INTL("Info")
@@ -2260,19 +2282,19 @@ class PokemonStorageScreen
 
   def pbFuseFromPC(selected, heldpoke)
     box = selected[0]
-      index = selected[1]
-      poke_body = @storage[box, index]
-      poke_head = heldpoke
-      if heldpoke
-        if dexNum(heldpoke.species) > NB_POKEMON
-          pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
-          return
-        end
-        if(heldpoke.egg?)
-          pbDisplay(_INTL("It's impossible to fuse an egg!"))
-          return
-        end
+    index = selected[1]
+    poke_body = @storage[box, index]
+    poke_head = heldpoke
+    if heldpoke
+      if dexNum(heldpoke.species) > NB_POKEMON
+        pbDisplay(_INTL("{1} is already fused!", heldpoke.name))
+        return
       end
+      if (heldpoke.egg?)
+        pbDisplay(_INTL("It's impossible to fuse an egg!"))
+        return
+      end
+    end
 
     splicerItem = selectSplicer()
     if splicerItem == nil
@@ -2330,7 +2352,7 @@ class PokemonStorageScreen
     if !pokemon
       command = pbShowCommands("Select an action", ["Continue fusing", "Stop fusing"])
       case command
-      when 1 #stop
+      when 1 # stop
         cancelFusion()
       end
     else
@@ -2349,7 +2371,7 @@ class PokemonStorageScreen
       end
       command = pbShowCommands("Select an action", commands)
       case command
-      when 0 #Fuse
+      when 0 # Fuse
         if !pokemon
           pbDisplay(_INTL("No Pokémon selected!"))
           return
@@ -2361,19 +2383,17 @@ class PokemonStorageScreen
         end
         isSuperSplicer = isSuperSplicer?(@fusionItem)
 
-
-        selectedHead =selectFusion(pokemon, heldpoke, isSuperSplicer)
+        selectedHead = selectFusion(pokemon, heldpoke, isSuperSplicer)
         if selectedHead == nil
           pbDisplay(_INTL("It won't have any effect."))
           return false
         end
-        if selectedHead == -1 #cancelled out
+        if selectedHead == -1 # cancelled out
           return false
         end
 
         selectedBase = selectedHead == pokemon ? heldpoke : pokemon
-        firstOptionSelected= selectedBase == pokemon
-
+        firstOptionSelected = selectedBase == pokemon
 
         if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
           playingBGM = $game_system.getPlayingBGM
@@ -2396,7 +2416,7 @@ class PokemonStorageScreen
           # print "fusion cancelled"
           # @fusionMode = false
         end
-      when 1 #swap
+      when 1 # swap
         if pokemon
           if dexNum(pokemon.species) <= NB_POKEMON
             pbSwap(selected)
@@ -2406,7 +2426,7 @@ class PokemonStorageScreen
         else
           pbDisplay(_INTL("Select a Pokémon!"))
         end
-      when 2 #cancel
+      when 2 # cancel
         cancelFusion()
         return
       end
