@@ -591,27 +591,40 @@ class PokemonStorageScreen
       _INTL("What do you want to do?"), commands)
     case commands[command]
     when cmd_jump
-      destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
-      if destbox >= 0
-        @scene.pbJumpToBox(destbox)
-      end
+      boxCommandJump
     when cmd_wallpaper
-      papers = @storage.availableWallpapers
-      index = 0
-      for i in 0...papers[1].length
-        if papers[1][i] == @storage[@storage.currentBox].background
-          index = i; break
-        end
-      end
-      wpaper = pbShowCommands(_INTL("Pick the wallpaper."), papers[0], index)
-      if wpaper >= 0
-        @scene.pbChangeBackground(papers[1][wpaper])
-      end
+      boxCommandSetWallpaper
     when cmd_name
-      @scene.pbBoxName(_INTL("Box name?"), 0, 12)
+      boxCommandName
     when cmd_info
-      pbMessage("This is the Transfer Box. It's used to transfer Pokémon between savefiles!")
-      pbMessage("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2.")
+      boxCommandTransferInfo
+    end
+  end
+
+  def boxCommandTransferInfo
+    pbMessage("This is the Transfer Box. It's used to transfer Pokémon between savefiles!")
+    pbMessage("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2.")
+  end
+  def boxCommandName
+    @scene.pbBoxName(_INTL("Box name?"), 0, 12)
+  end
+  def boxCommandJump
+    destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
+    if destbox >= 0
+      @scene.pbJumpToBox(destbox)
+    end
+  end
+  def boxCommandSetWallpaper
+    papers = @storage.availableWallpapers
+    index = 0
+    for i in 0...papers[1].length
+      if papers[1][i] == @storage[@storage.currentBox].background
+        index = i; break
+      end
+    end
+    wpaper = pbShowCommands(_INTL("Pick the wallpaper."), papers[0], index)
+    if wpaper >= 0
+      @scene.pbChangeBackground(papers[1][wpaper])
     end
   end
 

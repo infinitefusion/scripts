@@ -67,6 +67,56 @@ class PokemonStorageScreen
     @scene.pbCloseBox
   end
 
+  def selectAllBox
+    @scene.pbSetCursorMode("multiselect")
+    selected_index = PokemonBox::BOX_SIZE - 1
+    @multiSelectRange = [0, nil]
+    box = @storage.currentBox
+    @scene.pbUpdateSelectionRect(box, selected_index,)
+    @scene.selection = selected_index
+  end
+
+  def pbBoxCommands
+    is_holding_pokemon = pbHolding?
+    if @scene.cursormode == "multiselect"
+      if is_holding_pokemon
+        return dropAllHeldPokemon
+      else
+        return selectAllBox
+      end
+
+    end
+    cmd_jump = _INTL("Jump")
+    cmd_select = _INTL("Select all")
+    cmd_wallpaper = _INTL("Wallpaper")
+    cmd_name = _INTL("Name")
+    cmd_info = _INTL("Info")
+    cmd_cancel = _INTL("Cancel")
+
+    commands = []
+    commands << cmd_jump
+    commands << cmd_select unless is_holding_pokemon
+    commands << cmd_wallpaper
+    commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_info if @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_cancel
+
+    command = pbShowCommands(
+      _INTL("What do you want to do?"), commands)
+    case commands[command]
+    when cmd_jump
+      boxCommandJump
+    when cmd_wallpaper
+      boxCommandSetWallpaper
+    when cmd_name
+      boxCommandName
+    when cmd_info
+      boxCommandTransferInfo
+    when cmd_select
+      selectAllBox
+    end
+  end
+
   def singlePokemonCommands(selected)
     @multiSelectRange = nil
     @scene.pbUpdateSelectionRect(selected[0], selected[1])
@@ -97,11 +147,13 @@ class PokemonStorageScreen
     end
   end
 
+  def dropAllHeldPokemon
+    multiSelectAction([@storage.currentBox,0])
+  end
+
   # Multi-select flow: validates and delegates animations to scene.
   def multiSelectAction(selected)
-    echoln "multiSelectAction called; mode=#{@scene.cursormode}"
     return unless @scene.cursormode == "multiselect"
-
     if pbMultiHeldPokemon.length > 0
       # placing multi-held from screen's held list
       place_result = pbPlaceMulti(selected[0], selected[1])
@@ -130,7 +182,7 @@ class PokemonStorageScreen
         @multiSelectRange = nil
         @scene.pbUpdateSelectionRect(selected[0], selected[1])
         return
-      elsif pokemonCount == 1
+      elsif pokemonCount == 1 && @storage[selected[0], selected[1]]
         singlePokemonCommands(selected)
       else
         multipleSelectedPokemonCommands(selected, pokemonCount)

@@ -4,6 +4,7 @@ class PokemonStorageScene
   attr_reader :cursormode
   attr_reader :screen
   attr_reader :sprites
+  attr_accessor :selection
 
   alias _storageMultiselect_pbStartBox pbStartBox
 

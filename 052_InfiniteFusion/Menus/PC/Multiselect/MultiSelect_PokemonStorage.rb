@@ -58,6 +58,8 @@ class PokemonStorage
       end
     end
 
+    echoln [cursor_x, cursor_y]
+
     # -----------------------------
     # Phase 2: Assign leftovers by intended position
     # -----------------------------
@@ -67,7 +69,7 @@ class PokemonStorage
       !self[box_index, index].nil? || used_coords.include?([cx, cy])
     end
 
-    if available_coords.length < unplaced.length
+    if available_coords.length < unplaced.length  || available_coords.length < intended.length
       return :CANT_PLACE # Not enough room
     end
 
