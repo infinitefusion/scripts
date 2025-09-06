@@ -202,9 +202,9 @@ class PokemonStorageScreen
         end
       end
       if need_fill
-        store_result = @storage.pbStoreCaughtBatch(@multiheldpkmn, box, selected_pos[0], selected_pos[1])
+        store_result = @storage.pbStoreBatch(@multiheldpkmn, box, selected_pos[0], selected_pos[1])
         if store_result == :CANT_PLACE || !store_result
-          pbDisplay(_INTL("Not enough room in the box to place the selected Pokémon."))
+          pbDisplay(_INTL("There's not enough room!"))
           return
         end
         @scene.animate_place_multi(box, selected_index)
