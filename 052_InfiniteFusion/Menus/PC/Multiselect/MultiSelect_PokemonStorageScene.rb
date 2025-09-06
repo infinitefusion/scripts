@@ -61,8 +61,10 @@ class PokemonStorageScene
       end
       self.update
       if Input.trigger?(Input::ACTION) && @command == 0 # Organize only
-        pbPlayDecisionSE
-        pbNextCursorMode
+        if !@screen.pbHolding?
+          pbPlayDecisionSE
+          pbNextCursorMode
+        end
       elsif Input.trigger?(Input::BACK)
         @selection = selection
         return -1
@@ -173,7 +175,7 @@ class PokemonStorageScene
       pbSetCursorMode("default")
     when "multiselect"
       #pbSetCursorMode("quickswap") if !@screen.pbHolding?
-      pbSetCursorMode("default") if !@screen.pbHolding?
+      pbSetCursorMode("default")
     end
   end
 

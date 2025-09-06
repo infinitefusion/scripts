@@ -46,7 +46,7 @@ class PokemonStorage
   def obtain_wallpaper(wallpaper_id)
     wallpaper_name = allWallpapers[wallpaper_id]
     pbUnlockWallpaper(wallpaper_id)
-    path = "Graphics/Pictures/Storage/box_#{wallpaper_id}"
+    path = "Graphics/Pictures/Storage/Wallpapers/box_#{wallpaper_id}"
     pictureViewport = showPicture(path, 50,-45)
     musical_effect = "Key item get"
     pbMessage(_INTL("\\qp\\me[{1}]Obtained a new wallpaper: \\c[1]{2}\\c[0]!", musical_effect, wallpaper_name))

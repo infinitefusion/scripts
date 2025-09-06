@@ -160,6 +160,8 @@ class PokemonBoxArrow < SpriteWrapper
         @handsprite.changeBitmap(modeSprites[1]) # point2
       end
     end
+    @handsprite.changeBitmap(getSplicerIcon) if @fusing
+
     @frame += 1
     @frame = 0 if @frame >= Graphics.frame_rate
     @updating = false

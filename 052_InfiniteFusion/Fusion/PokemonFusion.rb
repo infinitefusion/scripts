@@ -957,7 +957,9 @@ class PokemonFusionScene
       @pokemon1.calc_stats
       @pokemon1.obtain_method = 0
 
-      learned_moves = @pokemon1.learned_moves + @pokemon2.learned_moves
+      learned_moves = []
+      learned_moves << @pokemon1.learned_moves if @pokemon1.learned_moves
+      learned_moves << @pokemon2.learned_moves if @pokemon2.learned_moves
       @pokemon1.moves.each do |move|
         learned_moves << move.id unless learned_moves.include?(move.id)
       end

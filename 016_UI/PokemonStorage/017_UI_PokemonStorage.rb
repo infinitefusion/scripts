@@ -186,6 +186,12 @@ class PokemonBoxArrow < SpriteWrapper
     @handsprite.addBitmap("point2q", "Graphics/Pictures/Storage/cursor_point_2_q")
     @handsprite.addBitmap("grabq", "Graphics/Pictures/Storage/cursor_grab_q")
     @handsprite.addBitmap("fistq", "Graphics/Pictures/Storage/cursor_fist_q")
+
+    @handsprite.addBitmap("fusion_dnasplicer", "Graphics/Pictures/Storage/cursor_dnasplicer")
+    @handsprite.addBitmap("fusion_supersplicer", "Graphics/Pictures/Storage/cursor_supersplicer")
+    @handsprite.addBitmap("fusion_infinitesplicer", "Graphics/Pictures/Storage/cursor_infinitesplicer")
+    @handsprite.addBitmap("fusion_infinitesplicer2", "Graphics/Pictures/Storage/cursor_infinitesplicer2")
+
     @handsprite.changeBitmap("fist")
     @spriteX = self.x
     @spriteY = self.y
@@ -198,14 +204,21 @@ class PokemonBoxArrow < SpriteWrapper
     super
   end
 
+  # 0 :DNASPLICERS
+  # 1: SUPERSPLICERS
+  # 2: INFINITESPLICERS
+  # 3: INFINITESPLICERS2
   def getSplicerIcon
     case @splicerType
+    when 3
+      return "fusion_dnasplicer"
     when 2
-      return AnimatedBitmap.new("Graphics/Pictures/boxinfinitesplicer")
+      return "fusion_infinitesplicer"
     when 1
-      return AnimatedBitmap.new("Graphics/Pictures/boxsupersplicer")
+      return "fusion_supersplicer"
+    else
+     return "fusion_dnasplicer"
     end
-    return AnimatedBitmap.new("Graphics/Pictures/boxsplicer")
   end
 
   def setSplicerType(type)
@@ -312,7 +325,10 @@ class PokemonBoxArrow < SpriteWrapper
     heldpkmn.update if heldpkmn
     @handsprite.update
     @holding = false if !heldpkmn
-    if @grabbingState > 0
+
+    if @fusionMode
+      @handsprite.changeBitmap(getSplicerIcon)
+    elsif @grabbingState > 0
       if @grabbingState <= 4 * Graphics.frame_rate / 20
         @handsprite.changeBitmap((@quickswap) ? "grabq" : "grab")
         self.y = @spriteY + 4.0 * @grabbingState * 20 / Graphics.frame_rate
@@ -459,7 +475,7 @@ class PokemonBoxSprite < SpriteWrapper
         @storage[@boxnumber].background = @bg
       end
       @boxbitmap.dispose if @boxbitmap
-      @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/box_#{@bg}")
+      @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/Wallpapers/box_#{@bg}")
     end
   end
 
