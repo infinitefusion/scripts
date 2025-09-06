@@ -67,6 +67,36 @@ class PokemonStorageScreen
     @scene.pbCloseBox
   end
 
+  def singlePokemonCommands(selected)
+    @multiSelectRange = nil
+    @scene.pbUpdateSelectionRect(selected[0], selected[1])
+    isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    pokemon = @storage[selected[0], selected[1]]
+    heldpoke = pbHeldPokemon
+    return organizeActions(selected, pokemon, heldpoke, isTransferBox)
+  end
+
+  def multipleSelectedPokemonCommands(selected, pokemonCount)
+    commands = []
+    cmdMove = -1
+    cmdRelease = -1
+    cmdCancel = -1
+
+    helptext = _INTL("Selected {1} Pokémon.", pokemonCount)
+
+    commands[cmdMove = commands.length] = _INTL("Move")
+    commands[cmdRelease = commands.length] = _INTL("Release") if $DEBUG
+    commands[cmdCancel = commands.length] = _INTL("Cancel")
+
+    command = pbShowCommands(helptext, commands)
+
+    if command == cmdMove
+      pbHoldMulti(selected[0], selected[1])
+    elsif command == cmdRelease
+      pbReleaseMulti(selected[0])
+    end
+  end
+
   # Multi-select flow: validates and delegates animations to scene.
   def multiSelectAction(selected)
     echoln "multiSelectAction called; mode=#{@scene.cursormode}"
@@ -74,7 +104,11 @@ class PokemonStorageScreen
 
     if pbMultiHeldPokemon.length > 0
       # placing multi-held from screen's held list
-      pbPlaceMulti(selected[0], selected[1])
+      place_result = pbPlaceMulti(selected[0], selected[1])
+      if place_result == :PLACED_OCCUPIED
+        pbSEPlay("GUI party switch")
+      end
+
     elsif !@multiSelectRange
       pbPlayDecisionSE
       @multiSelectRange = [selected[1], nil]
@@ -96,23 +130,10 @@ class PokemonStorageScreen
         @multiSelectRange = nil
         @scene.pbUpdateSelectionRect(selected[0], selected[1])
         return
-      end
-
-      commands = []
-      cmdMove = -1
-      cmdRelease = -1
-
-      helptext = _INTL("Selected {1} Pokémon.", pokemonCount)
-
-      commands[cmdMove = commands.length] = _INTL("Move")
-      commands[cmdRelease = commands.length] = _INTL("Release")
-
-      command = pbShowCommands(helptext, commands)
-
-      if command == cmdMove
-        pbHoldMulti(selected[0], selected[1])
-      elsif command == cmdRelease
-        pbReleaseMulti(selected[0])
+      elsif pokemonCount == 1
+        singlePokemonCommands(selected)
+      else
+        multipleSelectedPokemonCommands(selected, pokemonCount)
       end
       @multiSelectRange = nil
       @scene.pbUpdateSelectionRect(selected[0], selected[1])
@@ -164,7 +185,6 @@ class PokemonStorageScreen
     @scene.pbRefresh
   end
 
-
   # Check if all held pokémon can strictly fit at the target positions (no overlap, no OOB).
   # Commit them to storage and animate the placement.
   def pbPlaceMulti(box, selected_index)
@@ -182,8 +202,8 @@ class PokemonStorageScreen
         end
       end
       if need_fill
-        store_result = @storage.pbStoreCaughtBatch(@multiheldpkmn,box,selected_pos[0],selected_pos[1])
-        if store_result == -1
+        store_result = @storage.pbStoreCaughtBatch(@multiheldpkmn, box, selected_pos[0], selected_pos[1])
+        if store_result == :CANT_PLACE || !store_result
           pbDisplay(_INTL("Not enough room in the box to place the selected Pokémon."))
           return
         end
@@ -191,15 +211,14 @@ class PokemonStorageScreen
         @multiheldpkmn = []
         @scene.pbHardRefresh
 
-        @scene.restartBox(self,@command, false)
-        @storage =$PokemonStorage
+        @scene.restartBox(self, @command, false)
+        @storage = $PokemonStorage
         @scene.pbRefresh
         @multiheldpkmn = []
         @boxForMosaic = @storage.currentBox
         @selectionForMosaic = selected_index
-        return
+        return store_result
       end
-
 
       # All validated: animate then commit
       @scene.animate_place_multi(box, selected_index)
@@ -214,7 +233,7 @@ class PokemonStorageScreen
       # Party placement: validate space
       party_count = @storage.party.length
       if party_count + @multiheldpkmn.length > Settings::MAX_PARTY_SIZE
-        pbDisplay(_INTL("Can't place that there."))
+        pbDisplay(_INTL("There's not enough room!"))
         return
       end
 
@@ -227,8 +246,6 @@ class PokemonStorageScreen
     @scene.pbRefresh
     @multiheldpkmn = []
   end
-
-
 
   # Validate release rules, animate release, then delete from storage
   def pbReleaseMulti(box)

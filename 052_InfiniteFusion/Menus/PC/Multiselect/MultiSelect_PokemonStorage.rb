@@ -10,7 +10,12 @@ class PokemonStorage
   # Only commits the placement if all Pokémon can be placed.
   # box_index: the box to store in
   # x, y: cursor coordinates in the box
-  # pk_array: array of Pokémon to store
+  # pokemon_positions_array: array of Pokémon to store
+  #
+  # Returns a status:
+  # :CANT_PLACE : There's no room in the box to place Pokemon, no changes were made
+  # :PLACED_ALL_FREE : All the spots were free, everything placed where it was supposed
+  # :PLACED_OCCUPIED : Placed, but had to move some Pokemon
   def pbStoreCaughtBatch(pokemon_positions_array, box_index = @currentBox, x = 0, y = 0)
     return -1 if pokemon_positions_array.nil? || pokemon_positions_array.empty?
     return -1 if self[box_index].is_a?(StorageTransferBox)
@@ -60,7 +65,7 @@ class PokemonStorage
     available_coords.sort_by! { |cx, cy| (cx - x).abs + (cy - y).abs }
 
     if available_coords.length < unplaced.length
-      return -1 # Not enough room
+      return :CANT_PLACE # Not enough room
     end
 
     unplaced.each do |i|
@@ -74,9 +79,7 @@ class PokemonStorage
       index = cy * box_width + cx
       self[box_index, index] = pokemon_positions_array[i][0]
     end
-
-    @currentBox = box_index
-    return box_index
+    return assignments.empty? ? :PLACED_ALL_FREE : :PLACED_OCCUPIED
   end
 
 end

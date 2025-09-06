@@ -111,6 +111,7 @@ class PokemonStorageScreen
     commands[cmdCancel = commands.length] = _INTL("Cancel")
     command = pbShowCommands(helptext, commands)
     if cmdMove >= 0 && command == cmdMove # Move/Shift/Place
+      @scene.pbSetCursorMode("default")
       if @heldpkmn
         (pokemon) ? pbSwap(selected) : pbPlace(selected)
       else
@@ -676,6 +677,7 @@ class PokemonStorageScreen
   #
 
   def pbFuseFromPC(selected, heldpoke)
+    @scene.pbSetCursorMode("default")
     box = selected[0]
     index = selected[1]
     poke_body = @storage[box, index]

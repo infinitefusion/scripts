@@ -169,10 +169,11 @@ class PokemonStorageScene
     case @cursormode
     when "default"
       pbSetCursorMode("multiselect")
-    when "quickswap"
+    when "quickswap"  #Disabled
       pbSetCursorMode("default")
     when "multiselect"
-      pbSetCursorMode("quickswap") if !@screen.pbHolding?
+      #pbSetCursorMode("quickswap") if !@screen.pbHolding?
+      pbSetCursorMode("default") if !@screen.pbHolding?
     end
   end
 
