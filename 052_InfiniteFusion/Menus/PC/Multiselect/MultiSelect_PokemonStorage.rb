@@ -58,8 +58,6 @@ class PokemonStorage
       end
     end
 
-    echoln [cursor_x, cursor_y]
-
     # -----------------------------
     # Phase 2: Assign leftovers by intended position
     # -----------------------------

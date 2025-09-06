@@ -131,10 +131,12 @@ class PokemonStorageScreen
     cmdMove = -1
     cmdRelease = -1
     cmdCancel = -1
+    cmdSort = -1
 
     helptext = _INTL("Selected {1} Pokémon.", pokemonCount)
 
     commands[cmdMove = commands.length] = _INTL("Move")
+    commands[cmdSort = commands.length] = _INTL("Sort")
     commands[cmdRelease = commands.length] = _INTL("Release") if $DEBUG
     commands[cmdCancel = commands.length] = _INTL("Cancel")
 
@@ -142,6 +144,8 @@ class PokemonStorageScreen
 
     if command == cmdMove
       pbHoldMulti(selected[0], selected[1])
+    elsif command == cmdSort
+      pbSortMulti(selected[0])
     elsif command == cmdRelease
       pbReleaseMulti(selected[0])
     end
@@ -298,6 +302,11 @@ class PokemonStorageScreen
     @scene.pbRefresh
     @multiheldpkmn = []
   end
+
+
+
+
+
 
   # Validate release rules, animate release, then delete from storage
   def pbReleaseMulti(box)
