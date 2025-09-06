@@ -32,8 +32,15 @@ class PokemonStorageScreen
         break
       elsif selected[0] == SelectionConstants::CLOSE
         if pbHolding?
-          pbDisplay(_INTL("You're holding a Pokémon!"))
-          next
+          if @multiSelectRange
+            pbPlayCancelSE
+            @multiSelectRange = nil
+            @scene.pbUpdateSelectionRect(0, 0)
+            next
+          else
+            pbDisplay(_INTL("You're holding a Pokémon!"))
+            next
+          end
         end
         if pbConfirm(_INTL("Exit from the Box?"))
           pbSEPlay("PC close")
