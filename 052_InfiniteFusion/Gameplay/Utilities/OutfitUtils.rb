@@ -1,9 +1,9 @@
 def unlock_easter_egg_hats()
-  if $Trainer.name == "Ash"
+  if $Trainer.name.downcase == "Ash"
     $Trainer.hat = HAT_ASH
     $Trainer.unlock_hat(HAT_ASH)
   end
-  if $Trainer.name == "Frogman"
+  if $Trainer.name.downcase == "Frogman"
     $Trainer.hat = HAT_FROG
     $Trainer.unlock_hat(HAT_FROG)
   end
