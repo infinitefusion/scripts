@@ -62,6 +62,7 @@ class PokemonStorageScreen
     commands = sortable_criteria.map { |c| c[:label] } + [_INTL("Cancel")]
     cmd = pbShowCommands(_INTL("Sort selected Pokémon how?"), commands)
     return nil if cmd == commands.length - 1
+    return nil if cmd <= -1
     return cmd
   end
 
@@ -70,6 +71,7 @@ class PokemonStorageScreen
     crit = sortable_criteria[criterion_index]
     orders = crit[:friendly] + [_INTL("Cancel")]
     ord = pbShowCommands(_INTL("Sort order?"), orders)
+    return nil if ord <= -1
     return nil if ord == orders.length - 1
     return ord == 1 # true if descending
   end
