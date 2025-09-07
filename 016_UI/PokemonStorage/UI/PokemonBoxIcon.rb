@@ -75,7 +75,7 @@ class PokemonBoxIcon < IconSprite
       if fusion_enabled
         self.visible = true
       else
-        self.visible = false
+        self.opacity = false
       end
     end
     self.src_rect = Rect.new(0, 0, self.bitmap.height, self.bitmap.height)
