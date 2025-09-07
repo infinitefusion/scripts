@@ -6,92 +6,109 @@ class PokemonStorage
     self.party.compact! if box == -1
   end
 
-  # Stores multiple Pokémon near a specific (x, y) position in a single box.
-  # Only commits the placement if all Pokémon can be placed.
-  # box_index: the box to store in
-  # x, y: cursor coordinates in the box
-  # pokemon_positions_array: array of Pokémon to store
-  #
-  # Returns a status:
-  # :CANT_PLACE : There's no room in the box to place Pokemon, no changes were made
-  # :PLACED_ALL_FREE : All the spots were free, everything placed where it was supposed
-  # :PLACED_OCCUPIED : Placed, but had to move some Pokemon
   def pbStoreBatch(pokemon_positions_array, box_index = @currentBox, cursor_x = 0, cursor_y = 0)
-    return -1 if pokemon_positions_array.nil? || pokemon_positions_array.empty?
-    return -1 if self[box_index].is_a?(StorageTransferBox)
+    return -1 if invalid_input?(pokemon_positions_array, box_index)
+
     box_width  = PokemonBox::BOX_WIDTH
     box_height = PokemonBox::BOX_HEIGHT
+    coords     = all_coords(box_width, box_height)
 
-    # List all coordinates in the box
-    coords = []
-    for yy in 0...box_height
-      for xx in 0...box_width
-        coords << [xx, yy]
-      end
-    end
+    assignments, unplaced, intended = initialize_assignments(pokemon_positions_array.length)
 
-    # -----------------------------
-    # Phase 1: Assign guaranteed spots
-    # -----------------------------
-    assignments = Array.new(pokemon_positions_array.length)
-    unplaced    = []   # indices of Pokémon that still need a slot
-    intended    = []   # store intended positions even if blocked
+    spiral = spiral_offsets
 
-    pokemon_positions_array.each_with_index do |pokemon_data_array, i|
-      relative_position = [pokemon_data_array[1], pokemon_data_array[2]]
-      intended_position = [cursor_x + relative_position[0], cursor_y + relative_position[1]]
+    # Phase 1: Lock in guaranteed spots
+    lock_guaranteed_spots(pokemon_positions_array, box_index, cursor_x, cursor_y, box_width, box_height,
+                          assignments, unplaced, intended)
 
-      # Check bounds
-      if intended_position[0] >= box_width || intended_position[1] >= box_height
-        intended[i] = nil
-        unplaced << i
-        next
-      end
+    available_coords = filter_available_coords(coords, box_index, box_width, assignments)
+    return :CANT_PLACE if available_coords.length < unplaced.length
 
-      intended[i] = intended_position
-      index = intended_position[1] * box_width + intended_position[0]
+    # Phase 2: Assign leftovers using spiral fallback
+    assign_fallback_positions(unplaced, intended, assignments, available_coords, box_width, box_height, cursor_x, cursor_y, spiral)
+    return :CANT_PLACE if assignments.compact.uniq.length < assignments.compact.length
 
-      if self[box_index, index].nil?
-        assignments[i] = intended_position   # Free slot, lock it in
+    # Phase 3: Commit placements
+    commit_assignments(assignments, pokemon_positions_array, box_index, box_width)
+
+    unplaced.empty? ? :PLACED_ALL_FREE : :PLACED_OCCUPIED
+  end
+
+  # -----------------------------
+  # Helper methods
+  # -----------------------------
+  def invalid_input?(arr, box_index)
+    arr.nil? || arr.empty? || self[box_index].is_a?(StorageTransferBox)
+  end
+
+  def all_coords(box_width, box_height)
+    (0...box_height).flat_map { |y| (0...box_width).map { |x| [x, y] } }
+  end
+
+  def initialize_assignments(length)
+    [Array.new(length), [], []] # assignments, unplaced, intended
+  end
+
+  def spiral_offsets
+    [[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1],[2,0],[0,2],[-2,0],[0,-2]]
+  end
+
+  def lock_guaranteed_spots(pokemon_positions_array, box_index, cursor_x, cursor_y, box_width, box_height, assignments, unplaced, intended)
+    pokemon_positions_array.each_with_index do |pk_data, i|
+      rel_x, rel_y = pk_data[1], pk_data[2]
+      target_x, target_y = cursor_x + rel_x, cursor_y + rel_y
+      intended[i] = [target_x, target_y]
+
+      if target_x.between?(0, box_width-1) && target_y.between?(0, box_height-1)
+        index = target_y * box_width + target_x
+        assignments[i] = [target_x, target_y] if self[box_index, index].nil?
+        unplaced << i if assignments[i].nil?
       else
-        unplaced << i                         # Occupied, resolve later
+        unplaced << i
       end
     end
+  end
 
-    # -----------------------------
-    # Phase 2: Assign leftovers by intended position
-    # -----------------------------
+  def filter_available_coords(coords, box_index, box_width, assignments)
     used_coords = assignments.compact
-    available_coords = coords.reject do |cx, cy|
+    coords.reject { |cx, cy| !self[box_index, cy * box_width + cx].nil? || used_coords.include?([cx, cy]) }
+  end
+
+  def assign_fallback_positions(unplaced, intended, assignments, available_coords, box_width, box_height, cursor_x, cursor_y, spiral)
+    unplaced.each_with_index do |i, idx|
+      tx, ty = intended[i] || [cursor_x, cursor_y]
+      chosen = spiral.map { |offx, offy| [tx + offx, ty + offy] }
+                     .find { |nx, ny| nx.between?(0, box_width-1) && ny.between?(0, box_height-1) && available_coords.include?([nx, ny]) }
+      chosen ||= available_coords.min_by { |cx, cy| (cx - tx).abs + (cy - ty).abs }
+      raise :CANT_PLACE unless chosen
+      assignments[i] = chosen
+      available_coords.delete(chosen)
+    end
+  end
+
+  def commit_assignments(assignments, pokemon_positions_array, box_index, box_width)
+    assignments.each_with_index do |coords, i|
+      next unless coords
+      cx, cy = coords
       index = cy * box_width + cx
-      !self[box_index, index].nil? || used_coords.include?([cx, cy])
+      if self[box_index, index].nil?
+        self[box_index, index] = pokemon_positions_array[i][0]
+      else
+        rollback(assignments, pokemon_positions_array, box_index, box_width)
+        raise :CANT_PLACE
+      end
     end
+  end
 
-    if available_coords.length < unplaced.length  || available_coords.length < intended.length
-      return :CANT_PLACE # Not enough room
-    end
-
-    unplaced.each do |i|
-      target = intended[i] || [cursor_x, cursor_y] # fallback to cursor if no intended
-      available_coords.sort_by! { |cx, cy| (cx - target[0]).abs + (cy - target[1]).abs }
-      assignments[i] = available_coords.shift
-    end
-
-    # -----------------------------
-    # Commit placements
-    # -----------------------------
-    assignments.each_with_index do |(cx, cy), i|
-      index = cy * box_width + cx
-      self[box_index, index] = pokemon_positions_array[i][0]
-    end
-
-    # Status return
-    if unplaced.empty?
-      return :PLACED_ALL_FREE
-    else
-      return :PLACED_OCCUPIED
+  def rollback(assignments, pokemon_positions_array, box_index, box_width)
+    assignments.each do |coords|
+      next unless coords
+      rx, ry = coords
+      rindex = ry * box_width + rx
+      self[box_index, rindex] = nil if pokemon_positions_array.any? { |pk| pk[0] == self[box_index, rindex] }
     end
   end
 
 
 end
+
