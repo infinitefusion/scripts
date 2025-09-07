@@ -29,7 +29,10 @@ def eliteFourRematch(trainer_id, trainer_name, rematch_tier,end_dialog="")
   party = build_e4_trainer_party(selected_pokemon, base_line_level)
   party << get_rival_starter(base_line_level) if trainer_id == :CHAMPION
 
-  return customTrainerBattle(trainer_name,trainer_id,party,50,end_dialog)
+  items = [:FULLRESTORE, :FULLRESTORE]
+  items.concat([:FULLRESTORE, :FULLRESTORE]) if rematch_tier >= 2
+  items.concat([:FULLRESTORE, :FULLRESTORE]) if rematch_tier >= 4
+  return customTrainerBattle(trainer_name,trainer_id,party,50,end_dialog,nil,nil,items)
 end
 
 
