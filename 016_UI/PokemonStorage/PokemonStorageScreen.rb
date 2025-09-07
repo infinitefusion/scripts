@@ -606,7 +606,7 @@ class PokemonStorageScreen
     pbMessage("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2.")
   end
   def boxCommandName
-    @scene.pbBoxName(_INTL("Box name?"), 0, 12)
+    @scene.pbBoxName(_INTL("Box name?"), 0, 20)
   end
   def boxCommandJump
     destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
