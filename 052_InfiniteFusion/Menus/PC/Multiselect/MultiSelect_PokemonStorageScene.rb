@@ -169,6 +169,7 @@ class PokemonStorageScene
   end
 
   def pbNextCursorMode()
+    return if @screen.pbHolding?
     case @cursormode
     when "default"
       pbSetCursorMode("multiselect")

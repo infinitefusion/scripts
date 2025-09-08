@@ -42,9 +42,13 @@ class PokemonStorageScreen
         key: :type,
         label: _INTL("By type"),
         value_proc: ->(p) {
-          # Use the primary type name for alphabetical sorting
-          t = p.type1 || :NORMAL   # fallback to NORMAL if missing
-          GameData::Type.get(t).name
+          # Grab both types (fallbacks in case one is nil)
+          t1 = p.type1 || :NORMAL
+          t2 = p.type2 || ""
+          [
+            GameData::Type.get(t1).name,
+            GameData::Type.get(t2).name
+          ]
         },
         friendly: [_INTL("A to Z by type"), _INTL("Z to A by type")]
       },
@@ -53,7 +57,14 @@ class PokemonStorageScreen
         label: _INTL("By date caught"),
         value_proc: ->(p) { p.timeReceived || Time.at(0) },
         friendly: ["Oldest to Newest", "Newest to Oldest"]
-      }
+      },
+      {
+        key: :random,
+        label: _INTL("Random"),
+        value_proc: ->(p) { rand },
+        friendly: ["Randomize"]
+      },
+
     ]
   end
 
