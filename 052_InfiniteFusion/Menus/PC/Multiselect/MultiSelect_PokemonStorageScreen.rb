@@ -19,7 +19,11 @@ class PokemonStorageScreen
       selected = @scene.pbSelectBox(@storage.party)
       if selected == nil
         if pbHolding?
-          pbDisplay(_INTL("You're holding a Pokémon!"))
+          if @fusionMode
+            cancelFusion
+          else
+            pbDisplay(_INTL("You're holding a Pokémon!"))
+          end
           next
         end
         if @multiSelectRange
@@ -60,6 +64,7 @@ class PokemonStorageScreen
         elsif @fusionMode
           pbFusionCommands(selected)
         else
+          echoln "pcOrganizeCommand?"
           organizeActions(selected, pokemon, heldpoke, isTransferBox)
         end
       end
@@ -152,7 +157,7 @@ class PokemonStorageScreen
   end
 
   def dropAllHeldPokemon
-    multiSelectAction([@storage.currentBox,0])
+    multiSelectAction([@storage.currentBox, 0])
   end
 
   # Multi-select flow: validates and delegates animations to scene.
@@ -180,7 +185,6 @@ class PokemonStorageScreen
           noneggCount += 1 unless @storage[selected[0], index].egg?
         end
       end
-
       if pokemonCount == 0
         pbPlayCancelSE
         @multiSelectRange = nil
@@ -302,11 +306,6 @@ class PokemonStorageScreen
     @scene.pbRefresh
     @multiheldpkmn = []
   end
-
-
-
-
-
 
   # Validate release rules, animate release, then delete from storage
   def pbReleaseMulti(box)
