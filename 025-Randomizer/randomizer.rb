@@ -31,7 +31,7 @@ def get_pokemon_list(include_fusions = false)
   #Create array of all pokemon dex numbers
   pokeArray = []
 
-  monLimit = include_fusions ? PBSpecies.maxValue : NB_POKEMON - 1
+  monLimit = include_fusions ? PBSpecies.maxValue : NB_POKEMON
   for i in 1..monLimit
     pokeArray.push(i)
   end
@@ -41,7 +41,7 @@ end
 
 def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
   bst_hash = Hash.new
-  for i in 1..NB_POKEMON - 1
+  for i in 1..NB_POKEMON
     show_shuffle_progress(i) if show_progress
     baseStats = getBaseStatsFormattedForRandomizer(i)
     statsTotal = getStatsTotal(baseStats)
