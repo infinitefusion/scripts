@@ -1699,6 +1699,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       end
 
       fused_pokemon_learned_moved = pokemon.learned_moves
+      fused_pokemon_learned_moved = [] if !fused_pokemon_learned_moved
       pokemon.moves.each do |move|
         fused_pokemon_learned_moved << move.id unless fused_pokemon_learned_moved.include?(move.id)
       end

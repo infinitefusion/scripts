@@ -86,6 +86,9 @@ class PokemonStorageScreen
     cmdDebug = -1
     cmdCancel = -1
     cmdNickname = -1
+
+
+    echoln selected
     if heldpoke
       helptext = _INTL("{1} is selected.", heldpoke.name)
       commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
