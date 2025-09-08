@@ -111,11 +111,15 @@ class PokemonStorageScreen
     commands[cmdCancel = commands.length] = _INTL("Cancel")
     command = pbShowCommands(helptext, commands)
     if cmdMove >= 0 && command == cmdMove # Move/Shift/Place
-      @scene.pbSetCursorMode("default")
+      #@scene.pbSetCursorMode("default")
       if @heldpkmn
         (pokemon) ? pbSwap(selected) : pbPlace(selected)
       else
-        pbHold(selected)
+        if @scene.cursormode == "multiselect"
+          pbHoldMulti(selected[0], selected[1])
+        else
+          pbHold(selected)
+        end
       end
     elsif cmdSummary >= 0 && command == cmdSummary # Summary
       pbSummary(selected, @heldpkmn)

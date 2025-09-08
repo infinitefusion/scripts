@@ -118,8 +118,8 @@ class PokemonStorageScreen
   end
 
   def singlePokemonCommands(selected)
-    @multiSelectRange = nil
-    @scene.pbUpdateSelectionRect(selected[0], selected[1])
+    #@multiSelectRange = nil
+    #@scene.pbUpdateSelectionRect(selected[0], selected[1])
     isTransferBox = @storage[@storage.currentBox].is_a?(StorageTransferBox)
     pokemon = @storage[selected[0], selected[1]]
     heldpoke = pbHeldPokemon

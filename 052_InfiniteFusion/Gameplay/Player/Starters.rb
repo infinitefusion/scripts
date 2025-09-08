@@ -85,7 +85,6 @@ def setStarterEasterEgg
   end
 
   if should_apply_easter_egg
-    rival_starter = get_fusion_symbol(rival_starter_head,rival_starter_body)
     pbSet(VAR_PLAYER_STARTER_CHOICE,getDexNumberForSpecies(starter))
     pbSet(VAR_RIVAL_STARTER_HEAD_CHOICE,getDexNumberForSpecies(rival_starter_head))
     pbSet(VAR_RIVAL_STARTER_BODY_CHOICE,getDexNumberForSpecies(rival_starter_body))
