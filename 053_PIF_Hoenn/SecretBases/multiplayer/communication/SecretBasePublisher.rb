@@ -4,29 +4,45 @@ class SecretBasePublisher
   end
 
   def register
-    begin
-      payload = { playerID: @player_id }
-      url = "#{Settings::SECRETBASE_SERVER_URL}register"
-      response = pbPostToString(url,payload)
-      echoln response
-      json = JSON.parse(response) rescue {}
-      @secret_uuid = json["secretUUID"]
-      echoln @secret_uuid
-    rescue Exception => e
-      echoln e
-      pbMessage("There was an error connecting to the server.")
+    if $Trainer.secretBase_uuid
+      echoln "Already registered!"
+    else
+      begin
+        payload = { playerID: @player_id }
+        url = "#{Settings::SECRETBASE_UPLOAD_URL}/register"
+        response = pbPostToString(url,payload)
+        echoln response
+        json = JSON.parse(response) rescue {}
+        secret_uuid = json[:secretUUID]
+        echoln json
+        $Trainer.secretBase_uuid = secret_uuid
+        echoln $Trainer.secretBase_uuid
+        Game.save
+      rescue Exception => e
+        echoln e
+      end
     end
+
+    return $Trainer.secretBase_uuid
 
   end
 
+  #Trainer needs to be registered before this is called
   def upload_base(base_json)
+    secret_uuid = $Trainer.secretBase_uuid
+    echoln secret_uuid
+    unless $Trainer.secretBase_uuid
+      echoln "Trainer not registered!"
+      pbMessage("The base could not be uploaded")
+    end
+
     payload = {
-      action: "upload-base",
       playerID: @player_id,
-      secretUUID: @secret_uuid,
+      secretUUID: secret_uuid,
       baseJSON: base_json
     }
-    response = post_json(payload)
+    url = "#{Settings::SECRETBASE_UPLOAD_URL}/upload-base"
+    response = pbPostToString(url,payload)
     echoln response
 
     json = JSON.parse(response) rescue {}

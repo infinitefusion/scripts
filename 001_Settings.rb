@@ -70,7 +70,8 @@ module Settings
   CUSTOM_DEX_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/dex.json"
 
 
-  SECRETBASE_SERVER_URL = "http://secretbases-upload.pkmninfinitefusion.workers.dev/"
+  SECRETBASE_UPLOAD_URL = "http://secretbases-upload.pkmninfinitefusion.workers.dev"
+  SECRETBASE_DOWNLOAD_URL = "https://secretbase-download.pkmninfinitefusion.workers.dev"
 
   STARTUP_MESSAGES = ""
 

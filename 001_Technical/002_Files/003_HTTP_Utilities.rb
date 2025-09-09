@@ -74,22 +74,17 @@ def pbDownloadToFile(url, file)
 end
 
 def pbPostToString(url, postdata, timeout = 30)
-  start_time = Time.now
-  loop do
-    begin
-      safe_postdata = postdata.transform_values(&:to_s)
-      data = pbPostData(url, safe_postdata)
-      return data unless data.empty?
-    rescue MKXPError => e
-      echoln e
-      # ignore and retry
-    end
-    break if (Time.now - start_time) > timeout
-    sleep(0.05)
+  safe_postdata = postdata.transform_values(&:to_s)
+  begin
+    data = pbPostData(url, safe_postdata)
+    return data || ""
+  rescue MKXPError => e
+    echoln("[Remote AI] Exception: #{e.message}")
+    return ""
   end
-  echoln("[Remote AI] No response after #{timeout} seconds")
-  ""
 end
+
+
 
 
 

@@ -15,6 +15,7 @@ class Trainer
   attr_accessor :selected_difficulty
   attr_accessor :game_mode
   attr_accessor :quest_points
+  attr_accessor :secretBase_uuid
 
   def inspect
     str = super.chop

@@ -14,6 +14,7 @@ class SecretBaseExporter
       },
       trainer: {
         name: $Trainer.name || "",
+        id: $Trainer.id,
         nb_badges: $Trainer.badge_count || 0,
         game_mode: $Trainer.game_mode || 0,
         appearance: sanitize_string(export_current_outfit_to_json),
