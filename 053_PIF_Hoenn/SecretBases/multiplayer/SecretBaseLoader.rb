@@ -1,5 +1,4 @@
-# Download secret bases from other players
-# Loads them into the world
+# Loads other player secret bases from a local file and places them into the world
 
 # todo: only load max 5
 class SecretBaseLoader

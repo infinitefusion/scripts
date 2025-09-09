@@ -1,0 +1,3 @@
+class SecretBaseFetcher
+
+end

@@ -11,9 +11,17 @@ def useSecretBaseMannequin
   secretBase = getEnteredSecretBase
   if secretBase && secretBase.is_visitor
     interact_other_player(secretBase)
-
+  else
+    secret_base_mannequin_menu(secretBase)
   end
   return
+end
+
+def secret_base_mannequin_menu(secretBase)
+  cmd_share = _INTL("Share your base")
+  cmd_setTeam = _INTL("Set your base's Team")
+  cmd_import = _INTL("Import friend")
+
 end
 
 def interact_other_player(secretBase)

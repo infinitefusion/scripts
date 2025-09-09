@@ -69,6 +69,9 @@ module Settings
   CREDITS_FILE_URL = "https://infinitefusion.net/Sprite Credits.csv"
   CUSTOM_DEX_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/dex.json"
 
+
+  SECRETBASE_SERVER_URL = "http://secretbases-upload.pkmninfinitefusion.workers.dev/"
+
   STARTUP_MESSAGES = ""
 
   LEVEL_CAPS=[12,22,26,35,38,45,51,54,62,62,63,64,64,65,67,68]
