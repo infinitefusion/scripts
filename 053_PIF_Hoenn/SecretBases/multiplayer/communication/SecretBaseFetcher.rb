@@ -15,6 +15,7 @@ class SecretBaseFetcher
         save_friend_base(base_json)
       else
         pbMessage("The game couldn't find your friend's base. Make sure that they published it and that you wrote their trainer ID correctly.")
+        raise "Secret Base does not exist"
       end
     end
 

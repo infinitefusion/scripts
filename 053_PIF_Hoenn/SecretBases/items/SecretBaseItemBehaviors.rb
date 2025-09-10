@@ -22,7 +22,7 @@ def secret_base_mannequin_menu(secretBase)
   cmd_trainerID = _INTL("Copy your Trainer ID")
   cmd_export = _INTL("[DEBUG] Export to clipboard")
   cmd_cancel = _INTL("Cancel")
-  commands = [cmd_share, cmd_setTeam, cmd_import]
+  commands = [cmd_share, cmd_setTeam, cmd_import,cmd_trainerID]
   commands << cmd_export if $DEBUG
   commands << cmd_cancel
   pbMessage(_INTL("What would you like to do?"))
@@ -30,7 +30,7 @@ def secret_base_mannequin_menu(secretBase)
   case commands[choice]
   when cmd_share
     pbMessage(_INTL("Once you share you base, it may randomly appear in other player's games."))
-    pbMessage(_INTL("The other players will be able to see your character's name, your base's layout, your custom message, and battle your team"))
+    pbMessage(_INTL("The other players will be able to see your character's name, your base's layout, your custom message, and battle your team."))
     continue = pbConfirmMessage(_INTL("You can only share your secret base once per day. Would you like to continue and publish your current secret base? (Your game will save automatically afterwards)"))
     if continue
       begin
@@ -50,17 +50,18 @@ def secret_base_mannequin_menu(secretBase)
     end
   when cmd_import
     friend_code = input_friend_code
-    fetcher = SecretBaseFetcher.new
-    begin
-    fetcher.import_friend_base(friend_code)
-    pbMessage(_INTL("Your base's friend's base was imported!"))
-    rescue
-      pbMessage(_INTL("There was a problem, your friend's secret base was not imported."))
+    if friend_code
+      fetcher = SecretBaseFetcher.new
+      begin
+        fetcher.import_friend_base(friend_code)
+        pbMessage(_INTL("Your friend's base was imported!"))
+      rescue
+        pbMessage(_INTL("There was a problem, your friend's secret base was not imported."))
+      end
     end
-
   when cmd_setTeam
   when cmd_trainerID
-      Input.clipboard = $Trainer.id
+      Input.clipboard = $Trainer.id.to_s
       pbMessage(_INTL("Your Trainer ID was copied to the clipboard!"))
   when cmd_export
     exporter = SecretBaseExporter.new
@@ -70,6 +71,8 @@ def secret_base_mannequin_menu(secretBase)
 end
 
 def input_friend_code()
+  example = showPicture("Graphics/Pictures/Trainer Card/trainerID_example",0,0,0)
+
   cmd_refresh = _INTL("Refresh")
   cmd_confirm = _INTL("Confirm")
   cmd_manual = _INTL("Enter manually")
@@ -92,11 +95,12 @@ def input_friend_code()
       commands << cmd_cancel
     end
 
-    choice = pbMessage(message, commands)
+    choice = pbMessage(message, commands,commands.length)
     case commands[choice]
     when cmd_refresh
       next
     when cmd_confirm
+      example.dispose
       return clipboard_text
     when cmd_manual
       friend_trainer_id = pbEnterText("Friend's Trainer ID", 10, 10, clipboard_text)
@@ -105,6 +109,7 @@ def input_friend_code()
       end
       Input.clipboard = friend_trainer_id
     else
+      example.dispose
       return nil
     end
   end
