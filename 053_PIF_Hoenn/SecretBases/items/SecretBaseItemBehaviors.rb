@@ -70,6 +70,14 @@ def secret_base_mannequin_menu(secretBase)
   end
 end
 
+def check_copied_own_trainerId(clipboard_text)
+  if clipboard_text == $Trainer.id.to_s
+    pbMessage(_INTL("The trainer ID you copied is your own! You need to have your friend copy theirs and send it to you."))
+    return true
+  end
+  return false
+end
+
 def input_friend_code()
   example = showPicture("Graphics/Pictures/Trainer Card/trainerID_example",0,0,0)
 
@@ -82,7 +90,7 @@ def input_friend_code()
     clipboard_text = Input.clipboard || ""
     clipboard_text = clipboard_text.slice(0, 10)
 
-    if numeric_string?(clipboard_text)
+    if numeric_string?(clipboard_text) && clipboard_text.length == 10 && !check_copied_own_trainerId(clipboard_text)
       message = _INTL("Is this your friend's Trainer ID? \\C[1]#{clipboard_text}\\C[0]")
       commands << cmd_refresh
       commands << cmd_confirm
