@@ -147,10 +147,10 @@ class GameWeather
 
   def try_move_weather_to_neighbors(map_id,map_weather_type,weather_intensity)
     map_neighbors = @neighbors_maps[map_id]
+    return unless map_neighbors
     return if map_weather_type == :None || weather_intensity <= 1
     return unless can_weather_spread(map_weather_type)
     map_weather_type, weather_intensity = normalize_legendary_weather(map_weather_type, weather_intensity)
-
     map_neighbors.each do |neighbor_id|
       neighbor_weather_type = get_map_weather_type(neighbor_id)
       neighbor_weather_intensity = get_map_weather_intensity(neighbor_id)

@@ -35,8 +35,51 @@ class SecretBaseExporter
         direction: item.direction || DIRECTION_DOWN,
       }
     end
-
   end
+
+  def write_base_json_to_file(new_base_json, file_path, append = true)
+    ensure_folder_exists(File.dirname(file_path))
+
+    # Parse new_base JSON string into a Ruby object
+    begin
+      new_base = JSON.parse(new_base_json)
+    rescue Exception => e
+      echoln "[SecretBase] Failed to parse new base JSON: #{e.message}"
+      return
+    end
+
+    bases = []
+
+    if File.exist?(file_path)
+      begin
+        file_content = File.read(file_path).strip
+        if !file_content.empty?
+          # parse existing content into array
+          bases = JSON.parse(file_content)
+          bases = [] unless bases.is_a?(Array)
+        end
+      rescue Exception => e
+        echoln "[SecretBase] Error reading existing file: #{e.message}"
+        bases = []
+      end
+    end
+
+    # Append or replace
+    if append
+      bases << new_base
+    else
+      bases = [new_base]
+    end
+
+    # Write back
+    File.open(file_path, "w") do |file|
+      file.write(JSON.generate(bases))
+    end
+
+    echoln "[SecretBase] Saved base to #{file_path}"
+  end
+
+
 
   # Export the trainer's Pokémon party
   def export_team_as_array

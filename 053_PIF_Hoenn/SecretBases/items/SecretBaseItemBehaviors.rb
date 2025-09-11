@@ -16,13 +16,18 @@ def useSecretBaseMannequin
 end
 
 def secret_base_mannequin_menu(secretBase)
+  friend_bases = SecretBaseLoader.new.list_friend_bases
+
   cmd_share = _INTL("Share your secret base")
   cmd_import = _INTL("Import a friend's secret base")
+  cmd_removeFriend = _INTL("Remove a friend's secret base")
   cmd_setTeam = _INTL("Set your base's Team")
-  cmd_trainerID = _INTL("Copy your Trainer ID")
-  cmd_export = _INTL("[DEBUG] Export to clipboard")
+  cmd_trainerID = _INTL("[DEBUG] Copy your Trainer ID")
+  cmd_export = _INTL("[DEBUG] Export base to clipboard")
   cmd_cancel = _INTL("Cancel")
-  commands = [cmd_share, cmd_setTeam, cmd_import,cmd_trainerID]
+  commands = [cmd_share, cmd_setTeam, cmd_import]
+  commands << cmd_removeFriend if !friend_bases.empty?
+  commands << cmd_trainerID if $DEBUG
   commands << cmd_export if $DEBUG
   commands << cmd_cancel
   pbMessage(_INTL("What would you like to do?"))
@@ -54,6 +59,8 @@ def secret_base_mannequin_menu(secretBase)
       fetcher = SecretBaseFetcher.new
       begin
         fetcher.import_friend_base(friend_code)
+        loader = SecretBaseLoader.new
+        loader.load_visitor_bases
         pbMessage(_INTL("Your friend's base was imported!"))
       rescue
         pbMessage(_INTL("There was a problem, your friend's secret base was not imported."))
@@ -71,6 +78,8 @@ def secret_base_mannequin_menu(secretBase)
 end
 
 def check_copied_own_trainerId(clipboard_text)
+  return false
+
   if clipboard_text == $Trainer.id.to_s
     pbMessage(_INTL("The trainer ID you copied is your own! You need to have your friend copy theirs and send it to you."))
     return true
@@ -97,7 +106,7 @@ def input_friend_code()
       commands << cmd_manual
       commands << cmd_cancel
     else
-      message = _INTL("Copy your friend's Trainer ID and select 'Refresh'.")
+      message = _INTL("Copy your friend's ID and choose 'Refresh'. The game will detect it from your clipboard.")
       commands << cmd_refresh
       commands << cmd_manual
       commands << cmd_cancel
