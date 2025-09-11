@@ -146,3 +146,5 @@ define_quest("route104_oricorio_forms",:FIELD_QUEST,"Nectar Flowers", "Find all 
 #Route 115
 define_quest("route115_secretBase",:FIELD_QUEST,"Your Very Own Secret Base!", "Talk to Aarune near his secret base to learn how to make your own.","Route 115","NPC_Hoenn_AromaLady")
 
+#Rustboro
+define_quest("rustboro_whismur",:FIELD_QUEST,"Volume Booster!", "Find a Wingull to fuse with a Whismur to make it louder.","Rustboro City","NPC_schoolgirl")

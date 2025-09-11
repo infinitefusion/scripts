@@ -78,8 +78,6 @@ def secret_base_mannequin_menu(secretBase)
 end
 
 def check_copied_own_trainerId(clipboard_text)
-  return false
-
   if clipboard_text == $Trainer.id.to_s
     pbMessage(_INTL("The trainer ID you copied is your own! You need to have your friend copy theirs and send it to you."))
     return true

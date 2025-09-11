@@ -27,3 +27,11 @@ def replaceFusionSpecies(pokemon, speciesToChange, newSpecies)
   echoln newSpecies.id_number
   pokemon.species = newSpecies
 end
+
+def npc_fuse_screen(species_head,species_body)
+  head_pokemon = Pokemon.new(species_head,1)
+  body_pokemon = Pokemon.new(species_body,1)
+  return if head_pokemon.isFusion? || body_pokemon.isFusion?
+  npcTrainerFusionScreenPokemon(head_pokemon,body_pokemon)
+
+end

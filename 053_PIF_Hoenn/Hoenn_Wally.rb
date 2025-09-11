@@ -59,6 +59,7 @@ def wally_fuse_pokemon(with_fusion_screen=true)
   updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY,trainer)
 end
 
+
 def npcTrainerFusionScreenPokemon(headPokemon,bodyPokemon)
   fusionScene = PokemonFusionScene.new
   newSpecies = getFusedPokemonIdFromSymbols(bodyPokemon.species,headPokemon.species)
