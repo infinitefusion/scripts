@@ -1,6 +1,6 @@
 
 COMMON_EVENT_TRAINER_REMATCH_PARTNER = 200
-SWITCH_PARTNERED_WITH_NàPC_TRAINER = 2049
+SWITCH_PARTNERED_WITH_NPC_TRAINER = 2049
 
 class Trainer
   attr_accessor :npcPartner
@@ -34,6 +34,7 @@ def promptGiveToPartner(caughtPokemon)
     return
   end
   partnerTrainer = getRebattledTrainerFromKey($Trainer.npcPartner)
+  return false if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && partnerTrainer.currentTeam.length > 0
   return false if !partnerTrainer
     command = pbMessage(_INTL("Would you like to give the newly caught #{caughtPokemon.name} to #{partnerTrainer.trainerName}?"),
                         [_INTL("Keep"),_INTL("Give to #{partnerTrainer.trainerName}")], 2)
