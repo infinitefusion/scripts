@@ -21,7 +21,8 @@ class GameWeather
   attr_accessor :current_weather
   attr_accessor :last_update_time
 
-  TIME_BETWEEN_WEATHER_UPDATES = 12000 # 180 seconds, only actually changes once the player changes map
+  #TIME_BETWEEN_WEATHER_UPDATES in in-game seconds (1 irl second = 60 in-game seconds)
+  TIME_BETWEEN_WEATHER_UPDATES = 3600 #1 in-game hour (1 irl minute) .
 
   CHANCE_OF_NEW_WEATHER = 2 # /100    spontaneous new weather popping up somewhere
   CHANCE_OF_RAIN = 40 #/100
