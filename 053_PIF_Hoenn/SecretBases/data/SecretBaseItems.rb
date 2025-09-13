@@ -44,17 +44,7 @@ module SecretBasesData
     price: 350,
     under_player: true,
     behavior: ->(itemInstance = nil) {
-      event=itemInstance.getEvent
-      pbSEPlay("jump", 80, 100)
-      $game_player.through =true
-      $game_player.jump_forward
-      case event.direction
-      when DIRECTION_LEFT; $game_player.direction = DIRECTION_RIGHT
-      when DIRECTION_RIGHT; $game_player.direction = DIRECTION_LEFT
-      when DIRECTION_UP; $game_player.direction = DIRECTION_UP
-      when DIRECTION_DOWN; $game_player.direction = DIRECTION_DOWN
-      end
-      $game_player.through =false
+      sit_on_chair(itemInstance)
     }
   )
 
