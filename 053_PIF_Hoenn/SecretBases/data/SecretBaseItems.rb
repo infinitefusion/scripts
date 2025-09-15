@@ -112,7 +112,7 @@ module SecretBasesData
 
   register_base_item(
     :SKITTY_COUCH_3x4,
-    graphics: "skittySet/deco_3x4couch_skitty.png",
+    graphics: "skittySet/deco_3x4chair_skitty.png",
     real_name: "Skitty Couch",
     price: 2000,
     height: 1,
@@ -121,7 +121,7 @@ module SecretBasesData
     behavior: ->(itemInstance = nil) {
       sit_on_chair(itemInstance)
     },
-    uninteractable_positions: [[-1,0],[1,0]]
+    uninteractable_positions: [[-2,0],[2,0]]
   )
 
   register_base_item(

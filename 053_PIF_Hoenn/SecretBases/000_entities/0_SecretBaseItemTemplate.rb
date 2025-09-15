@@ -14,6 +14,13 @@ class SecretBaseItem
 
   attr_reader :height
   attr_reader :width
+  #todo: instead of this, have a 2d array that represents the layout visually and shows which tiles are interactable and which aren't
+  # ex:
+  # [
+  # [[x],[x],[x]],
+  # [[i],[i],[i]
+  # ]
+  # -> 2 rows, only interactable from the bottom
 
   # Secret base object attributes
   attr_reader :deletable
