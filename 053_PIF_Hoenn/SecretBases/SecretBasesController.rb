@@ -16,6 +16,12 @@ class SecretBaseController
     @secretBase = secretBase
   end
 
+  def callBehaviorPosition(item_position)
+    item = @secretBase.layout.get_item_at_position(item_position)
+    if item && item.itemTemplate.behavior && item.interactable?(item_position)
+      item.itemTemplate.behavior.call(item)
+    end
+  end
   def furnitureInteract(item_position = [], menuStartIndex=0)
     cmd_labels = {
       use:          _INTL("Use"),
@@ -29,6 +35,7 @@ class SecretBaseController
     }
 
     item = @secretBase.layout.get_item_at_position(item_position)
+    return unless item
     options = []
 
     if item.itemId == :PC
@@ -37,7 +44,7 @@ class SecretBaseController
       options << :storage
       options << :item_storage
     else
-      options << :use if item.itemTemplate.behavior
+      options << :use if item.itemTemplate.behavior && item.interactable?(item_position)
     end
 
     options << :move unless @secretBase.is_visitor
@@ -61,7 +68,7 @@ class SecretBaseController
     when :move
       moveSecretBaseItem(item.instanceId, item.position)
     when :rotate
-      rotateSecretBaseItem(item.getEvent)
+      rotateSecretBaseItem(item.getMainEvent)
       furnitureInteract(position,commandIndex)
     when :delete
       if pbConfirmMessage(_INTL("Put away the #{item.name}?"))
@@ -142,7 +149,7 @@ class SecretBaseController
     return if @secretBase.is_a?(VisitorSecretBase)
     itemInstance = @secretBase.layout.get_item_by_id(itemInstanceId)
 
-    event = itemInstance.getEvent
+    event = itemInstance.getMainEvent
 
     $game_player.setPlayerGraphicsOverride("SecretBases/#{itemInstance.getGraphics}")
     $game_player.direction_fix = true
@@ -199,20 +206,26 @@ class SecretBaseController
 
   def placeFurnitureAtCurrentPosition(furnitureInstanceId, direction)
     $game_switches[SWITCH_SECRET_BASE_PLACED_FIRST_DECORATION] = true
-    itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
-    itemInstance.position = [$game_player.x, $game_player.y]
+    itemInstance = @secretBase.layout.get_item_by_id(furnitureInstanceId)
+    currentPosition = [$game_player.x, $game_player.y]
+    itemInstance.position = currentPosition
     itemInstance.direction = direction
-    event = itemInstance.getEvent
-    event.direction = $game_player.direction
 
-    $PokemonTemp.pbClearTempEvents
-    SecretBaseLoader.new.loadSecretBaseFurniture(@secretBase)
+    if @secretBase.layout.check_position_available_for_item(itemInstance,currentPosition)
+      main_event = itemInstance.getMainEvent
+      main_event.direction = $game_player.direction
 
-    # Roload after items update
-    itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
-    event = itemInstance.getEvent
-    event.direction = $game_player.direction
-    resetPlayerPosition
+      $PokemonTemp.pbClearTempEvents
+      SecretBaseLoader.new.loadSecretBaseFurniture(@secretBase)
+
+      # Roload after items update
+      itemInstance = $Trainer.secretBase.layout.get_item_by_id(furnitureInstanceId)
+      event = itemInstance.getMainEvent
+      event.direction = $game_player.direction
+      resetPlayerPosition
+    else
+      pbMessage(_INTL("There's no room here!"))
+    end
   end
 
   def resetFurniture(furnitureInstanceId)
@@ -254,6 +267,7 @@ class SecretBaseController
 
 end
 
+
 def getEnteredSecretBase
   controller = $PokemonTemp.enteredSecretBaseController
   return controller.secretBase if controller
@@ -262,6 +276,26 @@ end
 def getSecretBaseController
   return $PokemonTemp.enteredSecretBaseController
 end
+
+def secretBaseItem(event_id)
+  return if $game_temp.moving_furniture
+  begin
+    event = $game_map.events[event_id]
+    pos=[event.x,event.y]
+    controller=getSecretBaseController
+    controller.callBehaviorPosition(pos)
+  end
+end
+
+def secretBaseItemMenu
+  return unless Input.trigger?(Input::C)
+  event = $game_player.pbFacingEvent
+  return unless event
+  event_position = [event.x, event.y]
+  controller = getSecretBaseController
+  controller.furnitureInteract(event_position)
+end
+
 
 def selectPlacedSecretBaseItemInstance()
   options = []
@@ -296,17 +330,3 @@ def selectAnySecretBaseItem()
   return nil
 end
 
-# Save player position
-# Change character graphics to item graphics
-# Make current invisible
-# Enter "moving mode" :
-# Press A :
-#   Options:
-#  - Place here: Sets the item with the instance ID to the current position & reloads map
-#       (check if passable, not already used by another item, not the saved player position)
-#  -Cancel: closes menu, reloads map
-# Press B: Exit moving mode
-
-# todo: cancel! (delete the item when cancel if oldPosition is nil (when adding a new item))
-
-#

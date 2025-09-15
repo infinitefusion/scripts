@@ -57,17 +57,28 @@ class SecretBase
       next unless item_instance.is_a?(SecretBaseItemInstance)
       next unless SecretBasesData::SECRET_BASE_ITEMS[item_instance.itemId]
 
-      template = item_instance.itemTemplate
-      event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position, DIRECTION_DOWN)
-      event.character_name = "player/SecretBases/#{template.graphics}"
-      event.through = template.pass_through
-      event.under_player = template.under_player
-      event.direction = item_instance.direction
-      if template.id == :MANNEQUIN && @is_visitor
-        setEventAppearance(event.id, @trainer_appearance) if @trainer_appearance
+      item_instance.direction = DIRECTION_DOWN
+
+
+       template = item_instance.itemTemplate
+      echoln template
+
+
+      item_instance.create_events
+
+      # event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_SECRET_BASE_FURNITURE, $game_map.map_id, item_instance.position, DIRECTION_DOWN)
+      # event.character_name = "player/SecretBases/#{template.graphics}"
+      # event.through = template.pass_through
+      # event.under_player = template.under_player
+      # event.direction = item_instance.direction
+
+
+      if item_instance.itemTemplate.id == :MANNEQUIN && @is_visitor
+        setEventAppearance(item_instance.main_event.id, @trainer_appearance) if @trainer_appearance
       end
-      item_instance.setEventId(event.id)
-      event.refresh
+      # item_instance.setMainEventId(event.id)
+      item_instance.refresh_events
+      #event.refresh
     end
   end
 

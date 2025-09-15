@@ -28,6 +28,8 @@ class Game_Character
   attr_accessor :under_everything #under even grass
   attr_accessor :under_player     #always under the player, but over grass, etc.
   attr_accessor :direction_fix
+  attr_accessor :always_on_top
+
   def initialize(map = nil)
     @map = map
     @id = 0

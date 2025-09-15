@@ -144,7 +144,7 @@ def interact_other_player(secretBase)
 end
 
 def pushEvent(itemInstance)
-  event = itemInstance.getEvent
+  event = itemInstance.getMainEvent
   old_x = event.x
   old_y = event.y
   return if !event.can_move_in_direction?($game_player.direction, false)
@@ -174,8 +174,9 @@ end
 
 
 def sit_on_chair(itemInstance)
-  event=itemInstance.getEvent
+  event=itemInstance.getMainEvent
   pbSEPlay("jump", 80, 100)
+  $game_player.always_on_top=true
   $game_player.through =true
   $game_player.jump_forward
   case event.direction
@@ -185,5 +186,15 @@ def sit_on_chair(itemInstance)
   when DIRECTION_DOWN; $game_player.direction = DIRECTION_DOWN
   end
   $game_player.through =false
+  loop do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    if Input.trigger?(Input::UP) || Input.trigger?(Input::DOWN) || Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
+      $game_player.jump_forward
+      $game_player.always_on_top=false
+      break
+    end
+  end
 end
 # PC behavior set directly in SecretBaseController

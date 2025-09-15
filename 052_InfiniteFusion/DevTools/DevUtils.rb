@@ -136,7 +136,7 @@ def search_event_scripts(target_string)
             if command.parameters[0].include?(target_string)
               results << {
                 map_id: map_id,
-                event_id: event_id,
+                main_event_id: event_id,
                 page_index: page_index + 1,
                 command_index: cmd_index + 1
               }
@@ -152,7 +152,7 @@ def search_event_scripts(target_string)
   else
     echoln "Found occurrences of '#{target_string}':"
     results.each do |res|
-      echoln "Map #{res[:map_id]}, Event #{res[:event_id]}, Page #{res[:page_index]}, Command #{res[:command_index]}"
+      echoln "Map #{res[:map_id]}, Event #{res[:main_event_id]}, Page #{res[:page_index]}, Command #{res[:command_index]}"
     end
   end
 end
