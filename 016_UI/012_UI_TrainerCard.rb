@@ -43,6 +43,21 @@ class PokemonTrainerCard_Scene
     @sprites["card"].z=-100
   end
 
+  def trainerCardActions
+    cmd_swapBackground = _INTL("Swap background")
+    cmd_copyTrainerID = _INTL("Copy Trainer ID")
+    cmd_cancel = _INTL("Cancel")
+    commands = [cmd_swapBackground, cmd_copyTrainerID,cmd_cancel]
+    choice = optionsMenu(commands)
+    case commands[choice]
+    when cmd_swapBackground
+      promptSwapBackground
+    when cmd_copyTrainerID
+      Input.clipboard = $Trainer.id.to_s
+      pbMessage(_INTL("Your Trainer ID was copied to the clipboard!"))
+    end
+  end
+
   def promptSwapBackground()
     $Trainer.unlocked_card_backgrounds = [] if !$Trainer.unlocked_card_backgrounds
     if $Trainer.unlocked_card_backgrounds.length >= 1
@@ -56,7 +71,7 @@ class PokemonTrainerCard_Scene
         end
       end
     else
-      pbMessage(_INTL("You can purchase new Trainer Card backgrounds at PokéMarts!"))
+      pbMessage("You can purchase new Trainer Card backgrounds at PokéMarts!")
     end
   end
 
@@ -70,12 +85,13 @@ class PokemonTrainerCard_Scene
     min = totalsec / 60 % 60
     time = (hour > 0) ? _INTL("{1}h {2}m", hour, min) : _INTL("{1}m", min)
     $PokemonGlobal.startTime = pbGetTimeNow if !$PokemonGlobal.startTime
-    starttime = "#{pbGetAbbrevMonthName($PokemonGlobal.startTime.mon)} #{$PokemonGlobal.startTime.day}, #{$PokemonGlobal.startTime.year}",
+    starttime = "#{pbGetAbbrevMonthName($PokemonGlobal.startTime.mon)} #{$PokemonGlobal.startTime.day}, #{$PokemonGlobal.startTime.year}"
     textPositions = [
       [_INTL("Name"), 34, 58, 0, baseColor, shadowColor],
       [$Trainer.name, 302, 58, 1, baseColor, shadowColor],
-      [_INTL("ID No."), 332, 58, 0, baseColor, shadowColor],
-      [sprintf("%05d", $Trainer.public_ID), 468, 58, 1, baseColor, shadowColor],
+      [_INTL("Trainer ID"), 352, 28, 0, baseColor, shadowColor],  #      [_INTL("ID"), 332, 58, 0, baseColor, shadowColor],
+      [sprintf("%05d", $Trainer.id), 462, 58, 1, baseColor, shadowColor], #      [sprintf("%05d", $Trainer.id), 468, 58, 1, baseColor, shadowColor],
+
       [_INTL("Money"), 34, 106, 0, baseColor, shadowColor],
       [_INTL("${1}", $Trainer.money.to_s_formatted), 302, 106, 1, baseColor, shadowColor],
       [_INTL("Pokédex"), 34, 154, 0, baseColor, shadowColor],
@@ -126,7 +142,7 @@ class PokemonTrainerCard_Scene
       Input.update
       pbUpdate
       if Input.trigger?(Input::USE)
-        promptSwapBackground()
+        trainerCardActions()
       end
       if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE

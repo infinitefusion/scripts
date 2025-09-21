@@ -167,6 +167,11 @@ class MoveRelearnerScreen
       next if m[0] > pkmn.level || pkmn.hasMove?(m[1])
       moves.push(m[1]) if !moves.include?(m[1])
     end
+
+    pkmn.learned_moves.each do |move|
+      moves.push(move) if !moves.include?(move)
+    end
+
     tmoves = []
     if pkmn.first_moves
       for i in pkmn.first_moves

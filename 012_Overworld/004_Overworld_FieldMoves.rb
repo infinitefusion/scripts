@@ -587,6 +587,33 @@ def pbFly(move, pokemon)
   return true
 end
 
+
+
+Events.onAction += proc { |_sender, _e|
+  terrain = $game_player.pbFacingTerrainTag
+  if terrain.can_secret_base
+    pbSecretPower(terrain)
+  end
+}
+
+def pbSecretPower(terrain)
+  return if $PokemonGlobal.surfing
+  return unless $game_player.direction == DIRECTION_UP
+  move = :SECRETPOWER
+  movefinder = $Trainer.get_pokemon_with_move(move)
+  return if !movefinder
+  speciesname = (movefinder) ? movefinder.name : $Trainer.name
+  biomeType = getSecretBaseBiome(terrain)
+  baseLayoutType = pickSecretBaseLayout(biomeType)
+
+  if biomeType && baseLayoutType
+    pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
+    pbHiddenMoveAnimation(movefinder)
+    pbSecretBase(biomeType,baseLayoutType)
+  end
+end
+
+
 #===============================================================================
 # Headbutt
 #===============================================================================
@@ -646,6 +673,13 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
   facingEvent = $game_player.pbFacingEvent
   pbHeadbuttEffect(facingEvent)
 })
+
+HiddenMoveHandlers::UseMove.add(:SECRETPOWER, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+})
+
 
 HiddenMoveHandlers::CanUseMove.add(:RELICSONG, proc { |move, pokemon, showmsg|
   if  !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))
@@ -867,6 +901,7 @@ def pbEndSurf(_xOffset, _yOffset)
       pbOnStepTaken(result)
     end
     $PokemonTemp.surfJump = nil
+    $game_temp.clearSurfSplashPatches
     return true
 
   end
@@ -940,6 +975,10 @@ Events.onAction += proc { |_sender, _e|
       pbMessage(_INTL("Woah! A Pokémon jumped out of the trashcan!"))
       pbWildBattle(:TRUBBISH, 10)
       $PokemonGlobal.stepcount += 1
+    end
+  else
+    if Settings::GAME_ID == :IF_HOENN
+      pbMessage(_INTL("There's nothing but trash..."))
     end
   end
 }
@@ -1026,6 +1065,41 @@ HiddenMoveHandlers::UseMove.add(:SWEETSCENT, proc { |move, pokemon|
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
   pbSweetScent
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:RAINDANCE, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+
+
+HiddenMoveHandlers::UseMove.add(:RAINDANCE, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Rain,1)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:SUNNYDAY, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Sunny,1)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:WHIRLWIND, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Wind,1)
   next true
 })
 

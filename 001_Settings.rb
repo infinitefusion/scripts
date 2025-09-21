@@ -5,9 +5,9 @@
 #==============================================================================#
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
-  GAME_VERSION = '6.5.1'
-  GAME_VERSION_NUMBER = "6.5.1"
-  LATEST_GAME_RELEASE = "6.5"
+  GAME_VERSION = '6.7.0'
+  GAME_VERSION_NUMBER = "6.7.0"
+  LATEST_GAME_RELEASE = "6.6"
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -21,8 +21,8 @@ module Settings
   #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10
 
-  ANIMATE_REFLECTIONS= true
-  GAME_ID = :IF_KANTO
+  ANIMATE_REFLECTIONS= false#GAME_ID == :IF_HOENN #true
+  USE_REFLECTIONS = false
   #Infinite fusion settings
   NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
@@ -69,6 +69,10 @@ module Settings
   CREDITS_FILE_URL = "https://infinitefusion.net/Sprite Credits.csv"
   CUSTOM_DEX_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/dex.json"
 
+
+  SECRETBASE_UPLOAD_URL = "http://secretbases-upload.pkmninfinitefusion.workers.dev"
+  SECRETBASE_DOWNLOAD_URL = "https://secretbase-download.pkmninfinitefusion.workers.dev"
+
   STARTUP_MESSAGES = ""
 
   LEVEL_CAPS=[12,22,26,35,38,45,51,54,62,62,63,64,64,65,67,68]
@@ -82,7 +86,7 @@ module Settings
   EGGSPRITE_SCALE = 1
   BACKSPRITE_POSITION_OFFSET = 20
   FRONTSPRITE_POSITION = 200
-  SHINY_HUE_OFFSET = 75
+  SHINY_HUE_OFFSET = 75 #no longer used
   NO_LEVEL_MODE_LEVEL_INCR = 5.8
   NO_LEVEL_MODE_LEVEL_BASE = 6
 
@@ -164,7 +168,7 @@ module Settings
   # Number of badges in the game
   NB_BADGES = 16
   # The odds of a newly generated Pokémon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = 16#(MECHANICS_GENERATION >= 6) ? 16 : 8
+  SHINY_POKEMON_CHANCE =16#(MECHANICS_GENERATION >= 6) ? 16 : 8
 
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE = 3
@@ -175,12 +179,19 @@ module Settings
   # always inherit egg moves from its father.
   BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER = (MECHANICS_GENERATION >= 6)
 
+
   KANTO_STARTERS = [:BULBASAUR, :CHARMANDER, :SQUIRTLE]
   JOHTO_STARTERS = [:CHIKORITA, :CYNDAQUIL, :TOTODILE]
   HOENN_STARTERS = [:TREECKO, :TORCHIC, :MUDKIP]
   SINNOH_STARTERS = [:TURTWIG, :CHIMCHAR, :PIPLUP]
   KALOS_STARTERS = [:CHESPIN, :FENNEKIN, :FROAKIE]
 
+  DEFAULT_STARTERS = Settings::GAME_ID == :IF_KANTO ? KANTO_STARTERS : HOENN_STARTERS
+
+
+  GRASS_STARTERS = [:BULBASAUR,:CHIKORITA,:TREECKO,:TURTWIG,:CHESPIN]
+  FIRE_STARTERS = [:CHARMANDER,:CYNDAQUIL, :TORCHIC, :CHIMCHAR, :FENNEKIN]
+  WATER_STARTERS = [:SQUIRTLE, :TOTODILE, :MUDKIP, :PIPLUP, :FROAKIE]
 
   #=============================================================================
 
@@ -221,10 +232,10 @@ module Settings
   POISON_IN_FIELD = true #(MECHANICS_GENERATION <= 4)
   # Whether poisoned Pokémon will faint while walking around in the field
   # (true), or survive the poisoning with 1 HP (false).
-  POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION >= 3)
+  POISON_FAINT_IN_FIELD = false
   # Whether planted berries grow according to Gen 4 mechanics (true) or Gen 3
   # mechanics (false).
-  NEW_BERRY_PLANTS = (MECHANICS_GENERATION >= 4)
+  NEW_BERRY_PLANTS = true
   # Whether fishing automatically hooks the Pokémon (true), or whether there is
   # a reaction test first (false).
   FISHING_AUTO_HOOK = false
@@ -529,6 +540,9 @@ module Settings
   # ID of the animation played when a berry tree grows a stage while the player
   # is on the map (for new plant growth mechanics only).
   PLANT_SPARKLE_ANIMATION_ID = 7
+  SPARKLE_SHORT_ANIMATION_ID = 25
+  SPARKLE_SUBTLE_ANIMATION_ID = 29
+
   SLEEP_ANIMATION_ID = 26
 
   CUT_TREE_ANIMATION_ID = 19
@@ -544,7 +558,11 @@ module Settings
       ["French", "french.dat"]
   ]
 
-
+  #Experimental
+  REMOTE_BATTLES_CONTROL = false
+  REMOTE_NPC_DIALOG = false
+  REMOTE_BATTLE_CONTROL_SERVER_URL = "http://127.0.0.1:5000/choose_move"
+  REMOTE_NPC_DIALOG_SERVER_URL = "http://127.0.0.1:5000"
   #Technical
   SPRITE_CACHE_MAX_NB=100
   NEWEST_SPRITEPACK_MONTH = 12
@@ -573,7 +591,7 @@ module Settings
     "speech hgss 18",
     "speech hgss 19",
     "speech hgss 20",
-    "speech pl 18"
+    "speech pl 18",
   ]
 
   # Available menu frames. These are graphic files in "Graphics/Windowskins/".

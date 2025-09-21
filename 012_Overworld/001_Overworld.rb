@@ -226,6 +226,7 @@ end
 def pbBattleOnStepTaken(repel_active)
   return if $Trainer.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
+  return if $PokemonGlobal.surfing && Settings::GAME_ID == :IF_HOENN
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
@@ -908,7 +909,7 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom = t
   move = item.move
   meName = (item.is_key_item?) ? _INTL("Key item get") : _INTL("Item get")
   text_color = item.is_key_item? ? "\\c[3]" : "\\c[1]"
-  if item == :LEFTOVERS
+  if item == :LEFTOVERS || item == :MUSHROOMSPORES
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))
   elsif item.is_machine? # TM or HM
     # if $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] && $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] && $game_variables[VAR_CURRENT_GYM_TYPE] > -1

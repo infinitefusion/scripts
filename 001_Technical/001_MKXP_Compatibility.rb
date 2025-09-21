@@ -14,7 +14,7 @@ class Bitmap
 
   alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
-  def draw_text(x, y, width, height = nil, text = "", align = 0)
+  def draw_text(x, y, width, height, text, align = 0)
     if x.is_a?(Rect)
       x.y -= (@text_offset_y || 0)
       # rect, string & alignment

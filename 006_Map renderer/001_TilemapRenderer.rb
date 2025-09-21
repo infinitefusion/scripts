@@ -54,6 +54,17 @@ class TilemapRenderer
             1023 => "flowers_red[10]",
             1031 => "flowers_grey[10]",
             1039 => "flowers_white[10]",
+
+            #water cliffs
+            1363 => "water_rock10", 1364 => "water_rock11",
+            1389 => "water_rock01",   1391 => "water_rock09",
+            1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
+
+            1377 => "water_rock08",                                                                         1379 => "water_rock07",
+            1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
+            1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
+                                                                            1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
+
     },
     2 => {  #small-town
             996 => "flowers_orange[10]",
@@ -64,6 +75,46 @@ class TilemapRenderer
             1023 => "flowers_red[10]",
             1031 => "flowers_grey[10]",
             1039 => "flowers_white[10]",
+
+    },
+
+    5 => {  #Rustboro
+            996 => "flowers_orange[10]",
+            991 => "flowers_pink[10]",
+            999 => "flowers_yellow[10]",
+            1007 => "flowers_blue[10]",
+            1015 => "flowers_purple[10]",
+            1023 => "flowers_red[10]",
+            1031 => "flowers_grey[10]",
+            1039 => "flowers_white[10]",
+
+    },
+
+    6 => {  #Dewford Town
+
+      #water cliffs
+      1363 => "water_rock10", 1364 => "water_rock11",
+      1389 => "water_rock01",   1391 => "water_rock09",
+      1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
+
+      1377 => "water_rock08",                                                                         1379 => "water_rock07",
+      1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
+      1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
+      1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
+    },
+
+    7 => {  #Sea Route
+            #water rocks
+            1173 => "water_rock_medium[15]",
+            #water cliffs
+            1363 => "water_rock10", 1364 => "water_rock11",
+            1389 => "water_rock01",   1391 => "water_rock09",
+            1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
+
+            1377 => "water_rock08",                                                                         1379 => "water_rock07",
+            1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
+            1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
+            1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
     },
 
 
@@ -88,6 +139,72 @@ class TilemapRenderer
       2668 => "flowers_grey[10]",
       2676 => "flowers_white[10]",
     }
+  }
+
+  WIND_TREE_AUTOTILES = {
+    1 => {  #Route-field
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    2 => {  #small-town
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    5 => {  #Rustboro
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    9 => {  #Route Forest
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
   }
 
   #=============================================================================
@@ -421,9 +538,19 @@ class TilemapRenderer
     @autotiles.remove(filename)
   end
 
-  def add_extra_autotiles(tileset_id)
-    overrides = EXTRA_AUTOTILES[tileset_id]
-    return unless overrides
+  def get_autotile_overrides(tileset_id,map_id)
+    base_overrides = EXTRA_AUTOTILES[tileset_id] || {}
+    return base_overrides unless $game_weather
+    wind_overrides =WIND_TREE_AUTOTILES[tileset_id] || {}
+    if $game_weather.map_current_weather_type(map_id) == :Wind && WIND_TREE_AUTOTILES[tileset_id]
+      return base_overrides.merge(wind_overrides)
+    end
+    return base_overrides
+  end
+
+  def add_extra_autotiles(tileset_id,map_id)
+    overrides = get_autotile_overrides(tileset_id,map_id)
+    return if !overrides || overrides.empty?
     overrides.each do |tile_id, filename|
       @autotiles.add(filename)
       @custom_autotile_ids[tile_id] = filename
@@ -465,7 +592,7 @@ class TilemapRenderer
       # end
 
       filename = nil
-      extra_autotile_hash = EXTRA_AUTOTILES[map.tileset_id]
+      extra_autotile_hash = get_autotile_overrides(map.tileset_id,map.map_id)
 
       if extra_autotile_hash && extra_autotile_hash[tile_id]
         # Custom tile_id override
