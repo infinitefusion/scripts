@@ -28,5 +28,5 @@ def initialize_quest_points
 end
 
 def player_has_quest_journal?
-  return $PokemonBag.pbHasItem?(:DEVONSCOPE)
+  return $PokemonBag.pbHasItem?(:DEVONSCOPE) || $PokemonBag.pbHasItem?(:NOTEBOOK)
 end

@@ -68,7 +68,7 @@ class Sprite_Character
   end
 end
 
-def get_rival_starter
+def get_hoenn_rival_starter
   case get_rival_starter_type()
   when :GRASS
     return obtainStarter(0)
@@ -228,7 +228,7 @@ def initializeRivalBattledTrainer
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
   echoln rivalBattledTrainer.currentTeam
   team = []
-  team<<Pokemon.new(get_rival_starter,5)
+  team<<Pokemon.new(get_hoenn_rival_starter,5)
   rivalBattledTrainer.currentTeam =team
   return rivalBattledTrainer
 end

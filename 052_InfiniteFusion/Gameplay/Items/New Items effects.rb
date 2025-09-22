@@ -1978,6 +1978,15 @@ ItemHandlers::UseInField.add(:DEVONSCOPE, proc { |item|
   pbQuestlog()
 })
 
+ItemHandlers::UseFromBag.add(:NOTEBOOK, proc { |item|
+  pbQuestlog()
+  next 1
+})
+
+ItemHandlers::UseInField.add(:NOTEBOOK, proc { |item|
+  pbQuestlog()
+})
+
 # TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
   track_pokemon()

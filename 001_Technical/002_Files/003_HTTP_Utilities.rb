@@ -5,38 +5,38 @@
 #############################
 
 def pbPostData(url, postdata, filename=nil, depth=0)
-  if url[/^http:\/\/([^\/]+)(.*)$/]
-    host = $1
-    path = $2
-    path = "/" if path.length==0
-    userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
+  return "" unless url =~ /^https?:\/\/([^\/]+)(.*)$/
+  host = $1
+  path = $2
+  path = "/" if path.empty?
 
-    # Build the body without modifying frozen strings
-    body = postdata.map { |key, value|
-      "#{key}=#{value}"
-    }.join('&')
+  userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
 
-    ret = HTTPLite.post_body(
-      url,
-      body,
-      "application/x-www-form-urlencoded",
-      {
-        "Host" => host,
-        "Proxy-Connection" => "Close",
-        "Content-Length" => body.bytesize.to_s,
-        "Pragma" => "no-cache",
-        "User-Agent" => userAgent
-      }
-    ) rescue ""
+  # Serialize as JSON
+  body = serialize_json(postdata)
 
-    return ret if !ret.is_a?(Hash)
-    return "" if ret[:status] != 200
-    return ret[:body] if !filename
-    File.open(filename, "wb"){|f|f.write(ret[:body])}
+  ret = HTTPLite.post_body(
+    url,
+    body,
+    "application/json",
+    {
+      "Host" => host,
+      "Proxy-Connection" => "Close",
+      "Content-Length" => body.bytesize.to_s,
+      "Pragma" => "no-cache",
+      "User-Agent" => userAgent
+    }
+  ) rescue ""
+
+  return "" if !ret.is_a?(Hash)
+  return "" if ret[:status] != 200
+  if filename
+    File.open(filename, "wb") { |f| f.write(ret[:body]) }
     return ""
   end
-  return ""
+  ret[:body]
 end
+
 
 
 def pbDownloadData(url, filename = nil, authorization = nil, depth = 0, &block)
@@ -74,21 +74,17 @@ def pbDownloadToFile(url, file)
 end
 
 def pbPostToString(url, postdata, timeout = 30)
-  start_time = Time.now
-  loop do
-    begin
-      safe_postdata = postdata.transform_values(&:to_s)
-      data = pbPostData(url, safe_postdata)
-      return data unless data.empty?
-    rescue MKXPError => e
-      # ignore and retry
-    end
-    break if (Time.now - start_time) > timeout
-    sleep(0.05)
+  safe_postdata = postdata.transform_values(&:to_s)
+  begin
+    data = pbPostData(url, safe_postdata)
+    return data || ""
+  rescue MKXPError => e
+    echoln("[Remote AI] Exception: #{e.message}")
+    return ""
   end
-  echoln("[Remote AI] No response after #{timeout} seconds")
-  ""
 end
+
+
 
 
 

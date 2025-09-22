@@ -1,6 +1,8 @@
 class SecretBaseImporter
-  def read_secret_base_json
-    path = "Data/bases/secret_bases.json"
+  FRIEND_BASES_FILE = "Data/bases/friend_bases.json"
+  VISITOR_BASES_FILE = "Data/bases/visitor_bases.json"
+
+  def read_secret_base_json(path)
     return [] unless File.exist?(path)
 
     file_contents = File.read(path)
@@ -16,8 +18,8 @@ class SecretBaseImporter
   end
 
   # Load all bases from the JSON
-  def load_bases
-    all_bases_data = read_secret_base_json
+  def load_bases(path)
+    all_bases_data = read_secret_base_json(path)
     return [] unless all_bases_data.is_a?(Array)
 
     # Only keep entries with a trainer
@@ -47,6 +49,7 @@ class SecretBaseImporter
     end
     return visitor_bases
   end
+
 
   def import_layout_from_json(layout_json, biome)
     layout = SecretBaseLayout.new(

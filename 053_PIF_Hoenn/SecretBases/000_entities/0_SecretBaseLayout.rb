@@ -17,7 +17,7 @@ class SecretBaseLayout
 
   def get_item_at_position(position = [0,0])
     @items.each do |item|
-      return item if item.position == position
+      return item if item.get_occupied_positions.include?(position)
     end
     return nil
   end
@@ -54,4 +54,28 @@ class SecretBaseLayout
       list << item.instanceId
     end
   end
+
+  def get_all_occupied_positions()
+    occupied_positions = []
+    @items.each do |item|
+      occupied_positions << get_occupied_positions_for_item(item)
+    end
+    return occupied_positions
+  end
+
+
+
+
+  def check_position_available_for_item(itemInstance,position)
+    #placed_item_positions = get_all_occupied_positions
+    item_occupied_positions = itemInstance.calculate_occupied_volume_positions(position)
+    item_occupied_positions.each do |position|
+      x, y = position
+      #return false if placed_item_positions.include?(position)
+      return false if !$game_map.passableStrict?(x, y, DIRECTION_ALL)
+    end
+    return true
+  end
+
+
 end

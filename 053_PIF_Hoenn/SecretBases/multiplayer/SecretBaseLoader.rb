@@ -1,5 +1,4 @@
-# Download secret bases from other players
-# Loads them into the world
+# Loads other player secret bases from a local file and places them into the world
 
 # todo: only load max 5
 class SecretBaseLoader
@@ -8,13 +7,24 @@ class SecretBaseLoader
   end
 
   def load_visitor_bases
-    all_bases = @importer.load_bases # array of VisitorSecretBase
+    visitor_bases = @importer.load_bases(SecretBaseImporter::VISITOR_BASES_FILE)
+    friend_bases = @importer.load_bases(SecretBaseImporter::FRIEND_BASES_FILE)
+    all_bases = visitor_bases + friend_bases
+    echoln friend_bases
     $game_temp.visitor_secret_bases = all_bases
   end
 
   def loadSecretBaseFurniture(secretBase)
     return unless $scene.is_a?(Scene_Map)
     secretBase.load_furniture
+  end
+
+  def list_friend_bases
+    return @importer.load_bases(SecretBaseImporter::FRIEND_BASES_FILE)
+  end
+
+  def list_visitor_bases
+    return @importer.load_bases(SecretBaseImporter::FRIEND_BASES_FILE)
   end
 end
 

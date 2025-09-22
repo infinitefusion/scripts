@@ -109,3 +109,7 @@ def displaySpriteWindowWithMessage(pif_sprite, message = "", x = 0, y = 0, z = 0
   pbMessage(message)
   pictureWindow.dispose
 end
+
+def numeric_string?(str)
+  str.match?(/\A\d+\z/)
+end

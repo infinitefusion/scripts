@@ -21,7 +21,8 @@ class GameWeather
   attr_accessor :current_weather
   attr_accessor :last_update_time
 
-  TIME_BETWEEN_WEATHER_UPDATES = 12000 # 180 seconds, only actually changes once the player changes map
+  #TIME_BETWEEN_WEATHER_UPDATES in in-game seconds (1 irl second = 60 in-game seconds)
+  TIME_BETWEEN_WEATHER_UPDATES = 3600 #1 in-game hour (1 irl minute) .
 
   CHANCE_OF_NEW_WEATHER = 2 # /100    spontaneous new weather popping up somewhere
   CHANCE_OF_RAIN = 40 #/100
@@ -147,10 +148,10 @@ class GameWeather
 
   def try_move_weather_to_neighbors(map_id,map_weather_type,weather_intensity)
     map_neighbors = @neighbors_maps[map_id]
+    return unless map_neighbors
     return if map_weather_type == :None || weather_intensity <= 1
     return unless can_weather_spread(map_weather_type)
     map_weather_type, weather_intensity = normalize_legendary_weather(map_weather_type, weather_intensity)
-
     map_neighbors.each do |neighbor_id|
       neighbor_weather_type = get_map_weather_type(neighbor_id)
       neighbor_weather_intensity = get_map_weather_intensity(neighbor_id)

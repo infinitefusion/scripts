@@ -877,6 +877,7 @@ DebugMenuCommands.register("randomid", {
   "effect"      => proc {
     $Trainer.id = rand(2 ** 16) | rand(2 ** 16) << 16
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $Trainer.public_ID, $Trainer.id))
+    $Trainer.secretBase_uuid = nil
   }
 })
 

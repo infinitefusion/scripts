@@ -59,10 +59,16 @@ class PokemonStorageScreen
         friendly: ["Oldest to Newest", "Newest to Oldest"]
       },
       {
+        key: :invert,
+        label: _INTL("Reverse"),
+        value_proc: ->(p) { reverse },
+        friendly: ["Reverse the order"]
+      },
+      {
         key: :random,
-        label: _INTL("Random"),
+        label: _INTL("Shuffle"),
         value_proc: ->(p) { rand },
-        friendly: ["Randomize"]
+        friendly: ["Randomize the order"]
       },
 
     ]
@@ -90,6 +96,10 @@ class PokemonStorageScreen
   # --- Sort the array according to criterion and order ---
   def sort_pokemon_array!(arr, criterion_index, descending)
     crit = sortable_criteria[criterion_index]
+    if crit[:key] == :invert
+      arr.reverse!
+      return
+    end
     arr.sort_by! { |p| crit[:value_proc].call(p) }
     arr.reverse! if descending
   end

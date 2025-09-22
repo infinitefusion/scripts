@@ -961,6 +961,7 @@ end
 
 
 def fix_quest_ids
+  return unless $Trainer.quests
   $Trainer.quests.each do |quest|
     new_id = get_new_quest_id(quest.id)
     if new_id != quest.id

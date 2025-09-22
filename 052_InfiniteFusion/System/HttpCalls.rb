@@ -90,7 +90,8 @@ def download_spritesheet(pif_sprite, dest)
   when :AUTOGEN
     return
   when :CUSTOM
-    url = Settings::CUSTOM_FUSIONS_SPRITESHEET_TRUE_SIZE_URL + "#{pif_sprite.head_id}/#{pif_sprite.head_id}#{pif_sprite.alt_letter}.png"
+    url = Settings::
+        CUSTOM_FUSIONS_SPRITESHEET_TRUE_SIZE_URL + "#{pif_sprite.head_id}/#{pif_sprite.head_id}#{pif_sprite.alt_letter}.png"
   when :BASE
     url = Settings::BASE_POKEMON_SPRITESHEET_TRUE_SIZE_URL + "#{pif_sprite.head_id}.png"
   end

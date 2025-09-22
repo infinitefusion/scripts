@@ -163,7 +163,12 @@ def enterSecretBase()
   }
 
 end
-
+def obtain_all_decorations
+  $Trainer.owned_decorations = [] unless $Trainer.owned_decorations
+  SecretBasesData::SECRET_BASE_ITEMS.keys.each do |item_id|
+    obtain_decoration_silent(item_id)
+  end
+end
 def obtain_decoration(item_id)
   $Trainer.owned_decorations = [] unless $Trainer.owned_decorations
   if SecretBasesData::SECRET_BASE_ITEMS[item_id]
