@@ -23,6 +23,18 @@ def obtainHat(outfit_id,secondary=false)
   return false
 end
 
+#Like obtainHat, but silent
+def unlockHat(outfit_id)
+  echoln "obtained new hat: " + outfit_id
+  outfit = get_hat_by_id(outfit_id)
+  if !outfit
+    pbMessage(_INTL("The hat {1} is invalid.", outfit_id))
+    return
+  end
+  $Trainer.unlocked_hats << outfit_id if !$Trainer.unlocked_hats.include?(outfit_id)
+  return false
+end
+
 def obtainClothes(outfit_id)
   echoln "obtained new clothes: " + outfit_id
   outfit = get_clothes_by_id(outfit_id)
@@ -262,6 +274,22 @@ def export_current_outfit()
   Input.clipboard = exportedString
 end
 
+def export_current_outfit_to_json
+  appearance = {
+    skin_color:     $Trainer.skin_tone || 0,
+    hat:            $Trainer.hat || nil,
+    hat2:           $Trainer.hat2 || nil,
+    clothes:        $Trainer.clothes,
+    hair:           $Trainer.hair,
+    hair_color:     $Trainer.hair_color || 0,
+    clothes_color:  $Trainer.clothes_color || 0,
+    hat_color:      $Trainer.hat_color || 0,
+    hat2_color:     $Trainer.hat2_color || 0
+  }
+  return appearance
+end
+
+
 def clearEventCustomAppearance(event_id)
   return if !$scene.is_a?(Scene_Map)
   event_sprite = $scene.spriteset.character_sprites[@event_id]
@@ -276,7 +304,7 @@ end
 
 def setEventAppearance(event_id, trainerAppearance)
   return if !$scene.is_a?(Scene_Map)
-  event_sprite = $scene.spriteset.character_sprites[@event_id]
+  event_sprite = $scene.spriteset.character_sprites[event_id]
   for sprite in $scene.spriteset.character_sprites
     if sprite.character.id == event_id
       event_sprite = sprite
@@ -405,6 +433,18 @@ def randomizePlayerOutfit()
   $Trainer.skin_tone = [1,2,3,4,5,6].sample
   $Trainer.hair = getFullHairId(hair_id,hair_color)
 
+end
+
+def select_hat()
+  hats_list = $Trainer.unlocked_hats
+  options = []
+  hats_list.each do |hat_id|
+    hat_name = get_hat_by_id(hat_id)
+    options << hat_name.name
+  end
+  chosen_index= optionsMenu(options)
+  selected_hat_id = hats_list[chosen_index]
+  return selected_hat_id
 end
 
 def canPutHatOnPokemon(pokemon)

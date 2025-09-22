@@ -21,11 +21,6 @@ class OutfitsMartAdapter < PokemonMartAdapter
     @version = nil
     $Trainer.dyed_hats = {} if !$Trainer.dyed_hats
     $Trainer.dyed_clothes = {} if !$Trainer.dyed_clothes
-
-    #todo: refactor to get the list from the first search when
-    # setting the stock instead of searching twice
-    @regional_set_items = @isShop ? list_regional_set_items : []
-    @city_exclusive_items = @isShop ? list_city_exclusive_items : []
   end
 
   def list_regional_set_items()
@@ -106,11 +101,11 @@ class OutfitsMartAdapter < PokemonMartAdapter
   end
 
   def isItemInRegionalSet(item)
-    return @regional_set_items.include?(item.id)
+    return item.is_in_regional_set
   end
 
   def isItemCityExclusive(item)
-    return @city_exclusive_items.include?(item.id)
+    return item.is_in_city_exclusive_set
   end
 
   def getBaseColorOverride(item)
