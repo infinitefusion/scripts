@@ -397,12 +397,12 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   randomTrainersHash = Hash.new
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
-  Kernel.pbMessage(_INTL("Parsing custom sprites folder"))
+  Kernel.pbMessage(_INTL("Parsing custom sprites folder..."))
   customsList = getCustomSpeciesList(true, true)
-  Kernel.pbMessage(_INTL("{1} sprites found", customsList.length.to_s))
+  Kernel.pbMessage(_INTL("{1} sprites found. Shuffling...", customsList.length.to_s))
 
   if customsList.length == 0
-    Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information"))
+    Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information."))
     Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
     return Kernel.pbShuffleTrainers(bst_range)
   elsif customsList.length < 200
