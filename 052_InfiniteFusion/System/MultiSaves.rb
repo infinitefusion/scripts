@@ -48,6 +48,7 @@ def onLoadExistingGame()
   migrateOldSavesToCharacterCustomization()
   clear_all_images()
   loadDateSpecificChanges()
+  $game_switches[SWITCH_LEGENDARY_MODE] = false
 end
 
 def loadDateSpecificChanges()

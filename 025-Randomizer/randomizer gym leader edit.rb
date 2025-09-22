@@ -279,9 +279,9 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
 
   if $game_switches[SWITCH_LEGENDARY_MODE]
-    new_species= convert_species_to_legendary(oldSpecies)
-    newspecies_dex = dexNum(new_species)
-    return newspecies_dex
+    # new_species= convert_species_to_legendary(oldSpecies)
+    # newspecies_dex = dexNum(new_species)
+    # return newspecies_dex
   end
 
   newspecies_dex = rand(maxDexNumber - 1) + 1
