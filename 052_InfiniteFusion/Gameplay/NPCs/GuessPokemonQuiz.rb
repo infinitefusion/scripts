@@ -102,14 +102,14 @@ class FusionQuiz
       show_fusion_picture(false)
       pbMessage("Okay, now's your chance to make up for the points you missed!")
       if !correct_answers[0] #1st question redemption
-        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, true, false)
+        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, false, false)
         if !correct_answers[1]
           pbMessage("Next question!")
         end
       end
 
       if !correct_answers[1] #2nd question redemption
-        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, true, false)
+        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, false, false)
       end
     else
       pbSEPlay("Applause", 80)
@@ -263,6 +263,7 @@ class FusionQuiz
   end
 
   def prompt_pick_answer_regular(prompt_message, real_answer, should_new_choices)
+    echoln should_new_choices
     commands = should_new_choices ? generate_new_choices(real_answer) : @choices.shuffle
     chosen = pbMessage(prompt_message, commands)
     return commands[chosen]

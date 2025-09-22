@@ -515,7 +515,7 @@ class BetterRegionMap
         end
       end
       if Input.repeat?(Input::AUX1)
-        print_current_position()
+        #print_current_position()
         new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
         frame += 1
       end
