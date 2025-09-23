@@ -39,29 +39,29 @@ end
 
 def getRegularConditionExample()
   list = [
-    "a Sandslash fusion which has the electric type will be able to learn the move Zing Zap.",
-    "any Pokémon that is both Flying and Fighting type will be able to learn the move Flying Press.",
-    "the move Shadow Bone can only be learned by ghost-type Marowak fusions.",
-    "any Pokémon that is both Ghost and Grass type will be able to learn the move Trick or Treat.",
-    "the move Forest's Curse can only be learned by Ghost/Grass typed Pokémon.",
-    "a grass-type fusion of a spiky Pokémon such as Jolteon will be able to learn the move Spiky Shield.",
-    "only a ground-type fusion of Grimer or Muk will be able to learn the move Shore Up.",
-    "any ice-type fusion that can already learn the move Crabhammer will also be able to learn the move Ice Hammer.",
-    "only water-type fusions of a ninja-like Pokémon such as Ninjask or Zoroark will be able to learn the move Water Shuriken.",
+    _INTL("a Sandslash fusion which has the electric type will be able to learn the move Zing Zap."),
+    _INTL("any Pokémon that is both Flying and Fighting type will be able to learn the move Flying Press."),
+    _INTL("the move Shadow Bone can only be learned by ghost-type Marowak fusions."),
+    _INTL("any Pokémon that is both Ghost and Grass type will be able to learn the move Trick or Treat."),
+    _INTL("the move Forest's Curse can only be learned by Ghost/Grass typed Pokémon."),
+    _INTL("a grass-type fusion of a spiky Pokémon such as Jolteon will be able to learn the move Spiky Shield."),
+    _INTL("only a ground-type fusion of Grimer or Muk will be able to learn the move Shore Up."),
+    _INTL("any ice-type fusion that can already learn the move Crabhammer will also be able to learn the move Ice Hammer."),
+    _INTL("only water-type fusions of a ninja-like Pokémon such as Ninjask or Zoroark will be able to learn the move Water Shuriken."),
   ]
   return list.sample
 end
 
 def getlegendaryConditionExample()
   list = [
-    "any Rotom fusion that can already learn the move Thunder Punch can also be taught the move Plasma Fists.",
-    "only an Electric-type fusion of a legendary Ice-type Pokémon will be able to learn the move Freeze Shock.",
-    "only a Fire-type fusion of a legendary Ice-type Pokémon will be able to learn the move Ice Burn.",
-    "any Pokémon that is both Flying and Dark type will be able to learn the move Oblivion Wing.",
-    "a ground-type fusion of a spiky Pokémon such as Ferrothorn will be able to learn the move Thousand Arrows.",
-    "any steel-type Pokémon that can already learn the move Double Slap will be able to learn Double Iron Bash.",
-    "any Pokémon that is both Fairy and Rock type will be able to learn the move Diamond Storm.",
-    "any water-type Pokémon that can already learn the move Eruption can also be taught the move Steam Eruption",
+    _INTL("any Rotom fusion that can already learn the move Thunder Punch can also be taught the move Plasma Fists."),
+    _INTL("only an Electric-type fusion of a legendary Ice-type Pokémon will be able to learn the move Freeze Shock."),
+    _INTL("only a Fire-type fusion of a legendary Ice-type Pokémon will be able to learn the move Ice Burn."),
+    _INTL("any Pokémon that is both Flying and Dark type will be able to learn the move Oblivion Wing."),
+    _INTL("a ground-type fusion of a spiky Pokémon such as Ferrothorn will be able to learn the move Thousand Arrows."),
+    _INTL("any steel-type Pokémon that can already learn the move Double Slap will be able to learn Double Iron Bash."),
+    _INTL("any Pokémon that is both Fairy and Rock type will be able to learn the move Diamond Storm."),
+    _INTL("any water-type Pokémon that can already learn the move Eruption can also be taught the move Steam Eruption"),
   ]
   return list.sample
 end

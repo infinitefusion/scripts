@@ -60,9 +60,15 @@ def secretBaseExistsAtPosition(map_id, position)
 end
 
 def createSecretBaseHere(biomeType, secretBaseMap = 0, baseLayoutType = :TYPE_1)
+<<<<<<< HEAD
   if pbConfirmMessage("Do you want to create a new secret base here?")
     if $Trainer.secretBase
       unless pbConfirmMessage("This will overwrite your current secret base. Do you still wish to continue?")
+=======
+  if pbConfirmMessage(_INTL("Do you want to create a new secret base here?"))
+    if $Trainer.secretBase
+      unless pbConfirmMessage(_INTL("This will overwrite your current secret base. Do you still wish to continue?"))
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
         return
       end
     end

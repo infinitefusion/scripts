@@ -396,9 +396,9 @@ def pbGetGoldString
     moneyString = _INTL("${1}", $Trainer.money.to_s_formatted)
   rescue
     if $data_system.respond_to?("words")
-      moneyString = _INTL("{1} {2}", $game_party.gold, $data_system.words.gold)
+      moneyString = "#{$game_party.gold} #{$data_system.words.gold}"
     else
-      moneyString = _INTL("{1} {2}", $game_party.gold, Vocab.gold)
+      moneyString = "#{$game_party.gold} #{Vocab.gold}"
     end
   end
   return moneyString

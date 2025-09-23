@@ -16,7 +16,7 @@ class PokemonPokedexInfo_Scene
 
   def drawPageForms()
     #@selected_index=0
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms"))
+    @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_forms")
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
@@ -30,19 +30,19 @@ class PokemonPokedexInfo_Scene
     @sprites["bgSelected_previous"] = IconSprite.new(0, 0, @viewport)
     @sprites["bgSelected_previous"].x = X_POSITION_BG_PREVIOUS
     @sprites["bgSelected_previous"].y = Y_POSITION_BG_SMALL
-    @sprites["bgSelected_previous"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms_selected_small"))
+    @sprites["bgSelected_previous"].setBitmap("Graphics/Pictures/Pokedex/bg_forms_selected_small")
     @sprites["bgSelected_previous"].visible = false
 
     @sprites["bgSelected_center"] = IconSprite.new(0, 0, @viewport)
     @sprites["bgSelected_center"].x = X_POSITION_BG_SELECTED
     @sprites["bgSelected_center"].y = Y_POSITION_BG_BIG
-    @sprites["bgSelected_center"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms_selected_large"))
+    @sprites["bgSelected_center"].setBitmap("Graphics/Pictures/Pokedex/bg_forms_selected_large")
     @sprites["bgSelected_center"].visible = false
 
     @sprites["bgSelected_next"] = IconSprite.new(0, 0, @viewport)
     @sprites["bgSelected_next"].x = X_POSITION_BG_NEXT
     @sprites["bgSelected_next"].y = Y_POSITION_BG_SMALL
-    @sprites["bgSelected_next"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms_selected_small"))
+    @sprites["bgSelected_next"].setBitmap("Graphics/Pictures/Pokedex/bg_forms_selected_small")
     @sprites["bgSelected_next"].visible = false
 
     @creditsOverlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
@@ -347,20 +347,20 @@ class PokemonPokedexInfo_Scene
     if @available.length > 1
       if is_main_sprite()
         if brief
-          pbMessage("This sprite will remain the displayed sprite")
+          pbMessage(_INTL("This sprite will remain the displayed sprite"))
           return true
         else
-          pbMessage("This sprite is already the displayed sprite")
+          pbMessage(_INTL("This sprite is already the displayed sprite"))
         end
       else
-        message = 'Would you like to use this sprite instead of the current sprite?'
-        if pbConfirmMessage(_INTL(message))
+        message = _INTL('Would you like to use this sprite instead of the current sprite?')
+        if pbConfirmMessage(message)
           swap_main_sprite()
           return true
         end
       end
     else
-      pbMessage("This is the only sprite available for this Pokémon!")
+      pbMessage(_INTL("This is the only sprite available for this Pokémon!"))
     end
     return false
   end

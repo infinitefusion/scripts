@@ -22,8 +22,13 @@ TRIGGER_PARRALLEL_PROCESS = 4
 GENDER_FEMALE=0
 GENDER_MALE=1
 
+<<<<<<< HEAD
 MELOETTA_BAND_NAME = "Miss Melody and the Mystic Musicians"
 SUCKY_BAND_NAME = "MooMoo Milk"
+=======
+MELOETTA_BAND_NAME = _INTL("Miss Melody and the Mystic Musicians")
+SUCKY_BAND_NAME = _INTL("MooMoo Milk")
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 NB_POKEMON = Settings::NB_POKEMON#809#420 #351  #aussi CONST_NB_POKE
 CONST_NB_POKE = NB_POKEMON

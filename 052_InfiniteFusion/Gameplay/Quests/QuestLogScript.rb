@@ -76,10 +76,17 @@ FieldQuestColor = :PURPLE
 LegendaryQuestColor = :GOLD
 TRQuestColor = :DARKRED
 
+<<<<<<< HEAD
 QuestBranchHotels = "Hotel Quests"
 QuestBranchField = "Field Quests"
 QuestBranchRocket = "Team Rocket Quests"
 QuestBranchLegendary = "Legendary Quests"
+=======
+QuestBranchHotels = _INTL("Hotel Quests")
+QuestBranchField = _INTL("Field Quests")
+QuestBranchRocket = _INTL("Team Rocket Quests")
+QuestBranchLegendary = _INTL("Legendary Quests")
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 class PokeBattle_Trainer
   attr_accessor :quests
@@ -104,7 +111,7 @@ def showNewQuestMessage(title,description, show_description)
   pbMEPlay("Voltorb Flip Win")
 
   pbCallBub(3)
-  Kernel.pbMessage("\\C[6]NEW QUEST: " + title)
+  Kernel.pbMessage(_INTL("\\C[6]NEW QUEST: ") + title)
   if show_description
     pbCallBub(3)
     Kernel.pbMessage("\\C[1]" + description)
@@ -122,7 +129,11 @@ def finishQuest(id, silent=false)
   return if pbCompletedQuest?(id)
   $Trainer.quest_points+=1
   pbMEPlay("Register phone") if !silent
+<<<<<<< HEAD
   Kernel.pbMessage("\\qp\\C[6]Quest completed!") if !silent
+=======
+  Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 
   $game_variables[VAR_KARMA] += 1 # karma
@@ -264,8 +275,8 @@ class Questlog
     end
     #pbDrawOutlineText(@main, 0, 142 - 178, 512, 384, "Ongoing: " + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
     #pbDrawOutlineText(@main, 0, 198 - 178, 512, 384, "Completed: " + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 142, 512, 384, "Ongoing: " + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 198, 512, 384, "Completed: " + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 0, 142, 512, 384, _INTL("Ongoing: ") + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 0, 198, 512, 384, _INTL("Completed: ") + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
 
     12.times do |i|
       Graphics.update
@@ -371,9 +382,9 @@ class Questlog
       pbDrawOutlineText(@main, 188, 330, 512, 384, quest.location, Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@main, 10, -178, 512, 384, quest.name, quest.color, Color.new(0, 0, 0))
       if !quest.completed
-        pbDrawOutlineText(@main, 8, 250, 512, 384, "Not Completed", pbColor(:LIGHTRED), Color.new(0, 0, 0))
+        pbDrawOutlineText(@main, 8, 250, 512, 384, _INTL("Not Completed"), pbColor(:LIGHTRED), Color.new(0, 0, 0))
       else
-        pbDrawOutlineText(@main, 8, 250, 512, 384, "Completed", pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
+        pbDrawOutlineText(@main, 8, 250, 512, 384, _INTL("Completed"), pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
       end
       10.times do |i|
         Graphics.update
@@ -403,20 +414,20 @@ class Questlog
       @sprites["text2"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
       @text2 = @sprites["text2"].bitmap
       pbSetSystemFont(@text2)
-      pbDrawOutlineText(@text2, 188, -122, 512, 384, "Quest received in:", Color.new(255, 255, 255), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text2, 188, -122, 512, 384, _INTL("Quest received in:"), Color.new(255, 255, 255), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 188, -94, 512, 384, quest.location, Color.new(255, 172, 115), Color.new(0, 0, 0))
-      pbDrawOutlineText(@text2, 188, -62, 512, 384, "Quest received at:", Color.new(255, 255, 255), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text2, 188, -62, 512, 384, _INTL("Quest received at:"), Color.new(255, 255, 255), Color.new(0, 0, 0))
       time = quest.time.to_s
       txt = time.split(' ')[1] + " " + time.split(' ')[2] + ", " + time.split(' ')[3].split(':')[0] + ":" + time.split(' ')[3].split(':')[1] rescue "?????"
       pbDrawOutlineText(@text2, 188, -36, 512, 384, txt, Color.new(255, 172, 115), Color.new(0, 0, 0))
-      pbDrawOutlineText(@text2, 188, -4, 512, 384, "Quest received from:", Color.new(255, 255, 255), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text2, 188, -4, 512, 384, _INTL("Quest received from:"), Color.new(255, 255, 255), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 188, 22, 512, 384, quest.npc, Color.new(255, 172, 115), Color.new(0, 0, 0))
-      pbDrawOutlineText(@text2, 188, 162, 512, 384, "From " + quest.npc, Color.new(255, 172, 115), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text2, 188, 162, 512, 384, _INTL("From ") + quest.npc, Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@text2, 10, -178, 512, 384, quest.name, quest.color, Color.new(0, 0, 0))
       if !quest.completed
-        pbDrawOutlineText(@text2, 8, 136, 512, 384, "Not Completed", pbColor(:LIGHTRED), Color.new(0, 0, 0))
+        pbDrawOutlineText(@text2, 8, 136, 512, 384, _INTL("Not Completed"), pbColor(:LIGHTRED), Color.new(0, 0, 0))
       else
-        pbDrawOutlineText(@text2, 8, 136, 512, 384, "Completed", pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
+        pbDrawOutlineText(@text2, 8, 136, 512, 384, _INTL("Completed"), pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
       end
       @sprites["text2"].x = 512
       16.times do
@@ -457,12 +468,12 @@ class Questlog
       @sprites["char"].src_rect.height = (@sprites["char"].bitmap.height / 4).round
       @sprites["char"].src_rect.width = (@sprites["char"].bitmap.width / 4).round
       drawTextExMulti(@text, 188, 54, 318, 8, quest.desc, Color.new(255, 255, 255), Color.new(0, 0, 0))
-      pbDrawOutlineText(@text, 188, 162, 512, 384, "From " + quest.npc, Color.new(255, 172, 115), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text, 188, 162, 512, 384, _INTL("From {1}",quest.npc), Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@text, 10, -178, 512, 384, quest.name, quest.color, Color.new(0, 0, 0))
       if !quest.completed
-        pbDrawOutlineText(@text, 8, 136, 512, 384, "Not Completed", pbColor(:LIGHTRED), Color.new(0, 0, 0))
+        pbDrawOutlineText(@text, 8, 136, 512, 384, _INTL("Not Completed"), pbColor(:LIGHTRED), Color.new(0, 0, 0))
       else
-        pbDrawOutlineText(@text, 8, 136, 512, 384, "Completed", pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
+        pbDrawOutlineText(@text, 8, 136, 512, 384, _INTL("Completed"), pbColor(:LIGHTBLUE), Color.new(0, 0, 0))
       end
       @sprites["text"].x = -512
       16.times do
@@ -515,9 +526,9 @@ class Questlog
     @text2.clear if @text2 rescue nil
     @sel_two = 0
     @scene = 0
-    pbDrawOutlineText(@main, 0, 2, 512, 384, "Quest Log", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 142, 512, 384, "Ongoing: " + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 198, 512, 384, "Completed: " + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Quest Log"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 0, 142, 512, 384, _INTL("Ongoing: ") + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 0, 198, 512, 384, _INTL("Completed: ") + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
     12.times do |i|
       Graphics.update
       @sprites["bg0"].opacity += 32 if i < 8
@@ -573,7 +584,7 @@ class Questlog
           else
             @sprites["down"].visible = false
           end
-          pbDrawOutlineText(@main, 0, 2, 512, 384, "Ongoing Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+          pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Ongoing Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
         else
           for i in 0...@completed.size
             break if i > 5
@@ -591,7 +602,7 @@ class Questlog
           else
             @sprites["down"].visible = false
           end
-          pbDrawOutlineText(@main, 0, 2 - 178, 512, 384, "Completed Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+          pbDrawOutlineText(@main, 0, 2 - 178, 512, 384, _INTL("Completed Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
         end
       end
     else
@@ -623,7 +634,7 @@ class Questlog
           else
             @sprites["down"].visible = false
           end
-          pbDrawOutlineText(@main, 0, 2, 512, 384, "Ongoing Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+          pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Ongoing Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
         else
           for i in 0...@completed.size
             break if i > 5
@@ -640,7 +651,7 @@ class Questlog
           else
             @sprites["down"].visible = false
           end
-          pbDrawOutlineText(@main, 0, 2 - 178, 512, 384, "Completed Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+          pbDrawOutlineText(@main, 0, 2 - 178, 512, 384, _INTL("Completed Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
         end
       end
     end
@@ -709,8 +720,8 @@ class Questlog
 
         #pbDrawOutlineText(@main, 11, -124 + 52 * i, 512, 384, @ongoing[i].name, @ongoing[i].color, Color.new(0, 0, 0), 1)
       end
-      pbDrawOutlineText(@main, 0, 175, 512, 384, "No ongoing quests", pbColor(:WHITE), pbColor(:BLACK), 1) if @ongoing.size == 0
-      pbDrawOutlineText(@main, 0, 2, 512, 384, "Ongoing Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+      pbDrawOutlineText(@main, 0, 175, 512, 384, _INTL("No ongoing quests"), pbColor(:WHITE), pbColor(:BLACK), 1) if @ongoing.size == 0
+      pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Ongoing Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
       12.times do |i|
         Graphics.update
         @sprites["main"].opacity += 32 if i < 8
@@ -732,8 +743,8 @@ class Questlog
         pbDrawOutlineText(@main, 11, getCellYPosition(i), 512, 384, @completed[i].name, @completed[i].color, Color.new(0, 0, 0), 1)
       end
 
-      pbDrawOutlineText(@main, 0, 175, 512, 384, "No completed quests", pbColor(:WHITE), pbColor(:BLACK), 1) if @completed.size == 0
-      pbDrawOutlineText(@main, 0, 2, 512, 384, "Completed Quests", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+      pbDrawOutlineText(@main, 0, 175, 512, 384, _INTL("No completed quests"), pbColor(:WHITE), pbColor(:BLACK), 1) if @completed.size == 0
+      pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Completed Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
       12.times do |i|
         Graphics.update
         @sprites["main"].opacity += 32 if i < 8
@@ -1082,11 +1093,11 @@ def showQuestStatistics(eventId,includeRocketQuests=false)
     end
   end
   pbCallBub(2, eventId)
-  pbMessage("Accepted quests: \\C[1]#{quests_accepted.length}")
+  pbMessage(_INTL("Accepted quests: \\C[1]{1}",quests_accepted.length))
   pbCallBub(2, eventId)
-  pbMessage("Completed quests: \\C[1]#{quests_completed.length}")
+  pbMessage(_INTL("Completed quests: \\C[1]{1}",quests_completed.length))
   pbCallBub(2, eventId)
-  pbMessage("In-progress: \\C[1]#{quests_in_progress.length}")
+  pbMessage(_INTL("In-progress: \\C[1]{1}",quests_in_progress.length))
 end
 
 def get_completed_quests(includeRocketQuests=false)
@@ -1122,9 +1133,9 @@ def getQuestReward(eventId)
       next
     end
     pbCallBub(2, eventId)
-    pbMessage("Also, there's one more thing...")
+    pbMessage(_INTL("Also, there's one more thing..."))
     pbCallBub(2, eventId)
-    pbMessage("As a gift for having helped so many people, I want to give you this.")
+    pbMessage(_INTL("As a gift for having helped so many people, I want to give you this."))
     pbReceiveItem(reward.item, reward.quantity)
     $PokemonGlobal.questRewardsObtained << reward.item
 
@@ -1136,11 +1147,11 @@ def getQuestReward(eventId)
 
   pbCallBub(2, eventId)
   if nb_to_next_reward <= 0
-    pbMessage("I have no more rewards to give you! Thanks for helping all these people!")
+    pbMessage(_INTL("I have no more rewards to give you! Thanks for helping all these people!"))
   elsif nb_to_next_reward == 1
-    pbMessage("Help #{nb_to_next_reward} more person and I'll give you something good!")
+    pbMessage(_INTL("Help {1} more person and I'll give you something good!",nb_to_next_reward))
   else
-    pbMessage("Help #{nb_to_next_reward} more people and I'll give you something good!")
+    pbMessage(_INTL("Help {1} more people and I'll give you something good!",nb_to_next_reward))
   end
 end
 

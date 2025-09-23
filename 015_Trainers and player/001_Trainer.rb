@@ -25,7 +25,7 @@ class Trainer
   end
 
   def full_name
-    return _INTL("{1} {2}", trainer_type_name, @name)
+    return "#{trainer_type_name} #{@name}"
   end
 
   #=============================================================================

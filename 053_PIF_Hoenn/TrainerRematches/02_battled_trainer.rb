@@ -83,7 +83,11 @@ class BattledTrainer
       @friendship_level += 1
 
       trainerClassName = GameData::TrainerType.get(@trainerType).real_name
+<<<<<<< HEAD
       pbMessage(_INTL("\\C[3]Friendship increased with #{trainerClassName} #{@trainerName}!"))
+=======
+      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!",trainerClassName,@trainerName))
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       case @friendship_level
       when 1
         pbMessage(_INTL("You can now trade with each other!"))

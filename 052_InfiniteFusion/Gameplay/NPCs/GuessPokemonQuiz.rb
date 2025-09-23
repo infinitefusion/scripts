@@ -56,7 +56,7 @@ class FusionQuiz
         round_multiplier += round_multiplier_increase
       else
         pbMessage(_INTL("This concludes our quiz! You've cumulated {1} points in total.", @score))
-        pbMessage("Thanks for playing with us today!")
+        pbMessage(_INTL("Thanks for playing with us today!"))
       end
     end
     end_quiz()
@@ -93,18 +93,18 @@ class FusionQuiz
     correct_answers = []
 
     #OBSCURED
-    correct_answers << new_question(calculate_points_awarded(base_points_q1, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, true, true)
-    pbMessage("Next question!")
-    correct_answers << new_question(calculate_points_awarded(base_points_q2, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, true, true)
+    correct_answers << new_question(calculate_points_awarded(base_points_q1, round_multiplier), _INTL("Which Pokémon is this fusion's body?"), @body_id, true, true)
+    pbMessage(_INTL("Next question!"))
+    correct_answers << new_question(calculate_points_awarded(base_points_q2, round_multiplier), _INTL("Which Pokémon is this fusion's head?"), @head_id, true, true)
 
     #NON-OBSCURED
     if !correct_answers[0] || !correct_answers[1]
       show_fusion_picture(false)
-      pbMessage("Okay, now's your chance to make up for the points you missed!")
+      pbMessage(_INTL("Okay, now's your chance to make up for the points you missed!"))
       if !correct_answers[0] #1st question redemption
         new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, false, false)
         if !correct_answers[1]
-          pbMessage("Next question!")
+          pbMessage(_INTL("Next question!"))
         end
       end
 
@@ -115,7 +115,7 @@ class FusionQuiz
       pbSEPlay("Applause", 80)
       pbMessage(_INTL("Wow! A perfect round! You get {1} more points!", perfect_round_points))
       show_fusion_picture(false, 100)
-      pbMessage("Let's see what this Pokémon looked like!")
+      pbMessage(_INTL("Let's see what this Pokémon looked like!"))
     end
     current_streak_dialog()
     hide_fusion_picture()
@@ -173,21 +173,21 @@ class FusionQuiz
 
   def question_answer_followup_dialog(answered_correctly, correct_answer, points_awarded_if_win, other_chance_later = false)
     if !other_chance_later
-      pbMessage("And the correct answer was...")
+      pbMessage(_INTL("And the correct answer was..."))
       pbMessage("...")
-      pbMessage(_INTL("{1}!", correct_answer))
+      pbMessage("#{correct_answer}!")
     end
 
     if answered_correctly
       pbSEPlay("itemlevel", 80)
       increase_streak
-      pbMessage("That's a correct answer!")
+      pbMessage(_INTL("That's a correct answer!"))
       pbMessage(_INTL("You're awarded {1} points for your answer. Your current score is {2}", points_awarded_if_win, @score.to_s))
     else
       pbSEPlay("buzzer", 80)
       break_streak
-      pbMessage("Unfortunately, that was a wrong answer.")
-      pbMessage("But you'll get another chance at it!") if other_chance_later
+      pbMessage(_INTL("Unfortunately, that was a wrong answer."))
+      pbMessage(_INTL("But you'll get another chance at it!")) if other_chance_later
     end
   end
 
@@ -241,7 +241,7 @@ class FusionQuiz
       else
         player_answer = prompt_pick_answer_regular(prompt_message, answer_id, should_generate_new_choices)
       end
-      confirmed = pbMessage("Is this your final answer?", ["Yes", "No"])
+      confirmed = pbMessage(_INTL("Is this your final answer?"), [_INTL("Yes"), _INTL("No")])
       if confirmed == 0
         question_answered = true
       else

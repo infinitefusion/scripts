@@ -133,6 +133,7 @@ def getNextLunarFeatherHint()
   nb_feathers = pbGet(VAR_LUNAR_FEATHERS)
   case nb_feathers
   when 0
+<<<<<<< HEAD
     return "Find the first feather in the northernmost dwelling in the port of exquisite sunsets..."
   when 1
     return "Amidst a nursery for Pokémon youngsters, the second feather hides, surrounded by innocence."
@@ -144,5 +145,18 @@ def getNextLunarFeatherHint()
     return "The final feather lies back in the refuge for orphaned Pokémon..."
   else
     return "Lie in the bed... Bring me the feathers..."
+=======
+    return _INTL("Find the first feather in the northernmost dwelling in the port of exquisite sunsets...")
+  when 1
+    return _INTL("Amidst a nursery for Pokémon youngsters, the second feather hides, surrounded by innocence.")
+  when 2
+    return _INTL("Find the next one in the inn where water meets rest")
+  when 3
+    return _INTL("Find the next one inside the lone house in the city at the edge of civilization.")
+  when 4
+    return _INTL("The final feather lies back in the refuge for orphaned Pokémon...")
+  else
+    return _INTL("Lie in the bed... Bring me the feathers...")
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
   end
 end

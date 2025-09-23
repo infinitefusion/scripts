@@ -637,7 +637,7 @@ class PokemonSaveScreen
       slot = SaveData::MANUAL_SLOTS[index]
       # Confirm if slot not empty
       if !File.file?(SaveData.get_full_path(slot)) ||
-        pbConfirmMessageSerious(_INTL("Are you sure you want to overwrite the save in #{slot}?")) # If the slot names were changed this grammar might need adjustment.
+        pbConfirmMessageSerious(_INTL("Are you sure you want to overwrite the save in {1}?",slot)) # If the slot names were changed this grammar might need adjustment.
         pbSEPlay('GUI save choice')
         ret = doSave(slot)
       end
@@ -701,7 +701,7 @@ class PokemonSaveScreen
     # Last save time
     time = temp_save_data[:player].last_time_saved
     if time
-      date_str = time.strftime("%x")
+      date_str = time.strftime(_INTL("%x"))
       time_str = time.strftime(_INTL("%I:%M%p"))
       datetime_str = "#{date_str}<r>#{time_str}<br>"
     else
@@ -799,7 +799,7 @@ module Game
     # Manage rolling backups
     if File.exist?(save_path)
       # Generate a timestamped backup name
-      timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+      timestamp = Time.now.strftime(_INTL("%Y%m%d%H%M%S"))
       backup_file = File.join(backup_slot_dir, "#{slot}_#{timestamp}.rxdata")
 
       # Copy the save file manually

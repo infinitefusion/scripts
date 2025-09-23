@@ -13,7 +13,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                       $game_system.bgm_resume(playingBGM)
                                     end
                                   end
-                                }, "Sets the volume for background music"
+                                }, _INTL("Sets the volume for background music")
     )
 
     options << SliderOption.new(_INTL("SE Volume"), 0, 100, 5,
@@ -29,14 +29,14 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                     end
                                     pbPlayCursorSE
                                   end
-                                }, "Sets the volume for sound effects"
+                                }, _INTL("Sets the volume for sound effects")
     )
 
     options << EnumOption.new(_INTL("Default Movement"), [_INTL("Walking"), _INTL("Running")],
                               proc { $PokemonSystem.runstyle },
                               proc { |value| $PokemonSystem.runstyle = value },
-                              ["Default to walking when not holding the Run key",
-                               "Default to running when not holding the Run key"]
+                              [_INTL("Default to walking when not holding the Run key"),
+                               _INTL("Default to running when not holding the Run key")]
     )
 
     options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
@@ -44,7 +44,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               proc { |value|
                                 $PokemonSystem.textspeed = value
                                 MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
-                              }, "Sets the speed at which the text is displayed"
+                              }, _INTL("Sets the speed at which the text is displayed")
     )
     if $game_switches
       options << EnumOption.new(_INTL("Difficulty"), [_INTL("Easy"), _INTL("Normal"), _INTL("Hard")],
@@ -52,9 +52,9 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 proc { |value|
                                   setDifficulty(value)
                                   @manually_changed_difficulty = true
-                                }, ["All Pokémon in the team gain experience. Otherwise the same as Normal difficulty.",
-                                    "The default experience. Levels are similar to the official games.",
-                                    "Higher levels and smarter AI. All trainers have access to healing items."]
+                                }, [_INTL("All Pokémon in the team gain experience. Otherwise the same as Normal difficulty."),
+                                    _INTL("The default experience. Levels are similar to the official games."),
+                                    _INTL("Higher levels and smarter AI. All trainers have access to healing items.")]
       )
     end
 
@@ -69,7 +69,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                          end
                          $game_switches[AUTOSAVE_ENABLED_SWITCH] = value == 0
                        },
-                       "Automatically saves when healing at Pokémon centers"
+                       _INTL("Automatically saves when healing at Pokémon centers")
         )
     end
 
@@ -77,17 +77,17 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               proc { $PokemonSystem.speedup },
                               proc { |value|
                                 $PokemonSystem.speedup = value
-                              }, "Pick how you want speed-up to be enabled"
+                              }, _INTL("Pick how you want speed-up to be enabled")
     )
 
     options << SliderOption.new(_INTL("Speed-up speed"), 1, 10, 1,
                                 proc { $PokemonSystem.speedup_speed },
                                 proc { |value|
                                   $PokemonSystem.speedup_speed = value
-                                }, "Sets by how much to speed up the game when holding the speed up button (Default: 3x)"
+                                }, _INTL("Sets by how much to speed up the game when holding the speed up button (Default: 3x)")
     )
     # if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
-    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast"), _INTL("Instant")],
+    #   options << EnumOption.new("Text Speed", ["Normal", "Fast", "Instant"],
     #                             proc { $PokemonSystem.textspeed },
     #                             proc { |value|
     #                               $PokemonSystem.textspeed = value
@@ -95,7 +95,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
     #                             }, "Sets the speed at which the text is displayed"
     #   )
     # else
-    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
+    #   options << EnumOption.new("Text Speed", ["Normal", "Fast"],
     #                             proc { $PokemonSystem.textspeed },
     #                             proc { |value|
     #                               $PokemonSystem.textspeed = value
@@ -109,7 +109,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                      proc { |value|
                        $PokemonSystem.download_sprites = value
                      },
-                     "Automatically download missing custom sprites and Pokédex entries from the internet"
+                     _INTL("Automatically download missing custom sprites and Pokédex entries from the internet")
       )
     #
     generated_entries_option_selected = $PokemonSystem.use_generated_dex_entries ? 1 : 0
@@ -119,8 +119,8 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 $PokemonSystem.use_generated_dex_entries = value == 1
                               },
                               [
-                                "Fusions without a custom Pokédex entry display nothing.",
-                                "Fusions without a custom Pokédex entry display an auto-generated placeholder."
+                                _INTL("Fusions without a custom Pokédex entry display nothing."),
+                                _INTL("Fusions without a custom Pokédex entry display an auto-generated placeholder.")
 
                               ]
     )
@@ -132,8 +132,13 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 $PokemonSystem.include_alt_sprites_in_random = value == 1
                               },
                               [
+<<<<<<< HEAD
                                 "Auto-selected sprites follow standard Pokémon sprites rules.",
                                 "Auto-selected sprites can be anything, including references, memes, jokes, etc."
+=======
+                                _INTL("Auto-selected sprites follow standard Pokémon sprites rules."),
+                                _INTL("Auto-selected sprites can be anything, including references, memes, jokes, etc.")
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
                               ]
     ) ? 1 : 0
 
@@ -143,8 +148,8 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               proc { |value|
                                 $PokemonSystem.hide_custom_eggs = value == 1
                               },
-                              ["Eggs have different sprites for each Pokémon.",
-                               "Eggs all use the same sprite."]
+                              [_INTL("Eggs have different sprites for each Pokémon."),
+                               _INTL("Eggs all use the same sprite.")]
     )
 
     if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) # beat the league
@@ -162,21 +167,21 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                            $game_variables[VAR_DEFAULT_BATTLE_TYPE] = [1, 1]
                          end
                          $PokemonSystem.battle_type = value
-                       }, "Sets the number of Pokémon sent out in battles (when possible)"
+                       }, _INTL("Sets the number of Pokémon sent out in battles (when possible)")
         )
     end
 
     options << EnumOption.new(_INTL("Battle Effects"), [_INTL("On"), _INTL("Off")],
                               proc { $PokemonSystem.battlescene },
                               proc { |value| $PokemonSystem.battlescene = value },
-                              "Display move animations in battles"
+                              _INTL("Display move animations in battles")
     )
 
     options << EnumOption.new(_INTL("Battle Style"), [_INTL("Switch"), _INTL("Set")],
                               proc { $PokemonSystem.battlestyle },
                               proc { |value| $PokemonSystem.battlestyle = value },
-                              ["Prompts to switch Pokémon before the opponent sends out the next one",
-                               "No prompt to switch Pokémon before the opponent sends the next one"]
+                              [_INTL("Prompts to switch Pokémon before the opponent sends out the next one"),
+                               _INTL("No prompt to switch Pokémon before the opponent sends the next one")]
     )
 
     options << NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
@@ -186,7 +191,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                   MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[value])
                                 }
     )
-    # NumberOption.new(_INTL("Menu Frame"),1,Settings::MENU_WINDOWSKINS.length,
+    # NumberOption.new("Menu Frame",1,Settings::MENU_WINDOWSKINS.length,
     #   proc { $PokemonSystem.frame },
     #   proc { |value|
     #     $PokemonSystem.frame = value
@@ -196,21 +201,21 @@ class PokemonGameOption_Scene < PokemonOption_Scene
     options << EnumOption.new(_INTL("Text Entry"), [_INTL("Cursor"), _INTL("Keyboard")],
                               proc { $PokemonSystem.textinput },
                               proc { |value| $PokemonSystem.textinput = value },
-                              ["Enter text by selecting letters on the screen",
-                               "Enter text by typing on the keyboard"]
+                              [_INTL("Enter text by selecting letters on the screen"),
+                               _INTL("Enter text by typing on the keyboard")]
     )
     if $game_variables
       options << EnumOption.new(_INTL("Fusion Icons"), [_INTL("Combined"), _INTL("DNA")],
                                 proc { $game_variables[VAR_FUSION_ICON_STYLE] },
                                 proc { |value| $game_variables[VAR_FUSION_ICON_STYLE] = value },
-                                ["Combines both Pokémon's party icons",
-                                 "Uses the same party icon for all fusions"]
+                                [_INTL("Combines both Pokémon's party icons"),
+                                 _INTL("Uses the same party icon for all fusions")]
       )
       battle_type_icon_option_selected = $PokemonSystem.type_icons ? 1 : 0
       options << EnumOption.new(_INTL("Battle Type Icons"), [_INTL("Off"), _INTL("On")],
                                 proc { battle_type_icon_option_selected },
                                 proc { |value| $PokemonSystem.type_icons = value == 1 },
-                                "Display the enemy Pokémon type in battles."
+                                _INTL("Display the enemy Pokémon type in battles.")
       )
 
     end
@@ -222,18 +227,18 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                   pbSetResizeFactor($PokemonSystem.screensize)
                                   echoln $PokemonSystem.screensize
                                 end
-                              }, "Sets the size of the screen"
+                              }, _INTL("Sets the size of the screen")
     )
     options << EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
                               proc { $PokemonSystem.quicksurf },
                               proc { |value| $PokemonSystem.quicksurf = value },
-                              "Start surfing automatically when interacting with water"
+                              _INTL("Start surfing automatically when interacting with water")
     )
 
     options << EnumOption.new(_INTL("Level caps"), [_INTL("Off"), _INTL("On")],
                               proc { $PokemonSystem.level_caps },
                               proc { |value| $PokemonSystem.level_caps = value },
-                              "Prevents leveling above the next gym leader's highest leveled Pokemon"
+                              _INTL("Prevents leveling above the next gym leader's highest leveled Pokemon")
     )
 
     device_option_selected = $PokemonSystem.on_mobile ? 1 : 0
@@ -241,7 +246,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               proc { device_option_selected },
                               proc { |value| $PokemonSystem.on_mobile = value == 1 },
                               ["The intended device on which to play the game.",
-                               "Disables some options that aren't supported when playing on mobile."]
+                               _INTL("Disables some options that aren't supported when playing on mobile.")]
     )
 
     selected_game_mode = $game_switches[SWITCH_MODERN_MODE] ? 1 : 0
@@ -251,8 +256,13 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 $game_switches[SWITCH_MODERN_MODE] = value == 1
                                 @manually_changed_gamemode = true
                               },
+<<<<<<< HEAD
                               ["Use trainers from Classic Mode for Legendary Mode",
                                "Use trainers from Remix Mode for Legendary Mode"]
+=======
+                              [_INTL("Use trainers from Classic Mode for Legendary Mode"),
+                               _INTL("Use trainers from Remix Mode for Legendary Mode")]
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     ) if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]
     return options
   end

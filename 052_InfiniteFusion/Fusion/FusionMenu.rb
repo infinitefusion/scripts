@@ -50,7 +50,7 @@ class FusionSelectOptionsScene < PokemonOption_Scene
 
   def getNatureDescription(nature)
     change= GameData::Nature.get(nature.id).stat_changes
-    return "Neutral nature" if change.empty?
+    return _INTL("Neutral nature") if change.empty?
     positiveChange = change[0]
     negativeChange = change[1]
     return _INTL("+ {1}\n- {2}",GameData::Stat.get(positiveChange[0]).name,GameData::Stat.get(negativeChange[0]).name)
@@ -87,7 +87,7 @@ class FusionSelectOptionsScene < PokemonOption_Scene
                                   else
                                     @nickname = @pokemon2.name
                                   end
-                                }, "Select the Pokémon's nickname")
+                                }, _INTL("Select the Pokémon's nickname"))
     end
 
     options << EnumOption.new(_INTL("Ability"), [_INTL(getAbilityName(@abilityList[0])), _INTL(getAbilityName(@abilityList[1]))],

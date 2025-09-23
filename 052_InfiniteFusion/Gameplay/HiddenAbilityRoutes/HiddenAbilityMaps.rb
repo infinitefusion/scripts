@@ -42,6 +42,6 @@ end
 
 def Kernel.getMapName(id)
   mapinfos = pbLoadMapInfos
-  return "Unknown location" if !mapinfos[id]
+  return _INTL("Unknown location") if !mapinfos[id]
   return mapinfos[id].name
 end

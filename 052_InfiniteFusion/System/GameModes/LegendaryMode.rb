@@ -21,6 +21,7 @@ GYM_LEADER_MAX_RETRIES = 20
 # end
 
 def initializeLegendaryMode()
+<<<<<<< HEAD
   # $game_variables[VAR_CURRENT_GYM_TYPE] = -1
   # $game_switches[SWITCH_RANDOM_TRAINERS] = true
   # $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = true
@@ -31,11 +32,25 @@ def initializeLegendaryMode()
   # addLegendaryEggsToPC
   # $PokemonSystem.hide_custom_eggs = true
   # $PokemonSystem.type_icons = true
+=======
+  $game_variables[VAR_CURRENT_GYM_TYPE] = -1
+  $game_switches[SWITCH_RANDOM_TRAINERS] = true
+  $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = true
+  $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = false
+  $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = true
+  $game_switches[SWITCH_LEGENDARY_MODE] = true
+  # Kernel.pbShuffleTrainers()
+  addLegendaryEggsToPC
+  $PokemonSystem.hide_custom_eggs = true
+  $PokemonSystem.type_icons = true
+  $PokemonBag.pbStoreItem(:MAGICBOOTS)
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 end
 
 def convert_species_to_legendary(dex_number)
   species = GameData::Species.get(dex_number).species
   dex_number = getDexNumberForSpecies(species)
+<<<<<<< HEAD
 
   return dex_number
 
@@ -44,6 +59,13 @@ def convert_species_to_legendary(dex_number)
   # new_species = isFusion ? convert_fusion_to_legendary(species) : convert_unfused_to_legendary(species)
   # echoln "#{get_readable_fusion_name(species)} -> #{get_readable_fusion_name(new_species)}"
   # return new_species
+=======
+  return species if isTripleFusion?(dex_number)
+  isFusion = isFusion(dex_number)
+  new_species = isFusion ? convert_fusion_to_legendary(species) : convert_unfused_to_legendary(species)
+  echoln "#{get_readable_fusion_name(species)} -> #{get_readable_fusion_name(new_species)}"
+  return new_species
+>>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 end
 
 # Takes an unfused Pokemon and fuses it with a random legendary

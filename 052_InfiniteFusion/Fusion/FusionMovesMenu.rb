@@ -52,7 +52,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     @sprites["title"].setSkin("Graphics/Windowskins/invisible")
     @sprites["option"].setSkin("Graphics/Windowskins/invisible")
     @sprites["textbox"].setSkin("Graphics/Windowskins/invisible")
-    # @sprites["textbox"].text = _INTL("Select moves")
+    # @sprites["textbox"].text = "Select moves"
     updateDescription(0)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end

@@ -359,7 +359,7 @@ module Settings
   # Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
-      # [_INTL("Kanto Pokédex"), 0]
+      # ["Kanto Pokédex", 0]
     ]
   end
 
@@ -557,8 +557,8 @@ module Settings
   # file in the Data folder. Edit only if you have 2 or more languages to choose
   # from.
   LANGUAGES = [
-    #  ["English", "english.dat"],
-    #  ["Deutsch", "deutsch.dat"]
+      ["English", "english.dat"],
+      ["French", "french.dat"]
   ]
 
   #Experimental
