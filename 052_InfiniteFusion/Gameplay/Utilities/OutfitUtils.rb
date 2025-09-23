@@ -79,11 +79,7 @@ def give_date_specific_hats()
   if (current_date.day == 24 || current_date.day == 25) && current_date.month == 12
     if !$Trainer.unlocked_hats.include?(HAT_SANTA)
       pbCallBub(2, @event_id, true)
-<<<<<<< HEAD
-      pbMessage("Hi! We're giving out a special hat today for the holidays season. Enjoy!")
-=======
       pbMessage(_INTL("Hi! We're giving out a special hat today for the holidays season. Enjoy!"))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       obtainHat(HAT_SANTA)
     end
   end
@@ -92,11 +88,7 @@ def give_date_specific_hats()
   if (current_date.day == 1 && current_date.month == 4)
     if !$Trainer.unlocked_hats.include?(HAT_CLOWN)
       pbCallBub(2, @event_id, true)
-<<<<<<< HEAD
-      pbMessage("Hi! We're giving out this fun accessory for this special day. Enjoy!")
-=======
       pbMessage(_INTL("Hi! We're giving out this fun accessory for this special day. Enjoy!"))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       obtainHat(HAT_CLOWN)
     end
   end
@@ -114,15 +106,9 @@ end
 def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
 
   commands = []
-<<<<<<< HEAD
-  command_hats = "Hats Dye Kit ($#{hats_kit_price})"
-  command_clothes = "Clothes Dye Kit ($#{clothes_kit_price})"
-  command_cancel = "Cancel"
-=======
   command_hats = _INTL("Hats Dye Kit (${1})",hats_kit_price)
   command_clothes = _INTL("Clothes Dye Kit (${1})",clothes_kit_price)
   command_cancel = _INTL("Cancel")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
   commands << command_hats if !$PokemonBag.pbHasItem?(:HATSDYEKIT)
   commands << command_clothes if !$PokemonBag.pbHasItem?(:CLOTHESDYEKIT)
@@ -130,22 +116,6 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
 
   if commands.length <= 1
     pbCallBub(2, @event_id)
-<<<<<<< HEAD
-    pbMessage("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!")
-
-    pbCallBub(2, @event_id)
-    pbMessage("You can use them at any time when you change clothes.")
-    return
-  end
-  pbCallBub(2, @event_id)
-  pbMessage("\\GWelcome! Are you interested in dyeing your outfits different colours?")
-
-  pbCallBub(2, @event_id)
-  pbMessage("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!")
-
-  pbCallBub(2, @event_id)
-  pbMessage("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?")
-=======
     pbMessage(_INTL("\\C[1]Dye Kits\\C[0] can be used to dye clothes all sorts of colours!"))
 
     pbCallBub(2, @event_id)
@@ -160,38 +130,20 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
 
   pbCallBub(2, @event_id)
   pbMessage(_INTL("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?"))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
   choice = optionsMenu(commands, commands.length)
   case commands[choice]
   when command_hats
     if $Trainer.money < hats_kit_price
       pbCallBub(2, @event_id)
-<<<<<<< HEAD
-      pbMessage("Oh, you don't have enough money...")
-      return
-    end
-    pbMessage("\\G\\PN purchased the dye kit.")
-=======
       pbMessage(_INTL("Oh, you don't have enough money..."))
       return
     end
     pbMessage(_INTL("\\G\\PN purchased the dye kit."))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     $Trainer.money -= hats_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:HATSDYEKIT)
     pbCallBub(2, @event_id)
-<<<<<<< HEAD
-    pbMessage("\\GHere you go! Have fun dyeing your hats!")
-  when command_clothes
-    if $Trainer.money < clothes_kit_price
-      pbCallBub(2, @event_id)
-      pbMessage("Oh, you don't have enough money...")
-      return
-    end
-    pbMessage("\\G\\PN purchased the dye kit.")
-=======
     pbMessage(_INTL("\\GHere you go! Have fun dyeing your hats!"))
   when command_clothes
     if $Trainer.money < clothes_kit_price
@@ -200,21 +152,13 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
       return
     end
     pbMessage(_INTL("\\G\\PN purchased the dye kit."))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     $Trainer.money -= clothes_kit_price
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:CLOTHESDYEKIT)
     pbCallBub(2, @event_id)
-<<<<<<< HEAD
-    pbMessage("\\GHere you go! Have fun dyeing your clothes!")
-  end
-  pbCallBub(2, @event_id)
-  pbMessage("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes.")
-=======
     pbMessage(_INTL("\\GHere you go! Have fun dyeing your clothes!"))
   end
   pbCallBub(2, @event_id)
   pbMessage(_INTL("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes."))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 end
 

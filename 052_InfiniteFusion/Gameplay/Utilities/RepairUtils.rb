@@ -11,15 +11,6 @@ def convertAllPokemon()
 
     #get previous version
     msgwindow = Kernel.pbCreateMessageWindow(nil)
-<<<<<<< HEAD
-    msgwindow.text = "What is the last version of the game you played?"
-    choice = Kernel.pbShowCommands(msgwindow, [
-      "4.7        (September 2020)",
-      "4.5-4.6.2        (2019-2020)",
-      "4.2-4.4           (2019)",
-      "4.0-4.1           (2018-2019)",
-      "3.x or earlier (2015-2018)"], -1)
-=======
     msgwindow.text = _INTL("What is the last version of the game you played?")
     choice = Kernel.pbShowCommands(msgwindow, [
       _INTL("4.7        (September 2020)"),
@@ -27,7 +18,6 @@ def convertAllPokemon()
       _INTL("4.2-4.4           (2019)"),
       _INTL("4.0-4.1           (2018-2019)"),
       _INTL("3.x or earlier (2015-2018)")], -1)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     case choice
     when 0
       prev_total = 381
@@ -50,11 +40,7 @@ def convertAllPokemon()
         pBody = (pf / prev_total).round
         pHead = pf - (prev_total * pBody)
 
-<<<<<<< HEAD
-        #   Kernel.pbMessage(_INTL("pbod {1} pHead {2}, species: {3})",pBody,pHead,pf))
-=======
         #   Kernel.pbMessage("pbod {1} pHead {2}, species: {3})",pBody,pHead,pf)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
         prev_max_value = (prev_total * prev_total) + prev_total
         if pf >= prev_max_value

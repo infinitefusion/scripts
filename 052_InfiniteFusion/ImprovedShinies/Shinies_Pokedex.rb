@@ -129,42 +129,21 @@
 #     # Draw all images
 #     pbDrawImagePositions(overlay, imagepos)
 #     # Write various bits of text
-<<<<<<< HEAD
-#     pagename = [_INTL("INFO"),
-#                 _INTL("TRAINER MEMO"),
-#                 _INTL("SKILLS"),
-#                 _INTL("MOVES"),
-#                 _INTL("MOVES")][page - 1]
-=======
 #     pagename = ["INFO",
 #                 "TRAINER MEMO",
 #                 "SKILLS",
 #                 "MOVES",
 #                 "MOVES"][page - 1]
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 #     textpos = [
 #       [pagename, 26, 10, 0, base, shadow],
 #       [@pokemon.name, 46, 56, 0, base, shadow],
 #       [@pokemon.level.to_s, 46, 86, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-<<<<<<< HEAD
-#       [_INTL("Item"), 66, 312, 0, base, shadow]
-=======
 #       ["Item", 66, 312, 0, base, shadow]
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 #     ]
 #     # Write the held item's name
 #     if @pokemon.hasItem?
 #       textpos.push([@pokemon.item.name, 16, 346, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
 #     else
-<<<<<<< HEAD
-#       textpos.push([_INTL("None"), 16, 346, 0, Color.new(192, 200, 208), Color.new(208, 216, 224)])
-#     end
-#     # Write the gender symbol
-#     if @pokemon.male?
-#       textpos.push([_INTL("♂"), 178, 56, 0, Color.new(24, 112, 216), Color.new(136, 168, 208)])
-#     elsif @pokemon.female?
-#       textpos.push([_INTL("♀"), 178, 56, 0, Color.new(248, 56, 32), Color.new(224, 152, 144)])
-=======
 #       textpos.push(["None", 16, 346, 0, Color.new(192, 200, 208), Color.new(208, 216, 224)])
 #     end
 #     # Write the gender symbol
@@ -172,7 +151,6 @@
 #       textpos.push(["♂", 178, 56, 0, Color.new(24, 112, 216), Color.new(136, 168, 208)])
 #     elsif @pokemon.female?
 #       textpos.push(["♀", 178, 56, 0, Color.new(248, 56, 32), Color.new(224, 152, 144)])
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 #     end
 #     # Draw all text
 #     pbDrawTextPositions(overlay, textpos)

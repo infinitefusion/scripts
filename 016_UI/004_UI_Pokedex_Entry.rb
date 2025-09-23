@@ -380,11 +380,7 @@ class PokemonPokedexInfo_Scene
           entryText = @randomEntryText
           shadowColor = shadow
         else
-<<<<<<< HEAD
-          entryText = "No custom Pokédex entry available for this Pokémon. Please consider submitting an entry for this Pokémon on the game's Discord. Auto-generated Pokédex entries can be enabled in the options menu."
-=======
           entryText = INTL("No custom Pokédex entry available for this Pokémon. Please consider submitting an entry for this Pokémon on the game's Discord. Auto-generated Pokédex entries can be enabled in the options menu.")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
           shadowColor = shadow
         end
       end

@@ -132,13 +132,8 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 $PokemonSystem.include_alt_sprites_in_random = value == 1
                               },
                               [
-<<<<<<< HEAD
-                                "Auto-selected sprites follow standard Pokémon sprites rules.",
-                                "Auto-selected sprites can be anything, including references, memes, jokes, etc."
-=======
                                 _INTL("Auto-selected sprites follow standard Pokémon sprites rules."),
                                 _INTL("Auto-selected sprites can be anything, including references, memes, jokes, etc.")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
                               ]
     ) ? 1 : 0
 
@@ -256,13 +251,8 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 $game_switches[SWITCH_MODERN_MODE] = value == 1
                                 @manually_changed_gamemode = true
                               },
-<<<<<<< HEAD
-                              ["Use trainers from Classic Mode for Legendary Mode",
-                               "Use trainers from Remix Mode for Legendary Mode"]
-=======
                               [_INTL("Use trainers from Classic Mode for Legendary Mode"),
                                _INTL("Use trainers from Remix Mode for Legendary Mode")]
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     ) if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]
     return options
   end

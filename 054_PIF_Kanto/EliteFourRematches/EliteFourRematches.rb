@@ -149,11 +149,7 @@ def unlock_new_league_tiers
     $game_switches[SWITCH_LEAGUE_TIER_5] = true if tiers_to_unlock.include?(5)
     unless currently_unlocked_tiers.include?(tier)
       pbMEPlay("Key item get")
-<<<<<<< HEAD
-      pbMessage(_INTL("#{$Trainer.name} unlocked the \\C[1]Tier #{tier} League Rematches\\C[0]!"))
-=======
       pbMessage(_INTL("{1} unlocked the \\C[1]Tier {2} League Rematches\\C[0]!",$Trainer.name,tier))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     end
   end
 end

@@ -104,11 +104,7 @@ def extraDialogPrompt(event_id)
 
   case commands[choice]
   when cmd_talk
-<<<<<<< HEAD
-    text = pbEnterText("What do you want to say?",0,100)
-=======
     text = pbEnterText(_INTL("What do you want to say?"),0,100)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     add_npc_context(event_id, text, true)
     response = getRemoteNPCResponse(event_id)
     add_npc_context(event_id, response, false)

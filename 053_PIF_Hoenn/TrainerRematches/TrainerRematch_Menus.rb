@@ -46,11 +46,7 @@ def setTrainerFriendship(trainer)
   params = ChooseNumberParams.new
   params.setRange(0,100)
   params.setDefaultValue($game_map.map_id)
-<<<<<<< HEAD
-  number = pbMessageChooseNumber("Frienship (0-100)?",params)
-=======
   number = pbMessageChooseNumber(_INTL("Frienship (0-100)?"),params)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
   trainer.friendship = number
   trainer.increase_friendship(0)
   return trainer
@@ -61,17 +57,6 @@ end
 #
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
 def postBattleActionsMenu()
-<<<<<<< HEAD
-  rematchCommand = "Rematch"
-  tradeCommand = "Trade Offer"
-  partnerCommand = "Partner up"
-  cancelCommand = "See ya!"
-
-  updateTeamDebugCommand = "(Debug) Simulate random event"
-  resetTrainerDebugCommand = "(Debug) Reset trainer"
-  setFriendshipDebugCommand = "(Debug) Set Friendship"
-  printTrainerTeamDebugCommand = "(Debug) Print team"
-=======
   rematchCommand = _INTL("Rematch")
   tradeCommand = _INTL("Trade Offer")
   partnerCommand = _INTL("Partner up")
@@ -81,7 +66,6 @@ def postBattleActionsMenu()
   resetTrainerDebugCommand = _INTL("(Debug) Reset trainer")
   setFriendshipDebugCommand = _INTL("(Debug) Set Friendship")
   printTrainerTeamDebugCommand = _INTL("(Debug) Print team")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 
   event = pbMapInterpreter.get_character(0)

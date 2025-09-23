@@ -76,11 +76,7 @@ class PokemonStorageScreen
     pokemon = @storage[selected[0], selected[1]]
 
     if !pokemon
-<<<<<<< HEAD
-      command = pbShowCommands("Select an action", ["Continue fusing", "Stop fusing"])
-=======
       command = pbShowCommands(_INTL("Select an action"), [_INTL("Continue fusing"), _INTL("Stop fusing")])
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       case command
       when 1 # stop
         cancelFusion
@@ -99,11 +95,7 @@ class PokemonStorageScreen
         @scene.setFusing(false)
         return
       end
-<<<<<<< HEAD
-      command = pbShowCommands("Select an action", commands)
-=======
       command = pbShowCommands(_INTL("Select an action"), commands)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       case command
       when 0 # Fuse
         if !pokemon

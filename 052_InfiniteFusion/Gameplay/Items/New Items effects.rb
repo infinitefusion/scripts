@@ -299,11 +299,7 @@ end
 
 def useFieldSleepingBag()
   currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
-<<<<<<< HEAD
-  confirmed = Kernel.pbConfirmMessage("Sleep for an hour?")
-=======
   confirmed = Kernel.pbConfirmMessage(_INTL("Sleep for an hour?"))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
   if confirmed
     oldDay = getDayOfTheWeek()
     timeAdded = 0
@@ -403,11 +399,7 @@ ItemHandlers::UseFromBag.add(:EMERGENCYWHISTLE, proc { |item|
 ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
   if $game_switches[SWITCH_SPORES_REPEL]
     if pbQuantity(:MUSHROOMSPORES) >= 2
-<<<<<<< HEAD
-      if pbConfirmMessage("Condense 2 spore samples into a Repel?")
-=======
       if pbConfirmMessage(_INTL("Condense 2 spore samples into a Repel?"))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
         $PokemonBag.pbDeleteItem(:MUSHROOMSPORES,2)
         pbReceiveItem(:REPEL)
         next 1
@@ -416,11 +408,7 @@ ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
       end
 
     else
-<<<<<<< HEAD
-      pbMessage("Collect another sample to condense them into a Repel.")
-=======
       pbMessage(_INTL("Collect another sample to condense them into a Repel."))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
       next 1
     end
   end

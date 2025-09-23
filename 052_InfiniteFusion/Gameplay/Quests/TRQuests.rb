@@ -82,19 +82,6 @@ def finishTRQuest(id, status, silent = false)
 end
 
 TR_QUESTS = {
-<<<<<<< HEAD
-  "tr_cerulean_1" => Quest.new("tr_cerulean_1", "Creepy Crawlies", "The Team Rocket Captain has tasked you with clearing the bug infestation in the temporary Rocket HQ in Cerulean City",  "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_2" => Quest.new("tr_cerulean_2", "No Fishing Zone", "Intimidate the fishermen at Nugget Bridge until they leave the area.",  "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_3" => Quest.new("tr_cerulean_3", "Disobedient Pokémon", "Bring back the Pokémon given by the Team Rocket Captain fainted to teach it a lesson.",  "rocket_petrel", "Cerulean City", TRQuestColor),
-  "tr_cerulean_4" => Quest.new("tr_cerulean_4", "Gran Theft Pokémon!", "Follow Petrel and go steal a rare Pokémon from a young girl.",  "rocket_petrel", "Cerulean City", TRQuestColor),
-
-  "tr_celadon_1" => Quest.new("tr_celadon_1", "Supplying the new grunts", "Catch 4 Pokémon with Rocket Balls in the outskirts of Celadon City.",  "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_2" => Quest.new("tr_celadon_2", "Interception!", "Intercept the TMs shipment to the Celadon Store and pose as the delivery person to deliver fake TMs.",  "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_3" => Quest.new( "tr_celadon_3", "Pokémon Collector", "Go meet a Pokémon collector on Route 22, near Viridian City and get his rare Pokémon.",  "rocket_archer", "Celadon City", TRQuestColor),
-  "tr_celadon_4" => Quest.new("tr_celadon_4", "Operation Shutdown", "The Team Rocket HQ is being raided! Regroup with the rest of the grunts in Goldenrod Tunnel!",  "rocket_archer", "Goldenrod City", TRQuestColor),
-
-  "tr_pinkan" => Quest.new("tr_pinkan", "Pinkan Island!", "Help Team Rocket with a heist on a Pokémon nature preserve!",  "rocket_archer", "Goldenrod City", TRQuestColor),
-=======
   "tr_cerulean_1" => Quest.new("tr_cerulean_1", _INTL("Creepy Crawlies"), _INTL("The Team Rocket Captain has tasked you with clearing the bug infestation in the temporary Rocket HQ in Cerulean City"),  "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
   "tr_cerulean_2" => Quest.new("tr_cerulean_2", _INTL("No Fishing Zone"), _INTL("Intimidate the fishermen at Nugget Bridge until they leave the area."),  "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
   "tr_cerulean_3" => Quest.new("tr_cerulean_3", _INTL("Disobedient Pokémon"), _INTL("Bring back the Pokémon given by the Team Rocket Captain fainted to teach it a lesson."),  "rocket_petrel", _INTL("Cerulean City"), TRQuestColor),
@@ -106,7 +93,6 @@ TR_QUESTS = {
   "tr_celadon_4" => Quest.new("tr_celadon_4", _INTL("Operation Shutdown"), _INTL("The Team Rocket HQ is being raided! Regroup with the rest of the grunts in Goldenrod Tunnel!"),  "rocket_archer", _INTL("Goldenrod City"), TRQuestColor),
 
   "tr_pinkan" => Quest.new("tr_pinkan", _INTL("Pinkan Island!"), _INTL("Help Team Rocket with a heist on a Pokémon nature preserve!"),  "rocket_archer", _INTL("Goldenrod City"), TRQuestColor),
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 }
 

@@ -51,26 +51,6 @@ TYPE_EXPERTS_APPEARANCES = {
 
 TYPE_EXPERT_TRAINERS = {
   :QMARK => ["name", "loseText"],
-<<<<<<< HEAD
-  :ELECTRIC => ["Ray", "What a shocking turn of events!"],
-  :BUG => ["Bea", "I’m bugging out of here!"],
-  :FAIRY => ["Luna", "You outshined me!"],
-  :DRAGON => ["Draco", "I shall scale back my plans."],
-  :FIGHTING => ["Floyd", "I have to throw in the towel."],
-  :GROUND => ["Pedro", "I’m buried under this loss."],
-  :FIRE => ["Blaze", "I guess I got burned out."],
-  :GRASS => ["Basil", "You really cut me down to size!"],
-  :ICE => ["Crystal", "I’m skating on thin ice!"],
-  :ROCK => ["Slate", "Looks like I’ve hit rock bottom..."],
-  :WATER => ["Marina", "You really made a splash!"],
-  :FLYING => ["Gale", "I guess I’m grounded for now."],
-  :DARK => ["Gerard", "I’ll slip back into the shadows"],
-  :STEEL => ["Silvia", "I guess I was a bit rusty..."],
-  :PSYCHIC => ["Carl", "I could not foresee this defeat."],
-  :GHOST => ["Evangeline", "I can feel myself disappearing into thin air!"],
-  :POISON => ["Marie", "I got a taste of my own medicine!"],
-  :NORMAL => ["Tim", "This was anything but normal!"],
-=======
   :ELECTRIC => ["Ray", _INTL("What a shocking turn of events!")],
   :BUG => ["Bea", _INTL("I’m bugging out of here!")],
   :FAIRY => ["Luna", _INTL("You outshined me!")],
@@ -89,7 +69,6 @@ TYPE_EXPERT_TRAINERS = {
   :GHOST => ["Evangeline", _INTL("I can feel myself disappearing into thin air!")],
   :POISON => ["Marie", _INTL("I got a taste of my own medicine!")],
   :NORMAL => ["Tim", _INTL("This was anything but normal!")],
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 }
 
 TYPE_EXPERT_REWARDS = {

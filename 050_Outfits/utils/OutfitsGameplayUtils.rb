@@ -28,11 +28,7 @@ def unlockHat(outfit_id)
   echoln "obtained new hat: " + outfit_id
   outfit = get_hat_by_id(outfit_id)
   if !outfit
-<<<<<<< HEAD
-    pbMessage(_INTL("The hat #{outfit_id} is invalid."))
-=======
     pbMessage(_INTL("The hat {1} is invalid.", outfit_id))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
     return
   end
   $Trainer.unlocked_hats << outfit_id if !$Trainer.unlocked_hats.include?(outfit_id)

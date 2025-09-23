@@ -71,11 +71,7 @@ def swapReleaseCaughtPokemon(caughtPokemon)
   index = pbGet(1)
   return false if index == -1
   releasedPokemon = $Trainer.party[index]
-<<<<<<< HEAD
-  pbMessage("#{releasedPokemon.name} was released.")
-=======
   pbMessage(_INTL("#{releasedPokemon.name} was released."))
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
   pbRemovePokemonAt(index)
   pbStorePokemon(caughtPokemon)
 

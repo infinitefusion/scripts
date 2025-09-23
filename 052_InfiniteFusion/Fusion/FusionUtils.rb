@@ -3,15 +3,9 @@ def playerHasFusionItems()
 end
 
 def selectSplicer()
-<<<<<<< HEAD
-  dna_splicers_const = "DNA Splicers"
-  super_splicers_const = "Super Splicers"
-  infinite_splicers_const = "Infinite Splicers"
-=======
   dna_splicers_const = _INTL("DNA Splicers")
   super_splicers_const = _INTL("Super Splicers")
   infinite_splicers_const = _INTL("Infinite Splicers")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
   dnaSplicersQt = $PokemonBag.pbQuantity(:DNASPLICERS)
   superSplicersQt = $PokemonBag.pbQuantity(:SUPERSPLICERS)
@@ -19,26 +13,16 @@ def selectSplicer()
   infiniteSplicers2Qt = $PokemonBag.pbQuantity(:INFINITESPLICERS2)
 
   options = []
-<<<<<<< HEAD
-  options.push(_INTL "{1}", infinite_splicers_const) if infiniteSplicers2Qt > 0 || infiniteSplicersQt > 0
-  options.push(_INTL("{1} ({2})", super_splicers_const, superSplicersQt)) if superSplicersQt > 0
-  options.push(_INTL("{1} ({2})", dna_splicers_const, dnaSplicersQt)) if dnaSplicersQt > 0
-=======
   options.push("#{infinite_splicers_const}") if infiniteSplicers2Qt > 0 || infiniteSplicersQt > 0
   options.push("#{super_splicers_const} (#{superSplicersQt})") if superSplicersQt > 0
   options.push("#{dna_splicers_const} (#{dnaSplicersQt})") if dnaSplicersQt > 0
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
   if options.length <= 0
     pbDisplay(_INTL("You have no fusion items available."))
     return nil
   end
 
-<<<<<<< HEAD
-  cmd = pbShowCommands("Use which splicers?", options)
-=======
   cmd = pbShowCommands(_INTL("Use which splicers?"), options)
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
   if cmd == -1
     return nil
   end

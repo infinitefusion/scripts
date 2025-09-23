@@ -76,17 +76,10 @@ FieldQuestColor = :PURPLE
 LegendaryQuestColor = :GOLD
 TRQuestColor = :DARKRED
 
-<<<<<<< HEAD
-QuestBranchHotels = "Hotel Quests"
-QuestBranchField = "Field Quests"
-QuestBranchRocket = "Team Rocket Quests"
-QuestBranchLegendary = "Legendary Quests"
-=======
 QuestBranchHotels = _INTL("Hotel Quests")
 QuestBranchField = _INTL("Field Quests")
 QuestBranchRocket = _INTL("Team Rocket Quests")
 QuestBranchLegendary = _INTL("Legendary Quests")
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 class PokeBattle_Trainer
   attr_accessor :quests
@@ -129,11 +122,7 @@ def finishQuest(id, silent=false)
   return if pbCompletedQuest?(id)
   $Trainer.quest_points+=1
   pbMEPlay("Register phone") if !silent
-<<<<<<< HEAD
-  Kernel.pbMessage("\\qp\\C[6]Quest completed!") if !silent
-=======
   Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
 
 
   $game_variables[VAR_KARMA] += 1 # karma

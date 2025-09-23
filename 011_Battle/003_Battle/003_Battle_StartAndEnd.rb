@@ -56,11 +56,7 @@ class PokeBattle_Battle
         end
         # Compare the have values with the need values
         # if requireds.length>sideCounts.length
-<<<<<<< HEAD
-        #   raise _INTL("Error: def pbGetOwnerIndexFromBattlerIndex gives invalid owner index ({1} for battle type {2}v{3}, trainers {4}v{5})",
-=======
         #   raise "Error: def pbGetOwnerIndexFromBattlerIndex gives invalid owner index ({1} for battle type {2}v{3}, trainers {4}v{5}",
->>>>>>> ccaa263b8eee38abaf4795358201b8c807de803b
         #      requireds.length-1,@sideSizes[0],@sideSizes[1],side1counts.length,side2counts.length)
         # end
         sideCounts.each_with_index do |_count,i|
