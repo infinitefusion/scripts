@@ -76,8 +76,8 @@ def getOverworldHairFilename(hairstyle_id)
   version= hairstyle_split[-2]
 
   base_path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_HAIR_FOLDER
-  dynamic_path = _INTL("/{1}/", name)
-  filename = _INTL(Settings::PLAYER_HAIR_FOLDER + "_{1}_{2}",version, name)
+  dynamic_path = "/#{name}/" 
+  filename = Settings::PLAYER_HAIR_FOLDER + "_#{version}_#{name}"
   full_path = base_path + dynamic_path + filename
   return full_path
 end

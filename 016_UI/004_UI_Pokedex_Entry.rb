@@ -298,7 +298,7 @@ class PokemonPokedexInfo_Scene
     indexText = sprintf("%03d", indexNumber)
     # end
     textpos = [
-      [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
+      ["#{indexText}  #{species_data.name}",
        246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
       [_INTL("Height"), 314, 152, 0, base, shadow],
       [_INTL("Weight"), 314, 184, 0, base, shadow]
