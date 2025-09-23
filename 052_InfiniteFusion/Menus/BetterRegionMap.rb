@@ -515,7 +515,7 @@ class BetterRegionMap
         end
       end
       if Input.repeat?(Input::AUX1)
-        print_current_position()
+        #print_current_position()
         new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
         frame += 1
       end
@@ -868,7 +868,7 @@ end
 #
 # class PokemonPokedexInfo_Scene
 #   def drawPageArea
-#     @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_area")
+#     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
 #     overlay = @sprites["overlay"].bitmap
 #     base   = Color.new(88,88,80)
 #     shadow = Color.new(168,184,184)
