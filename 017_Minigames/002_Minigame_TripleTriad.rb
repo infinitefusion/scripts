@@ -103,7 +103,7 @@ class TriadCard
     end
     typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     iconbitmap = AnimatedBitmap.new(GameData::Species.icon_filename(@species, @form))
-    numbersbitmap = AnimatedBitmap.new"Graphics/Pictures/triad_numbers")
+    numbersbitmap = AnimatedBitmap.new("Graphics/Pictures/triad_numbers")
     # Draw card background
     bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
     # Draw type icon

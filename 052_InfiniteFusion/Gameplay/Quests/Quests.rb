@@ -24,12 +24,12 @@ QUESTS = {
 
 
     #Pewter hotel
-    "pewter_1" => Quest.new("pewter_1", _INTL("Mushroom Gathering"), _INTL("A lady in Pewter City wants you to bring her 3 TinyMushroom from Viridian Forest to make a stew.") "BW (74)", _INTL("Pewter City"), HotelQuestColor),
+    "pewter_1" => Quest.new("pewter_1", _INTL("Mushroom Gathering"), _INTL("A lady in Pewter City wants you to bring her 3 TinyMushroom from Viridian Forest to make a stew."), "BW (74)", _INTL("Pewter City"), HotelQuestColor),
     "pewter_2" =>Quest.new("pewter_2", _INTL("Lost Medicine"), _INTL("A youngster in Pewter City needs your help to find a lost Revive. He lost it by sitting on a bench somewhere in Pewter City."), "BW (19)", _INTL("Pewter City"), HotelQuestColor),
     "pewter_3" =>Quest.new("pewter_3", _INTL("Bug Evolution "), _INTL("A Bug Catcher in Pewter City wants you to show him a fully-evolved Bug Pokémon."), "BWBugCatcher_male", _INTL("Pewter City"), HotelQuestColor),
     "pewter_field_1" => Quest.new("pewter_field_1", _INTL("Nectar garden"), _INTL("An old man wants you to bring differently colored flowers for the city's garden."),  "BW (039)", _INTL("Pewter City"), FieldQuestColor),
     "pewter_field_2" => Quest.new("pewter_field_2", _INTL("I Choose You!"), _INTL("A Pikachu in the PokéMart has lost its official Pokémon League Hat. Find one and give it to the Pikachu!"),  "YOUNGSTER_LeagueHat", _INTL("Pewter City"), FieldQuestColor),
-    "pewter_field_3" => Quest.new("pewter_field_3", _INTL("Prehistoric Amber!"), _INTL("Meetup with a scientist in Viridian Forest to look for prehistoric amber.")  "BW (82)", _INTL("Pewter City"), FieldQuestColor),
+    "pewter_field_3" => Quest.new("pewter_field_3", _INTL("Prehistoric Amber!"), _INTL("Meetup with a scientist in Viridian Forest to look for prehistoric amber."),  "BW (82)", _INTL("Pewter City"), FieldQuestColor),
 
     #Cerulean hotel
     "cerulean_1" => Quest.new("cerulean_1", _INTL("Playing Cupid"), _INTL("A boy in Cerulean City wants you bring a love letter to a Pokémon Breeder named Maude. She's probably somewhere in one of the routes near Cerulean City"), "BW (18)", _INTL("Cerulean City"), HotelQuestColor),

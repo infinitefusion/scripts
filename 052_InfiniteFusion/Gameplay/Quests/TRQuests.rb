@@ -216,7 +216,7 @@ def legendaryQuestioning()
   #question 4
   locations_formatted = { :VIRIDIAN => _INTL("Viridian City"), :LAVENDER => _INTL("Lavender Town"), :CERULEAN => _INTL("Cerulean City"), :CINNABAR => _INTL("Cinnabar Island"), :UNKNOWN => _INTL("that unknown location") }
   pbCallBub(2, @event_id)
-  pbMessage(_INTL("And at what time of the day was that legendary Pokémon seen near {1} exactly?",locations_formatted.values[chosen_location])
+  pbMessage(_INTL("And at what time of the day was that legendary Pokémon seen near {1} exactly?",locations_formatted.values[chosen_location]))
   time_of_day = { :DAWN => _INTL("At dawn"), :NOON => _INTL("At noon"), :AFTERNOON => _INTL("In the afternoon"), :SUNSET => _INTL("At sunset"), :NIGHT => _INTL("At night") }
   chosen_time = optionsMenu(time_of_day.values)
   pbCallBub(2, @event_id)

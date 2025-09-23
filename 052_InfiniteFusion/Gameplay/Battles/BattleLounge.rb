@@ -44,35 +44,35 @@ def get_egg_group_name(id)
   when 0;
     return nil
   when 1;
-    return _INTL("Monster Pokémon")
+    return "Monster Pokémon"
   when 2;
-    return :_INTL("Aquatic Pokémon")
+    return :"Aquatic Pokémon"
   when 3;
-    return :_INTL("Bug Pokémon")
+    return :"Bug Pokémon"
   when 4;
-    return :_INTL("Bird Pokémon")
+    return :"Bird Pokémon"
   when 5;
-    return :_INTL("Land Pokémon")
+    return :"Land Pokémon"
   when 6;
-    return :_INTL("Cute Pokémon")
+    return :"Cute Pokémon"
   when 7;
-    return :_INTL("Plant Pokémon")
+    return :"Plant Pokémon"
   when 8;
-    return :_INTL("Human-like Pokémon")
+    return :"Human-like Pokémon"
   when 9;
-    return :_INTL("Aquatic Pokémon")
+    return :"Aquatic Pokémon"
   when 10;
-    return :_INTL("Mineral Pokémon")
+    return :"Mineral Pokémon"
   when 11;
-    return :_INTL("Blob Pokémon")
+    return :"Blob Pokémon"
   when 12;
-    return :_INTL("Fish Pokémon")
+    return :"Fish Pokémon"
   when 13;
-    return :_INTL("Ditto")
+    return :"Ditto"
   when 14;
-    return :_INTL("Dragon Pokémon")
+    return :"Dragon Pokémon"
   when 15;
-    return :_INTL("Legendary Pokémon")
+    return :"Legendary Pokémon"
   end
 end
 
