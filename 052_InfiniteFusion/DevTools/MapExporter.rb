@@ -97,8 +97,8 @@
 #
 # DebugMenuCommands.register("exportmap", {
 #   "parent"      => "fieldmenu",
-#   "name"        => _INTL("Export a Map"),
-#   "description" => _INTL("Choose a map to export it to a PNG."),
+#   "name"        => "Export a Map",
+#   "description" => "Choose a map to export it to a PNG.",
 #   "effect"      => proc { |sprites, viewport|
 #     pbExportAMap
 #   }

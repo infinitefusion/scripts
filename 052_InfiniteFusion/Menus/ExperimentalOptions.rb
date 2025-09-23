@@ -55,7 +55,7 @@ class ExperimentalOptionsScene < PokemonOption_Scene
       )
 
     #,
-          # EnumOption.new(_INTL("Double abilities"), [_INTL("On"), _INTL("Off")],
+          # EnumOption.new("Double abilities", ["On", "Off"],
           #                proc {
           #                  $game_switches[SWITCH_DOUBLE_ABILITIES] ? 0 : 1
           #                },

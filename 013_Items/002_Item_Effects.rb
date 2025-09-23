@@ -870,60 +870,60 @@ ItemHandlers::UseOnPokemon.add(:GRACIDEA, proc { |item, pkmn, scene|
 
 # ItemHandlers::UseOnPokemon.add(:REDNECTAR, proc { |item, pkmn, scene|
 #   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form == 0
-#     scene.pbDisplay(_INTL("It had no effect."))
+#     scene.pbDisplay("It had no effect.")
 #     next false
 #   end
 #   if pkmn.fainted?
-#     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+#     scene.pbDisplay("This can't be used on the fainted Pokémon.")
 #   end
 #   pkmn.setForm(0) {
 #     scene.pbRefresh
-#     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
+#     scene.pbDisplay("{1} changed form!", pkmn.name)
 #   }
 #   next true
 # })
 #
 # ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR, proc { |item, pkmn, scene|
 #   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form == 1
-#     scene.pbDisplay(_INTL("It had no effect."))
+#     scene.pbDisplay("It had no effect.")
 #     next false
 #   end
 #   if pkmn.fainted?
-#     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+#     scene.pbDisplay("This can't be used on the fainted Pokémon.")
 #   end
 #   pkmn.setForm(1) {
 #     scene.pbRefresh
-#     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
+#     scene.pbDisplay("{1} changed form!", pkmn.name)
 #   }
 #   next true
 # })
 #
 # ItemHandlers::UseOnPokemon.add(:PINKNECTAR, proc { |item, pkmn, scene|
 #   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form == 2
-#     scene.pbDisplay(_INTL("It had no effect."))
+#     scene.pbDisplay("It had no effect.")
 #     next false
 #   end
 #   if pkmn.fainted?
-#     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+#     scene.pbDisplay("This can't be used on the fainted Pokémon.")
 #   end
 #   pkmn.setForm(2) {
 #     scene.pbRefresh
-#     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
+#     scene.pbDisplay("{1} changed form!", pkmn.name)
 #   }
 #   next true
 # })
 #
 # ItemHandlers::UseOnPokemon.add(:PURPLENECTAR, proc { |item, pkmn, scene|
 #   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form == 3
-#     scene.pbDisplay(_INTL("It had no effect."))
+#     scene.pbDisplay("It had no effect.")
 #     next false
 #   end
 #   if pkmn.fainted?
-#     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+#     scene.pbDisplay("This can't be used on the fainted Pokémon.")
 #   end
 #   pkmn.setForm(3) {
 #     scene.pbRefresh
-#     scene.pbDisplay(_INTL("{1} changed form!", pkmn.name))
+#     scene.pbDisplay("{1} changed form!", pkmn.name)
 #   }
 #   next true
 # })

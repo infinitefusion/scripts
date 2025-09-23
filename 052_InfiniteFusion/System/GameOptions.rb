@@ -87,7 +87,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 }, _INTL("Sets by how much to speed up the game when holding the speed up button (Default: 3x)")
     )
     # if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) #beat the league
-    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast"), _INTL("Instant")],
+    #   options << EnumOption.new("Text Speed", ["Normal", "Fast", "Instant"],
     #                             proc { $PokemonSystem.textspeed },
     #                             proc { |value|
     #                               $PokemonSystem.textspeed = value
@@ -95,7 +95,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
     #                             }, "Sets the speed at which the text is displayed"
     #   )
     # else
-    #   options << EnumOption.new(_INTL("Text Speed"), [_INTL("Normal"), _INTL("Fast")],
+    #   options << EnumOption.new("Text Speed", ["Normal", "Fast"],
     #                             proc { $PokemonSystem.textspeed },
     #                             proc { |value|
     #                               $PokemonSystem.textspeed = value
@@ -186,7 +186,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                   MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[value])
                                 }
     )
-    # NumberOption.new(_INTL("Menu Frame"),1,Settings::MENU_WINDOWSKINS.length,
+    # NumberOption.new("Menu Frame",1,Settings::MENU_WINDOWSKINS.length,
     #   proc { $PokemonSystem.frame },
     #   proc { |value|
     #     $PokemonSystem.frame = value

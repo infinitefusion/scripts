@@ -139,8 +139,8 @@
 #   canLose    = $PokemonTemp.battleRules["canLose"] || false
 #   # Skip battle if the player has no able Pokémon, or if holding Ctrl in Debug mode
 #   if $Trainer.able_pokemon_count == 0 || ($DEBUG && Input.press?(Input::CTRL))
-#     pbMessage(_INTL("SKIPPING BATTLE...")) if $DEBUG
-#     pbMessage(_INTL("AFTER WINNING...")) if $DEBUG && $Trainer.able_pokemon_count > 0
+#     pbMessage("SKIPPING BATTLE...") if $DEBUG
+#     pbMessage("AFTER WINNING...") if $DEBUG && $Trainer.able_pokemon_count > 0
 #     pbSet(outcomeVar,($Trainer.able_pokemon_count == 0) ? 0 : 1)   # Treat it as undecided/a win
 #     $PokemonTemp.clearBattleRules
 #     $PokemonGlobal.nextBattleBGM       = nil
@@ -176,7 +176,7 @@
 #       foeEndSpeeches.push(arg[3] || trainer.lose_text)
 #       foeItems.push(trainer.items)
 #     else
-#       raise _INTL("Expected NPCTrainer or array of trainer data, got {1}.", arg)
+#       raise "Expected NPCTrainer or array of trainer data, got {1}.", arg
 #     end
 #   end
 #   # Calculate who the player trainer(s) and their party are

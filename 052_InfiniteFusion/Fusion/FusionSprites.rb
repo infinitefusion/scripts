@@ -193,7 +193,7 @@ end
 # def get_unfused_sprite_path(dex_number_id, localOnly = false)
 #   dex_number = dex_number_id.to_s
 #   folder = dex_number.to_s
-#   substitution_id = _INTL("{1}", dex_number)
+#   substitution_id = "{1}", dex_number
 #
 #   if alt_sprites_substitutions_available && $PokemonGlobal.alt_sprite_substitutions.keys.include?(substitution_id)
 #     substitutionPath = $PokemonGlobal.alt_sprite_substitutions[substitution_id]
@@ -203,7 +203,7 @@ end
 #   random_alt = "" if !random_alt || localOnly
 #
 #
-#   filename = _INTL("{1}{2}.png", dex_number,random_alt)
+#   filename = "{1}{2}.png", dex_number,random_alt
 #
 #   path = Settings::CUSTOM_BASE_SPRITES_FOLDER  + filename
 #   if pbResolveBitmap(path)
@@ -273,7 +273,7 @@ end
 #   end
 #
 #
-#   pokemon_name = _INTL("{1}.{2}",head_id, body_id)
+#   pokemon_name = "{1}.{2}",head_id, body_id
 #
 #   #get altSprite letter
 #   random_alt = get_random_alt_letter_for_custom(head_id, body_id) #nil if no main
@@ -285,7 +285,7 @@ end
 #   end
 #
 #
-#   filename = _INTL("{1}{2}.png", pokemon_name, random_alt)
+#   filename = "{1}{2}.png", pokemon_name, random_alt
 #   #Try local custom sprite
 #   local_custom_path = Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + head_id.to_s  + "/" + filename
 #   if pbResolveBitmap(local_custom_path)

@@ -40,7 +40,7 @@ def convertAllPokemon()
         pBody = (pf / prev_total).round
         pHead = pf - (prev_total * pBody)
 
-        #   Kernel.pbMessage(_INTL("pbod {1} pHead {2}, species: {3})",pBody,pHead,pf))
+        #   Kernel.pbMessage("pbod {1} pHead {2}, species: {3})",pBody,pHead,pf)
 
         prev_max_value = (prev_total * prev_total) + prev_total
         if pf >= prev_max_value

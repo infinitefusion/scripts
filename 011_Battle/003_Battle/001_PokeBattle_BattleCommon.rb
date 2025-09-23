@@ -87,8 +87,8 @@ module PokeBattle_BattleCommon
   #   return pbStorePokemon(pokemon) if !$Trainer.party_full?
   #
   #   while !pickedOption
-  #     command = pbMessage(_INTL("\\ts[]Your team is full!"),
-  #                         [_INTL("Add to your party"), _INTL("Store to PC"),], 2)
+  #     command = pbMessage("\\ts[]Your team is full!"),
+  #                         ["Add to your party", "Store to PC",], 2)
   #     echoln ("command " + command.to_s)
   #     case command
   #     when 0 #SWAP

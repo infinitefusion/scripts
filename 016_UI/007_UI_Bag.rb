@@ -537,8 +537,8 @@ class PokemonBagScreen
         command = @scene.pbShowCommands(_INTL("How to sort?",itemname),[
           _INTL("Alphabetically"),
           _INTL("By quantity"),
-          # _INTL("Recently used"),
-          # _INTL("Recently obtained"),
+          # "Recently used",
+          # "Recently obtained",
           _INTL("Cancel")
         ],0)
         case command

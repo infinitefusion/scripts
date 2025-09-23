@@ -239,10 +239,10 @@ class PokemonPokedexInfo_Scene
   #   # ret.each do |entry|
   #   #   if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
   #   #     case entry[1]
-  #   #     when 0 then entry[0] = _INTL("Male")
-  #   #     when 1 then entry[0] = _INTL("Female")
+  #   #     when 0 then entry[0] = "Male"
+  #   #     when 1 then entry[0] = "Female"
   #   #     else
-  #   #       entry[0] = (multiple_forms) ? _INTL("One Form") : _INTL("Genderless")
+  #   #       entry[0] = multiple_forms ? "One Form" : "Genderless"
   #   #     end
   #   #   end
   #   #   entry[1] = 0 if entry[1] == 2   # Genderless entries are treated as male

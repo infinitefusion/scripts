@@ -6,7 +6,7 @@
 #     textPos = []
 #     textX = (@side==0) ? 10 : self.bitmap.width-8
 #     # Draw Pokémon's name
-#     textPos.push([_INTL("{1}'s",@battler.name),textX,-4,@side==1,
+#     textPos.push(["{1}'s",@battler.name,textX,-4,@side==1,
 #                   TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
 #     # Draw Pokémon's ability
 #     textPos.push([@battler.abilityName,textX,26,@side==1,

@@ -339,7 +339,7 @@ Events.onMapChange += proc { |_sender, e|
 #   currently_roaming = $PokemonGlobal.roamPosition.keys
 #   currently_roaming.each do |roamer_id|
 #     roamerOnCurrentMap = $PokemonGlobal.roamPosition[roamer_id] == $game_map.map_id
-#     echoln _INTL("{1} is on map {2}",roamer_id,$game_map.map_id)
+#     echoln "{1} is on map {2}",roamer_id,$game_map.map_id
 #     echoln $PokemonGlobal.roamPokemon
 #     if roamerOnCurrentMap
 #       next if $PokemonGlobal.roamPokemonCaught[roamer_id]

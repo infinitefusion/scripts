@@ -1139,7 +1139,7 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
 
   setAbilityAndNatureAndNickname([GameData::Ability.get(abID1), GameData::Ability.get(abID2)], availableNatures)
 
-  # if (Kernel.pbMessage("Choose an ability. ???", [_INTL("{1}", ability1_name), _INTL("{1}", ability2_name)], 2)) == 0
+  # if (Kernel.pbMessage("Choose an ability. ???", ["{1}", ability1_name, "{1}", ability2_name], 2)) == 0
   #   return abID1 #hidden1 ? 4 : 0
   # end
   # return abID2 #hidden2 ? 5 : 1

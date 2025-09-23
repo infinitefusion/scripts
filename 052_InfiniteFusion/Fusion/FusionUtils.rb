@@ -61,7 +61,7 @@ def species_has_body_of(checked_species, checked_against)
   end
   bodySpecies = get_body_species_from_symbol(checked_species)
   ret = bodySpecies == checked_against
-  #echoln _INTL("{1} HAS BODY OF {2} : {3} (body is {4})",checked_species,checked_against,ret,bodySpecies)
+  #echoln "{1} HAS BODY OF {2} : {3} (body is {4})",checked_species,checked_against,ret,bodySpecies
   return ret
 end
 
@@ -71,7 +71,7 @@ def species_has_head_of(checked_species, checked_against)
   end
   headSpecies = get_head_species_from_symbol(checked_species)
   ret = headSpecies == checked_against
-  #echoln _INTL("{1} HAS HEAD OF {2} : {3}",checked_species,checked_against,ret)
+  #echoln "{1} HAS HEAD OF {2} : {3}",checked_species,checked_against,ret
   return ret
 end
 

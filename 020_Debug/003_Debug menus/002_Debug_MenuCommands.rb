@@ -822,15 +822,15 @@ DebugMenuCommands.register("setplayer", {
     #   break
     # end
     # if limit <= 1
-    #   pbMessage(_INTL("There is only one player defined."))
+    #   pbMessage("There is only one player defined.")
     # else
     #   params = ChooseNumberParams.new
     #   params.setRange(0, limit - 1)
     #   params.setDefaultValue($Trainer.character_ID)
-    #   newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
+    #   newid = pbMessageChooseNumber("Choose the new player character."), params
     #   if newid != $Trainer.character_ID
     #     pbChangePlayer(newid)
-    #     pbMessage(_INTL("The player character was changed."))
+    #     pbMessage("The player character was changed.")
     #   end
     # end
   }
