@@ -88,7 +88,7 @@ class CharacterSelectMenuPresenter
       cmd = pbMessage(_INTL("Is this information correct?"), [_INTL("Yes"), _INTL("No")])
       if cmd == 0
         pbSEPlay("GUI naming confirm", 80, 100)
-        #pbMessage(_INTL("You will be able to customize your appearance further while playing"))
+        #pbMessage("You will be able to customize your appearance further while playing")
         applyAllSelectedValues()
         close_menu()
       end

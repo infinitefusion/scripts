@@ -8,17 +8,18 @@
 # e.g. If the player uses a stronger Pokemon in the battle, the NPC will get more experience
 # as a result
 #
-def makeRebattledTrainerTeamGainExp(trainer, playerWon=true)
+def makeRebattledTrainerTeamGainExp(trainer, playerWon=true, gained_exp=nil)
   return if !trainer
   updated_team = []
 
   trainer_pokemon = $Trainer.party[0]
-
+  return if !trainer_pokemon
   for pokemon in trainer.currentTeam
-    gained_exp = trainer_pokemon.level * trainer_pokemon.base_exp
-    gained_exp /= 2 if playerWon   #trainer lost so he's not getting full exp
-    gained_exp /= trainer.currentTeam.length
-
+    if !gained_exp  #Set depending on first pokemon in party if not given a specific amount
+      gained_exp = trainer_pokemon.level * trainer_pokemon.base_exp
+      gained_exp /= 2 if playerWon   #trainer lost so he's not getting full exp
+      gained_exp /= trainer.currentTeam.length
+    end
     growth_rate = pokemon.growth_rate
     new_exp = growth_rate.add_exp(pokemon.exp, gained_exp)
     pokemon.exp = new_exp
@@ -58,15 +59,18 @@ def generateTrainerRematch(trainer)
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
 
   loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
+  player_won = false
   if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
     updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
     updated_trainer = healRebattledTrainerPokemon(updated_trainer)
+    player_won=true
   else
     updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
   end
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
-  return updated_trainer
+  trainer.increase_friendship(5)
+  return updated_trainer, player_won
 end
 
 def showPrerematchDialog()
@@ -114,6 +118,7 @@ def showPrerematchDialog()
     split_messages = message_text.split("<br>")
     split_messages.each do |msg|
       pbCallBub(2,event.id)
+      pbCallBub(3) if isPartneredWithTrainer(trainer)
       pbMessage(msg)
     end
   end

@@ -181,31 +181,28 @@ def offerPokemonForTrade(player_pokemon, npc_party, trainer_class)
   player_score = evaluate_pokemon_worth(player_pokemon)
   pickiness = TRAINER_CLASS_PICKINESS[trainer_class] || 1.0
 
-  # Define a fair range of difference based on pickiness
-  max_difference = [player_score, 100].min * pickiness # scale based on lower score
+  # Evaluate all NPC Pokémon scores
+  npc_scores = npc_party.map do |npc_pkmn|
+    [npc_pkmn, evaluate_pokemon_worth(npc_pkmn, compare_level: player_pokemon.level)]
+  end
+  best_npc_pokemon, best_score = npc_scores.max_by { |_, score| score }
+  return best_npc_pokemon if player_score > best_score
 
-  candidates = npc_party.select do |npc_pkmn|
-    npc_score = evaluate_pokemon_worth(npc_pkmn, compare_level: player_pokemon.level)
+  max_difference = [player_score, 100].min * pickiness
+  candidates = npc_scores.select do |npc_pkmn, npc_score|
     (npc_score - player_score).abs <= max_difference
   end
 
   return nil if candidates.empty?
-
-  # Pick the best match (closest in value)
-  candidates.min_by do |npc_pkmn|
-    (evaluate_pokemon_worth(npc_pkmn, compare_level: player_pokemon.level) - player_score).abs
-  end
+  candidates.min_by do |_, npc_score|
+    (npc_score - player_score).abs
+  end.first
 end
-
-
-
-
-
 
 def doNPCTrainerTrade(trainer)
   echoln trainer.getTimeSinceLastTrade
   if trainer.isNextTradeReady?
-    pbMessage(_INTL("You traded with this trainer recently. Wait a little bit before you trade again."))
+    pbMessage(_INTL("The trainer is not ready to trade yet. Wait a little bit before you make your offer."))
     return trainer
   end
   return generateTrainerTradeOffer(trainer)
@@ -240,10 +237,7 @@ def generateTrainerTradeOffer(trainer)
     pif_sprite.dump_info()
 
     message = _INTL("{1} {2} is offering {3} (Level {4}) for your {5}.", trainerClassName, trainer.trainerName, offered_pokemon.name, offered_pokemon.level, chosen_pokemon.name)
-
-    $game_screen.pictures[bg_image_id].show("Trainers/obtain_trade_bg.png", 0, Graphics.width/4, 20)
-    displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
-    $game_screen.pictures[bg_image_id].erase
+    showPokemonInPokeballWithMessage(pif_sprite, message)
 
     if pbConfirmMessage(_INTL("Trade away {1} for {2} {3}'s {4}?", chosen_pokemon.name, trainerClassName, trainer.trainerName, offered_pokemon.name))
       pbStartTrade(chosen_index, offered_pokemon,offered_pokemon.name,trainer.trainerName,0)
@@ -251,6 +245,7 @@ def generateTrainerTradeOffer(trainer)
       updated_party.delete(offered_pokemon)
       updated_party << chosen_pokemon.clone
       trainer.previous_trade_timestamp= Time.now
+      trainer.increase_friendship(20)
       return trainer
     end
   end

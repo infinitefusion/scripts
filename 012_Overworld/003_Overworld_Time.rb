@@ -5,14 +5,6 @@ def pbGetTimeNow
   return Time.now
 end
 
-def pbGetTimeNowGlobal
-  if Settings::LANGUAGES.length >= 2 && Settings::LANGUAGES[$PokemonSystem.language][1] == "french.dat"
-    return pbGetTimeNow.strftime("%H:%M")
-  else
-    return pbGetTimeNow.strftime("%I:%M %p")
-  end
-end
-
 module PBDayNight
   HourlyTones = [
     Tone.new(-70, -90, 15, 55), # Night           # Midnight

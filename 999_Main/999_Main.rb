@@ -18,8 +18,11 @@ def handleReplaceExistingSprites()
   commands << _INTL("Replace all the old sprites with the new ones")
   #commands << "Import all the new sprites as alts"
 
-  message = _INTL("While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game.", spritesToReplaceList.size)
-  message = _INTL("While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game.", spritesToReplaceList.size) if spritesToReplaceList.size > 1
+  messageSingular = "While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game."
+  messagePlural = "While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game."
+
+  messageText = spritesToReplaceList.size==1 ? messageSingular : messagePlural
+  message = _INTL(messageText,spritesToReplaceList.length.to_s)
   pbMessage(message)
 
   command = pbMessage(_INTL("What to do with the new sprites?"),commands,commands.size-1)
@@ -67,8 +70,8 @@ def sortCustomBattlers()
   $game_temp.nb_imported_sprites=0
   echo "Sorting CustomBattlers files..."
 
-  # pbMessage( "Warning: Sprites that are manually imported will not get updated when a new sprite pack releases. This means that if some contain errors, these will not get fixed for you. All of the sprites from the latest spritepack are already available in your game without the need to manually import anything.")
-  # if !pbConfirmMessage( "Do you still wish to import the sprites that are in the \"Sprites to import\" folder")
+  # pbMessage("Warning: Sprites that are manually imported will not get updated when a new sprite pack releases. This means that if some contain errors, these will not get fixed for you. All of the sprites from the latest spritepack are already available in your game without the need to manually import anything.")
+  # if !pbConfirmMessage("Do you still wish to import the sprites that are in the \"Sprites to import\" folder")
   #   return
   # end
 
