@@ -235,7 +235,7 @@ module Game
     end
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)
-    self.load_secret_bases
+    self.load_secret_bases if Settings::HOENN
     pbUpdateVehicle
   end
 

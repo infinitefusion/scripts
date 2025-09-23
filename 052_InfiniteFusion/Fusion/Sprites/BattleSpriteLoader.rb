@@ -174,7 +174,7 @@ class BattleSpriteLoader
 
   #
   # Flow:
-  # #   if none found, look for custom sprite in custom spritesheet (download if can't find spritesheet or new spritepack released)
+  # #   if none found in cache, look for custom sprite in custom spritesheet (download if can't find spritesheet or new spritepack released)
   #   if  none found, load from autogen spritesheet
 
   def select_new_pif_fusion_sprite(head_id, body_id)
