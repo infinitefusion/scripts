@@ -1231,7 +1231,8 @@ class PokemonPartyScreen
     splicerItem = selectSplicer()
     return unless splicerItem
     if pbDNASplicing(pokemon,@scene,splicerItem)
-      $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICER2
+      echoln splicerItem
+      $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICERS2
     end
   end
 
@@ -1321,7 +1322,7 @@ class PokemonPartyScreen
         end
       end
       commands[cmdNickname = commands.length] = _INTL("Nickname") if !pkmn.egg?
-      #commands[cmdLearnMove = commands.length] = _INTL("Remember moves")
+      commands[cmdLearnMove = commands.length] = _INTL("Remember moves")
 
       if playerHasFusionItems
         if pkmn.isFusion?

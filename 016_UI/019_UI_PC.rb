@@ -260,6 +260,10 @@ def pbPokeCenterPC
     break if !PokemonPCList.callCommand(command)
   end
   pbSEPlay("PC close")
+  if $game_temp.transfer_box_autosave
+    Game.save()
+    $game_temp.transfer_box_autosave=false
+  end
 end
 
 def pbGetStorageCreator

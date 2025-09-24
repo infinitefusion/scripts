@@ -334,11 +334,13 @@ class PokemonLoadScreen
         return
       when cmd_new_game
         @scene.pbEndScene
-        Game.start_new
+        Game.start_new(new_game_plus)
+        echoln new_game_plus
+        @save_data[:player].new_game_plus_unlocked=new_game_plus
         return
       when cmd_new_game_plus
         @scene.pbEndScene
-        Game.start_new(@save_data[:bag],@save_data[:storage_system],@save_data[:player])
+        Game.start_new(new_game_plus,@save_data[:bag],@save_data[:storage_system],@save_data[:player])
         @save_data[:player].new_game_plus_unlocked=true
         return
       when cmd_mystery_gift

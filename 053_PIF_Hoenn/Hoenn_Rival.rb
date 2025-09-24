@@ -8,20 +8,19 @@ class Player < Trainer
   alias pokemonEssentials_player_initialize initialize
   def initialize(*args)
     pokemonEssentials_player_initialize(*args)
-    @rival_appearance = init_rival_appearance
   end
 
 
 
   def init_rival_appearance
     if isPlayerMale
-      return TrainerAppearance.new(5,
+      @rival_appearance= TrainerAppearance.new(5,
                             HAT_MAY,
                             CLOTHES_MAY,
                             getFullHairId(HAIR_MAY,3) ,
                             0, 0, 0)
     else
-      return TrainerAppearance.new(5,
+      @rival_appearance= TrainerAppearance.new(5,
                                    HAT_BRENDAN,
                                    CLOTHES_BRENDAN,
                                    getFullHairId(HAIR_BRENDAN,3),
@@ -64,12 +63,12 @@ class Sprite_Character
   def checkModifySpriteGraphics(character)
     PIF_typeExpert_checkModifySpriteGraphics(character)
     return if character == $game_player
-    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerFemale && character.name == HOENN_RIVAL_EVENT_NAME && character.character_name == TEMPLATE_CHARACTER_FILE
-    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerMale && character.name == HOENN_RIVAL_EVENT_NAME && character.character_name == TEMPLATE_CHARACTER_FILE
+    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerFemale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
+    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerMale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
   end
 end
 
-def get_rival_starter
+def get_hoenn_rival_starter
   case get_rival_starter_type()
   when :GRASS
     return obtainStarter(0)
@@ -225,11 +224,11 @@ def initializeRivalBattledTrainer
   trainer_type = :RIVAL1
   trainer_name = isPlayerMale ? "May" : "Brendan"
   trainer_appearance = $Trainer.rival_appearance
-  rivalBattledTrainer = BattledTrainer.new(trainer_type,trainer_name,0)
+  rivalBattledTrainer = BattledTrainer.new(trainer_type,trainer_name,0,BATTLED_TRAINER_RIVAL_KEY)
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
   echoln rivalBattledTrainer.currentTeam
   team = []
-  team<<Pokemon.new(get_rival_starter,5)
+  team<<Pokemon.new(get_hoenn_rival_starter,5)
   rivalBattledTrainer.currentTeam =team
   return rivalBattledTrainer
 end
