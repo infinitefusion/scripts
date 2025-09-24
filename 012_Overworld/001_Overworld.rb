@@ -919,9 +919,9 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom = t
   elsif quantity > 1
     pbMessage(_INTL("\\me[{1}]You obtained {2} {4}{3}\\c[0]!\\wtnp[30]", meName, quantity, itemname, text_color))
   elsif itemname.starts_with_vowel?
-    pbMessage(_INTL("\\me[{1}]You obtained an {4}{2}\\c[0]!\\wtnp[30]", meName, itemname, text_color))
+    pbMessage(_INTL("\\me[{1}]You obtained an {3}{2}\\c[0]!\\wtnp[30]", meName, itemname, text_color))
   else
-    pbMessage(_INTL("\\me[{1}]You obtained a {4}{2}\\c[0]!\\wtnp[30]", meName, itemname, text_color))
+    pbMessage(_INTL("\\me[{1}]You obtained a {3}{2}\\c[0]!\\wtnp[30]", meName, itemname, text_color))
   end
   promptRegisterItem(item)
   if $PokemonBag.pbStoreItem(item, quantity) # If item can be added
