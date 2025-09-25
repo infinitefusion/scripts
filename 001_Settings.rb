@@ -558,7 +558,7 @@ module Settings
   # from.
   LANGUAGES = [
       ["English", "english.dat"],
-      ["French", "french.dat"]
+      ["Français", "french.dat"]
   ]
 
   #Experimental

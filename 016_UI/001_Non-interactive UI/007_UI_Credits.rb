@@ -110,6 +110,11 @@ Chardub<s>TCGrunler#4583
 Elite 4 rematch teams
 duskrd<s>anaconja<s>taraline
 
+French translation
+anthonygourmand
+locpic_
+blood.wolf58 (Willi)
+
 The following free ressources were also used 
 with their respective authors' consent:
 

@@ -114,7 +114,7 @@ end
 def getTrainerSpriteHatFilename(hat_id)
   base_path = Settings::PLAYER_GRAPHICS_FOLDER + Settings::PLAYER_HAT_FOLDER
   dynamic_path = "/#{hat_id}/" 
-  filename = Settings::PLAYER_HAT_FOLDER + "_trainer_#{hat_id}", 
+  filename = Settings::PLAYER_HAT_FOLDER + "_trainer_#{hat_id}"
   full_path = base_path + dynamic_path + filename
   return full_path
 end
