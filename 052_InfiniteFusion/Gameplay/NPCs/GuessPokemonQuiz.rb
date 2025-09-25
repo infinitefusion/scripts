@@ -17,7 +17,8 @@ class FusionQuiz
     @selected_pokemon = nil
     @head_id = nil
     @body_id = nil
-    @choices = []
+    @body_choices = []
+    @head_choices = []
     @abandonned = false
     @score = 0
     @current_streak = 0
@@ -93,23 +94,23 @@ class FusionQuiz
     correct_answers = []
 
     #OBSCURED
-    correct_answers << new_question(calculate_points_awarded(base_points_q1, round_multiplier), _INTL("Which Pokémon is this fusion's body?"), @body_id, true, true)
+    correct_answers << new_question(calculate_points_awarded(base_points_q1, round_multiplier), _INTL("Which Pokémon is this fusion's body?"), @body_id, nil, true, :BODY)
     pbMessage(_INTL("Next question!"))
-    correct_answers << new_question(calculate_points_awarded(base_points_q2, round_multiplier), _INTL("Which Pokémon is this fusion's head?"), @head_id, true, true)
+    correct_answers << new_question(calculate_points_awarded(base_points_q2, round_multiplier), _INTL("Which Pokémon is this fusion's head?"), @head_id, nil, true, :HEAD)
 
     #NON-OBSCURED
     if !correct_answers[0] || !correct_answers[1]
       show_fusion_picture(false)
       pbMessage(_INTL("Okay, now's your chance to make up for the points you missed!"))
       if !correct_answers[0] #1st question redemption
-        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, false, false)
+        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, @body_choices, false, :BODY)
         if !correct_answers[1]
           pbMessage(_INTL("Next question!"))
         end
       end
 
       if !correct_answers[1] #2nd question redemption
-        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, false, false)
+        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, @head_choices, false, :HEAD)
       end
     else
       pbSEPlay("Applause", 80)
@@ -133,10 +134,10 @@ class FusionQuiz
     return points
   end
 
-  def new_question(points_value, question, answer_id, should_generate_new_choices, other_chance_later)
+  def new_question(points_value, question, answer_id, choices, other_chance_later,question_type)
     points_value = points_value.to_i
     answer_name = getPokemon(answer_id).real_name
-    answered_correctly = give_answer(question, answer_id, should_generate_new_choices)
+    answered_correctly = give_answer(question, answer_id, choices,question_type)
     award_points(points_value) if answered_correctly
     question_answer_followup_dialog(answered_correctly, answer_name, points_value, other_chance_later)
     return answered_correctly
@@ -232,14 +233,14 @@ class FusionQuiz
     pbSet(save_in_variable, @selected_pokemon)
   end
 
-  def give_answer(prompt_message, answer_id, should_generate_new_choices)
+  def give_answer(prompt_message, answer_id, choices,question_type=:BODY)
     question_answered = false
     answer_pokemon_name = getPokemon(answer_id).real_name
     while !question_answered
       if @difficulty == :ADVANCED
         player_answer = prompt_pick_answer_advanced(prompt_message, answer_id)
       else
-        player_answer = prompt_pick_answer_regular(prompt_message, answer_id, should_generate_new_choices)
+        player_answer = prompt_pick_answer_regular(prompt_message, answer_id, choices,question_type)
       end
       confirmed = pbMessage(_INTL("Is this your final answer?"), [_INTL("Yes"), _INTL("No")])
       if confirmed == 0
@@ -281,14 +282,17 @@ class FusionQuiz
     return choices
   end
 
-  def prompt_pick_answer_regular(prompt_message, real_answer, should_new_choices)
-    echoln should_new_choices
-    commands = should_new_choices ? generate_new_choices(real_answer) : @choices.shuffle
+  def prompt_pick_answer_regular(prompt_message, real_answer, choices, question_type=:BODY)
+    if choices && choices.is_a?(Array)
+      commands = choices.shuffle
+    else
+      commands = generate_new_choices(real_answer,question_type)
+    end
     chosen = pbMessage(prompt_message, commands)
     return commands[chosen]
   end
 
-  def generate_new_choices(real_answer)
+  def generate_new_choices(real_answer,question_type=:BODY)
     choices = []
     choices << real_answer
     choices.push(*get_random_pokemon_from_same_egg_group(real_answer, 3))
@@ -298,7 +302,11 @@ class FusionQuiz
       species = getPokemon(dex_num)
       commands.push(species.real_name)
     end
-    @choices = commands
+    if question_type == :BODY
+      @body_choices = commands
+    else
+      @head_choices = commands
+    end
     return commands.shuffle
   end
 
