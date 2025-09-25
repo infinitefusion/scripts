@@ -4,7 +4,7 @@ end
 
 
 class StorageTransferBox < PokemonBox
-  TRANSFER_BOX_NAME = "Transfer Box"
+  TRANSFER_BOX_NAME = _INTL("Transfer Box")
   def initialize()
     super(TRANSFER_BOX_NAME,PokemonBox::BOX_SIZE)
     @pokemon = []
@@ -65,7 +65,7 @@ end
 
 def verifyTransferBoxAutosave()
   if !$game_temp.transfer_box_autosave
-    confirmed = pbConfirmMessage("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?")
+    confirmed = pbConfirmMessage(_INTL("Moving Pokémon in and out of the transfer box will save the game automatically. Is this okay?"))
     $game_temp.transfer_box_autosave=true if confirmed
     return confirmed
   end

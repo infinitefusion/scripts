@@ -38,11 +38,11 @@ class SecretBase
   end
 
   def initializeBaseName
-    return _INTL("#{$Trainer.name}'s secret base")
+    return _INTL("{1}'s secret base",$Trainer.name)
   end
 
   def initialize_base_message
-    return "Welcome to my secret base!"
+    return _INTL("Welcome to my secret base!")
   end
   def initializeLayout
     @layout = SecretBaseLayout.new(@base_layout_type,!@is_visitor)

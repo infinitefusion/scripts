@@ -1,10 +1,10 @@
 def getGameModeFromIndex(index)
-  return "Classic" if index == 0
-  return "Random" if index == 1
-  return "Remix" if index == 2
-  return "Expert" if index == 3
-  return "Species" if index == 4
-  return "Debug" if index == 5
+  return _INTL("Classic") if index == 0
+  return _INTL("Random") if index == 1
+  return _INTL("Remix") if index == 2
+  return _INTL("Expert") if index == 3
+  return _INTL("Species") if index == 4
+  return _INTL("Debug") if index == 5
   return ""
 end
 

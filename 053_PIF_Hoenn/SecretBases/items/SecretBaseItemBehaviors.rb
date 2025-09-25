@@ -136,7 +136,7 @@ def interact_other_player(secretBase)
   event.turn_toward_player
   message = secretBase.base_message
   pbCallBub(3)
-  pbMessage(_INTL("Hey, I'm \\C[1]#{secretBase.trainer_name}\\C[0], welcome to my secret base!",))
+  pbMessage(_INTL("Hey, I'm \\C[1]{1}\\C[0], welcome to my secret base!",secretBase.trainer_name))
   if message
     pbCallBub(3)
     pbMessage(message)

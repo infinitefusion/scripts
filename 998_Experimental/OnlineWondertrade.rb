@@ -9,10 +9,10 @@ class OnlineWondertrade
       body = HTTPLite::JSON.parse(response[:body])
       doTrade(body)
     else
-      pbMessage("Could not find a trading partner...")
+      pbMessage(_INTL("Could not find a trading partner..."))
     end
     rescue MKXPError
-      pbMessage("There was an error while sending your Pokémon...")
+      pbMessage(_INTL("There was an error while sending your Pokémon..."))
     end
   end
 

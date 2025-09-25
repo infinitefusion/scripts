@@ -12,7 +12,7 @@ ItemHandlers::UseFromBag.add(:LANTERN, proc { |item|
 })
 
 ItemHandlers::UseInField.add(:LANTERN, proc { |item|
-  Kernel.pbMessage(_INTL("#{$Trainer.name} used the lantern."))
+  Kernel.pbMessage(_INTL("{1} used the lantern.", $Trainer.name))
   if useLantern()
     next 1
   else
@@ -175,7 +175,7 @@ def changeHiddenAbility2(abilityList, scene, poke)
   abilName2 = PBAbilities.getName(abID1)
   abilName3 = PBAbilities.getName(abID2)
 
-  if (Kernel.pbMessage("Choose an ability.", [_INTL("{1}", abilName2), _INTL("{1}", abilName3)], 2)) == 0
+  if (Kernel.pbMessage(_INTL("Choose an ability."), [_INTL("{1}", abilName2), _INTL("{1}", abilName3)], 2)) == 0
     poke.setAbility(2)
     scene.pbDisplay(_INTL("{1}'s ability was changed to {2}!", poke.name, abilName2))
   else
@@ -266,8 +266,8 @@ ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
 
 def useSleepingBag()
   currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
-  choices = ["1 hour", "6 hours", "12 hours", "24 hours", "Cancel"]
-  choice = Kernel.pbMessage("Sleep for how long?", choices, choices.length)
+  choices = [_INTL("1 hour"), _INTL("6 hours"), _INTL("12 hours"), _INTL("24 hours"), _INTL("Cancel")]
+  choice = Kernel.pbMessage(_INTL("Sleep for how long?"), choices, choices.length)
   echoln choice
   return 0 if choice == choices.length - 1
   oldDay = getDayOfTheWeek()
@@ -299,7 +299,7 @@ end
 
 def useFieldSleepingBag()
   currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
-  confirmed = Kernel.pbConfirmMessage("Sleep for an hour?")
+  confirmed = Kernel.pbConfirmMessage(_INTL("Sleep for an hour?"))
   if confirmed
     oldDay = getDayOfTheWeek()
     timeAdded = 0
@@ -399,7 +399,7 @@ ItemHandlers::UseFromBag.add(:EMERGENCYWHISTLE, proc { |item|
 ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
   if $game_switches[SWITCH_SPORES_REPEL]
     if pbQuantity(:MUSHROOMSPORES) >= 2
-      if pbConfirmMessage("Condense 2 spore samples into a Repel?")
+      if pbConfirmMessage(_INTL("Condense 2 spore samples into a Repel?"))
         $PokemonBag.pbDeleteItem(:MUSHROOMSPORES,2)
         pbReceiveItem(:REPEL)
         next 1
@@ -408,7 +408,7 @@ ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
       end
 
     else
-      pbMessage("Collect another sample to condense them into a Repel.")
+      pbMessage(_INTL("Collect another sample to condense them into a Repel."))
       next 1
     end
   end
@@ -430,7 +430,7 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   else
     Kernel.pbMessage(_INTL("The Odd Keystone appears to be moving on its own."))
     Kernel.pbMessage(_INTL("It seems as if some poweful energy is trying to escape from it."))
-    if (Kernel.pbMessage("Let it out?", ["No", "Yes"], 0)) == 1
+    if (Kernel.pbMessage(_INTL("Let it out?"), [_INTL("No"), _INTL("Yes")], 0)) == 1
       pbWildBattle(:SPIRITOMB, 27)
       pbSet(VAR_ODDKEYSTONE_NB, 0)
     end
@@ -439,9 +439,9 @@ ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
 })
 
 def useFavoriteOutfit()
-  cmd_switch = isWearingFavoriteOutfit() ? "Take off favorite outfit" : "Switch to favorite outfit"
-  cmd_mark_favorite = "Mark current outfit as favorite"
-  cmd_cancel = "Cancel"
+  cmd_switch = isWearingFavoriteOutfit() ? _INTL("Take off favorite outfit") : _INTL("Switch to favorite outfit")
+  cmd_mark_favorite = _INTL("Mark current outfit as favorite")
+  cmd_cancel = _INTL("Cancel")
 
   options = [cmd_switch, cmd_mark_favorite, cmd_cancel]
   choice = optionsMenu(options)
@@ -463,7 +463,7 @@ def switchToFavoriteOutfit()
   end
 
   if isWearingFavoriteOutfit()
-    if (Kernel.pbConfirmMessage("Remove your favorite outfit?"))
+    if (Kernel.pbConfirmMessage(_INTL("Remove your favorite outfit?")))
       last_worn_clothes_is_favorite = $Trainer.last_worn_outfit == $Trainer.favorite_clothes
       last_worn_hat_is_favorite = $Trainer.last_worn_hat == $Trainer.favorite_hat
       last_worn_hat2_is_favorite = $Trainer.last_worn_hat2 == $Trainer.favorite_hat2
@@ -480,7 +480,7 @@ def switchToFavoriteOutfit()
     end
 
   else
-    if (Kernel.pbConfirmMessage("Put on your favorite outfit?"))
+    if (Kernel.pbConfirmMessage(_INTL("Put on your favorite outfit?")))
       echoln "favorite clothes: #{$Trainer.favorite_clothes}, favorite hat: #{$Trainer.favorite_hat}, favorite hat2: #{$Trainer.favorite_hat2}"
 
       playOutfitChangeAnimation()
@@ -496,7 +496,7 @@ end
 def useRocketUniform()
   return 0 if !$game_switches[SWITCH_JOINED_TEAM_ROCKET]
   if isWearingTeamRocketOutfit()
-    if (Kernel.pbConfirmMessage("Remove the Team Rocket uniform?"))
+    if (Kernel.pbConfirmMessage(_INTL("Remove the Team Rocket uniform?")))
       if ($Trainer.last_worn_outfit == CLOTHES_TEAM_ROCKET_MALE || $Trainer.last_worn_outfit == CLOTHES_TEAM_ROCKET_FEMALE) && $Trainer.last_worn_hat == HAT_TEAM_ROCKET
         $Trainer.last_worn_outfit = getDefaultClothes(getPlayerGender)
       end
@@ -507,7 +507,7 @@ def useRocketUniform()
       return 0
     end
   else
-    if (Kernel.pbConfirmMessage("Put on the Team Rocket uniform?"))
+    if (Kernel.pbConfirmMessage(_INTL("Put on the Team Rocket uniform?")))
       playOutfitChangeAnimation()
       gender = pbGet(VAR_TRAINER_GENDER)
       if gender == GENDER_MALE
@@ -524,7 +524,7 @@ end
 
 def useDreamMirror
   visitedMap = $PokemonGlobal.visitedMaps[pbGet(226)]
-  map_name = visitedMap ? Kernel.getMapName(pbGet(226)).to_s : "an unknown location"
+  map_name = visitedMap ? Kernel.getMapName(pbGet(226)).to_s : _INTL("an unknown location")
 
   Kernel.pbMessage(_INTL("You peeked into the Dream Mirror..."))
 
@@ -665,9 +665,9 @@ end
 
 def useSplicerFromField(item)
   scene = PokemonParty_Scene.new
-  scene.pbStartScene($Trainer.party, "Select a Pokémon")
+  scene.pbStartScene($Trainer.party, _INTL("Select a Pokémon"))
   screen = PokemonPartyScreen.new(scene, $Trainer.party)
-  chosen = screen.pbChoosePokemon("Select a Pokémon")
+  chosen = screen.pbChoosePokemon(_INTL("Select a Pokémon"))
   pokemon = $Trainer.party[chosen]
   fusion_success = pbDNASplicing(pokemon, scene, item)
   screen.pbEndScene
@@ -752,34 +752,34 @@ ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
 #   if (pokemon.species <= NB_POKEMON)
 #     if pokemon.fused != nil
 #       if $Trainer.party.length >= 6
-#         scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
+#         scene.pbDisplay("Your party is full! You can't unfuse {1}.", pokemon.name)
 #         return false
 #       else
 #         $Trainer.party[$Trainer.party.length] = pokemon.fused
 #         pokemon.fused = nil
 #         pokemon.form = 0
 #         scene.pbHardRefresh
-#         scene.pbDisplay(_INTL("{1} changed Forme!", pokemon.name))
+#         scene.pbDisplay("{1} changed Forme!", pokemon.name)
 #         return true
 #       end
 #     else
-#       chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+#       chosen = scene.pbChoosePokemon("Fuse with which Pokémon?")
 #       if chosen >= 0
 #         poke2 = $Trainer.party[chosen]
 #         if (poke2.species <= NB_POKEMON) && poke2 != pokemon
 #           #check if fainted
 #           if pokemon.hp == 0 || poke2.hp == 0
-#             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
+#             scene.pbDisplay("A fainted Pokémon cannot be fused!")
 #             return false
 #           end
 #           if pbFuse(pokemon, poke2, supersplicers)
 #             pbRemovePokemonAt(chosen)
 #           end
 #         elsif pokemon == poke2
-#           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
+#           scene.pbDisplay("{1} can't be fused with itself!", pokemon.name)
 #           return false
 #         else
-#           scene.pbDisplay(_INTL("{1} can't be fused with {2}.", poke2.name, pokemon.name))
+#           scene.pbDisplay("{1} can't be fused with {2}.", poke2.name, pokemon.name)
 #           return false
 #
 #         end
@@ -801,20 +801,20 @@ ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
 #   #
 #
 #   if (pokemon.obtain_method == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
-#     scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
+#     scene.pbDisplay("You can't unfuse a Pokémon obtained in a trade!")
 #     return false
 #   else
-#     if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
+#     if Kernel.pbConfirmMessageSerious("Should {1} be unfused?", pokemon.name)
 #       if pokemon.species > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
-#         scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
+#         scene.pbDisplay("{1} cannot be unfused.", pokemon.name)
 #         return false
 #       elsif $Trainer.party.length >= 6 && !pcPosition
-#         scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
+#         scene.pbDisplay("Your party is full! You can't unfuse {1}.", pokemon.name)
 #         return false
 #       else
-#         scene.pbDisplay(_INTL("Unfusing ... "))
-#         scene.pbDisplay(_INTL(" ... "))
-#         scene.pbDisplay(_INTL(" ... "))
+#         scene.pbDisplay("Unfusing ... ")
+#         scene.pbDisplay(" ... ")
+#         scene.pbDisplay(" ... ")
 #
 #         bodyPoke = getBasePokemonID(pokemon.species, true)
 #         headPoke = getBasePokemonID(pokemon.species, false)
@@ -859,9 +859,9 @@ ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
 #         pokemon.obtain_method = 0
 #         poke1.obtain_method = 0
 #
-#         #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
+#         #scene.pbDisplay(p1.to_s + " " + p2.to_s)
 #         scene.pbHardRefresh
-#         scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
+#         scene.pbDisplay("Your Pokémon were successfully unfused! ")
 #         return true
 #       end
 #     end
@@ -937,7 +937,7 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
   move = scene.pbChooseMove(pokemon, _INTL("Boost Damage of which move?"))
   if move >= 0
     # if pokemon.moves[move].damage==0 ||  pokemon.moves[move].accuracy<=5 || pokemon.moves[move].dmgup >=3
-    #  scene.pbDisplay(_INTL("It won't have any effect."))
+    #  scene.pbDisplay("It won't have any effect.")
     #  next false
     # else
     # pokemon.moves[move].dmgup+=1
@@ -945,7 +945,7 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
     # pokemon.moves[move].accuracy -=5
 
     # movename=PBMoves.getName(pokemon.moves[move].id)
-    # scene.pbDisplay(_INTL("{1}'s damage increased.",movename))
+    # scene.pbDisplay("{1}'s damage increased.",movename)
     # next true
     scene.pbDisplay(_INTL("This item has not been implemented into the game yet. It had no effect."))
     next false
@@ -956,12 +956,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 ##New "stones"
 # ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -978,12 +978,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1000,12 +1000,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1022,12 +1022,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 # #
 # ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1060,12 +1060,12 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1082,12 +1082,12 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1141,7 +1141,7 @@ ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM, proc { |item, pokemon, battl
 # #TRACKER (for roaming legendaries)
 # ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
 #   if Settings::ROAMING_SPECIES.length == 0
-#     Kernel.pbMessage(_INTL("No roaming Pokémon defined."))
+#     Kernel.pbMessage("No roaming Pokémon defined.")
 #   else
 #     text = "\\l[8]"
 #     min = $game_switches[350] ? 0 : 1
@@ -1152,11 +1152,11 @@ ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM, proc { |item, pokemon, battl
 #         status = $PokemonGlobal.roamPokemon[i]
 #         if status == true
 #           if $PokemonGlobal.roamPokemonCaught[i]
-#             text += _INTL("{1} has been caught.",
-#                           PBSpecies.getName(getID(PBSpecies, poke[0])))
+#             text += "{1} has been caught.",
+#                           PBSpecies.getName(getID(PBSpecies, poke[0]))
 #           else
-#             text += _INTL("{1} has been defeated.",
-#                           PBSpecies.getName(getID(PBSpecies, poke[0])))
+#             text += "{1} has been defeated.",
+#                           PBSpecies.getName(getID(PBSpecies, poke[0]))
 #           end
 #         else
 #           curmap = $PokemonGlobal.roamPosition[i]
@@ -1164,21 +1164,21 @@ ItemHandlers::BattleUseOnPokemon.add(:BALMMUSHROOM, proc { |item, pokemon, battl
 #             mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
 #
 #             if curmap == $game_map.map_id
-#               text += _INTL("Beep beep! {1} appears to be nearby!",
-#                             PBSpecies.getName(getID(PBSpecies, poke[0])))
+#               text += "Beep beep! {1} appears to be nearby!",
+#                             PBSpecies.getName(getID(PBSpecies, poke[0]))
 #             else
-#               text += _INTL("{1} is roaming around {3}",
+#               text += "{1} is roaming around {3}",
 #                             PBSpecies.getName(getID(PBSpecies, poke[0])), curmap,
-#                             mapinfos[curmap].name, (curmap == $game_map.map_id) ? _INTL("(this route!)") : "")
+#                             mapinfos[curmap].name, (curmap == $game_map.map_id) ? "(this route!)") : ""
 #             end
 #           else
-#             text += _INTL("{1} is roaming in an unknown area.",
-#                           PBSpecies.getName(getID(PBSpecies, poke[0])), poke[1])
+#             text += "{1} is roaming in an unknown area.",
+#                           PBSpecies.getName(getID(PBSpecies, poke[0])), poke[1]
 #           end
 #         end
 #       else
-#         #text+=_INTL("{1} does not appear to be roaming.",
-#         #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2])
+#         #text+="{1} does not appear to be roaming.",
+#         #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2]
 #       end
 #       text += "\n" if i < Settings::ROAMING_SPECIES.length - 1
 #     end
@@ -1242,18 +1242,18 @@ ItemHandlers::UseOnPokemon.add(:TRANSGENDERSTONE, proc { |item, pokemon, scene|
 #     abil2 = i[1] if i[1] == 1
 #   end
 #   if poke.abilityIndex() >= 2 || abil1 == abil2
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
-#   if Kernel.pbConfirmMessage(_INTL("Do you want to change {1}'s ability?",
-#                                    poke.name))
+#   if Kernel.pbConfirmMessage("Do you want to change {1}'s ability?",
+#                                    poke.name)
 #
 #     if poke.abilityIndex() == 0
 #       poke.setAbility(1)
 #     else
 #       poke.setAbility(0)
 #     end
-#     scene.pbDisplay(_INTL("{1}'s ability was changed!", poke.name))
+#     scene.pbDisplay("{1}'s ability was changed!", poke.name)
 #     next true
 #   end
 #   next false
@@ -1303,7 +1303,7 @@ def changeHiddenAbility2(abilityList, scene, poke)
   abilName2 = PBAbilities.getName(abID1)
   abilName3 = PBAbilities.getName(abID2)
 
-  if (Kernel.pbMessage("Choose an ability.", [_INTL("{1}", abilName2), _INTL("{1}", abilName3)], 2)) == 0
+  if (Kernel.pbMessage(_INTL("Choose an ability."), [_INTL("{1}", abilName2), _INTL("{1}", abilName3)], 2)) == 0
     poke.setAbility(2)
     scene.pbDisplay(_INTL("{1}'s ability was changed to {2}!", poke.name, abilName2))
   else
@@ -1376,19 +1376,19 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR_NORMAL, proc { |item, pokemon, scene|
     scene.pbDisplay(_INTL("The egg is closer to hatching!"))
 
     # if pokemon.steps_to_hatch <= 1
-    #   scene.pbDisplay(_INTL("Incubating..."))
-    #   scene.pbDisplay(_INTL("..."))
-    #   scene.pbDisplay(_INTL("..."))
-    #   scene.pbDisplay(_INTL("The egg is ready to hatch!"))
+    #   scene.pbDisplay("Incubating...")
+    #   scene.pbDisplay("...")
+    #   scene.pbDisplay("...")
+    #   scene.pbDisplay("The egg is ready to hatch!")
     #   next false
     # else
-    #   scene.pbDisplay(_INTL("Incubating..."))
-    #   scene.pbDisplay(_INTL("..."))
-    #   scene.pbDisplay(_INTL("..."))
+    #   scene.pbDisplay("Incubating...")
+    #   scene.pbDisplay("...")
+    #   scene.pbDisplay("...")
     #   if pokemon.nbIncubatorsUsed >= 10
-    #     scene.pbDisplay(_INTL("The egg is a bit closer to hatching"))
+    #     scene.pbDisplay("The egg is a bit closer to hatching")
     #   else
-    #     scene.pbDisplay(_INTL("The egg is closer to hatching"))
+    #     scene.pbDisplay("The egg is closer to hatching")
     #   end
     #   pokemon.incrIncubator()
     #   next true
@@ -1578,7 +1578,7 @@ end
 #   newid = (pokemon.species_data.id_number) * NB_POKEMON + poke2.species_data.id_number
 #   previewwindow = FusionPreviewScreen.new(pokemon, poke2)#PictureWindow.new(picturePath)
 #
-#   if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?", newid)))
+#   if (Kernel.pbConfirmMessage("Fuse the two Pokémon?", newid))
 #     previewwindow.dispose
 #     fus = PokemonFusionScene.new
 #     if (fus.pbStartScreen(pokemon, poke2, newid))
@@ -1634,12 +1634,12 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       keepInParty = 0
       if $Trainer.party.length >= 6 && !pcPosition
 
-        message = "Your party is full! Keep which Pokémon in party?"
-        message = "Your party is full! Keep which Pokémon in party? The other will be released." if isOnPinkanIsland()
+        message = _INTL("Your party is full! Keep which Pokémon in party?")
+        message = _INTL("Your party is full! Keep which Pokémon in party? The other will be released.") if isOnPinkanIsland()
         scene.pbDisplay(_INTL(message))
-        selectPokemonMessage = "Select a Pokémon to keep in your party."
-        selectPokemonMessage = "Select a Pokémon to keep in your party. The other will be released" if isOnPinkanIsland()
-        choice = Kernel.pbMessage(selectPokemonMessage, [_INTL("{1}", PBSpecies.getName(bodyPoke)), _INTL("{1}", PBSpecies.getName(headPoke)), "Cancel"], 2)
+        selectPokemonMessage = _INTL("Select a Pokémon to keep in your party.")
+        selectPokemonMessage = _INTL("Select a Pokémon to keep in your party. The other will be released") if isOnPinkanIsland()
+        choice = Kernel.pbMessage(selectPokemonMessage, ["#{PBSpecies.getName(bodyPoke)}", "#{PBSpecies.getName(headPoke)}", _INTL("Cancel")], 2)
         if choice == 2
           return false
         else
@@ -1781,9 +1781,9 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
       pokemon.obtain_method = 0
       poke1.obtain_method = 0
 
-      # scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
+      # scene.pbDisplay(p1.to_s + " " + p2.to_s)
       scene.pbHardRefresh
-      scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
+      scene.pbDisplay(_INTL("Your Pokémon were successfully unfused!"))
       return true
     end
   end
@@ -1812,7 +1812,7 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
   move = scene.pbChooseMove(pokemon, _INTL("Boost Damage of which move?"))
   if move >= 0
     # if pokemon.moves[move].damage==0 ||  pokemon.moves[move].accuracy<=5 || pokemon.moves[move].dmgup >=3
-    #  scene.pbDisplay(_INTL("It won't have any effect."))
+    #  scene.pbDisplay("It won't have any effect.")
     #  next false
     # else
     # pokemon.moves[move].dmgup+=1
@@ -1820,7 +1820,7 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
     # pokemon.moves[move].accuracy -=5
 
     # movename=PBMoves.getName(pokemon.moves[move].id)
-    # scene.pbDisplay(_INTL("{1}'s damage increased.",movename))
+    # scene.pbDisplay("{1}'s damage increased.",movename)
     # next true
     scene.pbDisplay(_INTL("This item has not been implemented into the game yet. It had no effect."))
     next false
@@ -1831,12 +1831,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 ##New "stones"
 # ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1853,12 +1853,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1875,12 +1875,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1897,12 +1897,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1919,12 +1919,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -1941,12 +1941,12 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 #
 # ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   end
 #   newspecies = pbCheckEvolution(pokemon, item)
 #   if newspecies <= 0
-#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     scene.pbDisplay("It won't have any effect.")
 #     next false
 #   else
 #     pbFadeOutInWithMusic(99999) {
@@ -2034,7 +2034,7 @@ def track_pokemon()
 
   # nbRoaming = 0
   # if Settings::ROAMING_SPECIES.length == 0
-  #   Kernel.pbMessage(_INTL("No roaming Pokémon defined."))
+  #   Kernel.pbMessage("No roaming Pokémon defined.")
   # else
   #   text = "\\l[8]"
   #   min = $game_switches[350] ? 0 : 1
@@ -2045,11 +2045,11 @@ def track_pokemon()
   #       status = $PokemonGlobal.roamPokemon[i]
   #       if status == true
   #         if $PokemonGlobal.roamPokemonCaught[i]
-  #           text += _INTL("{1} has been caught.",
-  #                         PBSpecies.getName(getID(PBSpecies, poke[0])))
+  #           text += "{1} has been caught.",
+  #                         PBSpecies.getName(getID(PBSpecies, poke[0]))
   #         else
-  #           text += _INTL("{1} has been defeated.",
-  #                         PBSpecies.getName(getID(PBSpecies, poke[0])))
+  #           text += "{1} has been defeated.",
+  #                         PBSpecies.getName(getID(PBSpecies, poke[0]))
   #         end
   #       else
   #         nbRoaming += 1
@@ -2058,21 +2058,21 @@ def track_pokemon()
   #           mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
   #
   #           if curmap == $game_map.map_id
-  #             text += _INTL("Beep beep! {1} appears to be nearby!",
-  #                           PBSpecies.getName(getID(PBSpecies, poke[0])))
+  #             text += "Beep beep! {1} appears to be nearby!",
+  #                           PBSpecies.getName(getID(PBSpecies, poke[0]))
   #           else
-  #             text += _INTL("{1} is roaming around {3}",
-  #                           PBSpecies.getName(getID(PBSpecies, poke[0])), curmap,
-  #                           mapinfos[curmap].name, (curmap == $game_map.map_id) ? _INTL("(this route!)") : "")
+  #             text += "{1} is roaming around {3}",
+  #                           PBSpecies.getName(getID(PBSpecies, poke[0]), curmap,
+  #                           mapinfos[curmap].name, (curmap == $game_map.map_id) ? "(this route!)") : ""
   #           end
   #         else
-  #           text += _INTL("{1} is roaming in an unknown area.",
-  #                         PBSpecies.getName(getID(PBSpecies, poke[0])), poke[1])
+  #           text += "{1} is roaming in an unknown area.",
+  #                         PBSpecies.getName(getID(PBSpecies, poke[0])), poke[1]
   #         end
   #       end
   #     else
-  #       #text+=_INTL("{1} does not appear to be roaming.",
-  #       #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2])
+  #       #text+="{1} does not appear to be roaming.",
+  #       #   PBSpecies.getName(getID(PBSpecies,poke[0])),poke[1],poke[2]
   #     end
   #     #text += "\n" if i < Settings::ROAMING_SPECIES.length - 1
   #   end
@@ -2110,7 +2110,7 @@ ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
     304, 306, 307 # Victory road
   ]
   if blacklisted_maps.include?($game_map.map_id)
-    Kernel.pbMessage("There doesn't seem to be any network coverage here...")
+    Kernel.pbMessage(_INTL("There doesn't seem to be any network coverage here..."))
   else
     pbFadeOutIn {
       scene = PokemonStorageScene.new

@@ -20,9 +20,9 @@ def exportFusedPokemonForShowdown(pokemon)
   end
 
   if pokemon.item
-    nameLine = _INTL("{1} ({2}) @ {3}", pokemon.name, species_name, pokemon.item.name)
+    nameLine = "#{pokemon.name} (#{species_name}) @ #{pokemon.item.name}"
   else
-    nameLine = _INTL("{1} ({2})", pokemon.name, species_name)
+    nameLine = "#{pokemon.name} (#{species_name})"
   end
 
   abilityLine = _INTL("Ability: {1}", pokemon.ability.name)
@@ -34,14 +34,14 @@ def exportFusedPokemonForShowdown(pokemon)
     fusionLine = _INTL("Fusion: {1}\n", body_pokemon_species.name)
   end
   evsLine = calculateEvLineForShowdown(pokemon)
-  natureLine = "#{GameData::Nature.get(pokemon.nature).real_name} Nature"
+  natureLine = _INTL("{1} Nature",GameData::Nature.get(pokemon.nature).real_name)
   ivsLine = calculateIvLineForShowdown(pokemon)
 
   move1 = "", move2 = "", move3 = "", move4 = ""
-  move1 = _INTL("- {1}", GameData::Move.get(pokemon.moves[0].id).real_name) if pokemon.moves[0]
-  move2 = _INTL("- {1}", GameData::Move.get(pokemon.moves[1].id).real_name) if pokemon.moves[1]
-  move3 = _INTL("- {1}", GameData::Move.get(pokemon.moves[2].id).real_name) if pokemon.moves[2]
-  move4 = _INTL("- {1}", GameData::Move.get(pokemon.moves[3].id).real_name) if pokemon.moves[3]
+  move1 = "- #{GameData::Move.get(pokemon.moves[0].id).real_name}"  if pokemon.moves[0]
+  move2 = "- #{GameData::Move.get(pokemon.moves[1].id).real_name}" if pokemon.moves[1]
+  move3 = "- #{GameData::Move.get(pokemon.moves[2].id).real_name}" if pokemon.moves[2]
+  move4 = "- #{GameData::Move.get(pokemon.moves[3].id).real_name}" if pokemon.moves[3]
 
   ret = nameLine + "\n" +
     abilityLine + "\n" +

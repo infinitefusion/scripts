@@ -11,7 +11,7 @@ class PokemonStorage
     case commands[choice]
     when cmd_play
       if $Trainer.quest_points <= 0
-        pbMessage("You don't have any \\C[1]Quest points\\C[0]. Complete quests to obtain more!")
+        pbMessage(_INTL("You don't have any \\C[1]Quest points\\C[0]. Complete quests to obtain more!"))
         return
       end
 
@@ -20,7 +20,7 @@ class PokemonStorage
         locked_wallpapers << i unless isAvailableWallpaper?(i)
       end
       if locked_wallpapers.empty?
-        pbMessage("You don't have any wallpapers left to unlock!")
+        pbMessage(_INTL("You don't have any wallpapers left to unlock!"))
         return
       end
 
@@ -37,8 +37,8 @@ class PokemonStorage
       $game_system.bgm_restore
       obtain_wallpaper(unlocked_index)
     when cmd_info
-      pbMessage("The Wallpaper Lottery allows you to unlock \\C[1]new wallpapers\\C[0] for your PC boxes background.")
-      pbMessage("Participating in the lottery costs \\C[1]1 Quest point\\C[0]. You obtain one Quest Point per quest that you complete.")
+      pbMessage(_INTL("The Wallpaper Lottery allows you to unlock \\C[1]new wallpapers\\C[0] for your PC boxes background."))
+      pbMessage(_INTL("Participating in the lottery costs \\C[1]1 Quest point\\C[0]. You obtain one Quest Point per quest that you complete."))
 
     end
   end

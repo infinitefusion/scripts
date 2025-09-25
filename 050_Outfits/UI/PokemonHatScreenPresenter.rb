@@ -122,7 +122,7 @@ class PokemonHatPresenter
   end
 
   def resetHatPosition
-    if pbConfirmMessage("Reset hat position?")
+    if pbConfirmMessage(_INTL("Reset hat position?"))
       pbSEPlay("GUI naming tab swap end")
       @x_pos=0
       @y_pos=0

@@ -103,7 +103,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
       #Redo loop if below BST - 200
       species = 0 if bst < (chosenBST - 200)
 
-      # raise _INTL("{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst)
+      # raise "{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst
 
       # species=0 if (except.include?(species) && except2.include?(species))
       # use this above line instead if you wish to neither receive pokemon that YOU
@@ -165,7 +165,7 @@ def pbGRS(minBST, chosenBST, luck, rare, except2)
     #Redo loop if below BST - 200
     species = 0 if bst < (chosenBST - 200)
 
-    # raise _INTL("{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst)
+    # raise "{1}'s bst ist {2}, new ist {3}",myPoke,chosenBST,bst
 
     # species=0 if (except.include?(species) && except2.include?(species))
     # use this above line instead if you wish to neither receive pokemon that YOU

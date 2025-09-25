@@ -279,13 +279,13 @@ end
 
 def printDebugRematchInfo(nbRematch, expRate, newLevel, levelCap, originalLevel)
   info = ""
-  info << "total rematched trainers: " + $PokemonGlobal.rematchedTrainers.length.to_s + "\n"
+  info << _INTL("total rematched trainers: ") + $PokemonGlobal.rematchedTrainers.length.to_s + "\n"
 
-  info << "nb times: " + nbRematch.to_s + "\n"
-  info << "lvl up every " + expRate.to_s + " times" + "\n"
-  info << "original level: " << originalLevel.to_s + "\n"
-  info << "new level: " + newLevel.to_s + "\n"
-  info << "level cap: " + levelCap.to_s
+  info << _INTL("nb times: ") + nbRematch.to_s + "\n"
+  info << _INTL("lvl up every {1}  times",expRate.to_s) + "\n"
+  info << _INTL("original level: ") << originalLevel.to_s + "\n"
+  info << _INTL("new level: ") + newLevel.to_s + "\n"
+  info << _INTL("level cap: ") + levelCap.to_s
   print info
 end
 

@@ -42,20 +42,20 @@ def changeOricorioFlower(form = 1)
   message = ""
   form_name = ""
   if form == 1
-    message = "It's a flower with red nectar. "
+    message = _INTL("It's a flower with red nectar. ")
     form_name = "Baile"
   elsif form == 2
-    message = "It's a flower with yellow nectar. "
+    message = _INTL("It's a flower with yellow nectar. ")
     form_name = "Pom-pom"
   elsif form == 3
-    message = "It's a flower with pink nectar. "
+    message = _INTL("It's a flower with pink nectar. ")
     form_name = "Pa'u"
   elsif form == 4
-    message = "It's a flower with blue nectar. "
+    message = _INTL("It's a flower with blue nectar. ")
     form_name = "Sensu"
   end
 
-  message = message + "Show it to a Pokémon?"
+  message = message + _INTL("Show it to a Pokémon?")
   if pbConfirmMessage(message)
     pbChoosePokemon(1, 2,
                     proc { |poke|
