@@ -217,3 +217,15 @@ def fix_broken_TR_quests()
     end
   end
 end
+
+def fix_missing_infinite_splicers
+  return unless Settings::KANTO
+  obtained_infinite_splicers = $game_switches[275]
+  obtained_upgraded_infinite_splicers = $game_self_switches[[703,4,"A"]]
+  if obtained_infinite_splicers && pbQuantity(:INFINITESPLICERS) <= 0 && pbQuantity(:INFINITESPLICERS2) <= 0
+    pbReceiveItem(:INFINITESPLICERS)
+  end
+  if obtained_upgraded_infinite_splicers && pbQuantity(:INFINITESPLICERS2) <= 0
+    pbReceiveItem(:INFINITESPLICERS2)
+  end
+end
