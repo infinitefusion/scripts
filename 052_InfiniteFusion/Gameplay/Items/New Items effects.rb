@@ -1044,19 +1044,27 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 
 # easter egg for evolving shellder into slowbro's tail
 ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
-  echoln pokemon.species
-  next false if pokemon.species != :SHELLDER
+  next evolveSlowpokeTail(item, pokemon, scene)
+})
+
+
+def evolveSlowpokeTail(item, pokemon, scene)
+  if pokemon.species != :SHELLDER
+    pbMessage(_INTL("It won't have any effect."))
+    return false
+  end
   pbFadeOutInWithMusic(99999) {
     evo = PokemonEvolutionScene.new
     evo.pbStartScreen(pokemon, :B90H80)
     evo.pbEvolution(false)
     evo.pbEndScreen
-    scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 }) if scene.pbHasAnnotations?
+    if scene.respond_to?(:pbHasAnnotations) && scene.pbHasAnnotations?
+      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+    end
     scene.pbRefresh
   }
-  next true
-
-})
+  return true
+end
 #
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
