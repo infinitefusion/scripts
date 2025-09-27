@@ -60,7 +60,7 @@ class LimitProperty
     params = ChooseNumberParams.new
     params.setRange(0,@maxvalue)
     params.setDefaultValue(oldsetting)
-    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).",settingname),params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-{2}).",settingname, @maxvalue),params)
   end
 
   def defaultValue
@@ -85,7 +85,7 @@ class LimitProperty2
     params.setRange(0,@maxvalue)
     params.setDefaultValue(oldsetting)
     params.setCancelValue(-1)
-    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-#{@maxvalue}).",settingname),params)
+    ret = pbMessageChooseNumber(_INTL("Set the value for {1} (0-{2}).",settingname, @maxvalue),params)
     return (ret>=0) ? ret : nil
   end
 

@@ -263,7 +263,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
       $Trainer.lowest_difficulty = $Trainer.selected_difficulty
       echoln "lowered difficulty (#{$Trainer.selected_difficulty})"
       if @manually_changed_difficulty
-        pbMessage(_INTL("The savefile's lowest selected difficulty was changed to #{getDisplayDifficulty()}."))
+        pbMessage(_INTL("The savefile's lowest selected difficulty was changed to {1}.",getDisplayDifficulty()))
         @manually_changed_difficulty = false
       end
     end

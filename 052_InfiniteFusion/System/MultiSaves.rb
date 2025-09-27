@@ -607,7 +607,7 @@ class PokemonSaveScreen
       ret = slotSelect
     else
       choices = [
-        _INTL("Save to #{$Trainer.save_slot}"),
+        _INTL("Save to {1}",$Trainer.save_slot),
         _INTL("Save to another slot"),
         _INTL("Don't save")
       ]

@@ -72,8 +72,8 @@ def finishTRQuest(id, status, silent = false)
   return if pbCompletedQuest?(id)
   pbMEPlay("Register phone") if status == :SUCCESS && !silent
   pbMEPlay("Voltorb Flip Game Over") if status == :FAILURE && !silent
-  Kernel.pbMessage("\\C[2]Mission completed!") if status == :SUCCESS && !silent
-  Kernel.pbMessage("\\C[2]Mission Failed...") if status == :FAILURE && !silent
+  Kernel.pbMessage(_INTL("\\C[2]Mission completed!")) if status == :SUCCESS && !silent
+  Kernel.pbMessage(_INTL("\\C[2]Mission Failed...")) if status == :FAILURE && !silent
 
   $game_variables[VAR_KARMA] -= 5 # karma
   $game_variables[VAR_NB_ROCKET_MISSIONS] += 1 #nb. quests completed

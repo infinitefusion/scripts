@@ -74,7 +74,7 @@ class CharacterSelectionMenuView
   end
 
   def init_labels()
-    Kernel.pbDisplayText("Confirm", (CONFIRM_X+CURSOR_X_MARGIN), CONFIRM_Y)
+    Kernel.pbDisplayText(_INTL("Confirm"), (CONFIRM_X+CURSOR_X_MARGIN), CONFIRM_Y)
 
     #Labels are directly in the image
 
