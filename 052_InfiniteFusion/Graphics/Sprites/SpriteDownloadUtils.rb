@@ -1,5 +1,5 @@
 def promptEnableSpritesDownload
-  message = "Some sprites appear to be missing from your game. \nWould you like the game to download sprites automatically while playing? (this requires an internet connection)"
+  message = _INTL("Some sprites appear to be missing from your game. \nWould you like the game to download sprites automatically while playing? (this requires an internet connection)")
   if pbConfirmMessage(message)
     $PokemonSystem.download_sprites = 0
   end
@@ -14,7 +14,7 @@ def update_spritepack_files()
     spritesLoader.clear_sprites_cache(:CUSTOM)
     spritesLoader.clear_sprites_cache(:BASE)
 
-    pbMessage("Data files updated. New sprites will now be downloaded as you play!")
+    pbMessage(_INTL("Data files updated. New sprites will now be downloaded as you play!"))
 end
 
 def reset_updated_spritesheets_cache()
@@ -75,7 +75,7 @@ def check_for_spritepack_update()
   if new_spritepack_was_released()
     pbFadeOutIn() {
       return if !downloadAllowed?()
-      should_update = pbConfirmMessage("A new spritepack was released. Would you like to let the game update your game's sprites automatically?")
+      should_update = pbConfirmMessage(_INTL("A new spritepack was released. Would you like to let the game update your game's sprites automatically?"))
       if should_update
         update_spritepack_files
       end
