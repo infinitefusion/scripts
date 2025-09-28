@@ -245,7 +245,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
     )
 
     selected_game_mode = $game_switches[SWITCH_MODERN_MODE] ? 1 : 0
-    options << EnumOption.new(_INTL("Game Mode"), [_INTL("Classic"), _INTL("Remix")],
+    options << EnumOption.new(_INTL("Trainers"), [_INTL("Classic"), _INTL("Remix")],
                               proc { selected_game_mode },
                               proc { |value|
                                 $game_switches[SWITCH_MODERN_MODE] = value == 1
