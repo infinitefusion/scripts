@@ -186,29 +186,29 @@ def changeHiddenAbility2(abilityList, scene, poke)
   return true
 end
 
-ItemHandlers::UseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 100, scene)
-})
-
-ItemHandlers::BattleUseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 100, scene)
-})
-
-ItemHandlers::UseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 100, scene)
-})
-
-ItemHandlers::BattleUseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 100, scene)
-})
-
-ItemHandlers::UseOnPokemon.add(:COFFEE, proc { |item, pokemon, scene|
-  next pbHPItem(pokemon, 50, scene)
-})
-
-ItemHandlers::BattleUseOnPokemon.add(:COFFEE, proc { |item, pokemon, battler, scene|
-  next pbBattleHPItem(pokemon, battler, 50, scene)
-})
+# ItemHandlers::UseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, scene|
+#   next pbHPItem(pokemon, 100, scene)
+# })
+#
+# ItemHandlers::BattleUseOnPokemon.add(:ROCKETMEAL, proc { |item, pokemon, battler, scene|
+#   next pbBattleHPItem(pokemon, battler, 100, scene)
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, scene|
+#   next pbHPItem(pokemon, 100, scene)
+# })
+#
+# ItemHandlers::BattleUseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, battler, scene|
+#   next pbBattleHPItem(pokemon, battler, 100, scene)
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:COFFEE, proc { |item, pokemon, scene|
+#   next pbHPItem(pokemon, 50, scene)
+# })
+#
+# ItemHandlers::BattleUseOnPokemon.add(:COFFEE, proc { |item, pokemon, battler, scene|
+#   next pbBattleHPItem(pokemon, battler, 50, scene)
+# })
 
 ItemHandlers::UseOnPokemon.add(:RAGECANDYBAR, proc { |item, pokemon, scene|
   if pokemon.level <= 1
@@ -1336,6 +1336,14 @@ ItemHandlers::UseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, scene|
 
 ItemHandlers::BattleUseOnPokemon.add(:FANCYMEAL, proc { |item, pokemon, battler, choices, scene|
   pbBattleHPItem(pokemon, battler, 100, scene)
+})
+
+ItemHandlers::UseOnPokemon.add(:COFFEE, proc { |item, pokemon, scene|
+  next pbHPItem(pokemon, 50, scene)
+})
+
+ItemHandlers::BattleUseOnPokemon.add(:COFFEE, proc { |item, pokemon, battler, choices, scene|
+  pbBattleHPItem(pokemon, battler, 50, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:RAGECANDYBAR, proc { |item, pokemon, scene|
