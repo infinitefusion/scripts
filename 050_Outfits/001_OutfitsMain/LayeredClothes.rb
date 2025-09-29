@@ -375,13 +375,15 @@ def duplicateHatForFrames(hatBitmap, frame_count)
   return duplicatedBitmap
 end
 
-def add_hat_to_bitmap(bitmap, hat_id, x_pos, y_pos, scale = 1, mirrored = false)
+def add_hat_to_bitmap(bitmap, hat_id, x_pos, y_pos, scale = 1, mirrored_horizontal = false, mirrored_vertical = false)
   base_scale = 1.5 #coz hat & poke sprites aren't the same size
   adjusted_scale = base_scale * scale
   hat_filename = getTrainerSpriteHatFilename(hat_id)
   hatBitmapWrapper = AnimatedBitmap.new(hat_filename, 0) if pbResolveBitmap(hat_filename)
   hatBitmapWrapper.scale_bitmap(adjusted_scale) if hatBitmapWrapper
-  hatBitmapWrapper.mirror if hatBitmapWrapper && mirrored
+  hatBitmapWrapper.mirror_horizontally if hatBitmapWrapper && mirrored_horizontal
+  hatBitmapWrapper.mirror_vertically if hatBitmapWrapper && mirrored_vertical
+
   bitmap.blt(x_pos * adjusted_scale, y_pos * adjusted_scale, hatBitmapWrapper.bitmap, hatBitmapWrapper.bitmap.rect) if hatBitmapWrapper
 end
 
