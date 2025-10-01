@@ -1118,8 +1118,8 @@ ItemHandlers::UseOnPokemon.add(:POISONMUSHROOM, proc { |item, pkmn, scene|
   next pbHPItem(pkmn, 10, scene)
 })
 ItemHandlers::BattleUseOnPokemon.add(:POISONMUSHROOM, proc { |item, pokemon, battler, choices, scene|
-  if battler.status != :POISON
-    battler.status = :POISON
+  if pokemon.status != :POISON
+    pokemon.status = :POISON
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1} was poisoned from eating the mushroom.", pokemon.name))
   end
