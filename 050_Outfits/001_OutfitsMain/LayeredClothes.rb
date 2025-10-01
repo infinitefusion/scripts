@@ -383,7 +383,6 @@ def add_hat_to_bitmap(bitmap, hat_id, x_pos, y_pos, scale = 1, mirrored_horizont
   hatBitmapWrapper.scale_bitmap(adjusted_scale) if hatBitmapWrapper
   hatBitmapWrapper.mirror_horizontally if hatBitmapWrapper && mirrored_horizontal
   hatBitmapWrapper.mirror_vertically if hatBitmapWrapper && mirrored_vertical
-
   bitmap.blt(x_pos * adjusted_scale, y_pos * adjusted_scale, hatBitmapWrapper.bitmap, hatBitmapWrapper.bitmap.rect) if hatBitmapWrapper
 end
 
