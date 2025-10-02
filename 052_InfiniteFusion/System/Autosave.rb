@@ -79,21 +79,21 @@ class AutosaveOptionsScene < PokemonOption_Scene
                      proc { |value|
                        $game_variables[AUTOSAVE_HEALING_VAR]=value
                      },
-                     "Autosave when healing at a Pokémon Center"
+                     _INTL("Autosave when healing at a Pokémon Center")
       ),
       EnumOption.new(_INTL("When catching Pokémon"), [_INTL("On"), _INTL("Off")],
                      proc { $game_switches[AUTOSAVE_CATCH_SWITCH] ? 0 : 1 },
                      proc { |value|
                        $game_switches[AUTOSAVE_CATCH_SWITCH] = value == 0
                      },
-                     "Autosave everytime a new Pokémon is caught"
+                     _INTL("Autosave everytime a new Pokémon is caught")
       ),
       EnumOption.new(_INTL("After trainer battles"), [_INTL("On"), _INTL("Off")],
                      proc { $game_switches[AUTOSAVE_WIN_SWITCH] ? 0 : 1 },
                      proc { |value|
                        $game_switches[AUTOSAVE_WIN_SWITCH] = value == 0
                      },
-                     "Autosave after each trainer battle"
+                     _INTL("Autosave after each trainer battle")
       ),
       EnumOption.new(_INTL("Every x steps"), [_INTL("On"), _INTL("Off")],
                      proc { $game_switches[AUTOSAVE_STEPS_SWITCH] ? 0 : 1 },
@@ -103,7 +103,7 @@ class AutosaveOptionsScene < PokemonOption_Scene
                          selectAutosaveSteps()
                        end
                        $game_switches[AUTOSAVE_STEPS_SWITCH] = value == 0
-                     }, "Autosave after a defined amount of steps"
+                     }, _INTL("Autosave after a defined amount of steps")
       )
     ]
     return options
@@ -120,7 +120,7 @@ class AutosaveOptionsScene < PokemonOption_Scene
     params.setCancelValue(0)
     val = Kernel.pbMessageChooseNumber(_INTL("Autosave every how many steps?"),params)
     if val < 200
-      Kernel.pbMessage("Warning: Choosing a low number of steps may decrease performance.")
+      Kernel.pbMessage(_INTL("Warning: Choosing a low number of steps may decrease performance."))
     end
     if val == 0
       val = 1

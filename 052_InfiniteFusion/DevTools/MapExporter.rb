@@ -46,7 +46,7 @@
 #   s = Sprite.new(vp)
 #   s.bitmap = Bitmap.new(Graphics.width, Graphics.height)
 #   s.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0,0,0))
-#   mapid = pbListScreen(_INTL("Export Map"),MapLister.new(pbDefaultMap))
+#   mapid = pbListScreen("Export Map",MapLister.new(pbDefaultMap))
 #   if mapid > 0
 #     player = $game_map.map_id == mapid
 #     if player
@@ -63,13 +63,13 @@
 #         options << :events if cmds[1].split("")[1] == "X"
 #         options << :player if player && cmds[2].split("")[1] == "X"
 #         msgwindow = Window_AdvancedTextPokemon.newWithSize(
-#           _INTL("Saving... Please be patient."),
+#           "Saving... Please be patient.",
 #           0, Graphics.height - 96, Graphics.width, 96, vp
 #         )
 #         msgwindow.setSkin(MessageConfig.pbGetSpeechFrame)
 #         Graphics.update
 #         pbExportMap(mapid, options)
-#         msgwindow.setText(_INTL("Successfully exported the map."))
+#         msgwindow.setText("Successfully exported the map.")
 #         60.times { Graphics.update; Input.update }
 #         pbDisposeMessageWindow(msgwindow)
 #         break
@@ -97,8 +97,8 @@
 #
 # DebugMenuCommands.register("exportmap", {
 #   "parent"      => "fieldmenu",
-#   "name"        => _INTL("Export a Map"),
-#   "description" => _INTL("Choose a map to export it to a PNG."),
+#   "name"        => "Export a Map",
+#   "description" => "Choose a map to export it to a PNG.",
 #   "effect"      => proc { |sprites, viewport|
 #     pbExportAMap
 #   }

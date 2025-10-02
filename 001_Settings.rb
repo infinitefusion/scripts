@@ -5,9 +5,11 @@
 #==============================================================================#
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
-  GAME_VERSION = '6.7.0'
-  GAME_VERSION_NUMBER = "6.7.0"
+  GAME_VERSION_NUMBER = "6.7.2"
   LATEST_GAME_RELEASE = "6.6"
+
+  KANTO = GAME_ID == :IF_KANTO
+  HOENN = GAME_ID == :IF_HOENN
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -33,7 +35,7 @@ module Settings
   BATTLERS_FOLDER = "Graphics/Battlers/Autogens/"
   DOWNLOADED_SPRITES_FOLDER = "Graphics/temp/"
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"
-  CREDITS_FILE_PATH = "Data/sprites/Sprite Credits.csv"
+  CREDITS_FILE_PATH = "Data/sprites/Sprite_Credits.csv"
   VERSION_FILE_PATH = "Data/VERSION"
   CUSTOM_SPRITES_FILE_PATH = "Data/sprites/CUSTOM_SPRITES"
   BASE_SPRITES_FILE_PATH = "Data/sprites/BASE_SPRITES"
@@ -66,7 +68,7 @@ module Settings
   SPRITES_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/sprites/CUSTOM_SPRITES"
   BASE_SPRITES_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/main/Data/sprites/BASE_SPRITES"
 
-  CREDITS_FILE_URL = "https://infinitefusion.net/Sprite Credits.csv"
+  CREDITS_FILE_URL = "https://infinitefusion.net/customsprites/Sprite_Credits.csv"
   CUSTOM_DEX_FILE_URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/dex.json"
 
 
@@ -356,7 +358,7 @@ module Settings
   # Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
-      # [_INTL("Kanto Pokédex"), 0]
+      # ["Kanto Pokédex", 0]
     ]
   end
 
@@ -554,8 +556,8 @@ module Settings
   # file in the Data folder. Edit only if you have 2 or more languages to choose
   # from.
   LANGUAGES = [
-    #  ["English", "english.dat"],
-    #  ["Deutsch", "deutsch.dat"]
+      ["English", "english.dat"],
+      ["Français", "french.dat"]
   ]
 
   #Experimental

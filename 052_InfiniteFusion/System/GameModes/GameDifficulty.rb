@@ -15,13 +15,13 @@ end
 
 # Old menu for changing difficulty - unused
 def change_game_difficulty(down_only = false)
-  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  message = _INTL("The game is currently on {1} difficulty.",get_difficulty_text())
   pbMessage(message)
 
-  choice_easy = "Easy"
-  choice_normal = "Normal"
-  choice_hard = "Hard"
-  choice_cancel = "Cancel"
+  choice_easy = _INTL("Easy")
+  choice_normal = _INTL("Normal")
+  choice_hard = _INTL("Hard")
+  choice_cancel = _INTL("Cancel")
 
   available_difficulties = []
   currentDifficulty = get_current_game_difficulty
@@ -42,7 +42,7 @@ def change_game_difficulty(down_only = false)
     available_difficulties << choice_hard
   end
   available_difficulties << choice_cancel
-  index = pbMessage("Select a new difficulty", available_difficulties, available_difficulties[-1])
+  index = pbMessage(_INTL("Select a new difficulty"), available_difficulties, available_difficulties[-1])
   choice = available_difficulties[index]
   case choice
   when choice_easy
@@ -58,7 +58,7 @@ def change_game_difficulty(down_only = false)
     return
   end
 
-  message = "The game is currently on " + get_difficulty_text() + " difficulty."
+  message = _INTL("The game is currently on {1} difficulty.",get_difficulty_text())
   pbMessage(message)
 end
 
@@ -76,8 +76,8 @@ def getDisplayDifficulty
 end
 
 def getDisplayDifficultyFromIndex(difficultyIndex)
-  return "Easy" if difficultyIndex == 0
-  return "Normal" if difficultyIndex == 1
-  return "Hard" if difficultyIndex == 2
+  return _INTL("Easy") if difficultyIndex == 0
+  return _INTL("Normal") if difficultyIndex == 1
+  return _INTL("Hard") if difficultyIndex == 2
   return "???"
 end

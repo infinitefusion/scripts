@@ -6,37 +6,37 @@ class PokemonStorageScreen
         key: :dex,
         label: _INTL("By Pokédex number"),
         value_proc: ->(p) { p.id_number || 0 },
-        friendly: ["Lowest to Highest Pokédex #", "Highest to Lowest Pokédex #"]
+        friendly: [_INTL("Lowest to Highest Pokédex #"), _INTL("Highest to Lowest Pokédex #")]
       },
       {
         key: :head_dex,
         label: _INTL("By head Pokédex number"),
         value_proc: ->(p) { p.head_id || 0 },
-        friendly: ["Lowest to Highest Pokédex #", "Highest to Lowest Pokédex #"]
+        friendly: [_INTL("Lowest to Highest Pokédex #"), _INTL("Highest to Lowest Pokédex #")]
       },
       {
         key: :body_dex,
         label: _INTL("By body Pokédex number"),
         value_proc: ->(p) { p.body_id || 0 },
-        friendly: ["Lowest to Highest Pokédex #", "Highest to Lowest Pokédex #"]
+        friendly: [_INTL("Lowest to Highest Pokédex #"), _INTL("Highest to Lowest Pokédex #")]
       },
       {
         key: :alpha_species,
         label: _INTL("By species name"),
         value_proc: ->(p) { (p.species.to_s || "").downcase },
-        friendly: ["A to Z", "Z to A"]
+        friendly: [_INTL("A to Z"), _INTL("Z to A")]
       },
       {
         key: :alpha,
         label: _INTL("By nickname"),
         value_proc: ->(p) { (p.name || "").downcase },
-        friendly: ["A to Z", "Z to A"]
+        friendly: [_INTL("A to Z"), _INTL("Z to A")]
       },
       {
         key: :level,
         label: _INTL("By level"),
         value_proc: ->(p) { p.level || 0 },
-        friendly: ["Lowest to Highest level", "Highest to Lowest level"]
+        friendly: [_INTL("Lowest to Highest level"), _INTL("Highest to Lowest level")]
       },
       {
         key: :type,
@@ -56,19 +56,19 @@ class PokemonStorageScreen
         key: :date,
         label: _INTL("By date caught"),
         value_proc: ->(p) { p.timeReceived || Time.at(0) },
-        friendly: ["Oldest to Newest", "Newest to Oldest"]
+        friendly: [_INTL("Oldest to Newest"), _INTL("Newest to Oldest")]
       },
       {
         key: :invert,
         label: _INTL("Reverse"),
         value_proc: ->(p) { reverse },
-        friendly: ["Reverse the order"]
+        friendly: [_INTL("Reverse the order")]
       },
       {
         key: :random,
         label: _INTL("Shuffle"),
         value_proc: ->(p) { rand },
-        friendly: ["Randomize the order"]
+        friendly: [_INTL("Randomize the order")]
       },
 
     ]

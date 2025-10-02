@@ -1247,7 +1247,7 @@ class Pokemon
     current_head = @species_data.head_pokemon
 
     choices = [
-      #_INTL("Evolve both!"),
+      # "Evolve both!",
       _INTL("Evolve head!"),
       _INTL("Evolve body!"),
       _INTL("Don't evolve")

@@ -3,9 +3,9 @@ def playerHasFusionItems()
 end
 
 def selectSplicer()
-  dna_splicers_const = "DNA Splicers"
-  super_splicers_const = "Super Splicers"
-  infinite_splicers_const = "Infinite Splicers"
+  dna_splicers_const = _INTL("DNA Splicers")
+  super_splicers_const = _INTL("Super Splicers")
+  infinite_splicers_const = _INTL("Infinite Splicers")
 
   dnaSplicersQt = $PokemonBag.pbQuantity(:DNASPLICERS)
   superSplicersQt = $PokemonBag.pbQuantity(:SUPERSPLICERS)
@@ -13,16 +13,16 @@ def selectSplicer()
   infiniteSplicers2Qt = $PokemonBag.pbQuantity(:INFINITESPLICERS2)
 
   options = []
-  options.push(_INTL "{1}", infinite_splicers_const) if infiniteSplicers2Qt > 0 || infiniteSplicersQt > 0
-  options.push(_INTL("{1} ({2})", super_splicers_const, superSplicersQt)) if superSplicersQt > 0
-  options.push(_INTL("{1} ({2})", dna_splicers_const, dnaSplicersQt)) if dnaSplicersQt > 0
+  options.push("#{infinite_splicers_const}") if infiniteSplicers2Qt > 0 || infiniteSplicersQt > 0
+  options.push("#{super_splicers_const} (#{superSplicersQt})") if superSplicersQt > 0
+  options.push("#{dna_splicers_const} (#{dnaSplicersQt})") if dnaSplicersQt > 0
 
   if options.length <= 0
     pbDisplay(_INTL("You have no fusion items available."))
     return nil
   end
 
-  cmd = pbShowCommands("Use which splicers?", options)
+  cmd = pbShowCommands(_INTL("Use which splicers?"), options)
   if cmd == -1
     return nil
   end
@@ -61,7 +61,7 @@ def species_has_body_of(checked_species, checked_against)
   end
   bodySpecies = get_body_species_from_symbol(checked_species)
   ret = bodySpecies == checked_against
-  #echoln _INTL("{1} HAS BODY OF {2} : {3} (body is {4})",checked_species,checked_against,ret,bodySpecies)
+  #echoln "{1} HAS BODY OF {2} : {3} (body is {4})",checked_species,checked_against,ret,bodySpecies
   return ret
 end
 
@@ -71,7 +71,7 @@ def species_has_head_of(checked_species, checked_against)
   end
   headSpecies = get_head_species_from_symbol(checked_species)
   ret = headSpecies == checked_against
-  #echoln _INTL("{1} HAS HEAD OF {2} : {3}",checked_species,checked_against,ret)
+  #echoln "{1} HAS HEAD OF {2} : {3}",checked_species,checked_against,ret
   return ret
 end
 
@@ -142,7 +142,7 @@ end
 
 def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
   #download_pokemon_sprite_if_missing(bodyId, headId)
-  picturePath = _INTL("Graphics/Battlers/{1}/{1}.{2}.png", headId, bodyId)
+  picturePath = "Graphics/Battlers/#{headId}/#{headId}.#{bodyId}.png"
 
   if include_customs && customSpriteExistsBodyHead(bodyId, headId)
     pathCustom = getCustomSpritePath(bodyId, headId)
@@ -154,7 +154,7 @@ def obtainPokemonSpritePath(bodyId, headId, include_customs = true)
 end
 
 def getCustomSpritePath(body, head)
-  return _INTL("#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}{1}/{1}.{2}.png", head, body)
+  return "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{head}/#{head}.#{body}.png"
 end
 
 def customSpriteExistsForm(species, form_id_head = nil, form_id_body = nil)
@@ -170,7 +170,7 @@ def customSpriteExistsForm(species, form_id_head = nil, form_id_body = nil)
   spritename += "." + body.to_s
   spritename += "_" + form_id_body.to_s if form_id_body
 
-  pathCustom = _INTL("Graphics/.CustomBattlers/indexed/{1}/{2}.png", folder, spritename)
+  pathCustom = "Graphics/.CustomBattlers/indexed/#{folder}/#{spritename}.png"
   return true if pbResolveBitmap(pathCustom) != nil
   return download_custom_sprite(head, body) != nil
 end

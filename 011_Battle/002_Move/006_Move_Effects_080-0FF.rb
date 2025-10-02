@@ -2995,7 +2995,7 @@ class PokeBattle_Move_0EB < PokeBattle_Move
       return true
     end
     # if @battle.wildBattle? && target.level>user.level
-    #   @battle.pbDisplay(_INTL("But it failed!"))
+    #   @battle.pbDisplay("But it failed!")
     #   return true
     # end
     if @battle.trainerBattle?

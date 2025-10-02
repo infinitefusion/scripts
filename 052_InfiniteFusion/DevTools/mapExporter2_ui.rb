@@ -1,8 +1,8 @@
 #
 # DebugMenuCommands.register("exportmap", {
 #   "parent"      => "fieldmenu",
-#   "name"        => _INTL("Export Map Image"),
-#   "description" => _INTL("Select a map and save its image as a png."),
+#   "name"        => "Export Map Image",
+#   "description" => "Select a map and save its image as a png.",
 #   "effect"      => proc {
 #     pbExportMapSelection
 #   }
@@ -10,7 +10,7 @@
 #
 # def pbExportMapSelection
 #   loop do
-#     map_id = pbListScreen(_INTL("Export Map"), MapLister.new(pbDefaultMap))
+#     map_id = pbListScreen("Export Map", MapLister.new(pbDefaultMap))
 #     break if map_id <= 0
 #     commands = ["Events", "Player", "Dependent Events", "Fog", "Panorama", "Map Name", "Game Name"]
 #     if $game_map.map_id != map_id
@@ -21,7 +21,7 @@
 #     if !options.include?(:Cancel)
 #       ret = MapExporter.export(map_id, options)
 #       mapname = pbGetMapNameFromId(map_id)
-#       pbMessage(_INTL("Sucessfully exported map image of Map {1} ({2}) to the Exported Maps folder in the games's root.", map_id, mapname))
+#       pbMessage("Sucessfully exported map image of Map {1} ({2}) to the Exported Maps folder in the games's root.", map_id, mapname)
 #       return
 #     end
 #   end
@@ -41,7 +41,7 @@
 #       commands.each_with_index do |s, i|
 #         cmd_sym = s.gsub(/\s+/, "").to_sym
 #         x = sym_commands.include?(cmd_sym) ? "[x]" : "[  ]"
-#         sel_commands.push(_INTL("{1} {2}",x, s))
+#         sel_commands.push("{1} {2}",x, s)
 #       end
 #       sel_commands.push("Export Map...")
 #       cmdwindow.commands = sel_commands

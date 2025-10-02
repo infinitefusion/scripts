@@ -124,7 +124,7 @@ class PokeBattle_Scene
     time = getBackdropTimeSuffix()
     base_path = getBackdropBasePath(backdrop_type)
     default_name = base_path + filename
-    time_adjusted_name = _INTL("{1}{2}_{3}",base_path,filename,time)
+    time_adjusted_name = "#{base_path}#{filename}_#{time}"
     if pbResolveBitmap(time_adjusted_name)
       return time_adjusted_name
     end
@@ -244,7 +244,7 @@ class PokeBattle_Scene
     trainer = pbAddSprite("trainer_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     spriteOverrideBitmap = setTrainerSpriteOverrides(trainerType)
     trainer.bitmap = spriteOverrideBitmap if spriteOverrideBitmap
-    trainer.bitmap = generate_front_trainer_sprite_bitmap_from_appearance(custom_appearance).bitmap if custom_appearance
+    trainer.bitmap = generate_front_trainer_sprite_bitmap_from_appearance(custom_appearance,true).bitmap if custom_appearance
     return if !trainer.bitmap
     # Alter position of sprite
     trainer.z = 7 + idxTrainer
@@ -254,7 +254,7 @@ class PokeBattle_Scene
 
   def setTrainerSpriteOverrides(trainer_type)
     if TYPE_EXPERTS_APPEARANCES.keys.include?(trainer_type)
-      return generate_front_trainer_sprite_bitmap_from_appearance(TYPE_EXPERTS_APPEARANCES[trainer_type]).bitmap
+      return generate_front_trainer_sprite_bitmap_from_appearance(TYPE_EXPERTS_APPEARANCES[trainer_type],false).bitmap
     end
   end
 

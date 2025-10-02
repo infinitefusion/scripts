@@ -412,7 +412,7 @@ class PokemonStorageScreen
 
     if @storage[box].is_a?(StorageTransferBox)
       if @heldpkmn.owner.name == "RENTAL"
-        pbMessage("This Pokémon cannot be transferred.")
+        pbMessage(_INTL("This Pokémon cannot be transferred."))
         return
       end
       unless verifyTransferBoxAutosave
@@ -421,16 +421,16 @@ class PokemonStorageScreen
     end
 
     if @storage[box, index]
-      pbDisplay("Can't place that there.")
+      pbDisplay(_INTL("Can't place that there."))
       return
       echoln _INTL("Position {1},{2} is not empty...", box, index)
     end
     if box != -1 && index >= @storage.maxPokemon(box)
-      pbDisplay("Can't place that there.")
+      pbDisplay(_INTL("Can't place that there."))
       return
     end
     if box != -1 && @heldpkmn.mail
-      pbDisplay("Please remove the mail.")
+      pbDisplay(_INTL("Please remove the mail."))
       return
     end
     if box >= 0
@@ -457,7 +457,7 @@ class PokemonStorageScreen
 
     if @storage[box].is_a?(StorageTransferBox)
       if @heldpkmn.owner.name == "RENTAL"
-        pbMessage("This Pokémon cannot be transferred.")
+        pbMessage(_INTL("This Pokémon cannot be transferred."))
         return
       end
       unless verifyTransferBoxAutosave
@@ -471,7 +471,7 @@ class PokemonStorageScreen
       return false
     end
     if box != -1 && @heldpkmn.mail
-      pbDisplay("Please remove the mail.")
+      pbDisplay(_INTL("Please remove the mail."))
       return false
     end
     if box >= 0
@@ -609,8 +609,8 @@ class PokemonStorageScreen
   end
 
   def boxCommandTransferInfo
-    pbMessage("This is the Transfer Box. It's used to transfer Pokémon between savefiles!")
-    pbMessage("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2.")
+    pbMessage(_INTL("This is the Transfer Box. It's used to transfer Pokémon between savefiles!"))
+    pbMessage(_INTL("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2."))
   end
   def boxCommandName
     @scene.pbBoxName(_INTL("Box name?"), 0, 20)
@@ -767,7 +767,7 @@ class PokemonStorageScreen
     pokemon = @storage[selected[0], selected[1]]
 
     if !pokemon
-      command = pbShowCommands("Select an action", ["Continue fusing", "Stop fusing"])
+      command = pbShowCommands(_INTL("Select an action"), [_INTL("Continue fusing"), _INTL("Stop fusing")])
       case command
       when 1 # stop
         cancelFusion()
@@ -786,7 +786,7 @@ class PokemonStorageScreen
         @scene.setFusing(false)
         return
       end
-      command = pbShowCommands("Select an action", commands)
+      command = pbShowCommands(_INTL("Select an action"), commands)
       case command
       when 0 # Fuse
         if !pokemon

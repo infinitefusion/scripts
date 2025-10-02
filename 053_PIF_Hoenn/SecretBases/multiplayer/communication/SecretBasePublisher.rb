@@ -33,7 +33,7 @@ class SecretBasePublisher
     echoln secret_uuid
     unless $Trainer.secretBase_uuid
       echoln "Trainer not registered!"
-      pbMessage("The base could not be uploaded")
+      pbMessage(_INTL("The base could not be uploaded"))
     end
 
     payload = {

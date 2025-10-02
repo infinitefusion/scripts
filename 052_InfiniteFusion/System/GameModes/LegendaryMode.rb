@@ -27,11 +27,10 @@ def initializeLegendaryMode()
   $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = false
   $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = true
   $game_switches[SWITCH_LEGENDARY_MODE] = true
-  # Kernel.pbShuffleTrainers()
+  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   addLegendaryEggsToPC
   $PokemonSystem.hide_custom_eggs = true
   $PokemonSystem.type_icons = true
-  $PokemonBag.pbStoreItem(:MAGICBOOTS)
 end
 
 def convert_species_to_legendary(dex_number)
@@ -157,7 +156,7 @@ def addLegendaryEggsToPC()
   legendaries_species = LEGENDARIES_LIST.shuffle
   legendaries_species.each do |species|
     pokemon = Pokemon.new(species, Settings::EGG_LEVEL)
-    pokemon.steps_to_hatch = pokemon.species_data.hatch_steps
+    pokemon.steps_to_hatch = pokemon.species_data.hatch_steps/2
     pokemon.name = "Egg"
     $PokemonStorage.pbStoreCaught(pokemon)
   end

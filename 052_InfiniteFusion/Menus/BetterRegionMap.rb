@@ -515,7 +515,7 @@ class BetterRegionMap
         end
       end
       if Input.repeat?(Input::AUX1)
-        print_current_position()
+        #print_current_position()
         new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
         frame += 1
       end
@@ -868,7 +868,7 @@ end
 #
 # class PokemonPokedexInfo_Scene
 #   def drawPageArea
-#     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
+#     @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_area")
 #     overlay = @sprites["overlay"].bitmap
 #     base   = Color.new(88,88,80)
 #     shadow = Color.new(168,184,184)
@@ -945,13 +945,13 @@ end
 #       pbDrawImagePositions(overlay,[
 #         [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"),108,188]
 #       ])
-#       textpos.push([_INTL("Area unknown"),Graphics.width/2,Graphics.height/2,2,base,shadow])
+#       textpos.push(["Area unknown"),Graphics.width/2,Graphics.height/2,2,base,shadow]
 #     end
 #     textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,44,2,base,shadow])
-#     textpos.push([_INTL("{1}'s area",PBSpecies.getName(@species)),
+#     textpos.push(["{1}'s area",PBSpecies.getName(@species),
 #                   Graphics.width/2,352,2,base,shadow])
 #
-#     textpos.push([_INTL("Full view"),Graphics.width/2,306,2,base,shadow])
+#     textpos.push(["Full view"),Graphics.width/2,306,2,base,shadow]
 #     pbDrawTextPositions(overlay,textpos)
 #   end
 # end

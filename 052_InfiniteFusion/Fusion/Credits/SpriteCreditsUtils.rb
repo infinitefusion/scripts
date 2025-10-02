@@ -258,7 +258,7 @@ def display_specific_pokemon_statistics()
   species_sprites = list_all_sprite_credits_for_pokemon(species)
   unique_sprites = filter_unique_sprites_nb_for_pokemon(species_sprites)
   percent = (unique_sprites.length.to_f / (NB_POKEMON * 2)) * 100
-  pbMessage "#{species.real_name} completion: \\C[1]#{sprintf('%.2f', percent)}%\\C[0]"
+  pbMessage(_INTL("{1} completion: \\C[1]{2}%\\C[0]",species.real_name,sprintf('%.2f', percent)))
 
   contributors_string = ""
   top_contributors = get_top_contributors_for_pokemon(species_sprites, 5)
@@ -267,7 +267,7 @@ def display_specific_pokemon_statistics()
     contributors_string += " (#{top_contributors[spriter]} sprites)"
     contributors_string += "<br>" unless index == top_contributors.length - 1
   end
-  pbMessage("#{species.real_name} top contributors:<br>#{contributors_string}")
+  pbMessage(_INTL("{1} top contributors:<br>{2}",species.real_name,contributors_string))
 end
 
 def display_team_flag_statistics(species)
@@ -275,9 +275,9 @@ def display_team_flag_statistics(species)
   flag_pokemon_name = species.name
   echoln evolution_line
   if evolution_line.length > 1
-    pbMessage("This flag stands as a tribute to the artists who have devoted their talents to portraying \\C[1]#{flag_pokemon_name}\\C[0] and its evolution line in all its forms.")
+    pbMessage(_INTL("This flag stands as a tribute to the artists who have devoted their talents to portraying \\C[1]{1}\\C[0] and its evolution line in all its forms.",flag_pokemon_name))
   else
-    pbMessage("This flag stands as a tribute to the artists who have devoted their talents to portraying \\C[1]#{flag_pokemon_name}\\C[0] in all its forms.")
+    pbMessage(_INTL("This flag stands as a tribute to the artists who have devoted their talents to portraying \\C[1]{1}\\C[0] in all its forms.",flag_pokemon_name))
   end
   all_sprites = []
   family_unique_sprites_nb = []
@@ -289,14 +289,14 @@ def display_team_flag_statistics(species)
     unique_sprites_nb = unique_sprites.length.to_f
     family_unique_sprites_nb << unique_sprites_nb
     percent = (unique_sprites.length.to_f / (NB_POKEMON * 2)) * 100
-    pbMessage "#{species.real_name} completion: \\C[1]#{sprintf('%.2f', percent)}%\\C[0]" if evolution_line.length > 1
+    pbMessage(_INTL("{1} completion: \\C[1]{2}%\\C[0]",species.real_name,sprintf('%.2f', percent))) if evolution_line.length > 1
   end
   overall_total = 0
   family_unique_sprites_nb.each { |nb|
     overall_total += nb
   }
   overall_percent = (overall_total / ((NB_POKEMON * 2)*family_unique_sprites_nb.length))*100
-  pbMessage "Team #{flag_pokemon_name} overall completion: \\C[3]#{sprintf('%.2f', overall_percent)}%\\C[0]"
+  pbMessage(_INTL("Team {1} overall completion: \\C[3]{2}%\\C[0]",flag_pokemon_name,sprintf('%.2f', overall_percent)))
 
   family_line_sprites = {}
   for pokemon_sprites in all_sprites
@@ -307,10 +307,10 @@ def display_team_flag_statistics(species)
   top_contributors = get_top_contributors_for_pokemon(family_line_sprites, 5)
   top_contributors.keys.each_with_index do |spriter, index|
     contributors_string += "\\C[1]#{spriter}\\C[0]"
-    contributors_string += " (#{top_contributors[spriter]} sprites)"
+    contributors_string += _INTL(" ({1} sprites)",top_contributors[spriter])
     contributors_string += "<br>" unless index == top_contributors.length - 1
   end
-  pbMessage("Team #{flag_pokemon_name} top contributors:<br>#{contributors_string}")
+  pbMessage(_INTL("Team {1} top contributors:<br>{2}",flag_pokemon_name,contributors_string))
 
 end
 
@@ -321,10 +321,10 @@ end
 
 def display_special_banner()
   flag_id = "500000"
-  flag_name = "Team 500,000"
+  flag_name = _INTL("Team 500,000")
   price = 10000
 
-  banner_title = "Half-million Milestone Banner"
+  banner_title = _INTL("Half-million Milestone Banner")
   flag_path = "Trainer Card/backgrounds/#{flag_id}"
 
   flag_image_id = 10
@@ -336,10 +336,10 @@ def display_special_banner()
   $game_screen.pictures[frame_image_id].show("teamFlagFrame", 0, x_position, y_position, 50, 50)
 
   pbMessage("\"#{banner_title}\"")
-  pbMessage("A banner honoring the 500,000 members of the community who have come together to inspire countless others.")
+  pbMessage(_INTL("A banner honoring the 500,000 members of the community who have come together to inspire countless others."))
   pbWait(10)
   percent = get_total_completion_percent()
-  pbMessage("All Pokémon completion: \\C[1]#{sprintf('%.2f', percent)}%")
+  pbMessage(_INTL("All Pokémon completion: \\C[1]{1}%",sprintf('%.2f', percent)))
 
   prompt_flag_purchase(flag_id, flag_name, price)
   $game_screen.pictures[flag_image_id].erase
@@ -350,16 +350,16 @@ def prompt_flag_purchase(flag_id, flag_name, price)
   $Trainer.unlocked_card_backgrounds = [] if ! $Trainer.unlocked_card_backgrounds
   if !$Trainer.unlocked_card_backgrounds.include?(flag_id) && $Trainer.money >= price
     pbWait(20)
-    if pbConfirmMessage("\\GWould you to purchase the \\C[1]#{flag_name}\\C[0] flag as a background for your \\C[1]Trainer Card\\C[0] for $#{price}?")
+    if pbConfirmMessage(_INTL("\\GWould you to purchase the \\C[1]{1}\\C[0] flag as a background for your \\C[1]Trainer Card\\C[0] for ${2}?",flag_name,price))
       pbSEPlay("Mart buy item")
       $Trainer.money -= price
       unlock_card_background(flag_id)
-      pbMessage("\\GYou purchased the \\C[1]#{flag_name}\\C[0] Trainer Card background!")
-      if pbConfirmMessage("Swap your current Trainer Card for the newly purchased one?")
+      pbMessage(_INTL("\\GYou purchased the \\C[1]{1}\\C[0] Trainer Card background!",flag_name))
+      if pbConfirmMessage(_INTL("Swap your current Trainer Card for the newly purchased one?"))
         pbSEPlay("GUI trainer card open")
         $Trainer.card_background = flag_id
       else
-        pbMessage("You can swap the background at anytime when viewing your Trainer Card.")
+        pbMessage(_INTL("You can swap the background at anytime when viewing your Trainer Card."))
       end
     end
   end
@@ -402,7 +402,7 @@ def displayGalleryFrame(frame)
 
   pif_sprite = pbGet(VAR_GALLERY_FEATURED_SPRITES)[frame]
   if !pif_sprite.is_a?(PIFSprite)
-    pbMessage("The frame is empty...")
+    pbMessage(_INTL("The frame is empty..."))
     return
   end
   species = getPokemonSpeciesFromPifSprite(pif_sprite)

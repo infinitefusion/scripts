@@ -29,11 +29,11 @@ end
 
 def get_difficulty_text
   if $game_switches[SWITCH_GAME_DIFFICULTY_EASY]
-    return "Easy"
+    return _INTL("Easy")
   elsif $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
-    return "Hard"
+    return _INTL("Hard")
   else
-    return "Normal"
+    return _INTL("Normal")
   end
 end
 
@@ -65,8 +65,8 @@ def openUrlInBrowser(url = "")
     system("xdg-open", url) || system("open", url) || system("start", url)
   rescue
     Input.clipboard = url
-    pbMessage("The game could not open the link in the browser")
-    pbMessage("The link has been copied to your clipboard instead")
+    pbMessage(_INTL("The game could not open the link in the browser"))
+    pbMessage(_INTL("The link has been copied to your clipboard instead"))
   end
 end
 

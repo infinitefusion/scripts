@@ -1,6 +1,12 @@
 def obtainStarter(starterIndex = 0)
   if ($game_switches[SWITCH_LEGENDARY_MODE])
-    startersList = generate_legendary_mode_starters
+    generated_list = pbGet(VAR_LEGENDARY_STARTERS_CHOICES)
+    if generated_list.is_a?(Array)
+      startersList = generated_list
+    else
+      startersList = generate_legendary_mode_starters
+      pbSet(VAR_LEGENDARY_STARTERS_CHOICES,startersList)
+    end
     starter = startersList[starterIndex]
   elsif ($game_switches[SWITCH_RANDOM_STARTERS])
     starter = obtainRandomizedStarter(starterIndex)

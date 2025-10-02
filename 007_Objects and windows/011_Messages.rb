@@ -396,9 +396,9 @@ def pbGetGoldString
     moneyString = _INTL("${1}", $Trainer.money.to_s_formatted)
   rescue
     if $data_system.respond_to?("words")
-      moneyString = _INTL("{1} {2}", $game_party.gold, $data_system.words.gold)
+      moneyString = "#{$game_party.gold} #{$data_system.words.gold}"
     else
-      moneyString = _INTL("{1} {2}", $game_party.gold, Vocab.gold)
+      moneyString = "#{$game_party.gold} #{Vocab.gold}"
     end
   end
   return moneyString
@@ -612,6 +612,12 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   text.gsub!(/\\pog/i, "")
   text.gsub!(/\\b/i, "<c3=3050C8,D0D0C8>")
   text.gsub!(/\\r/i, "<c3=E00808,D0D0C8>")
+  text.gsub!(/\\mu\[(.*?)\]/i) do
+    $Trainer && isPlayerMale() ? $1 : ""
+  end
+  text.gsub!(/\\fu\[(.*?)\]/i) do
+    $Trainer && isPlayerFemale() ? $1 : ""
+  end
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) {
     w = $1.to_s
     if w == ""

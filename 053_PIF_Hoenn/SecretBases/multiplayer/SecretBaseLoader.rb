@@ -10,7 +10,6 @@ class SecretBaseLoader
     visitor_bases = @importer.load_bases(SecretBaseImporter::VISITOR_BASES_FILE)
     friend_bases = @importer.load_bases(SecretBaseImporter::FRIEND_BASES_FILE)
     all_bases = visitor_bases + friend_bases
-    echoln friend_bases
     $game_temp.visitor_secret_bases = all_bases
   end
 

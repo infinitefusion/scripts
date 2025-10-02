@@ -1,9 +1,10 @@
 LEGENDARIES_LIST = [:ARTICUNO, :ZAPDOS, :MOLTRES, :MEWTWO, :MEW,
                     :ENTEI, :RAIKOU, :SUICUNE, :HOOH, :LUGIA, :CELEBI,
                     :GROUDON, :KYOGRE, :RAYQUAZA, :DEOXYS, :JIRACHI, :LATIAS, :LATIOS,
+                    :REGIROCK, :REGICE, :REGISTEEL,
                     :REGIGIGAS, :DIALGA, :PALKIA, :GIRATINA, :DARKRAI, :CRESSELIA, :ARCEUS,
                     :GENESECT, :RESHIRAM, :ZEKROM, :KYUREM, :MELOETTA_A,:MELOETTA_P,
-                    :NECROZMA, :U_NECROZMA]
+                    :NECROZMA, :U_NECROZMA, :DIANCIE]
 
 class PokemonGlobalMetadata
   attr_accessor :psuedoHash
@@ -99,7 +100,7 @@ def is_legendary(dex_num,printInfo=false)
   is_legendary = is_fusion_of_any(pokemon_id,LEGENDARIES_LIST)
 
   #echoln "#{pokemon_id} is legendary? : #{is_legendary}"
-  #echoln _INTL("{1} ({2}) {3}",dex_num,pokemon_id,is_legendary) if printInfo
+  #echoln "{1} ({2}) {3}",dex_num,pokemon_id,is_legendary) if printInfo
   return is_legendary
 end
 
@@ -223,7 +224,7 @@ end
 #         pokeArrayRand.delete(pokeArrayRand[j])
 #             if i % 2 == 0 && type == 1
 #               n = (i.to_f/NB_POKEMON)*100
-#               Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^",sprintf('%.2f', n),NB_POKEMON))
+#               Kernel.pbMessageNoSound("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^",sprintf('%.2f', n),NB_POKEMON)
 #             end
 #         break
 #       end
@@ -302,7 +303,7 @@ end
 #   for i in 1..PBSpecies.maxValue
 #     if i % 20 == 0
 #       n = (i.to_f/PBSpecies.maxValue)*100
-#       #Kernel.pbMessage(_INTL("\\ts[]Shuffling...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue))
+#       #Kernel.pbMessage("\\ts[]Shuffling...\\n {1}%\\^",sprintf('%.2f', n),PBSpecies.maxValue)
 #     end
 #
 #     baseStats=calcBaseStats(i)

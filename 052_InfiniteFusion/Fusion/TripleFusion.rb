@@ -47,7 +47,7 @@ class TripleFusion <  Pokemon
     part1 = split_string_with_syllables(@species1_data.name)[0]
     part2 = split_string_with_syllables(@species2_data.name)[1]
     part3 = split_string_with_syllables(@species3_data.name)[2]
-    return _INTL("{1}{2}{3}",part1,part2,part3).capitalize!
+    return "#{part1}#{part2}#{part3}".capitalize!
   end
 
 

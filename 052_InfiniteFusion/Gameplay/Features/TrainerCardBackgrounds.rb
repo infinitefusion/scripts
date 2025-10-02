@@ -194,7 +194,7 @@ def purchaseCardBackground(price = 1000)
   echoln $Trainer.unlocked_card_backgrounds
 
   if purchasable_cards.length <= 0
-    pbMessage("There are no more Trainer Card backgrounds available for purchase!")
+    pbMessage(_INTL("There are no more Trainer Card backgrounds available for purchase!"))
     return
   end
 
@@ -205,27 +205,27 @@ def purchaseCardBackground(price = 1000)
     name = getDisplayedName(card)
     commands.push([index, name, card])
   end
-  pbMessage("\\GWhich background would you like to purchase?")
-  chosen = pbListScreen("Trainer card", TrainerCardBackgroundLister.new(purchasable_cards))
+  pbMessage(_INTL("\\GWhich background would you like to purchase?"))
+  chosen = pbListScreen(_INTL("Trainer card"), TrainerCardBackgroundLister.new(purchasable_cards))
   echoln chosen
   if chosen != nil
     name = getDisplayedName(chosen)
-    if pbConfirmMessage("\\GPurchase the \\C[1]#{name} Trainer Card background\\C[0] for $#{price.to_s}?")
+    if pbConfirmMessage(_INTL("\\GPurchase the \\C[1]{1} Trainer Card background\\C[0] for ${2}?", name, price.to_s))
       if $Trainer.money < price
         pbSEPlay("GUI sel buzzer", 80)
-        pbMessage("\\G\\C[2]Insufficient funds")
+        pbMessage(_INTL("\\G\\C[2]Insufficient funds"))
         return false
       end
       pbSEPlay("Mart buy item")
       $Trainer.money -= price
       unlock_card_background(chosen)
       pbSEPlay("Item get")
-      pbMessage("\\GYou purchased the #{name} Trainer Card background!")
-      if pbConfirmMessage("Would you like to swap your current Trainer Card for the newly purchased one?")
+      pbMessage(_INTL("\\GYou purchased the {1} Trainer Card background!", name))
+      if pbConfirmMessage(_INTL("Would you like to swap your current Trainer Card for the newly purchased one?"))
         pbSEPlay("GUI trainer card open")
         $Trainer.card_background = chosen
       else
-        pbMessage("You can swap the background at anytime when viewing your Trainer Card.")
+        pbMessage(_INTL("You can swap the background at anytime when viewing your Trainer Card."))
       end
       echoln $Trainer.unlocked_card_backgrounds
       return true
@@ -283,7 +283,7 @@ class TrainerCardBackgroundLister
       card_name = getDisplayedName(@cardsList[i])
       @commands.push(card_name)
     end
-    @commands << "Cancel"
+    @commands << _INTL("Cancel")
     return @commands
   end
 
