@@ -16,7 +16,8 @@ module SecretBasesData
     behavior: ->(event = nil) {
       #Behavior for PC is handled in SecretBasesController
       #useSecretBasePC
-    }
+    },
+
   )
 
   register_base_item(
@@ -87,41 +88,28 @@ module SecretBasesData
     graphics: "skittySet/deco_3x3chair_skitty.png",
     real_name: "Skitty Armchair",
     price: 1000,
-    height: 1,
-    width: 3,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
       sit_on_chair(itemInstance)
     },
-    uninteractable_positions: [[-1,0],[1,0]]
+    collision_map: SecretBaseItemCollisionMap.new(
+      [[:x, :i, :x]]
+    ),
   )
 
-  register_base_item(
-    :SKITTY_CHAIR_3x3,
-    graphics: "skittySet/deco_3x3chair_skitty.png",
-    real_name: "Skitty Armchair",
-    price: 1000,
-    height: 1,
-    width: 3,
-    trigger: TRIGGER_PLAYER_TOUCH,
-    behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
-    },
-    uninteractable_positions: [[-1,0],[1,0]]
-  )
 
   register_base_item(
     :SKITTY_COUCH_3x4,
     graphics: "skittySet/deco_3x4chair_skitty.png",
     real_name: "Skitty Couch",
     price: 2000,
-    height: 1,
-    width: 4,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
       sit_on_chair(itemInstance)
     },
-    uninteractable_positions: [[-2,0],[2,0]]
+    collision_map: SecretBaseItemCollisionMap.new(
+      [:x, :i, :x]
+    ),
   )
 
   register_base_item(
