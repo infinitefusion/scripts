@@ -30,6 +30,11 @@ class Scene_Intro
 
     playIntroCinematic
     # Selects title screen style
+
+    unless File.exist?(Settings::CREDITS_FILE_PATH)
+      updateCreditsFile
+    end
+
     @screen = GenOneStyle.new
     # Plays the title screen intro (is skippable)
     @screen.intro
