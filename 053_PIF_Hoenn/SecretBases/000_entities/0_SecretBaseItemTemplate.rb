@@ -36,8 +36,8 @@ class SecretBaseItem
     @under_player = under_player
 
     # Parts of the item that the player shouldn't be able to pass through
-    @height = height
-    @width = width
+    # @height = height
+    # @width = width
 
     # Default behavior just shows text if none provided
     @behavior = behavior

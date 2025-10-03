@@ -117,13 +117,13 @@ module SecretBasesData
     graphics: "skittySet/deco_3x5couch_skitty.png",
     real_name: "Wide Skitty Couch",
     price: 2000,
-    height: 1,
-    width: 5,
+    #height: 1,
+    #width: 5,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
       sit_on_chair(itemInstance)
     },
-    uninteractable_positions: [[-2,0],[2,0]]
+  #uninteractable_positions: [[-2,0],[2,0]]
   )
 
   register_base_item(
@@ -172,8 +172,8 @@ module SecretBasesData
     :ROCK_TABLE_2x3,
     graphics: "rockSet/deco_2x3table_rock.png",
     real_name: "Large Rocky Table",
-    width:3,
-    height:2,
+    #width:3,
+    #height:2,
     price: 5000
   )
 
@@ -182,13 +182,13 @@ module SecretBasesData
     graphics: "rockSet/deco_3x3chair_rock.png",
     real_name: "Rocky Armchair",
     price: 1000,
-    height: 1,
-    width: 3,
+    #height: 1,
+    #width: 3,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
       sit_on_chair(itemInstance)
     },
-    uninteractable_positions: [[-1,0],[1,0]]
+  #uninteractable_positions: [[-1,0],[1,0]]
   )
 
   register_base_item(
