@@ -29,6 +29,10 @@ module GameData
     attr_reader :flower
 
     attr_reader :trashcan
+    attr_reader :stairs
+    attr_reader :chair
+
+
     attr_reader :sharpedoObstacle
     attr_reader :underwater #only visible when diving
 
@@ -85,6 +89,11 @@ module GameData
       @flowerBlue = hash[:flowerBlue] || false
       @flower = hash[:flower] || false
       @trashcan = hash[:trashcan] || false
+
+      @stairs = hash[:stairs] || false
+      @chair = hash[:chair] || false
+
+
       @sharpedoObstacle = hash[:sharpedoObstacle] || false
       @underwater = hash[:underwater] || false
 
@@ -333,4 +342,16 @@ GameData::TerrainTag.register({
                                 :id => :Secretbase_Bush,
                                 :id_number => 31,
                                 :secretBase_bush => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Chair,
+                                :id_number => 32,
+                                :chair => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Stairs,
+                                :id_number => 33,
+                                :stairs => true
                               })

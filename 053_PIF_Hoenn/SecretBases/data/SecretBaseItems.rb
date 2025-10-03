@@ -45,7 +45,7 @@ module SecretBasesData
     price: 350,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     }
   )
 
@@ -90,7 +90,7 @@ module SecretBasesData
     price: 1000,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     },
     collision_map: SecretBaseItemCollisionMap.new(
       [[:x, :i, :x]]
@@ -105,7 +105,7 @@ module SecretBasesData
     price: 2000,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     },
     collision_map: SecretBaseItemCollisionMap.new(
       [:x, :i, :x]
@@ -121,7 +121,7 @@ module SecretBasesData
     #width: 5,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     },
   #uninteractable_positions: [[-2,0],[2,0]]
   )
@@ -143,7 +143,7 @@ module SecretBasesData
     price: 350,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     }
   )
 
@@ -186,7 +186,7 @@ module SecretBasesData
     #width: 3,
     trigger: TRIGGER_PLAYER_TOUCH,
     behavior: ->(itemInstance = nil) {
-      sit_on_chair(itemInstance)
+      sit_on_chair_item(itemInstance)
     },
   #uninteractable_positions: [[-1,0],[1,0]]
   )
