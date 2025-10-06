@@ -322,7 +322,11 @@ class GenOneStyle
     @sprites["2poke2"].opacity = 255
     @sprites["start"].opacity = 200
 
-    Kernel.pbDisplayText("v." + Settings::GAME_VERSION_NUMBER, 455, 5, 99999,pbColor(:WHITE),pbColor(:INVISIBLE))
+    begin
+      Kernel.pbDisplayText("v." + Settings::GAME_VERSION_NUMBER, 455, 5, 99999,pbColor(:WHITE),pbColor(:INVISIBLE))
+    rescue
+
+    end
   end
 
 

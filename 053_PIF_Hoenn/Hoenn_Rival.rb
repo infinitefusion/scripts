@@ -15,18 +15,18 @@ class Player < Trainer
     pokemonEssentials_player_initialize(*args)
   end
 
-  def init_rival_appearance
+  def init_rival_appearance(skin_color = 1, hair)
     if isPlayerMale
-      @rival_appearance = TrainerAppearance.new(5,
+      @rival_appearance = TrainerAppearance.new(skin_color,
                                                 HAT_MAY,
                                                 CLOTHES_MAY,
-                                                getFullHairId(HAIR_MAY, 3),
+                                                hair,
                                                 0, 0, 0)
     else
-      @rival_appearance = TrainerAppearance.new(5,
+      @rival_appearance = TrainerAppearance.new(skin_color,
                                                 HAT_BRENDAN,
                                                 CLOTHES_BRENDAN,
-                                                getFullHairId(HAIR_BRENDAN, 3),
+                                                hair,
                                                 0, 0, 0)
     end
   end
@@ -47,6 +47,7 @@ def init_rival_name
   rival_name = "Brendan" if isPlayerFemale
   rival_name = "May" if isPlayerMale
   pbSet(VAR_RIVAL_NAME, rival_name)
+  return rival_name
 end
 
 def set_rival_hat(hat)
@@ -67,7 +68,6 @@ class Sprite_Character
   def checkModifySpriteGraphics(character)
     PIF_typeExpert_checkModifySpriteGraphics(character)
     return unless character.visible?
-    echoln character.visible?
     return if character == $game_player
     setSpriteToAppearance($Trainer.rival_appearance) if isPlayerFemale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
     setSpriteToAppearance($Trainer.rival_appearance) if isPlayerMale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
