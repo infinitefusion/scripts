@@ -567,7 +567,7 @@ end
 #party: array of pokemon team
 # [[:SPECIES,level], ... ]
 #
-def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil, items = [])
+def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil, items = [],canLose=false)
 
 
   # trainerID= "customTrainer"
@@ -597,8 +597,8 @@ def customTrainerBattle(trainerName, trainerType, party_array, default_level=50,
   Events.onTrainerPartyLoad.trigger(nil,trainer)
 
 
-
-  decision = pbTrainerBattleCore(trainer)
+  $PokemonTemp.battleRules["canLose"] = canLose
+  decision = pbTrainerBattleCore(traine)
   # Return true if the player won the battle, and false if any other result
   return (decision==1)
 end

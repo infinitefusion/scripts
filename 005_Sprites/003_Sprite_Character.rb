@@ -97,6 +97,14 @@ class Sprite_Character < RPG::Sprite
     end
   end
 
+  def setSpriteToStaticAppearance(file_path)
+    begin
+      new_bitmap = AnimatedBitmap.new(file_path)
+      @bitmap_override = new_bitmap
+      updateBitmap
+    rescue
+    end
+  end
   def setSpriteToAppearance(trainerAppearance)
     #return if !@charbitmap || !@charbitmap.bitmap
     begin

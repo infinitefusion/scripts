@@ -93,7 +93,7 @@ def sit_on_chair()
     Input.update
     pbUpdateSceneMap
 
-    direction = checkinputDirection
+    direction = checkInputDirection
     if direction
       facing_terrain = $game_player.pbFacingTerrainTag(direction)
       if facing_terrain.chair
@@ -116,7 +116,7 @@ def sit_on_chair()
   end
 end
 
-def checkinputDirection
+def checkInputDirection
   return DIRECTION_UP if Input.trigger?(Input::UP)
   return DIRECTION_DOWN if Input.trigger?(Input::DOWN)
   return DIRECTION_LEFT if Input.trigger?(Input::LEFT)
