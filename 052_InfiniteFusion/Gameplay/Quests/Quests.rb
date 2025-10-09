@@ -148,3 +148,7 @@ define_quest("route115_secretBase",:FIELD_QUEST,_INTL("Your Very Own Secret Base
 
 #Rustboro
 define_quest("rustboro_whismur",:FIELD_QUEST,_INTL("Volume Booster!"), _INTL("Find a Wingull to fuse with a Whismur to make it louder."),_INTL("Rustboro City"),"NPC_schoolgirl")
+
+
+# Route 109
+define_quest("route109_tanning",:FIELD_QUEST,_INTL("Soaking in the sun"), _INTL("Sit in a beach chair until your suntan is on point!"),_INTL("Route 109"),"NPC_Hoenn_Triathlete_F")
