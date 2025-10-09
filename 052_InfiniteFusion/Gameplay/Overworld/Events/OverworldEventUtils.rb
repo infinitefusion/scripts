@@ -112,6 +112,7 @@ def sit_on_chair()
           $game_player.turn_180
         end
       end
+      pbWait(8)
     end
   end
 end

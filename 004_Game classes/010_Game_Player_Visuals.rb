@@ -74,7 +74,11 @@ class Game_Player < Game_Character
       self.move_speed = 4     # Sliding on ice
     elsif !moving? && !@move_route_forcing && $PokemonGlobal
       if $PokemonGlobal.bicycle
-        self.move_speed = $game_switches[SWITCH_RACE_BIKE] && !Input.press?(Input::ACTION) ? 5.5 : 5   # Cycling
+        if $game_player.pbTerrainTag.must_walk
+          self.move_speed = 3
+        else
+          self.move_speed = $game_switches[SWITCH_RACE_BIKE] && !Input.press?(Input::ACTION) ? 5.5 : 5   # Cycling
+        end
       elsif pbCanRun? || $PokemonGlobal.surfing
         self.move_speed = 4   # Running, surfing
       else
