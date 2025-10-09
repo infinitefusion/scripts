@@ -21,7 +21,7 @@ module GameData
     attr_reader :must_walk
     attr_reader :ignore_passability
 
-    #oricorio
+    # oricorio
     attr_reader :flowerRed
     attr_reader :flowerPink
     attr_reader :flowerYellow
@@ -29,13 +29,14 @@ module GameData
     attr_reader :flower
 
     attr_reader :trashcan
+    attr_reader :chair
+
     attr_reader :sharpedoObstacle
-    attr_reader :underwater #only visible when diving
+    attr_reader :underwater # only visible when diving
 
     attr_reader :secretBase_tree
     attr_reader :secretBase_cave
     attr_reader :secretBase_bush
-
 
     DATA = {}
 
@@ -74,7 +75,7 @@ module GameData
       @ice = hash[:ice] || false
       @waterCurrent = hash[:waterCurrent] || false
       @bridge = hash[:bridge] || false
-      @shows_reflections =   hash[:shows_reflections]      || false
+      @shows_reflections = hash[:shows_reflections] || false
       @must_walk = hash[:must_walk] || false
       @ignore_passability = hash[:ignore_passability] || false
       @ignore_passability = hash[:ignore_passability] || false
@@ -85,6 +86,9 @@ module GameData
       @flowerBlue = hash[:flowerBlue] || false
       @flower = hash[:flower] || false
       @trashcan = hash[:trashcan] || false
+
+      @chair = hash[:chair] || false
+
       @sharpedoObstacle = hash[:sharpedoObstacle] || false
       @underwater = hash[:underwater] || false
 
@@ -155,8 +159,6 @@ GameData::TerrainTag.register({
                                 :waterCurrent => true,
                                 :battle_environment => :MovingWater
                               })
-
-
 
 GameData::TerrainTag.register({
                                 :id => :Water,
@@ -306,7 +308,7 @@ GameData::TerrainTag.register({
                                 :can_surf => true,
                                 :can_fish => true,
                                 :battle_environment => :StillWater,
-                                :shows_reflections      => true
+                                :shows_reflections => true
                               })
 
 GameData::TerrainTag.register({
@@ -315,7 +317,6 @@ GameData::TerrainTag.register({
                                 :battle_environment => :underwater,
                                 :underwater => true,
                               })
-
 
 GameData::TerrainTag.register({
                                 :id => :Secretbase_Tree,
@@ -333,4 +334,16 @@ GameData::TerrainTag.register({
                                 :id => :Secretbase_Bush,
                                 :id_number => 31,
                                 :secretBase_bush => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Chair,
+                                :id_number => 32,
+                                :chair => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Stairs,
+                                :id_number => 33,
+                                :must_walk => true
                               })

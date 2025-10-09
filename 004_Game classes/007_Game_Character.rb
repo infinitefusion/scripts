@@ -389,7 +389,6 @@ class Game_Character
   end
 
   def force_move_route(move_route)
-    #echoln screen_z() if self == $game_player
     if @original_move_route == nil
       @original_move_route = @move_route
       @original_move_route_index = @move_route_index
@@ -915,19 +914,19 @@ class Game_Character
     @direction_fix = last_direction_fix
   end
 
-  def jump_forward
+  def jump_forward(distance=1)
     case $game_player.direction
     when DIRECTION_DOWN
       x_direction = 0
-      y_direction = 1
+      y_direction = distance
     when DIRECTION_UP
       x_direction = 0
-      y_direction = -1
+      y_direction = 0-distance
     when DIRECTION_LEFT
-      x_direction = -1
+      x_direction = 0-distance
       y_direction = 0
     when DIRECTION_RIGHT
-      x_direction = 1
+      x_direction = distance
       y_direction = 0
     else
       x_direction = 0
@@ -967,14 +966,18 @@ class Game_Character
   end
 
   def jumpForward
-    case self.direction
-    when 2 then
+    jumpTowards(self.direction)
+  end
+
+  def jumpTowards(direction)
+    case direction
+    when DIRECTION_DOWN then
       jump(0, 1) # down
-    when 4 then
+    when DIRECTION_LEFT then
       jump(-1, 0) # left
-    when 6 then
+    when DIRECTION_RIGHT then
       jump(1, 0) # right
-    when 8 then
+    when DIRECTION_UP then
       jump(0, -1) # up
     end
   end
@@ -1093,6 +1096,7 @@ class Game_Character
       (sy > 0) ? turn_down : turn_up
     end
   end
+
 
   #=============================================================================
   # Updating

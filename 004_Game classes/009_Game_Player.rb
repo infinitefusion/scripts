@@ -45,6 +45,7 @@ class Game_Player < Game_Character
         y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
         return if pbLedge(x_offset, y_offset)
         return if pbEndSurf(x_offset, y_offset)
+        return if sitOnChair
         turn_generic(dir, true)
         if !$PokemonTemp.encounterTriggered
           @x += x_offset

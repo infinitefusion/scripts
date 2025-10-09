@@ -288,5 +288,9 @@ class Game_Event < Game_Character
     return !@erased && @page != nil
   end
 
+  def visible?
+    return @page.graphic.character_name != "" && active?
+  end
+
 
 end

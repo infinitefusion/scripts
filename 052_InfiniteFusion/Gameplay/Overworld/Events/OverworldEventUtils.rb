@@ -81,3 +81,46 @@ def idleHatEvent(hatId, time, switchToActivate = nil)
   $game_switches[switchToActivate] = true if switchToActivate
   obtainHat(hatId)
 end
+
+def sit_on_chair()
+  pbSEPlay("jump", 80, 100)
+  $game_player.through =true
+  $game_player.jump_forward
+  $game_player.turn_180
+  $game_player.through =false
+  loop do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+
+    direction = checkInputDirection
+    if direction
+      facing_terrain = $game_player.pbFacingTerrainTag(direction)
+      if facing_terrain.chair
+        pbSEPlay("jump", 80, 100)
+        $game_player.direction_fix=true
+        $game_player.jumpTowards(direction)
+        $game_player.direction_fix=false
+      else
+        passable_from_direction = $game_map.passable?($game_player.x,$game_player.y,direction)
+        if passable_from_direction
+          $game_player.turn_generic(direction)
+          $game_player.jump_forward
+          break
+        else
+          $game_player.turn_generic(direction)
+          $game_player.turn_180
+        end
+      end
+      pbWait(8)
+    end
+  end
+end
+
+def checkInputDirection
+  return DIRECTION_UP if Input.trigger?(Input::UP)
+  return DIRECTION_DOWN if Input.trigger?(Input::DOWN)
+  return DIRECTION_LEFT if Input.trigger?(Input::LEFT)
+  return DIRECTION_RIGHT if Input.trigger?(Input::RIGHT)
+  return nil
+end
