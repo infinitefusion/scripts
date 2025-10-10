@@ -228,8 +228,8 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
       next false
     else
       scene.pbDisplay(_INTL("Incubating..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("..."))
+      scene.pbDisplay("...")
+      scene.pbDisplay("...")
       scene.pbDisplay(_INTL("Your egg is ready to hatch!"))
       pokemon.eggsteps = 1
       next true
@@ -898,7 +898,7 @@ def drawPokemonType(pokemon_id, x_pos = 192, y_pos = 264)
   overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
 
   pokemon = GameData::Species.get(pokemon_id)
-  typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+  typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
   type1_number = GameData::Type.get(pokemon.type1).id_number
   type2_number = GameData::Type.get(pokemon.type2).id_number
   type1rect = Rect.new(0, type1_number * 28, 64, 28)
@@ -1356,8 +1356,8 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
       next false
     else
       scene.pbDisplay(_INTL("Incubating..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("..."))
+      scene.pbDisplay("...")
+      scene.pbDisplay("...")
       scene.pbDisplay(_INTL("Your egg is ready to hatch!"))
       pokemon.steps_to_hatch = 1
       next true
@@ -1379,8 +1379,8 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR_NORMAL, proc { |item, pokemon, scene|
       pokemon.steps_to_hatch = steps
     end
     scene.pbDisplay(_INTL("Incubating..."))
-    scene.pbDisplay(_INTL("..."))
-    scene.pbDisplay(_INTL("..."))
+    scene.pbDisplay("...")
+    scene.pbDisplay("...")
     scene.pbDisplay(_INTL("The egg is closer to hatching!"))
 
     # if pokemon.steps_to_hatch <= 1

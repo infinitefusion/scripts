@@ -431,7 +431,7 @@ module GenderProperty
   end
 
   def self.format(value)
-    return _INTL("-") if !value
+    return "-" if !value
     return (value==0) ? _INTL("Male") : (value==1) ? _INTL("Female") : "-"
   end
 end

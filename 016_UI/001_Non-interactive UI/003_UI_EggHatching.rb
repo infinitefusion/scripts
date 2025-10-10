@@ -218,8 +218,8 @@ def pbHatch(pokemon)
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
     pbMessage(_INTL("Huh?\1"))
-    pbMessage(_INTL("...\1"))
-    pbMessage(_INTL("... .... .....\1"))
+    pbMessage("...\1")
+    pbMessage("... .... .....\1")
     pbMessage(_INTL("{1} hatched from the Egg!", speciesname))
     if pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?", speciesname))
       nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname),

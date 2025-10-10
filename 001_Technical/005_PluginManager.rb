@@ -234,7 +234,7 @@ module PluginManager
                 dep_version = dep[1]
                 next if self.installed?(dep_name, dep_version)
                 if self.installed?(dep_name)   # Have plugin but lower version
-                  msg = "Plugin '{1}' requires plugin '#{dep_name}' version #{dep_version} or higher, " +
+                  msg = "Plugin '#{name}' requires plugin '#{dep_name}' version #{dep_version} or higher, " +
                         "but the installed version is #{self.version(dep_name)}."
                   if dep_link = self.link(dep_name)
                     msg += "\r\nCheck #{dep_link} for an update to plugin '#{dep_name}'."

@@ -784,7 +784,7 @@ PokemonDebugMenuCommands.register("setnature", {
     ids = []
     GameData::Nature.each do |nature|
       if nature.stat_changes.length == 0
-        commands.push(_INTL("{1} (---)", nature.real_name))
+        commands.push("#{nature.real_name} (---)")
       else
         plus_text = ""
         minus_text = ""
@@ -797,7 +797,7 @@ PokemonDebugMenuCommands.register("setnature", {
             minus_text += GameData::Stat.get(change[0]).name_brief
           end
         end
-        commands.push(_INTL("{1} (+{2}, -{3})", nature.real_name, plus_text, minus_text))
+        commands.push("#{nature.real_name} (+#{plus_text}, -#{minus_text})")
       end
       ids.push(nature.id)
     end

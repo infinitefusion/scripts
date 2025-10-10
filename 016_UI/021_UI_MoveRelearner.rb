@@ -84,7 +84,7 @@ class MoveRelearner_Scene
         textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
         if moveData.total_pp>0
           textpos.push([_INTL("PP"),112,yPos+32,0,Color.new(64,64,64),Color.new(176,176,176)])
-          textpos.push([_INTL("{1}/{1}",moveData.total_pp),230,yPos+32,1,
+          textpos.push(["#{moveData.total_pp}/#{moveData.total_pp}",230,yPos+32,1,
              Color.new(64,64,64),Color.new(176,176,176)])
         else
           textpos.push(["-",80,yPos,0,Color.new(64,64,64),Color.new(176,176,176)])
