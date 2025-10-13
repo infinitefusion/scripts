@@ -153,10 +153,6 @@ class Sprite_Character
   # Event name must contain questNPC(x) for a quest icon to be displayed
   # Where x is the quest ID
   # if the quest has not already been accepted, the quest marker will be shown
-
-
-
-
   #type: :QUEST_ICON, :DIALOG_ICON
   def addQuestMarkerToSprite(iconType)
     removeQuestIcon if @questIcon
