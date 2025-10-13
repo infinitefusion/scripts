@@ -120,7 +120,7 @@ def select_league_tier
   end
   cmd_cancel = _INTL("Cancel")
   commands << cmd_cancel
-  choice = pbMessage(_INTL("Which League Rematch difficulty rank will you choose?"),commands)
+  choice = pbMessage(_INTL("Which League Rematch difficulty tier will you choose?"),commands)
   if commands[choice] == cmd_cancel
     return -1
   end

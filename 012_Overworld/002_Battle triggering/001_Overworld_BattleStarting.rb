@@ -598,7 +598,7 @@ def customTrainerBattle(trainerName, trainerType, party_array, default_level=50,
 
 
   $PokemonTemp.battleRules["canLose"] = canLose
-  decision = pbTrainerBattleCore(traine)
+  decision = pbTrainerBattleCore(trainer)
   # Return true if the player won the battle, and false if any other result
   return (decision==1)
 end
