@@ -265,6 +265,7 @@ end
 
 # todo: return whether the player has any mulch items
 def canFertilize?
+  return $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH)
   return true
 end
 
@@ -510,6 +511,18 @@ def pbBerryPlant
         end
       end
       break
+    end
+  end
+end
+
+#used for rain
+def pbWaterAllBerriesInMap(map_id)
+  map_events = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events
+  for event in map_events
+    berryData = $PokemonGlobal.eventvars[[map_id, event.id]]
+    echoln berryData
+    if berryData
+      berryData[4] = 100
     end
   end
 end
