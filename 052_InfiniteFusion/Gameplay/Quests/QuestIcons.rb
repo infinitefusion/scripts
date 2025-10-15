@@ -34,6 +34,12 @@ class Game_Event < Game_Character
     addQuestMarkersToSprite unless MAPS_WITH_NO_ICONS.include?($game_map.map_id)
   end
 
+    alias _orig_start start
+    def start
+      setDialogIconManualOffValue(true)
+      _orig_start
+    end
+
   def setDialogIconManualOffValue(value)
     @dialog_icon_manual_off=value
     @show_dialog_icon = !@dialog_icon_manual_off
