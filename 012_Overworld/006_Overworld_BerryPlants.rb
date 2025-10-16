@@ -515,18 +515,6 @@ def pbBerryPlant
   end
 end
 
-#used for rain
-def pbWaterAllBerriesInMap(map_id)
-  map_events = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events
-  for event in map_events
-    berryData = $PokemonGlobal.eventvars[[map_id, event.id]]
-    echoln berryData
-    if berryData
-      berryData[4] = 100
-    end
-  end
-end
-
 def pbPickBerry(berry, qty = 1)
   interp = pbMapInterpreter
   thisEvent = interp.get_character(0)
