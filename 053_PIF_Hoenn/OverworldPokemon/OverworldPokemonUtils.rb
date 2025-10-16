@@ -17,6 +17,8 @@ class PokemonTemp
   attr_accessor :overworld_pokemon_flee
 end
 
+
+
 #fleeDelay: The time (in seconds) you need to wait between steps for the Pokemon not to flee
 def checkOWPokemonFlee(mapId, eventId, fleeDelay)
   $PokemonTemp.overworld_pokemon_flee ||= {}
@@ -49,7 +51,7 @@ end
 #
 #- radius: the circle around the Pokemon from where it will start detecting you
 
-def overworldPokemonBehavior(species:,level:,radius:,flee_delay:)
+def overworldPokemonBehaviorManual(species:,level:,radius:,flee_delay:)
   event = $MapFactory.getMap(@map_id).events[@event_id]
 
   if event.player_near_event?(radius)
@@ -72,3 +74,32 @@ def overworldPokemonBehavior(species:,level:,radius:,flee_delay:)
   end
 end
 
+#Called from automatically spawned overworld Pokemon - species and level is obtained from name
+
+def overworldPokemonBehavior()
+  event = $MapFactory.getMap(@map_id).events[@event_id]
+  parsed_event_name = event.id.split("_")
+  species_id = parsed_event_name[1].to_sym
+  level = parsed_event_name[2].to_i
+  radius = calculate_ow_pokemon_sight_radius(species_id)
+  flee_delay = calculate_ow_pokemon_flee_delay(species_id)
+  overworldPokemonBehaviorManual(species: species_id, level: level, radius: radius, flee_delay: flee_delay)
+end
+
+#The harder the pokemon is to catch, the more skittish it is (shorter flee delay)
+def calculate_ow_pokemon_flee_delay(species_id)
+  min_delay = 1
+  max_delay = 4
+  catch_rate = GameData::Species.get(species_id).catch_rate
+  delay = max_delay - ((catch_rate - 1) / 254.0) * (max_delay - min_delay)
+  return delay.round
+end
+
+#The rarer the Pokemon, the more skittish it is (larger sight radius)
+def calculate_ow_pokemon_sight_radius(species_id)
+  min_radius = 2
+  max_radius = 6
+  catch_rate = GameData::Species.get(species_id).catch_rate
+  radius = min_radius + ((255 - catch_rate) / 254.0) * (max_radius - min_radius)
+  return radius.round
+end
