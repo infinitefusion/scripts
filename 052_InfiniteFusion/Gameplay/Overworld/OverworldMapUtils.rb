@@ -31,6 +31,21 @@ def find_random_tall_grass_coordinates_near_player(width,height,variance,max_nb_
   return [x,y]
 end
 
+
+def find_random_surfable_coordinates_near_player(width,height,variance,max_nb_tries = 10)
+  found_available_position = false
+  current_try = 0
+  while !found_available_position
+    x, y = getRandomPositionOnPerimeter(width, height, $game_player.x, $game_player.y, variance)
+
+    terrain = $game_map.terrain_tag(x, y)
+    found_available_position = terrain.can_surf
+    current_try += 1
+    return nil if current_try > max_nb_tries
+  end
+  return [x,y]
+end
+
 def getRandomPositionOnPerimeter(width, height, center_x, center_y, variance=0,edge=nil)
   half_width = width / 2.0
   half_height = height / 2.0

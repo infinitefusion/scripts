@@ -97,39 +97,39 @@ def try_spawn_surf_water_splashes
   spawnSurfSplashPatch
 end
 
-Events.onStepTaken += proc { |sender, e|
-  next unless $scene.is_a?(Scene_Map)
-  next unless Settings::GAME_ID == :IF_HOENN
-  next unless $PokemonGlobal.surfing
-
-  player_pos = [$game_player.x, $game_player.y]  # Cache player position
-
-  if $game_temp.surf_patches
-    # Use reverse_each to safely delete while iterating
-    $game_temp.surf_patches.reverse_each.with_index do |patch, reverse_idx|
-      next unless patch && patch.shape
-
-      if patch.shape.include?(player_pos)
-        next if rand(100) > 25
-
-        # Calculate actual index for deletion
-        actual_idx = $game_temp.surf_patches.length - 1 - reverse_idx
-        $game_temp.surf_patches.delete_at(actual_idx)
-
-        echoln "surf patch encounter!"
-        wild_pokemon = $PokemonEncounters.choose_wild_pokemon(:Water)
-        if wild_pokemon
-          pbWildBattle(wild_pokemon[0], wild_pokemon[1])
-        else
-          pbItemBall(:OLDBOOT)
-        end
-        break
-      end
-    end
-  end
-
-  try_spawn_surf_water_splashes
-}
+# Events.onStepTaken += proc { |sender, e|
+#   next unless $scene.is_a?(Scene_Map)
+#   next unless Settings::GAME_ID == :IF_HOENN
+#   next unless $PokemonGlobal.surfing
+#
+#   player_pos = [$game_player.x, $game_player.y]  # Cache player position
+#
+#   if $game_temp.surf_patches
+#     # Use reverse_each to safely delete while iterating
+#     $game_temp.surf_patches.reverse_each.with_index do |patch, reverse_idx|
+#       next unless patch && patch.shape
+#
+#       if patch.shape.include?(player_pos)
+#         next if rand(100) > 25
+#
+#         # Calculate actual index for deletion
+#         actual_idx = $game_temp.surf_patches.length - 1 - reverse_idx
+#         $game_temp.surf_patches.delete_at(actual_idx)
+#
+#         echoln "surf patch encounter!"
+#         wild_pokemon = $PokemonEncounters.choose_wild_pokemon(:Water)
+#         if wild_pokemon
+#           pbWildBattle(wild_pokemon[0], wild_pokemon[1])
+#         else
+#           pbItemBall(:OLDBOOT)
+#         end
+#         break
+#       end
+#     end
+#   end
+#
+#   try_spawn_surf_water_splashes
+# }
 
 def spawnSurfSplashPatch
   $game_temp.initializeSurfPatches unless $game_temp.surf_patches

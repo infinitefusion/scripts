@@ -46,6 +46,17 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
                               }, _INTL("Sets the speed at which the text is displayed")
     )
+
+    if Settings::HOENN
+      options << EnumOption.new(_INTL("Overworld Encounters"), [_INTL("On"), _INTL("Off")],
+                                proc { $PokemonSystem.overworld_encounters },
+                                proc { |value| $PokemonSystem.overworld_encounters = value },
+                                [_INTL("Pokémon are encountered in the overworld."),
+                                 _INTL("Pokémon are only encountered in tall grass, etc.")]
+      )
+    end
+
+
     if $game_switches
       options << EnumOption.new(_INTL("Difficulty"), [_INTL("Easy"), _INTL("Normal"), _INTL("Hard")],
                                 proc { $Trainer.selected_difficulty },

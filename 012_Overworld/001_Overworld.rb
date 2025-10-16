@@ -240,8 +240,14 @@ def pbBattleOnStepTaken(repel_active)
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
   $PokemonTemp.encounterType = encounter_type
-
   encounter = getEncounter(encounter_type)
+
+  if $PokemonSystem.overworld_encounters
+    #single pokemon that spawns near player
+    spawn_random_overworld_pokemon_group(encounter,2,1)
+    return
+  end
+
   if isFusedEncounter()
     encounter_fusedWith = getEncounter(encounter_type)
     if encounter[0] != encounter_fusedWith[0]

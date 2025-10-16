@@ -76,17 +76,18 @@ def overworldPokemonBehaviorManual(species:, level:, radius:, flee_delay:, time_
       playCry(species)
       pbWildBattle(species, level)
       event.erase
+      $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
       return
     end
   end
 end
 
 
-def overworldPokemonFlee(event,species)
+def overworldPokemonFlee(event,species,silent=false)
   flee_sprite = get_overworld_pokemon_flee_sprite(species)
   event.character_name=flee_sprite if flee_sprite
-  playCry(species)
-  pbSEPlay(SE_FLEE)
+  playCry(species) if species && !silent
+  pbSEPlay(SE_FLEE) unless silent
   event.move_speed = 4
   event.move_away_from_player
   event.opacity -=50
@@ -94,8 +95,8 @@ def overworldPokemonFlee(event,species)
    event.opacity -=50
   event.move_away_from_player
   event.opacity -=50
-  pbWait(8)
   event.erase
+  $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
 end
 
 def get_overworld_pokemon_flee_sprite(species)
