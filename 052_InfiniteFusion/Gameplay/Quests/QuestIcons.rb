@@ -61,20 +61,12 @@ class Game_Event < Game_Character
 
   def detectDialogueIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
-    page = pbGetActiveEventPage(event)
-    first_command = page.list[0]
-    return nil if !(first_command.code == 108 || first_command.code == 408)
-    comments = first_command.parameters
-    return comments.any? { |str| DIALOG_ICON_COMMENT_TRIGGER.include?(str) }
+    return detectCommentCommand(DIALOG_ICON_COMMENT_TRIGGER)
   end
 
   def detectTradeIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
-    page = pbGetActiveEventPage(event)
-    first_command = page.list[0]
-    return nil if !(first_command.code == 108 || first_command.code == 408)
-    comments = first_command.parameters
-    return comments.any? { |str| TRADE_ICON_COMMENT_TRIGGER.include?(str) }
+    return detectCommentCommand(TRADE_ICON_COMMENT_TRIGGER)
   end
 
   def detectQuestSwitch(event)
