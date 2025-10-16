@@ -1209,14 +1209,14 @@ def pbWaterfall
   return false
 end
 
-Events.onAction += proc { |_sender, _e|
-  terrain = $game_player.pbFacingTerrainTag
-  if terrain.waterfall || isFacingTempWaterfall()
-    pbWaterfall
-  elsif terrain.waterfall_crest
-    pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
-  end
-}
+# Events.onAction += proc { |_sender, _e|
+#   terrain = $game_player.pbFacingTerrainTag
+#   if terrain.waterfall || isFacingTempWaterfall()
+#     pbWaterfall
+#   elsif terrain.waterfall_crest
+#     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
+#   end
+# }
 
 def isFacingTempWaterfall()
   return if !$game_temp.temp_waterfall

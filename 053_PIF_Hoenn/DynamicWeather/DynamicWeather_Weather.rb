@@ -82,7 +82,6 @@ class GameWeather
     if !@current_weather[map_id]
       @current_weather[map_id] = [:None,0]
     end
-    echoln @current_weather[map_id][0]
     return @current_weather[map_id][0]
   end
 
