@@ -1,5 +1,3 @@
-
-
 class Game_Event
   def player_near_event?(radius)
     dx = $game_player.x - @x
@@ -17,9 +15,7 @@ class PokemonTemp
   attr_accessor :overworld_pokemon_flee
 end
 
-
-
-#fleeDelay: The time (in seconds) you need to wait between steps for the Pokemon not to flee
+# fleeDelay: The time (in seconds) you need to wait between steps for the Pokemon not to flee
 def checkOWPokemonFlee(mapId, eventId, fleeDelay)
   return false
   $PokemonTemp.overworld_pokemon_flee ||= {}
@@ -45,7 +41,7 @@ def checkOWPokemonFlee(mapId, eventId, fleeDelay)
   end
 end
 
-#To be called from an event
+# To be called from an event
 #
 #- flee_delay in seconds (can be fractions). The higher, the more skittish the Pokemon is
 # It's the time you need to stand still for the Pokemon not to flee.
@@ -83,8 +79,7 @@ end
 #   end
 # end
 
-
-def overworldPokemonBehaviorManual(species:, level:, radius:, flee_delay:, time_event:true)
+def overworldPokemonBehaviorManual(species:, level:, radius:, flee_delay:, time_event: true)
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event
 
@@ -101,22 +96,31 @@ def overworldPokemonBehaviorManual(species:, level:, radius:, flee_delay:, time_
     end
 
     # --- If not fleeing, check if player stopped and is next to event ---
-    if !$game_player.moving? && event.playerNextToEvent?
-      return if event.instance_variable_get(:@_triggered)
-      event.instance_variable_set(:@_triggered, true)
-      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, event.x, event.y)
-      event.turn_toward_player
-      playCry(species)
+    if !$game_player.moving?
 
-      $PokemonTemp.overworld_wild_battle_participants = [] if !$PokemonTemp.overworld_wild_battle_participants
-      $PokemonTemp.overworld_wild_battle_participants << [species,level]
-      pbWait(8)
-      trigger_overworld_wild_battle
-      event.erase
-      $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
-      return
+      if event.playerNextToEvent? # Battle
+        overworldPokemonBattle(event, species, level)
+      else
+        # check for noticed
+      end
     end
   end
+end
+
+def overworldPokemonBattle(event, species, level)
+  return if event.instance_variable_get(:@_triggered)
+  event.instance_variable_set(:@_triggered, true)
+  playAnimation(Settings::EXCLAMATION_ANIMATION_ID, event.x, event.y)
+  event.turn_toward_player
+  playCry(species)
+
+  $PokemonTemp.overworld_wild_battle_participants = [] if !$PokemonTemp.overworld_wild_battle_participants
+  $PokemonTemp.overworld_wild_battle_participants << [species, level]
+  pbWait(8)
+  trigger_overworld_wild_battle
+  event.erase
+  $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
+  return
 end
 
 def trigger_overworld_wild_battle
@@ -129,13 +133,13 @@ def trigger_overworld_wild_battle
   when 2
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
-    pb1v2WildBattle(battler1[0],battler1[1], battler2[0], battler2[1])
+    pb1v2WildBattle(battler1[0], battler1[1], battler2[0], battler2[1])
     $PokemonTemp.overworld_wild_battle_participants = []
   when 3
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
     battler3 = $PokemonTemp.overworld_wild_battle_participants[2]
-    pb1v3WildBattle(battler1[0],battler1[1], battler2[0], battler2[1],battler3[0], battler3[1])
+    pb1v3WildBattle(battler1[0], battler1[1], battler2[0], battler2[1], battler3[0], battler3[1])
     $PokemonTemp.overworld_wild_battle_participants = []
   else
     battler = $PokemonTemp.overworld_wild_battle_participants[0]
@@ -145,18 +149,18 @@ def trigger_overworld_wild_battle
   $PokemonTemp.overworld_wild_battle_triggered = false
 end
 
-def overworldPokemonFlee(event,species,silent=false)
+def overworldPokemonFlee(event, species, silent = false)
   flee_sprite = get_overworld_pokemon_flee_sprite(species)
-  event.character_name=flee_sprite if flee_sprite
+  event.character_name = flee_sprite if flee_sprite
   playCry(species) if species && !silent
   pbSEPlay(SE_FLEE) unless silent
   event.move_speed = 4
   event.move_away_from_player
-  event.opacity -=50
+  event.opacity -= 50
   event.move_away_from_player
-   event.opacity -=50
+  event.opacity -= 50
   event.move_away_from_player
-  event.opacity -=50
+  event.opacity -= 50
   event.erase
   $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
 end
@@ -169,7 +173,7 @@ def get_overworld_pokemon_flee_sprite(species)
   return nil
 end
 
-#Called from automatically spawned overworld Pokemon - species and level is obtained from name
+# Called from automatically spawned overworld Pokemon - species and level is obtained from name
 
 def overworldPokemonBehavior()
   event = $MapFactory.getMap(@map_id).events[@event_id]
@@ -180,14 +184,14 @@ def overworldPokemonBehavior()
     level = parsed_event_name[2].to_i
     radius = calculate_ow_pokemon_sight_radius(species_id)
     flee_delay = calculate_ow_pokemon_flee_delay(species_id)
-    overworldPokemonBehaviorManual(species: species_id, level: level, radius: radius, flee_delay: flee_delay, time_event:false)
+    overworldPokemonBehaviorManual(species: species_id, level: level, radius: radius, flee_delay: flee_delay, time_event: false)
   rescue
     return
   end
 
 end
 
-#The harder the pokemon is to catch, the more skittish it is (shorter flee delay)
+# The harder the pokemon is to catch, the more skittish it is (shorter flee delay)
 def calculate_ow_pokemon_flee_delay(species_id)
   min_delay = 1
   max_delay = 4
@@ -196,7 +200,7 @@ def calculate_ow_pokemon_flee_delay(species_id)
   return delay.round
 end
 
-#The rarer the Pokemon, the more skittish it is (larger sight radius)
+# The rarer the Pokemon, the more skittish it is (larger sight radius)
 def calculate_ow_pokemon_sight_radius(species_id)
   min_radius = 2
   max_radius = 6
