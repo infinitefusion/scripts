@@ -532,6 +532,10 @@ module Settings
   # ID of the animation played when a trainer notices the player (an exclamation
   # bubble).
   EXCLAMATION_ANIMATION_ID = 3
+
+  QUESTION_MARK_ANIMATION_ID = 4
+  ANGRY_ANIMATION_ID = 24
+
   # ID of the animation played when a patch of grass rustles due to using the
   # Poké Radar.
   RUSTLE_NORMAL_ANIMATION_ID = 1

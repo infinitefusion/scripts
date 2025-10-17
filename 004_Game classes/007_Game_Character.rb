@@ -463,6 +463,28 @@ class Game_Character
     end
   end
 
+  def move_type_away_from_player
+    # Calculate distance from player
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+
+    # If far from player, just move randomly
+    if sx.abs + sy.abs >= 20
+      move_random
+      return
+    end
+    # Randomized movement behavior
+    case rand(6)
+    when 0..3
+      move_away_from_player   # move in the opposite direction
+    when 4
+      move_random             # occasional random step
+    when 5
+      move_forward            # maybe just move forward
+    end
+  end
+
+
   def move_type_custom
     return if jumping? || moving?
     while @move_route_index < @move_route.list.size
@@ -1141,12 +1163,14 @@ class Game_Character
     # 6 => @stop_count > 0     # 0 seconds
     if @stop_count >= self.move_frequency_real
       case @move_type
-      when 1 then
+      when MOVE_TYPE_RANDOM then
         move_type_random
-      when 2 then
+      when MOVE_TYPE_TOWARDS_PLAYER then
         move_type_toward_player
-      when 3 then
+      when MOVE_TYPE_CUSTOM then
         move_type_custom
+      when MOVE_TYPE_AWAY_PLAYER then
+        move_type_away_from_player
       end
     end
   end

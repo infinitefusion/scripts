@@ -34,7 +34,9 @@ end
 def get_ow_pokemon_roaming_behavior_template(pokemon)
   species  =  pokemon[0]
   if isSpeciesFusion(species)
-    species = GameData::FusedSpecies.get(species).get_head_species_symbol.to_s
+    echoln "FUSIONNNNNNN"
+    species = GameData::FusedSpecies.get(species).get_head_species_symbol
+    echoln species
   end
   behavior = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
   case behavior
@@ -47,37 +49,27 @@ def get_ow_pokemon_roaming_behavior_template(pokemon)
   end
 end
 
+
+
 def create_overworld_pokemon_event(pokemon, position, terrain)
   template_event = get_ow_pokemon_roaming_behavior_template(pokemon)
-  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position)
-  return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
 
   species = pokemon[0]
   level = pokemon[1]
-  event.character_name = getOverworldSpritePath(species)
-  event.event.name = "OW/#{species.to_s}/#{level.to_s}"
-  if terrain == :Water
-    event.forced_bush_depth = 20
-    event.calculate_bush_depth
+  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
+    event.setup_pokemon(species, level, terrain)
   end
+  return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
   playOverworldPokemonSpawnAnimation(event, terrain)
   return event
 end
 
-def getOverworldSpritePath(species)
-  if isSpeciesFusion(species)
-    species_name = GameData::FusedSpecies.get(species).get_body_species_symbol.to_s
-    return "Followers/Fusions/#{species_name.to_s}_fusion"
 
-  else
-    return "Followers/#{species.to_s}"
-  end
-end
 
 def get_overworld_pokemon_group_size(species, max_group_size)
   catch_rate = GameData::Species.get(species).catch_rate
   t = (catch_rate - 1) / 254.0
-  t = 1 - Math.sqrt(t) # invert to favor smaller groups
+  t = Math.sqrt(t) # invert to favor smaller groups
 
   # Base group size, biased toward smaller numbers
   base = 1 + (t * (max_group_size - 1) * 0.5) # multiply by 0.5 to shrink toward 1–2
@@ -95,6 +87,11 @@ def get_overworld_pokemon_group_size(species, max_group_size)
   return size
 end
 
+#shortcut for calling from events
+# wild_pokemon: [species, level]
+def spawn_pokemon(wild_pokemon,max_quantity=1)
+  spawn_random_overworld_pokemon_group(wild_pokemon,10,max_quantity)
+end
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
 
@@ -139,7 +136,7 @@ end
 def despawn_overworld_pokemon(event_id)
   event = $game_map.events[event_id]
   return unless event
-  overworldPokemonFlee(event, nil, true)
+  event.ow_pokemon_flee(true)
 end
 
 class PokemonTemp
