@@ -37,30 +37,54 @@ def create_overworld_pokemon_event(pokemon, position, terrain)
 
   species = pokemon[0]
   level = pokemon[1]
-  event.character_name = "Followers/#{species}"
-  event.event.name = "OW_#{species.to_s}_#{level.to_s}"
+  event.character_name = getOverworldSpritePath(species)
+  event.event.name = "OW/#{species.to_s}/#{level.to_s}"
+  if terrain == :Water
+    event.forced_bush_depth=20
+    event.calculate_bush_depth
+  end
   playOverworldPokemonSpawnAnimation(event, terrain)
   return event
+end
+
+def getOverworldSpritePath(species)
+  if isSpeciesFusion(species)
+    species_name = GameData::FusedSpecies.get(species).get_body_species_symbol.to_s
+    return "Followers/Fusions/#{species_name.to_s}_fusion"
+
+  else
+    return "Followers/#{species.to_s}"
+  end
 end
 
 def get_overworld_pokemon_group_size(species, max_group_size)
   catch_rate = GameData::Species.get(species).catch_rate
   t = (catch_rate - 1) / 254.0
-  t = Math.sqrt(t)
-  base = 1 + t * (max_group_size - 1)
-  variation = rand < 0.3 ? -1 : 0 # occasional smaller variation
+  t = 1 - Math.sqrt(t)  # invert to favor smaller groups
+
+  # Base group size, biased toward smaller numbers
+  base = 1 + (t * (max_group_size - 1) * 0.5)  # multiply by 0.5 to shrink toward 1–2
+
+  # Random variation: mostly negative or zero, rarely positive
+  variation = if rand < 0.6
+                -1
+              elsif rand < 0.9
+                0
+              else
+                1
+              end
+
   size = (base.round + variation).clamp(1, max_group_size)
   return size
 end
+
+
 
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
 
   if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
-    echoln "despawning #{$PokemonTemp.overworld_pokemon_on_map[0]}"
-    echoln $PokemonTemp.overworld_pokemon_on_map
     despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0])
-    echoln $PokemonTemp.overworld_pokemon_on_map
   end
 
   if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
@@ -76,7 +100,8 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
   encounter_type = getTimeBasedEncounter(terrain)
 
   return unless encounter_type && position
-  wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type) if !wild_pokemon
+  wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
+  return unless wild_pokemon
   species = wild_pokemon[0]
   number_to_spawn = get_overworld_pokemon_group_size(species, max_group_size)
   for i in 0...number_to_spawn
@@ -109,6 +134,7 @@ end
 Events.onStepTaken += proc { |sender, e|
   next unless $scene.is_a?(Scene_Map)
   next unless Settings::GAME_ID == :IF_HOENN
+  next if isRepelActive()
   if should_spawn_overworld_pokemon?
     spawn_random_overworld_pokemon_group
   end
@@ -116,7 +142,12 @@ Events.onStepTaken += proc { |sender, e|
 
 Events.onMapChange += proc { |_sender, e|
   next unless Settings::HOENN
+  clearOverworldPokemon
+}
+
+
+def clearOverworldPokemon
   $PokemonTemp.pbClearTempEvents
   $PokemonTemp.overworld_pokemon_on_map = []
-}
+end
 

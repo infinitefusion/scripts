@@ -32,7 +32,7 @@ class Player < Trainer
   end
 
   def rival_appearance
-    @rival_appearance = init_rival_appearance if !@rival_appearance
+    @rival_appearance = init_rival_appearance(1,nil) if !@rival_appearance
     return @rival_appearance
   end
 

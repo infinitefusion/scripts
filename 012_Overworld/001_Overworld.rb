@@ -222,11 +222,29 @@ def isFusedEncounter
   return (rand(chance) == 0)
 end
 
-def getEncounter(encounter_type)
+
+def generateWildEncounter(encounter_type)
+  encounter = getRegularEncounter(encounter_type)
+  if isFusedEncounter()
+    encounter_fusedWith = getRegularEncounter(encounter_type)
+    if encounter[0] != encounter_fusedWith[0]
+      encounter[0] = getFusionSpeciesSymbol(encounter[0], encounter_fusedWith[0])
+    end
+  end
+
+  if encounter[0].is_a?(Integer)
+    encounter[0] = getSpecies(encounter[0])
+  end
+
+  $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
+  return encounter
+end
+def getRegularEncounter(encounter_type)
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   if $game_switches[SWITCH_RANDOM_WILD] # wild poke random activated
     if $game_switches[SWITCH_WILD_RANDOM_GLOBAL] && encounter != nil
-      encounter[0] = getRandomizedTo(encounter[0])
+      dex_num = getRandomizedTo(encounter[0])
+      encounter[0] = GameData::Species.get(dex_num).species
     end
   end
   return encounter
@@ -240,7 +258,7 @@ def pbBattleOnStepTaken(repel_active)
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
   $PokemonTemp.encounterType = encounter_type
-  encounter = getEncounter(encounter_type)
+  encounter = generateWildEncounter(encounter_type)
 
   if $PokemonSystem.overworld_encounters
     #single pokemon that spawns near player
@@ -248,18 +266,7 @@ def pbBattleOnStepTaken(repel_active)
     return
   end
 
-  if isFusedEncounter()
-    encounter_fusedWith = getEncounter(encounter_type)
-    if encounter[0] != encounter_fusedWith[0]
-      encounter[0] = getFusionSpeciesSymbol(encounter[0], encounter_fusedWith[0])
-    end
-  end
 
-  if encounter[0].is_a?(Integer)
-    encounter[0] = getSpecies(encounter[0])
-  end
-
-  $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
 
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)

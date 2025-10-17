@@ -21,6 +21,7 @@ end
 
 #fleeDelay: The time (in seconds) you need to wait between steps for the Pokemon not to flee
 def checkOWPokemonFlee(mapId, eventId, fleeDelay)
+  return false
   $PokemonTemp.overworld_pokemon_flee ||= {}
   key = "#{mapId}_#{eventId}"
   current_time = Time.now.to_f
@@ -113,7 +114,7 @@ def overworldPokemonBehavior()
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event
   begin
-    parsed_event_name = event.event.name.split("_")
+    parsed_event_name = event.event.name.split("/")
     species_id = parsed_event_name[1].to_sym
     level = parsed_event_name[2].to_i
     radius = calculate_ow_pokemon_sight_radius(species_id)

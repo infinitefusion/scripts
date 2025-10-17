@@ -275,6 +275,7 @@ class Scene_Map
       Graphics.transition(20)
     end
     $game_map.autoplay if reset_music
+    clearOverworldPokemon
     Graphics.frame_reset
     Input.update
   end

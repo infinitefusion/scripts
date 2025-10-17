@@ -13,7 +13,7 @@ class Game_Character
   attr_accessor :character_name
   attr_accessor :character_hue
   attr_reader :opacity
-  attr_reader :blend_type
+  attr_accessor :blend_type
   attr_accessor :direction
   attr_accessor :pattern
   attr_accessor :pattern_surf
@@ -29,6 +29,7 @@ class Game_Character
   attr_accessor :under_player     #always under the player, but over grass, etc.
   attr_accessor :direction_fix
   attr_accessor :always_on_top
+  attr_accessor :forced_bush_depth
 
   def initialize(map = nil)
     @map = map
@@ -82,6 +83,7 @@ class Game_Character
     @under_everything=false
     @under_player = false
     @forced_z=nil
+    @forced_bush_depth=nil
   end
 
   def at_coordinate?(check_x, check_y)
@@ -213,6 +215,10 @@ class Game_Character
   end
 
   def calculate_bush_depth
+    if @forced_bush_depth
+      @bush_depth = @forced_bush_depth
+      return
+    end
     if @tile_id > 0 || @always_on_top || jumping?
       @bush_depth = 0
     else
