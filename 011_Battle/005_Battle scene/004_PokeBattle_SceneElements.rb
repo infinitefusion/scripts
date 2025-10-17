@@ -289,9 +289,6 @@ class PokemonDataBox < SpriteWrapper
     return if @battler.is_a?(PokeBattle_FakeBattler)
     type1_number = GameData::Type.get(@battler.type1).id_number
     type2_number = GameData::Type.get(@battler.type2).id_number
-
-    echoln type1_number
-
     vertical_margin = 2
     iconHeight=19
 

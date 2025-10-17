@@ -127,6 +127,9 @@ def despawn_overworld_pokemon(event_id)
 end
 
 class PokemonTemp
+  attr_accessor :overworld_wild_battle_participants
+  attr_accessor :overworld_wild_battle_triggered
+
   attr_accessor :overworld_pokemon_on_map
   attr_accessor :prevent_ow_encounters
 end
@@ -149,5 +152,7 @@ Events.onMapChange += proc { |_sender, e|
 def clearOverworldPokemon
   $PokemonTemp.pbClearTempEvents
   $PokemonTemp.overworld_pokemon_on_map = []
+  $PokemonTemp.overworld_wild_battle_triggered = false
+  $PokemonTemp.overworld_wild_battle_participants = []
 end
 

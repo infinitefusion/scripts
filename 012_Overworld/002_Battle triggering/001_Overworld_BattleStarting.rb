@@ -406,6 +406,10 @@ def pbDoubleWildBattle(species1, level1, species2, level2,
   setBattleRule("double")
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2)
+
+  Events.onWildBattleEnd.trigger(nil, species1, level1, decision)
+  Events.onWildBattleEnd.trigger(nil, species2, level2, decision)
+
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision!=2 && decision!=5)
 end
@@ -419,9 +423,34 @@ def pbTripleWildBattle(species1, level1, species2, level2, species3, level3,
   setBattleRule("triple")
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2, species3, level3)
+
+  Events.onWildBattleEnd.trigger(nil, species1, level1, decision)
+  Events.onWildBattleEnd.trigger(nil, species2, level2, decision)
+  Events.onWildBattleEnd.trigger(nil, species3, level3, decision)
+
+
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision!=2 && decision!=5)
 end
+
+
+def pb1v2WildBattle(species1, level1, species2, level2,
+                       outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  setBattleRule("1v2")
+  # Perform the battle
+  decision = pbWildBattleCore(species1, level1, species2, level2)
+
+  Events.onWildBattleEnd.trigger(nil, species1, level1, decision)
+  Events.onWildBattleEnd.trigger(nil, species2, level2, decision)
+
+  # Return false if the player lost or drew the battle, and true if any other result
+  return (decision!=2 && decision!=5)
+end
+
 
 def pb1v3WildBattle(species1, level1, species2, level2, species3, level3,
                        outcomeVar=1, canRun=true, canLose=false)
@@ -432,6 +461,11 @@ def pb1v3WildBattle(species1, level1, species2, level2, species3, level3,
   setBattleRule("1v3")
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2, species3, level3)
+
+  Events.onWildBattleEnd.trigger(nil, species1, level1, decision)
+  Events.onWildBattleEnd.trigger(nil, species2, level2, decision)
+  Events.onWildBattleEnd.trigger(nil, species3, level3, decision)
+
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision!=2 && decision!=5)
 end

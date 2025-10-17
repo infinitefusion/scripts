@@ -225,6 +225,7 @@ end
 
 def generateWildEncounter(encounter_type)
   encounter = getRegularEncounter(encounter_type)
+  return unless encounter
   if isFusedEncounter()
     encounter_fusedWith = getRegularEncounter(encounter_type)
     if encounter[0] != encounter_fusedWith[0]
@@ -239,6 +240,7 @@ def generateWildEncounter(encounter_type)
   $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
   return encounter
 end
+
 def getRegularEncounter(encounter_type)
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   if $game_switches[SWITCH_RANDOM_WILD] # wild poke random activated
