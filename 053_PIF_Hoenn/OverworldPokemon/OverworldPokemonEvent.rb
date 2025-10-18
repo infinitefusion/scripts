@@ -16,11 +16,13 @@ class OverworldPokemonEvent < Game_Event
 
     @behavior_roaming = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
     @behavior_noticed = POKEMON_BEHAVIOR_DATA[species][:behavior_noticed]
+
     @behavior_roaming = :random if !@behavior_roaming
     @behavior_noticed = :normal if !@behavior_noticed
 
     @can_flee = POKEMON_BEHAVIOR_DATA[species][:can_flee] || false
     @can_fly = POKEMON_BEHAVIOR_DATA[species][:can_fly] || false
+    @step_anime = POKEMON_BEHAVIOR_DATA[species][:can_fly] || false
 
     @flee_delay = calculate_ow_pokemon_flee_delay
     @detection_radius = calculate_ow_pokemon_sight_radius
@@ -31,7 +33,6 @@ class OverworldPokemonEvent < Game_Event
 
     @character_name = getOverworldSpritePath(species)
     @event.name = "OW/#{species.to_s}/#{level.to_s}"
-    echoln @event.name
     if terrain == :Water
       self.forced_bush_depth = 20
       self.calculate_bush_depth
@@ -252,6 +253,10 @@ class OverworldPokemonEvent < Game_Event
 
   # Static
   def set_noticed_movement
+    if isRepelActive
+      @move_type = MOVE_TYPE_AWAY_PLAYER
+      self.move_frequency=6
+    end
     case @behavior_noticed
     when :normal
       @move_type = MOVE_TYPE_RANDOM
@@ -271,6 +276,11 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_roaming_movement
+    if isRepelActive
+      @move_type = MOVE_TYPE_AWAY_PLAYER
+      self.move_frequency=3
+      return
+    end
     case @behavior_roaming
     when :random,
       @move_type = MOVE_TYPE_RANDOM
