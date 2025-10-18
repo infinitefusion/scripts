@@ -16,7 +16,7 @@ OVERWORLD_POKEMON_COMMENT_TRIGGER = "OverworldPokemon"
 def should_spawn_overworld_pokemon?
   return false unless $PokemonSystem.overworld_encounters
   return false if $PokemonTemp.prevent_ow_encounters
-  return false unless $PokemonGlobal.stepcount % 25 == 0
+  return false unless $PokemonGlobal.stepcount % 10 == 0
   return rand(100) > 25 # true
 end
 
@@ -59,6 +59,7 @@ def create_overworld_pokemon_event(pokemon, position, terrain)
   event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
     event.setup_pokemon(species, level, terrain)
   end
+  event.direction = [DIRECTION_LEFT,DIRECTION_RIGHT,DIRECTION_DOWN,DIRECTION_UP].sample
   return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
   playOverworldPokemonSpawnAnimation(event, terrain)
   return event
