@@ -122,7 +122,7 @@ class OverworldPokemonEvent < Game_Event
   def playDetectPlayerAnimation
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
-    if @behavior_noticed == :shy || @behavior_noticed == :skittish || @behavior_noticed == :still || @can_flee
+    if @behavior_noticed == :shy || @behavior_noticed == :skittish || @behavior_noticed == :still || @behavior_noticed == :teleport_away
       playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     elsif @behavior_noticed == :curious
       playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
@@ -327,19 +327,14 @@ class OverworldPokemonEvent < Game_Event
     when :skittish
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 6
+    when :shy
+      @move_type = MOVE_TYPE_AWAY_PLAYER
+    when :teleport_away
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][:teleport_away])
     end
   end
 
   def set_roaming_movement
-    # @move_type = MOVE_TYPE_CUSTOM
-    #
-    # @move_route = RPG::MoveRoute.new
-    # @move_route.repeat = true
-    # @move_route.skippable = true
-    # @move_route.list = OW_BEHAVIOR_MOVE_ROUTES[:roaming][:burrow][:move_route]
-    # return
-
-
     if isRepelActive
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 3
