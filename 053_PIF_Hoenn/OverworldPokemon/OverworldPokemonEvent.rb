@@ -14,16 +14,17 @@ class OverworldPokemonEvent < Game_Event
     @species = species
     @level = level
     @pokemon = Pokemon.new(species, level)
+    @behavior_species= getBehaviorSpecies
 
-    @behavior_roaming = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
-    @behavior_noticed = POKEMON_BEHAVIOR_DATA[species][:behavior_noticed]
+    @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
+    @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
 
     @behavior_roaming = :random if !@behavior_roaming
     @behavior_noticed = :normal if !@behavior_noticed
 
     @land_sprite =
 
-    @can_flee = POKEMON_BEHAVIOR_DATA[species][:can_flee] || false
+    @can_flee = POKEMON_BEHAVIOR_DATA[@behavior_species][:can_flee] || false
 
     @flee_delay = calculate_ow_pokemon_flee_delay
     @detection_radius = calculate_ow_pokemon_sight_radius
@@ -53,13 +54,16 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
+  def getBehaviorSpecies
+    if isSpeciesFusion(@species)
+      return GameData::FusedSpecies.get(species).get_head_species_symbol
+    end
+    return @species
+  end
+
   def initialize_sprite(terrain)
     @land_sprite = getOverworldLandPath
     @flying_sprite = getOverworldFlyingPath
-    echoln @land_sprite
-    echoln @flying_sprite
-
-
     if terrain == :Water && @flying_sprite
       @character_name = @flying_sprite
     else

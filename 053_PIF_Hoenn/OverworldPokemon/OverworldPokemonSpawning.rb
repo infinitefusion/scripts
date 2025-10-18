@@ -31,34 +31,33 @@ def playOverworldPokemonSpawnAnimation(event, terrain)
   end
 end
 
-def get_ow_pokemon_roaming_behavior_template(pokemon)
-  species  =  pokemon[0]
-  if isSpeciesFusion(species)
-    echoln "FUSIONNNNNNN"
-    species = GameData::FusedSpecies.get(species).get_head_species_symbol
-    echoln species
-  end
-  behavior = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
-  case behavior
-  when :normal, :shy, :curious, :aggressive
-    return TEMPLATE_EVENT_OW_POKEMON_NORMAL
-  when :skittish, :still
-    return TEMPLATE_EVENT_OW_POKEMON_STILL
-  else
-    return TEMPLATE_EVENT_OW_POKEMON_NORMAL
-  end
-end
+# def get_ow_pokemon_roaming_behavior_template(pokemon)
+#   species  =  pokemon[0]
+#   if isSpeciesFusion(species)
+#     species = GameData::FusedSpecies.get(species).get_head_species_symbol
+#   end
+#   behavior = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
+#   case behavior
+#   when :normal, :shy, :curious, :aggressive
+#     return TEMPLATE_EVENT_OW_POKEMON_NORMAL
+#   when :skittish, :still
+#     return TEMPLATE_EVENT_OW_POKEMON_STILL
+#   else
+#     return TEMPLATE_EVENT_OW_POKEMON_NORMAL
+#   end
+# end
 
 
 
 def create_overworld_pokemon_event(pokemon, position, terrain)
-  template_event = get_ow_pokemon_roaming_behavior_template(pokemon)
+  template_event = TEMPLATE_EVENT_OW_POKEMON_NORMAL
 
   species = pokemon[0]
   level = pokemon[1]
   event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
     event.setup_pokemon(species, level, terrain)
   end
+  echoln "Created Overworld Pokemon Event: #{event.name}"
   event.direction = [DIRECTION_LEFT,DIRECTION_RIGHT,DIRECTION_DOWN,DIRECTION_UP].sample
   return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
   playOverworldPokemonSpawnAnimation(event, terrain)
@@ -95,7 +94,7 @@ def spawn_pokemon(wild_pokemon,max_quantity=1)
 end
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
-
+  $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
   if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
     despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0])
   end
@@ -165,6 +164,8 @@ Events.onMapChange += proc { |_sender, e|
 }
 
 def clearOverworldPokemon
+  echoln "Clearing Overworld Pokemon"
+
   $PokemonTemp.pbClearTempEvents
   $PokemonTemp.overworld_pokemon_on_map = []
   $PokemonTemp.overworld_wild_battle_triggered = false
