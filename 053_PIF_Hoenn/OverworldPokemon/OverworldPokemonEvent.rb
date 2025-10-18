@@ -9,6 +9,7 @@ class OverworldPokemonEvent < Game_Event
 
   attr_accessor :flee_delay
   attr_accessor :detection_radius
+  attr_accessor :pokemon
 
   def setup_pokemon(species, level, terrain)
     @species = species
@@ -22,8 +23,6 @@ class OverworldPokemonEvent < Game_Event
     @behavior_roaming = :random if !@behavior_roaming
     @behavior_noticed = :normal if !@behavior_noticed
 
-    @land_sprite =
-
     @can_flee = POKEMON_BEHAVIOR_DATA[@behavior_species][:can_flee] || false
 
     @flee_delay = calculate_ow_pokemon_flee_delay
@@ -33,16 +32,16 @@ class OverworldPokemonEvent < Game_Event
 
     @deleted = false
 
-    initialize_sprite(terrain)
-    if @flying_sprite
-      @can_fly = true
-    end
+
 
     @event.name = "OW/#{species.to_s}/#{level.to_s}"
+
+    initialize_sprite(terrain)
+    @is_flying = @character_name == @flying_sprite
+    @step_anime=@is_flying
+    @always_on_top = @is_flying
     if terrain == :Water
-      @step_anime = @can_fly
-      @always_on_top = @can_fly
-      unless @can_fly
+      unless @is_flying
         self.forced_bush_depth = 20
         self.calculate_bush_depth
       end
@@ -52,6 +51,9 @@ class OverworldPokemonEvent < Game_Event
       pbSEPlay("shiny", 60)
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID,@x, @y)
     end
+
+
+
   end
 
   def getBehaviorSpecies
@@ -240,7 +242,6 @@ class OverworldPokemonEvent < Game_Event
     @move_away_from_player
     @opacity -= 50
     erase
-    $PokemonTemp.overworld_pokemon_on_map.delete(@id)
   end
 
   def get_overworld_pokemon_flee_sprite(species)

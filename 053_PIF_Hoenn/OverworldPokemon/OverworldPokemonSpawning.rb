@@ -94,10 +94,7 @@ def spawn_pokemon(wild_pokemon,max_quantity=1)
 end
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
-  $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
-  if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
-    despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0])
-  end
+
 
   if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
     terrain = :Water
@@ -112,6 +109,12 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
   encounter_type = getTimeBasedEncounter(terrain)
 
   return unless encounter_type && position
+
+  $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
+  if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
+    despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0],terrain)
+  end
+
   wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
   return unless wild_pokemon
   species = wild_pokemon[0]
@@ -133,10 +136,18 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
   end
 end
 
-def despawn_overworld_pokemon(event_id)
+def despawn_overworld_pokemon(event_id,terrain)
   event = $game_map.events[event_id]
+  if event.pokemon.shiny? #re-add it ad the end of the list instead
+    $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
+    $PokemonTemp.overworld_pokemon_on_map << event.id
+    event_id = $PokemonTemp.overworld_pokemon_on_map[0]
+    event = $game_map.events[event_id]
+  end
   return unless event
   event.ow_pokemon_flee(true)
+  $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
+  playOverworldPokemonSpawnAnimation(event,terrain)
 end
 
 class PokemonTemp
