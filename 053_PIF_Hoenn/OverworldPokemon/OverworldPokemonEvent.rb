@@ -20,6 +20,8 @@ class OverworldPokemonEvent < Game_Event
     @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
     @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
 
+    echoln @behavior_roaming
+
     @behavior_roaming = :random if !@behavior_roaming
     @behavior_noticed = :normal if !@behavior_noticed
 
@@ -31,7 +33,6 @@ class OverworldPokemonEvent < Game_Event
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
-
 
 
     @event.name = "OW/#{species.to_s}/#{level.to_s}"
@@ -51,9 +52,7 @@ class OverworldPokemonEvent < Game_Event
       pbSEPlay("shiny", 60)
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID,@x, @y)
     end
-
-
-
+    set_roaming_movement
   end
 
   def getBehaviorSpecies
@@ -133,6 +132,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def update_behavior()
+    return if @opacity == 0
     if player_near_event?(@detection_radius)
       # --- Check flee first ---
       if $game_player.moving?
@@ -331,18 +331,45 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_roaming_movement
+    # @move_type = MOVE_TYPE_CUSTOM
+    #
+    # @move_route = RPG::MoveRoute.new
+    # @move_route.repeat = true
+    # @move_route.skippable = true
+    # @move_route.list = OW_BEHAVIOR_MOVE_ROUTES[:roaming][:burrow][:move_route]
+    # return
+
+
     if isRepelActive
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 3
       return
     end
+
+    echoln @behavior_roaming
     case @behavior_roaming
     when :random,
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
+    when :still_teleport
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:still_teleport])
+    when :random_burrow
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:random_burrow])
+    when :random_vanish
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:random_vanish])
     end
     self.move_frequency = 3
   end
 
+  def set_custom_move_route(move_list)
+    echoln "set_custom_move_route"
+    @move_type = MOVE_TYPE_CUSTOM
+    @move_route = RPG::MoveRoute.new
+    @move_route.repeat = true
+    @move_route.skippable = true
+    @move_route.list = move_list
+  end
+
 end
+

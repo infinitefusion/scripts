@@ -57,7 +57,7 @@ module Compiler
       case commands[i]
       when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
            PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
-           PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
+           PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script, PBMoveRoute::PlayAnimation,
         route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1]]))
         i += 1
       when PBMoveRoute::ScriptAsync

@@ -561,6 +561,7 @@ end
 # Event movement
 #===============================================================================
 module PBMoveRoute
+  End = 0
   Down = 1
   Left = 2
   Right = 3
@@ -606,6 +607,8 @@ module PBMoveRoute
   Blending = 43 # 1 param
   PlaySE = 44 # 1 param
   Script = 45 # 1 param
+  PlayAnimation = 46 # 1 param
+
   ScriptAsync = 101 # 1 param
 end
 
