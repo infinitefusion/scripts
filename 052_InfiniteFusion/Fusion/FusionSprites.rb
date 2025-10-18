@@ -47,7 +47,7 @@ module GameData
       elsif isBodyShiny && SHINY_COLOR_OFFSETS[body_number]&.dig(color)
         offset = SHINY_COLOR_OFFSETS[body_number]&.dig(color)
       else
-        return 0 if color != :v1
+        return 0 if color != :c1
         offset = calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny, isHeadShiny)
       end
       return offset
