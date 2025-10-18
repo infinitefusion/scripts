@@ -272,6 +272,7 @@ def pbWildBattleCore(*args)
   foeParty = []
   sp = nil
   for arg in args
+    echoln arg
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
@@ -353,9 +354,48 @@ def pbWildBattleSpecific(pokemon, outcomeVar=1, canRun=true, canLose=false)
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
   # Perform the battle
+  echoln pokemon
   decision = pbWildBattleCore(pokemon)
   # Used by the Poké Radar to update/break the chain
   #Events.onWildBattleEnd.trigger(nil,species,level,decision)
+  # Return false if the player lost or drew the battle, and true if any other result
+  Events.onWildBattleEnd.trigger(nil, pokemon.species, pokemon.level, decision)
+  return (decision!=2 && decision!=5)
+end
+
+
+def pb1v2WildBattleSpecific(pokemon1, pokemon2,
+                    outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  setBattleRule("1v2")
+  # Perform the battle
+  decision = pbWildBattleCore(pokemon1, pokemon2)
+
+  Events.onWildBattleEnd.trigger(nil, pokemon1.species, pokemon1.level, decision)
+  Events.onWildBattleEnd.trigger(nil, pokemon2.species, pokemon2.level, decision)
+
+  # Return false if the player lost or drew the battle, and true if any other result
+  return (decision!=2 && decision!=5)
+end
+
+
+def pb1v3WildBattleSpecific(pokemon1, pokemon2, pokemon3,
+                    outcomeVar=1, canRun=true, canLose=false)
+  # Set some battle rules
+  setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
+  setBattleRule("cannotRun") if !canRun
+  setBattleRule("canLose") if canLose
+  setBattleRule("1v3")
+  # Perform the battle
+  decision = pbWildBattleCore(pokemon1, pokemon2, pokemon3)
+
+  Events.onWildBattleEnd.trigger(nil, pokemon1.species, pokemon1.level, decision)
+  Events.onWildBattleEnd.trigger(nil, pokemon2.species, pokemon2.level, decision)
+  Events.onWildBattleEnd.trigger(nil, pokemon3.species, pokemon3.level, decision)
+
   # Return false if the player lost or drew the battle, and true if any other result
   return (decision!=2 && decision!=5)
 end

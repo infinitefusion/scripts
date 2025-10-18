@@ -16,8 +16,6 @@ class PokemonTemp
 end
 
 
-
-
 def trigger_overworld_wild_battle
   return if $PokemonTemp.overworld_wild_battle_triggered
   $PokemonTemp.overworld_wild_battle_triggered = true
@@ -28,17 +26,17 @@ def trigger_overworld_wild_battle
   when 2
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
-    pb1v2WildBattle(battler1[0], battler1[1], battler2[0], battler2[1])
+    pb1v2WildBattleSpecific(battler1, battler2)
     $PokemonTemp.overworld_wild_battle_participants = []
   when 3
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
     battler3 = $PokemonTemp.overworld_wild_battle_participants[2]
-    pb1v3WildBattle(battler1[0], battler1[1], battler2[0], battler2[1], battler3[0], battler3[1])
+    pb1v2WildBattleSpecific(battler1, battler2, battler3)
     $PokemonTemp.overworld_wild_battle_participants = []
   else
     battler = $PokemonTemp.overworld_wild_battle_participants[0]
-    pbWildBattle(battler[0], battler[1])
+    pbWildBattleSpecific(battler)
     $PokemonTemp.overworld_wild_battle_participants.shift
   end
   $PokemonTemp.overworld_wild_battle_triggered = false
