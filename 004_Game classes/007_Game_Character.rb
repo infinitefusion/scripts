@@ -13,7 +13,7 @@ class Game_Character
   attr_accessor :character_name
   attr_accessor :character_hue
   attr_reader :opacity
-  attr_reader :blend_type
+  attr_accessor :blend_type
   attr_accessor :direction
   attr_accessor :pattern
   attr_accessor :pattern_surf
@@ -25,10 +25,12 @@ class Game_Character
   attr_reader :move_speed
   attr_accessor :walk_anime
   attr_writer :bob_height
-  attr_accessor :under_everything #under even grass
-  attr_accessor :under_player     #always under the player, but over grass, etc.
+  attr_accessor :under_everything # under even grass
+  attr_accessor :under_player # always under the player, but over grass, etc.
   attr_accessor :direction_fix
   attr_accessor :always_on_top
+  attr_accessor :forced_bush_depth
+  attr_reader :move_route
 
   def initialize(map = nil)
     @map = map
@@ -79,9 +81,10 @@ class Game_Character
     @moved_this_frame = false
     @locked = false
     @prelock_direction = 0
-    @under_everything=false
+    @under_everything = false
     @under_player = false
-    @forced_z=nil
+    @forced_z = nil
+    @forced_bush_depth = nil
   end
 
   def at_coordinate?(check_x, check_y)
@@ -213,6 +216,10 @@ class Game_Character
   end
 
   def calculate_bush_depth
+    if @forced_bush_depth
+      @bush_depth = @forced_bush_depth
+      return
+    end
     if @tile_id > 0 || @always_on_top || jumping?
       @bush_depth = 0
     else
@@ -240,14 +247,13 @@ class Game_Character
     return $game_map.terrain_tag(facing[1], facing[2])
   end
 
-
   def passable?(x, y, d, strict = false)
     return false if self == $game_player && $game_switches[SWITCH_LOCK_PLAYER_MOVEMENT]
     new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
     new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
     return false unless self.map.valid?(new_x, new_y)
     if self.character_name == "SHARPEDO" || self.character_name == "nightmare"
-      return false if pbFacingTerrainTag().id==:SharpedoObstacle
+      return false if pbFacingTerrainTag().id == :SharpedoObstacle
     end
     return true if @through
 
@@ -352,7 +358,7 @@ class Game_Character
         return z + self.map.priorities[@tile_id] * 32
       rescue
         return 0
-        #raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
+        # raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
       end
     end
     # Add z if height exceeds 32
@@ -361,10 +367,14 @@ class Game_Character
 
   def opposite_direction
     case @direction
-    when DIRECTION_LEFT; return DIRECTION_RIGHT
-    when DIRECTION_RIGHT; return DIRECTION_LEFT
-    when DIRECTION_UP; return DIRECTION_DOWN
-    when DIRECTION_DOWN; return DIRECTION_UP
+    when DIRECTION_LEFT;
+      return DIRECTION_RIGHT
+    when DIRECTION_RIGHT;
+      return DIRECTION_LEFT
+    when DIRECTION_UP;
+      return DIRECTION_DOWN
+    when DIRECTION_DOWN;
+      return DIRECTION_UP
     else
       return DIRECTION_ALL
     end
@@ -389,7 +399,6 @@ class Game_Character
   end
 
   def force_move_route(move_route)
-    #echoln screen_z() if self == $game_player
     if @original_move_route == nil
       @original_move_route = @move_route
       @original_move_route_index = @move_route_index
@@ -457,6 +466,28 @@ class Game_Character
       move_forward
     end
   end
+
+  def move_type_away_from_player
+    # Calculate distance from player
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
+
+    # If far from player, just move randomly
+    if sx.abs + sy.abs >= 20
+      move_random
+      return
+    end
+    # Randomized movement behavior
+    case rand(6)
+    when 0..3
+      move_away_from_player # move in the opposite direction
+    when 4
+      move_random # occasional random step
+    when 5
+      move_forward # maybe just move forward
+    end
+  end
+
 
   def move_type_custom
     return if jumping? || moving?
@@ -602,6 +633,8 @@ class Game_Character
           pbSEPlay(command.parameters[0])
         when 45 then
           eval(command.parameters[0])
+        when 46 then
+          playAnimation(command.parameters[0],@x,@y)
         end
         @move_route_index += 1
       end
@@ -915,19 +948,19 @@ class Game_Character
     @direction_fix = last_direction_fix
   end
 
-  def jump_forward
+  def jump_forward(distance = 1)
     case $game_player.direction
     when DIRECTION_DOWN
       x_direction = 0
-      y_direction = 1
+      y_direction = distance
     when DIRECTION_UP
       x_direction = 0
-      y_direction = -1
+      y_direction = 0 - distance
     when DIRECTION_LEFT
-      x_direction = -1
+      x_direction = 0 - distance
       y_direction = 0
     when DIRECTION_RIGHT
-      x_direction = 1
+      x_direction = distance
       y_direction = 0
     else
       x_direction = 0
@@ -967,14 +1000,18 @@ class Game_Character
   end
 
   def jumpForward
-    case self.direction
-    when 2 then
+    jumpTowards(self.direction)
+  end
+
+  def jumpTowards(direction)
+    case direction
+    when DIRECTION_DOWN then
       jump(0, 1) # down
-    when 4 then
+    when DIRECTION_LEFT then
       jump(-1, 0) # left
-    when 6 then
+    when DIRECTION_RIGHT then
       jump(1, 0) # right
-    when 8 then
+    when DIRECTION_UP then
       jump(0, -1) # up
     end
   end
@@ -1131,12 +1168,14 @@ class Game_Character
     # 6 => @stop_count > 0     # 0 seconds
     if @stop_count >= self.move_frequency_real
       case @move_type
-      when 1 then
+      when MOVE_TYPE_RANDOM then
         move_type_random
-      when 2 then
+      when MOVE_TYPE_TOWARDS_PLAYER then
         move_type_toward_player
-      when 3 then
+      when MOVE_TYPE_CUSTOM then
         move_type_custom
+      when MOVE_TYPE_AWAY_PLAYER then
+        move_type_away_from_player
       end
     end
   end

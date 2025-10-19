@@ -46,6 +46,17 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
                               }, _INTL("Sets the speed at which the text is displayed")
     )
+
+    if Settings::HOENN
+      options << EnumOption.new(_INTL("Overworld Encounters"), [_INTL("On"), _INTL("Off")],
+                                proc { $PokemonSystem.overworld_encounters },
+                                proc { |value| $PokemonSystem.overworld_encounters = value },
+                                [_INTL("Pokémon are encountered in the overworld."),
+                                 _INTL("Pokémon are only encountered in tall grass, etc.")]
+      )
+    end
+
+
     if $game_switches
       options << EnumOption.new(_INTL("Difficulty"), [_INTL("Easy"), _INTL("Normal"), _INTL("Hard")],
                                 proc { $Trainer.selected_difficulty },
@@ -244,16 +255,18 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                _INTL("Disables some options that aren't supported when playing on mobile.")]
     )
 
-    selected_game_mode = $game_switches[SWITCH_MODERN_MODE] ? 1 : 0
-    options << EnumOption.new(_INTL("Game Mode"), [_INTL("Classic"), _INTL("Remix")],
-                              proc { selected_game_mode },
-                              proc { |value|
-                                $game_switches[SWITCH_MODERN_MODE] = value == 1
-                                @manually_changed_gamemode = true
-                              },
-                              [_INTL("Use trainers from Classic Mode for Legendary Mode"),
-                               _INTL("Use trainers from Remix Mode for Legendary Mode")]
-    ) if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]
+    if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]
+      selected_game_mode = $game_switches[SWITCH_MODERN_MODE] ? 1 : 0
+      options << EnumOption.new(_INTL("Trainers"), [_INTL("Classic"), _INTL("Remix")],
+                                proc { selected_game_mode },
+                                proc { |value|
+                                  $game_switches[SWITCH_MODERN_MODE] = value == 1
+                                  @manually_changed_gamemode = true
+                                },
+                                [_INTL("Use trainers from Classic Mode for Legendary Mode"),
+                                 _INTL("Use trainers from Remix Mode for Legendary Mode")]
+      )
+    end
     return options
   end
 

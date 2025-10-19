@@ -265,6 +265,7 @@ end
 
 # todo: return whether the player has any mulch items
 def canFertilize?
+  return $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH)
   return true
 end
 

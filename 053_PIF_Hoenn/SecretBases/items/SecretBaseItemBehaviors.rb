@@ -171,10 +171,12 @@ def pushEvent(itemInstance)
   end
 end
 
-
-
-def sit_on_chair(itemInstance)
+def sit_on_chair_item(itemInstance)
   event=itemInstance.getMainEvent
+  sit_on_chair_event(event)
+end
+
+def sit_on_chair_event(event)
   pbSEPlay("jump", 80, 100)
   $game_player.always_on_top=true
   $game_player.through =true
@@ -197,4 +199,5 @@ def sit_on_chair(itemInstance)
     end
   end
 end
+
 # PC behavior set directly in SecretBaseController

@@ -21,29 +21,26 @@ GYM_LEADER_MAX_RETRIES = 20
 # end
 
 def initializeLegendaryMode()
-  # $game_variables[VAR_CURRENT_GYM_TYPE] = -1
-  # $game_switches[SWITCH_RANDOM_TRAINERS] = true
-  # $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = true
-  # $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = false
-  # $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = true
-  # $game_switches[SWITCH_LEGENDARY_MODE] = true
-  #
-  # addLegendaryEggsToPC
-  # $PokemonSystem.hide_custom_eggs = true
-  # $PokemonSystem.type_icons = true
+  $game_variables[VAR_CURRENT_GYM_TYPE] = -1
+  $game_switches[SWITCH_RANDOM_TRAINERS] = true
+  $game_switches[SWITCH_RANDOMIZE_GYMS_SEPARATELY] = true
+  $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = false
+  $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = true
+  $game_switches[SWITCH_LEGENDARY_MODE] = true
+  $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
+  addLegendaryEggsToPC
+  $PokemonSystem.hide_custom_eggs = true
+  $PokemonSystem.type_icons = true
 end
 
 def convert_species_to_legendary(dex_number)
   species = GameData::Species.get(dex_number).species
   dex_number = getDexNumberForSpecies(species)
-
-  return dex_number
-
-  # return species if isTripleFusion?(dex_number)
-  # isFusion = isFusion(dex_number)
-  # new_species = isFusion ? convert_fusion_to_legendary(species) : convert_unfused_to_legendary(species)
-  # echoln "#{get_readable_fusion_name(species)} -> #{get_readable_fusion_name(new_species)}"
-  # return new_species
+  return species if isTripleFusion?(dex_number)
+  isFusion = isFusion(dex_number)
+  new_species = isFusion ? convert_fusion_to_legendary(species) : convert_unfused_to_legendary(species)
+  echoln "#{get_readable_fusion_name(species)} -> #{get_readable_fusion_name(new_species)}"
+  return new_species
 end
 
 # Takes an unfused Pokemon and fuses it with a random legendary
@@ -125,7 +122,7 @@ def getNewLegendaryFusionForGymType(original_species, nb_retries = 0)
   echoln "gymType: #{gym_type} - body_species: #{body_species.species} head_species: #{head_species.species}, kept: #{pokemon_to_be_kept.species}"
 
   legendary_species = LEGENDARIES_LIST.sample
-
+  return getNewLegendaryFusion(original_species, nb_retries)  unless pokemon_to_be_replaced
   if pokemon_to_be_replaced.species == head_species.species
     head_species_id = legendary_species
   else
@@ -159,7 +156,7 @@ def addLegendaryEggsToPC()
   legendaries_species = LEGENDARIES_LIST.shuffle
   legendaries_species.each do |species|
     pokemon = Pokemon.new(species, Settings::EGG_LEVEL)
-    pokemon.steps_to_hatch = pokemon.species_data.hatch_steps
+    pokemon.steps_to_hatch = pokemon.species_data.hatch_steps/2
     pokemon.name = "Egg"
     $PokemonStorage.pbStoreCaught(pokemon)
   end

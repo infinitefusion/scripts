@@ -289,9 +289,6 @@ class PokemonDataBox < SpriteWrapper
     return if @battler.is_a?(PokeBattle_FakeBattler)
     type1_number = GameData::Type.get(@battler.type1).id_number
     type2_number = GameData::Type.get(@battler.type2).id_number
-
-    echoln type1_number
-
     vertical_margin = 2
     iconHeight=19
 
@@ -634,7 +631,7 @@ class PokemonBattlerSprite < RPG::Sprite
     @_iconBitmap.scale_bitmap(scale)
 
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
-    add_hat_to_bitmap(self.bitmap,pkmn.hat,pkmn.hat_x,pkmn.hat_y,scale,self.mirror) if self.bitmap && pkmn.hat
+    add_hat_to_bitmap(self.bitmap,pkmn.hat,pkmn.hat_x,pkmn.hat_y,scale,pkmn.hat_mirrored_horizontal,pkmn.hat_mirrored_vertical) if self.bitmap && pkmn.hat
 
     pbSetPosition
   end

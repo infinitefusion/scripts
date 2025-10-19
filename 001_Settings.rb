@@ -5,12 +5,13 @@
 #==============================================================================#
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
-  GAME_VERSION = '6.7.0'
-  GAME_VERSION_NUMBER = "6.7.0"
+  GAME_VERSION_NUMBER = "6.7.2"
   LATEST_GAME_RELEASE = "6.6"
 
   KANTO = GAME_ID == :IF_KANTO
   HOENN = GAME_ID == :IF_HOENN
+
+  OVERWORLD_POKEMON_LIMIT = 8
 
   POKERADAR_LIGHT_ANIMATION_RED_ID = 17
   POKERADAR_LIGHT_ANIMATION_GREEN_ID = 18
@@ -27,7 +28,7 @@ module Settings
   ANIMATE_REFLECTIONS= false#GAME_ID == :IF_HOENN #true
   USE_REFLECTIONS = false
   #Infinite fusion settings
-  NB_POKEMON = Settings::GAME_ID == :IF_HOENN ? 565 : 501
+  NB_POKEMON = 572# Settings::GAME_ID == :IF_HOENN ? 565 : 501
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
   CUSTOM_SPRITES_TO_IMPORT_FOLDER = "Graphics/CustomBattlers/Sprites to import/"
@@ -531,6 +532,10 @@ module Settings
   # ID of the animation played when a trainer notices the player (an exclamation
   # bubble).
   EXCLAMATION_ANIMATION_ID = 3
+
+  QUESTION_MARK_ANIMATION_ID = 4
+  ANGRY_ANIMATION_ID = 24
+
   # ID of the animation played when a patch of grass rustles due to using the
   # Poké Radar.
   RUSTLE_NORMAL_ANIMATION_ID = 1

@@ -302,8 +302,9 @@ def getBasePokemonID(pokemon, body = true)
   return head.to_i
 end
 
-def getGenericPokemonCryText(pokemonSpecies)
-  case pokemonSpecies
+def getGenericPokemonCryText(dex_number)
+  return unless dex_number.is_a?(Integer)
+  case dex_number
   when 25
     return "Pika!"
   when 16, 17, 18, 21, 22, 144, 145, 146, 227, 417, 418, 372 # birds

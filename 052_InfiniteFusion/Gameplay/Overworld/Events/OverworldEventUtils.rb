@@ -81,3 +81,144 @@ def idleHatEvent(hatId, time, switchToActivate = nil)
   $game_switches[switchToActivate] = true if switchToActivate
   obtainHat(hatId)
 end
+
+
+DIRECTION_ALL  = 0
+DIRECTION_LEFT = 4
+DIRECTION_RIGHT = 6
+DIRECTION_DOWN = 2
+DIRECTION_UP = 8
+
+DIRECTION_ALL  = 0
+DIRECTION_LEFT = 4
+DIRECTION_RIGHT = 6
+DIRECTION_DOWN = 2
+DIRECTION_UP = 8
+
+DIRECTION_ALL  = 0
+DIRECTION_LEFT = 4
+DIRECTION_RIGHT = 6
+DIRECTION_DOWN = 2
+DIRECTION_UP = 8
+
+DIRECTION_ALL  = 0
+DIRECTION_LEFT = 4
+DIRECTION_RIGHT = 6
+DIRECTION_DOWN = 2
+DIRECTION_UP = 8
+
+DIRECTION_ALL  = 0
+DIRECTION_LEFT = 4
+DIRECTION_RIGHT = 6
+DIRECTION_DOWN = 2
+DIRECTION_UP = 8
+
+def kick_ball(eventId)
+  ball = $game_map.events[eventId]
+  return if !ball
+
+  dir = $game_player.direction
+  dx = (dir == DIRECTION_RIGHT ? 1 : dir == DIRECTION_LEFT ? -1 : 0)
+  dy = (dir == DIRECTION_DOWN ? 1 : dir == DIRECTION_UP ? -1 : 0)
+
+  # Shorter kick distance — scales gently with speed
+  player_speed = $game_player.move_speed
+  remaining_distance = [player_speed * 0.8, 1].max.floor
+
+  pbSEPlay("jump", 80, 100) rescue nil
+  pbWait(3)
+
+  current_dir = dir
+  total_bounces = 0
+  max_bounces = 3
+
+  while remaining_distance > 0 && total_bounces < max_bounces
+    travel = 0
+    while travel < remaining_distance
+      test_x = ball.x + dx * (travel + 1)
+      test_y = ball.y + dy * (travel + 1)
+      break if !$game_map.passable?(test_x - dx, test_y - dy, current_dir) ||
+        !$game_map.passable?(test_x, test_y, current_dir)
+      travel += 1
+    end
+
+    if travel > 0
+      ball.jump(dx * travel, dy * travel)
+      pbWait(6)
+    end
+
+    if travel < remaining_distance
+      pbSEPlay("jump", 80, 80) rescue nil
+      total_bounces += 1
+      remaining_distance = [remaining_distance / 2.0, 1].max.floor
+
+      pbWait(6)
+
+      dx *= -1
+      dy *= -1
+      current_dir = case current_dir
+                    when DIRECTION_UP then DIRECTION_DOWN
+                    when DIRECTION_DOWN then DIRECTION_UP
+                    when DIRECTION_LEFT then DIRECTION_RIGHT
+                    when DIRECTION_RIGHT then DIRECTION_LEFT
+                    end
+
+      bounce_dist = [remaining_distance / 2.0, 1].max.floor
+      ball.jump(dx * bounce_dist, dy * bounce_dist)
+      pbWait(8)
+    else
+      remaining_distance = 0
+    end
+  end
+end
+
+
+
+
+
+
+
+
+
+def sit_on_chair()
+  pbSEPlay("jump", 80, 100)
+  $game_player.through =true
+  $game_player.jump_forward
+  $game_player.turn_180
+  $game_player.through =false
+  loop do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+
+    direction = checkInputDirection
+    if direction
+      facing_terrain = $game_player.pbFacingTerrainTag(direction)
+      if facing_terrain.chair
+        pbSEPlay("jump", 80, 100)
+        $game_player.direction_fix=true
+        $game_player.jumpTowards(direction)
+        $game_player.direction_fix=false
+      else
+        passable_from_direction = $game_map.passable?($game_player.x,$game_player.y,direction)
+        if passable_from_direction
+          $game_player.turn_generic(direction)
+          $game_player.jump_forward
+          break
+        else
+          $game_player.turn_generic(direction)
+          $game_player.turn_180
+        end
+      end
+      pbWait(8)
+    end
+  end
+end
+
+def checkInputDirection
+  return DIRECTION_UP if Input.trigger?(Input::UP)
+  return DIRECTION_DOWN if Input.trigger?(Input::DOWN)
+  return DIRECTION_LEFT if Input.trigger?(Input::LEFT)
+  return DIRECTION_RIGHT if Input.trigger?(Input::RIGHT)
+  return nil
+end

@@ -1,7 +1,6 @@
 class CharacterSelectMenuPresenter
   attr_accessor :options
   attr_reader :current_index
-
   OPTION_NAME = 'Name'
   OPTION_AGE = "Age"
   OPTION_GENDER = "Gender"
@@ -35,6 +34,7 @@ class CharacterSelectMenuPresenter
     @hairstyle = "red"
     @hairColor = 2
 
+    @is_player= true
     @options = [OPTION_NAME, OPTION_GENDER, OPTION_AGE, OPTION_SKIN, OPTION_HAIR, OPTION_CONFIRM]
 
     @trainerPreview = TrainerClothesPreview.new(300, 80, false, "POKEBALL")
@@ -42,6 +42,35 @@ class CharacterSelectMenuPresenter
     @closed = false
     @current_index = 0
     @view.setMaxIndex(@options.length - 1)
+  end
+
+  #For selecting the rival in Hoenn
+  def main_rival()
+    trainer_hair = $Trainer.hair
+    trainer_hat = $Trainer.hat
+    trainer_clothes = $Trainer.clothes
+    trainer_skinTone = $Trainer.skin_tone
+
+
+    $Trainer.hat = nil
+    @options = [OPTION_NAME, OPTION_SKIN, OPTION_HAIR, OPTION_CONFIRM]
+    @view.setMaxIndex(@options.length - 1)
+    if isPlayerMale
+      @hairstyle = getDefaultHair(GENDER_FEMALE)
+      $Trainer.clothes = getDefaultClothes(GENDER_FEMALE)
+    else
+      @hairstyle = getDefaultHair(GENDER_MALE)
+      $Trainer.clothes = getDefaultClothes(GENDER_MALE)
+    end
+    setInitialValuesRival()
+    main()
+
+
+    $Trainer.init_rival_appearance($Trainer.skin_tone, $Trainer.hair)
+    $Trainer.hair = trainer_hair
+    $Trainer.hat = trainer_hat
+    $Trainer.clothes = trainer_clothes
+    $Trainer.skin_tone = trainer_skinTone
   end
 
   def main()
@@ -74,7 +103,7 @@ class CharacterSelectMenuPresenter
     case selected_option
     when OPTION_NAME
       pbSEPlay("GUI summary change page", 80, 100)
-      @name = pbEnterPlayerName(_INTL("Enter your name"), 0, Settings::MAX_PLAYER_NAME_SIZE)
+      @name = pbEnterPlayerName(_INTL("Name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
       @name = getDefaultName() if @name == ''
       pbSEPlay("GUI trainer card open", 80, 100)
       updateDisplayedName(current_index)
@@ -268,6 +297,18 @@ class CharacterSelectMenuPresenter
 
     setGender(genderIndex, 0)
     setAge(ageIndex, 0)
+    setHairColor(hairIndex, 0)
+    setSkinColor(skinIndex, 0)
+    updateTrainerPreview()
+  end
+
+  def setInitialValuesRival()
+    hairIndex = getOptionIndex(OPTION_HAIR)
+    skinIndex = getOptionIndex(OPTION_SKIN)
+
+    @name = init_rival_name
+    updateDisplayedName(getOptionIndex(OPTION_NAME))
+
     setHairColor(hairIndex, 0)
     setSkinColor(skinIndex, 0)
     updateTrainerPreview()

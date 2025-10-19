@@ -25,6 +25,7 @@ class PokemonSystem
   attr_accessor :use_generated_dex_entries
   attr_accessor :hide_custom_eggs
   attr_accessor :include_alt_sprites_in_random
+  attr_accessor :overworld_encounters
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
