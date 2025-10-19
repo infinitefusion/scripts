@@ -240,7 +240,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
     options << EnumOption.new(_INTL("Device"), [_INTL("PC"), _INTL("Mobile")],
                               proc { device_option_selected },
                               proc { |value| $PokemonSystem.on_mobile = value == 1 },
-                              ["The intended device on which to play the game.",
+                              [_INTL("The intended device on which to play the game."),
                                _INTL("Disables some options that aren't supported when playing on mobile.")]
     )
 
