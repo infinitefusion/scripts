@@ -1,5 +1,10 @@
-# behavior:
-#   :skittish (The Pokemon will run away unless you sneak up on it (ex: Ralts, Skitty, etc.)
+# behavior_roaming:
+#
+# behavior_roaming:
+#
+#
+#  :skittish (The Pokemon will run away unless you sneak up on it (ex: Ralts, Skitty, etc.)
+#
 # :shy (walks away from the player)
 # :normal (The Pokemon walks around randomly)
 # :curious (comes towards the player but stays at a distance)
@@ -10,8 +15,6 @@
 #
 # can_fly=true
 
-# Todo: Possible custom behaviors
-#  Abra, Diglett
 
 POKEMON_BEHAVIOR_DATA =
   {
@@ -534,7 +537,7 @@ POKEMON_BEHAVIOR_DATA =
     :PELIPPER => { behavior_noticed: :skittish, behavior_roaming: :random },
     :SURSKIT => { behavior_noticed: :normal, behavior_roaming: :random },
     :MASQUERAIN => { behavior_noticed: :skittish, behavior_roaming: :random },
-    :WHISMUR => { behavior_noticed: :normal, behavior_roaming: :random },
+    :WHISMUR => { behavior_noticed: :shy, behavior_roaming: :random },
     :LOUDRED => { behavior_noticed: :normal, behavior_roaming: :random },
     :EXPLOUD => { behavior_noticed: :normal, behavior_roaming: :random },
     :MAKUHITA => { behavior_noticed: :normal, behavior_roaming: :random },

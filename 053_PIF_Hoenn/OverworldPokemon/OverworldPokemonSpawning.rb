@@ -14,10 +14,15 @@
 OVERWORLD_POKEMON_COMMENT_TRIGGER = "OverworldPokemon"
 
 def should_spawn_overworld_pokemon?
-  return false unless $PokemonSystem.overworld_encounters
-  return false if $PokemonTemp.prevent_ow_encounters
+  return false unless can_spawn_overworld_pokemon?
   return false unless $PokemonGlobal.stepcount % 10 == 0
   return rand(100) > 25 # true
+end
+
+def can_spawn_overworld_pokemon?
+  return false unless $PokemonSystem.overworld_encounters
+  return false if $PokemonTemp.prevent_ow_encounters
+  return true
 end
 
 def playOverworldPokemonSpawnAnimation(event, terrain)
@@ -103,8 +108,7 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     terrain = :Cave
     position = find_random_walkable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   elsif $PokemonEncounters.has_land_encounters?
-    terrain = :Land
-    position = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
+    position,terrain = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   end
   encounter_type = getTimeBasedEncounter(terrain)
 

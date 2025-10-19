@@ -10,7 +10,7 @@ def find_random_walkable_coordinates_near_player(width,height,variance,max_nb_tr
   current_try = 0
   while !found_available_position
     x, y = getRandomPositionOnPerimeter(width, height, $game_player.x, $game_player.y, variance)
-    found_available_position = true if $game_map.passable?(x, y, $game_player.direction)
+    found_available_position = true if $game_map.passableStrict?(x, y, $game_player.direction)
     current_try += 1
     return nil if current_try > max_nb_tries
   end
@@ -28,7 +28,12 @@ def find_random_tall_grass_coordinates_near_player(width,height,variance,max_nb_
     current_try += 1
     return nil if current_try > max_nb_tries
   end
-  return [x,y]
+
+  encounter_type = :Land  #default grass
+  encounter_type = :Land1 if terrain.id == :Grass_alt1
+  encounter_type = :Land2 if terrain.id == :Grass_alt2
+  encounter_type = :Land3 if terrain.id == :Grass_alt3
+  return [x,y],encounter_type
 end
 
 

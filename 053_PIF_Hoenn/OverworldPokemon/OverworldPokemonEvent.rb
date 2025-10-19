@@ -262,13 +262,15 @@ class OverworldPokemonEvent < Game_Event
   end
 
   # The rarer the Pokemon, the more skittish it is (larger sight radius)
-  def calculate_ow_pokemon_sight_radius()
+  def calculate_ow_pokemon_sight_radius
     min_radius = 2
     max_radius = 6
-    catch_rate = GameData::Species.get(@species).catch_rate
-    radius = min_radius + ((255 - catch_rate) / 254.0) * (max_radius - min_radius)
+    speed = GameData::Species.get(@species).base_stats[:SPEED]  # Get base Speed stat
+    # Scale speed (1–255) to radius
+    radius = min_radius + ((speed - 1) / 254.0) * (max_radius - min_radius)
     return radius.round
   end
+
 
   #####
   # Noticing player
@@ -341,7 +343,6 @@ class OverworldPokemonEvent < Game_Event
       return
     end
 
-    echoln @behavior_roaming
     case @behavior_roaming
     when :random,
       @move_type = MOVE_TYPE_RANDOM
@@ -358,7 +359,6 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_custom_move_route(move_list)
-    echoln "set_custom_move_route"
     @move_type = MOVE_TYPE_CUSTOM
     @move_route = RPG::MoveRoute.new
     @move_route.repeat = true
