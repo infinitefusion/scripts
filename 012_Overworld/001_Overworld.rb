@@ -417,6 +417,7 @@ Events.onMapSceneChange += proc { |_sender, e|
       nosignpost = true if $game_map.name == oldmapname
     end
     scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
+    scene.spriteset.addUserSprite(WeatherIcon.new) if !nosignpost
   end
   # Force cycling/walking
   if map_metadata && map_metadata.always_bicycle
