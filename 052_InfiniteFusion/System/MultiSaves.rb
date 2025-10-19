@@ -466,20 +466,20 @@ class PokemonLoadScreen
       if show_continue
         commands[cmd_continue = commands.length] = "#{@selected_file}"
         if @save_data[:player].mystery_gift_unlocked
-          commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift') # Honestly I have no idea how to make Mystery Gift work well with this.
+          commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift") # Honestly I have no idea how to make Mystery Gift work well with this.
         end
       end
 
-      commands[cmd_new_game = commands.length] = _INTL('New Game')
+      commands[cmd_new_game = commands.length] = _INTL("New Game")
       if new_game_plus
-        commands[cmd_new_game_plus = commands.length] = _INTL('New Game +')
+        commands[cmd_new_game_plus = commands.length] = _INTL("New Game +")
       end
-      commands[cmd_options = commands.length] = _INTL('Options')
-      commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES.length >= 2
-      commands[cmd_discord = commands.length] = _INTL('Discord')
-      commands[cmd_wiki = commands.length] = _INTL('Wiki')
-      commands[cmd_debug = commands.length] = _INTL('Debug') if $DEBUG
-      commands[cmd_quit = commands.length] = _INTL('Quit Game')
+      commands[cmd_options = commands.length] = _INTL("Options")
+      commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES.length >= 2
+      commands[cmd_discord = commands.length] = _INTL("Discord")
+      commands[cmd_wiki = commands.length] = _INTL("Wiki")
+      commands[cmd_debug = commands.length] = _INTL("Debug") if $DEBUG
+      commands[cmd_quit = commands.length] = _INTL("Quit Game")
       cmd_left = -3
       cmd_right = -2
 
@@ -610,7 +610,7 @@ class PokemonSaveScreen
         _INTL("Save to another slot"),
         _INTL("Don't save")
       ]
-      opt = pbMessage(_INTL('Would you like to save the game?'), choices, 3)
+      opt = pbMessage(_INTL("Would you like to save the game?"), choices, 3)
       if opt == 0
         pbSEPlay('GUI save choice')
         ret = doSave($Trainer.save_slot)

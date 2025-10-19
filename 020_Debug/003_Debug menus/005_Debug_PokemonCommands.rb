@@ -895,9 +895,9 @@ PokemonDebugMenuCommands.register("speciesform", {
       when 1   # Set form
         old_head_dex = get_head_number_from_symbol(pkmn.species)
         old_body_dex = get_body_number_from_symbol(pkmn.species)
-        pbMessage('Head species?')
+        pbMessage(_INTL("Head species?"))
         head_species = pbChooseSpeciesList(old_head_dex,NB_POKEMON)
-        pbMessage('Body species?')
+        pbMessage(_INTL("Body species?"))
         body_species = pbChooseSpeciesList(old_body_dex,NB_POKEMON)
 
         fused_species_dex = getFusionSpecies(body_species.species, head_species.species)
