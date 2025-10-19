@@ -19,9 +19,6 @@ class OverworldPokemonEvent < Game_Event
 
     @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
     @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
-
-    echoln @behavior_roaming
-
     @behavior_roaming = :random if !@behavior_roaming
     @behavior_noticed = :normal if !@behavior_noticed
 

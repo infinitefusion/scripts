@@ -35,10 +35,10 @@ class Game_Player < Game_Character
 
   #Override the player's graphics
   # Path from Graphics/Characters/player/
-  def setPlayerGraphicsOverride(path)
-    @defaultCharacterName=path
-
+  def setPlayerGraphicsOverride(filename)
+    @defaultCharacterName="overrides/#{filename}"
   end
+
   def removeGraphicsOverride
     @defaultCharacterName = ""
   end

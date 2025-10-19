@@ -222,3 +222,17 @@ def checkInputDirection
   return DIRECTION_RIGHT if Input.trigger?(Input::RIGHT)
   return nil
 end
+
+def getOnBoat
+  set_player_graphics("boat_briney")
+  $PokemonTemp.prevent_ow_battles=true
+  remove_player_shadow
+  $PokemonGlobal.boat=true
+end
+
+def getOffBoat
+  reset_player_graphics
+  $PokemonTemp.prevent_ow_battles=false
+  add_player_shadow
+  $PokemonGlobal.boat=false
+end

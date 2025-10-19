@@ -62,7 +62,6 @@ def create_overworld_pokemon_event(pokemon, position, terrain)
   event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
     event.setup_pokemon(species, level, terrain)
   end
-  echoln "Created Overworld Pokemon Event: #{event.name}"
   event.direction = [DIRECTION_LEFT,DIRECTION_RIGHT,DIRECTION_DOWN,DIRECTION_UP].sample
   return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
   playOverworldPokemonSpawnAnimation(event, terrain)
@@ -99,9 +98,7 @@ def spawn_pokemon(wild_pokemon,max_quantity=1)
 end
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
-
-
-  if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
+  if ($PokemonGlobal.surfing ||  $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
     terrain = :Water
     position = find_random_surfable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   elsif $PokemonEncounters.has_cave_encounters?

@@ -52,13 +52,8 @@ def pokemonExceedsLevelCap(pokemon)
   return pokemon.level >= current_max_level
 end
 
-def get_spritecharacter_for_event(event_id)
-  for sprite in $scene.spriteset.character_sprites
-    if sprite.character.id == event_id
-      return sprite
-    end
-  end
-end
+
+
 
 def setForcedAltSprites(forcedSprites_map)
   $PokemonTemp.forced_alt_sprites = forcedSprites_map

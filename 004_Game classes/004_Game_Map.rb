@@ -282,7 +282,7 @@ class Game_Map
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing
-        return true if $PokemonGlobal.surfing && terrain.can_surf && !terrain.waterfall
+        return true if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && terrain.can_surf && !terrain.waterfall
         # Prevent cycling in really tall grass/on ice
         #return false if $PokemonGlobal.bicycle && terrain.must_walk
         # Depend on passability of bridge tile if on bridge

@@ -22,8 +22,6 @@ class WeatherIcon
 
   def update
     return if disposed?
-
-    # If message box appears or map changes → kill it
     if $game_temp.message_window_showing || @currentmap != $game_map.map_id
       dispose
       return
