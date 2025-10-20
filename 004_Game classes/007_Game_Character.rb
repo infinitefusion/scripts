@@ -633,8 +633,10 @@ class Game_Character
           pbSEPlay(command.parameters[0])
         when 45 then
           eval(command.parameters[0])
-        when 46 then
+        when PBMoveRoute::PlayAnimation then
           playAnimation(command.parameters[0],@x,@y)
+        when PBMoveRoute::FlyForward then
+          fly_forward
         end
         @move_route_index += 1
       end
@@ -916,6 +918,15 @@ class Game_Character
       if !moving? && sx != 0
         (sx > 0) ? move_right : move_left
       end
+    end
+  end
+
+  def fly_forward
+    case @direction
+    when DIRECTION_LEFT, DIRECTION_UP then
+      move_upper_left
+    when DIRECTION_RIGHT, DIRECTION_DOWN then
+      move_upper_right
     end
   end
 

@@ -609,6 +609,7 @@ module PBMoveRoute
   PlaySE = 44 # 1 param
   Script = 45 # 1 param
   PlayAnimation = 46 # 1 param
+  FlyForward = 47 # 1 param
 
   ScriptAsync = 101 # 1 param
 end

@@ -11,10 +11,6 @@ class Game_Event
   end
 end
 
-class PokemonTemp
-  attr_accessor :overworld_pokemon_flee
-end
-
 
 def trigger_overworld_wild_battle
   return if $PokemonTemp.overworld_wild_battle_triggered

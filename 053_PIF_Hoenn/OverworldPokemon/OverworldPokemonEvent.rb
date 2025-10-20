@@ -1,7 +1,6 @@
 class OverworldPokemonEvent < Game_Event
 
   attr_accessor :species
-  attr_accessor :eventId
   attr_accessor :level
 
   attr_accessor :behavior_roaming
@@ -14,29 +13,35 @@ class OverworldPokemonEvent < Game_Event
   def setup_pokemon(species, level, terrain)
     @species = species
     @level = level
+    species_data = GameData::Species.get(@species)
+
     @pokemon = Pokemon.new(species, level)
-    @behavior_species= getBehaviorSpecies
+    @behavior_species = getBehaviorSpecies(species_data)
 
     @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
     @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
-    @behavior_roaming = :random if !@behavior_roaming
-    @behavior_noticed = :normal if !@behavior_noticed
+    @behavior_roaming = :random unless @behavior_roaming
+    @behavior_noticed = :normal unless @behavior_noticed
 
-    @can_flee = POKEMON_BEHAVIOR_DATA[@behavior_species][:can_flee] || false
+    default_move_speed = calculate_value_from_stat(species_data, :SPEED, 1, 4)
+    @roaming_move_speed = POKEMON_BEHAVIOR_DATA[@behavior_species][:roaming_move_speed] || default_move_speed
+    @noticed_move_speed = POKEMON_BEHAVIOR_DATA[@behavior_species][:noticed_move_speed] || default_move_speed
 
-    @flee_delay = calculate_ow_pokemon_flee_delay
-    @detection_radius = calculate_ow_pokemon_sight_radius
+    default_frequency = calculate_value_from_stat(species_data, :ATTACK, 1, 5)
+    @roaming_frequency = POKEMON_BEHAVIOR_DATA[@behavior_species][:roaming_frequency] || default_frequency
+    @noticed_frequency = POKEMON_BEHAVIOR_DATA[@behavior_species][:noticed_frequency] || default_frequency
+
+    @detection_radius = calculate_ow_pokemon_sight_radius(species_data)
 
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
 
-
     @event.name = "OW/#{species.to_s}/#{level.to_s}"
 
     initialize_sprite(terrain)
     @is_flying = @character_name == @flying_sprite
-    @step_anime=@is_flying
+    @step_anime = @is_flying
     @always_on_top = @is_flying
     if terrain == :Water
       unless @is_flying
@@ -47,14 +52,14 @@ class OverworldPokemonEvent < Game_Event
 
     if @pokemon.shiny?
       pbSEPlay("shiny", 60)
-      playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID,@x, @y)
+      playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, @x, @y)
     end
     set_roaming_movement
   end
 
-  def getBehaviorSpecies
+  def getBehaviorSpecies(species_data)
     if isSpeciesFusion(@species)
-      return GameData::FusedSpecies.get(species).get_head_species_symbol
+      return species_data.get_head_species_symbol
     end
     return @species
   end
@@ -62,12 +67,15 @@ class OverworldPokemonEvent < Game_Event
   def initialize_sprite(terrain)
     @land_sprite = getOverworldLandPath
     @flying_sprite = getOverworldFlyingPath
+    @noticed_sprite = getOverworldNoticedPath
+
+
     if terrain == :Water && @flying_sprite
       @character_name = @flying_sprite
     else
       if @land_sprite
         @character_name = @land_sprite
-        elsif @flying_sprite
+      elsif @flying_sprite
         @character_name = @flying_sprite
       end
     end
@@ -90,6 +98,9 @@ class OverworldPokemonEvent < Game_Event
     return @deleted
   end
 
+  ####
+  # ACTIONS
+  # ###
   def overworldPokemonBattle
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
@@ -102,10 +113,10 @@ class OverworldPokemonEvent < Game_Event
     $PokemonTemp.overworld_wild_battle_participants << @pokemon
     pbWait(8)
     trigger_overworld_wild_battle
-    self.erase
-    $PokemonTemp.overworld_pokemon_on_map.delete(@eventId)
+    despawn
     return
   end
+
 
   #####
   # Behaviors
@@ -119,29 +130,19 @@ class OverworldPokemonEvent < Game_Event
   def playDetectPlayerAnimation
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
-    if @behavior_noticed == :shy || @behavior_noticed == :skittish || @behavior_noticed == :still || @behavior_noticed == :teleport_away
-      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
-    elsif @behavior_noticed == :curious
+
+    if @behavior_noticed == :curious
       playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
     elsif @behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
+    else
+      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     end
   end
 
   def update_behavior()
     return if @opacity == 0
     if player_near_event?(@detection_radius)
-      # --- Check flee first ---
-      if $game_player.moving?
-        should_flee = should_flee?
-        should_flee = true if pbFacingEachOther(self, $game_player)
-        if should_flee
-          ow_pokemon_flee
-          pbWait(8)
-          return
-        end
-      end
-
       if !$game_player.moving?
         if playerNextToEvent? # Battle
           overworldPokemonBattle
@@ -180,6 +181,7 @@ class OverworldPokemonEvent < Game_Event
       set_roaming_movement
     when :NOTICED_PLAYER
       set_noticed_movement
+      update_sprite(@noticed_sprite) if @noticed_sprite
     end
   end
 
@@ -198,76 +200,28 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  # fleeDelay: The time (in seconds) you need to wait between steps for the Pokemon not to flee
-  # FIXME: broken
-  def should_flee?()
-    return false unless @can_flee
-    $PokemonTemp.overworld_pokemon_flee ||= {}
-    key = "#{$game_map.map_id}_#{@eventId}"
-    current_time = Time.now.to_f
-    last_time = $PokemonTemp.overworld_pokemon_flee[key]
-    if last_time
-      time_past = current_time - last_time
-      echoln "last time: #{last_time}, current time: #{current_time}, time past: #{time_past}"
-
-      if time_past < @flee_delay
-        $PokemonTemp.overworld_pokemon_flee[key] = nil
-        return true
-      else
-        $PokemonTemp.overworld_pokemon_flee[key] = current_time
-        return false
-      end
-    else
-      # First time seeing this event
-      $PokemonTemp.overworld_pokemon_flee[key] = current_time
-      echoln "start tracking"
-      return false
-    end
-  end
-
-  # Fleeing
-  def ow_pokemon_flee(silent = false)
-    flee_sprite = get_overworld_pokemon_flee_sprite(@species)
-    @character_name = flee_sprite if flee_sprite
-    playCry(species) if species && !silent
-    pbSEPlay(SE_FLEE) unless silent
-    @move_speed = 4
-    @move_away_from_player
-    @opacity -= 50
-    @move_away_from_player
-    @opacity -= 50
-    @move_away_from_player
-    @opacity -= 50
-    erase
-  end
-
-  def get_overworld_pokemon_flee_sprite(species)
-    flee_sprite = "Graphics/Characters/Followers/#{species.to_s}_flee"
-    if pbResolveBitmap(flee_sprite)
-      return "Followers/#{species}_flee"
-    end
-    return nil
-  end
-
-  # The harder the pokemon is to catch, the more skittish it is (shorter flee delay)
-  def calculate_ow_pokemon_flee_delay
-    min_delay = 1
-    max_delay = 4
-    catch_rate = GameData::Species.get(@species).catch_rate
-    delay = max_delay - ((catch_rate - 1) / 254.0) * (max_delay - min_delay)
-    return delay.round
-  end
 
   # The rarer the Pokemon, the more skittish it is (larger sight radius)
-  def calculate_ow_pokemon_sight_radius
+  def calculate_ow_pokemon_sight_radius(species_data)
     min_radius = 2
     max_radius = 6
-    speed = GameData::Species.get(@species).base_stats[:SPEED]  # Get base Speed stat
+    speed = species_data.base_stats[:SPEED] # Get base Speed stat
     # Scale speed (1–255) to radius
     radius = min_radius + ((speed - 1) / 254.0) * (max_radius - min_radius)
     return radius.round
   end
 
+  def calculate_value_from_stat(species_data, stat, min_value, max_value)
+    stat_value = species_data.base_stats[stat]
+    average_stat = 70.0
+    half_range = (max_value - min_value) / 2.0
+
+    # Center on average stat and scale up/down
+    normalized = (stat_value - average_stat) / average_stat
+    scaled = (min_value + half_range) + normalized * half_range
+
+    return scaled.clamp(min_value, max_value).round
+  end
 
   #####
   # Noticing player
@@ -280,7 +234,7 @@ class OverworldPokemonEvent < Game_Event
     if @pokemon.shiny?
       base_path += "Shiny/"
     elsif is_fusion
-      species_name = GameData::FusedSpecies.get(@species).get_body_species_symbol.to_s
+      species_name = species_data.get_body_species_symbol.to_s
       base_path += "Fusions/"
     end
     path = "#{base_path}#{species_name}"
@@ -296,13 +250,34 @@ class OverworldPokemonEvent < Game_Event
     if @pokemon.shiny?
       base_path += "Shiny/"
     elsif is_fusion
-      species_name = GameData::FusedSpecies.get(@species).get_body_species_symbol.to_s
+      species_name = species_data.get_body_species_symbol.to_s
       base_path += "Fusions/"
     end
     path = "#{base_path}#{species_name}_fly"
     if pbResolveBitmap("Graphics/Characters/#{path}")
       return path
     end
+  end
+
+  def getOverworldNoticedPath
+    base_path = "Followers/"
+    is_fusion = isSpeciesFusion(@species)
+    species_name = @species.to_s
+    if @pokemon.shiny?
+      base_path += "Shiny/"
+    elsif is_fusion
+      species_name = species_data.get_body_species_symbol.to_s
+      base_path += "Fusions/"
+    end
+    path = "#{base_path}#{species_name}_notice"
+    if pbResolveBitmap("Graphics/Characters/#{path}")
+      return path
+    end
+  end
+
+  def update_sprite(new_sprite_path)
+    @character_name = new_sprite_path
+    @need_refresh = true
   end
 
   # Static
@@ -328,9 +303,16 @@ class OverworldPokemonEvent < Game_Event
       self.move_frequency = 6
     when :shy
       @move_type = MOVE_TYPE_AWAY_PLAYER
-    when :teleport_away
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][:teleport_away])
+    when :flee, :flee_flying, :teleport_away
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
+      @through = true
+      @detection_radius =10
+    when :flee_flying
+      @always_on_top = true
+    else
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
     end
+    @move_speed = @noticed_move_speed
   end
 
   def set_roaming_movement
@@ -353,15 +335,20 @@ class OverworldPokemonEvent < Game_Event
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:random_vanish])
     end
     self.move_frequency = 3
+    @move_speed = @roaming_move_speed
   end
 
-  def set_custom_move_route(move_list)
+  def set_custom_move_route(move_list, repeating = true)
     @move_type = MOVE_TYPE_CUSTOM
     @move_route = RPG::MoveRoute.new
-    @move_route.repeat = true
+    @move_route.repeat = repeating
     @move_route.skippable = true
     @move_route.list = move_list
   end
 
+  def despawn
+    $PokemonTemp.overworld_pokemon_on_map.delete(@id)
+    erase
+  end
 end
 

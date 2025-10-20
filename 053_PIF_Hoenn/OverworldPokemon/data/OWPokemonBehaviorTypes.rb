@@ -1,10 +1,16 @@
 # behavior_roaming:
 #
-# behavior_roaming:
+# :random (default, the pokemon walks around randomly)
+# :still (the pokemon doesn't move, just turns around randoml;y)
+# :random_vanish (for ghost pokemon. Walks around randomly and sometimes becomes invisible)
+# :burrow (walks around randomly and sometimes disappears with a dig animation for a little bit) - diglett/dugtrio
+# :still_teleport
 #
+#
+#
+# behavior_noticed:
 #
 #  :skittish (The Pokemon will run away unless you sneak up on it (ex: Ralts, Skitty, etc.)
-#
 # :shy (walks away from the player)
 # :normal (The Pokemon walks around randomly)
 # :curious (comes towards the player but stays at a distance)
@@ -12,7 +18,8 @@
 #
 # :still (The Pokemon doesn't move (ex:Metapod, Silcoon)
 #
-#
+# :flee : The Pokemon flees the player, then despawns
+# :flee_flying : Same as flee but goes up instead of sideways
 # can_fly=true
 
 
@@ -80,7 +87,7 @@ POKEMON_BEHAVIOR_DATA =
     :POLIWAG => { behavior_noticed: :shy, behavior_roaming: :random },
     :POLIWHIRL => { behavior_noticed: :normal, behavior_roaming: :random },
     :POLIWRATH => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :ABRA => { behavior_noticed: :skittish, behavior_roaming: :still },
+    :ABRA => { behavior_noticed: :flee, behavior_roaming: :still_teleport },
     :KADABRA => { behavior_noticed: :skittish, behavior_roaming: :random },
     :ALAKAZAM => { behavior_noticed: :normal, behavior_roaming: :random },
     :MACHOP => { behavior_noticed: :normal, behavior_roaming: :random },
@@ -130,7 +137,7 @@ POKEMON_BEHAVIOR_DATA =
     :WEEZING => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :RHYHORN => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :RHYDON => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :CHANSEY => { behavior_noticed: :skittish, behavior_roaming: :random },
+    :CHANSEY => { behavior_noticed: :flee, behavior_roaming: :random },
     :TANGELA => { behavior_noticed: :normal, behavior_roaming: :random },
     :KANGASKHAN => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :HORSEA => { behavior_noticed: :shy, behavior_roaming: :random },
@@ -218,7 +225,7 @@ POKEMON_BEHAVIOR_DATA =
     :MURKROW => { behavior_noticed: :aggressive,  behavior_roaming: :random },
     :SLOWKING => { behavior_noticed: :normal, behavior_roaming: :random },
     :MISDREAVUS => { behavior_noticed: :curious,  behavior_roaming: :random_vanish },
-    :UNOWN => { behavior_noticed: :normal, behavior_roaming: :random },
+    :UNOWN => { behavior_noticed: :flee, behavior_roaming: :random },
     :WOBBUFFET => { behavior_noticed: :still, behavior_roaming: :random },
     :GIRAFARIG => { behavior_noticed: :normal, behavior_roaming: :random },
     :PINECO => { behavior_noticed: :normal, behavior_roaming: :random },
@@ -230,7 +237,7 @@ POKEMON_BEHAVIOR_DATA =
     :GRANBULL => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :QWILFISH => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :SCIZOR => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :SHUCKLE => { behavior_noticed: :normal, behavior_roaming: :random },
+    :SHUCKLE => { behavior_noticed: :still, behavior_roaming: :random },
     :HERACROSS => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :SNEASEL => { behavior_noticed: :skittish, behavior_roaming: :random },
     :TEDDIURSA => { behavior_noticed: :curious, behavior_roaming: :random },
@@ -260,9 +267,9 @@ POKEMON_BEHAVIOR_DATA =
     :MAGBY => { behavior_noticed: :skittish, behavior_roaming: :random },
     :MILTANK => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :BLISSEY => { behavior_noticed: :normal, behavior_roaming: :random },
-    :RAIKOU => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :ENTEI => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :SUICUNE => { behavior_noticed: :shy, behavior_roaming: :random },
+    :RAIKOU => { behavior_noticed: :flee, behavior_roaming: :random },
+    :ENTEI => { behavior_noticed: :flee, behavior_roaming: :random },
+    :SUICUNE => { behavior_noticed: :flee, behavior_roaming: :random },
     :HO_OH => { behavior_noticed: :aggressive,  behavior_roaming: :random },
     :CELEBI => { behavior_noticed: :curious,  behavior_roaming: :random },
     :TREECKO => { behavior_noticed: :normal, behavior_roaming: :random },
@@ -291,9 +298,9 @@ POKEMON_BEHAVIOR_DATA =
     :SHIFTRY => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :TAILLOW => { behavior_noticed: :skittish,  behavior_roaming: :random },
     :SWELLOW => { behavior_noticed: :skittish,  behavior_roaming: :random },
-    :WINGULL => { behavior_noticed: :skittish,  behavior_roaming: :random },
+    :WINGULL => { behavior_noticed: :flee_flying, behavior_roaming: :random },
     :PELIPPER => { behavior_noticed: :normal,  behavior_roaming: :random },
-    :RALTS => { behavior_noticed: :skittish, behavior_roaming: :random },
+    :RALTS => { behavior_noticed: :flee, behavior_roaming: :random },
     :KIRLIA => { behavior_noticed: :skittish, behavior_roaming: :random },
     :GARDEVOIR => { behavior_noticed: :normal, behavior_roaming: :random },
     :GALLADE => { behavior_noticed: :aggressive, behavior_roaming: :random },
@@ -397,8 +404,8 @@ POKEMON_BEHAVIOR_DATA =
     :REGIROCK => { behavior_noticed: :still, behavior_roaming: :still },
     :REGICE => { behavior_noticed: :still, behavior_roaming: :still },
     :REGISTEEL => { behavior_noticed: :still, behavior_roaming: :still },
-    :LATIAS => { behavior_noticed: :skittish,  behavior_roaming: :random },
-    :LATIOS => { behavior_noticed: :skittish,  behavior_roaming: :random },
+    :LATIAS => { behavior_noticed: :flee, behavior_roaming: :random },
+    :LATIOS => { behavior_noticed: :flee, behavior_roaming: :random },
     :KYOGRE => { behavior_noticed: :still, behavior_roaming: :still },
     :GROUDON => { behavior_noticed: :aggressive, behavior_roaming: :still },
     :RAYQUAZA => { behavior_noticed: :aggressive,  behavior_roaming: :random },
@@ -450,7 +457,8 @@ POKEMON_BEHAVIOR_DATA =
     :HONCHKROW => { behavior_noticed: :aggressive,  behavior_roaming: :random },
     :GLAMEOW => { behavior_noticed: :curious, behavior_roaming: :random },
     :PURUGLY => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :CHINGLING => { behavior_noticed: :shy,  behavior_roaming: :random },
+    :CHINGLING => { behavior_noticed: :flee, behavior_roaming: :random },
+    :CHIMECHO => { behavior_noticed: :flee, behavior_roaming: :random },
     :STUNKY => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :SKUNTANK => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :BRONZOR => { behavior_noticed: :still,  behavior_roaming: :still },
@@ -494,15 +502,15 @@ POKEMON_BEHAVIOR_DATA =
     :PROBOPASS => { behavior_noticed: :still, behavior_roaming: :still },
     :DUSKNOIR => { behavior_noticed: :aggressive, behavior_roaming: :still },
     :ROTOM => { behavior_noticed: :curious,  behavior_roaming: :random },
-    :UXIE => { behavior_noticed: :still,  behavior_roaming: :still },
-    :MESPRIT => { behavior_noticed: :skittish,  behavior_roaming: :random },
-    :AZELF => { behavior_noticed: :skittish,  behavior_roaming: :random },
+    :UXIE => { behavior_noticed: :flee, behavior_roaming: :still },
+    :MESPRIT => { behavior_noticed: :flee, behavior_roaming: :random },
+    :AZELF => { behavior_noticed: :flee, behavior_roaming: :random },
     :DIALGA => { behavior_noticed: :aggressive, behavior_roaming: :still },
     :PALKIA => { behavior_noticed: :aggressive, behavior_roaming: :still },
     :HEATRAN => { behavior_noticed: :aggressive, behavior_roaming: :still },
     :REGIGIGAS => { behavior_noticed: :still, behavior_roaming: :still },
     :GIRATINA => { behavior_noticed: :aggressive,  behavior_roaming: :random },
-    :CRESSELIA => { behavior_noticed: :curious,  behavior_roaming: :random },
+    :CRESSELIA => { behavior_noticed: :flee, behavior_roaming: :random },
     :DARKRAI => { behavior_noticed: :aggressive,  behavior_roaming: :random },
     :SHAYMIN => { behavior_noticed: :curious, behavior_roaming: :random },
     :ARCEUS => { behavior_noticed: :still, behavior_roaming: :still },
@@ -582,7 +590,7 @@ POKEMON_BEHAVIOR_DATA =
     :ARCHEOPS => { behavior_noticed: :aggressive,  behavior_roaming: :random },
     :TRUBBISH => { behavior_noticed: :curious, behavior_roaming: :random },
     :GARBODOR => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :ZORUA => { behavior_noticed: :skittish, behavior_roaming: :random },
+    :ZORUA => { behavior_noticed: :flee, behavior_roaming: :random },
     :ZOROARK => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :MINCCINO => { behavior_noticed: :curious, behavior_roaming: :random },
     :CINCCINO => { behavior_noticed: :normal, behavior_roaming: :random },
@@ -690,7 +698,8 @@ POKEMON_BEHAVIOR_DATA =
     :PANGORO => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :FURFROU => { behavior_noticed: :normal, behavior_roaming: :random },
     :ESPURR => { behavior_noticed: :curious, behavior_roaming: :random },
-    :MEOWSTIC => { behavior_noticed: :normal, behavior_roaming: :random },
+    :MEOWSTIC_F => { behavior_noticed: :aggressive, behavior_roaming: :random },
+    :MEOWSTIC_M => { behavior_noticed: :shy, behavior_roaming: :random },
     :HONEDGE => { behavior_noticed: :still, behavior_roaming: :still },
     :DOUBLADE => { behavior_noticed: :still, behavior_roaming: :still },
     :AEGISLASH => { behavior_noticed: :still, behavior_roaming: :still },
@@ -804,7 +813,7 @@ POKEMON_BEHAVIOR_DATA =
     :TAPU_LELE => { behavior_noticed: :curious,  behavior_roaming: :random },
     :TAPU_BULU => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :TAPU_FINI => { behavior_noticed: :normal, behavior_roaming: :random },
-    :COSMOG => { behavior_noticed: :shy,  behavior_roaming: :random },
+    :COSMOG => { behavior_noticed: :flee, behavior_roaming: :random },
     :COSMOEM => { behavior_noticed: :still, behavior_roaming: :still },
     :SOLGALEO => { behavior_noticed: :normal, behavior_roaming: :random },
     :LUNALA => { behavior_noticed: :normal,  behavior_roaming: :random },

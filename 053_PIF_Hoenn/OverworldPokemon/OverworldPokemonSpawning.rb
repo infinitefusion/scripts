@@ -91,6 +91,16 @@ def get_overworld_pokemon_group_size(species, max_group_size)
   return size
 end
 
+def printPokemonOnCurrentMap
+  event_names = []
+  $PokemonTemp.overworld_pokemon_on_map.each do |key|
+    event = $game_map.events[key]
+    event_names << "[#{event.id}]#{event.name}"
+  end
+  echoln event_names
+end
+
+
 #shortcut for calling from events
 # wild_pokemon: [species, level]
 def spawn_pokemon(wild_pokemon,max_quantity=1)
@@ -98,7 +108,7 @@ def spawn_pokemon(wild_pokemon,max_quantity=1)
 end
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
-  if ($PokemonGlobal.surfing ||  $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
+  if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
     terrain = :Water
     position = find_random_surfable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   elsif $PokemonEncounters.has_cave_encounters?
@@ -146,8 +156,7 @@ def despawn_overworld_pokemon(event_id,terrain)
     event = $game_map.events[event_id]
   end
   return unless event
-  event.ow_pokemon_flee(true)
-  $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
+  event.despawn
   playOverworldPokemonSpawnAnimation(event,terrain)
 end
 
