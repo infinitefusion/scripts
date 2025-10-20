@@ -185,9 +185,6 @@ class Sprite_Character
     @is_follower = is_follower
     ow_shadow_init(@viewport, character)
 
-
-
-
     return unless pbShouldGetShadow?(character)
     return if @is_follower && defined?(Toggle_Following_Switch) &&
       !$game_switches[Toggle_Following_Switch]
@@ -294,7 +291,7 @@ class Sprite_Character
       @shadow.opacity = self.opacity
       @shadow.visible = (bushdepth == 0)
       if !self.visible || (@is_follower || @character == $game_player) &&
-        ($PokemonGlobal.surfing || $PokemonGlobal.diving)
+        ($PokemonGlobal.surfing || $PokemonGlobal.diving || $PokemonGlobal.boat)
         @shadow.visible = false
       end
     end

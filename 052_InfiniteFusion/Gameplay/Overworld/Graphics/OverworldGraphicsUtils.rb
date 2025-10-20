@@ -39,17 +39,10 @@ end
 def get_player_sprite_character
   return nil if !$scene || !$scene.spriteset
   for sprite in $scene.spriteset.character_sprites
-    if sprite.is_a?(Game_Player)
+    echoln "sprite: #{sprite}, character: #{sprite.character}"
+    if sprite.character == $game_player
       return sprite
     end
   end
   return nil
-end
-
-def remove_player_shadow
-  #Todo
-end
-
-def add_player_shadow
-  #Todo
 end
