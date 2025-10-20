@@ -68,10 +68,17 @@ OW_BEHAVIOR_MOVE_ROUTES = {
     ],
 
   },
+
   :noticed => {
+    :shy => [
+      RPG::MoveCommand.new(PBMoveRoute::AwayFromPlayer),
+      RPG::MoveCommand.new(PBMoveRoute::TurnTowardPlayer),
+      RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
     :teleport_away => [
-      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [3]),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
       RPG::MoveCommand.new(PBMoveRoute::PlayAnimation, [TELEPORT_ANIMATION_ID]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnTowardPlayer),
       RPG::MoveCommand.new(PBMoveRoute::Script, ["self.despawn"]),
       RPG::MoveCommand.new(PBMoveRoute::End)
     ],

@@ -138,12 +138,12 @@ class OverworldPokemonEvent < Game_Event
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
 
-    if @behavior_noticed == :curious
-      playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
+    if @behavior_noticed == :shy || @behavior_noticed == :skittish
+      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) #todo: make a sweat drop
     elsif @behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
     else
-      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
+      playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
     end
   end
 
@@ -157,6 +157,7 @@ class OverworldPokemonEvent < Game_Event
           # check for noticed
           if @current_state == :ROAMING
             if check_detect_trainer
+              echoln @detection_radius
               playDetectPlayerAnimation
               update_state(:NOTICED_PLAYER)
             end
@@ -197,8 +198,10 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def check_detect_trainer
+    return unless noticed_state_different_from_roaming()
     return if $game_system.map_interpreter.running? || @starting
-    return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
+    #return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
+    return pbPlayerInEventCone?(self, $game_player, @detection_radius)
   end
 
   def pbCheckEventTriggerAfterTurning
@@ -316,13 +319,9 @@ class OverworldPokemonEvent < Game_Event
     when :aggressive
       @move_type = MOVE_TYPE_TOWARDS_PLAYER
       self.move_frequency = 6
-    when :shy
-      @move_type = MOVE_TYPE_AWAY_PLAYER
     when :skittish
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 6
-    when :shy
-      @move_type = MOVE_TYPE_AWAY_PLAYER
     when :flee, :flee_flying, :teleport_away
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
       @through = true

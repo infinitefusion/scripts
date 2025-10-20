@@ -516,6 +516,52 @@ def pbEventCanReachPlayer?(event, player, distance)
   return true
 end
 
+# Checks if an event is within a cone-shaped area in front of the player.
+# distance = max forward tiles to check.
+# spread   = how wide the cone expands per tile (1 = triangle shape).
+# Checks if player is inside a cone-shaped area in front of the event.
+# distance = how far ahead the event can see
+# spread   = how wide the cone opens per tile of distance (1 = narrow triangle)
+def pbPlayerInEventCone?(event, player, distance, spread = 1)
+  return false if !event || !player || distance <= 0
+
+  ex = event.x; ey = event.y
+  px = player.x; py = player.y
+
+  case event.direction
+  when 2   # Event facing Down
+    dy = py - ey
+    return false if dy <= 0 || dy > distance
+    side = (px - ex).abs
+    return side <= dy * spread
+
+  when 8   # Facing Up
+    dy = ey - py
+    return false if dy <= 0 || dy > distance
+    side = (px - ex).abs
+    return side <= dy * spread
+
+  when 6   # Facing Right
+    dx = px - ex
+    return false if dx <= 0 || dx > distance
+    side = (py - ey).abs
+    return side <= dx * spread
+
+  when 4   # Facing Left
+    dx = ex - px
+    return false if dx <= 0 || dx > distance
+    side = (py - ey).abs
+    return side <= dx * spread
+
+  else
+    return false
+  end
+end
+
+
+
+
+
 # Returns whether the two events are standing next to each other and facing each
 # other.
 def pbFacingEachOther(event1, event2)
