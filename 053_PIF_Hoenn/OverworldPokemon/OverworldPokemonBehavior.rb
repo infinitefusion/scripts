@@ -39,10 +39,20 @@ def trigger_overworld_wild_battle
 end
 
 
-
+def setupAsOverworldPokemon(species: ,level: , behavior_roaming:nil, behavior_notice:nil )
+  event = $game_map.events[@event_id]
+  x, y = event.x, event.y
+  terrain = $game_map.terrain_tag(x, y)
+  pokemon = [species, level]
+  event.erase
+  ow_event = spawn_overworld_pokemon(pokemon,[x,y],terrain,behavior_roaming,behavior_notice)
+  if ow_event
+     ow_event.behavior_roaming = behavior_roaming if behavior_roaming
+     ow_event.behavior_notice = behavior_notice if behavior_notice
+  end
+end
 
 # Called from automatically spawned overworld Pokemon - species and level is obtained from name
-
 def overworldPokemonBehavior()
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event && event.is_a?(OverworldPokemonEvent)

@@ -6,22 +6,28 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :behavior_roaming
   attr_accessor :behavior_noticed
 
-  attr_accessor :flee_delay
   attr_accessor :detection_radius
   attr_accessor :pokemon
 
-  def setup_pokemon(species, level, terrain)
+  def setup_pokemon(species, level, terrain, behavior_roaming=nil, behavior_noticed=nil)
     @species = species
     @level = level
+    @behavior_roaming = behavior_roaming if behavior_roaming
+    @behavior_noticed = behavior_noticed if behavior_noticed
     species_data = GameData::Species.get(@species)
 
     @pokemon = Pokemon.new(species, level)
     @behavior_species = getBehaviorSpecies(species_data)
 
-    @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
-    @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
-    @behavior_roaming = :random unless @behavior_roaming
-    @behavior_noticed = :normal unless @behavior_noticed
+
+    unless behavior_roaming
+      @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
+      @behavior_roaming = :random unless @behavior_roaming
+    end
+    unless behavior_noticed
+      @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
+      @behavior_noticed = :normal unless @behavior_noticed
+    end
 
     default_move_speed = calculate_value_from_stat(species_data, :SPEED, 1, 4)
     @roaming_move_speed = POKEMON_BEHAVIOR_DATA[@behavior_species][:roaming_move_speed] || default_move_speed
@@ -37,9 +43,10 @@ class OverworldPokemonEvent < Game_Event
 
     @deleted = false
 
-    @event.name = "OW/#{species.to_s}/#{level.to_s}"
+    #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
     initialize_sprite(terrain)
+    @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
     @always_on_top = @is_flying
@@ -161,7 +168,10 @@ class OverworldPokemonEvent < Game_Event
         end
       end
     else
-      update_state(:ROAMING) if @current_state != :ROAMING
+      if @current_state != :ROAMING
+        echoln "setting back to roaming"
+        update_state(:ROAMING)
+      end
     end
   end
 
@@ -173,6 +183,7 @@ class OverworldPokemonEvent < Game_Event
   def update_state(new_state)
     @current_state = new_state
     update_movement_type
+    set_sprite_to_current_state
   end
 
   def update_movement_type
@@ -181,8 +192,8 @@ class OverworldPokemonEvent < Game_Event
       set_roaming_movement
     when :NOTICED_PLAYER
       set_noticed_movement
-      update_sprite(@noticed_sprite) if @noticed_sprite
     end
+    set_sprite_to_current_state
   end
 
   def check_detect_trainer
@@ -275,8 +286,17 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  def update_sprite(new_sprite_path)
-    @character_name = new_sprite_path
+  def set_sprite_to_current_state
+    case @current_state
+    when :NOTICED_PLAYER
+      set_sprite(@noticed_sprite) if @noticed_sprite
+    when :ROAMING
+      set_sprite(@roaming_sprite) if @roaming_sprite
+    end
+  end
+
+  def set_sprite(sprite_path)
+    @character_name = sprite_path
     @need_refresh = true
   end
 
@@ -323,16 +343,12 @@ class OverworldPokemonEvent < Game_Event
     end
 
     case @behavior_roaming
-    when :random,
+    when :random
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
-    when :still_teleport
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:still_teleport])
-    when :random_burrow
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:random_burrow])
-    when :random_vanish
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][:random_vanish])
+    else
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][@behavior_roaming])
     end
     self.move_frequency = 3
     @move_speed = @roaming_move_speed

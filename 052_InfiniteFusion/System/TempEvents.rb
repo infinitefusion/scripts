@@ -25,6 +25,7 @@ class PokemonTemp
   end
 
   def createTempEvent(eventTemplateID, map_id, position = [0, 0],direction=nil, event_class = Game_Event)
+    return unless $scene.is_a?(Scene_Map)
     template_event = $MapFactory.getMap(MAP_TEMPLATE_EVENTS,false).events[eventTemplateID]
     key_id = ($game_map.events.keys.max || -1) + 1
 

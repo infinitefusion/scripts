@@ -36,39 +36,19 @@ def playOverworldPokemonSpawnAnimation(event, terrain)
   end
 end
 
-# def get_ow_pokemon_roaming_behavior_template(pokemon)
-#   species  =  pokemon[0]
-#   if isSpeciesFusion(species)
-#     species = GameData::FusedSpecies.get(species).get_head_species_symbol
-#   end
-#   behavior = POKEMON_BEHAVIOR_DATA[species][:behavior_roaming]
-#   case behavior
-#   when :normal, :shy, :curious, :aggressive
-#     return TEMPLATE_EVENT_OW_POKEMON_NORMAL
-#   when :skittish, :still
-#     return TEMPLATE_EVENT_OW_POKEMON_STILL
-#   else
-#     return TEMPLATE_EVENT_OW_POKEMON_NORMAL
-#   end
-# end
-
-
-
-def create_overworld_pokemon_event(pokemon, position, terrain)
+def create_overworld_pokemon_event(pokemon, position, terrain, behavior_roaming = nil, behavior_noticed = nil)
   template_event = TEMPLATE_EVENT_OW_POKEMON_NORMAL
 
   species = pokemon[0]
   level = pokemon[1]
   event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
-    event.setup_pokemon(species, level, terrain)
+    event.setup_pokemon(species, level, terrain, behavior_roaming, behavior_noticed)
   end
-  event.direction = [DIRECTION_LEFT,DIRECTION_RIGHT,DIRECTION_DOWN,DIRECTION_UP].sample
-  return unless event.detectCommentCommand(OVERWORLD_POKEMON_COMMENT_TRIGGER)
+  return unless event
+  event.direction = [DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP].sample
   playOverworldPokemonSpawnAnimation(event, terrain)
   return event
 end
-
-
 
 def get_overworld_pokemon_group_size(species, max_group_size)
   catch_rate = GameData::Species.get(species).catch_rate
@@ -100,12 +80,12 @@ def printPokemonOnCurrentMap
   echoln event_names
 end
 
-
-#shortcut for calling from events
+# shortcut for calling from events
 # wild_pokemon: [species, level]
-def spawn_pokemon(wild_pokemon,max_quantity=1)
-  spawn_random_overworld_pokemon_group(wild_pokemon,10,max_quantity)
+def spawn_pokemon(wild_pokemon, max_quantity = 1)
+  spawn_random_overworld_pokemon_group(wild_pokemon, 10, max_quantity)
 end
+
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
   if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
@@ -115,7 +95,7 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     terrain = :Cave
     position = find_random_walkable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   elsif $PokemonEncounters.has_land_encounters?
-    position,terrain = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
+    position, terrain = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   end
   encounter_type = getTimeBasedEncounter(terrain)
 
@@ -123,7 +103,7 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
 
   $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
   if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
-    despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0],terrain)
+    despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0], terrain)
   end
 
   wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
@@ -138,8 +118,7 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     new_position = [position[0] + offset_x, position[1] + offset_y]
     begin
       if $game_map.playerPassable?(new_position[0], new_position[1], DIRECTION_ALL)
-        event = create_overworld_pokemon_event(wild_pokemon, new_position, terrain)
-        $PokemonTemp.overworld_pokemon_on_map << event.id
+        spawn_overworld_pokemon(wild_pokemon, new_position, terrain)
       end
     rescue
       next
@@ -147,9 +126,16 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
   end
 end
 
-def despawn_overworld_pokemon(event_id,terrain)
+def spawn_overworld_pokemon(wild_pokemon, position, terrain, behavior_roaming = nil, behavior_noticed = nil)
+  event = create_overworld_pokemon_event(wild_pokemon, position, terrain,
+                                         behavior_roaming, behavior_noticed)
+  $PokemonTemp.overworld_pokemon_on_map << event.id if event
+  return event
+end
+
+def despawn_overworld_pokemon(event_id, terrain)
   event = $game_map.events[event_id]
-  if event.pokemon.shiny? #re-add it ad the end of the list instead
+  if event.pokemon.shiny? # re-add it ad the end of the list instead
     $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
     $PokemonTemp.overworld_pokemon_on_map << event.id
     event_id = $PokemonTemp.overworld_pokemon_on_map[0]
@@ -157,7 +143,7 @@ def despawn_overworld_pokemon(event_id,terrain)
   end
   return unless event
   event.despawn
-  playOverworldPokemonSpawnAnimation(event,terrain)
+  playOverworldPokemonSpawnAnimation(event, terrain)
 end
 
 class PokemonTemp
@@ -166,7 +152,7 @@ class PokemonTemp
 
   attr_accessor :overworld_pokemon_on_map
   attr_accessor :prevent_ow_encounters
-  attr_accessor :prevent_ow_battles #For cutscenes where we stil want Pokemon to spawn but shouldn't encounter them (ex: Mr. Briney boat ride)
+  attr_accessor :prevent_ow_battles # For cutscenes where we stil want Pokemon to spawn but shouldn't encounter them (ex: Mr. Briney boat ride)
 
 end
 

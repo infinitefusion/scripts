@@ -1,5 +1,10 @@
 OW_BEHAVIOR_MOVE_ROUTES = {
   :roaming => {
+    :look_around => [
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
+
     :still_teleport =>
       [
         RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [3]),
