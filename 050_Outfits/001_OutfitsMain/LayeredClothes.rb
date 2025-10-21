@@ -109,6 +109,7 @@ def setHat(hat_id)
 end
 
 def getEasterEggHeldItem()
+  return unless Settings::KANTO #todo: add hoenn map ids too
   map = $game_map.map_id
   return "secrets/HOTDOG" if [141, 194].include?(map) #restaurant
   return "secrets/SNOWBALL" if [670, 693, 698, 694].include?(map)
@@ -140,7 +141,6 @@ def getCurrentPokeball(allowEasterEgg=true)
 end
 
 def generate_front_trainer_sprite_bitmap_from_appearance(trainerAppearance,is_trainer=true)
-  echoln trainerAppearance.hat
   return generate_front_trainer_sprite_bitmap(false,nil,trainerAppearance.clothes,trainerAppearance.hat,trainerAppearance.hat2,
                                               trainerAppearance.hair,trainerAppearance.skin_color,
                                               trainerAppearance.hair_color,trainerAppearance.hat_color,trainerAppearance.clothes_color,

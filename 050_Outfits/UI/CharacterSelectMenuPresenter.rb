@@ -51,6 +51,7 @@ class CharacterSelectMenuPresenter
     trainer_hat = $Trainer.hat
     trainer_clothes = $Trainer.clothes
     trainer_skinTone = $Trainer.skin_tone
+    trainer_name = $Trainer.name
 
 
     $Trainer.hat = nil
@@ -73,6 +74,7 @@ class CharacterSelectMenuPresenter
     $Trainer.hat = trainer_hat
     $Trainer.clothes = trainer_clothes
     $Trainer.skin_tone = trainer_skinTone
+    $Trainer.name = trainer_name
     $scene.reset_player_sprite
   end
 
