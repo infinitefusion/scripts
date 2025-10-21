@@ -46,7 +46,7 @@ BATTLED_TRAINER_RIVAL_KEY = "rival"
 def init_rival_name
   rival_name = "Brendan" if isPlayerFemale
   rival_name = "May" if isPlayerMale
-  pbSet(VAR_RIVAL_NAME, rival_name)
+  @name = rival_name
   return rival_name
 end
 
@@ -277,7 +277,7 @@ def initializeRivalBattledTrainer
   return rivalBattledTrainer
 end
 
-def hoennRivalBattle(loseDialog = "...", canLose = false)
+def hoennRivalBattle(loseDialog = "...", canLose = false, items= [])
   $PokemonGlobal.battledTrainers = {} if !$PokemonGlobal.battledTrainers
   if !$PokemonGlobal.battledTrainers.has_key?(BATTLED_TRAINER_RIVAL_KEY)
     rival_trainer = initializeRivalBattledTrainer()
@@ -285,7 +285,5 @@ def hoennRivalBattle(loseDialog = "...", canLose = false)
   else
     rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
   end
-  echoln rival_trainer
-  echoln rival_trainer.currentTeam
-  return customTrainerBattle(rival_trainer.trainerName, rival_trainer.trainerType, rival_trainer.currentTeam, rival_trainer, loseDialog, nil, rival_trainer.custom_appearance)
+  return customTrainerBattle(rival_trainer.trainerName, rival_trainer.trainerType, rival_trainer.currentTeam, rival_trainer, loseDialog, nil, rival_trainer.custom_appearance, items,canLose)
 end

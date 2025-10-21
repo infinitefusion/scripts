@@ -261,6 +261,8 @@ class Scene_Map
 
   def reset_player_sprite
     @spritesetGlobal.playersprite.updateBitmap
+    updateSpritesets
+    refreshPlayerOutfit
   end
 
   def reset_map(fadeout = false,reset_music=true)

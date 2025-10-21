@@ -70,6 +70,7 @@ class CharacterSelectMenuPresenter
     setInitialValuesRival()
     main()
     $Trainer.init_rival_appearance($Trainer.skin_tone, $Trainer.hair)
+    pbSet(VAR_RIVAL_NAME, @name)
     $Trainer.hair = trainer_hair
     $Trainer.hat = trainer_hat
     $Trainer.clothes = trainer_clothes
