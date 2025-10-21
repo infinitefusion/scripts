@@ -52,21 +52,24 @@ def setupStartingOutfit()
   default_hair_female = getDefaultHair(GENDER_FEMALE)
 
   $Trainer.hat = nil
-  $Trainer.clothes = STARTING_OUTFIT
+  if Settings::KANTO
+    $Trainer.clothes = STARTING_OUTFIT
+  end
+
+
   unlock_easter_egg_hats()
   gender = pbGet(VAR_TRAINER_GENDER)
   if gender == GENDER_FEMALE
     $Trainer.unlock_clothes(default_clothes_female, true)
     $Trainer.unlock_hat(default_hat_female, true)
     $Trainer.hair = "3_" + default_hair_female if !$Trainer.hair # when migrating old savefiles
+    $Trainer.clothes = default_clothes_female
 
   elsif gender == GENDER_MALE
     $Trainer.unlock_clothes(default_clothes_male, true)
     $Trainer.unlock_hat(default_hat_male, true)
-
-    echoln $Trainer.hair
     $Trainer.hair = ("3_" + default_hair_male) if !$Trainer.hair # when migrating old savefiles
-    echoln $Trainer.hair
+    $Trainer.clothes = default_clothes_male
   end
   $Trainer.unlock_hair(default_hair_male, true)
   $Trainer.unlock_hair(default_hair_female, true)

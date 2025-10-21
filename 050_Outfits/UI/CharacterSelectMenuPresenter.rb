@@ -42,6 +42,7 @@ class CharacterSelectMenuPresenter
     @closed = false
     @current_index = 0
     @view.setMaxIndex(@options.length - 1)
+    @rival = false
   end
 
   #For selecting the rival in Hoenn
@@ -58,19 +59,21 @@ class CharacterSelectMenuPresenter
     if isPlayerMale
       @hairstyle = getDefaultHair(GENDER_FEMALE)
       $Trainer.clothes = getDefaultClothes(GENDER_FEMALE)
+      $Trainer.hair = getDefaultHair(GENDER_FEMALE)
     else
       @hairstyle = getDefaultHair(GENDER_MALE)
       $Trainer.clothes = getDefaultClothes(GENDER_MALE)
+      $Trainer.hair = getDefaultHair(GENDER_MALE)
     end
+    @rival = true
     setInitialValuesRival()
     main()
-
-
     $Trainer.init_rival_appearance($Trainer.skin_tone, $Trainer.hair)
     $Trainer.hair = trainer_hair
     $Trainer.hat = trainer_hat
     $Trainer.clothes = trainer_clothes
     $Trainer.skin_tone = trainer_skinTone
+    $game_map.refresh
   end
 
   def main()
@@ -140,7 +143,6 @@ class CharacterSelectMenuPresenter
 
   def applyAllSelectedValues
     applyGender(@gender)
-    echoln @age
     pbSet(VAR_TRAINER_AGE, @age)
     $Trainer.skin_tone = @skinTone
     $Trainer.name = @name
@@ -164,7 +166,19 @@ class CharacterSelectMenuPresenter
     @current_index = @options.length - 1 if @current_index <= -1
 
     update_cursor(@current_index)
+    setHatVisibility(@current_index)
     return @current_index
+  end
+
+  def setHatVisibility(index)
+    return if @rival
+    case @options[index]
+    when OPTION_HAIR
+      $Trainer.hat=nil
+    else
+      $Trainer.hat = getDefaultHat(@gender)
+    end
+    updateTrainerPreview
   end
 
   def update_cursor(index)
@@ -258,6 +272,7 @@ class CharacterSelectMenuPresenter
   end
 
   def applyGender(gender_index)
+    return if @rival
     # outfitId = gender + 1
     pbSet(VAR_TRAINER_GENDER, gender_index)
 

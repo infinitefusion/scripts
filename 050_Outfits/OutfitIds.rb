@@ -32,8 +32,8 @@ DEFAULT_OUTFIT_MALE = "red"
 DEFAULT_OUTFIT_FEMALE = "leaf"
 STARTING_OUTFIT = "pikajamas"
 
-CLOTHES_BRENDAN = "red" #todo
-CLOTHES_MAY = "leaf"    #todo
+CLOTHES_BRENDAN = "brendanRS"
+CLOTHES_MAY = "mayRS"
 
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
@@ -164,5 +164,5 @@ HAIR_EEVEE="eeveetail"
 HAIR_LEAFEON="leafeonbob"
 HAIR_ORICORIO="oricoriopuffs"
 
-HAIR_BRENDAN = "buzzcut"
+HAIR_BRENDAN = "brendan"
 HAIR_MAY = "may"
