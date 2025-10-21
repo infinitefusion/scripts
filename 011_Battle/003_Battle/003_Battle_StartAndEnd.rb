@@ -284,6 +284,7 @@ class PokeBattle_Battle
     weather_data = GameData::BattleWeather.try_get(@field.weather)
     echoln "Current weather: #{@field.weather}"
 
+    echoln weather_data.animation
     pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
     when :Sun         then pbDisplay(_INTL("The sunlight is strong."))

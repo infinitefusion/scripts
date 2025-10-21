@@ -319,9 +319,11 @@ def useFieldSleepingBag()
       if $game_weather
         mapId = $game_map.map_id
         $game_weather.update_weather
-        $game_weather.try_spawn_new_weather(mapId,
-                                            $game_weather.current_weather[mapId][0],
-                                            20)
+        if $game_weather.current_weather[mapId]
+          $game_weather.try_spawn_new_weather(mapId,
+                                              $game_weather.current_weather[mapId][0],
+                                              20)
+        end
       end
       Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
       $scene.reset_map(false)

@@ -45,7 +45,7 @@ class OverworldPokemonEvent < Game_Event
 
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
-    initialize_sprite(terrain)
+    initialize_sprite(terrain,species_data)
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
@@ -71,10 +71,10 @@ class OverworldPokemonEvent < Game_Event
     return @species
   end
 
-  def initialize_sprite(terrain)
-    @land_sprite = getOverworldLandPath
-    @flying_sprite = getOverworldFlyingPath
-    @noticed_sprite = getOverworldNoticedPath
+  def initialize_sprite(terrain,species_data)
+    @land_sprite = getOverworldLandPath(species_data)
+    @flying_sprite = getOverworldFlyingPath(species_data)
+    @noticed_sprite = getOverworldNoticedPath(species_data)
 
 
     if terrain == :Water && @flying_sprite
@@ -170,7 +170,6 @@ class OverworldPokemonEvent < Game_Event
       end
     else
       if @current_state != :ROAMING
-        echoln "setting back to roaming"
         update_state(:ROAMING)
       end
     end
@@ -241,7 +240,7 @@ class OverworldPokemonEvent < Game_Event
   # Noticing player
   # ###
 
-  def getOverworldLandPath
+  def getOverworldLandPath(species_data)
     base_path = "Followers/"
     is_fusion = isSpeciesFusion(@species)
     species_name = @species.to_s
@@ -257,7 +256,7 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  def getOverworldFlyingPath
+  def getOverworldFlyingPath(species_data)
     base_path = "Followers/"
     is_fusion = isSpeciesFusion(@species)
     species_name = @species.to_s
@@ -273,7 +272,7 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  def getOverworldNoticedPath
+  def getOverworldNoticedPath(species_data)
     base_path = "Followers/"
     is_fusion = isSpeciesFusion(@species)
     species_name = @species.to_s
