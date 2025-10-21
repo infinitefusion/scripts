@@ -88,7 +88,7 @@ end
 
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
   return unless $PokemonEncounters && $PokemonGlobal
-  if $PokemonGlobal.surfing && $PokemonEncounters.has_water_encounters?
+  if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
     terrain = :Water
     position = find_random_surfable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
   elsif $PokemonEncounters.has_cave_encounters?

@@ -588,8 +588,11 @@ end
 
 def pbAutoplayOnTransition
   surfbgm = GameData::Metadata.get.surf_BGM
+
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
+  elsif $PokemonGlobal.boat
+    pbBGMPlay("ship")
   else
     $game_map.autoplayAsCue
   end

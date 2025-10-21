@@ -8,6 +8,8 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
         if isWaterTerrain?(mapTerrainTag) && !event.always_on_top #&& $PokemonGlobal.stepcount % 2 ==0
           $scene.spriteset.addUserAnimation(PUDDLE_ANIMATION_ID, event.x, event.y, true, 0)
         end
+      elsif $PokemonGlobal.boat
+        $scene.spriteset.addUserAnimation(PUDDLE_ANIMATION_ID, event.x, event.y-2, true, 0)
       else
         if mapTerrainTag == 16 #puddle
           pbSEPlay("puddle", 100) if event == $game_player && !$PokemonGlobal.surfing #only play sound effect in puddle
