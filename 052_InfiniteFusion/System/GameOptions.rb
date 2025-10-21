@@ -49,8 +49,8 @@ class PokemonGameOption_Scene < PokemonOption_Scene
 
     if Settings::HOENN
       options << EnumOption.new(_INTL("Overworld Encounters"), [_INTL("On"), _INTL("Off")],
-                                proc { $PokemonSystem.overworld_encounters },
-                                proc { |value| $PokemonSystem.overworld_encounters = value },
+                                proc { $PokemonSystem.overworld_encounters ? 0 : 1 },
+                                proc { |value| $PokemonSystem.overworld_encounters = value == 0 },
                                 [_INTL("Pokémon are encountered in the overworld."),
                                  _INTL("Pokémon are only encountered in tall grass, etc.")]
       )
