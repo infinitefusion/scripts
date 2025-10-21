@@ -73,7 +73,7 @@ class CharacterSelectMenuPresenter
     $Trainer.hat = trainer_hat
     $Trainer.clothes = trainer_clothes
     $Trainer.skin_tone = trainer_skinTone
-    $game_map.refresh
+    $scene.reset_player_sprite
   end
 
   def main()
