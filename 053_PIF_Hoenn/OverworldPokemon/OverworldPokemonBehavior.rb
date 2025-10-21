@@ -40,6 +40,8 @@ end
 
 
 def setupAsOverworldPokemon(species: ,level: , behavior_roaming:nil, behavior_notice:nil )
+  return #todo: fixme - also spawns events in connecting maps...
+
   event = $game_map.events[@event_id]
   x, y = event.x, event.y
   terrain = $game_map.terrain_tag(x, y)

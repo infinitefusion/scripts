@@ -138,12 +138,12 @@ class OverworldPokemonEvent < Game_Event
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
 
-    if @behavior_noticed == :shy || @behavior_noticed == :skittish
-      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) #todo: make a sweat drop
+    if @behavior_noticed == :curious
+      playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
     elsif @behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
     else
-      playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
+      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     end
   end
 

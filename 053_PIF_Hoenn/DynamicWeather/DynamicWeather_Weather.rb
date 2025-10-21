@@ -69,7 +69,7 @@ class GameWeather
   def initialize_weather
     weather = {}
     @neighbors_maps.keys.each { |map_id|
-      weather[map_id] = select_new_weather_spawn
+      weather[map_id] = select_new_weather_spawn(CHANCE_OF_NEW_WEATHER)
     }
     @current_weather = weather
   end
@@ -109,7 +109,7 @@ class GameWeather
     new_weather = @current_weather.dup
     new_weather.each do |map_id, (type, intensity)|
       try_end_weather(map_id,type, get_map_weather_intensity(map_id))
-      try_spawn_new_weather(map_id,type, intensity)
+      try_spawn_new_weather(map_id,type)
       try_propagate_weather_to_neighbors(map_id,type, intensity)
       echoln @current_weather[954] if @debug_you
       try_move_weather_to_neighbors(map_id,type, intensity)
@@ -139,9 +139,10 @@ class GameWeather
     end
   end
 
-  def try_spawn_new_weather(map_id,map_weather_type,weather_intensity)
+  def try_spawn_new_weather(map_id,map_weather_type,spawn_chance=nil)
     return if map_weather_type != :None
-    new_weather = select_new_weather_spawn
+    spawn_chance = CHANCE_OF_NEW_WEATHER unless spawn_chance
+    new_weather = select_new_weather_spawn(spawn_chance)
     @current_weather[map_id] = adjust_weather_for_map(new_weather,map_id)
   end
 
@@ -346,9 +347,8 @@ class GameWeather
     return rand(100) <= CHANCES_OF_INTENSITY_DECREASE
   end
 
-  def select_new_weather_spawn
-    return [:None, 0] if rand(100) >= CHANCE_OF_NEW_WEATHER
-
+  def select_new_weather_spawn(spawn_chance)
+    return [:None, 0] if rand(100) >= spawn_chance
     base_intensity = rand(MAX_INTENSITY_ON_NEW_WEATHER) + 1
 
     weights = []

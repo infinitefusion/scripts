@@ -285,6 +285,13 @@ def useSleepingBag()
   pbSet(UnrealTime::EXTRA_SECONDS, currentSecondsValue + timeAdded)
   pbSEPlay("Sleep", 100)
   pbFadeOutIn {
+    if $game_weather
+      mapId = $game_map.map_id
+      $game_weather.update_weather
+      $game_weather.try_spawn_new_weather(mapId,
+                                          $game_weather.current_weather[mapId][0],
+                                          20)
+    end
     Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
   }
   time = pbGetTimeNow.strftime("%I:%M %p")
@@ -294,6 +301,7 @@ def useSleepingBag()
   else
     Kernel.pbMessage(_INTL("The current time is now {1}.", time))
   end
+  $scene.spriteset.addUserSprite(WeatherIcon.new)
   return 1
 end
 
@@ -308,7 +316,13 @@ def useFieldSleepingBag()
     pbSet(UnrealTime::EXTRA_SECONDS, currentSecondsValue + timeAdded)
     pbSEPlay("Sleep", 100)
     pbFadeOutIn {
-      $game_weather.update_weather
+      if $game_weather
+        mapId = $game_map.map_id
+        $game_weather.update_weather
+        $game_weather.try_spawn_new_weather(mapId,
+                                            $game_weather.current_weather[mapId][0],
+                                            20)
+      end
       Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
       $scene.reset_map(false)
     }
@@ -319,6 +333,7 @@ def useFieldSleepingBag()
     else
       Kernel.pbMessage(_INTL("The current time is now {1}.", time))
     end
+    $scene.spriteset.addUserSprite(WeatherIcon.new)
     return 1
   end
 
@@ -344,7 +359,7 @@ ItemHandlers::UseInField.add(:SLEEPINGBAG, proc { |item|
 
 ItemHandlers::UseFromBag.add(:FIELDSLEEPINGBAG, proc { |item|
   mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
-  if !mapMetadata || !mapMetadata.outdoor_map
+  if !mapMetadata || !mapMetadata.outdoor_map || $PokemonGlobal.surfing
     Kernel.pbMessage(_INTL("Can't use that here..."))
     next 0
   end
@@ -353,7 +368,7 @@ ItemHandlers::UseFromBag.add(:FIELDSLEEPINGBAG, proc { |item|
 
 ItemHandlers::UseInField.add(:FIELDSLEEPINGBAG, proc { |item|
   mapMetadata = GameData::MapMetadata.try_get($game_map.map_id)
-  if !mapMetadata || !mapMetadata.outdoor_map
+  if !mapMetadata || !mapMetadata.outdoor_map || $PokemonGlobal.surfing
     Kernel.pbMessage(_INTL("Can't use that here..."))
     next 0
   end
@@ -400,7 +415,7 @@ ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
   if $game_switches[SWITCH_SPORES_REPEL]
     if pbQuantity(:MUSHROOMSPORES) >= 2
       if pbConfirmMessage(_INTL("Condense 2 spore samples into a Repel?"))
-        $PokemonBag.pbDeleteItem(:MUSHROOMSPORES,2)
+        $PokemonBag.pbDeleteItem(:MUSHROOMSPORES, 2)
         pbReceiveItem(:REPEL)
         next 1
       else
@@ -414,7 +429,6 @@ ItemHandlers::UseFromBag.add(:MUSHROOMSPORES, proc { |item|
   end
   next 0
 })
-
 
 ItemHandlers::UseFromBag.add(:ODDKEYSTONE, proc { |item|
   TOTAL_SPIRITS_NEEDED = 108
@@ -449,9 +463,9 @@ def useFavoriteOutfit()
     switchToFavoriteOutfit()
   elsif options[choice] == cmd_mark_favorite
     pbSEPlay("shiny", 80, 100)
-    $Trainer.favorite_clothes= $Trainer.clothes
+    $Trainer.favorite_clothes = $Trainer.clothes
     $Trainer.favorite_hat = $Trainer.hat
-    $Trainer.favorite_hat2=$Trainer.hat2
+    $Trainer.favorite_hat2 = $Trainer.hat2
     pbMessage(_INTL("Your favorite outfit was updated!"))
   end
 end
@@ -471,9 +485,9 @@ def switchToFavoriteOutfit()
         $Trainer.last_worn_outfit = getDefaultClothes(getPlayerGenderId)
       end
       playOutfitChangeAnimation()
-      putOnClothes($Trainer.last_worn_outfit, true) #if $Trainer.favorite_clothes
-      putOnHat($Trainer.last_worn_hat, true,false) #if $Trainer.favorite_hat
-      putOnHat($Trainer.last_worn_hat2, true,true) #if $Trainer.favorite_hat2
+      putOnClothes($Trainer.last_worn_outfit, true) # if $Trainer.favorite_clothes
+      putOnHat($Trainer.last_worn_hat, true, false) # if $Trainer.favorite_hat
+      putOnHat($Trainer.last_worn_hat2, true, true) # if $Trainer.favorite_hat2
 
     else
       return 0
@@ -691,7 +705,7 @@ ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
 })
 
 def reverseFusion(pokemon)
-  if pokemon.owner.name  == "RENTAL"
+  if pokemon.owner.name == "RENTAL"
     pbMessage(_INTL("You cannot reverse a rental pokémon!"))
     return
   end
@@ -1047,7 +1061,6 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
   next evolveSlowpokeTail(item, pokemon, scene)
 })
 
-
 def evolveSlowpokeTail(item, pokemon, scene)
   if pokemon.species != :SHELLDER
     pbMessage(_INTL("It won't have any effect."))
@@ -1065,6 +1078,7 @@ def evolveSlowpokeTail(item, pokemon, scene)
   }
   return true
 end
+
 #
 # ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
 #   if (pokemon.isShadow? rescue false)
@@ -1212,8 +1226,8 @@ ItemHandlers::UseFromBag.add(:EXPALLOFF, proc { |item|
   next 1 # Continue
 })
 
-ItemHandlers::BattleUseOnPokemon.add(:BANANA,proc { |item,pokemon,battler,choices,scene|
-  pbBattleHPItem(pokemon,battler,30,scene)
+ItemHandlers::BattleUseOnPokemon.add(:BANANA, proc { |item, pokemon, battler, choices, scene|
+  pbBattleHPItem(pokemon, battler, 30, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:BANANA, proc { |item, pokemon, scene|
@@ -1344,7 +1358,7 @@ ItemHandlers::UseOnPokemon.add(:COFFEE, proc { |item, pokemon, scene|
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:COFFEE, proc { |item, pokemon, battler, choices, scene|
-  battler.pbRaiseStatStage(:SPEED,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler) if battler
+  battler.pbRaiseStatStage(:SPEED, (Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1, battler) if battler
   pbBattleHPItem(pokemon, battler, 50, scene)
 })
 
@@ -1633,7 +1647,7 @@ def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
     scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
     return false
   end
-  if pokemon.owner.name  == "RENTAL"
+  if pokemon.owner.name == "RENTAL"
     scene.pbDisplay(_INTL("You cannot unfuse a rental pokémon!"))
     return
   end
@@ -2119,7 +2133,6 @@ ItemHandlers::UseFromBag.add(:EXPALLOFF, proc { |item|
   next 1 # Continue
 })
 
-
 ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
   blacklisted_maps = [
     315, 316, 317, 318, 328, 343, # Elite Four
@@ -2139,7 +2152,7 @@ ItemHandlers::UseInField.add(:BOXLINK, proc { |item|
   next 1
 })
 
-def changeOricorioFormFromItem(pokemon,form_name,new_form)
+def changeOricorioFormFromItem(pokemon, form_name, new_form)
   if !(Kernel.isPartPokemon(pokemon, :ORICORIO_1) ||
     Kernel.isPartPokemon(pokemon, :ORICORIO_2) ||
     Kernel.isPartPokemon(pokemon, :ORICORIO_3) ||
@@ -2160,47 +2173,47 @@ end
 ItemHandlers::UseOnPokemon.add(:REDNECTAR, proc { |item, poke, scene|
   form_name = "Baile"
   form = 1
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:REDNECTAR, proc { |item, poke, scene|
   form_name = "Baile"
   form = 1
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
   form_name = "Pom-Pom"
   form = 2
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
   form_name = "Pom-Pom"
   form = 1
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::UseOnPokemon.add(:PINKNECTAR, proc { |item, poke, scene|
   form_name = "Pa'u"
   form = 3
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:PINKNECTAR, proc { |item, poke, scene|
   form_name = "Pa'u"
   form = 3
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::UseOnPokemon.add(:BLUENECTAR, proc { |item, poke, scene|
   form_name = "Sensu"
   form = 4
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:BLUENECTAR, proc { |item, poke, scene|
   form_name = "Sensu"
   form = 4
-  next changeOricorioFormFromItem(poke,form_name,form)
+  next changeOricorioFormFromItem(poke, form_name, form)
 })
