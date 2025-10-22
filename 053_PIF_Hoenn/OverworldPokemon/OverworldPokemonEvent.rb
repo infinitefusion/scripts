@@ -9,7 +9,7 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :detection_radius
   attr_accessor :pokemon
 
-  def setup_pokemon(species, level, terrain, behavior_roaming=nil, behavior_noticed=nil)
+  def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
     @behavior_roaming = behavior_roaming if behavior_roaming
@@ -19,14 +19,13 @@ class OverworldPokemonEvent < Game_Event
     @pokemon = Pokemon.new(species, level)
     @behavior_species = getBehaviorSpecies(species_data)
 
-
     unless behavior_roaming
       @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
       @behavior_roaming = :random unless @behavior_roaming
     end
     unless behavior_noticed
       @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
-      @behavior_noticed = :normal unless @behavior_noticed
+      @behavior_noticed = nil unless @behavior_noticed
     end
 
     default_move_speed = calculate_value_from_stat(species_data, :SPEED, 1, 4)
@@ -45,7 +44,7 @@ class OverworldPokemonEvent < Game_Event
 
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
-    initialize_sprite(terrain,species_data)
+    initialize_sprite(terrain, species_data)
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
@@ -71,11 +70,10 @@ class OverworldPokemonEvent < Game_Event
     return @species
   end
 
-  def initialize_sprite(terrain,species_data)
+  def initialize_sprite(terrain, species_data)
     @land_sprite = getOverworldLandPath(species_data)
     @flying_sprite = getOverworldFlyingPath(species_data)
     @noticed_sprite = getOverworldNoticedPath(species_data)
-
 
     if terrain == :Water && @flying_sprite
       @character_name = @flying_sprite
@@ -124,12 +122,22 @@ class OverworldPokemonEvent < Game_Event
     return
   end
 
+  def flee(behavior)
+    playCry(@species)
+    pbSEPlay(SE_FLEE)
+    set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
+    @through = true
+    @detection_radius = 10
+    force_move_route(@move_route)
+    @always_on_top = true if behavior == :flee_flying
+    @current_state = :FLEEING
+  end
 
   #####
   # Behaviors
   #####
   def noticed_state_different_from_roaming
-    return false if @behavior_noticed == :normal && @behavior_roaming == :random
+    return false unless @behavior_noticed
     return false if @behavior_noticed == :still && @behavior_roaming == :still
     return true
   end
@@ -149,31 +157,55 @@ class OverworldPokemonEvent < Game_Event
 
   def update_behavior()
     return if @opacity == 0
+    return if @current_state == :FLEEING
     if player_near_event?(@detection_radius)
-      if !$game_player.moving?
-        if playerNextToEvent? # Battle
-          overworldPokemonBattle
-        else
-          # check for noticed
-          if @current_state == :ROAMING
-            if check_detect_trainer
-              echoln @detection_radius
-              playDetectPlayerAnimation
-              update_state(:NOTICED_PLAYER)
-            end
-          elsif @current_state == :NOTICED_PLAYER
-            unless player_near_event?(@detection_radius)
-              update_state(@current_state = :ROAMING)
-            end
+      # if !$game_player.moving?
+      if playerNextToEvent? # Battle
+        overworldPokemonBattle
+      else
+        # check for noticed
+        if @current_state == :ROAMING
+          if check_detect_trainer
+            playDetectPlayerAnimation
+            update_state(:NOTICED_PLAYER)
           end
         end
       end
+      # end
     else
       if @current_state != :ROAMING
         update_state(:ROAMING)
       end
     end
   end
+
+  # def update_behavior()
+  #   return if @opacity == 0
+  #   if player_near_event?(@detection_radius)
+  #     if !$game_player.moving?
+  #       if playerNextToEvent? # Battle
+  #         overworldPokemonBattle
+  #       else
+  #         # check for noticed
+  #         if @current_state == :ROAMING
+  #           if check_detect_trainer
+  #             echoln @detection_radius
+  #             playDetectPlayerAnimation
+  #             update_state(:NOTICED_PLAYER)
+  #           end
+  #         elsif @current_state == :NOTICED_PLAYER
+  #           unless player_near_event?(@detection_radius)
+  #             update_state(@current_state = :ROAMING)
+  #           end
+  #         end
+  #       end
+  #     end
+  #   else
+  #     if @current_state != :ROAMING
+  #       update_state(:ROAMING)
+  #     end
+  #   end
+  # end
 
   def turn_generic(*args)
     super(*args)
@@ -199,7 +231,7 @@ class OverworldPokemonEvent < Game_Event
   def check_detect_trainer
     return unless noticed_state_different_from_roaming()
     return if $game_system.map_interpreter.running? || @starting
-    #return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
+    # return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
     return pbPlayerInEventCone?(self, $game_player, @detection_radius)
   end
 
@@ -212,7 +244,6 @@ class OverworldPokemonEvent < Game_Event
       end
     end
   end
-
 
   # The rarer the Pokemon, the more skittish it is (larger sight radius)
   def calculate_ow_pokemon_sight_radius(species_data)
@@ -307,9 +338,11 @@ class OverworldPokemonEvent < Game_Event
     if isRepelActive
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 6
+      return
     end
+    return unless @behavior_noticed
     case @behavior_noticed
-    when :normal
+    when :random
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
@@ -322,16 +355,13 @@ class OverworldPokemonEvent < Game_Event
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 6
     when :flee, :flee_flying, :teleport_away
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
-      @through = true
-      @detection_radius =10
-    when :flee_flying
-      @always_on_top = true
+      flee(@behavior_noticed)
     else
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
     end
     @move_speed = @noticed_move_speed
   end
+
 
   def set_roaming_movement
     if isRepelActive

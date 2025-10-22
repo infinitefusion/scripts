@@ -287,11 +287,11 @@ def useSleepingBag()
   pbFadeOutIn {
     if $game_weather
       mapId = $game_map.map_id
-      $game_weather.update_weather
       $game_weather.try_spawn_new_weather(mapId,
                                           $game_weather.current_weather[mapId][0],
-                                          20)
+                                          40)
     end
+    $game_weather.update_weather
     Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
   }
   time = pbGetTimeNow.strftime("%I:%M %p")
@@ -318,12 +318,14 @@ def useFieldSleepingBag()
     pbFadeOutIn {
       if $game_weather
         mapId = $game_map.map_id
-        $game_weather.update_weather
+        echoln $game_weather.current_weather[mapId]
         if $game_weather.current_weather[mapId]
+          echoln "spawning...."
           $game_weather.try_spawn_new_weather(mapId,
                                               $game_weather.current_weather[mapId][0],
-                                              20)
+                                              40)
         end
+        $game_weather.update_weather
       end
       Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
       $scene.reset_map(false)
