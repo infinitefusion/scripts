@@ -328,18 +328,18 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbGetBasicMapNameFromId(id)
-  begin
-    map = pbLoadMapInfos
-    return "" if !map
-    return map[id].name
-  rescue
-    return ""
-  end
-end
+# def pbGetBasicMapNameFromId(id)
+#   begin
+#     map = pbLoadMapInfos
+#     return "" if !map
+#     return map[id].name
+#   rescue
+#     return ""
+#   end
+# end
 
 def pbGetMapNameFromId(id)
-  map = pbGetBasicMapNameFromId(id)
+  map = pbGetMessage(MessageTypes::MapNames, id)
   map.gsub!(/\\PN/, $Trainer.name) if $Trainer
   return map
 end
