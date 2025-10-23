@@ -11,7 +11,6 @@
 # A special type of event that is a Pokemon visible in the overworld. It flees if the player gets too close.
 # Can either spawn naturally or be static
 
-OVERWORLD_POKEMON_COMMENT_TRIGGER = "OverworldPokemon"
 
 def should_spawn_overworld_pokemon?
   return false unless can_spawn_overworld_pokemon?
@@ -82,31 +81,36 @@ end
 
 # shortcut for calling from events
 # wild_pokemon: [species, level]
-def spawn_pokemon(wild_pokemon, max_quantity = 1)
-  spawn_random_overworld_pokemon_group(wild_pokemon, 10, max_quantity)
+def spawn_ow_pokemon(species, level, max_quantity = 1, radius=10, coordinates=nil)
+  wild_pokemon = [species, level]
+  spawn_random_overworld_pokemon_group(wild_pokemon,radius,max_quantity,coordinates)
 end
 
-def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4)
-  return unless $PokemonEncounters && $PokemonGlobal
-  if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
-    terrain = :Water
-    position = find_random_surfable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
-  elsif $PokemonEncounters.has_cave_encounters?
-    terrain = :Cave
-    position = find_random_walkable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
-  elsif $PokemonEncounters.has_land_encounters?
-    position, terrain = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
-  end
-  encounter_type = getTimeBasedEncounter(terrain)
 
-  return unless encounter_type && position
+def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4, position=nil, terrain=nil)
+  return unless $PokemonEncounters && $PokemonGlobal
+
+
+  unless wild_pokemon && position
+    if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
+      terrain = :Water
+      position = find_random_surfable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
+    elsif $PokemonEncounters.has_cave_encounters?
+      terrain = :Cave
+      position = find_random_walkable_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
+    elsif $PokemonEncounters.has_land_encounters?
+      position, terrain = find_random_tall_grass_coordinates_near_player(radius, radius, 3, max_nb_tries = 10)
+    end
+    encounter_type = getTimeBasedEncounter(terrain)
+    return unless encounter_type && position
+    wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
+  end
 
   $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
   if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
     despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0], terrain)
   end
 
-  wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
   return unless wild_pokemon
   species = wild_pokemon[0]
   number_to_spawn = get_overworld_pokemon_group_size(species, max_group_size)

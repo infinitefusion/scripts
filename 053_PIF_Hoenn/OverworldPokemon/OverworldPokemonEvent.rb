@@ -125,7 +125,7 @@ class OverworldPokemonEvent < Game_Event
   def flee(behavior)
     playCry(@species)
     pbSEPlay(SE_FLEE)
-    set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
+    set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed], false)
     @through = true
     @detection_radius = 10
     force_move_route(@move_route)
@@ -321,7 +321,8 @@ class OverworldPokemonEvent < Game_Event
 
   def set_sprite_to_current_state
     case @current_state
-    when :NOTICED_PLAYER
+    when :NOTICED_PLAYER, :FLEEING
+      echoln @noticed_sprite
       set_sprite(@noticed_sprite) if @noticed_sprite
     when :ROAMING
       set_sprite(@roaming_sprite) if @roaming_sprite

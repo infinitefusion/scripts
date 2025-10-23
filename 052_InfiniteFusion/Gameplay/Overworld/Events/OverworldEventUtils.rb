@@ -234,3 +234,24 @@ def getOffBoat
   $PokemonTemp.prevent_ow_battles=false
   $PokemonGlobal.boat=false
 end
+
+def check_beach_seashell
+  pbMessage("\PN flipped the seashell over...")
+  pearl_chance = 2
+  pokemon_chance = 15
+  roll = rand(1..100)
+  if roll <= pearl_chance
+    pbReceiveItem(:PEARL)
+  elsif roll <= pearl_chance + pokemon_chance
+    possible_pokemon = [:KRABBY] #if added to the game, also dwebble, binacle?
+    event = $game_map.events[@event_id]
+    # Spawn Pokémon
+    level = rand(8..16)
+    pbWait(4)
+    playAnimation(Settings::EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y)
+    spawn_random_overworld_pokemon_group([possible_pokemon.sample, level], 1, 3, [event.x, event.y], :Cave)
+  else
+    # Nothing
+    pbMessage(_INTL("...There's nothing there."))
+  end
+end

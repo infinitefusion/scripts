@@ -40,7 +40,6 @@ class SecretBaseImporter
         trainer_data: import_trainer_from_json(trainer_data),
         base_message: base_data[:base_message],
       )
-      echoln base.layout
       visitor_bases << base
       #base.dump_info
       rescue Exception => e
@@ -64,11 +63,9 @@ class SecretBaseImporter
       direction = item_data[:direction]
       item_instance = SecretBaseItemInstance.new(id,position,direction)
 
-      echoln item_instance.direction
       items << item_instance
     end
 
-    echoln items
     layout.items = items
     return layout
   end
