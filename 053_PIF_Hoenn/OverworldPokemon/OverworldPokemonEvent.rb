@@ -322,7 +322,6 @@ class OverworldPokemonEvent < Game_Event
   def set_sprite_to_current_state
     case @current_state
     when :NOTICED_PLAYER, :FLEEING
-      echoln @noticed_sprite
       set_sprite(@noticed_sprite) if @noticed_sprite
     when :ROAMING
       set_sprite(@roaming_sprite) if @roaming_sprite

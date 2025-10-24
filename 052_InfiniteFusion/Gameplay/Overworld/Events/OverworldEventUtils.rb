@@ -255,3 +255,59 @@ def check_beach_seashell
     pbMessage(_INTL("...There's nothing there."))
   end
 end
+
+def clefairy_minigame(length=4)
+  possible_elements = ["Left!"," Up!","Right!","Down!"]
+  pbMessage("Listen up and remember this!")
+  sequence = []
+  message = ""
+  (0...length).each { |i|
+    element = possible_elements.sample
+    sequence << element
+    message += element
+    message += "\\wt[20]"
+    message +=" "
+  }
+  message += "\\wtnp[40]"
+  pbWait(8)
+  pbMessage(message)
+  pbMessage("Get ready... Press the buttons!\\wtnp[20]")
+
+  player_input = []
+  loop do
+    if Input.trigger?(Input::LEFT)
+      player_input << possible_elements[0]
+      pbSEPlay("GUI save choice", 80, 100)
+    end
+    if Input.trigger?(Input::UP)
+      player_input << possible_elements[1]
+      pbSEPlay("GUI save choice", 80, 100)
+    end
+    if Input.trigger?(Input::RIGHT)
+      player_input << possible_elements[2]
+      pbSEPlay("GUI save choice", 80, 100)
+    end
+    if Input.trigger?(Input::DOWN)
+      player_input << possible_elements[3]
+      pbSEPlay("GUI save choice", 80, 100)
+    end
+    if Input.trigger?(Input::BACK)
+      pbSEPlay("GUI sel buzzer", 80, 100)
+      return false
+    end
+    Graphics.update
+    Input.update
+    break if player_input.size == sequence.size
+  end
+
+  pbWait(10)
+  if player_input == sequence
+    pbSEPlay("GUI naming confirm", 80, 100)
+    pbMessage("Correct!")
+    return true
+  else
+    pbSEPlay("GUI sel buzzer", 80, 100)
+    pbMessage("Incorrect!")
+    return false
+  end
+end
