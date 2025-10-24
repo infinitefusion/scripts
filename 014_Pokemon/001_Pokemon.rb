@@ -1384,7 +1384,7 @@ class Pokemon
 
   def bst
     bst = 0
-    @baseStats.each_value { |s| bst += s }
+    baseStats.each_value { |s| bst += s }
     return bst
   end
 
