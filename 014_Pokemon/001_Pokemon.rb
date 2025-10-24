@@ -1382,6 +1382,12 @@ class Pokemon
     return ret
   end
 
+  def bst
+    bst = 0
+    @baseStats.each_value { |s| bst += s }
+    return bst
+  end
+
   # Returns this Pokémon's effective IVs, taking into account Hyper Training.
   # Only used for calculating stats.
   # @return [Hash<Integer>] hash containing this Pokémon's effective IVs

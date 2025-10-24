@@ -44,20 +44,24 @@ class Game_Map
   alias ow_game_map_create_new_event create_new_game_event
 
   def create_new_game_event(event)
+    # Only process events that actually belong to this map
+    unless @map.events[event.id] == event
+      return ow_game_map_create_new_event(event)
+    end
+
     if Settings::HOENN && event.name == OVERWORLD_POKEMON_EVENT_NAME
       begin
-        if event.map_id == $game_map.map_id
-          game_event = OverworldPokemonEvent.new(@map_id, event, self)
-          setup_overworld_pokemon_from_comments(game_event)
-          return game_event if game_event
-        end
+        game_event = OverworldPokemonEvent.new(@map_id, event, self)
+        setup_overworld_pokemon_from_comments(game_event)
+        return game_event if game_event
       rescue
         return ow_game_map_create_new_event(event)
       end
     end
-    return ow_game_map_create_new_event(event)
 
+    return ow_game_map_create_new_event(event)
   end
+
 
   def setup_overworld_pokemon_from_comments(event)
     params = extract_parameters_from_comments(event)
