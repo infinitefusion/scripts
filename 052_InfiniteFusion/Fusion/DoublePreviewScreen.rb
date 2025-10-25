@@ -205,7 +205,7 @@ class DoublePreviewScreen
     overlay = BitmapSprite.new(Graphics.width, Graphics.height, viewport).bitmap
 
     pokemon = GameData::Species.get(pokemon_id)
-    typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     type1_number = GameData::Type.get(pokemon.type1).id_number
     type2_number = GameData::Type.get(pokemon.type2).id_number
     type1rect = Rect.new(0, type1_number * 28, 64, 28)

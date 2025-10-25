@@ -444,7 +444,7 @@ def pbDisplayTwoVariableWindow(msgwindow, name1, variable1_id, name2, variable2_
   pointsString1 = $game_variables[variable1_id].to_s
   pointsString2 = $game_variables[variable2_id].to_s
 
-  pointswindow = Window_AdvancedTextPokemon.new(_INTL("{1}:<ar>{2}</ar>\n{3}:<ar>{4}</ar>", name1, pointsString1, name2, pointsString2))
+  pointswindow = Window_AdvancedTextPokemon.new("#{name1}:<ar>#{pointsString1}</ar>\n#{name2}:<ar>#{pointsString2}</ar>")
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text, Graphics.width)
   pointswindow.width = 160 if pointswindow.width <= 160

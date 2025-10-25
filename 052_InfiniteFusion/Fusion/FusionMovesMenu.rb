@@ -36,7 +36,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
 
   def pbStartScene(inloadscreen = false)
     super
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["overlay"].z = 9999
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -88,13 +88,13 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       [_INTL("Category"), 20, 116, 0, label_base_color, label_shadow_color],
 
       [_INTL("Power"), 20, 148, 0, label_base_color, label_shadow_color],
-      [_INTL("{1}", damage), 140, 148, 0, value_base_color, value_shadow_color],
+      ["#{damage}", 140, 148, 0, value_base_color, value_shadow_color],
 
       [_INTL("Accuracy"), 20, 180, 0, label_base_color, label_shadow_color],
-      [_INTL("{1}%", accuracy), 140, 180, 0, value_base_color, value_shadow_color],
+      ["#{accuracy}%", 140, 180, 0, value_base_color, value_shadow_color],
 
       [_INTL("PP"), 20, 212, 0, label_base_color, label_shadow_color], #move.total_pp
-      [_INTL("{1}", pp), 140, 212, 0, value_base_color, value_shadow_color] #move.total_pp
+      ["#{pp}", 140, 212, 0, value_base_color, value_shadow_color] #move.total_pp
 
     ]
     imagepos = []
