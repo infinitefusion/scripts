@@ -114,6 +114,7 @@ class Pokemon
   attr_accessor :size_category #the size attribute for scaling the sprite (used only for gourgeist/pumpkaboo)
 
   attr_accessor :force_disobey
+  attr_accessor :ow_coordinates #used only for ow pokemon encounters, will be nil most of the time
 
   # Max total IVs
   IV_STAT_LIMIT = 31
@@ -1621,6 +1622,7 @@ class Pokemon
         reset_moves if withMoves
       end
     end
+    @ow_coordinates = nil
   end
 
   def totalIv()

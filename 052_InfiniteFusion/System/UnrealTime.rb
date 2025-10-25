@@ -87,7 +87,7 @@ module UnrealTime
 
   # Choose switch number that when true the time won't pass (or -1 to cancel).
   # Only works if TIME_STOPS=true.
-  SWITCH_STOPS = -1
+  SWITCH_STOPS = SWITCH_TIME_PAUSED
 
   # Choose variable(s) number(s) that can hold time passage (or -1 to cancel).
   # Look at description for more details.

@@ -535,6 +535,7 @@ module Settings
 
   QUESTION_MARK_ANIMATION_ID = 4
   ANGRY_ANIMATION_ID = 24
+  FUSE_ANIMATION_ID = 33
 
   # ID of the animation played when a patch of grass rustles due to using the
   # Poké Radar.

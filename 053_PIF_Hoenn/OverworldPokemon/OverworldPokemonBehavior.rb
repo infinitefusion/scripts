@@ -1,3 +1,5 @@
+
+MULTIPLE_WILD_OW_FUSE_CHANCE = 25
 class Game_Event
   def player_near_event?(radius)
     dx = $game_player.x - @x
@@ -12,6 +14,7 @@ class Game_Event
 end
 
 
+
 def trigger_overworld_wild_battle
   return if $PokemonTemp.overworld_wild_battle_triggered
   $PokemonTemp.overworld_wild_battle_triggered = true
@@ -22,13 +25,27 @@ def trigger_overworld_wild_battle
   when 2
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
-    pb1v2WildBattleSpecific(battler1, battler2)
+    should_fuse = rand(100) <= MULTIPLE_WILD_OW_FUSE_CHANCE
+    should_fuse = false if battler1.isFusion? || battler2.isFusion? #&& rand(100) <= MULTIPLE_WILD_OW_FUSE_CHANCE
+    should_fuse = false if battler1.shiny? || battler2.shiny?
+    if should_fuse
+      fusion_species= fusionOf(battler1.species, battler2.species)
+      fusion_level = (battler1.level + battler2.level )/2.ceil
+      if battler1.ow_coordinates && battler2.ow_coordinates
+        playAnimation(Settings::FUSE_ANIMATION_ID, battler1.ow_coordinates[0], battler1.ow_coordinates[1])
+        playAnimation(Settings::FUSE_ANIMATION_ID, battler2.ow_coordinates[0], battler2.ow_coordinates[1])
+        pbWait(16)
+      end
+      pbWildBattleSpecific(Pokemon.new(fusion_species,fusion_level))
+    else
+      pb1v2WildBattleSpecific(battler1, battler2)
+    end
     $PokemonTemp.overworld_wild_battle_participants = []
   when 3
     battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
     battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
     battler3 = $PokemonTemp.overworld_wild_battle_participants[2]
-    pb1v2WildBattleSpecific(battler1, battler2, battler3)
+    pb1v3WildBattleSpecific(battler1, battler2, battler3)
     $PokemonTemp.overworld_wild_battle_participants = []
   else
     battler = $PokemonTemp.overworld_wild_battle_participants[0]

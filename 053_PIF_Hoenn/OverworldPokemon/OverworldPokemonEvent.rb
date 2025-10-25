@@ -1,3 +1,4 @@
+
 class OverworldPokemonEvent < Game_Event
 
   attr_accessor :species
@@ -113,7 +114,7 @@ class OverworldPokemonEvent < Game_Event
     playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     turn_toward_player
     playCry(@species)
-
+    @pokemon.ow_coordinates = [@x, @y]
     $PokemonTemp.overworld_wild_battle_participants = [] if !$PokemonTemp.overworld_wild_battle_participants
     $PokemonTemp.overworld_wild_battle_participants << @pokemon
     pbWait(8)
