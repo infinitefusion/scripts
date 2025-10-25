@@ -113,7 +113,7 @@ end
 
 def isQuestAlreadyAccepted?(id)
   $Trainer.quests ||= []  # Initializes quests as an empty array if nil
-  $Trainer.quests.any? { |quest| quest.id.to_s == id.to_s }
+  return $Trainer.quests.any? { |quest| quest.id.to_s == id.to_s }
 end
 
 

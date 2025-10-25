@@ -370,7 +370,12 @@ def pb1v2WildBattleSpecific(pokemon1, pokemon2,
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
-  setBattleRule("1v2")
+
+  if $PokemonGlobal.partner
+    setBattleRule("double")
+  else
+    setBattleRule("1v2")
+  end
   # Perform the battle
   decision = pbWildBattleCore(pokemon1, pokemon2)
 
@@ -388,7 +393,12 @@ def pb1v3WildBattleSpecific(pokemon1, pokemon2, pokemon3,
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
-  setBattleRule("1v3")
+
+  if $PokemonGlobal.partner
+    setBattleRule("2v3")
+  else
+    setBattleRule("1v3")
+  end
   # Perform the battle
   decision = pbWildBattleCore(pokemon1, pokemon2, pokemon3)
 
@@ -480,7 +490,12 @@ def pb1v2WildBattle(species1, level1, species2, level2,
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
-  setBattleRule("1v2")
+
+  if $PokemonGlobal.partner
+    setBattleRule("double")
+  else
+    setBattleRule("1v2")
+  end
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2)
 
@@ -498,7 +513,12 @@ def pb1v3WildBattle(species1, level1, species2, level2, species3, level3,
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
-  setBattleRule("1v3")
+
+  if $PokemonGlobal.partner
+    setBattleRule("2v3")
+  else
+    setBattleRule("1v3")
+  end
   # Perform the battle
   decision = pbWildBattleCore(species1, level1, species2, level2, species3, level3)
 

@@ -187,6 +187,7 @@ class Sprite_Character
   def removeQuestIcon()
     @questIcon.dispose if @questIcon
     @questIcon = nil
+    @character.show_quest_icon = false
   end
 
 end
