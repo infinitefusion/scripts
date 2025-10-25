@@ -238,7 +238,7 @@ end
 def check_beach_seashell
   pbMessage("\PN flipped the seashell over...")
   pearl_chance = 2
-  pokemon_chance = 15
+  pokemon_chance = 20
   roll = rand(1..100)
   if roll <= pearl_chance
     pbReceiveItem(:PEARL)

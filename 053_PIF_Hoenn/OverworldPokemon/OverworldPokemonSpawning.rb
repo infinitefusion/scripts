@@ -139,6 +139,10 @@ end
 
 def despawn_overworld_pokemon(event_id, terrain)
   event = $game_map.events[event_id]
+  if !event
+    clearOverworldPokemon
+    return
+  end
   if event.pokemon.shiny? # re-add it ad the end of the list instead
     $PokemonTemp.overworld_pokemon_on_map.delete(event.id)
     $PokemonTemp.overworld_pokemon_on_map << event.id
