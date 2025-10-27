@@ -1,5 +1,5 @@
 
-MULTIPLE_WILD_OW_FUSE_CHANCE = 25
+MULTIPLE_WILD_OW_FUSE_CHANCE = 35
 class Game_Event
   def player_near_event?(radius)
     dx = $game_player.x - @x

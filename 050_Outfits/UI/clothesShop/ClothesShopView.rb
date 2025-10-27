@@ -52,6 +52,9 @@ class ClothesShopView < PokemonMart_Scene
 
   def scroll_back_map
     $game_player.center($game_player.x, $game_player.y)
+    Graphics.update
+    Input.update
+    pbRefreshSceneMap
   end
 
   def refreshStock(adapter)

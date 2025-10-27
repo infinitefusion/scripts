@@ -51,10 +51,7 @@ class OverworldPokemonEvent < Game_Event
     @step_anime = @is_flying
     @always_on_top = @is_flying
     if terrain == :Water
-      unless @is_flying
-        self.forced_bush_depth = 20
-        self.calculate_bush_depth
-      end
+      set_swimming
     end
 
     if @pokemon.shiny?
@@ -63,6 +60,14 @@ class OverworldPokemonEvent < Game_Event
     end
     set_roaming_movement
   end
+
+  def set_swimming
+    unless @is_flying
+      self.forced_bush_depth = 20
+      self.calculate_bush_depth
+    end
+  end
+
 
   def getBehaviorSpecies(species_data)
     if isSpeciesFusion(@species)

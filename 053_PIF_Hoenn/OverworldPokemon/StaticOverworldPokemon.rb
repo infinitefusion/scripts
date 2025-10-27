@@ -82,6 +82,7 @@ class Game_Map
 
       always_on_top = event.always_on_top
       event.setup_pokemon(species, level, :Grass, behavior_roaming, behavior_noticed)
+      event.set_swimming if params[:swimming]
       event.always_on_top = always_on_top
     else
       event.erase
@@ -109,6 +110,10 @@ class Game_Map
         result[:behavior_noticed] = $1.to_sym
       elsif line =~ /spawn_chance\s*=\s*(\d+)/
         result[:spawn_chance] = $1.to_i
+      elsif line =~ /swimming/
+        result[:swimming] = true
+      elsif line =~ /flying/
+        result[:flying] = true
       end
     end
     return result
