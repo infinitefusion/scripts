@@ -71,7 +71,7 @@ def postBattleActionsMenu()
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
-
+  return unless trainer
   options = []
   options << rematchCommand
   options << tradeCommand if trainer.friendship_level >= 1
