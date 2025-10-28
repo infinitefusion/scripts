@@ -130,6 +130,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def flee(behavior)
+    return if @pokemon.shiny?
     playCry(@species)
     pbSEPlay(SE_FLEE)
     set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed], false)

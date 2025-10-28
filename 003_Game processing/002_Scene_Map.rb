@@ -94,7 +94,7 @@ class Scene_Map
     $game_temp.player_transferring = false
     pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
     autofade($game_temp.player_new_map_id)
-    pbBridgeOff
+    #pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
     clear_quest_icons()
     if $game_map.map_id != $game_temp.player_new_map_id

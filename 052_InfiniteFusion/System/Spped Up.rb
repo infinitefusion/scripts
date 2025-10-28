@@ -50,6 +50,10 @@ module Graphics
   end
 
   def self.update
+    if $DEBUG && Input.trigger?(Input::AUX2)
+      spawn_random_overworld_pokemon_group
+    end
+
     if $CanToggle && Input.trigger?(Input::AUX1)
       $GameSpeed += 1
       $GameSpeed = 0 if $GameSpeed >= SPEEDUP_STAGES.size
