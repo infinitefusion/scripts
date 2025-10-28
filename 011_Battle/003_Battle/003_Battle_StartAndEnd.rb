@@ -24,7 +24,7 @@ class PokeBattle_Battle
     #       enough to hit each other if there are multiple trainers on each
     #       side.
     if trainerBattle? && (@sideSizes[0]>2 || @sideSizes[1]>2) &&
-       @player.length>1 && @opponent.length>1
+      @player.length>1 && @opponent.length>1
       raise _INTL("Can't have battles larger than 2v2 where both sides have multiple trainers")
     end
     # Find out how many Pokémon each trainer has
@@ -62,9 +62,9 @@ class PokeBattle_Battle
         sideCounts.each_with_index do |_count,i|
           if !requireds[i] || requireds[i]==0
             raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-               i+1,@sideSizes[0],@sideSizes[1]) if side==0
+                        i+1,@sideSizes[0],@sideSizes[1]) if side==0
             raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-               i+1,@sideSizes[0],@sideSizes[1]) if side==1
+                        i+1,@sideSizes[0],@sideSizes[1]) if side==1
           end
           next if requireds[i]<=sideCounts[i]   # Trainer has enough Pokémon to fill their positions
           if requireds[i]==1
@@ -81,11 +81,11 @@ class PokeBattle_Battle
       # Reduce one or both side's sizes by 1 and try again
       if wildBattle?
         PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
-                    "(#{side1counts} player-side teams versus #{side2counts[0]} wild Pokémon)")
+                      "(#{side1counts} player-side teams versus #{side2counts[0]} wild Pokémon)")
         newSize = @sideSizes[0]-1
       else
         PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
-                    "(#{side1counts} player-side teams versus #{side2counts} opposing teams)")
+                      "(#{side1counts} player-side teams versus #{side2counts} opposing teams)")
         newSize = @sideSizes.max-1
       end
       if newSize==0
@@ -167,10 +167,10 @@ class PokeBattle_Battle
         pbDisplayPaused(_INTL("Oh! A wild {1} appeared!",foeParty[0].name))
       when 2
         pbDisplayPaused(_INTL("Oh! A wild {1} and {2} appeared!",foeParty[0].name,
-           foeParty[1].name))
+                              foeParty[1].name))
       when 3
         pbDisplayPaused(_INTL("Oh! A wild {1}, {2} and {3} appeared!",foeParty[0].name,
-           foeParty[1].name,foeParty[2].name))
+                              foeParty[1].name,foeParty[2].name))
       end
     else   # Trainer battle
       case @opponent.length
@@ -178,10 +178,10 @@ class PokeBattle_Battle
         pbDisplayPaused(_INTL("You are challenged by {1}!",@opponent[0].full_name))
       when 2
         pbDisplayPaused(_INTL("You are challenged by {1} and {2}!",@opponent[0].full_name,
-           @opponent[1].full_name))
+                              @opponent[1].full_name))
       when 3
         pbDisplayPaused(_INTL("You are challenged by {1}, {2} and {3}!",
-           @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
+                              @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
       end
     end
     # Send out Pokémon (opposing trainers first)
@@ -200,7 +200,7 @@ class PokeBattle_Battle
           msg += _INTL("{1} sent out {2}!",t.full_name,@battlers[sent[0]].name)
         when 2
           msg += _INTL("{1} sent out {2} and {3}!",t.full_name,
-             @battlers[sent[0]].name,@battlers[sent[1]].name)
+                       @battlers[sent[0]].name,@battlers[sent[1]].name)
         when 3
           if $game_switches[SWITCH_TRIPLE_BOSS_BATTLE]
             if $game_switches[SWITCH_SILVERBOSS_BATTLE]
@@ -227,7 +227,7 @@ class PokeBattle_Battle
           msg += _INTL("Go! {1} and {2}!",@battlers[sent[0]].name,@battlers[sent[1]].name)
         when 3
           msg += _INTL("Go! {1}, {2} and {3}!",@battlers[sent[0]].name,
-             @battlers[sent[1]].name,@battlers[sent[2]].name)
+                       @battlers[sent[1]].name,@battlers[sent[2]].name)
         end
         toSendOut.concat(sent)
       end
@@ -283,8 +283,6 @@ class PokeBattle_Battle
     # Weather announcement
     weather_data = GameData::BattleWeather.try_get(@field.weather)
     echoln "Current weather: #{@field.weather}"
-
-    echoln weather_data.animation
     pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
     when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
@@ -403,7 +401,7 @@ class PokeBattle_Battle
     oldDecision = @decision
     @decision = 4 if @decision==1 && wildBattle? && @caughtPokemon.length>0
     case oldDecision
-    ##### WIN #####
+      ##### WIN #####
     when 1
       PBDebug.log("")
       PBDebug.log("***Player won***")
@@ -414,10 +412,10 @@ class PokeBattle_Battle
           pbDisplayPaused(_INTL("You defeated {1}!",@opponent[0].full_name))
         when 2
           pbDisplayPaused(_INTL("You defeated {1} and {2}!",@opponent[0].full_name,
-             @opponent[1].full_name))
+                                @opponent[1].full_name))
         when 3
           pbDisplayPaused(_INTL("You defeated {1}, {2} and {3}!",@opponent[0].full_name,
-             @opponent[1].full_name,@opponent[2].full_name))
+                                @opponent[1].full_name,@opponent[2].full_name))
         end
         @opponent.each_with_index do |_t,i|
           @scene.pbShowOpponent(i)
@@ -433,7 +431,7 @@ class PokeBattle_Battle
         Kernel.tryAutosave()
       end
 
-    ##### LOSE, DRAW #####
+      ##### LOSE, DRAW #####
     when 2, 5
       PBDebug.log("")
       PBDebug.log("***Player lost***") if @decision==2
@@ -446,10 +444,10 @@ class PokeBattle_Battle
             pbDisplayPaused(_INTL("You lost against {1}!",@opponent[0].full_name))
           when 2
             pbDisplayPaused(_INTL("You lost against {1} and {2}!",
-               @opponent[0].full_name,@opponent[1].full_name))
+                                  @opponent[0].full_name,@opponent[1].full_name))
           when 3
             pbDisplayPaused(_INTL("You lost against {1}, {2} and {3}!",
-               @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
+                                  @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
           end
         end
         # Lose money from losing a battle
@@ -464,7 +462,7 @@ class PokeBattle_Battle
           end
         end
       end
-    ##### CAUGHT WILD POKÉMON #####
+      ##### CAUGHT WILD POKÉMON #####
     when 4
       @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
@@ -473,17 +471,17 @@ class PokeBattle_Battle
 
     isRematch = $game_switches[SWITCH_IS_REMATCH]
     begin
-    if isRematch
-      if @opponent.is_a?(Array)
-        for trainer in @opponent
-          rematchId = getRematchId(trainer.name,trainer.trainer_type)
+      if isRematch
+        if @opponent.is_a?(Array)
+          for trainer in @opponent
+            rematchId = getRematchId(trainer.name,trainer.trainer_type)
+            incrNbRematches(rematchId)
+          end
+        else
+          rematchId = getRematchId(@opponent.name,@opponent.trainer_type)
           incrNbRematches(rematchId)
         end
-      else
-        rematchId = getRematchId(@opponent.name,@opponent.trainer_type)
-        incrNbRematches(rematchId)
       end
-    end
     rescue
       $game_switches[SWITCH_IS_REMATCH]=false
     end

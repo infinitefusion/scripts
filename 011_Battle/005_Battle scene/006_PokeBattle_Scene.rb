@@ -174,7 +174,7 @@ class PokeBattle_Scene
           yielded = true
         end
         if !@battleEnd
-          if i>=MESSAGE_PAUSE_TIME*3   # Autoclose after 3 seconds
+          if i>=MESSAGE_PAUSE_TIME*2   # Autoclose after 3 seconds
             cw.text = ""
             cw.visible = false
             break

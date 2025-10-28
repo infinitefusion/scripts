@@ -123,7 +123,7 @@ class OverworldPokemonEvent < Game_Event
     @pokemon.ow_coordinates = [@x, @y]
     $PokemonTemp.overworld_wild_battle_participants = [] if !$PokemonTemp.overworld_wild_battle_participants
     $PokemonTemp.overworld_wild_battle_participants << @pokemon
-    pbWait(8)
+    pbWait(4)
     trigger_overworld_wild_battle
     despawn
     return
