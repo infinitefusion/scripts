@@ -283,6 +283,10 @@ class PokemonEncounters
     if !enc_type || !GameData::EncounterType.exists?(enc_type)
       raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
+    if map_is_altering_cave?
+      return select_altering_cave_encounter
+    end
+
     enc_list = @encounter_tables[enc_type]
     return nil if !enc_list || enc_list.length == 0
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.

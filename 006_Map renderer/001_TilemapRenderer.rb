@@ -596,10 +596,10 @@ class TilemapRenderer
   def refresh
     @need_refresh = true
   end
-
+  INVISIBLE_WALL_TILE_ID = 384
   def refresh_tile_bitmap(tile, map, tile_id)
     tile.tile_id = tile_id
-    if tile_id < TILES_PER_AUTOTILE
+    if tile_id < TILES_PER_AUTOTILE || ( Settings::HOENN && tile_id == INVISIBLE_WALL_TILE_ID)
       tile.set_bitmap("", tile_id, false, false, 0, nil)
       tile.shows_reflection = false
       tile.bridge = false

@@ -146,3 +146,26 @@ def reposition_market_vendors
   assign_vendors_to_spots(active_vendors)
 end
 
+def map_is_altering_cave?
+  return false unless Settings::HOENN
+  return $game_map.map_id == 70
+end
+
+def select_altering_cave_encounter
+  level_range = 8..16
+  encounter_table =
+    {
+      :MONDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:HOUNDOUR],
+      :TUESDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:SCRAGGY],
+      :WEDNESDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:ZORUA],
+      :THURSDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:WOOBAT],
+      :FRIDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:TEDDIURSA],
+      :SATURDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:TYNAMO],
+      :SUNDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:SMEARGLE],
+    }
+  day_of_week = getDayOfTheWeek
+  species = encounter_table[day_of_week].sample
+  level = rand(level_range)
+  return [species, level]
+end
+
