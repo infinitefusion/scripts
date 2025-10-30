@@ -10,7 +10,7 @@ def find_random_walkable_coordinates_near_player(width,height,variance,max_nb_tr
   current_try = 0
   while !found_available_position
     x, y = getRandomPositionOnPerimeter(width, height, $game_player.x, $game_player.y, variance)
-    found_available_position = true if $game_map.passableStrict?(x, y, $game_player.direction)
+    found_available_position = true if $game_map.playerPassable?(x, y, $game_player.direction)
     current_try += 1
     return nil if current_try > max_nb_tries
   end

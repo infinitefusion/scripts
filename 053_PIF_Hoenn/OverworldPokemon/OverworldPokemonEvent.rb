@@ -15,6 +15,7 @@ class OverworldPokemonEvent < Game_Event
     @level = level
     @behavior_roaming = behavior_roaming if behavior_roaming
     @behavior_noticed = behavior_noticed if behavior_noticed
+    @terrain = terrain
     species_data = GameData::Species.get(@species)
 
     @pokemon = Pokemon.new(species, level)
@@ -45,12 +46,12 @@ class OverworldPokemonEvent < Game_Event
 
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
-    initialize_sprite(terrain, species_data)
+    initialize_sprite(@terrain, species_data)
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
     @always_on_top = @is_flying
-    if terrain == :Water
+    if @terrain == :Water
       set_swimming
     end
 
@@ -66,6 +67,16 @@ class OverworldPokemonEvent < Game_Event
       self.forced_bush_depth = 20
       self.calculate_bush_depth
     end
+  end
+
+  def set_shiny
+    @pokemon.shiny = true
+    @pokemon.natural_shiny = true
+    species_data = GameData::Species.get(@species)
+    initialize_sprite(@terrain,species_data)
+  end
+  def set_switch_a
+    @switch_a = true
   end
 
 
@@ -125,7 +136,12 @@ class OverworldPokemonEvent < Game_Event
     $PokemonTemp.overworld_wild_battle_participants << @pokemon
     pbWait(4)
     trigger_overworld_wild_battle
-    despawn
+    if @switch_a
+      pbSetSelfSwitch(@id,"A",true)
+      echoln "setting switch A"
+    else
+      despawn
+    end
     return
   end
 

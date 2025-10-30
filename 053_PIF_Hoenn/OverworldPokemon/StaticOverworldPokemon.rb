@@ -62,7 +62,6 @@ class Game_Map
     return ow_game_map_create_new_event(event)
   end
 
-
   def setup_overworld_pokemon_from_comments(event)
     params = extract_parameters_from_comments(event)
     unless params && params.is_a?(Hash)
