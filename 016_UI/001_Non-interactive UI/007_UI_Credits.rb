@@ -114,6 +114,7 @@ French translation
 anthonygourmand
 locpic_
 blood.wolf58 (Willi)
+ragzzh
 
 The following free ressources were also used 
 with their respective authors' consent:

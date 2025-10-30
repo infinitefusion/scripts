@@ -33,6 +33,8 @@ def find_random_tall_grass_coordinates_near_player(width,height,variance,max_nb_
   encounter_type = :Land1 if terrain.id == :Grass_alt1
   encounter_type = :Land2 if terrain.id == :Grass_alt2
   encounter_type = :Land3 if terrain.id == :Grass_alt3
+  encounter_type = :LandTallGrass if terrain.id == :TallGrass
+
   return [x,y],encounter_type
 end
 

@@ -290,8 +290,8 @@ def useSleepingBag()
       $game_weather.try_spawn_new_weather(mapId,
                                           $game_weather.current_weather[mapId][0],
                                           40)
+      $game_weather.update_weather
     end
-    $game_weather.update_weather
     Kernel.pbMessage(_INTL("{1} slept for a while...", $Trainer.name))
   }
   time = pbGetTimeNow.strftime("%I:%M %p")
