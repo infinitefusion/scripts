@@ -112,6 +112,8 @@ class Bitmap
 
 
   def hue_changecolors(dex_number, bodyShiny, headShiny, alt = "")
+    
+    return if !bodyShiny && !headShiny
     if isFusion(dex_number)
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number, body_id)

@@ -6,8 +6,8 @@ class AnimatedBitmap
 
   def shiftAllColors(dex_number, bodyShiny, headShiny)
     # pratically the same as hue_changecolors but for the animated bitmap
+    return if !bodyShiny && !headShiny
     if isFusion(dex_number)
-      return if !bodyShiny && !headShiny
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number, body_id)
       shiny_directory = "Graphics/Battlers/Shiny/#{head_id}.#{body_id}"
