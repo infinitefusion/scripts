@@ -1103,6 +1103,28 @@ HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
   next true
 })
 
+HiddenMoveHandlers::CanUseMove.add(:MIST, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+HiddenMoveHandlers::UseMove.add(:MIST, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Fog,4)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:DEFOG, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(nil,1) if $game_screen.weather == :Fog
+  next true
+})
+
 #===============================================================================
 # Teleport
 #===============================================================================

@@ -63,6 +63,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_swimming
+    return if @species == :SURSKIT
     unless @is_flying
       self.forced_bush_depth = 20
       self.calculate_bush_depth

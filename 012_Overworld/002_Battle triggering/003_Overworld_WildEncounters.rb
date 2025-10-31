@@ -265,7 +265,7 @@ class PokemonEncounters
         baseType = :Land1 if terrain_tag == :Grass_alt1
         baseType = :Land2 if terrain_tag == :Grass_alt2
         baseType = :Land3 if terrain_tag == :Grass_alt3
-        baseType = :LandTallGrass if terrain_tag == :TallGrass
+        baseType = :TallGrass if terrain_tag == :TallGrass
         ret = find_valid_encounter_type_for_time(baseType, time) if !ret
       end
       if !ret && has_cave_encounters?
