@@ -784,7 +784,7 @@ PokemonDebugMenuCommands.register("setnature", {
     ids = []
     GameData::Nature.each do |nature|
       if nature.stat_changes.length == 0
-        commands.push(_INTL("{1} (---)", nature.real_name))
+        commands.push("#{nature.real_name} (---)")
       else
         plus_text = ""
         minus_text = ""
@@ -797,7 +797,7 @@ PokemonDebugMenuCommands.register("setnature", {
             minus_text += GameData::Stat.get(change[0]).name_brief
           end
         end
-        commands.push(_INTL("{1} (+{2}, -{3})", nature.real_name, plus_text, minus_text))
+        commands.push("#{nature.real_name} (+#{plus_text}, -#{minus_text})")
       end
       ids.push(nature.id)
     end
@@ -895,9 +895,9 @@ PokemonDebugMenuCommands.register("speciesform", {
       when 1   # Set form
         old_head_dex = get_head_number_from_symbol(pkmn.species)
         old_body_dex = get_body_number_from_symbol(pkmn.species)
-        pbMessage('Head species?')
+        pbMessage(_INTL("Head species?"))
         head_species = pbChooseSpeciesList(old_head_dex,NB_POKEMON)
-        pbMessage('Body species?')
+        pbMessage(_INTL("Body species?"))
         body_species = pbChooseSpeciesList(old_body_dex,NB_POKEMON)
 
         fused_species_dex = getFusionSpecies(body_species.species, head_species.species)

@@ -2,11 +2,11 @@ class HairstyleSelectionMenuPresenter
   attr_accessor :options
   attr_reader :current_index
 
-  OPTION_STYLE = 'Hairstyle'
-  OPTION_BASE_COLOR = "Base color"
-  OPTION_DYE = "Dye"
+  OPTION_STYLE = _INTL("Hairstyle")
+  OPTION_BASE_COLOR = _INTL("Base color")
+  OPTION_DYE = _INTL("Dye")
 
-  HAIR_COLOR_NAMES = ["Blonde", "Light Brown", "Dark Brown", "Black"]
+  HAIR_COLOR_NAMES = [_INTL("Blonde"), _INTL("Light Brown"), _INTL("Dark Brown"), _INTL("Black")]
   HAIR_COLOR_IDS = [1, 2, 3, 4]
 
   #ids for displayed text sprites

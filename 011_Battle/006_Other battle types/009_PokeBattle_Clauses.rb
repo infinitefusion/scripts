@@ -193,7 +193,7 @@ class PokeBattle_Move_0E0   # Self-Destruct
       count  = @battle.pbAbleNonActiveCount(user.idxOwnSide)
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
       if count==0
-        @battle.pbDisplay("But it failed!")
+        @battle.pbDisplay(_INTL("But it failed!"))
         return false
       end
     end

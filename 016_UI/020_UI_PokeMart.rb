@@ -248,7 +248,7 @@ end
 #
 #===============================================================================
 class PokemonMart_Scene
-  def initialize(currency_name = "Money")
+  def initialize(currency_name = _INTL("Money"))
     @currency_name = currency_name
   end
 

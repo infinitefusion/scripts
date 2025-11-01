@@ -1,23 +1,23 @@
 class CharacterSelectMenuPresenter
   attr_accessor :options
   attr_reader :current_index
-  OPTION_NAME = 'Name'
-  OPTION_AGE = "Age"
-  OPTION_GENDER = "Gender"
-  OPTION_HAIR = "Hair"
-  OPTION_SKIN = "Skin"
-  OPTION_CONFIRM = "Confirm"
+  OPTION_NAME = _INTL("Name")
+  OPTION_AGE = _INTL("Age")
+  OPTION_GENDER = _INTL("Gender")
+  OPTION_HAIR = _INTL("Hair")
+  OPTION_SKIN = _INTL("Skin")
+  OPTION_CONFIRM = _INTL("Confirm")
 
   MIN_AGE = 10
   MAX_AGE = 17
 
   MIN_SKIN_COLOR = 1
   MAX_SKIN_COLOR = 6
-  SKIN_COLOR_IDS = ["Type A", "Type B", "Type C", "Type D", "Type E", "Type F"]
-  GENDERS_IDS = ["Female", "Male"]
+  SKIN_COLOR_IDS = [_INTL("Type A"), _INTL("Type B"), _INTL("Type C"), _INTL("Type D"), _INTL("Type E"), _INTL("Type F")]
+  GENDERS_IDS = [_INTL("Female"), _INTL("Male")]
 
   HAIR_COLOR_IDS = [1, 2, 3, 4]
-  HAIR_COLOR_NAMES = ["Blonde", "Light Brown", "Dark Brown", "Black"]
+  HAIR_COLOR_NAMES = [_INTL("Blonde"), _INTL("Light Brown"), _INTL("Dark Brown"), _INTL("Black")]
 
   #ids for displayed text sprites
   NAME_TEXT_ID = "name"

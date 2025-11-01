@@ -116,7 +116,7 @@ def select_league_tier
   available_tiers.reverse!
   commands = []
   available_tiers.each do |tier_nb|
-    commands << _INTL("Rank #{tier_nb}")
+    commands << _INTL("Rank {1}",tier_nb)
   end
   cmd_cancel = _INTL("Cancel")
   commands << cmd_cancel
