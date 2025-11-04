@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #Levels relative to 50 (actual level is adjusted dynamically depending on the type of rematch)
 
 

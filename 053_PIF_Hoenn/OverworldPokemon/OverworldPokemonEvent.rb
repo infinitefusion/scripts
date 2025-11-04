@@ -1,4 +1,3 @@
-
 class OverworldPokemonEvent < Game_Event
 
   attr_accessor :species
@@ -50,7 +49,7 @@ class OverworldPokemonEvent < Game_Event
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
-    @always_on_top = @is_flying
+    #@always_on_top = @is_flying
     if @terrain == :Water
       set_swimming
     end
@@ -74,12 +73,12 @@ class OverworldPokemonEvent < Game_Event
     @pokemon.shiny = true
     @pokemon.natural_shiny = true
     species_data = GameData::Species.get(@species)
-    initialize_sprite(@terrain,species_data)
+    initialize_sprite(@terrain, species_data)
   end
+
   def set_switch_a
     @switch_a = true
   end
-
 
   def getBehaviorSpecies(species_data)
     if isSpeciesFusion(@species)
@@ -138,7 +137,7 @@ class OverworldPokemonEvent < Game_Event
     pbWait(4)
     trigger_overworld_wild_battle
     if @switch_a
-      pbSetSelfSwitch(@id,"A",true)
+      pbSetSelfSwitch(@id, "A", true)
       echoln "setting switch A"
     else
       despawn
@@ -175,6 +174,8 @@ class OverworldPokemonEvent < Game_Event
       playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
     elsif @behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
+    elsif @behavior_noticed == :semi_aggressive
+      playAnimation(Settings::ANGRY_SHORT_ANIMATION_ID, @x, @y)
     else
       playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     end
@@ -200,6 +201,7 @@ class OverworldPokemonEvent < Game_Event
     else
       if @current_state != :ROAMING
         update_state(:ROAMING)
+        back_to_roaming_action
       end
     end
   end
@@ -235,6 +237,14 @@ class OverworldPokemonEvent < Game_Event
   def turn_generic(*args)
     super(*args)
 
+  end
+
+  # called when a pokemon that has noticed the player goes back to roaming
+  def back_to_roaming_action
+    case @behavior_noticed
+    when :skittish, :shy
+      turn_toward_player
+    end
   end
 
   def update_state(new_state)
@@ -296,16 +306,25 @@ class OverworldPokemonEvent < Game_Event
   # Noticing player
   # ###
 
-  def getOverworldLandPath(species_data)
+  def get_base_sprite_path(is_fusion, species_name)
     base_path = "Followers/"
-    is_fusion = isSpeciesFusion(@species)
-    species_name = @species.to_s
-    if @pokemon.shiny?
-      base_path += "Shiny/"
-    elsif is_fusion
-      species_name = species_data.get_body_species_symbol.to_s
+    if is_fusion
       base_path += "Fusions/"
     end
+    if @pokemon.shiny?
+      base_path += "Shiny/"
+    end
+    return base_path
+  end
+
+  def getOverworldLandPath(species_data)
+    is_fusion = isSpeciesFusion(@species)
+    if is_fusion
+      species_name = species_data.get_body_species_symbol.to_s
+    else
+      species_name = @species.to_s
+    end
+    base_path = get_base_sprite_path(is_fusion, species_name)
     path = "#{base_path}#{species_name}"
     if pbResolveBitmap("Graphics/Characters/#{path}")
       return path
@@ -313,15 +332,13 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def getOverworldFlyingPath(species_data)
-    base_path = "Followers/"
     is_fusion = isSpeciesFusion(@species)
-    species_name = @species.to_s
-    if @pokemon.shiny?
-      base_path += "Shiny/"
-    elsif is_fusion
+    if is_fusion
       species_name = species_data.get_body_species_symbol.to_s
-      base_path += "Fusions/"
+    else
+      species_name = @species.to_s
     end
+    base_path = get_base_sprite_path(is_fusion, species_name)
     path = "#{base_path}#{species_name}_fly"
     if pbResolveBitmap("Graphics/Characters/#{path}")
       return path
@@ -329,15 +346,13 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def getOverworldNoticedPath(species_data)
-    base_path = "Followers/"
     is_fusion = isSpeciesFusion(@species)
-    species_name = @species.to_s
-    if @pokemon.shiny?
-      base_path += "Shiny/"
-    elsif is_fusion
+    if is_fusion
       species_name = species_data.get_body_species_symbol.to_s
-      base_path += "Fusions/"
+    else
+      species_name = @species.to_s
     end
+    base_path = get_base_sprite_path(is_fusion, species_name)
     path = "#{base_path}#{species_name}_notice"
     if pbResolveBitmap("Graphics/Characters/#{path}")
       return path
@@ -371,7 +386,9 @@ class OverworldPokemonEvent < Game_Event
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
-    when :curious
+    when :curious # slowly walk towards player until close, then look at them
+      @move_type = MOVE_TYPE_CURIOUS
+    when :semi_aggressive # slowly walks towards player until battle
       @move_type = MOVE_TYPE_TOWARDS_PLAYER
     when :aggressive
       @move_type = MOVE_TYPE_TOWARDS_PLAYER
@@ -386,7 +403,6 @@ class OverworldPokemonEvent < Game_Event
     end
     @move_speed = @noticed_move_speed
   end
-
 
   def set_roaming_movement
     if isRepelActive
@@ -418,6 +434,16 @@ class OverworldPokemonEvent < Game_Event
   def despawn
     $PokemonTemp.overworld_pokemon_on_map.delete(@id)
     erase
+  end
+
+  # Additional move types for OW pokemon
+  def update_command_new
+    super
+    ready_for_next_movement = @stop_count >= self.move_frequency_real
+    case @move_type
+    when MOVE_TYPE_CURIOUS
+      move_type_curious(ready_for_next_movement)
+    end
   end
 end
 

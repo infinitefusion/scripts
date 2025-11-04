@@ -119,13 +119,20 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     offset_y = rand(-2..2)
     new_position = [position[0] + offset_x, position[1] + offset_y]
     begin
-      if $game_map.playerPassable?(new_position[0], new_position[1], DIRECTION_ALL)
+      if can_spawn_pokemon_there(new_position[0], new_position[1], terrain)
         spawn_overworld_pokemon(wild_pokemon, new_position, terrain)
       end
     rescue
       next
     end
   end
+end
+
+def can_spawn_pokemon_there(x,y,terrain)
+  if terrain == :Water
+    return $game_map.playerPassable?(x, y, DIRECTION_ALL) && $game_map.terrain_tag(x,y).can_surf
+  end
+  return $game_map.playerPassable?(x, y, DIRECTION_ALL)
 end
 
 def spawn_overworld_pokemon(wild_pokemon, position, terrain, behavior_roaming = nil, behavior_noticed = nil)

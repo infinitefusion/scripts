@@ -1,3 +1,8 @@
+#todo:
+# - Jumping (Spoink)
+# - Dancing (turns around in a circle) - Oricorio, Spinda
+# Curious walks up to the trainer and then look at them at a distance of 1 tile instead of running into them
+
 OW_BEHAVIOR_MOVE_ROUTES = {
   :roaming => {
     :look_around => [
@@ -57,15 +62,32 @@ OW_BEHAVIOR_MOVE_ROUTES = {
       RPG::MoveCommand.new(PBMoveRoute::Random),
       RPG::MoveCommand.new(PBMoveRoute::Opacity, [100]),
       RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
-      RPG::MoveCommand.new(PBMoveRoute::Opacity, [0]),
+      RPG::MoveCommand.new(PBMoveRoute::Opacity, [50]),
       RPG::MoveCommand.new(PBMoveRoute::Random),
       RPG::MoveCommand.new(PBMoveRoute::Opacity, [100]),
       RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
       RPG::MoveCommand.new(PBMoveRoute::Opacity, [255]),
       RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
       RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
+
+    :random_spin => [
+      RPG::MoveCommand.new(PBMoveRoute::Random),
+      RPG::MoveCommand.new(PBMoveRoute::Random),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRight90),
+      RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRight90),
+      RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRight90),
+      RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRight90),
+      RPG::MoveCommand.new(PBMoveRoute::Wait, [2]),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [3]),
+      RPG::MoveCommand.new(PBMoveRoute::End)
 
     ],
+
 
   },
 
@@ -79,6 +101,7 @@ OW_BEHAVIOR_MOVE_ROUTES = {
     ],
     :teleport_away => [
       RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
+      RPG::MoveCommand.new(PBMoveRoute::PlaySE, RPG::AudioFile.new("SE_Zoom5")),
       RPG::MoveCommand.new(PBMoveRoute::PlayAnimation, [TELEPORT_ANIMATION_ID]),
       RPG::MoveCommand.new(PBMoveRoute::TurnTowardPlayer),
       RPG::MoveCommand.new(PBMoveRoute::Script, ["self.despawn"]),
