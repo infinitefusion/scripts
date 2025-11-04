@@ -6,8 +6,8 @@ class AnimatedBitmap
 
   def shiftAllColors(dex_number, bodyShiny, headShiny)
     # pratically the same as hue_changecolors but for the animated bitmap
+    return if !bodyShiny && !headShiny
     if isFusion(dex_number)
-      return if !bodyShiny && !headShiny
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number, body_id)
       shiny_directory = "Graphics/Battlers/Shiny/#{head_id}.#{body_id}"
@@ -28,7 +28,10 @@ class AnimatedBitmap
       return
     end
     offset = offsets.compact.max_by { |o| o.keys.count }
-    return unless offset
+    if !offset
+      shiftColors(GameData::Species.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
+      return
+    end
     onetime = true
     offset.keys.each do |version|
       value = offset&.dig(version)
