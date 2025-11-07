@@ -14,7 +14,7 @@
 
 def should_spawn_overworld_pokemon?
   return false unless can_spawn_overworld_pokemon?
-  return false unless $PokemonGlobal.stepcount % 10 == 0
+  return false unless $PokemonGlobal.stepcount % 15 == 0
   return rand(100) > 25 # true
 end
 
