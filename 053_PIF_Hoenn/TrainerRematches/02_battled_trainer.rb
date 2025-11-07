@@ -63,6 +63,10 @@ class BattledTrainer
     @friendship_level = 0
   end
 
+  #For double trainer classes like twins, etc. Adds an additional double rematch option.
+  def setLinkedTrainer(linked_trainer_event)
+    @linked_event = linked_trainer_event
+  end
   def friendship_level
     @friendship_level =0 if !@friendship_level
     return @friendship_level

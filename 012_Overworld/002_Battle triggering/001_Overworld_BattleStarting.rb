@@ -662,20 +662,6 @@ end
 # [[:SPECIES,level], ... ]
 #
 def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil, items = [],canLose=false)
-
-
-  # trainerID= "customTrainer"
-  #
-  # trainer_info_hash = {}
-  # trainer_info_hash[:id] = trainerID
-  # trainer_info_hash[:id_number] = 0
-  # trainer_info_hash[:name] = trainerName
-  # trainer_info_hash[:version] = 0
-  # trainer_info_hash[:items] = []
-  # trainer_info_hash[:lose_text] = endSpeech
-  # trainer_info_hash[:pokemon] = party
-
-  #trainer = GameData::Trainer.new(trainer_info_hash)
   trainer = NPCTrainer.new(trainerName,trainerType,sprite_override,custom_appearance)
   trainer.lose_text=endSpeech
   trainer.items = items
@@ -696,6 +682,7 @@ def customTrainerBattle(trainerName, trainerType, party_array, default_level=50,
   # Return true if the player won the battle, and false if any other result
   return (decision==1)
 end
+
 
 #===============================================================================
 # Standard methods that start a trainer battle of various sizes

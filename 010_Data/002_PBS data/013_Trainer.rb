@@ -11,6 +11,8 @@ module GameData
 
 
     attr_accessor :loseText_rematch
+    attr_accessor :loseText_rematch_double
+
     attr_accessor :preRematchText
     attr_accessor :preRematchText_caught
     attr_accessor :preRematchText_evolved
@@ -42,6 +44,7 @@ module GameData
       "Ball" => [:poke_ball, "s"],
 
       "LoseTextRematch" => [:loseText_rematch, "s"],
+      "LoseTextRematchDouble" => [:loseText_rematch_double, "s"],
       "PreRematchText" => [:preRematchText, "s"],
       "PreRematchText_caught" => [:preRematchText_caught, "s"],
       "PreRematchText_evolved" => [:preRematchText_evolved, "s"],
