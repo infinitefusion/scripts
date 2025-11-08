@@ -57,7 +57,17 @@ def loadDateSpecificChanges()
   end
 end
 
-def onStartingNewGame() end
+def onStartingNewGame()
+  set_starting_options
+end
+
+def set_starting_options
+  if Settings::HOENN
+    $PokemonSystem.overworld_encounters= true
+    $PokemonSystem.use_generated_dex_entries=true
+    $PokemonGlobal.runningShoes=true
+  end
+end
 
 def migrateOldSavesToCharacterCustomization()
   if !$Trainer.unlocked_clothes
