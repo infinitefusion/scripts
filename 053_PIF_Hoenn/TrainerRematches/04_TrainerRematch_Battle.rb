@@ -73,6 +73,11 @@ def generateTrainerRematch(trainer)
   return updated_trainer, player_won
 end
 
+def generateTrainerRematchDouble(trainer1,trainer2)
+  #TODO
+end
+
+
 def showPrerematchDialog()
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?

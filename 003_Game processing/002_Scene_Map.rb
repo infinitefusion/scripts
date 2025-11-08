@@ -94,7 +94,7 @@ class Scene_Map
     $game_temp.player_transferring = false
     pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
     autofade($game_temp.player_new_map_id)
-    pbBridgeOff
+    #pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
     clear_quest_icons()
     if $game_map.map_id != $game_temp.player_new_map_id
@@ -218,6 +218,12 @@ class Scene_Map
     end
     return if $game_temp.message_window_showing
     if !pbMapInterpreterRunning?
+      if $game_temp.moving_furniture
+        placeFurnitureMenu() if Input.trigger?(Input::USE)
+        rotate__held_furniture_left if Input.trigger?(Input::JUMPDOWN)
+        rotate_held_furniture_right if Input.trigger?(Input::JUMPUP)
+      end
+
       if Input.trigger?(Input::USE)
         $PokemonTemp.hiddenMoveEventCalling = true
       elsif Input.trigger?(Input::BACK)
@@ -225,7 +231,10 @@ class Scene_Map
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
           dayOfWeek = getDayOfTheWeek().to_s
-          $scene.spriteset.addUserSprite(LocationWindow.new($game_map.name+ "\n"+ pbGetTimeNow.strftime("%I:%M %p") + "\n" + dayOfWeek))
+          location_window_text = $game_map.name
+          location_window_text += "\n"+ pbGetTimeNow.strftime(_INTL("%I:%M %p"))# unless $game_switches[SWITCH_TIME_PAUSED]
+          location_window_text += "\n"+ dayOfWeek
+          $scene.spriteset.addUserSprite(LocationWindow.new(location_window_text))
         end
       elsif Input.trigger?(Input::SPECIAL)
         unless $game_system.menu_disabled || $game_player.moving?
@@ -254,6 +263,8 @@ class Scene_Map
 
   def reset_player_sprite
     @spritesetGlobal.playersprite.updateBitmap
+    updateSpritesets
+    refreshPlayerOutfit
   end
 
   def reset_map(fadeout = false,reset_music=true)
@@ -269,6 +280,7 @@ class Scene_Map
       Graphics.transition(20)
     end
     $game_map.autoplay if reset_music
+    clearOverworldPokemon
     Graphics.frame_reset
     Input.update
   end

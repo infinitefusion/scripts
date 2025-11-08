@@ -1,7 +1,6 @@
 class CharacterSelectMenuPresenter
   attr_accessor :options
   attr_reader :current_index
-
   OPTION_NAME = 'Name'
   OPTION_AGE = "Age"
   OPTION_GENDER = "Gender"
@@ -35,6 +34,7 @@ class CharacterSelectMenuPresenter
     @hairstyle = "red"
     @hairColor = 2
 
+    @is_player= true
     @options = [OPTION_NAME, OPTION_GENDER, OPTION_AGE, OPTION_SKIN, OPTION_HAIR, OPTION_CONFIRM]
 
     @trainerPreview = TrainerClothesPreview.new(300, 80, false, "POKEBALL")
@@ -42,6 +42,41 @@ class CharacterSelectMenuPresenter
     @closed = false
     @current_index = 0
     @view.setMaxIndex(@options.length - 1)
+    @rival = false
+  end
+
+  #For selecting the rival in Hoenn
+  def main_rival()
+    trainer_hair = $Trainer.hair
+    trainer_hat = $Trainer.hat
+    trainer_clothes = $Trainer.clothes
+    trainer_skinTone = $Trainer.skin_tone
+    trainer_name = $Trainer.name
+
+
+    $Trainer.hat = nil
+    @options = [OPTION_NAME, OPTION_SKIN, OPTION_HAIR, OPTION_CONFIRM]
+    @view.setMaxIndex(@options.length - 1)
+    if isPlayerMale
+      @hairstyle = getDefaultHair(GENDER_FEMALE)
+      $Trainer.clothes = getDefaultClothes(GENDER_FEMALE)
+      $Trainer.hair = getDefaultHair(GENDER_FEMALE)
+    else
+      @hairstyle = getDefaultHair(GENDER_MALE)
+      $Trainer.clothes = getDefaultClothes(GENDER_MALE)
+      $Trainer.hair = getDefaultHair(GENDER_MALE)
+    end
+    @rival = true
+    setInitialValuesRival()
+    main()
+    $Trainer.init_rival_appearance($Trainer.skin_tone, $Trainer.hair)
+    pbSet(VAR_RIVAL_NAME, @name)
+    $Trainer.hair = trainer_hair
+    $Trainer.hat = trainer_hat
+    $Trainer.clothes = trainer_clothes
+    $Trainer.skin_tone = trainer_skinTone
+    $Trainer.name = trainer_name
+    $scene.reset_player_sprite
   end
 
   def main()
@@ -74,7 +109,7 @@ class CharacterSelectMenuPresenter
     case selected_option
     when OPTION_NAME
       pbSEPlay("GUI summary change page", 80, 100)
-      @name = pbEnterPlayerName(_INTL("Enter your name"), 0, Settings::MAX_PLAYER_NAME_SIZE)
+      @name = pbEnterPlayerName(_INTL("Name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
       @name = getDefaultName() if @name == ''
       pbSEPlay("GUI trainer card open", 80, 100)
       updateDisplayedName(current_index)
@@ -85,7 +120,7 @@ class CharacterSelectMenuPresenter
       update_cursor(@current_index)
       @name = getDefaultName if @name == ""
       updateDisplayedName(getOptionIndex(OPTION_NAME))
-      cmd = pbMessage("Is this information correct?", [_INTL("Yes"), _INTL("No")])
+      cmd = pbMessage(_INTL("Is this information correct?"), [_INTL("Yes"), _INTL("No")])
       if cmd == 0
         pbSEPlay("GUI naming confirm", 80, 100)
         #pbMessage("You will be able to customize your appearance further while playing")
@@ -111,7 +146,6 @@ class CharacterSelectMenuPresenter
 
   def applyAllSelectedValues
     applyGender(@gender)
-    echoln @age
     pbSet(VAR_TRAINER_AGE, @age)
     $Trainer.skin_tone = @skinTone
     $Trainer.name = @name
@@ -135,7 +169,19 @@ class CharacterSelectMenuPresenter
     @current_index = @options.length - 1 if @current_index <= -1
 
     update_cursor(@current_index)
+    setHatVisibility(@current_index)
     return @current_index
+  end
+
+  def setHatVisibility(index)
+    return if @rival
+    case @options[index]
+    when OPTION_HAIR
+      $Trainer.hat=nil
+    else
+      $Trainer.hat = getDefaultHat(@gender)
+    end
+    updateTrainerPreview
   end
 
   def update_cursor(index)
@@ -229,6 +275,7 @@ class CharacterSelectMenuPresenter
   end
 
   def applyGender(gender_index)
+    return if @rival
     # outfitId = gender + 1
     pbSet(VAR_TRAINER_GENDER, gender_index)
 
@@ -268,6 +315,18 @@ class CharacterSelectMenuPresenter
 
     setGender(genderIndex, 0)
     setAge(ageIndex, 0)
+    setHairColor(hairIndex, 0)
+    setSkinColor(skinIndex, 0)
+    updateTrainerPreview()
+  end
+
+  def setInitialValuesRival()
+    hairIndex = getOptionIndex(OPTION_HAIR)
+    skinIndex = getOptionIndex(OPTION_SKIN)
+
+    @name = init_rival_name
+    updateDisplayedName(getOptionIndex(OPTION_NAME))
+
     setHairColor(hairIndex, 0)
     setSkinColor(skinIndex, 0)
     updateTrainerPreview()

@@ -58,6 +58,7 @@ class PokemonGlobalMetadata
   #Trainers rematch
   attr_accessor :rematchedTrainers
   attr_accessor :questRewardsObtained
+  attr_accessor :boat
 
   def initialize
     # Movement

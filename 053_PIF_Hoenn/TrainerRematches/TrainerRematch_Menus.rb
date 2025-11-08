@@ -46,7 +46,7 @@ def setTrainerFriendship(trainer)
   params = ChooseNumberParams.new
   params.setRange(0,100)
   params.setDefaultValue($game_map.map_id)
-  number = pbMessageChooseNumber("Frienship (0-100)?",params)
+  number = pbMessageChooseNumber(_INTL("Frienship (0-100)?"),params)
   trainer.friendship = number
   trainer.increase_friendship(0)
   return trainer
@@ -57,21 +57,21 @@ end
 #
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
 def postBattleActionsMenu()
-  rematchCommand = "Rematch"
-  tradeCommand = "Trade Offer"
-  partnerCommand = "Partner up"
-  cancelCommand = "See ya!"
+  rematchCommand = _INTL("Rematch")
+  tradeCommand = _INTL("Trade Offer")
+  partnerCommand = _INTL("Partner up")
+  cancelCommand = _INTL("See ya!")
 
-  updateTeamDebugCommand = "(Debug) Simulate random event"
-  resetTrainerDebugCommand = "(Debug) Reset trainer"
-  setFriendshipDebugCommand = "(Debug) Set Friendship"
-  printTrainerTeamDebugCommand = "(Debug) Print team"
+  updateTeamDebugCommand = _INTL("(Debug) Simulate random event")
+  resetTrainerDebugCommand = _INTL("(Debug) Reset trainer")
+  setFriendshipDebugCommand = _INTL("(Debug) Set Friendship")
+  printTrainerTeamDebugCommand = _INTL("(Debug) Print team")
 
 
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
-
+  return unless trainer
   options = []
   options << rematchCommand
   options << tradeCommand if trainer.friendship_level >= 1

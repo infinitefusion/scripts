@@ -31,7 +31,6 @@ class PokemonEncounters
     if $game_switches && $game_switches[SWITCH_RANDOM_WILD] && $game_switches[SWITCH_RANDOM_WILD_AREA]
       mode= GameData::EncounterRandom
     end
-    echoln mode
     return mode
   end
 
@@ -266,6 +265,7 @@ class PokemonEncounters
         baseType = :Land1 if terrain_tag == :Grass_alt1
         baseType = :Land2 if terrain_tag == :Grass_alt2
         baseType = :Land3 if terrain_tag == :Grass_alt3
+        baseType = :TallGrass if terrain_tag == :TallGrass
         ret = find_valid_encounter_type_for_time(baseType, time) if !ret
       end
       if !ret && has_cave_encounters?
@@ -284,6 +284,10 @@ class PokemonEncounters
     if !enc_type || !GameData::EncounterType.exists?(enc_type)
       raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
+    if map_is_altering_cave?
+      return select_altering_cave_encounter
+    end
+
     enc_list = @encounter_tables[enc_type]
     return nil if !enc_list || enc_list.length == 0
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.

@@ -3,6 +3,7 @@
 class PokemonEncounters
   WEATHER_ENCOUNTER_BASE_CHANCE = 8 #/100 (for weather intensity of 0)
   alias pokemonEssentials_PokemonEncounter_choose_wild_pokemon choose_wild_pokemon
+  ANIMATION_WEATHER_ENCOUNTER = 3
   def choose_wild_pokemon(enc_type, *args)
     return pokemonEssentials_PokemonEncounter_choose_wild_pokemon(enc_type, *args) if !$game_weather
     current_weather_type = $game_weather.get_map_weather_type($game_map.map_id)
@@ -12,7 +13,6 @@ class PokemonEncounters
       if roll_for_weather_encounter(current_weather_intensity)
         weather_encounter_type = get_weather_encounter_type(enc_type,current_weather_type)
         echoln "weather encounter!"
-        echoln weather_encounter_type
         return pokemonEssentials_PokemonEncounter_choose_wild_pokemon(weather_encounter_type) if(weather_encounter_type)
       end
     end
@@ -20,7 +20,7 @@ class PokemonEncounters
   end
 
 
-  SUBSTITUTABLE_ENCOUNTER_TYPES = [:Land, :Land1, :Land2, :Land3, :Water]
+  SUBSTITUTABLE_ENCOUNTER_TYPES = [:LandDay, :LandNight, :LandMorning, :Land, :Land1, :Land2, :Land3, :TallGrass, :Water]
   def can_substitute_for_weather_encounter(encounter_type,current_weather)
     return false if Settings::GAME_ID != :IF_HOENN
     return false if !SUBSTITUTABLE_ENCOUNTER_TYPES.include?(encounter_type)

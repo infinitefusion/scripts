@@ -63,6 +63,10 @@ class BattledTrainer
     @friendship_level = 0
   end
 
+  #For double trainer classes like twins, etc. Adds an additional double rematch option.
+  def setLinkedTrainer(linked_trainer_event)
+    @linked_event = linked_trainer_event
+  end
   def friendship_level
     @friendship_level =0 if !@friendship_level
     return @friendship_level
@@ -83,7 +87,7 @@ class BattledTrainer
       @friendship_level += 1
 
       trainerClassName = GameData::TrainerType.get(@trainerType).real_name
-      pbMessage(_INTL("\\C[3]Friendship increased with #{trainerClassName} #{@trainerName}!"))
+      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!",trainerClassName,@trainerName))
       case @friendship_level
       when 1
         pbMessage(_INTL("You can now trade with each other!"))

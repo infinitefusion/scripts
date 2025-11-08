@@ -18,8 +18,70 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
   postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
   return result
 end
-def postTrainerBattleActions(trainerID, trainerName,trainerVersion)
-  trainer = registerBattledTrainer(@event_id,$game_map.map_id,trainerID,trainerName,trainerVersion)
+
+# Important: Use this instead of pbDoubleBattle and pbTripleBattle so that the trainers are rematchable!
+# trainers_array is an array of 2 or 3 arrays defining a trainer like such
+# [:TRAINER_CLASS, "Name", eventId]
+# e.g.
+# [[:TWIN_1,"Gina",12],[:TWIN_2, "Mia", 13]]
+def pbMultiTrainerBattle(trainers_array,canLose=false, outcomeVar=1)
+  case trainers_array.size
+  when 1
+    trainer_id =  trainers_array[0][0]
+    trainer_name =  trainers_array[0][1]
+    return pbTrainerBattle(trainer_id,trainer_name)
+  when 2
+    trainer_1 =  trainers_array[0]
+    trainer_1_id = trainer_1[0]
+    trainer_1_name = trainer_1[1]
+    trainer_1_event = trainer_1[2]
+
+    trainer_2 =  trainers_array[1]
+    trainer_2_id = trainer_2[0]
+    trainer_2_name = trainer_2[1]
+    trainer_2_event = trainer_2[2]
+
+    result= pbDoubleTrainerBattle(trainer_1_id,trainer_1_name,0,nil,
+                                 trainer_2_id,trainer_2_name,0,nil,
+                                 canLose,outcomeVar)
+    if Settings::GAME_ID == :IF_HOENN
+      postTrainerBattleActions(trainer_1_id, trainer_1_name,0,trainer_1_event,trainer_2_event)
+      postTrainerBattleActions(trainer_2_id, trainer_2_name,0,trainer_2_event,trainer_1_event)
+    end
+    return result
+  when 3
+    trainer_1 =  trainers_array[0]
+    trainer_1_id = trainer_1[0]
+    trainer_1_name = trainer_1[1]
+    trainer_1_event = trainer_1[2]
+
+    trainer_2 =  trainers_array[1]
+    trainer_2_id = trainer_2[0]
+    trainer_2_name = trainer_2[1]
+    trainer_2_event = trainer_2[2]
+
+    trainer_3 =  trainers_array[2]
+    trainer_3_id = trainer_3[0]
+    trainer_3_name = trainer_3[1]
+    trainer_3_event = trainer_3[2]
+
+    result= pbTripleTrainerBattle(trainer_1_id,trainer_1_name,0,nil,
+                                  trainer_2_id,trainer_2_name,0,nil,
+                                  trainer_3_id,trainer_3_name,0,nil,
+                                  canLose,outcomeVar)
+    if Settings::GAME_ID == :IF_HOENN
+      postTrainerBattleActions(trainer_1_id, trainer_1_name,0,trainer_1_event)
+      postTrainerBattleActions(trainer_2_id, trainer_2_name,0,trainer_2_event)
+      postTrainerBattleActions(trainer_3_id, trainer_3_name,0,trainer_3_event)
+    end
+    return result
+  end
+end
+
+
+def postTrainerBattleActions(trainerID, trainerName,trainerVersion,event_id=nil,linked_event=nil)
+  event_id = @event_id unless event_id
+  trainer = registerBattledTrainer(event_id,$game_map.map_id,trainerID,trainerName,trainerVersion,linked_event)
   makeRebattledTrainerTeamGainExp(trainer)
 end
 
@@ -27,11 +89,13 @@ end
 #Do NOT call this alone. Rebattlable trainers are always intialized after
 # defeating them.
 # Having a rematchable trainer that is not registered will cause crashes.
-def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion=0)
+def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion=0, linked_event=nil)
   key = [event_id,mapId]
   $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
   trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion,key)
+  trainer.setLinkedTrainer(linked_event) if linked_event
   $PokemonGlobal.battledTrainers[key] = trainer
+  echoln "Registered rematchable trainer #{key}"
   return trainer
 end
 

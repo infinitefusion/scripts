@@ -24,12 +24,16 @@ CLOTHES_WAITER = "butler"
 CLOTHES_LASS_YELLOW ="lass"
 CLOTHES_LASS_BLUE ="lass2"
 
+CLOTHES_ROCKET_WHITE_M ="RocketJames"
+CLOTHES_ROCKET_WHITE_F ="RocketJessie"
+
+
 DEFAULT_OUTFIT_MALE = "red"
 DEFAULT_OUTFIT_FEMALE = "leaf"
 STARTING_OUTFIT = "pikajamas"
 
-CLOTHES_BRENDAN = "red" #todo
-CLOTHES_MAY = "leaf"    #todo
+CLOTHES_BRENDAN = "brendanRS"
+CLOTHES_MAY = "mayRS"
 
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
@@ -44,8 +48,10 @@ HAT_SILPHSCOPE = "silphscope"
 HAT_BRENDAN = "brendanRSE"
 HAT_MAY = "mayRSE"
 HAT_ORAN = "orange"
+HAT_FLOWERS = "grassexpert"
+HAT_LUCHA = "hawluchamask"
 
-
+HAT_EEVEE_EARS = "eeveeears"
 HAT_PARASHROOM = "parashroom"
 HAT_AERODACTYL = "aerodactylSkull"
 HAT_DUSKULL_MASK = "duskullmask"
@@ -156,6 +162,7 @@ HAIR_LATIAS="SpecialLatias"
 HAIR_GARDEVOIR="gardevoir"
 HAIR_EEVEE="eeveetail"
 HAIR_LEAFEON="leafeonbob"
+HAIR_ORICORIO="oricoriopuffs"
 
-HAIR_BRENDAN = "buzzcut"
+HAIR_BRENDAN = "brendan"
 HAIR_MAY = "may"

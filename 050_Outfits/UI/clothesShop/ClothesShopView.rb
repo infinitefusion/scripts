@@ -46,13 +46,27 @@ class ClothesShopView < PokemonMart_Scene
     @initial_direction = $game_player.direction
     $game_player.turn_down
     pbRefreshSceneMap
+
+      # pbSEPlay("GUI menu open")
+      # $game_player.center($game_player.x+7, $game_player.y-5)
+      # @initial_direction = $game_player.direction
+      # $game_player.turn_down
+      # Graphics.update
+      # Input.update
+      # pbRefreshSceneMap
   end
 
   def scroll_back_map
+
     @adapter.reset_player_clothes()
     pbScrollMap(DIRECTION_LEFT, 7, 6)
     pbScrollMap(DIRECTION_DOWN, 5, 6)
     $game_player.turn_generic(@initial_direction)
+
+    # $game_player.center($game_player.x, $game_player.y)
+    # Graphics.update
+    # Input.update
+    # pbRefreshSceneMap
   end
 
   def refreshStock(adapter)

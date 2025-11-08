@@ -76,7 +76,7 @@ class Game_Map
     Events.onMapCreate.trigger(self, map_id, @map, tileset)
     @events = {}
     for i in @map.events.keys
-      @events[i] = Game_Event.new(@map_id, @map.events[i], self)
+      @events[i] = create_new_game_event(@map.events[i])
     end
     @common_events = {}
     for i in 1...$data_common_events.size
@@ -85,6 +85,10 @@ class Game_Map
     @scroll_direction = 2
     @scroll_rest = 0
     @scroll_speed = 4
+  end
+
+  def create_new_game_event(event)
+    return Game_Event.new(@map_id,event , self)
   end
 
   def updateTileset
@@ -276,15 +280,16 @@ class Game_Map
     bit = (1 << (d / 2 - 1)) & 0x0f
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
+      next unless tile_id
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
       if terrain
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing
-        return true if $PokemonGlobal.surfing && terrain.can_surf && !terrain.waterfall
+        return true if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && terrain.can_surf && !terrain.waterfall
         # Prevent cycling in really tall grass/on ice
-        return false if $PokemonGlobal.bicycle && terrain.must_walk
+        #return false if $PokemonGlobal.bicycle && terrain.must_walk
         # Depend on passability of bridge tile if on bridge
         if terrain.bridge && $PokemonGlobal.bridge > 0
           return (passage & bit == 0 && passage & 0x0f != 0x0f)

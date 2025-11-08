@@ -26,7 +26,7 @@ class PokemonMartAdapter
     item_name = getName(item)
     if GameData::Item.get(item).is_machine?
       machine = GameData::Item.get(item).move
-      item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
+      item_name = "#{item_name} #{GameData::Move.get(machine).name}"
     end
     return item_name
   end
@@ -88,7 +88,7 @@ class PokemonMartAdapter
     return nil
   end
 
-  #specialType is a symbol
+  # specialType is a symbol
   def getSpecialItemCaption(specialType)
     return nil
   end
@@ -97,7 +97,7 @@ class PokemonMartAdapter
     return nil
   end
 
-  def doSpecialItemAction(specialType,itemId=nil)
+  def doSpecialItemAction(specialType, itemId = nil)
     return nil
   end
 
@@ -108,7 +108,6 @@ class PokemonMartAdapter
   def getSpecialItemShadowColor(specialType)
     return nil
   end
-
 
 end
 
@@ -504,64 +503,64 @@ class PokemonMart_Scene
     itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
     using(numwindow = Window_AdvancedTextPokemon.new("")) { # Showing number of items
-    qty = @adapter.getQuantity(item)
-    using(inbagwindow = Window_AdvancedTextPokemon.new("")) { # Showing quantity in bag
-    pbPrepareWindow(numwindow)
-    pbPrepareWindow(inbagwindow)
-    numwindow.viewport = @viewport
-    numwindow.width = 224
-    numwindow.height = 64
-    numwindow.baseColor = Color.new(88, 88, 80)
-    numwindow.shadowColor = Color.new(168, 184, 184)
-    inbagwindow.visible = @buying
-    inbagwindow.viewport = @viewport
-    inbagwindow.width = 190
-    inbagwindow.height = 64
-    inbagwindow.baseColor = Color.new(88, 88, 80)
-    inbagwindow.shadowColor = Color.new(168, 184, 184)
-    inbagwindow.text = _INTL("In Bag:<r>{1}  ", qty)
-    numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-    pbBottomRight(numwindow)
-    numwindow.y -= helpwindow.height
-    pbBottomLeft(inbagwindow)
-    inbagwindow.y -= helpwindow.height
-    loop do
-      Graphics.update
-      Input.update
-      numwindow.update
-      inbagwindow.update
-      self.update
-      if Input.repeat?(Input::LEFT)
-        pbPlayCursorSE
-        curnumber -= 10
-        curnumber = 1 if curnumber < 1
+      qty = @adapter.getQuantity(item)
+      using(inbagwindow = Window_AdvancedTextPokemon.new("")) { # Showing quantity in bag
+        pbPrepareWindow(numwindow)
+        pbPrepareWindow(inbagwindow)
+        numwindow.viewport = @viewport
+        numwindow.width = 224
+        numwindow.height = 64
+        numwindow.baseColor = Color.new(88, 88, 80)
+        numwindow.shadowColor = Color.new(168, 184, 184)
+        inbagwindow.visible = @buying
+        inbagwindow.viewport = @viewport
+        inbagwindow.width = 190
+        inbagwindow.height = 64
+        inbagwindow.baseColor = Color.new(88, 88, 80)
+        inbagwindow.shadowColor = Color.new(168, 184, 184)
+        inbagwindow.text = _INTL("In Bag:<r>{1}  ", qty)
         numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::RIGHT)
-        pbPlayCursorSE
-        curnumber += 10
-        curnumber = maximum if curnumber > maximum
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::UP)
-        pbPlayCursorSE
-        curnumber += 1
-        curnumber = 1 if curnumber > maximum
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.repeat?(Input::DOWN)
-        pbPlayCursorSE
-        curnumber -= 1
-        curnumber = maximum if curnumber < 1
-        numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-      elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
-        ret = curnumber
-        break
-      elsif Input.trigger?(Input::BACK)
-        pbPlayCancelSE
-        ret = 0
-        break
-      end
-    end
-    }
+        pbBottomRight(numwindow)
+        numwindow.y -= helpwindow.height
+        pbBottomLeft(inbagwindow)
+        inbagwindow.y -= helpwindow.height
+        loop do
+          Graphics.update
+          Input.update
+          numwindow.update
+          inbagwindow.update
+          self.update
+          if Input.repeat?(Input::LEFT)
+            pbPlayCursorSE
+            curnumber -= 10
+            curnumber = 1 if curnumber < 1
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::RIGHT)
+            pbPlayCursorSE
+            curnumber += 10
+            curnumber = maximum if curnumber > maximum
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::UP)
+            pbPlayCursorSE
+            curnumber += 1
+            curnumber = 1 if curnumber > maximum
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.repeat?(Input::DOWN)
+            pbPlayCursorSE
+            curnumber -= 1
+            curnumber = maximum if curnumber < 1
+            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+          elsif Input.trigger?(Input::USE)
+            pbPlayDecisionSE
+            ret = curnumber
+            break
+          elsif Input.trigger?(Input::BACK)
+            pbPlayCancelSE
+            ret = 0
+            break
+          end
+        end
+      }
     }
     helpwindow.visible = false
     return ret
@@ -685,11 +684,23 @@ class PokemonMartScreen
         end
         @stock.compact!
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
+        extra_item = nil
         if $PokemonBag
-          if quantity >= 10 && GameData::Item.get(item).is_poke_ball? && GameData::Item.exists?(:PREMIERBALL)
-            if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
-              pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too."))
+          if quantity >= 10
+            if GameData::Item.get(item).is_poke_ball?
+              extra_item = :PREMIERBALL
+            elsif item == :DNASPLICERS || item == :SUPERSPLICERS
+              extra_item = :DNAREVERSER
+            elsif item == :DNAREVERSER
+              extra_item = :DNASPLICERS
             end
+          end
+        end
+        if extra_item
+          item_name = GameData::Item.get(extra_item).real_name
+          echoln extra_item
+          if @adapter.addItem(GameData::Item.get(extra_item))
+            pbDisplayPaused(_INTL("I'll throw in a {1}, too.", item_name))
           end
         end
       end

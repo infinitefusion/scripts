@@ -21,7 +21,8 @@ class GameWeather
   attr_accessor :current_weather
   attr_accessor :last_update_time
 
-  TIME_BETWEEN_WEATHER_UPDATES = 12000 # 180 seconds, only actually changes once the player changes map
+  #TIME_BETWEEN_WEATHER_UPDATES in in-game seconds (1 irl second = 60 in-game seconds)
+  TIME_BETWEEN_WEATHER_UPDATES = 3600 #1 in-game hour (1 irl minute) .
 
   CHANCE_OF_NEW_WEATHER = 2 # /100    spontaneous new weather popping up somewhere
   CHANCE_OF_RAIN = 40 #/100
@@ -68,7 +69,7 @@ class GameWeather
   def initialize_weather
     weather = {}
     @neighbors_maps.keys.each { |map_id|
-      weather[map_id] = select_new_weather_spawn
+      weather[map_id] = select_new_weather_spawn(CHANCE_OF_NEW_WEATHER)
     }
     @current_weather = weather
   end
@@ -108,7 +109,7 @@ class GameWeather
     new_weather = @current_weather.dup
     new_weather.each do |map_id, (type, intensity)|
       try_end_weather(map_id,type, get_map_weather_intensity(map_id))
-      try_spawn_new_weather(map_id,type, intensity)
+      try_spawn_new_weather(map_id,type)
       try_propagate_weather_to_neighbors(map_id,type, intensity)
       echoln @current_weather[954] if @debug_you
       try_move_weather_to_neighbors(map_id,type, intensity)
@@ -122,6 +123,7 @@ class GameWeather
   def try_propagate_weather_to_neighbors(map_id,propagating_map_weather_type,propagating_map_weather_intensity)
     propagating_map_neighbors = @neighbors_maps[map_id]
 
+    return unless propagating_map_neighbors
     return if propagating_map_weather_type == :None
     return unless can_weather_spread(propagating_map_weather_type)
     propagating_map_weather_type, propagating_map_weather_intensity = normalize_legendary_weather(propagating_map_weather_type, propagating_map_weather_intensity)
@@ -137,19 +139,20 @@ class GameWeather
     end
   end
 
-  def try_spawn_new_weather(map_id,map_weather_type,weather_intensity)
+  def try_spawn_new_weather(map_id,map_weather_type,spawn_chance=nil)
     return if map_weather_type != :None
-    new_weather = select_new_weather_spawn
+    spawn_chance = CHANCE_OF_NEW_WEATHER unless spawn_chance
+    new_weather = select_new_weather_spawn(spawn_chance)
     @current_weather[map_id] = adjust_weather_for_map(new_weather,map_id)
   end
 
 
   def try_move_weather_to_neighbors(map_id,map_weather_type,weather_intensity)
     map_neighbors = @neighbors_maps[map_id]
+    return unless map_neighbors
     return if map_weather_type == :None || weather_intensity <= 1
     return unless can_weather_spread(map_weather_type)
     map_weather_type, weather_intensity = normalize_legendary_weather(map_weather_type, weather_intensity)
-
     map_neighbors.each do |neighbor_id|
       neighbor_weather_type = get_map_weather_type(neighbor_id)
       neighbor_weather_intensity = get_map_weather_intensity(neighbor_id)
@@ -344,9 +347,8 @@ class GameWeather
     return rand(100) <= CHANCES_OF_INTENSITY_DECREASE
   end
 
-  def select_new_weather_spawn
-    return [:None, 0] if rand(100) >= CHANCE_OF_NEW_WEATHER
-
+  def select_new_weather_spawn(spawn_chance)
+    return [:None, 0] if rand(100) >= spawn_chance
     base_intensity = rand(MAX_INTENSITY_ON_NEW_WEATHER) + 1
 
     weights = []

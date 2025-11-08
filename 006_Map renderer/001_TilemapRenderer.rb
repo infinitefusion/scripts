@@ -118,6 +118,18 @@ class TilemapRenderer
     },
 
 
+    12 => {  #Slateport
+            996 => "flowers_orange[10]",
+            991 => "flowers_pink[10]",
+            999 => "flowers_yellow[10]",
+            1007 => "flowers_blue[10]",
+            1015 => "flowers_purple[10]",
+            1023 => "flowers_red[10]",
+            1031 => "flowers_grey[10]",
+            1039 => "flowers_white[10]",
+
+    },
+
     23 => { #outdoor
       1232 => "flowers_orange[10]",
       1240 => "flowers_pink[10]",
@@ -175,6 +187,37 @@ class TilemapRenderer
 
     5 => {  #Rustboro
             #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    9 => {  #Route Forest
+            #trees
+            864 => "tree_sway_single_1",
+            865 => "tree_sway_single_2",
+            872 => "tree_sway_single_3",
+            873 => "tree_sway_single_4",
+            880 => "tree_sway_single_5",
+            881 => "tree_sway_single_6",
+
+
+            866 => "tree_sway_group_1",
+            867 => "tree_sway_group_2",
+            874 => "tree_sway_group_3",
+            875 => "tree_sway_group_4",
+    },
+
+    12 => {  #Slateport
             864 => "tree_sway_single_1",
             865 => "tree_sway_single_2",
             872 => "tree_sway_single_3",
@@ -553,10 +596,10 @@ class TilemapRenderer
   def refresh
     @need_refresh = true
   end
-
+  INVISIBLE_WALL_TILE_ID = 384
   def refresh_tile_bitmap(tile, map, tile_id)
     tile.tile_id = tile_id
-    if tile_id < TILES_PER_AUTOTILE
+    if tile_id < TILES_PER_AUTOTILE || ( Settings::HOENN && tile_id == INVISIBLE_WALL_TILE_ID)
       tile.set_bitmap("", tile_id, false, false, 0, nil)
       tile.shows_reflection = false
       tile.bridge = false

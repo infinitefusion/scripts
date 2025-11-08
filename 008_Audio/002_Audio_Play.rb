@@ -53,6 +53,7 @@ def pbBGMPlay(param,volume=nil,pitch=nil)
   return if !param
   param=pbResolveAudioFile(param,volume,pitch)
   param = pbResolveAudioFile("ultra_metropolis", volume, pitch) if darknessEffectOnCurrentMap() && !$PokemonTemp.during_battle
+  param = pbResolveAudioFile("ship", volume, pitch) if $PokemonGlobal && $PokemonGlobal.boat
   if param.name && param.name!=""
     if $game_system && $game_system.respond_to?("bgm_play")
       $game_system.bgm_play(param)
@@ -101,7 +102,6 @@ end
 # volume -- Volume of the file, up to 100
 # pitch -- Pitch of the file, normally 100
 def pbMEPlay(param,volume=nil,pitch=nil)
-  echoln param
   return if !param
   param=pbResolveAudioFile(param,volume,pitch)
   if param.name && param.name!=""

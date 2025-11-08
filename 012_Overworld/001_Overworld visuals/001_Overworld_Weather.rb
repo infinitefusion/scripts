@@ -144,6 +144,7 @@ module RPG
 
     def set_max(value,weather_type)
       return if @max == value
+      return if get_max_sprites(value,weather_type) <= 0
       value = value.clamp(0, get_max_sprites(value,weather_type))
       #echoln "[Weather] Setting max particles to #{value} for type #{@type}" if @max != value
       @max = value

@@ -1,0 +1,9 @@
+##############
+# ANIMATIONS
+################
+DUST_ANIMATION_ID=2
+VIRUS_ANIMATION_ID=10
+
+TELEPORT_ANIMATION_ID=32
+
+

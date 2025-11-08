@@ -7,7 +7,7 @@ CITIES_MAP_IDS = {
   :PETALBURG =>7,
   :RUSTBORO => 47,
   :DEWFORD => 51,
-  :SLATEPORT => 0,
+  :SLATEPORT => 6,
   :MAUVILLE => 0,
   :VERDANTURF => 0,
   :FALLARBOR => 0,
@@ -72,9 +72,9 @@ HOENN_POKEMART_ENTRANCES = {
   :OLDALE => [1, 0, 0],
   :VERMILLION => [1, 0, 0],
   :PETALBURG => [7, 32, 19],
-  :RUSTBORO => [1, 0, 0],
+  :RUSTBORO => [47, 28, 54],
   :DEWFORD => [1, 0, 0],
-  :SLATEPORT => [1, 0, 0],
+  :SLATEPORT => [6, 20, 35],
   :MAUVILLE => [1, 0, 0],
   :VERDANTURF => [1, 0, 0],
   :FALLARBOR => [1, 0, 0],
@@ -97,6 +97,7 @@ def exit_pokemart_hoenn()
 
   pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, 0)
   pbSet(VAR_CURRENT_MART, 0)
+  pbSEPlay(SE_EXIT)
   pbFadeOutIn {
     $game_temp.player_new_map_id = entrance_map
     $game_temp.player_new_x = entrance_x
@@ -113,21 +114,23 @@ def get_mart_exclusive_items_hoenn(city)
 end
 
 def exit_pokemon_center()
-  if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId>=0
-    pbCancelVehicles
-    pbRemoveDependencies
-    $game_temp.player_new_map_id    = $PokemonGlobal.pokecenterMapId
-    $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
-    $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
-    $scene.transfer_player if $scene.is_a?(Scene_Map)
-    $game_map.refresh
-  else#Home
-    $game_temp.player_new_map_id    = 9
-    $game_temp.player_new_x         = 16
-    $game_temp.player_new_y         = 23
-    $scene.transfer_player if $scene.is_a?(Scene_Map)
-    $game_map.refresh
-  end
+  pbSEPlay(SE_EXIT)
+  pbFadeOutIn {
+    if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId>=0
+      pbCancelVehicles
+      $game_temp.player_new_map_id    = $PokemonGlobal.pokecenterMapId
+      $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
+      $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
+      $scene.transfer_player if $scene.is_a?(Scene_Map)
+      $game_map.refresh
+    else#Home
+      $game_temp.player_new_map_id    = 9
+      $game_temp.player_new_x         = 16
+      $game_temp.player_new_y         = 23
+      $scene.transfer_player if $scene.is_a?(Scene_Map)
+      $game_map.refresh
+    end
+  }
 end
 
 

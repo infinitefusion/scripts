@@ -1668,7 +1668,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
       user.item = b.item
       b.item = nil
       b.effects[PBEffects::Unburden] = true
-      if battle.wildBattle? && !user.initialItem && b.initialItem==user.item
+      if battle.wildBattle? && !user.initialItem && user.item == b.initialItem
         user.setInitialItem(user.item)
         b.setInitialItem(nil)
       end
