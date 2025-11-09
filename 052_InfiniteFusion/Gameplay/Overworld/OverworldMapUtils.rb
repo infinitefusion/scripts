@@ -77,3 +77,16 @@ def getRandomPositionOnPerimeter(width, height, center_x, center_y, variance=0,e
 
   return random_x.round, random_y.round
 end
+
+
+def setVariableToLeaderType(variable=5)
+  if $game_switches[SWITCH_RANDOM_TRAINERS]
+    gymArray = pbGet(VAR_GYM_TYPES_ARRAY)
+  else
+    gymArray = GYM_TYPES_ARRAY
+  end
+  currentGym = pbGet(VAR_CURRENT_GYM_TYPE)
+  typeIndex = gymArray[currentGym]
+  type = PBTypes.getName(typeIndex)
+  $game_variables[variable] = type
+end

@@ -315,3 +315,48 @@ end
 def isDebugMode()
   return $DEBUG
 end
+
+
+def side_stairs_right
+  case $game_player.direction
+  when DIRECTION_RIGHT  #Going up
+    destination_x = $game_player.x+1
+    destination_y = $game_player.y-1
+    if $game_player.destination_is_passable(destination_x, destination_y)
+      $game_player.move_upper_right
+    elsif $game_player.destination_is_passable(destination_x, $game_player.y)
+      $game_player.move_right
+    end
+
+  when DIRECTION_LEFT #Going down
+    destination_x = $game_player.x-1
+    destination_y = $game_player.y+1
+    if $game_player.destination_is_passable(destination_x, destination_y)
+      $game_player.move_lower_left
+    elsif $game_player.destination_is_passable(destination_x, $game_player.y)
+      $game_player.move_left
+    end
+  end
+end
+
+def side_stairs_left
+  case $game_player.direction
+  when DIRECTION_LEFT  #Going up
+    destination_x = $game_player.x-1
+    destination_y = $game_player.y-1
+    if $game_player.destination_is_passable(destination_x, destination_y)
+      $game_player.move_upper_left
+    elsif $game_player.destination_is_passable(destination_x, $game_player.y)
+      $game_player.move_left
+    end
+
+  when DIRECTION_RIGHT #Going down
+    destination_x = $game_player.x+1
+    destination_y = $game_player.y+1
+    if $game_player.destination_is_passable(destination_x, destination_y)
+      $game_player.move_lower_right
+    elsif $game_player.destination_is_passable(destination_x, $game_player.y)
+      $game_player.move_right
+    end
+  end
+end

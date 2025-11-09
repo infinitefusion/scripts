@@ -30,7 +30,12 @@
 #GYM_TYPES_ARRAY = [0,5,11,13,12,3,14,10,4,1,0,6,2,16,7,15,1,8,15,1,7,16,18,17,7,16]
 GYM_TYPES_CLASSIC = [:NORMAL, :ROCK, :WATER, :ELECTRIC, :GRASS, :POISON, :PSYCHIC, :FIRE, :GROUND, :FIGHTING, :NORMAL, :BUG, :FLYING, :DRAGON, :GHOST, :ICE, :FIGHTING, :STEEL, :ICE, :FIGHTING, :GHOST, :DRAGON, :FAIRY, :DARK, :GHOST, :ROCK]
 GYM_TYPES_MODERN = [:NORMAL, :STEEL, :ICE, :FIGHTING, :BUG, :DARK, :FAIRY, :PSYCHIC, :NORMAL, :FIGHTING, :FAIRY, :GRASS, :BUG, :DRAGON, :FIRE, :GHOST, :GROUND, :ELECTRIC, :WATER, :ROCK, :POISON, :FLYING, :FAIRY, :DARK, :GHOST, :DRAGON]
+
+GYM_TYPES_HOENN_CLASSIC = [:NORMAL, :ROCK, :FIGHTING, :ELECTRIC, :FIRE, :NORMAL, :FLYING, :PSYCHIC, :WATER, :PSYCHIC, :GHOST, :ICE, :DRAGON, :STEEL]
+
 GYM_TYPES_ARRAY = ($game_switches && $game_switches[SWITCH_MODERN_MODE]) ? GYM_TYPES_MODERN : GYM_TYPES_CLASSIC
+GYM_TYPES_ARRAY_HOENN = ($game_switches && $game_switches[SWITCH_MODERN_MODE]) ? GYM_TYPES_MODERN : GYM_TYPES_HOENN_CLASSIC
+
 
 #$randomTrainersArray = []
 
@@ -38,7 +43,11 @@ GYM_TYPES_ARRAY = ($game_switches && $game_switches[SWITCH_MODERN_MODE]) ? GYM_T
 
 def Kernel.initRandomTypeArray()
   typesArray = GYM_TYPES_ARRAY.shuffle #ne pas remettre 10 (QMARKS)
-  $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY
+  if Settings::KANTO
+    $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY
+  elsif Settings::HOENN
+    $game_variables[VAR_GYM_TYPES_ARRAY] = $game_switches[SWITCH_RANDOMIZED_GYM_TYPES] ? typesArray : GYM_TYPES_ARRAY_HOENN
+  end
 end
 
 # def setRivalStarter(starter1, starter2, starter3, choice)

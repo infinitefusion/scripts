@@ -1,3 +1,5 @@
+#[TRADE, ITEM, PARTNER]
+# Max is 100 - put a value above that if a level should not be attainable
 class BattledTrainer
   FRIENDSHIP_LEVELS = {
     AROMALADY:      [10, 25, 45],
@@ -49,6 +51,8 @@ class BattledTrainer
     CRUSHKIN:       [15, 35, 80],
     SISANDBRO:      [10, 25, 50],
     TWINS:          [10, 25, 50],
+    TWIN_1:          [10, 25, 50],
+    TWIN_2:          [10, 25, 50],
     YOUNGCOUPLE:    [15, 30, 65],
     SOCIALITE:      [12, 30, 70],
     BUGCATCHER_F:   [8, 20, 35],
@@ -80,6 +84,27 @@ class BattledTrainer
     TEAM_MAGMA_GRUNT_F:       [25, 60, 100],
     TEAM_MAGMAQUA_GRUNT_M:    [25, 60, 100],
     TEAM_MAGMAQUA_GRUNT_F:    [25, 60, 100],
+
+
+
+    LEADER_Roxanne:    [30, 200, 200],
+    LEADER_Brawly:    [30, 200, 200],
+    LEADER_Wattson:    [30, 200, 200],
+    LEADER_Flannery:    [30, 200, 200],
+    LEADER_Norman:    [5, 200, 200],
+    LEADER_Winona:    [30, 200, 200],
+    LEADER_Tate:    [30, 200, 200],
+    LEADER_Liza:    [30, 200, 200],
+    LEADER_Wallace:    [30, 200, 200],
+    LEADER_Juan:    [30, 200, 200],
+    ELITEFOUR_Sidney:    [50, 200, 200],
+    ELITEFOUR_Phoebe:    [50, 200, 200],
+    ELITEFOUR_Glacia:    [50, 200, 200],
+    ELITEFOUR_Drake:    [50, 200, 200],
+    CHAMPION_Steven:    [100, 200, 200],
+
+
+
   }
 
 end
