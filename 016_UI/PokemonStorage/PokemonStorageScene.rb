@@ -651,7 +651,7 @@ class PokemonStorageScene
     for i in 0...@storage.maxBoxes
       box = @storage[i]
       if box
-        commands.push(_INTL("{1} ({2}/{3})", box.name, box.nitems, box.length))
+        commands.push("#{box.name} (#{box.nitems}/#{box.length})")
       end
     end
     return pbShowCommands(msg, commands, @storage.currentBox)
@@ -881,9 +881,9 @@ class PokemonStorageScene
     if !pokemon.egg?
       imagepos = []
       if pokemon.male?
-        textstrings.push([_INTL("♂"), 148, 2, false, Color.new(24, 112, 216), Color.new(136, 168, 208)])
+        textstrings.push(["♂", 148, 2, false, Color.new(24, 112, 216), Color.new(136, 168, 208)])
       elsif pokemon.female?
-        textstrings.push([_INTL("♀"), 148, 2, false, Color.new(248, 56, 32), Color.new(224, 152, 144)])
+        textstrings.push(["♀", 148, 2, false, Color.new(248, 56, 32), Color.new(224, 152, 144)])
       end
       imagepos.push(["Graphics/Pictures/Storage/overlay_lv", 6, 246])
       textstrings.push([pokemon.level.to_s, 28, 228, false, base, shadow])
@@ -901,7 +901,7 @@ class PokemonStorageScene
         addShinyStarsToGraphicsArray(imagepos, 156, 198, pokemon.bodyShiny?, pokemon.headShiny?, pokemon.debugShiny?, nil, nil, nil, nil, false, true)
         # imagepos.push(["Graphics/Pictures/shiny", 156, 198])
       end
-      typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+      typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
       type1_number = GameData::Type.get(pokemon.type1).id_number
       type2_number = GameData::Type.get(pokemon.type2).id_number
       type1rect = Rect.new(0, type1_number * 28, 64, 28)

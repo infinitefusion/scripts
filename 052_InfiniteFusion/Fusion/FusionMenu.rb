@@ -53,7 +53,7 @@ class FusionSelectOptionsScene < PokemonOption_Scene
     return _INTL("Neutral nature") if change.empty?
     positiveChange = change[0]
     negativeChange = change[1]
-    return _INTL("+ {1}\n- {2}",GameData::Stat.get(positiveChange[0]).name,GameData::Stat.get(negativeChange[0]).name)
+    return "+ #{GameData::Stat.get(positiveChange[0]).name}\n- #{GameData::Stat.get(negativeChange[0]).name}"
   end
 
   def shouldSelectNickname

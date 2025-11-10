@@ -56,7 +56,7 @@ def obtainNewHairstyle(full_outfit_id)
   split_outfit_id = getSplitHairFilenameAndVersionFromID(full_outfit_id)
   hairstyle_id = split_outfit_id[1]
   hairstyle = get_hair_by_id(hairstyle_id)
-  musical_effect = _INTL("Key item get")
+  musical_effect = "Key item get"
   pbMessage(_INTL("\\me[{1}]Your hairstyle was changed to \\c[1]{2}\\c[0] hairstyle!\\wtnp[30]", musical_effect, hairstyle.name))
   return true
 end
@@ -152,7 +152,7 @@ end
 
 def obtainOutfitMessage(outfit)
   pictureViewport = showOutfitPicture(outfit)
-  musical_effect = _INTL("Key item get")
+  musical_effect = "Key item get"
   pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]", musical_effect, outfit.name))
   pictureViewport.dispose if pictureViewport
 end

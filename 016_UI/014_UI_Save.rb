@@ -40,7 +40,7 @@ class PokemonSave_Scene
     mapname=$game_map.name
     textColor = ["0070F8,78B8E8","E82010,F8A8B8","0070F8,78B8E8"][$Trainer.gender]
     locationColor = "209808,90F090"   # green
-    loctext=_INTL("<ac><c3={1}>{2}</c3></ac>",locationColor,mapname)
+    loctext="<ac><c3=#{locationColor}>#{mapname}</c3></ac>"
     loctext+=_INTL("Player<r><c3={1}>{2}</c3><br>",textColor,$Trainer.name)
     if hour>0
       loctext+=_INTL("Time<r><c3={1}>{2}h {3}m</c3><br>",textColor,hour,min)
@@ -89,13 +89,13 @@ class PokemonSaveScreen
   def pbSaveScreen
     ret = false
     @scene.pbStartScreen
-    if pbConfirmMessage(_INTL('Would you like to save the game?'))
+    if pbConfirmMessage(_INTL("Would you like to save the game?"))
       if SaveData.exists? && $PokemonTemp.begunNewGame
-        pbMessage(_INTL('WARNING!'))
-        pbMessage(_INTL('There is a different game file that is already saved.'))
+        pbMessage(_INTL("WARNING!"))
+        pbMessage(_INTL("There is a different game file that is already saved."))
         pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
         if !pbConfirmMessageSerious(
-            _INTL('Are you sure you want to save now and overwrite the other save file?'))
+            _INTL("Are you sure you want to save now and overwrite the other save file?"))
           pbSEPlay('GUI save choice')
           @scene.pbEndScreen
           return false

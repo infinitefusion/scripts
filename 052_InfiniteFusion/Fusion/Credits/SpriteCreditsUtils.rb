@@ -222,7 +222,7 @@ def displayTeamFlag(frame)
   $game_screen.pictures[flag_image_id].show(flag_path, 0, x_position, y_position, 50, 50)
   $game_screen.pictures[frame_image_id].show("teamFlagFrame", 0, x_position, y_position, 50, 50)
   name = species.real_name
-  pbMessage("\"Team #{name} Flag\"")
+  pbMessage(_INTL("\"Team {1} Flag\"",name))
 
   display_team_flag_statistics(species)
 
@@ -410,7 +410,7 @@ def displayGalleryFrame(frame)
   $game_screen.pictures[bg_image_id].show("pictureFrame", 0, 0, 0)
   name = species.real_name
   author = pbGet(259)
-  message = "\"#{name}\"\nBy #{author}"
+  message = _INTL("\"{1}\"\nBy {2}",name,author)
   displaySpriteWindowWithMessage(pif_sprite, message, 90, -10, 201)
   $game_screen.pictures[frame_image_id].erase
   $game_screen.pictures[bg_image_id].erase

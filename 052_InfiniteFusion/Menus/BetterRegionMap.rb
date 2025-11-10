@@ -689,7 +689,7 @@ class BetterRegionMap
   end
 
   def print_current_position()
-    echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
+    echoln "(#{$PokemonGlobal.regionMapSel[0]}, #{$PokemonGlobal.regionMapSel[1]})"
   end
 
   def update_text

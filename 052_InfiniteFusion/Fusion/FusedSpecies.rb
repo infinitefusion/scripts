@@ -292,7 +292,7 @@ module GameData
       for evolution in body_evolutions
         evolutionSpecies = evolution[0]
         evolutionSpecies_dex = GameData::Species.get(evolutionSpecies).id_number
-        fused_species = _INTL("B{1}H{2}", evolutionSpecies_dex, @head_pokemon.id_number)
+        fused_species = "B#{evolutionSpecies_dex}H#{@head_pokemon.id_number}" 
         fused_evolutions << build_evolution_array(evolution, fused_species)
       end
 
@@ -300,7 +300,7 @@ module GameData
       for evolution in head_evolutions
         evolutionSpecies = evolution[0]
         evolutionSpecies_dex = GameData::Species.get(evolutionSpecies).id_number
-        fused_species = _INTL("B{1}H{2}", @body_pokemon.id_number, evolutionSpecies_dex)
+        fused_species = "B#{@body_pokemon.id_number}H#{evolutionSpecies_dex}"
         fused_evolutions << build_evolution_array(evolution, fused_species)
       end
 
