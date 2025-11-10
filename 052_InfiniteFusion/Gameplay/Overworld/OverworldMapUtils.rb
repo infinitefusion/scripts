@@ -90,3 +90,14 @@ def setVariableToLeaderType(variable=5)
   type = PBTypes.getName(typeIndex)
   $game_variables[variable] = type
 end
+
+def increaseDarknessRadius(increase_by)
+  return unless $PokemonTemp.darknessSprite
+  $PokemonTemp.darknessSprite.radius += increase_by
+end
+
+def setDarknessRadius(value)
+  return unless $PokemonTemp.darknessSprite
+  echoln "setting to #{value}"
+  $PokemonTemp.darknessSprite.radius = value
+end
