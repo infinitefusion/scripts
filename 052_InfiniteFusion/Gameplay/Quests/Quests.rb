@@ -152,3 +152,4 @@ define_quest("rustboro_whismur",:FIELD_QUEST,_INTL("Volume Booster!"), _INTL("Fi
 
 # Route 109
 define_quest("route109_tanning",:FIELD_QUEST,_INTL("Soaking in the sun"), _INTL("Sit in a beach chair until your suntan is on point!"),_INTL("Route 109"),"NPC_Hoenn_Triathlete_F")
+define_quest("route109_seahouse",:FIELD_QUEST,_INTL("Hot Battles at the Seashore House"), _INTL("Defeat all of the trainers in the Seashore House!"),_INTL("Route 109"),"NPC_Hoenn_Fisherman")

@@ -765,7 +765,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbPokemonMart(stock, speech = nil, cantsell = false)
+def pbPokemonMart(stock, speech_welcome = nil, cantsell = false, speech_bye=nil, speech_what_else=nil)
   if $game_switches[SWITCH_RANDOM_ITEMS_GENERAL] && $game_switches[SWITCH_RANDOM_SHOP_ITEMS]
     stock = replaceShopStockWithRandomized(stock)
   end
@@ -783,7 +783,7 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
   commands[cmdSell = commands.length] = _INTL("Sell") if !cantsell
   commands[cmdQuit = commands.length] = _INTL("Quit")
   cmd = pbMessage(
-    speech ? speech : _INTL("Welcome! How may I serve you?"),
+    speech_welcome ? speech_welcome : _INTL("Welcome! How may I serve you?"),
     commands, cmdQuit + 1)
   loop do
     if cmdBuy >= 0 && cmd == cmdBuy
@@ -795,10 +795,12 @@ def pbPokemonMart(stock, speech = nil, cantsell = false)
       screen = PokemonMartScreen.new(scene, stock)
       screen.pbSellScreen
     else
-      pbMessage(_INTL("Please come again!"))
+      unless speech_bye == ""
+        pbMessage(speech_bye ? speech_bye : _INTL("Please come again!"))
+      end
       break
     end
-    cmd = pbMessage(_INTL("Is there anything else I can help you with?"),
+    cmd = pbMessage(speech_what_else ? speech_what_else : _INTL("Is there anything else I can help you with?"),
                     commands, cmdQuit + 1)
   end
   $game_temp.clear_mart_prices

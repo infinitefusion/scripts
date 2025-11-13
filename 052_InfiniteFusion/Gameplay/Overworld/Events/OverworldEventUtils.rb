@@ -385,3 +385,7 @@ def trendSet(option1, option2)
   end
   return false
 end
+
+def vendingMachine(stock)
+  pbPokemonMart(stock,_INTL("What would you like to purchase from the vending machine?"),true,_INTL(""),_INTL("Purchase anything else?"))
+end

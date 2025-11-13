@@ -3,21 +3,71 @@
 # :NEWS
 # :WEATHER
 
-TV_CHANNELS = [:NEWS, :WEATHER]
+TV_CHANNEL_CHANCES = {
+  NEWS: 3,
+  WEATHER: 3,
+  TREND: 1
+}
 
 def showTVText(channel = :RANDOM)
-  channel = TV_CHANNELS.sample if channel == :RANDOM
+
+  if channel == :RANDOM
+    channel = select_random_channel
+  end
+
   case channel
   when :NEWS
     pbMessage(getTVNewsCaption())
   when :WEATHER
     pbMessage(_INTL("It's the weather channel! Let's see how things are looking out today."))
     pbWeatherMapMap()
+  when :TREND
+    getTVTrendMessages()
   end
 end
 
+
 SWITCH_REPORTER_AT_PETALBURG = 2026
 
+
+def select_random_channel
+  available_channels = TV_CHANNEL_CHANCES.dup
+  available_channels.delete(:TREND) unless pbGet(VAR_TRENDY_PHRASE).is_a?(String)
+
+  channel_picks = []
+  for channel in available_channels.keys
+    channel = channel
+    chances = TV_CHANNEL_CHANCES[channel]
+    for i in 0..chances
+      channel_picks << channel
+    end
+  end
+  return channel_picks.sample
+end
+
+
+
+def getTVTrendMessages()
+  current_phrase = pbGet(VAR_TRENDY_PHRASE)
+  vowels =["A","E","I","O","U"]
+  if vowels.include?(current_phrase[0])
+    adverb = _INTL("an")
+  else
+    adverb = _INTL("a")
+  end
+
+  pbMessage(_INTL("It's the trend-watcher network channel!"))
+  pbMessage(_INTL("\"Everybody's talking about it, #{current_phrase} has been all the rage in all around the region!\""))
+  pbMessage(_INTL("\"Nobody knows where it's started, but #{current_phrase} is all that the younger people are talking about these days\""))
+  case rand(3)
+  when 0
+    pbMessage(_INTL("\"Where can someone get their hands on #{adverb} #{current_phrase}? We'll continue our investigation to find out!'\""))
+  when 1
+    pbMessage(_INTL("\"Experts say that #{current_phrase} may just be the next big thing! Stay tuned for updates!\""))
+  when 2
+    pbMessage(_INTL("\"Some say that #{current_phrase} just a fad, but others seem to think it's here to stay! Stay tuned for updates!\""))
+  end
+end
 def getTVNewsCaption()
   if $game_switches[SWITCH_REPORTER_AT_PETALBURG]
     return _INTL("It's showing the local news. There's a berry-growing contest going on in Petalburg Town!")
