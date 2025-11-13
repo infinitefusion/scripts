@@ -360,3 +360,28 @@ def side_stairs_left
     end
   end
 end
+
+def get_random_trend
+  items = list_all_item_names.reject { |name| name.include?("TM") || name.include?("HM") || name.include?("unknown_item") }
+  name1, name2 = items.sample(2)
+
+  word1 = name1.split.first
+  word2 = name2.split[1] || name2.split.first
+
+  "#{word1} #{word2}"
+end
+
+def trendSet(option1, option2)
+  choice = pbMessage(_INTL("What do you think? Do you think any of these have any potential?"),[_INTL("Not really..."),"#{option1} is pretty cool!","I like #{option2}!"])
+  case choice
+  when 0
+    return false
+  when 1
+    pbSet(VAR_TRENDY_PHRASE,option1)
+    return true
+  when 2
+    pbSet(VAR_TRENDY_PHRASE,option2)
+    return true
+  end
+  return false
+end

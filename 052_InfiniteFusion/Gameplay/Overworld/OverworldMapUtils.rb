@@ -101,3 +101,4 @@ def setDarknessRadius(value)
   echoln "setting to #{value}"
   $PokemonTemp.darknessSprite.radius = value
 end
+

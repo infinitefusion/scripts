@@ -82,3 +82,12 @@ def getArceusPlateType(heldItem)
     return :NORMAL
   end
 end
+
+
+def list_all_item_names()
+  names = []
+  GameData::Item.list_all.each do |item|
+    names << item[1].name
+  end
+  return names
+end
