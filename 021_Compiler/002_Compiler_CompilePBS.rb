@@ -1122,6 +1122,7 @@ module Compiler
     trainer_names = []
     trainer_lose_texts = []
 
+    trainer_battleText = []
     trainer_lose_texts_rematch = []
     trainer_preRematch_text = []
     trainer_preRematchText_caught = []
@@ -1217,9 +1218,10 @@ module Compiler
         end
         # Record XXX=YYY setting
         case property_name
-        when "Items", "LoseText", "LoseTextRematch", "PreRematchText", "PreRematchText_caught", "PreRematchText_evolved", "PreRematchText_fused", "PreRematchText_unfused", "PreRematchText_reversed"
+        when "Items", "LoseText", "BattleText", "LoseTextRematch", "PreRematchText", "PreRematchText_caught", "PreRematchText_evolved", "PreRematchText_fused", "PreRematchText_unfused", "PreRematchText_reversed"
           trainer_hash[line_schema[0]] = property_value
           trainer_lose_texts[trainer_id] = property_value if property_name == "LoseText"
+          trainer_battleText[trainer_id] = property_value if property_name == "BattleText"
           trainer_lose_texts_rematch[trainer_id] = property_value if property_name == "LoseTextRematch"
           trainer_preRematch_text[trainer_id] = property_value if property_name == "PreRematchText"
           trainer_preRematchText_caught[trainer_id] = property_value if property_name == "PreRematchText_caught"
@@ -1391,8 +1393,10 @@ module Compiler
     trainer_preRematchText_fused = []
     trainer_preRematchText_unfused = []
     trainer_preRematchText_reversed = []
+    trainer_battleText = []
 
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts_rematch)
+    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_battleText)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematch_text)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_caught)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_evolved)

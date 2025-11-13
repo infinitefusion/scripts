@@ -13,6 +13,7 @@ module GameData
     attr_accessor :loseText_rematch
     attr_accessor :loseText_rematch_double
 
+    attr_accessor :battleText
     attr_accessor :preRematchText
     attr_accessor :preRematchText_caught
     attr_accessor :preRematchText_evolved
@@ -45,6 +46,7 @@ module GameData
 
       "LoseTextRematch" => [:loseText_rematch, "s"],
       "LoseTextRematchDouble" => [:loseText_rematch_double, "s"],
+      "BattleText" => [:battleText, "s"],
       "PreRematchText" => [:preRematchText, "s"],
       "PreRematchText_caught" => [:preRematchText_caught, "s"],
       "PreRematchText_evolved" => [:preRematchText_evolved, "s"],
@@ -115,7 +117,7 @@ module GameData
           pkmn[:ev][s.id] ||= 0 if pkmn[:ev]
         end
       end
-
+      @battleText  = hash[:battleText]
       @loseText_rematch = hash[:loseText_rematch] || @real_lose_text
       @preRematchText  = hash[:preRematchText] || "Are you up for a rematch? Or maybe you want to trade..."
       @preRematchText_caught = hash[:preRematchText_caught] || @preRematchText
@@ -128,6 +130,10 @@ module GameData
     # @return [String] the translated name of this trainer
     def name
       return pbGetMessageFromHash(MessageTypes::TrainerNames, @real_name)
+    end
+
+    def battle_text
+      return pbGetMessageFromHash(MessageTypes::BeginSpeech, @battleText)
     end
 
     # @return [String] the translated in-battle lose message of this trainer

@@ -14,6 +14,11 @@ alias original_pbTrainerBattle pbTrainerBattle
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
+  trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
+  if trainer_data.battleText && @event_id
+    pbCallBub(2,@event_id)
+    pbMessage(trainer_data.battleText)
+  end
   result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)
   postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
   return result
