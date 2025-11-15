@@ -25,12 +25,8 @@ class Game_Character
   private
 
   def update_floating
-    # Smooth, tiny oscillation
     @float_phase += 0.1
-
-    # amplitude in pixels (VERY subtle)
-    amplitude = 2.5   # float up to ~1.5px
-
+    amplitude = 2.5
     @float_offset = Math.sin(@float_phase) * amplitude
   end
 end

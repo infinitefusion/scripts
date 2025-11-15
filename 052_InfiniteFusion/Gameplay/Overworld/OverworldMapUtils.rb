@@ -102,3 +102,7 @@ def setDarknessRadius(value)
   $PokemonTemp.darknessSprite.radius = value
 end
 
+Events.onMapChange += proc { |_sender, e|
+  $game_player.floating=false
+  $game_player.walk_anime = true
+}

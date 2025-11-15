@@ -339,12 +339,12 @@ def pbDive
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     if movefinder
-      $Trainer.surfing_pokemon= getSpecies(movefinder.species)
+      $Trainer.surfing_pokemon = getSpecies(movefinder.species)
 
       echoln movefinder.species
       echoln getSpecies(movefinder.species)
     else
-      $Trainer.surfing_pokemon=nil
+      $Trainer.surfing_pokemon = nil
     end
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -413,7 +413,7 @@ def pbTransferUnderwater(mapid, x, y, direction = $game_player.direction)
     $PokemonGlobal.diving = true
     $PokemonGlobal.surfing = false
     pbUpdateVehicle
-    $scene.transfer_player(false )
+    $scene.transfer_player(false)
     addWaterCausticsEffect()
 
     $game_map.autoplay
@@ -587,8 +587,6 @@ def pbFly(move, pokemon)
   return true
 end
 
-
-
 Events.onAction += proc { |_sender, _e|
   terrain = $game_player.pbFacingTerrainTag
   if terrain.can_secret_base
@@ -609,10 +607,9 @@ def pbSecretPower(terrain)
   if biomeType && baseLayoutType
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
-    pbSecretBase(biomeType,baseLayoutType)
+    pbSecretBase(biomeType, baseLayoutType)
   end
 end
-
 
 #===============================================================================
 # Headbutt
@@ -680,9 +677,8 @@ HiddenMoveHandlers::UseMove.add(:SECRETPOWER, proc { |move, pokemon|
   end
 })
 
-
 HiddenMoveHandlers::CanUseMove.add(:RELICSONG, proc { |move, pokemon, showmsg|
-  if  !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))
+  if !(pokemon.isFusionOf(:MELOETTA_A) || pokemon.isFusionOf(:MELOETTA_P))
     pbMessage(_INTL("It won't have any effect")) if showmsg
     next false
   end
@@ -721,8 +717,8 @@ def changeMeloettaForm(pokemon)
     pbMessage(_INTL("{1} changed form!", pokemon.name))
   else
     if is_meloetta_P
-    replaceFusionSpecies(pokemon, :MELOETTA_P, :MELOETTA_A)
-    pbMessage(_INTL("{1} changed to the Aria form!", pokemon.name))
+      replaceFusionSpecies(pokemon, :MELOETTA_P, :MELOETTA_A)
+      pbMessage(_INTL("{1} changed to the Aria form!", pokemon.name))
     end
     if is_meloetta_A
       replaceFusionSpecies(pokemon, :MELOETTA_A, :MELOETTA_P)
@@ -788,7 +784,7 @@ HiddenMoveHandlers::UseMove.add(:ROCKSMASH, proc { |move, pokemon|
 #===============================================================================
 def pbStrength
   if $PokemonMap.strengthUsed
-    #pbMessage("Strength made it possible to move boulders around.")
+    # pbMessage("Strength made it possible to move boulders around.")
     return false
   end
   move = :STRENGTH
@@ -870,12 +866,12 @@ def pbSurf
   return false
 end
 
-def pbStartSurfing(speciesID=nil)
+def pbStartSurfing(speciesID = nil)
   pbCancelVehicles
   if speciesID
-    $Trainer.surfing_pokemon=getSpecies(speciesID)
+    $Trainer.surfing_pokemon = getSpecies(speciesID)
   else
-    $Trainer.surfing_pokemon=nil
+    $Trainer.surfing_pokemon = nil
   end
   $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
@@ -931,7 +927,7 @@ Events.onAction += proc { |_sender, _e|
   pbSurf
 }
 
-#Flowers
+# Flowers
 Events.onAction += proc { |_sender, _e|
   next if !$game_player.pbFacingTerrainTag.flower
   if $game_player.pbFacingTerrainTag.flowerRed
@@ -964,7 +960,7 @@ Events.onAction += proc { |_sender, _e|
   end
 }
 
-#Trashcan
+# Trashcan
 Events.onAction += proc { |_sender, _e|
   next if !$game_player.pbFacingTerrainTag.trashcan
   if $PokemonGlobal.stepcount % 25 == 0
@@ -1072,12 +1068,11 @@ HiddenMoveHandlers::CanUseMove.add(:RAINDANCE, proc { |move, pkmn, showmsg|
   next true if Settings::GAME_ID == :IF_HOENN
 })
 
-
 HiddenMoveHandlers::UseMove.add(:RAINDANCE, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Rain,1)
+  changeCurrentWeather(:Rain, 1)
   next true
 })
 
@@ -1088,7 +1083,7 @@ HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Sunny,1)
+  changeCurrentWeather(:Sunny, 1)
   next true
 })
 
@@ -1099,7 +1094,24 @@ HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Wind,1)
+  changeCurrentWeather(:Wind, 1)
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:MAGNETRISE, proc { |move, pkmn, showmsg|
+  next true
+})
+HiddenMoveHandlers::UseMove.add(:MAGNETRISE, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  if $game_player.floating
+    $game_player.floating=false
+    $game_player.walk_anime = true
+  else
+    $game_player.walk_anime = false
+    $game_player.floating = true
+  end
   next true
 })
 
@@ -1110,7 +1122,7 @@ HiddenMoveHandlers::UseMove.add(:MIST, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Fog,4)
+  changeCurrentWeather(:Fog, 4)
   next true
 })
 
@@ -1121,7 +1133,7 @@ HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(nil,1) if $game_screen.weather == :Fog
+  changeCurrentWeather(nil, 1) if $game_screen.weather == :Fog
   next true
 })
 
