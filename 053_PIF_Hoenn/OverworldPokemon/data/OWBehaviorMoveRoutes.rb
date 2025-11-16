@@ -133,4 +133,5 @@ OW_BEHAVIOR_MOVE_ROUTES = {
       RPG::MoveCommand.new(PBMoveRoute::End)
     ]
   }
+
 }

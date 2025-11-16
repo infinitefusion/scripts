@@ -10,6 +10,7 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :pokemon
 
   DISTANCE_FOR_DESPAWN  = 16
+  FLEEING_BEHAVIORS  = [:flee, :flee_flying, :teleport_away]
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
@@ -150,7 +151,9 @@ class OverworldPokemonEvent < Game_Event
     return if @pokemon.shiny?
     playCry(@species)
     pbSEPlay(SE_FLEE)
-    set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed], false)
+    flee_behavior = OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed]
+    flee_behavior = OW_BEHAVIOR_MOVE_ROUTES[:noticed][:flee] unless FLEEING_BEHAVIORS.include?(flee_behavior)
+      set_custom_move_route(flee_behavior, false)
     @through = true
     @detection_radius = 10
     force_move_route(@move_route)
@@ -191,9 +194,13 @@ class OverworldPokemonEvent < Game_Event
       despawn
     end
     if is_near_player
-      # if !$game_player.moving?
       if playerNextToEvent? # Battle
-        overworldPokemonBattle
+        if isRepelActive && pokemon_can_be_repelled
+          playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
+          flee(@behavior_noticed)
+        else
+          overworldPokemonBattle
+        end
       else
         # check for noticed
         if @current_state == :ROAMING
@@ -203,7 +210,6 @@ class OverworldPokemonEvent < Game_Event
           end
         end
       end
-      # end
     else
       if @current_state != :ROAMING
         update_state(:ROAMING)
@@ -212,33 +218,9 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  # def update_behavior()
-  #   return if @opacity == 0
-  #   if player_near_event?(@detection_radius)
-  #     if !$game_player.moving?
-  #       if playerNextToEvent? # Battle
-  #         overworldPokemonBattle
-  #       else
-  #         # check for noticed
-  #         if @current_state == :ROAMING
-  #           if check_detect_trainer
-  #             echoln @detection_radius
-  #             playDetectPlayerAnimation
-  #             update_state(:NOTICED_PLAYER)
-  #           end
-  #         elsif @current_state == :NOTICED_PLAYER
-  #           unless player_near_event?(@detection_radius)
-  #             update_state(@current_state = :ROAMING)
-  #           end
-  #         end
-  #       end
-  #     end
-  #   else
-  #     if @current_state != :ROAMING
-  #       update_state(:ROAMING)
-  #     end
-  #   end
-  # end
+  def pokemon_can_be_repelled
+    return $Trainer.party[0].level > @pokemon.level && !@pokemon.shiny?
+  end
 
   def turn_generic(*args)
     super(*args)
