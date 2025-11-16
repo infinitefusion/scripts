@@ -2,10 +2,14 @@
 MULTIPLE_WILD_OW_FUSE_CHANCE = 350
 class Game_Event
   def player_near_event?(radius)
+    return distance_from_player <= radius
+  end
+
+  def distance_from_player
     dx = $game_player.x - @x
     dy = $game_player.y - @y
     distance = Math.sqrt(dx * dx + dy * dy)
-    return distance <= radius
+    return distance
   end
 
   def playerNextToEvent?

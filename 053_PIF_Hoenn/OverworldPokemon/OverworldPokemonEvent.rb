@@ -9,6 +9,7 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :detection_radius
   attr_accessor :pokemon
 
+  DISTANCE_FOR_DESPAWN  = 16
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
@@ -184,7 +185,12 @@ class OverworldPokemonEvent < Game_Event
   def update_behavior()
     return if @opacity == 0
     return if @current_state == :FLEEING
-    if player_near_event?(@detection_radius)
+    distance = distance_from_player()
+    is_near_player = distance <= @detection_radius
+    if distance >= DISTANCE_FOR_DESPAWN
+      despawn
+    end
+    if is_near_player
       # if !$game_player.moving?
       if playerNextToEvent? # Battle
         overworldPokemonBattle
