@@ -1266,7 +1266,7 @@ class Game_Character
   def distance_from_player
     dx = (@x - $game_player.x).abs
     dy = (@y - $game_player.y).abs
-    return (dx + dy)-1 #-1 because not counting the event's current tile
+    return (dx + dy)-1 #-1 because not counting the event's or the player"s current tile
   end
 
 

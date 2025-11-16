@@ -150,7 +150,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   if $scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
       if $MapFactory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
-        $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
+        $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1) unless $game_player.floating
       end
     end
     if event == $game_player
@@ -260,6 +260,7 @@ def pbBattleOnStepTaken(repel_active)
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
+  return if $game_player.floating
   $PokemonTemp.encounterType = encounter_type
   encounter = generateWildEncounter(encounter_type)
 

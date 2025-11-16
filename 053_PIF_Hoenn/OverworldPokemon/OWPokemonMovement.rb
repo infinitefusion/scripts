@@ -16,7 +16,6 @@ class Game_Character
 
   def move_type_curious(next_movement_ready = false)
     if next_movement_ready
-      echoln distance_from_player
       if distance_from_player > 1
         move_toward_player
       else
