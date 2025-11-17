@@ -319,28 +319,44 @@ end
 #   return Settings::DEFAULT_SPRITE_PATH
 # end
 
-def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
+def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true, weightedByArtist = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  if onlyMain
-    alts_list = list_main_sprites_letters(spriteName)
-    return nil if alts_list.empty?
-    return alts_list.sample
-  else
-    alts_list = list_all_sprites_letters(spriteName)
-    return nil if alts_list.empty?
-    return alts_list.sample
-  end
+  return get_random_alt_letter(spriteName, onlyMain, weightedByArtist)
 end
 
-def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
+def get_random_alt_letter_for_unfused(dex_num, onlyMain = true, weightedByArtist = true)
   spriteName = _INTL("{1}", dex_num)
+  return get_random_alt_letter(spriteName, onlyMain, weightedByArtist)
+end
+
+def get_random_alt_letter(spriteName, onlyMain = true, weightedByArtist = true)
+  sprites = map_alt_sprite_letters_for_pokemon(spriteName)
+  return nil if sprites.empty?
+
   if onlyMain
-    letters_list= list_main_sprites_letters(spriteName)
-  else
-    letters_list= list_all_sprites_letters(spriteName)
+    tempList = sprites.select { |key, value| value[:status] == 'main' }
+    tempList = sprites.select { |key, value| value[:status] == 'temp' } if tempList.empty?
+    return nil if tempList.empty?
+    sprites = tempList
   end
-  letters_list << ""  #add main sprite
-  return letters_list.sample
+
+  return sprites.keys.sample if !weightedByArtist
+
+  artists = {}
+  sprites.each { |key, value| # count how many sprites each artist has
+    sprites[key][:artist] = value[:artist] = sprites[key][:artist].split(' & ').map {|name| name.strip }.sort.join(' & ')  # keep collabs with different order as same artist
+    artists[value[:artist]] = 0 if !artists.has_key?(value[:artist])
+    artists[value[:artist]] += 1
+  }
+
+  hat = []
+  factor = artists.reduce(1) { |acc, (artist, count)| acc.lcm(count) }
+  sprites.each { |key, value|
+    for i in 1..(factor / artists[value[:artist]]) do # more artist's sprites = fewer times in list
+      hat << key
+    end
+  }
+  return hat.sample # pick a sprite out of the hat
 end
 
 def list_main_sprites_letters(spriteName)
@@ -348,13 +364,13 @@ def list_main_sprites_letters(spriteName)
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
   main_sprites = []
   all_sprites.each do |key, value|
-    main_sprites << key if value == "main"
+    main_sprites << key if value[:status] == "main"
   end
 
   #add temp sprites if no main sprites found
   if main_sprites.empty?
     all_sprites.each do |key, value|
-      main_sprites << key if value == "temp"
+      main_sprites << key if value[:status] == "temp"
     end
   end
   return main_sprites
@@ -362,51 +378,40 @@ end
 
 def list_all_sprites_letters_head_body(head_id,body_id)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
-  letters = []
-  all_sprites_map.each do |key, value|
-    letters << key
-  end
-  return letters
+  return map_alt_sprite_letters_for_pokemon(spriteName).keys
 end
 
 def list_all_sprites_letters(spriteName)
-  all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
-  letters = []
-  all_sprites_map.each do |key, value|
-    letters << key
-  end
-  return letters
+  return map_alt_sprite_letters_for_pokemon(spriteName).keys
 end
 
 def list_alt_sprite_letters(spriteName)
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
   alt_sprites = []
   all_sprites.each do |key, value|
-    alt_sprites << key if value == "alt"
+    alt_sprites << key if value[:status] == "alt"
   end
+  return alt_sprites
 end
 
 
-#ex: "1" -> "main"
-#    "1a" -> "alt"
+#ex: "1" -> { :status => "main", :artist => "urbain" }
+#    "1a" -> { :status => "alt", :artist => "taunie" }
 def map_alt_sprite_letters_for_pokemon(spriteName)
+  parts = spriteName.split('.')
+  is_triple = parts[2] != nil
+  is_fusion = !is_triple && parts[1] != nil
+
   alt_sprites = {}
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
     row = line.split(',')
-    sprite_name = row[0]
-    if sprite_name.start_with?(spriteName)
-      if sprite_name.length > spriteName.length #alt letter
-        letter = sprite_name[spriteName.length]
-        if letter.match?(/[a-zA-Z]/)
-          main_or_alt = row[2] ? row[2] : nil
-          alt_sprites[letter] = main_or_alt
-        end
-      else  #letterless
-      main_or_alt = row[2] ? row[2].gsub("\n","") : nil
-      alt_sprites[""] = main_or_alt
-      end
-    end
+    sprite_name = row[0].strip
+
+    next if is_triple && !sprite_name.match(Regexp.new("^#{parts[0]}\\.#{parts[1]}\\.#{parts[2]}[a-z]*$"))
+    next if is_fusion && !sprite_name.match(Regexp.new("^#{parts[0]}\\.#{parts[1]}[a-z]*$"))
+    next if !is_triple && !is_fusion && !sprite_name.match(Regexp.new("^#{parts[0]}[a-z]*$"))
+
+    alt_sprites[sprite_name[/[a-z]+/] || ""] = { :status => row[2], :artist => row[1] }
   end
   return alt_sprites
 end
