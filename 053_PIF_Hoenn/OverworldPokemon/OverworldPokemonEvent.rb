@@ -8,9 +8,11 @@ class OverworldPokemonEvent < Game_Event
 
   attr_accessor :detection_radius
   attr_accessor :pokemon
+  attr_accessor :manual_ow_pokemon
 
-  DISTANCE_FOR_DESPAWN  = 16
-  FLEEING_BEHAVIORS  = [:flee, :flee_flying, :teleport_away]
+  DISTANCE_FOR_DESPAWN = 16
+  FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
+
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
@@ -44,7 +46,7 @@ class OverworldPokemonEvent < Game_Event
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
-
+    @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
     initialize_sprite(@terrain, species_data)
@@ -153,7 +155,7 @@ class OverworldPokemonEvent < Game_Event
     pbSEPlay(SE_FLEE)
     flee_behavior = OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed]
     flee_behavior = OW_BEHAVIOR_MOVE_ROUTES[:noticed][:flee] unless FLEEING_BEHAVIORS.include?(flee_behavior)
-      set_custom_move_route(flee_behavior, false)
+    set_custom_move_route(flee_behavior, false)
     @through = true
     @detection_radius = 10
     force_move_route(@move_route)
@@ -191,7 +193,7 @@ class OverworldPokemonEvent < Game_Event
     distance = distance_from_player()
     is_near_player = distance <= @detection_radius
     if distance >= DISTANCE_FOR_DESPAWN
-      despawn
+      despawn unless @manual_ow_pokemon
     end
     if is_near_player
       if playerNextToEvent? # Battle

@@ -63,6 +63,7 @@ class Game_Map
   end
 
   def setup_overworld_pokemon_from_comments(event)
+    echoln "setting up"
     params = extract_parameters_from_comments(event)
     unless params && params.is_a?(Hash)
       raise "Error: Couldn't setup overworld Pokemon for event #{event.id} in map #{@map_id}"
@@ -83,6 +84,7 @@ class Game_Map
       event.setup_pokemon(species, level, :Grass, behavior_roaming, behavior_noticed)
       event.set_swimming if params[:swimming]
       event.always_on_top = always_on_top
+      event.manual_ow_pokemon = true
     else
       event.erase
     end
