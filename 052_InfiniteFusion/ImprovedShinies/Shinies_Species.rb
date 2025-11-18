@@ -6,12 +6,15 @@ module GameData
       valid_format_hex = /^#([0-9a-fA-F]{6}).#([0-9a-fA-F]{6})$/ # Format hexadécimal
 
       ids = []
-      if dex_number <= NB_POKEMON
-        ids << dex_number
-      else
+      if isFusion(dex_number)
         ids << getBodyID(dex_number) if bodyShiny
         ids << getHeadID(dex_number, ids[0]) if headShiny
+      elsif isTripleFusion?(dex_number)
+        ids = get_triple_fusion_components(dex_number)
+      else
+        ids << dex_number
       end
+      keep_same_color = (bodyShiny && headShiny) && !isTripleFusion?(dex_number)
       color_to_stay = []
       ids.each do |id|
         offsets = SHINY_COLOR_OFFSETS[id]
@@ -20,7 +23,7 @@ module GameData
           if value.is_a?(String)
             if value.match?(valid_format_rgb)
               from_rgb, to_rgb = value.split(".").map { |rgb| rgb.split.map(&:to_i) }
-              if from_rgb == to_rgb && bodyShiny && headShiny
+              if from_rgb == to_rgb && keep_same_color
                 color_to_stay << value
                 next
               end
@@ -29,7 +32,7 @@ module GameData
               from_hex, to_hex = value.split(".")
               from_rgb = hex_to_rgb(from_hex)
               to_rgb = hex_to_rgb(to_hex)
-              if from_rgb == to_rgb && bodyShiny && headShiny
+              if from_rgb == to_rgb && keep_same_color
                 color_to_stay << "#{from_rgb.join(" ")}.#{to_rgb.join(" ")}"
                 next
               end
@@ -40,7 +43,7 @@ module GameData
       end
       if result.empty?
         "nil"
-      elsif bodyShiny && headShiny
+      elsif keep_same_color
         [result.join("|"), color_to_stay.join("|")].reject(&:empty?).join("&")
       else
         result.join("|")
