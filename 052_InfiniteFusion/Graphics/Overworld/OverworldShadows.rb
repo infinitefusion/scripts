@@ -60,6 +60,7 @@ def pbShouldGetShadow?(event)
   return true if event.is_a?(Game_Player) # The player will always have a shadow
   page = pbGetActiveEventPage(event)
   return false unless page
+  return false unless page.graphic.character_name == ""
   comments = page.list.select { |e| e.code == 108 || e.code == 408 }.map do |e|
     e.parameters.join
   end
