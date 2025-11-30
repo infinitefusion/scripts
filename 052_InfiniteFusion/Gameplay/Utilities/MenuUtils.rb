@@ -89,3 +89,25 @@ def select_any_pokemon()
   end
   return pbChooseList(commands, 0, nil, 1)
 end
+
+
+def pbChoosePokemonPC(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
+  chosen = 0
+  pbFadeOutIn {
+    scene = PokemonParty_Scene.new
+    screen = PokemonPartyScreen.new(scene, $Trainer.party)
+    if ableProc
+      chosen = screen.pbChooseAblePokemon(ableProc, allowIneligible)
+    else
+      screen.pbStartScene(_INTL("Choose a Pokémon."), false)
+      chosen = screen.pbChoosePokemon
+      screen.pbEndScene
+    end
+  }
+  pbSet(variableNumber, chosen)
+  if chosen >= 0
+    pbSet(nameVarNumber, $Trainer.party[chosen].name)
+  else
+    pbSet(nameVarNumber, "")
+  end
+end

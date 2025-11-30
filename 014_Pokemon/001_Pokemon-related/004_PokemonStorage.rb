@@ -58,6 +58,8 @@ class PokemonStorage
   attr_accessor   :transfer_box
   attr_accessor :currentBox
   attr_writer   :unlockedWallpapers
+  attr_accessor :filterProc
+
   BASICWALLPAPERQTY = 16
 
   def initialize(maxBoxes = Settings::NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)

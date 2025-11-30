@@ -1322,7 +1322,7 @@ class PokemonPartyScreen
         end
       end
       commands[cmdNickname = commands.length] = _INTL("Nickname") if !pkmn.egg?
-      commands[cmdLearnMove = commands.length] = _INTL("Remember moves")
+      commands[cmdLearnMove = commands.length] = _INTL("Change moves")
 
       if playerHasFusionItems
         if pkmn.isFusion?

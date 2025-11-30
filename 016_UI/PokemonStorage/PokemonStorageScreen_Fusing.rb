@@ -34,6 +34,7 @@ class PokemonStorageScreen
       pbHold(selected)
       pbDisplay(_INTL("Select a Pokémon to fuse it with"))
       @scene.sprites["box"].disableFusions()
+
       return
     end
     if !poke_body

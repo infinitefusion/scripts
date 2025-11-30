@@ -23,16 +23,23 @@ class PokemonBoxSprite < SpriteWrapper
     self.y = 18
 
     @fusions_enabled = fusionsEnabled
+    @filterProc = nil
     refresh
   end
 
+  def setFilterProc(filter)
+    @filterProc=filter
+  end
+
   def disableFusions()
-    @fusions_enabled = false
+    #@fusions_enabled = false
+    @filterProc = proc { |pokemon| pokemon&.isFusion? == false }
     refreshAllBoxSprites()
   end
 
   def enableFusions()
-    @fusions_enabled = true
+    @filterProc = nil
+   # @fusions_enabled = true
     refreshAllBoxSprites()
   end
 
@@ -159,11 +166,12 @@ class PokemonBoxSprite < SpriteWrapper
     end
   end
 
-  def refreshAllBoxSprites
-    # spriteLoader = BattleSpriteLoader.new
+  #@filterProc is called on the @pokemon object of each BoxIcon.
+  # If true, full opacity, selectable, otherwise, low opacity, not selectable
+  def refreshAllBoxSprites()
     for i in 0...PokemonBox::BOX_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
-        @pokemonsprites[i].refresh(@fusions_enabled)
+        @pokemonsprites[i].refresh(@filterProc)
       end
       # spriteLoader.preload_sprite_from_pokemon(@pokemonsprites[i].pokemon) if @pokemonsprites[i].pokemon
     end
