@@ -4,6 +4,7 @@
 class PokemonStorageScene
   attr_reader :quickswap
   attr_accessor :sprites
+  attr_accessor :choseFromParty
 
   def initialize
     @command = 1
@@ -44,6 +45,11 @@ class PokemonStorageScene
     @command = command
     addBackgroundPlane(@sprites, "background", "Storage/bg", @bgviewport)
     @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
+
+    echoln @screen.filterProc
+    if @screen.filterProc
+      @sprites["box"].setFilterProc(@screen.filterProc)
+    end
     @sprites["boxsides"] = IconSprite.new(0, 0, @boxsidesviewport)
     @sprites["boxsides"].setBitmap("Graphics/Pictures/Storage/overlay_main")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)

@@ -6,15 +6,21 @@ class PokemonStorageScreen
   attr_reader :storage
   attr_accessor :heldpkmn
   attr_accessor :fusionMode
+  attr_accessor :filterProc
 
   def initialize(scene, storage)
     @scene = scene
     @storage = storage
     @pbHeldPokemon = nil
-    @command =0
+    @command = 0
+    @filterProc = nil
   end
 
-  def pbStartScreen(command,animate=true)
+  def setFilter(filterProc)
+    @filterProc = filterProc
+  end
+
+  def pbStartScreen(command, animate = true)
     @heldpkmn = nil
     @command = command
     if command == 0 # Organise
@@ -26,10 +32,19 @@ class PokemonStorageScreen
     elsif command == 2 # Deposit
       @scene.pbStartBox(self, command, animate)
       pcDepositCommand
-    elsif command == 3
+    else
       @scene.pbStartBox(self, command, animate)
       @scene.pbCloseBox
     end
+  end
+
+
+  #TODO: Open party screen by default.
+  # Handle when player chooses a Pokemon from their party instead of a box
+  def choosePokemon
+    command = COMMAND_SELECT_POKEMON
+    @scene.pbStartBox(self, command, true)
+    return pcSelectCommand
   end
 
   def pcOrganizeCommand()
@@ -86,7 +101,6 @@ class PokemonStorageScreen
     cmdDebug = -1
     cmdCancel = -1
     cmdNickname = -1
-
 
     echoln selected
     if heldpoke
@@ -151,6 +165,50 @@ class PokemonStorageScreen
     else
       pbHold(selected)
     end
+  end
+
+  def pcSelectCommand
+    loop do
+      selected = @scene.pbSelectBox(@storage.party)
+      if selected == nil
+        next if pbConfirm(_INTL("Continue Box operations?"))
+        break
+      else
+        case selected[0]
+        when -2 # Party Pokémon
+          pbDisplay(_INTL("Which one will you choose?"))
+          next
+        when -3 # Close box
+          if pbConfirm(_INTL("Cancel choosing a Pokémon?"))
+            pbSEPlay("PC close")
+            break
+          end
+          return nil
+        when -4 # Box name
+          pbBoxCommands
+          next
+        end
+        pokemon = @storage[selected[0], selected[1]]
+        next if !pokemon
+        if filterProc.call(pokemon)
+          command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
+            _INTL("Choose"),
+            _INTL("Summary"),
+            _INTL("Cancel")
+          ])
+          case command
+          when 0 then
+            return selected
+          when 1 then
+            pbSummary(selected, nil)
+          end
+        else
+          pbDisplay(_INTL("This Pokémon cannot be chosen..."))
+          next
+        end
+      end
+    end
+    @scene.pbCloseBox
   end
 
   def pcWithdrawCommand
@@ -612,15 +670,18 @@ class PokemonStorageScreen
     pbMessage(_INTL("This is the Transfer Box. It's used to transfer Pokémon between savefiles!"))
     pbMessage(_INTL("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2."))
   end
+
   def boxCommandName
     @scene.pbBoxName(_INTL("Box name?"), 0, 20)
   end
+
   def boxCommandJump
     destbox = @scene.pbChooseBox(_INTL("Jump to which Box?"))
     if destbox >= 0
       @scene.pbJumpToBox(destbox)
     end
   end
+
   def boxCommandSetWallpaper
     papers = @storage.availableWallpapers
     index = 0

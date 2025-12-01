@@ -91,23 +91,21 @@ def select_any_pokemon()
 end
 
 
-def pbChoosePokemonPC(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
-  chosen = 0
-  pbFadeOutIn {
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $Trainer.party)
-    if ableProc
-      chosen = screen.pbChooseAblePokemon(ableProc, allowIneligible)
-    else
-      screen.pbStartScene(_INTL("Choose a Pokémon."), false)
-      chosen = screen.pbChoosePokemon
-      screen.pbEndScene
-    end
-  }
-  pbSet(variableNumber, chosen)
-  if chosen >= 0
-    pbSet(nameVarNumber, $Trainer.party[chosen].name)
-  else
-    pbSet(nameVarNumber, "")
-  end
+
+# chosen pokemon is returned with this format:
+#[[boxID, boxPosition],pokemon]
+
+def pbChoosePokemonPC(positionVariableNumber, pokemonVarNumber, ableProc = nil)
+  chosen = nil
+  pokemon = nil
+    pbFadeOutIn {
+      scene = PokemonStorageScene.new
+      screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+      screen.setFilter(ableProc) if ableProc
+      chosen = screen.choosePokemon
+      pokemon = $PokemonStorage[chosen[0]][chosen[1]] if chosen
+      scene.pbCloseBox
+    }
+  pbSet(positionVariableNumber, chosen)
+  pbSet(pokemonVarNumber, pokemon)
 end

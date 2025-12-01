@@ -4,6 +4,7 @@
 class PokemonBoxSprite < SpriteWrapper
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
+  attr_accessor :filterProc
 
   def initialize(storage, boxnumber, viewport = nil, fusionsEnabled = true)
     super(viewport)
@@ -171,7 +172,9 @@ class PokemonBoxSprite < SpriteWrapper
   def refreshAllBoxSprites()
     for i in 0...PokemonBox::BOX_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
-        @pokemonsprites[i].refresh(@filterProc)
+        @pokemonsprites[i].refresh
+        @pokemonsprites[i].apply_filter(@filterProc)
+
       end
       # spriteLoader.preload_sprite_from_pokemon(@pokemonsprites[i].pokemon) if @pokemonsprites[i].pokemon
     end
@@ -182,6 +185,7 @@ class PokemonBoxSprite < SpriteWrapper
     for i in 0...PokemonBox::BOX_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].update
+        @pokemonsprites[i].apply_filter(@filterProc)
       end
     end
   end
