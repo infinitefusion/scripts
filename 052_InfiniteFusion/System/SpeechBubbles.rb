@@ -91,13 +91,14 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
         msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
         msgwindow.height = 102
         msgwindow.width = Graphics.width
-        if ($game_player.direction==8 && !$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp
+        if ($game_player.direction==DIRECTION_UP && !$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 0, Graphics.width, 280)
           msgwindow.y = 6
         else
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 6 + msgwindow.height, Graphics.width, 280)
           msgwindow.y = (Graphics.height - msgwindow.height) - 6
-          if $PokemonTemp.speechbubble_outofrange==true
+          if $PokemonTemp.speechbubble_outofrange==true && !$PokemonTemp.speechbubble_alwaysDown
+            echoln "out of range bitch"
             msgwindow.y = 6
           end
         end
@@ -168,6 +169,7 @@ def pbCreateMessageWindow(viewport=nil,skin=nil)
     arrow.zoom_y = 2
     end
   end
+  arrow.bitmap=nil if $PokemonTemp.speechbubble_outofrange
   $PokemonTemp.speechbubble_arrow = arrow
   msgwindow=Window_AdvancedTextPokemon.new("")
   if !viewport
