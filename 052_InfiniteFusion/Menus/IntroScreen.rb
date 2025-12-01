@@ -35,8 +35,12 @@ class Scene_Intro
     unless File.exist?(Settings::CREDITS_FILE_PATH)
       updateCreditsFile
     end
-
-    @screen = GenOneStyle.new
+    if Settings::KANTO
+      @screen = GenOneStyle.new
+    end
+    if Settings::HOENN
+      @screen = HoennIntroScreen.new
+    end
     # Plays the title screen intro (is skippable)
     @screen.intro
     # Creates/updates the main title screen loop
