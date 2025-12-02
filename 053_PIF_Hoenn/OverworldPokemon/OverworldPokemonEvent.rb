@@ -12,7 +12,6 @@ class OverworldPokemonEvent < Game_Event
 
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
-
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
@@ -42,6 +41,13 @@ class OverworldPokemonEvent < Game_Event
     @noticed_frequency = POKEMON_BEHAVIOR_DATA[@behavior_species][:noticed_frequency] || default_frequency
 
     @detection_radius = calculate_ow_pokemon_sight_radius(species_data)
+
+    #When the player is next to a Pokemon but not facing it, there is a delay before it battles.
+    # The battle will start when the timer reaches @nearby_notice_limit
+    # @nearby_notice_limit depends on the size of the pokemon. (usually around 3-5 ticks)
+    @nearby_notice_timer = 0
+    @nearby_notice_limit = calculateNearbyNoticeLimit(species_data)
+    echoln @nearby_notice_limit
 
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
@@ -84,6 +90,37 @@ class OverworldPokemonEvent < Game_Event
     @switch_a = true
   end
 
+  def calculateNearbyNoticeLimit(species_data)
+    min_height = 0.1      # meters
+    max_height = 20.0
+    min_weight = 0.1      # kg
+    max_weight = 1000.0
+
+    min_notice = 2        # smallest notice value
+    max_notice = 12       # largest notice value
+    small_height = 0.5    # height threshold for very small Pokémon
+    small_weight = 5      # weight threshold for very small Pokémon
+    small_clamp = 3       # max value for very small Pokémon
+    exponent = 2.5        # curve exponent for large Pokémon scaling
+
+    height = species_data.height.to_f / 10.0   # decimeters → meters
+    weight = species_data.weight.to_f / 10.0   # hectograms → kg
+    # ==== Normalize ====
+    norm_height = [[height, min_height].max, max_height].min / max_height
+    norm_weight = [[weight, min_weight].max, max_weight].min / max_weight
+
+    size_factor = ((norm_height + norm_weight) / 2.0) ** exponent
+    notice_value = min_notice + size_factor * (max_notice - min_notice)
+    if height < small_height && weight < small_weight
+      notice_value = [notice_value, small_clamp].min
+    end
+
+    return notice_value.round
+  end
+
+
+
+
   def getBehaviorSpecies(species_data)
     if isSpeciesFusion(@species)
       return species_data.get_head_species_symbol
@@ -111,9 +148,6 @@ class OverworldPokemonEvent < Game_Event
     return @current_state
   end
 
-  def notice_player
-    @current_state = :NOTICED_PLAYER
-  end
 
   def delete
     $PokemonTemp.overworld_pokemon_on_map.delete(self)
@@ -196,7 +230,7 @@ class OverworldPokemonEvent < Game_Event
       despawn unless @manual_ow_pokemon
     end
     if is_near_player
-      if playerNextToEvent? # Battle
+      if should_start_battle? # Battle
         if isRepelActive && pokemon_can_be_repelled
           playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
           flee(@behavior_noticed)
@@ -220,6 +254,31 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
+  #Automatically starts a battle if the player is 1 tile away from the Pokemon.
+  # If the player is behind or to the side of the pokemon, there is a slight delay
+  def should_start_battle?
+    should_start = false
+    if player_near_event?(1)
+      position = playerPositionRelativeToEvent
+      echoln position
+      if position[:front]
+        should_start = true
+      elsif position[:back]
+        @nearby_notice_timer += 1
+        @nearby_notice_timer += 1 if @current_state == :NOTICED_PLAYER
+      elsif position[:side]
+        @nearby_notice_timer += 2
+        should_start = true if @current_state == :NOTICED_PLAYER
+      end
+      if @nearby_notice_timer > @nearby_notice_limit
+        should_start = true
+      end
+    else
+      @nearby_notice_timer =0
+    end
+    @nearby_notice_timer if should_start
+    return should_start
+  end
   def pokemon_can_be_repelled
     return $Trainer.party[0].level > @pokemon.level && !@pokemon.shiny?
   end
