@@ -102,7 +102,6 @@ class PokemonStorageScreen
     cmdCancel = -1
     cmdNickname = -1
 
-    echoln selected
     if heldpoke
       helptext = _INTL("{1} is selected.", heldpoke.name)
       commands[cmdMove = commands.length] = (pokemon) ? _INTL("Shift") : _INTL("Place")
@@ -168,8 +167,10 @@ class PokemonStorageScreen
   end
 
   def pcSelectCommand
+    @scene.choseFromParty = true
+    @scene.partyTabBackButton = _INTL("Boxes")
     loop do
-      selected = @scene.pbSelectBox(@storage.party)
+      selected =  @scene.pbSelectBox(@storage.party)
       if selected == nil
         next if pbConfirm(_INTL("Continue Box operations?"))
         break
@@ -190,7 +191,9 @@ class PokemonStorageScreen
         end
         pokemon = @storage[selected[0], selected[1]]
         next if !pokemon
-        if filterProc.call(pokemon)
+        echoln selected
+
+        if @filterProc.call(pokemon)
           command = pbShowCommands(_INTL("{1} is selected.", pokemon.name), [
             _INTL("Choose"),
             _INTL("Summary"),

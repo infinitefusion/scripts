@@ -13,7 +13,7 @@ class HoennIntroScreen
 
   # Fusion config
   FUSION_SCROLL_SPEED = 2
-  FUSION_PRELOAD_COUNT = 20
+  FUSION_PRELOAD_COUNT = 10
   FUSION_SPAWN_EVERY = 300
   FUSION_Y_RANGE = (50..260)
 
@@ -32,7 +32,7 @@ class HoennIntroScreen
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99998
     @sprites = {}
-
+    pbBGMPlay(@bgm)
     setupScrollingLayers
     setupUI
     preloadFusionSprites

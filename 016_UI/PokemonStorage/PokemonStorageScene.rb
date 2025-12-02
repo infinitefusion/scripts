@@ -42,14 +42,15 @@ class PokemonStorageScene
     @quickswap = false
     @sprites = {}
     @choseFromParty = false
+    @partyTabBackButton = nil
     @command = command
     addBackgroundPlane(@sprites, "background", "Storage/bg", @bgviewport)
-    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
+    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport,true,@screen.filterProc)
 
-    echoln @screen.filterProc
-    if @screen.filterProc
-      @sprites["box"].setFilterProc(@screen.filterProc)
-    end
+    # echoln @screen.filterProc
+    # if @screen.filterProc
+    #   @sprites["box"].setFilterProc(@screen.filterProc)
+    # end
     @sprites["boxsides"] = IconSprite.new(0, 0, @boxsidesviewport)
     @sprites["boxsides"].setBitmap("Graphics/Pictures/Storage/overlay_main")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @boxsidesviewport)
@@ -60,8 +61,8 @@ class PokemonStorageScene
     @sprites["pokemon"].y = 134
     @sprites["pokemon"].zoom_y = Settings::FRONTSPRITE_SCALE
     @sprites["pokemon"].zoom_x = Settings::FRONTSPRITE_SCALE
-    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport)
-    if command != 2 # Drop down tab only on Deposit
+    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport,@screen.filterProc)
+    if command != 2 && command != 3 # Drop down tab only on Deposit and Select Pokemon
       @sprites["boxparty"].x = 182
       @sprites["boxparty"].y = Graphics.height
     end
@@ -375,6 +376,11 @@ class PokemonStorageScene
     end
   end
 
+  def setStartingTab(symbol)
+    @command = (symbol == :party ? 1 : 0)   # 1 = party, 0 = box
+  end
+
+
   def pbSelectPartyInternal(party, depositing)
     selection = @selection
     pbPartySetArrow(@sprites["arrow"], selection)
@@ -459,7 +465,7 @@ class PokemonStorageScene
   end
 
   def pbSwitchBoxToRight(newbox)
-    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled)
+    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled,@screen.filterProc)
     newbox.x = 520
     Graphics.frame_reset
     distancePerFrame = 64 * 20 / Graphics.frame_rate
@@ -480,7 +486,7 @@ class PokemonStorageScene
   end
 
   def pbSwitchBoxToLeft(newbox)
-    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled)
+    newbox = PokemonBoxSprite.new(@storage, newbox, @boxviewport, @sprites["box"].isFusionEnabled,@screen.filterProc)
     newbox.x = -152
     Graphics.frame_reset
     distancePerFrame = 64 * 20 / Graphics.frame_rate
@@ -841,9 +847,9 @@ class PokemonStorageScene
   def pbHardRefresh
     oldPartyY = @sprites["boxparty"].y
     @sprites["box"].dispose
-    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
+    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport,@screen.filterProc)
     @sprites["boxparty"].dispose
-    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport)
+    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport,@screen.filterProc)
     @sprites["boxparty"].y = oldPartyY
   end
 
