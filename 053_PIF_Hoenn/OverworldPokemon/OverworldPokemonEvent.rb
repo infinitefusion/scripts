@@ -47,8 +47,6 @@ class OverworldPokemonEvent < Game_Event
     # @nearby_notice_limit depends on the size of the pokemon. (usually around 3-5 ticks)
     @nearby_notice_timer = 0
     @nearby_notice_limit = calculateNearbyNoticeLimit(species_data)
-    echoln @nearby_notice_limit
-
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
@@ -176,7 +174,6 @@ class OverworldPokemonEvent < Game_Event
     trigger_overworld_wild_battle
     if @switch_a
       pbSetSelfSwitch(@id, "A", true)
-      echoln "setting switch A"
     else
       despawn
     end
@@ -260,7 +257,6 @@ class OverworldPokemonEvent < Game_Event
     should_start = false
     if player_near_event?(1)
       position = playerPositionRelativeToEvent
-      echoln position
       if position[:front]
         should_start = true
       elsif position[:back]
