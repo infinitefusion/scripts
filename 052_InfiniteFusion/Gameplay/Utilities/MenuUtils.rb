@@ -98,6 +98,7 @@ end
 def pbChoosePokemonPC(positionVariableNumber, pokemonVarNumber, ableProc = nil)
   chosen = nil
   pokemon = nil
+
     pbFadeOutIn {
       scene = PokemonStorageScene.new
       screen = PokemonStorageScreen.new(scene, $PokemonStorage)

@@ -296,9 +296,9 @@ class PokemonStorageScene
   def pbHardRefresh
     oldPartyY = @sprites["boxparty"].y
     @sprites["box"].dispose
-    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport)
+    @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport, @screen.filterProc)
     @sprites["boxparty"].dispose
-    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport)
+    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport,@screen.filterProc,@partyTabBackButton)
     @sprites["boxparty"].y = oldPartyY
   end
 
