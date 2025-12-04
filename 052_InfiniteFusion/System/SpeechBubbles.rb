@@ -169,7 +169,7 @@ def pbCreateMessageWindow(viewport=nil,skin=nil)
     arrow.zoom_y = 2
     end
   end
-  arrow.bitmap=nil if $PokemonTemp.speechbubble_outofrange
+  arrow.bitmap=nil if $PokemonTemp.speechbubble_outofrange && arrow
   $PokemonTemp.speechbubble_arrow = arrow
   msgwindow=Window_AdvancedTextPokemon.new("")
   if !viewport
