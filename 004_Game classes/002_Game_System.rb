@@ -20,7 +20,7 @@ class Game_System
   attr_accessor :autoscroll_x_speed
   attr_accessor :autoscroll_y_speed
   attr_accessor :bgm_position
-
+  attr_reader :defaultBGM
   def initialize
     @map_interpreter    = Interpreter.new(0, true)
     @battle_interpreter = Interpreter.new(0, false)

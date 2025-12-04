@@ -55,6 +55,11 @@ def pbBGMPlay(param,volume=nil,pitch=nil)
   param = pbResolveAudioFile("ultra_metropolis", volume, pitch) if darknessEffectOnCurrentMap() && !$PokemonTemp.during_battle
   param = pbResolveAudioFile("ship", volume, pitch) if $PokemonGlobal && $PokemonGlobal.boat
   if param.name && param.name!=""
+    if $PokemonSystem
+      $PokemonSystem.encountered_music = [] if !$PokemonSystem.encountered_music
+      $PokemonSystem.encountered_music << param.name unless $PokemonSystem.encountered_music.include?(param.name)
+      echoln "registering new music!#{param.name}"
+    end
     if $game_system && $game_system.respond_to?("bgm_play")
       $game_system.bgm_play(param)
       return
