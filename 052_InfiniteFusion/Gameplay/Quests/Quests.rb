@@ -1,5 +1,8 @@
 def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite)
   case quest_type
+  when :MAIN_QUEST
+    text_color = MainQuestColor
+
   when :HOTEL_QUEST
     text_color = HotelQuestColor
   when :FIELD_QUEST
@@ -10,6 +13,7 @@ def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location
     text_color = TRQuestColor
   end
   new_quest = Quest.new(quest_id, quest_name, quest_description, npc_sprite, quest_location, quest_location, text_color)
+  new_quest.type= quest_type
   QUESTS[quest_id] = new_quest
 end
 
@@ -127,6 +131,18 @@ QUESTS = {
 # HOENN QUESTS   ##
 # ################
 
+## MAIN QUESTS
+define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the first Pokémon Gym in Rustboro City."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne")
+define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan")
+
+define_quest("main_stolen_parts",:MAIN_QUEST,_INTL("Stolen Package"), _INTL("Recover a package stolen by Team Magma!"),_INTL("Rustboro City"),"NPC_Hoenn_MrStone")
+define_quest("main_steven_letter",:MAIN_QUEST,_INTL("Steven's Letter"), _INTL("Deliver a letter from the Devon Corp. president to Steven in Granite Cave. "),_INTL("Granite Cave"),"NPC_Hoenn_MrStone")
+define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL("Deliver the Devon Parts to the Shipyard in Slateport City."),_INTL("Slateport City"),"NPC_Hoenn_MrStone")
+
+
+
+#SIDE QUESTS
+#
 #route 102
 define_quest("route_102_rematch",:FIELD_QUEST,_INTL("Trainer Rematches"), _INTL("A lass you battled wants to switch up her team and rematch you!"),_INTL("Route 102"),"NPC_Hoenn_Lass")
 

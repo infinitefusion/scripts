@@ -23,6 +23,7 @@ class Quest
   attr_accessor :color
   attr_accessor :time
   attr_accessor :completed
+  attr_accessor :type
 
   def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false)
     self.id = id
@@ -70,11 +71,14 @@ def pbColor(color)
   return Color.new(255, 255, 255)
 end
 
+MainQuestColor = :GREEN
 
 HotelQuestColor = :GOLD
 FieldQuestColor = :PURPLE
 LegendaryQuestColor = :GOLD
 TRQuestColor = :DARKRED
+
+QuestBranchMain = _INTL("Main Quests")
 
 QuestBranchHotels = _INTL("Hotel Quests")
 QuestBranchField = _INTL("Field Quests")
@@ -85,7 +89,10 @@ class PokeBattle_Trainer
   attr_accessor :quests
 end
 
-
+#Shortcuts for events
+def pbQuest(id)
+  pbAcceptNewQuest(id)
+end
 def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
   return if isQuestAlreadyAccepted?(id)
   $game_variables[96] += 1 #nb. quests accepted
@@ -93,15 +100,32 @@ def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
 
   title = QUESTS[id].name
   description = QUESTS[id].desc
-  showNewQuestMessage(title,description,show_description)
+  type = QUESTS[id].type
+  if type && type == :MAIN_QUEST
+    showNewMainQuestMessage(title, description, show_description)
+  else
+    showNewSideQuestMessage(title, description, show_description)
+  end
   character_sprite = get_spritecharacter_for_event(@event_id)
   character_sprite.removeQuestIcon if character_sprite
 
   pbAddQuest(id)
 end
 
-def showNewQuestMessage(title,description, show_description)
+def showNewMainQuestMessage(title, description, show_description)
   pbMEPlay("Voltorb Flip Win")
+
+  pbCallBub(3)
+  Kernel.pbMessage(_INTL("\\C[3]NEW MAIN OBJECTIVE: \\n") + title)
+  if show_description
+    pbCallBub(3)
+    Kernel.pbMessage("\\C[1]" + description)
+  end
+end
+
+def showNewSideQuestMessage(title, description, show_description)
+  pbMEPlay("Voltorb Flip Win") if Settings::KANTO
+  pbMEPlay("match_call") if Settings::HOENN
 
   pbCallBub(3)
   Kernel.pbMessage(_INTL("\\C[6]NEW QUEST: ") + title)

@@ -118,7 +118,7 @@ class PokemonPauseMenu
     end
     commands[cmdPokemon = commands.length] = _INTL("Pokémon") if $Trainer.party_count > 0
     commands[cmdBag = commands.length] = _INTL("Bag") if !pbInBugContest?
-    commands[cmdPokegear = commands.length] = _INTL("Pokégear") if $Trainer.has_pokegear
+    commands[cmdPokegear = commands.length] = _INTL("PokéNav") if $Trainer.has_pokegear
     commands[cmdTrainer = commands.length] = $Trainer.name
     commands[cmdOutfit = commands.length] = _INTL("Outfit") if $Trainer.can_change_outfit
     if pbInSafari?
