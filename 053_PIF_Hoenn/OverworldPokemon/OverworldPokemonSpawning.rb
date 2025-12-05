@@ -130,9 +130,9 @@ end
 
 def can_spawn_pokemon_there(x,y,terrain)
   if terrain == :Water
-    return $game_map.playerPassable?(x, y, DIRECTION_ALL) && $game_map.terrain_tag(x,y).can_surf
+    return $game_map.OWPokemonPassable?(x, y, DIRECTION_ALL) && $game_map.terrain_tag(x,y).can_surf
   end
-  return $game_map.playerPassable?(x, y, DIRECTION_ALL)
+  return $game_map.OWPokemonPassable?(x, y, DIRECTION_ALL)
 end
 
 def spawn_overworld_pokemon(wild_pokemon, position, terrain, behavior_roaming = nil, behavior_noticed = nil)
