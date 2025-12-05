@@ -57,8 +57,10 @@ def pbBGMPlay(param,volume=nil,pitch=nil)
   if param.name && param.name!=""
     if $PokemonSystem
       $PokemonSystem.encountered_music = [] if !$PokemonSystem.encountered_music
-      $PokemonSystem.encountered_music << param.name unless $PokemonSystem.encountered_music.include?(param.name)
-      echoln "registering new music!#{param.name}"
+      unless $PokemonSystem.encountered_music.include?(param.name)
+        $PokemonSystem.encountered_music << param.name
+        echoln "registering new music!#{param.name}"
+      end
     end
     if $game_system && $game_system.respond_to?("bgm_play")
       $game_system.bgm_play(param)

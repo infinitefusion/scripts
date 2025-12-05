@@ -63,7 +63,6 @@ class Game_Map
   end
 
   def setup_overworld_pokemon_from_comments(event)
-    echoln "setting up"
     params = extract_parameters_from_comments(event)
     unless params && params.is_a?(Hash)
       raise "Error: Couldn't setup overworld Pokemon for event #{event.id} in map #{@map_id}"

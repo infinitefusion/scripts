@@ -46,7 +46,7 @@ class OverworldPokemonEvent < Game_Event
     # The battle will start when the timer reaches @nearby_notice_limit
     # @nearby_notice_limit depends on the size of the pokemon. (usually around 3-5 ticks)
     @nearby_notice_timer = 0
-    @nearby_notice_limit = calculateNearbyNoticeLimit(species_data)
+    @nearby_notice_limit = calculate_value_from_ref_value(species_data.weight.to_f/10,2,12, 8)# weight is multiplied by 10 in the pokemon data for some reason
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
@@ -87,37 +87,6 @@ class OverworldPokemonEvent < Game_Event
   def set_switch_a
     @switch_a = true
   end
-
-  def calculateNearbyNoticeLimit(species_data)
-    min_height = 0.1      # meters
-    max_height = 20.0
-    min_weight = 0.1      # kg
-    max_weight = 1000.0
-
-    min_notice = 2        # smallest notice value
-    max_notice = 12       # largest notice value
-    small_height = 0.5    # height threshold for very small Pokémon
-    small_weight = 5      # weight threshold for very small Pokémon
-    small_clamp = 3       # max value for very small Pokémon
-    exponent = 2.5        # curve exponent for large Pokémon scaling
-
-    height = species_data.height.to_f / 10.0   # decimeters → meters
-    weight = species_data.weight.to_f / 10.0   # hectograms → kg
-    # ==== Normalize ====
-    norm_height = [[height, min_height].max, max_height].min / max_height
-    norm_weight = [[weight, min_weight].max, max_weight].min / max_weight
-
-    size_factor = ((norm_height + norm_weight) / 2.0) ** exponent
-    notice_value = min_notice + size_factor * (max_notice - min_notice)
-    if height < small_height && weight < small_weight
-      notice_value = [notice_value, small_clamp].min
-    end
-
-    return notice_value.round
-  end
-
-
-
 
   def getBehaviorSpecies(species_data)
     if isSpeciesFusion(@species)
@@ -256,6 +225,7 @@ class OverworldPokemonEvent < Game_Event
   def should_start_battle?
     should_start = false
     if player_near_event?(1)
+      return true if $PokemonTemp.overworld_wild_battle_participants.length >= 1 #Notice immediately if a pokemon is already attacking so that double battles are more likely
       position = playerPositionRelativeToEvent
       if position[:front]
         should_start = true
@@ -347,9 +317,25 @@ class OverworldPokemonEvent < Game_Event
     return scaled.clamp(min_value, max_value).round
   end
 
+  #Generic version of calculate_value_from_stat. You provide the value.
+  # There's an optional curve_factor if it shouldn't be linear
+  # > 1 : steeper towards the end
+  # < 1 steeper towards the beginning
+  def calculate_value_from_ref_value(ref_value, min_value, max_value, curve_factor = 1)
+    ref_value = [ref_value, 1].max
+
+    # Logarithmic scaling 0 → 1
+    scaled_value = Math.log(ref_value) / curve_factor
+    normalized = scaled_value / (1 + scaled_value)
+
+    # Scale to range
+    value = min_value + normalized * (max_value - min_value)
+    value.round
+  end
+
   #####
   # Noticing player
-  # ###
+  # ###12
 
   def get_base_sprite_path(is_fusion, species_name)
     base_path = "Followers/"
