@@ -45,7 +45,7 @@ class Game_Map
 
   def create_new_game_event(event)
     # Only process events that actually belong to this map
-    unless @map.events[event.id] == event
+    if @map_id != MAP_TEMPLATE_EVENTS && @map_id != $game_map.map_id
       return ow_game_map_create_new_event(event)
     end
 
@@ -72,6 +72,7 @@ class Game_Map
     should_spawn = spawn_chance >= rand(0..100)
     if should_spawn
       species = params[:species]
+      echoln "spawning a #{species}"
       min_level = params[:min_level]
       max_level = params[:max_level]
 
@@ -84,6 +85,11 @@ class Game_Map
       event.set_swimming if params[:swimming]
       event.always_on_top = always_on_top
       event.manual_ow_pokemon = true
+
+      echoln species
+      echoln event.id
+      echoln event.name
+      echoln "(#{event.x}, #{event.y})"
     else
       event.erase
     end
