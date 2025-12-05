@@ -101,7 +101,7 @@ OW_BEHAVIOR_MOVE_ROUTES = {
     ],
     :teleport_away => [
       RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
-      RPG::MoveCommand.new(PBMoveRoute::PlaySE, RPG::AudioFile.new("SE_Zoom5")),
+      RPG::MoveCommand.new(PBMoveRoute::PlaySE, [RPG::AudioFile.new("SE_Zoom5")]),
       RPG::MoveCommand.new(PBMoveRoute::PlayAnimation, [TELEPORT_ANIMATION_ID]),
       RPG::MoveCommand.new(PBMoveRoute::TurnTowardPlayer),
       RPG::MoveCommand.new(PBMoveRoute::Script, ["self.despawn"]),
