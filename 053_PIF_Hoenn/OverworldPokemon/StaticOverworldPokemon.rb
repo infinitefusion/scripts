@@ -45,7 +45,7 @@ class Game_Map
 
   def create_new_game_event(event)
     # Only process events that actually belong to this map
-    if @map_id != MAP_TEMPLATE_EVENTS && @map_id != $game_map.map_id
+    unless @map.events[event.id] == event
       return ow_game_map_create_new_event(event)
     end
 

@@ -12,6 +12,7 @@ class OverworldPokemonEvent < Game_Event
 
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
+
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
@@ -254,7 +255,6 @@ class OverworldPokemonEvent < Game_Event
 
   def turn_generic(*args)
     super(*args)
-
   end
 
   # called when a pokemon that has noticed the player goes back to roaming
