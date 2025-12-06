@@ -98,7 +98,6 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 6 + msgwindow.height, Graphics.width, 280)
           msgwindow.y = (Graphics.height - msgwindow.height) - 6
           if $PokemonTemp.speechbubble_outofrange==true && !$PokemonTemp.speechbubble_alwaysDown
-            echoln "out of range bitch"
             msgwindow.y = 6
           end
         end

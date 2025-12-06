@@ -16,87 +16,75 @@ class PokeBattle_Battle
   #=============================================================================
   def pbEnsureParticipants
     # Prevent battles larger than 2v2 if both sides have multiple trainers
-    # NOTE: This is necessary to ensure that battlers can never become unable to
-    #       hit each other due to being too far away. In such situations,
-    #       battlers will move to the centre position at the end of a round, but
-    #       because they cannot move into a position owned by a different
-    #       trainer, it's possible that battlers will be unable to move close
-    #       enough to hit each other if there are multiple trainers on each
-    #       side.
-    if trainerBattle? && (@sideSizes[0]>2 || @sideSizes[1]>2) &&
-      @player.length>1 && @opponent.length>1
+    if trainerBattle? && (@sideSizes[0] > 2 || @sideSizes[1] > 2) &&
+      @player.length > 1 && @opponent.length > 1
       raise _INTL("Can't have battles larger than 2v2 where both sides have multiple trainers")
     end
+
     # Find out how many Pokémon each trainer has
     side1counts = pbAbleTeamCounts(0)
     side2counts = pbAbleTeamCounts(1)
-    # Change the size of the battle depending on how many wild Pokémon there are
-    if wildBattle? && side2counts[0]!=@sideSizes[1]
-      if @sideSizes[0]==@sideSizes[1]
-        # Even number of battlers per side, change both equally
-        @sideSizes = [side2counts[0],side2counts[0]]
+
+    # Adjust for wild multi battles
+    if wildBattle? && side2counts[0] != @sideSizes[1]
+      if @sideSizes[0] == @sideSizes[1]
+        @sideSizes = [side2counts[0], side2counts[0]]
       else
-        # Uneven number of battlers per side, just change wild side's size
         @sideSizes[1] = side2counts[0]
       end
     end
-    # Check if battle is possible, including changing the number of battlers per
-    # side if necessary
+
+    # Main loop to ensure battle is possible
     loop do
       needsChanging = false
-      for side in 0...2   # Each side in turn
-        next if side==1 && wildBattle?   # Wild side's size already checked above
-        sideCounts = (side==0) ? side1counts : side2counts
+
+      # Check each side (player=0, opponent=1)
+      for side in 0...2
+        next if side == 1 && wildBattle?
+        sideCounts = (side == 0) ? side1counts : side2counts
         requireds = []
-        # Find out how many Pokémon each trainer on side needs to have
+
+        # Count required battler slots per trainer
         for i in 0...@sideSizes[side]
-          idxTrainer = pbGetOwnerIndexFromBattlerIndex(i*2+side)
-          requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
+          idxTrainer = pbGetOwnerIndexFromBattlerIndex(i * 2 + side)
+          requireds[idxTrainer] ||= 0
           requireds[idxTrainer] += 1
         end
-        # Compare the have values with the need values
-        # if requireds.length>sideCounts.length
-        #   raise "Error: def pbGetOwnerIndexFromBattlerIndex gives invalid owner index ({1} for battle type {2}v{3}, trainers {4}v{5}",
-        #      requireds.length-1,@sideSizes[0],@sideSizes[1],side1counts.length,side2counts.length)
-        # end
-        sideCounts.each_with_index do |_count,i|
-          if !requireds[i] || requireds[i]==0
-            raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-                        i+1,@sideSizes[0],@sideSizes[1]) if side==0
-            raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
-                        i+1,@sideSizes[0],@sideSizes[1]) if side==1
+
+        # Compare required vs actual Pokémon
+        sideCounts.each_with_index do |_count, i|
+          # If a trainer has no required position, shrink instead of erroring
+          if !requireds[i] || requireds[i] == 0
+            needsChanging = true
+            break
           end
-          next if requireds[i]<=sideCounts[i]   # Trainer has enough Pokémon to fill their positions
-          if requireds[i]==1
-            raise _INTL("Player-side trainer {1} has no able Pokémon",i+1) if side==0
-            raise _INTL("Opposing trainer {1} has no able Pokémon",i+1) if side==1
+
+          # If they don't have enough Pokémon, shrink instead of raising
+          if requireds[i] > sideCounts[i]
+            needsChanging = true
+            break
           end
-          # Not enough Pokémon, try lowering the number of battler positions
-          needsChanging = true
-          break
         end
+
         break if needsChanging
       end
-      break if !needsChanging
-      # Reduce one or both side's sizes by 1 and try again
-      if wildBattle?
-        PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
-                      "(#{side1counts} player-side teams versus #{side2counts[0]} wild Pokémon)")
-        newSize = @sideSizes[0]-1
-      else
-        PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
-                      "(#{side1counts} player-side teams versus #{side2counts} opposing teams)")
-        newSize = @sideSizes.max-1
-      end
-      if newSize==0
-        raise _INTL("Couldn't lower either side's size any further, battle isn't possible")
-      end
-      for side in 0...2
-        next if side==1 && wildBattle?   # Wild Pokémon's side size is fixed
-        next if @sideSizes[side]==1 || newSize>@sideSizes[side]
-        @sideSizes[side] = newSize
+
+      break unless needsChanging
+
+      # SAFE SHRINK
+      PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible; shrinking…")
+
+      # Always shrink PLAYER SIDE first
+      @sideSizes[0] -= 1
+
+      # Never shrink opponent unless impossible
+      if @sideSizes[1] > @sideSizes[0] + 1
+        @sideSizes[1] = @sideSizes[0] + 1
       end
       PBDebug.log("Trying #{@sideSizes[0]}v#{@sideSizes[1]} battle instead")
+      if @sideSizes[0] <= 0
+        raise _INTL("Couldn't lower player side any further, battle isn't possible")
+      end
     end
   end
 
