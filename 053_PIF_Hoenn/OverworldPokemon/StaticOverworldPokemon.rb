@@ -72,7 +72,7 @@ class Game_Map
     should_spawn = spawn_chance >= rand(0..100)
     if should_spawn
       species = params[:species]
-      echoln "spawning a #{species}"
+      echoln "spawning a static overworld #{species}"
       min_level = params[:min_level]
       max_level = params[:max_level]
 
@@ -83,13 +83,10 @@ class Game_Map
       always_on_top = event.always_on_top
       event.setup_pokemon(species, level, :Grass, behavior_roaming, behavior_noticed)
       event.set_swimming if params[:swimming]
+      event.set_shiny if params[:shiny]
       event.always_on_top = always_on_top
       event.manual_ow_pokemon = true
-
-      echoln species
-      echoln event.id
-      echoln event.name
-      echoln "(#{event.x}, #{event.y})"
+      event.set_post_battle_switch(params[:post_battle_switch]) if params[:post_battle_switch]
     else
       event.erase
     end
@@ -120,6 +117,10 @@ class Game_Map
         result[:swimming] = true
       elsif line =~ /flying/
         result[:flying] = true
+      elsif line =~ /shiny/
+        result[:shiny] = true
+      elsif line =~ /switch\s*=\s*(\d+)/  #A switch that will be turned on after the pokemon is battled
+        result[:post_battle_switch] = $1.to_i
       end
     end
     return result

@@ -164,6 +164,7 @@ define_quest("route115_secretBase",:FIELD_QUEST,_INTL("Your Very Own Secret Base
 
 #Rustboro
 define_quest("rustboro_whismur",:FIELD_QUEST,_INTL("Volume Booster!"), _INTL("Find a Wingull to fuse with a Whismur to make it louder."),_INTL("Rustboro City"),"NPC_schoolgirl")
+define_quest("rustboro_shiny",:FIELD_QUEST,_INTL("A Green Marill?"), _INTL("A child claims they've seen a green Marill by the pond on Route 104. Go investigate!"),_INTL("Rustboro City"),"NPC_preschooler_m")
 
 
 # Route 109

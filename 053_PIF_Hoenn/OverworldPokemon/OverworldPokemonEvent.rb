@@ -85,8 +85,10 @@ class OverworldPokemonEvent < Game_Event
     initialize_sprite(@terrain, species_data)
   end
 
-  def set_switch_a
-    @switch_a = true
+  #Used for special static pokemon - if need other actions after the pokemon was battled
+
+  def set_post_battle_switch(switch_nb)
+    @post_battle_switch = switch_nb if switch_nb.is_a?(Integer)
   end
 
   def getBehaviorSpecies(species_data)
@@ -142,11 +144,11 @@ class OverworldPokemonEvent < Game_Event
     $PokemonTemp.overworld_wild_battle_participants << @pokemon
     pbWait(4)
     trigger_overworld_wild_battle
-    if @switch_a
-      pbSetSelfSwitch(@id, "A", true)
-    else
-      despawn
+    echoln @post_battle_switch
+    if @post_battle_switch && @post_battle_switch.is_a?(Integer) && @post_battle_switch >=1
+      $game_switches[@post_battle_switch] = true
     end
+    despawn
     return
   end
 
