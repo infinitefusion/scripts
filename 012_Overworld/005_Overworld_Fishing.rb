@@ -41,6 +41,30 @@ def pbFishingEnd
   $PokemonGlobal.fishing = false
 end
 
+
+def getFishingItems
+  if Settings::KANTO
+    return [:PEARL,
+            :OLDBOOT,
+            :OLDBOOT,
+            :OLDBOOT,
+            :OLDBOOT,
+            :WATERGEM,
+            :PEARL,
+            :WATERGEM
+    ]
+  elsif  Settings::HOENN
+    return [:PEARL,
+            :SEAWEED,
+            :SEAWEED,
+            :SEAWEED,
+            :OLDBOOT,
+            :WATERGEM,
+            :PEARL,
+    ]
+  end
+  return []
+end
 def pbFishing(hasEncounter,rodType=1)
   autohook= Settings::FISHING_AUTO_HOOK || $game_switches[SWITCH_FISHING_AUTOHOOK]
   speedup = ($Trainer.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.first_pokemon.ability_id))
@@ -75,15 +99,7 @@ def pbFishing(hasEncounter,rodType=1)
       itemChance = rand((rodType)*5)
       if itemChance<=1
         #ITEM
-        items =  [:PEARL,
-                  :OLDBOOT,
-                  :OLDBOOT,
-                  :OLDBOOT,
-                  :OLDBOOT,
-                  :WATERGEM,
-                  :PEARL,
-                  :WATERGEM
-        ]
+        items = getFishingItems
         hats = [
           HAT_SLOWKING_SHELL,HAT_TENTACRUEL
         ]

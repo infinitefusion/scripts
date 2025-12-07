@@ -312,6 +312,7 @@ def clefairy_minigame(length=4)
   end
 end
 
+#Switch 20
 def isDebugMode()
   return $DEBUG
 end

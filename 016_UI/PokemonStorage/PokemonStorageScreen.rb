@@ -168,7 +168,6 @@ class PokemonStorageScreen
 
   def pcSelectCommand
     @scene.choseFromParty = true
-    @scene.partyTabBackButton = _INTL("Boxes")
     loop do
       selected =  @scene.pbSelectBox(@storage.party)
       if selected == nil
