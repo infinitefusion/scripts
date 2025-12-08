@@ -415,6 +415,7 @@ end
 
 #####################
 
+#TODO: Refactor
 class PokemonFusionScene
   private
 
@@ -663,6 +664,7 @@ class PokemonFusionScene
 
   # Starts the fusion screen
 
+  #TODO: Refactor
   def pbStartScreen(pokemon_body, pokemon_head, newspecies,splicerItem)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -807,6 +809,7 @@ class PokemonFusionScene
   end
 
   # Opens the fusion screen
+  #TODO: Refactor
 
   def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false, isPlayerPokemon= true)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
@@ -880,11 +883,18 @@ class PokemonFusionScene
                                 _INTL("\\se[]The Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
       end
 
+      body_pokemon = @pokemon1.clone
+      head_pokemon = @pokemon2.clone
 
+
+      @pokemon1.original_body = body_pokemon
+      echoln "body pokemon is #{body_pokemon.species}"
+      @pokemon1.original_head = head_pokemon
       #exp
       @pokemon1.exp_when_fused_head = @pokemon2.exp
       @pokemon1.exp_when_fused_body = @pokemon1.exp
       @pokemon1.exp_gained_since_fused = 0
+
 
       if @pokemon2.shiny?
         @pokemon1.head_shiny = true
