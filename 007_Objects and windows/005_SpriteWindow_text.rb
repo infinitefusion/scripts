@@ -684,14 +684,26 @@ class Window_InputNumberPokemon < SpriteWindow_Base
           @negative=!@negative
         else
           place = 10 ** (digits - 1 - @index)
-          n = @number / place % 10
-          @number -= n*place
+          digit_value = (@number / place) % 10
           if Input.repeat?(Input::UP)
-            n = (n + 1) % 10
+            if digit_value == 9
+              @number -= digit_value * place
+              carry = place * 10
+              @number = [@number + carry, 10 ** @digits_max - 1].min
+            else
+              @number += place
+            end
+
           elsif Input.repeat?(Input::DOWN)
-            n = (n + 9) % 10
+            if digit_value == 0
+              @number += 9 * place
+              borrow = place * 10
+              @number = [@number - borrow, 0].max
+            else
+              @number -= place
+            end
           end
-          @number += n*place
+
         end
         refresh
       elsif Input.repeat?(Input::RIGHT)
