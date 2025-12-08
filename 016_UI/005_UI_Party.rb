@@ -1227,10 +1227,10 @@ class PokemonPartyScreen
     return retval
   end
 
-  def fuseFromParty(pokemon)
+  def fuseFromParty(pokemon,partyPosition)
     splicerItem = selectSplicer()
     return unless splicerItem
-    if pbDNASplicing(pokemon,@scene,splicerItem)
+    if pbDNASplicing(pokemon,@scene,splicerItem,partyPosition)
       echoln splicerItem
       $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICERS2
     end
@@ -1399,7 +1399,7 @@ class PokemonPartyScreen
       elsif cmdNickname >= 0 && command == cmdNickname
         pbPokemonRename(pkmn, pkmnid)
       elsif cmdFuse >= 0 && command == cmdFuse
-        fuseFromParty(pkmn)
+        fuseFromParty(pkmn,pkmnid)
       elsif cmdUnfuse >= 0 && command == cmdUnfuse
         unfuseFromParty(pkmn,pkmnid)
       elsif cmdDebug >= 0 && command == cmdDebug

@@ -185,7 +185,7 @@ class PokemonStorageScreen
       item = selectSplicer()
       return if item == nil
       isSuperSplicer = isSuperSplicer?(item)
-      if pbUnfuse(pokemon, @scene, isSuperSplicer, selected)
+      if pbUnfuse(pokemon, @scene, nil, selected)
         if canDeleteItem(item)
           $PokemonBag.pbDeleteItem(item)
         end

@@ -298,7 +298,7 @@ class PokemonStorageScene
     @sprites["box"].dispose
     @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport, @screen.filterProc)
     @sprites["boxparty"].dispose
-    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport,@screen.filterProc,@partyTabBackButton)
+    @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party, @boxsidesviewport,@screen.filterProc)
     @sprites["boxparty"].y = oldPartyY
   end
 

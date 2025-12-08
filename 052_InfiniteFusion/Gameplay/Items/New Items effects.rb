@@ -1518,7 +1518,7 @@ def getPokemonPositionInParty(pokemon)
 end
 
 # don't remember why there's two Supersplicers arguments.... probably a mistake
-def pbDNASplicing(pokemon, scene, item = :DNASPLICERS)
+def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =0)
   is_supersplicer = isSuperSplicersMechanics(item)
 
   playingBGM = $game_system.getPlayingBGM
@@ -1592,7 +1592,7 @@ def pbDNASplicing(pokemon, scene, item = :DNASPLICERS)
     end
   else
     # UNFUSE
-    return true if pbUnfuse(pokemon, scene, is_supersplicer)
+    return true if pbUnfuse(pokemon, scene, partyPosition, nil)
   end
 end
 
@@ -1645,8 +1645,14 @@ def pbFuse(pokemon_body, pokemon_head, splicer_item)
   end
 end
 
+
+
+
+
+
+
 # Todo: refactor this, this is a mess
-def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
+def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
   if pokemon.species_data.id_number > (NB_POKEMON * NB_POKEMON) + NB_POKEMON # triple fusion
     scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
     return false
