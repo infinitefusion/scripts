@@ -17,6 +17,7 @@ class Pokemon
   attr_accessor :time_form_set
   # @return [Integer] the current experience points
   attr_reader :exp
+  attr_accessor :exp_gained_with_player
 
   attr_accessor :exp_when_fused_head
   attr_accessor :exp_when_fused_body
@@ -45,6 +46,13 @@ class Pokemon
   attr_accessor :body_shiny
   attr_accessor :debug_shiny
   attr_accessor :natural_shiny
+
+
+  #Fusions
+  # Copy of the original Pokemon object from before they were fused
+  attr_accessor :original_body
+  attr_accessor :original_head
+
 
   # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
   # hidden abilities)as defined for its species/form. An ability may not be
@@ -425,6 +433,10 @@ class Pokemon
     end
     @exp = growth_rate.minimum_exp_for_level(value)
     @level = value
+  end
+
+  def calculate_level_at_exp(exp_value)
+    return growth_rate.level_from_exp(exp_value)
   end
 
   # Sets this Pokémon's Exp. Points.

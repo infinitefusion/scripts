@@ -265,6 +265,7 @@ def pbChooseNumber(msgwindow, params)
     pbUpdateSceneMap
     cmdwindow.update
     msgwindow.update if msgwindow
+    $game_temp.choose_number_window = cmdwindow
     yield if block_given?
     if Input.trigger?(Input::USE)
       ret = cmdwindow.number
@@ -282,6 +283,7 @@ def pbChooseNumber(msgwindow, params)
       break
     end
   end
+  $game_temp.choose_number_window = nil
   cmdwindow.dispose
   Input.update
   return ret

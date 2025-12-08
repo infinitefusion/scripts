@@ -206,8 +206,8 @@ class PokeBattle_Battle
         else
           pkmn.exp_gained_since_fused += expGained
         end
-
       end
+      pkmn.exp_gained_with_player += expGained
       @scene.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2) if !dontAnimate
 
 

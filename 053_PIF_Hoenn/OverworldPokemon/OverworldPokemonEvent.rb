@@ -58,7 +58,7 @@ class OverworldPokemonEvent < Game_Event
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @step_anime = @is_flying
-    #@always_on_top = @is_flying
+    @forced_z = 300 if @is_flying     #@always_on_top = @is_flying
     if @terrain == :Water
       set_swimming
     end
