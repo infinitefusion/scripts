@@ -1240,7 +1240,7 @@ class PokemonPartyScreen
     splicerItem = selectSplicer()
     return unless splicerItem
     isSuperSplicer = [:SUPERSPLICERS,:INFINITESPLICERS2].include?(splicerItem)
-    if pbUnfuse(pokemon,@scene,isSuperSplicer)
+    if pbUnfuse(pokemon,@scene,index, nil)
       $PokemonBag.pbDeleteItem(splicerItem, 1) unless splicerItem == :INFINITESPLICERS || splicerItem == :INFINITESPLICER2
     end
   end

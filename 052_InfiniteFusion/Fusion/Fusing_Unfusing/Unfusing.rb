@@ -6,7 +6,7 @@ def pbUnfuse(pokemon, scene, partyPosition=nil, pcPosition = nil)
       unfusePokemonFromParty(pokemon, scene, partyPosition)
     end
   else
-    unfusePokemonLegacy(pokemon, scene, false, pcPosition)
+    unfusePokemonLegacy(pokemon, scene, false, pcPosition)  #Wild Fusions
   end
 end
 
@@ -94,7 +94,7 @@ def obtainUnfusedPokemonParty(head_pokemon, body_pokemon, partyPosition)
     #Removes the fusion, then store in an order that depends on which one is sent to PC
     if choice == 0 # Head
       if isOnPinkanIsland()
-        $Trainer.remove_pokemon_at_index(partyPosition)
+        $Trainer.party.delete_at(partyPosition)
         pbAddPokemon(head_pokemon)
       else
         storeUnfusedPokemon(partyPosition,head_pokemon,body_pokemon)
@@ -102,7 +102,7 @@ def obtainUnfusedPokemonParty(head_pokemon, body_pokemon, partyPosition)
     elsif choice == 1 #body
       $Trainer.remove_pokemon_at_index(partyPosition)
       if isOnPinkanIsland()
-        $Trainer.remove_pokemon_at_index(partyPosition)
+        $Trainer.party.delete_at(partyPosition)
         pbAddPokemon(body_pokemon)
       else
         storeUnfusedPokemon(partyPosition,body_pokemon,head_pokemon)
@@ -117,7 +117,7 @@ def obtainUnfusedPokemonParty(head_pokemon, body_pokemon, partyPosition)
 end
 
 def storeUnfusedPokemon(fusedPokemonPartyPosition, pokemonKeptInParty,pokemonSentToPC)
-  $Trainer.remove_pokemon_at_index(fusedPokemonPartyPosition)
+  $Trainer.party.delete_at(fusedPokemonPartyPosition)
   pbAddPokemonSilent(pokemonKeptInParty)
   pbAddPokemonSilent(pokemonSentToPC)
 end

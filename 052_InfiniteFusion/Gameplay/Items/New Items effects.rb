@@ -1689,9 +1689,9 @@ def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
         end
       end
 
-      scene.pbDisplay(_INTL("Unfusing ... "))
-      scene.pbDisplay(_INTL(" ... "))
-      scene.pbDisplay(_INTL(" ... "))
+      pbSEPlay("Minimize")
+      pbMessage(_INTL("Unfusing...\\....\\....\\....\\wtnp[5]"))
+      pbSEPlay("Voltorb Flip Point")
 
       if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
         new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
@@ -1825,7 +1825,7 @@ def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
 
       # scene.pbDisplay(p1.to_s + " " + p2.to_s)
       scene.pbHardRefresh
-      scene.pbDisplay(_INTL("Your Pokémon were successfully unfused!"))
+      pbMessage(_INTL("Your Pokémon were successfully unfused!"))
       return true
     end
   end
