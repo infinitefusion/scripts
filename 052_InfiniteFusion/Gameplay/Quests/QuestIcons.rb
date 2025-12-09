@@ -61,12 +61,12 @@ class Game_Event < Game_Character
 
   def detectDialogueIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
-    return detectCommentCommand(DIALOG_ICON_COMMENT_TRIGGER)
+    return detectCommentCommand(DIALOG_ICON_COMMENT_TRIGGER,event)
   end
 
   def detectTradeIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
-    return detectCommentCommand(TRADE_ICON_COMMENT_TRIGGER)
+    return detectCommentCommand(TRADE_ICON_COMMENT_TRIGGER,event)
   end
 
   def detectQuestSwitch(event)
