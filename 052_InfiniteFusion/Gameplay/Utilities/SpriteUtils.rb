@@ -1,57 +1,54 @@
 def splitSpriteCredits(name, bitmap, max_width)
-  name_full_width = bitmap.text_size(name).width
-  # use original name if can fit on one line
-  return [ name ] if name_full_width <= max_width
+  return [name] if bitmap.text_size(name).width <= max_width
 
-  temp_string = name
-  name_split = []
+  parts = name.split(" & ")
+  lines = []
 
-  # split name by collab separator " & " nearest to max width
-  start_pos = temp_string.index(' & ')
-  temp_pos = nil
-  while start_pos && (bitmap.text_size(temp_string).width > max_width)
-    substring_width = bitmap.text_size(temp_string[0, start_pos]).width
-    if substring_width > max_width
-      name_split << temp_string[0, temp_pos].strip
-      temp_string = temp_string[(temp_pos + 1)..].strip
-      start_pos = temp_string.index(' & ')
-      temp_pos = nil
+  parts.each_with_index do |part, i|
+    segment = part
+    segment += " &" if i < parts.length - 1   # keep & with the left segment
+
+    # If this segment fits, just add it
+    if bitmap.text_size(segment).width <= max_width
+      lines << segment
       next
     end
 
-    temp_pos = start_pos
-    start_pos = temp_string.index(' & ', start_pos + 1)
-  end
-
-  # append remainder of " & " split if within max width
-  if temp_pos != nil
-    name_split << temp_string[0, temp_pos].strip
-    temp_string = temp_string[(temp_pos + 1)..].strip
-  end
-
-  # split remaining string by space
-  temp_pos = nil
-  if (bitmap.text_size(temp_string).width > max_width) && (start_pos = temp_string.index(' '))
-    while start_pos && (bitmap.text_size(temp_string).width > max_width)
-      substring_width = bitmap.text_size(temp_string[0, start_pos]).width
-      if substring_width > max_width
-        name_split << temp_string[0, temp_pos].strip
-        temp_string = temp_string[(temp_pos + 1)..].strip
-        start_pos = temp_string.index(' ')
-        temp_pos = nil
-        next
+    # Otherwise split inside the segment
+    current = segment.dup
+    while bitmap.text_size(current).width > max_width
+      # Try to break at last space within limit
+      break_pos = nil
+      j = 0
+      while j = current.index(" ", j)
+        if bitmap.text_size(current[0, j]).width <= max_width
+          break_pos = j
+        else
+          break
+        end
+        j += 1
       end
 
-      temp_pos = start_pos
-      start_pos = temp_string.index(' ', start_pos + 1)
+      if break_pos
+        # split at last valid space
+        lines << current[0, break_pos].strip
+        current = current[break_pos + 1..].strip
+      else
+        # no spaces at all: hard split by characters
+        # find max chars that fit
+        k = current.length - 1
+        k -= 1 while bitmap.text_size(current[0, k]).width > max_width
+        lines << current[0, k]
+        current = current[k..].strip
+      end
     end
+
+    lines << current unless current.empty?
   end
 
-  # append remaining text, even if too long for screen
-  name_split << temp_string if temp_string != ''
-
-  return name_split
+  lines
 end
+
 
 def pbLoadPokemonBitmapSpecies(pokemon, species, back = false, scale = POKEMONSPRITESCALE)
   ret = nil

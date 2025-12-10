@@ -418,6 +418,9 @@ def pbBerryPlant
     pbMessage(_INTL("A {1} was planted here.", GameData::Item.get(berry).name))
   when 2 # X sprouted
     pbMessage(_INTL("The {1} has sprouted.", GameData::Item.get(berry).name))
+    unless hasHat?(HAT_SPROUT)
+      obtainHat(HAT_SPROUT) if rand(10) == 0
+    end
   when 3 # X taller
     pbMessage(_INTL("The {1} plant is growing bigger.", GameData::Item.get(berry).name))
   when 4 # X flowering

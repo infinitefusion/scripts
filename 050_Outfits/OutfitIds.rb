@@ -26,7 +26,7 @@ CLOTHES_LASS_BLUE ="lass2"
 
 CLOTHES_ROCKET_WHITE_M ="RocketJames"
 CLOTHES_ROCKET_WHITE_F ="RocketJessie"
-
+CLOTHES_POLICE = "policeuniform"
 
 DEFAULT_OUTFIT_MALE = "red"
 DEFAULT_OUTFIT_FEMALE = "leaf"
@@ -68,15 +68,16 @@ HAT_HALO = "halo"
 HAT_MAGIKARP = "magicap"
 HAT_SLOWKING_SHELL = "slowking"
 HAT_TENTACRUEL = "tentacruel"
-
+HAT_HELMET = "helmet"
+HAT_POLICE = "policeuniform"
 HAT_ZOROARK = "banefulfoxmask"
 HAT_FROG = "froghat"
 HAT_SANTA = "santa"
 HAT_QMARKS = "glitzerset"
 HAT_SUDOWOODO = "sudowoodohorns"
-
+HAT_SPROUT = "sprout"
 HAT_TREVENANT="trevenantforestkingcrown"
-
+HAT_CHEF = "cheftoque"
 HAT_CLOWN = "clownnose"
 
 HAT_BREEDER_1="breedervisor"
