@@ -1450,7 +1450,7 @@ def pbForceEvo(pokemon)
   return false if evolutions.empty?
   # if multiple evolutions, pick a random one
   #(format of returned value is [[speciesNum, level]])
-  newspecies = evolutions[rand(evolutions.length - 1)][0]
+  newspecies = evolutions[rand(evolutions.length)][0]
   return false if newspecies == nil
   evo = PokemonEvolutionScene.new
   evo.pbStartScreen(pokemon, newspecies)
