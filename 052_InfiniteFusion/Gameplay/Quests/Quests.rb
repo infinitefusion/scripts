@@ -158,6 +158,7 @@ define_quest("petalburgwoods_spores",:FIELD_QUEST,_INTL("Spores Harvest"), _INTL
 #Route 104 (North)
 define_quest("route104_oricorio",:FIELD_QUEST,_INTL("Special Flowery Grass"), _INTL("Find an Oricorio in the flowery grass behind the flower shop."),_INTL("Route 104"),"NPC_Hoenn_AromaLady")
 define_quest("route104_oricorio_forms",:FIELD_QUEST,_INTL("Nectar Flowers"), _INTL("Find all 4 types of nectar flowers to transform Oricorio."),_INTL("Route 104"),"NPC_Hoenn_AromaLady")
+define_quest("route104_allergic",:FIELD_QUEST,_INTL("The Allergic Rich Boy"), _INTL("An allergy-ridden rich boy is looking for a flowery Pokémon to give to his girlfriend."),_INTL("Route 104"),"NPC_Hoenn_RichBoy")
 
 #Route 115
 define_quest("route115_secretBase",:FIELD_QUEST,_INTL("Your Very Own Secret Base!"), _INTL("Talk to Aarune near his secret base to learn how to make your own."),_INTL("Route 115"),"NPC_Hoenn_AromaLady")
