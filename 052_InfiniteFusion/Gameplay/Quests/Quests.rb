@@ -170,6 +170,10 @@ define_quest("rustboro_shiny",:FIELD_QUEST,_INTL("A Green Marill?"), _INTL("A ch
 #Dewford
 define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
 
+#Slateport
+define_quest("slateport_team_aqua",:FIELD_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie")
+define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp on Route 110."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie")
+
 
 # Route 109
 define_quest("route109_tanning",:FIELD_QUEST,_INTL("Soaking in the sun"), _INTL("Sit in a beach chair until your suntan is on point!"),_INTL("Route 109"),"NPC_Hoenn_Triathlete_F")

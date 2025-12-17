@@ -144,10 +144,15 @@ end
 def finishQuest(id, silent=false)
   $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
-  $Trainer.quest_points+=1
-  pbMEPlay("Register phone") if !silent
-  Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
+  if is_main_quest?(id)
+    pbMEPlay("match_call") if !silent
+    Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
+  else
+    pbMEPlay("Register phone") if !silent
+    Kernel.pbMessage(_INTL("\\qp\\C[6]Main quest completed: {1}"),QUESTS[id].name) if !silent
+  end
 
+  $Trainer.quest_points+=1
 
   $game_variables[VAR_KARMA] += 1 # karma
   $game_variables[VAR_NB_QUEST_ACTIVE] -= 1 #nb. quests active
@@ -162,6 +167,12 @@ def pbCompletedQuest?(id)
   end
   return false
 end
+
+def is_main_quest?(id)
+  quest = QUESTS[id]
+  return quest.type == :MAIN_QUEST
+end
+
 
 def pbQuestlog
   if !$Trainer.quests_repaired

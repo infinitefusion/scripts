@@ -2,7 +2,7 @@
 def oricorioEventPickFlower(flower_color)
   quest_progression = pbGet(VAR_ORICORIO_FLOWERS)
   if flower_color == :PINK
-    if !$game_switches[SWITCH_ORICORIO_QUEST_PINK]
+    if Settings::KANTO && !$game_switches[SWITCH_ORICORIO_QUEST_PINK]
       pbMessage(_INTL("Woah! A Pokémon jumped out of the flower!"))
       pbWildBattle(:FOMANTIS, 10)
     end
@@ -28,6 +28,15 @@ def hasOricorioInParty()
 end
 
 def changeOricorioFlower(form = 1)
+  #guaranteed encounter first time you interact with a flower
+  if Settings::HOENN && !$game_switches[SWITCH_FOMANTIS_GUARANTEED_FLOWER]
+    pbMessage(_INTL("Woah! A Pokémon jumped out of the flower!"))
+    pbWildBattle(:FOMANTIS, 4)
+    $game_switches[SWITCH_FOMANTIS_GUARANTEED_FLOWER] = true
+    return
+  end
+
+
   if $PokemonGlobal.stepcount % 25 == 0
     if !hatUnlocked?(HAT_FLOWER) && rand(2) == 0
       obtainHat(HAT_FLOWER)
