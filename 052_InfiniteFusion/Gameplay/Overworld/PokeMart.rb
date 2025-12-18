@@ -28,6 +28,23 @@ def get_city_numerical_id(city_sym)
   return current_city_numerical[city_sym]
 end
 
+POKEMON_CENTER_MAP = 25
+POKEMON_CENTER_DOOR_POS = [10,10]
+POKEMON_CENTER_BIRTHDAY_MAP = 27
+def enter_pokemon_center
+  pbSetPokemonCenter
+  pokemon_center_map = isPlayerBirthDay? ? POKEMON_CENTER_BIRTHDAY_MAP : POKEMON_CENTER_MAP
+  pbFadeOutIn {
+    $game_temp.player_new_map_id = pokemon_center_map
+    $game_temp.player_new_x = POKEMON_CENTER_DOOR_POS[0]
+    $game_temp.player_new_y = POKEMON_CENTER_DOOR_POS[1]
+    $scene.transfer_player(true)
+    $game_map.autoplay
+    $game_map.refresh
+  }
+end
+
+
 POKEMART_MAP_ID = 357
 POKEMART_DOOR_POS = [12, 12]
 # city -> Symbol

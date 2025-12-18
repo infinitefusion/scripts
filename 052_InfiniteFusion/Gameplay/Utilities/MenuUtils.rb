@@ -110,3 +110,60 @@ def pbChoosePokemonPC(positionVariableNumber, pokemonVarNumber, ableProc = nil)
   pbSet(positionVariableNumber, chosen)
   pbSet(pokemonVarNumber, pokemon)
 end
+
+def set_player_birthday
+  date = selectDate(_INTL("Your birthday is on"))
+  $Trainer.birth_day = date.day
+  $Trainer.birth_month = date.month
+end
+
+def selectDate(confirm_text = _INTL("You chose "))
+  months_nb_days = {
+    :JANUARY => 31,
+    :FEBRUARY => 29,
+    :MARCH => 31,
+    :APRIL => 30,
+    :MAY => 31,
+    :JUNE => 30,
+    :JULY => 31,
+    :AUGUST => 31,
+    :SEPTEMBER => 30,
+    :OCTOBER => 31,
+    :NOVEMBER => 30,
+    :DECEMBER => 31,
+  }
+  month_names = {
+    :JANUARY => _INTL("January"),
+    :FEBRUARY => _INTL("February"),
+    :MARCH => _INTL("March"),
+    :APRIL => _INTL("April"),
+    :MAY => _INTL("May"),
+    :JUNE => _INTL("June"),
+    :JULY => _INTL("July"),
+    :AUGUST => _INTL("August"),
+    :SEPTEMBER => _INTL("September"),
+    :OCTOBER => _INTL("October"),
+    :NOVEMBER => _INTL("November"),
+    :DECEMBER => _INTL("December"),
+  }
+
+  pbMessage(_INTL("Which month?"))
+  selected = false
+  while !selected
+    chosen_month_index = optionsMenu(month_names.values)
+    month = month_names.keys[chosen_month_index]
+    nb_days = months_nb_days[month]
+
+    numberParams = ChooseNumberParams.new
+    numberParams.setRange(1,nb_days)
+    numberParams.setDefaultValue(1)
+    chosen_day = pbMessageChooseNumber(_INTL("Which day?"),numberParams)
+
+    chosen_month_name = month_names[month]
+    if pbConfirmMessage(_INTL("{1} \\C[1]{2} {3}\\C[0]. Is that correct?",confirm_text, chosen_month_name,chosen_day))
+      birthday = Time.new(2000,chosen_month_index+1,chosen_day)
+      return birthday
+    end
+  end
+
+end

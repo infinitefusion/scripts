@@ -48,7 +48,7 @@ end
 
 if Settings::GAME_ID == :IF_HOENN
   POKEMART_MAP_ID = 24
-  POKEMART_DOOR_POS = [12, 12]
+  POKEMART_DOOR_POS = [9, 10]
 end
 
 # city -> Symbol

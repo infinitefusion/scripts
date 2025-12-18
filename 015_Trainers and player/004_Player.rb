@@ -43,6 +43,9 @@ class Player < Trainer
 
   attr_accessor :seen_qmarks_sprite
 
+  attr_accessor :birth_day
+  attr_accessor :birth_month
+
 
   # @return [Array<Boolean>] the player's Gym Badges (true if owned)
   attr_accessor :badges
