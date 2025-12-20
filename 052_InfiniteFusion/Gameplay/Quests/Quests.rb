@@ -172,7 +172,7 @@ define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"
 
 #Slateport
 define_quest("slateport_team_aqua",:FIELD_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie")
-define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp on Route 110."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie")
+define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie")
 
 
 # Route 109

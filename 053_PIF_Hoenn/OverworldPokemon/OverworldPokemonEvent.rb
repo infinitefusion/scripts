@@ -47,7 +47,7 @@ class OverworldPokemonEvent < Game_Event
     # The battle will start when the timer reaches @nearby_notice_limit
     # @nearby_notice_limit depends on the size of the pokemon. (usually around 3-5 ticks)
     @nearby_notice_timer = 0
-    @nearby_notice_limit = calculate_value_from_ref_value(species_data.weight.to_f/10,2,12, 8)# weight is multiplied by 10 in the pokemon data for some reason
+    @nearby_notice_limit = 4#calculate_value_from_ref_value(species_data.weight.to_f/10,2,12, 8)# weight is multiplied by 10 in the pokemon data for some reason
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false

@@ -150,6 +150,7 @@ def pbGenerateEgg(pkmn, text = "")
   pkmn.obtain_text    = text
   pkmn.calc_stats
   # Add egg to party
+  echoln "adding to party"
   if $Trainer.party.length<6
     $Trainer.party[$Trainer.party.length] = pkmn
   else

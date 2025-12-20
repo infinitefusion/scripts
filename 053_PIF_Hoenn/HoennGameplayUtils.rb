@@ -177,7 +177,7 @@ def assign_vendors_to_spots(vendors_ids)
     vendors_ids.pop
     assigned_vendor_event = $game_map.events[assigned_vendor_id]
     assigned_vendor_event.moveto(coordinates.first, coordinates.last)
-    assigned_vendor_event.direction = direction
+    #assigned_vendor_event.direction = direction
     pbSetSelfSwitch(assigned_vendor_id, "B", false)
   end
 end
