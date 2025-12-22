@@ -26,6 +26,7 @@ class Game_Event < Game_Character
   QUEST_NPC_TRIGGER = "questNPC"
   MAPS_WITH_NO_ICONS = [] #Maps in which the game shouldn't try to look for quest icons(e.g. maps with a lot of events - mostly for possible performance issues)
   DIALOG_ICON_COMMENT_TRIGGER=["dialogIcon"]
+  QUEST_ICON_COMMENT_TRIGGER=["questIcon"]  #Only when it can't be defined in the event's name (multiple page - only one is quest giver)
   TRADE_ICON_COMMENT_TRIGGER=["tradeIcon"]
 
   alias eventQuestIcon_init initialize
@@ -54,7 +55,7 @@ class Game_Event < Game_Character
   end
 
   def addQuestMarkersToSprite()
-    @show_quest_icon = detectQuestSwitch(self) && !@quest_icon_manual_off
+    @show_quest_icon = (detectQuestSwitch(self) || detectQuestIcon(self)) && !@quest_icon_manual_off
     @show_dialog_icon = detectDialogueIcon(self) && !@dialog_icon_manual_off
     @show_trade_icon = detectTradeIcon(self) && !@trade_icon_manual_off
   end
@@ -67,6 +68,11 @@ class Game_Event < Game_Character
   def detectTradeIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
     return detectCommentCommand(TRADE_ICON_COMMENT_TRIGGER,event)
+  end
+
+  def detectQuestIcon(event)
+    return nil if !validateEventIsCompatibleWithIcons(event)
+    return detectCommentCommand(QUEST_ICON_COMMENT_TRIGGER,event)
   end
 
   def detectQuestSwitch(event)

@@ -146,6 +146,10 @@ define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL
 #route 102
 define_quest("route_102_rematch",:FIELD_QUEST,_INTL("Trainer Rematches"), _INTL("A lass you battled wants to switch up her team and rematch you!"),_INTL("Route 102"),"NPC_Hoenn_Lass")
 
+#Petalburg Town
+define_quest("petalburg_rematch",:FIELD_QUEST,_INTL("Berry Contest"), _INTL("Take part in the berry-growing contest in Petalburg Town!"),_INTL("Route 102"),"NPC_Hoenn_Breeder_F")
+
+
     #Route 116
 define_quest("route116_glasses",:FIELD_QUEST,_INTL("Lost glasses"), _INTL("A trainer has lost their glasses, help him find them!"),_INTL("Route 116"),"NPC_Hoenn_BugManiac")
 
