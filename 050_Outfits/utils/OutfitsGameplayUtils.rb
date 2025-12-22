@@ -52,6 +52,17 @@ def obtainClothes(outfit_id)
   return false
 end
 
+def unlockClothes(outfit_id)
+  outfit = get_clothes_by_id(outfit_id)
+  if !outfit
+    pbMessage(_INTL("The clothes {1} are invalid.", outfit_id))
+    return
+  end
+  return if !outfit
+  $Trainer.unlocked_clothes << outfit_id if !$Trainer.unlocked_clothes.include?(outfit_id)
+  return false
+end
+
 def obtainNewHairstyle(full_outfit_id)
   split_outfit_id = getSplitHairFilenameAndVersionFromID(full_outfit_id)
   hairstyle_id = split_outfit_id[1]

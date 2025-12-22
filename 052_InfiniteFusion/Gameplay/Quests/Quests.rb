@@ -178,3 +178,6 @@ define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INT
 # Route 109
 define_quest("route109_tanning",:FIELD_QUEST,_INTL("Soaking in the sun"), _INTL("Sit in a beach chair until your suntan is on point!"),_INTL("Route 109"),"NPC_Hoenn_Triathlete_F")
 define_quest("route109_seahouse",:FIELD_QUEST,_INTL("Hot Battles at the Seashore House"), _INTL("Defeat all of the trainers in the Seashore House!"),_INTL("Route 109"),"NPC_Hoenn_Fisherman")
+
+#Team Magma - Route 103
+define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Route 103"),"NPC_Hoenn_Magma_Exec_M")

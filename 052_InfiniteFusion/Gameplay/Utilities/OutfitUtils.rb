@@ -165,3 +165,12 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
   pbMessage(_INTL("You can use \\C[1]Dye Kits\\C[0] at any time when you change clothes."))
 end
 
+def isWearingTeamAquaOutfit()
+  return false if !$game_switches[SWITCH_JOINED_TEAM_AQUA]
+  return isWearingClothes(CLOTHES_TEAM_AQUA_F) || isWearingClothes(CLOTHES_TEAM_AQUA_M)
+end
+
+def isWearingTeamMagmaOutfit()
+  return false if !$game_switches[SWITCH_JOINED_TEAM_MAGMA]
+  return isWearingClothes(CLOTHES_TEAM_MAGMA_M) || isWearingClothes(CLOTHES_TEAM_MAGMA_F)
+end

@@ -103,6 +103,10 @@ def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
   type = QUESTS[id].type
   if type && type == :MAIN_QUEST
     showNewMainQuestMessage(title, description, show_description)
+  elsif type && type == :MAGMA_QUEST
+    showEvilTeamMissionMessage(:MAGMA, title,description,show_description)
+  elsif type && type == :AQUA_QUEST
+    showEvilTeamMissionMessage(:AQUA, title,description,show_description)
   else
     showNewSideQuestMessage(title, description, show_description)
   end
@@ -120,6 +124,22 @@ def showNewMainQuestMessage(title, description, show_description)
   if show_description
     pbCallBub(3)
     Kernel.pbMessage("\\C[1]" + description)
+  end
+end
+
+def showEvilTeamMissionMessage(team, title, description, show_description)
+  titleColor = team == :MAGMA ? 2 : 1
+  textColor = team == :MAGMA ? 2 : 1
+
+  team = team == :MAGMA ? "MAGMA" : "AQUA"
+
+  pbMEPlay("rocketQuest", 80, 110)
+
+  pbCallBub(3)
+  Kernel.pbMessage(_INTL("\\C[{1}]{2} MISSION: ",titleColor,team) + title)
+  if show_description
+    pbCallBub(3)
+    Kernel.pbMessage("\\C[#{textColor}]" + description)
   end
 end
 

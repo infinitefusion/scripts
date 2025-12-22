@@ -219,3 +219,7 @@ def select_altering_cave_encounter
   return [species, level]
 end
 
+
+
+
+

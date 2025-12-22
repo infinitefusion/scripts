@@ -35,6 +35,14 @@ STARTING_OUTFIT = "pikajamas"
 CLOTHES_BRENDAN = "brendanRS"
 CLOTHES_MAY = "mayRS"
 
+CLOTHES_TEAM_MAGMA_M = "magmaRSE"
+CLOTHES_TEAM_MAGMA_F = "magmaRSE"
+
+
+CLOTHES_TEAM_AQUA_M = "aquaRSE"
+CLOTHES_TEAM_AQUA_F = "aquaRSE"
+
+
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
 HAT_POSTMAN = "postman"
@@ -125,6 +133,8 @@ HAT_GYM_REWARD_14 = "prycemask"
 HAT_GYM_REWARD_15 = "mortyHeadband"
 HAT_GYM_REWARD_16 = "magnemitepin"
 
+HAT_TEAM_MAGMA = "magmaRSE"
+HAT_TEAM_AQUA = "aquaRSE"
 
 #Hairstyles
 HAIR_RED = "red"

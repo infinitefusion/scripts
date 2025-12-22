@@ -888,7 +888,6 @@ end
 # Message-displaying functions
 #===============================================================================
 def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd = 0, &block)
-  pbMapInterpreter.pbGlobalLock
   ret = 0
   msgwindow = pbCreateMessageWindow(nil, skin)
   if commands
@@ -901,7 +900,6 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
   end
   pbDisposeMessageWindow(msgwindow)
   Input.update
-  pbMapInterpreter.pbGlobalUnlock
   return ret
 end
 

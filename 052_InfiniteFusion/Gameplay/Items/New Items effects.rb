@@ -387,6 +387,24 @@ ItemHandlers::UseInField.add(:ROCKETUNIFORM, proc { |item|
   next useRocketUniform()
 })
 
+ItemHandlers::UseFromBag.add(:MAGMAUNIFORM, proc { |item|
+  next useMagmaUniform()
+})
+
+ItemHandlers::UseInField.add(:MAGMAUNIFORM, proc { |item|
+  next useMagmaUniform()
+})
+
+ItemHandlers::UseFromBag.add(:AQUAUNIFORM, proc { |item|
+  next useAquaUniform()
+})
+
+ItemHandlers::UseInField.add(:AQUAUNIFORM, proc { |item|
+  next useAquaUniform()
+})
+
+
+
 ItemHandlers::UseFromBag.add(:FAVORITEOUTFIT, proc { |item|
   next useFavoriteOutfit()
 })
@@ -539,6 +557,68 @@ def useRocketUniform()
   end
   return 1
 end
+
+
+def useMagmaUniform()
+  return 0 if !$game_switches[SWITCH_JOINED_TEAM_MAGMA]
+  if isWearingTeamMagmaOutfit()
+    if (Kernel.pbConfirmMessage(_INTL("Remove the Team Magma uniform?")))
+      if ($Trainer.last_worn_outfit == CLOTHES_TEAM_MAGMA_M || $Trainer.last_worn_outfit == CLOTHES_TEAM_MAGMA_F) && $Trainer.last_worn_hat == HAT_TEAM_MAGMA
+        gender = pbGet(VAR_TRAINER_GENDER)
+        $Trainer.last_worn_outfit = getDefaultClothes(gender)
+      end
+      playOutfitChangeAnimation()
+      putOnClothes($Trainer.last_worn_outfit, true)
+      putOnHat($Trainer.last_worn_hat, true)
+    else
+      return 0
+    end
+  else
+    if (Kernel.pbConfirmMessage(_INTL("Put on the Team Magma uniform?")))
+      playOutfitChangeAnimation()
+      gender = pbGet(VAR_TRAINER_GENDER)
+      if gender == GENDER_MALE
+        putOnClothes(CLOTHES_TEAM_MAGMA_M, true)
+      else
+        putOnClothes(CLOTHES_TEAM_MAGMA_F, true)
+      end
+      putOnHat(HAT_TEAM_MAGMA, true)
+    end
+  end
+  return 1
+end
+
+
+
+def useAquaUniform()
+  return 0 if !$game_switches[SWITCH_JOINED_TEAM_AQUA]
+  if isWearingTeamAquaOutfit()
+    if (Kernel.pbConfirmMessage(_INTL("Remove the Team Aqua uniform?")))
+      if ($Trainer.last_worn_outfit == CLOTHES_TEAM_AQUA_M || $Trainer.last_worn_outfit == CLOTHES_TEAM_AQUA_F) && $Trainer.last_worn_hat == HAT_TEAM_AQUA
+        gender = pbGet(VAR_TRAINER_GENDER)
+        $Trainer.last_worn_outfit = getDefaultClothes(gender)
+      end
+      playOutfitChangeAnimation()
+      putOnClothes($Trainer.last_worn_outfit, true)
+      putOnHat($Trainer.last_worn_hat, true)
+    else
+      return 0
+    end
+  else
+    if (Kernel.pbConfirmMessage(_INTL("Put on the Team Aqua uniform?")))
+      playOutfitChangeAnimation()
+      gender = pbGet(VAR_TRAINER_GENDER)
+      if gender == GENDER_MALE
+        putOnClothes(CLOTHES_TEAM_AQUA_M, true)
+      else
+        putOnClothes(CLOTHES_TEAM_AQUA_F, true)
+      end
+      putOnHat(HAT_TEAM_AQUA, true)
+    end
+  end
+  return 1
+end
+
 
 def useDreamMirror
   visitedMap = $PokemonGlobal.visitedMaps[pbGet(226)]

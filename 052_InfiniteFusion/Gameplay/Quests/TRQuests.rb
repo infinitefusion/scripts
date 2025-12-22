@@ -4,6 +4,7 @@ def isWearingTeamRocketOutfit()
   return (isWearingClothes(CLOTHES_TEAM_ROCKET_MALE) || isWearingClothes(CLOTHES_TEAM_ROCKET_FEMALE)) && isWearingHat(HAT_TEAM_ROCKET)
 end
 
+
 def isWearingFavoriteOutfit()
   favorites = {
     hat: $Trainer.favorite_hat,

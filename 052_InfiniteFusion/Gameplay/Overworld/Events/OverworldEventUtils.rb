@@ -82,32 +82,31 @@ def idleHatEvent(hatId, time, switchToActivate = nil)
   obtainHat(hatId)
 end
 
-
-DIRECTION_ALL  = 0
+DIRECTION_ALL = 0
 DIRECTION_LEFT = 4
 DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
 DIRECTION_UP = 8
 
-DIRECTION_ALL  = 0
+DIRECTION_ALL = 0
 DIRECTION_LEFT = 4
 DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
 DIRECTION_UP = 8
 
-DIRECTION_ALL  = 0
+DIRECTION_ALL = 0
 DIRECTION_LEFT = 4
 DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
 DIRECTION_UP = 8
 
-DIRECTION_ALL  = 0
+DIRECTION_ALL = 0
 DIRECTION_LEFT = 4
 DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
 DIRECTION_UP = 8
 
-DIRECTION_ALL  = 0
+DIRECTION_ALL = 0
 DIRECTION_LEFT = 4
 DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
@@ -172,20 +171,12 @@ def kick_ball(eventId)
   end
 end
 
-
-
-
-
-
-
-
-
 def sit_on_chair()
   pbSEPlay("jump", 80, 100)
-  $game_player.through =true
+  $game_player.through = true
   $game_player.jump_forward
   $game_player.turn_180
-  $game_player.through =false
+  $game_player.through = false
   loop do
     Graphics.update
     Input.update
@@ -196,11 +187,11 @@ def sit_on_chair()
       facing_terrain = $game_player.pbFacingTerrainTag(direction)
       if facing_terrain.chair
         pbSEPlay("jump", 80, 100)
-        $game_player.direction_fix=true
+        $game_player.direction_fix = true
         $game_player.jumpTowards(direction)
-        $game_player.direction_fix=false
+        $game_player.direction_fix = false
       else
-        passable_from_direction = $game_map.passable?($game_player.x,$game_player.y,direction)
+        passable_from_direction = $game_map.passable?($game_player.x, $game_player.y, direction)
         if passable_from_direction
           $game_player.turn_generic(direction)
           $game_player.jump_forward
@@ -225,14 +216,14 @@ end
 
 def getOnBoat
   set_player_graphics("boat_briney")
-  $PokemonTemp.prevent_ow_battles=true
-  $PokemonGlobal.boat=true
+  $PokemonTemp.prevent_ow_battles = true
+  $PokemonGlobal.boat = true
 end
 
 def getOffBoat
   reset_player_graphics
-  $PokemonTemp.prevent_ow_battles=false
-  $PokemonGlobal.boat=false
+  $PokemonTemp.prevent_ow_battles = false
+  $PokemonGlobal.boat = false
 end
 
 def check_beach_seashell
@@ -243,12 +234,12 @@ def check_beach_seashell
   if roll <= pearl_chance
     pbReceiveItem(:PEARL)
   elsif roll <= pearl_chance + pokemon_chance
-    possible_pokemon = [:KRABBY] #if added to the game, also dwebble, binacle?
+    possible_pokemon = [:KRABBY] # if added to the game, also dwebble, binacle?
     event = $game_map.events[@event_id]
     # Spawn Pokémon
     level = rand(8..16)
     pbWait(4)
-    playAnimation(Settings::EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y)
+    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, $game_player.x, $game_player.y)
     spawn_random_overworld_pokemon_group([possible_pokemon.sample, level], 1, 3, [event.x, event.y], :Cave)
   else
     # Nothing
@@ -256,8 +247,8 @@ def check_beach_seashell
   end
 end
 
-def clefairy_minigame(length=4)
-  possible_elements = ["Left!"," Up!","Right!","Down!"]
+def clefairy_minigame(length = 4)
+  possible_elements = ["Left!", " Up!", "Right!", "Down!"]
   pbMessage("Listen up and remember this!")
   sequence = []
   message = ""
@@ -266,7 +257,7 @@ def clefairy_minigame(length=4)
     sequence << element
     message += element
     message += "\\wt[20]"
-    message +=" "
+    message += " "
   }
   message += "\\wtnp[40]"
   pbWait(8)
@@ -312,26 +303,25 @@ def clefairy_minigame(length=4)
   end
 end
 
-#Switch 20
+# Switch 20
 def isDebugMode()
   return $DEBUG
 end
 
-
 def side_stairs_right
   case $game_player.direction
-  when DIRECTION_RIGHT  #Going up
-    destination_x = $game_player.x+1
-    destination_y = $game_player.y-1
+  when DIRECTION_RIGHT # Going up
+    destination_x = $game_player.x + 1
+    destination_y = $game_player.y - 1
     if $game_player.destination_is_passable(destination_x, destination_y)
       $game_player.move_upper_right
     elsif $game_player.destination_is_passable(destination_x, $game_player.y)
       $game_player.move_right
     end
 
-  when DIRECTION_LEFT #Going down
-    destination_x = $game_player.x-1
-    destination_y = $game_player.y+1
+  when DIRECTION_LEFT # Going down
+    destination_x = $game_player.x - 1
+    destination_y = $game_player.y + 1
     if $game_player.destination_is_passable(destination_x, destination_y)
       $game_player.move_lower_left
     elsif $game_player.destination_is_passable(destination_x, $game_player.y)
@@ -342,18 +332,18 @@ end
 
 def side_stairs_left
   case $game_player.direction
-  when DIRECTION_LEFT  #Going up
-    destination_x = $game_player.x-1
-    destination_y = $game_player.y-1
+  when DIRECTION_LEFT # Going up
+    destination_x = $game_player.x - 1
+    destination_y = $game_player.y - 1
     if $game_player.destination_is_passable(destination_x, destination_y)
       $game_player.move_upper_left
     elsif $game_player.destination_is_passable(destination_x, $game_player.y)
       $game_player.move_left
     end
 
-  when DIRECTION_RIGHT #Going down
-    destination_x = $game_player.x+1
-    destination_y = $game_player.y+1
+  when DIRECTION_RIGHT # Going down
+    destination_x = $game_player.x + 1
+    destination_y = $game_player.y + 1
     if $game_player.destination_is_passable(destination_x, destination_y)
       $game_player.move_lower_right
     elsif $game_player.destination_is_passable(destination_x, $game_player.y)
@@ -373,20 +363,34 @@ def get_random_trend
 end
 
 def trendSet(option1, option2)
-  choice = pbMessage(_INTL("What do you think? Do you think any of these have any potential?"),[_INTL("Not really..."),"#{option1} is pretty cool!","I like #{option2}!"])
+  choice = pbMessage(_INTL("What do you think? Do you think any of these have any potential?"), [_INTL("Not really..."), "#{option1} is pretty cool!", "I like #{option2}!"])
   case choice
   when 0
     return false
   when 1
-    pbSet(VAR_TRENDY_PHRASE,option1)
+    pbSet(VAR_TRENDY_PHRASE, option1)
     return true
   when 2
-    pbSet(VAR_TRENDY_PHRASE,option2)
+    pbSet(VAR_TRENDY_PHRASE, option2)
     return true
   end
   return false
 end
 
 def vendingMachine(stock)
-  pbPokemonMart(stock,_INTL("What would you like to purchase from the vending machine?"),true,_INTL(""),_INTL("Purchase anything else?"))
+  pbPokemonMart(stock, _INTL("It's a vending machine. What do you want to buy?"), true, _INTL(""), _INTL("Purchase anything else?"))
+end
+
+# Shiny egg of a random Pokemon (from a list)
+def obtainBirthdayGift
+  possible_species =
+    [
+      :PICHU, :CLEFFA, :IGGLYBUFF, :TOGEPI, :EEVEE, :HAPPINY, :AZURILL, :BUDEW, :CHINGLING, :MUNCHLAX, :RIOLU,
+    ]
+  species = possible_species.sample
+  pokemon = Pokemon.new(species,Settings::EGG_LEVEL)
+  pokemon.shiny=true
+  pokemon.natural_shiny = true
+  pokemon.moves[0] = Pokemon::Move.new(:HOLDHANDS)
+  pbGenerateEgg(pokemon)
 end
