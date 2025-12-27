@@ -45,80 +45,92 @@ class TilemapRenderer
   #    6 => [["Water rock", "Sea deep"], []]
 
   EXTRA_AUTOTILES = {
-    1 => {  #route-field
-            996 => "flowers_orange[10]",
-            991 => "flowers_pink[10]",
-            999 => "flowers_yellow[10]",
-            1007 => "flowers_blue[10]",
-            1015 => "flowers_purple[10]",
-            1023 => "flowers_red[10]",
-            1031 => "flowers_grey[10]",
-            1039 => "flowers_white[10]",
+    1 => { # route-field
+           996 => "flowers_orange[10]",
+           991 => "flowers_pink[10]",
+           999 => "flowers_yellow[10]",
+           1007 => "flowers_blue[10]",
+           1015 => "flowers_purple[10]",
+           1023 => "flowers_red[10]",
+           1031 => "flowers_grey[10]",
+           1039 => "flowers_white[10]",
+           #water rocks
+           1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
+           1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
+           1173 => "water_rock_medium[10]",
+           # water cliffs
+           1363 => "water_rock10", 1364 => "water_rock11",
+           1389 => "water_rock01", 1391 => "water_rock09",
+           1381 => "water_rock_shore08", 1382 => "water_rock_shore09",
 
-            #water cliffs
-            1363 => "water_rock10", 1364 => "water_rock11",
-            1389 => "water_rock01",   1391 => "water_rock09",
-            1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
-
-            1377 => "water_rock08",                                                                         1379 => "water_rock07",
-            1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
-            1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
-                                                                            1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
-
-    },
-    2 => {  #small-town
-            996 => "flowers_orange[10]",
-            991 => "flowers_pink[10]",
-            999 => "flowers_yellow[10]",
-            1007 => "flowers_blue[10]",
-            1015 => "flowers_purple[10]",
-            1023 => "flowers_red[10]",
-            1031 => "flowers_grey[10]",
-            1039 => "flowers_white[10]",
+           1377 => "water_rock08", 1379 => "water_rock07",
+           1384 => "water_rock_shore01", 1385 => "water_rock02", 1387 => "water_rock06", 1397 => "water_rock_shore07",
+           1392 => "water_rock_shore02", 1393 => "water_rock03", 1394 => "water_rock04", 1395 => "water_rock05", 1396 => "water_rock_shore06",
+           1401 => "water_rock_shore03", 1402 => "water_rock_shore04", 1403 => "water_rock_shore05",
 
     },
-
-    5 => {  #Rustboro
-            996 => "flowers_orange[10]",
-            991 => "flowers_pink[10]",
-            999 => "flowers_yellow[10]",
-            1007 => "flowers_blue[10]",
-            1015 => "flowers_purple[10]",
-            1023 => "flowers_red[10]",
-            1031 => "flowers_grey[10]",
-            1039 => "flowers_white[10]",
+    2 => { # small-town
+           996 => "flowers_orange[10]",
+           991 => "flowers_pink[10]",
+           999 => "flowers_yellow[10]",
+           1007 => "flowers_blue[10]",
+           1015 => "flowers_purple[10]",
+           1023 => "flowers_red[10]",
+           1031 => "flowers_grey[10]",
+           1039 => "flowers_white[10]",
 
     },
 
-    6 => {  #Dewford Town
+    5 => { # Rustboro
+           996 => "flowers_orange[10]",
+           991 => "flowers_pink[10]",
+           999 => "flowers_yellow[10]",
+           1007 => "flowers_blue[10]",
+           1015 => "flowers_purple[10]",
+           1023 => "flowers_red[10]",
+           1031 => "flowers_grey[10]",
+           1039 => "flowers_white[10]",
 
-      #water cliffs
-      1363 => "water_rock10", 1364 => "water_rock11",
-      1389 => "water_rock01",   1391 => "water_rock09",
-      1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
-
-      1377 => "water_rock08",                                                                         1379 => "water_rock07",
-      1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
-      1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
-      1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
     },
 
-    7 => {  #Sea Route
+    6 => { # Dewford Town
+           # water rocks
+           1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
+           1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
+           1173 => "water_rock_medium[10]",
+           # water cliffs
+           1363 => "water_rock10", 1364 => "water_rock11",
+           1389 => "water_rock01", 1391 => "water_rock09",
+           1381 => "water_rock_shore08", 1382 => "water_rock_shore09",
+
+           1377 => "water_rock08", 1379 => "water_rock07",
+           1384 => "water_rock_shore01", 1385 => "water_rock02", 1387 => "water_rock06", 1397 => "water_rock_shore07",
+           1392 => "water_rock_shore02", 1393 => "water_rock03", 1394 => "water_rock04", 1395 => "water_rock05", 1396 => "water_rock_shore06",
+           1401 => "water_rock_shore03", 1402 => "water_rock_shore04", 1403 => "water_rock_shore05",
+    },
+
+    7 => { # Sea Route
+           # water rocks
+           1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
+           1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
+           1173 => "water_rock_medium[10]",
+           # water cliffs
+           1363 => "water_rock10", 1364 => "water_rock11",
+           1389 => "water_rock01", 1391 => "water_rock09",
+           1381 => "water_rock_shore08", 1382 => "water_rock_shore09",
+
+           1377 => "water_rock08", 1379 => "water_rock07",
+           1384 => "water_rock_shore01", 1385 => "water_rock02", 1387 => "water_rock06", 1397 => "water_rock_shore07",
+           1392 => "water_rock_shore02", 1393 => "water_rock03", 1394 => "water_rock04", 1395 => "water_rock05", 1396 => "water_rock_shore06",
+           1401 => "water_rock_shore03", 1402 => "water_rock_shore04", 1403 => "water_rock_shore05",
+    },
+
+    12 => { # Slateport
             #water rocks
-            1173 => "water_rock_medium[15]",
-            #water cliffs
-            1363 => "water_rock10", 1364 => "water_rock11",
-            1389 => "water_rock01",   1391 => "water_rock09",
-            1381 => "water_rock_shore08",   1382  => "water_rock_shore09",
-
-            1377 => "water_rock08",                                                                         1379 => "water_rock07",
-            1384 => "water_rock_shore01",   1385 => "water_rock02",                                         1387 => "water_rock06",         1397 => "water_rock_shore07",
-            1392 => "water_rock_shore02",   1393 =>"water_rock03",          1394 => "water_rock04",         1395 => "water_rock05",         1396 => "water_rock_shore06",
-            1401 =>"water_rock_shore03",    1402 =>"water_rock_shore04",    1403 =>"water_rock_shore05",
-    },
-
-
-    12 => {  #Slateport
+            1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
+            1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
+            1173 => "water_rock_medium[10]",
+            #
             996 => "flowers_orange[10]",
             991 => "flowers_pink[10]",
             999 => "flowers_yellow[10]",
@@ -130,15 +142,15 @@ class TilemapRenderer
 
     },
 
-    23 => { #outdoor
-      1232 => "flowers_orange[10]",
-      1240 => "flowers_pink[10]",
-      1248 => "flowers_yellow[10]",
-      1256 => "flowers_blue[10]",
-      1264 => "flowers_purple[10]",
-      1272 => "flowers_red[10]",
-      1280 => "flowers_grey[10]",
-      1288 => "flowers_white[10]",
+    23 => { # outdoor
+            1232 => "flowers_orange[10]",
+            1240 => "flowers_pink[10]",
+            1248 => "flowers_yellow[10]",
+            1256 => "flowers_blue[10]",
+            1264 => "flowers_purple[10]",
+            1272 => "flowers_red[10]",
+            1280 => "flowers_grey[10]",
+            1288 => "flowers_white[10]",
 
     },
     30 => {
@@ -154,77 +166,72 @@ class TilemapRenderer
   }
 
   WIND_TREE_AUTOTILES = {
-    1 => {  #Route-field
-            864 => "tree_sway_single_1",
-            865 => "tree_sway_single_2",
-            872 => "tree_sway_single_3",
-            873 => "tree_sway_single_4",
-            880 => "tree_sway_single_5",
-            881 => "tree_sway_single_6",
+    1 => { # Route-field
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
 
-
-            866 => "tree_sway_group_1",
-            867 => "tree_sway_group_2",
-            874 => "tree_sway_group_3",
-            875 => "tree_sway_group_4",
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
     },
 
-    2 => {  #small-town
-            #trees
-            864 => "tree_sway_single_1",
-            865 => "tree_sway_single_2",
-            872 => "tree_sway_single_3",
-            873 => "tree_sway_single_4",
-            880 => "tree_sway_single_5",
-            881 => "tree_sway_single_6",
+    2 => { # small-town
+           # trees
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
 
-
-            866 => "tree_sway_group_1",
-            867 => "tree_sway_group_2",
-            874 => "tree_sway_group_3",
-            875 => "tree_sway_group_4",
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
     },
 
-    5 => {  #Rustboro
-            #trees
-            864 => "tree_sway_single_1",
-            865 => "tree_sway_single_2",
-            872 => "tree_sway_single_3",
-            873 => "tree_sway_single_4",
-            880 => "tree_sway_single_5",
-            881 => "tree_sway_single_6",
+    5 => { # Rustboro
+           # trees
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
 
-
-            866 => "tree_sway_group_1",
-            867 => "tree_sway_group_2",
-            874 => "tree_sway_group_3",
-            875 => "tree_sway_group_4",
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
     },
 
-    9 => {  #Route Forest
-            #trees
-            864 => "tree_sway_single_1",
-            865 => "tree_sway_single_2",
-            872 => "tree_sway_single_3",
-            873 => "tree_sway_single_4",
-            880 => "tree_sway_single_5",
-            881 => "tree_sway_single_6",
+    9 => { # Route Forest
+           # trees
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
 
-
-            866 => "tree_sway_group_1",
-            867 => "tree_sway_group_2",
-            874 => "tree_sway_group_3",
-            875 => "tree_sway_group_4",
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
     },
 
-    12 => {  #Slateport
+    12 => { # Slateport
             864 => "tree_sway_single_1",
             865 => "tree_sway_single_2",
             872 => "tree_sway_single_3",
             873 => "tree_sway_single_4",
             880 => "tree_sway_single_5",
             881 => "tree_sway_single_6",
-
 
             866 => "tree_sway_group_1",
             867 => "tree_sway_group_2",
@@ -328,6 +335,7 @@ class TilemapRenderer
     end
 
     EXPANDED_AUTOTILES_FOLDER = "Graphics/Autotiles/ExpandedAutotiles/"
+
     def add(filename)
       return if nil_or_empty?(filename)
       if @bitmaps[filename]
@@ -338,7 +346,7 @@ class TilemapRenderer
       # Try to load expanded autotile from cache first
       cached_path = File.join("Graphics", "Autotiles/ExpandedAutotiles", "#{filename}.png")
       if safeExists?(cached_path)
-        #echoln "Loading cached expanded autotile for #{filename}"
+        # echoln "Loading cached expanded autotile for #{filename}"
         bitmap = RPG::Cache.load_bitmap(EXPANDED_AUTOTILES_FOLDER, filename)
 
         duration = AUTOTILE_FRAME_DURATION
@@ -371,7 +379,6 @@ class TilemapRenderer
       end
       @load_counts[filename] = 1
     end
-
 
     def remove(filename)
       super
@@ -565,18 +572,18 @@ class TilemapRenderer
     @autotiles.remove(filename)
   end
 
-  def get_autotile_overrides(tileset_id,map_id)
+  def get_autotile_overrides(tileset_id, map_id)
     base_overrides = EXTRA_AUTOTILES[tileset_id] || {}
     return base_overrides unless $game_weather
-    wind_overrides =WIND_TREE_AUTOTILES[tileset_id] || {}
+    wind_overrides = WIND_TREE_AUTOTILES[tileset_id] || {}
     if $game_weather.map_current_weather_type(map_id) == :Wind && WIND_TREE_AUTOTILES[tileset_id]
       return base_overrides.merge(wind_overrides)
     end
     return base_overrides
   end
 
-  def add_extra_autotiles(tileset_id,map_id)
-    overrides = get_autotile_overrides(tileset_id,map_id)
+  def add_extra_autotiles(tileset_id, map_id)
+    overrides = get_autotile_overrides(tileset_id, map_id)
     return if !overrides || overrides.empty?
     overrides.each do |tile_id, filename|
       @autotiles.add(filename)
@@ -596,10 +603,12 @@ class TilemapRenderer
   def refresh
     @need_refresh = true
   end
+
   INVISIBLE_WALL_TILE_ID = 384
+
   def refresh_tile_bitmap(tile, map, tile_id)
     tile.tile_id = tile_id
-    if tile_id < TILES_PER_AUTOTILE || ( Settings::HOENN && tile_id == INVISIBLE_WALL_TILE_ID)
+    if tile_id < TILES_PER_AUTOTILE || (Settings::HOENN && tile_id == INVISIBLE_WALL_TILE_ID)
       tile.set_bitmap("", tile_id, false, false, 0, nil)
       tile.shows_reflection = false
       tile.bridge = false
@@ -619,7 +628,7 @@ class TilemapRenderer
       # end
 
       filename = nil
-      extra_autotile_hash = get_autotile_overrides(map.tileset_id,map.map_id)
+      extra_autotile_hash = get_autotile_overrides(map.tileset_id, map.map_id)
 
       if extra_autotile_hash && extra_autotile_hash[tile_id]
         # Custom tile_id override
@@ -671,8 +680,8 @@ class TilemapRenderer
   end
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
-    if tile.underwater_tile#tile.shows_reflection -2000
-        tile.z = -5
+    if tile.underwater_tile # tile.shows_reflection -2000
+      tile.z = -5
     elsif tile.bridge && $PokemonGlobal.bridge > 0
       tile.z = 0
     else
