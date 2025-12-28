@@ -57,7 +57,7 @@ end
 # The event does a little animation before giving out the candies.
 #
 def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
-  pokemon.exp_gained_with_player if !pokemon.exp_gained_with_player
+  pokemon.exp_gained_with_player = 0 if !pokemon.exp_gained_with_player
   max_value = pokemon.exp_gained_with_player / 1000.floor
 
   if max_value < 1
