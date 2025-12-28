@@ -1,4 +1,5 @@
 class Sprite_Player < Sprite_Character
+  ACRO_BIKE_POSITION_OFFSET = 16
   def initialize(viewport, character = nil)
     super
     @viewport = viewport
@@ -8,18 +9,17 @@ class Sprite_Player < Sprite_Character
 
     hatFilename = ""
     hairFilename = ""
-    @hat = Sprite_Hat.new(self, hatFilename, @character_name, @viewport,3)
-    @hat2 = Sprite_Hat.new(self, hatFilename, @character_name, @viewport,2)
+    @hat = Sprite_Hat.new(self, hatFilename, @character_name, @viewport, 3)
+    @hat2 = Sprite_Hat.new(self, hatFilename, @character_name, @viewport, 2)
     @hair = Sprite_Hair.new(self, hairFilename, @character_name, @viewport)
 
     @previous_skinTone = 0
 
     @current_bitmap = nil
-    @previous_action =nil
+    @previous_action = nil
     echoln "init playa"
     getClothedPlayerSprite(true)
   end
-
 
   def updateCharacterBitmap
     skinTone = $Trainer.skin_tone ? $Trainer.skin_tone : 0
@@ -39,12 +39,12 @@ class Sprite_Player < Sprite_Character
 
   def opacity=(value)
     super
-    @hat.sprite.opacity= value if @hat && @hat.sprite.bitmap
-    @hat2.sprite.opacity= value if @hat2 && @hat2.sprite.bitmap
-    @hair.sprite.opacity= value if @hair && @hair.sprite.bitmap
+    @hat.sprite.opacity = value if @hat && @hat.sprite.bitmap
+    @hat2.sprite.opacity = value if @hat2 && @hat2.sprite.bitmap
+    @hair.sprite.opacity = value if @hair && @hair.sprite.bitmap
   end
 
-  def getClothedPlayerSprite(forceUpdate=false)
+  def getClothedPlayerSprite(forceUpdate = false)
     if @previous_action != @character_name || forceUpdate
       @current_bitmap = generateClothedBitmap
     end
@@ -55,10 +55,9 @@ class Sprite_Player < Sprite_Character
     return @current_bitmap
   end
 
-
   def generateClothedBitmap()
-    @charbitmap.bitmap.clone #nekkid sprite
-    baseBitmap = @charbitmap.bitmap.clone #nekkid sprite
+    @charbitmap.bitmap.clone # nekkid sprite
+    baseBitmap = @charbitmap.bitmap.clone # nekkid sprite
 
     if $game_player.hasGraphicsOverride? && @character_name != "fish"
       @hair.update(@character_name, "", 0) if @hair
@@ -99,11 +98,16 @@ class Sprite_Player < Sprite_Character
     return baseBitmap
   end
 
-
-
+  #When the player needs to be positioned differently relative to its normal position
+  def apply_global_player_offsets
+    if $PokemonGlobal.acroBike
+      self.y -= ACRO_BIKE_POSITION_OFFSET
+    end
+  end
 
   def update
     super
+    apply_global_player_offsets
     if Settings::GAME_ID == :IF_HOENN && $PokemonGlobal.diving
       self.z = -4
       @hat.adjust_layer if @hat

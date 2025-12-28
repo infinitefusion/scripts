@@ -266,6 +266,8 @@ class Game_Map
           break if facing_terrain.id != :None && !facing_terrain.ignore_passability
         end
       end
+      return true if terrain.acroBike && $PokemonGlobal.bicycle
+
       # Regular passability checks
       if !terrain || !terrain.ignore_passability
         passage = @passages[tile_id]
@@ -314,6 +316,7 @@ class Game_Map
       passage = @passages[tile_id]
       if terrain
         return false if terrain.ledge
+        return false if terrain.acroBike
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing

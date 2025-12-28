@@ -40,6 +40,7 @@ class Game_Player < Game_Character
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
+      return if hopOffFence
       if can_move_in_direction?(dir)
         x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
         y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
@@ -420,6 +421,7 @@ def pbCancelVehicles(destination=nil)
   $PokemonGlobal.surfing = false
   $PokemonGlobal.diving  = false
   $PokemonGlobal.bicycle = false if !destination || !pbCanUseBike?(destination)
+  $PokemonGlobal.acroBike = false
   pbUpdateVehicle
 end
 
@@ -441,8 +443,10 @@ def pbMountBike
 end
 
 def pbDismountBike
+  return if $game_map.terrain_tag($game_player.x, $game_player.y).acroBike
   return if !$PokemonGlobal.bicycle
   $PokemonGlobal.bicycle = false
+  $PokemonGlobal.acroBike = false
   pbUpdateVehicle
   $game_map.autoplayAsCue
 end

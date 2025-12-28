@@ -239,6 +239,10 @@ class Sprite_Character
     # end
     @shadow.x = x
     @shadow.y = y - 6
+
+    @shadow.y += @character.shadow_offset if @character.shadow_offset
+
+
     @shadow.z = self.z - 1
 
     if @shadow
@@ -292,7 +296,7 @@ class Sprite_Character
       @shadow.opacity = self.opacity
       @shadow.visible = (bushdepth == 0)
       if !self.visible || (@is_follower || @character == $game_player) &&
-        ($PokemonGlobal.surfing || $PokemonGlobal.diving || $PokemonGlobal.boat)
+        ($PokemonGlobal.surfing || $PokemonGlobal.diving || $PokemonGlobal.boat || $PokemonGlobal.acroBike)
         @shadow.visible = false
       end
     end

@@ -837,6 +837,7 @@ def pbSurf
   return false if $game_player.pbFacingEvent
   return false if $game_player.pbHasDependentEvents?
   return false if $PokemonGlobal.diving || $PokemonGlobal.surfing
+  return false if $PokemonGlobal.acroBike
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder)
@@ -897,7 +898,7 @@ def pbEndSurf(_xOffset, _yOffset)
       pbOnStepTaken(result)
     end
     $PokemonTemp.surfJump = nil
-    $game_temp.clearSurfSplashPatches
+    #$game_temp.clearSurfSplashPatches
     return true
 
   end
@@ -958,6 +959,13 @@ Events.onAction += proc { |_sender, _e|
       changeOricorioFlower(4)
     end
   end
+}
+
+# Acro Bike
+Events.onAction += proc { |_sender, _e|
+  next unless $PokemonGlobal.bicycle
+  next unless $game_player.pbFacingTerrainTag.acroBike
+  bikeOnFence()
 }
 
 # Trashcan

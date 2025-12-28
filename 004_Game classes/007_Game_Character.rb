@@ -31,6 +31,7 @@ class Game_Character
   attr_accessor :always_on_top
   attr_accessor :forced_bush_depth
   attr_reader :move_route
+  attr_accessor :shadow_offset
 
   def initialize(map = nil)
     @map = map
@@ -85,6 +86,7 @@ class Game_Character
     @under_player = false
     @forced_z = nil
     @forced_bush_depth = nil
+    @shadow_offset =0
   end
 
   def at_coordinate?(check_x, check_y)
@@ -245,6 +247,27 @@ class Game_Character
     return $MapFactory.getFacingTerrainTag(dir, self) if $MapFactory
     facing = pbFacingTile(dir, self)
     return $game_map.terrain_tag(facing[1], facing[2])
+  end
+
+  #like pbFacingTerrainTag, but doesn't care about passability
+  def getTerrainTagDirectlyInFront()
+    x = $game_player.x
+    y= $game_player.y
+
+    case @direction
+    when DIRECTION_UP
+      y= $game_player.y-1
+    when DIRECTION_DOWN
+      y= $game_player.y+1
+    when DIRECTION_LEFT
+      x= $game_player.x-1
+    when DIRECTION_RIGHT
+      x= $game_player.x+1
+    end
+    return $game_map.terrain_tag(x, y)
+  end
+  def getTerrainTag()
+    return $game_map.terrain_tag($game_player.x, $game_player.y)
   end
 
   def passable?(x, y, d, strict = false)

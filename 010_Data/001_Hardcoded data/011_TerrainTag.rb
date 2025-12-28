@@ -21,6 +21,9 @@ module GameData
     attr_reader :must_walk
     attr_reader :ignore_passability
 
+    attr_reader :acroBike
+
+
     # oricorio
     attr_reader :flowerRed
     attr_reader :flowerPink
@@ -28,7 +31,10 @@ module GameData
     attr_reader :flowerBlue
     attr_reader :flower
 
+    #common objects
     attr_reader :trashcan
+    attr_reader :chair
+
     attr_reader :chair
 
     attr_reader :sharpedoObstacle
@@ -87,9 +93,10 @@ module GameData
       @flower = hash[:flower] || false
       @trashcan = hash[:trashcan] || false
 
+      @acroBike = hash[:acroBike] || false
       @chair = hash[:chair] || false
 
-      @sharpedoObstacle = hash[:sharpedoObstacle] || false
+      @sharpedoObstacle = hash[:chair] || false
       @underwater = hash[:underwater] || false
 
       @secretBase_tree = hash[:secretBase_tree] || false
@@ -346,4 +353,10 @@ GameData::TerrainTag.register({
                                 :id => :Stairs,
                                 :id_number => 33,
                                 :must_walk => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :AcroBike,
+                                :id_number => 34,
+                                :acroBike => true,
                               })

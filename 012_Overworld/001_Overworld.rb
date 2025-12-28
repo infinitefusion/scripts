@@ -222,7 +222,6 @@ def isFusedEncounter
   return (rand(chance) == 0)
 end
 
-
 def generateWildEncounter(encounter_type)
   encounter = getRegularEncounter(encounter_type)
   return unless encounter
@@ -237,7 +236,6 @@ def generateWildEncounter(encounter_type)
     encounter[0] = getSpecies(encounter[0])
   end
   echoln encounter[0]
-
   $game_switches[SWITCH_FORCE_FUSE_NEXT_POKEMON] = false
   return encounter
 end
@@ -265,12 +263,10 @@ def pbBattleOnStepTaken(repel_active)
   encounter = generateWildEncounter(encounter_type)
 
   if $PokemonSystem.overworld_encounters
-    #single pokemon that spawns near player
-    spawn_random_overworld_pokemon_group(encounter,2,1)
+    # single pokemon that spawns near player
+    spawn_random_overworld_pokemon_group(encounter, 2, 1)
     return
   end
-
-
 
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)
@@ -530,25 +526,25 @@ def pbPlayerInEventCone?(event, player, distance, spread = 1)
   px = player.x; py = player.y
 
   case event.direction
-  when 2   # Event facing Down
+  when 2 # Event facing Down
     dy = py - ey
     return false if dy <= 0 || dy > distance
     side = (px - ex).abs
     return side <= dy * spread
 
-  when 8   # Facing Up
+  when 8 # Facing Up
     dy = ey - py
     return false if dy <= 0 || dy > distance
     side = (px - ex).abs
     return side <= dy * spread
 
-  when 6   # Facing Right
+  when 6 # Facing Right
     dx = px - ex
     return false if dx <= 0 || dx > distance
     side = (py - ey).abs
     return side <= dx * spread
 
-  when 4   # Facing Left
+  when 4 # Facing Left
     dx = ex - px
     return false if dx <= 0 || dx > distance
     side = (py - ey).abs
@@ -558,10 +554,6 @@ def pbPlayerInEventCone?(event, player, distance, spread = 1)
     return false
   end
 end
-
-
-
-
 
 # Returns whether the two events are standing next to each other and facing each
 # other.
@@ -727,9 +719,39 @@ def pbLedge(_xOffset, _yOffset)
 end
 
 def sitOnChair()
+  return false if $PokemonGlobal.bicycle
   if $game_player.pbFacingTerrainTag.chair
     sit_on_chair()
     return true
+  end
+end
+
+def bikeOnFence()
+  if $game_player.pbFacingTerrainTag.acroBike
+    pbSEPlay("Player jump")
+    $game_player.through = true
+    $game_player.jump_forward
+    $game_player.through = false
+    #return pbJumpToward(1, true)
+    $PokemonGlobal.acroBike = true
+    return true
+  end
+  return false
+end
+
+def hopOffFence
+  x = $game_player.x
+  y = $game_player.y
+  if $game_map.terrain_tag(x, y).acroBike && !$game_player.pbFacingTerrainTag.acroBike
+    $PokemonTemp.surfJump = [x, y]
+    if pbJumpToward(1, true)
+      $game_map.autoplayAsCue
+      $game_player.increase_steps
+      result = $game_player.check_event_trigger_here([1, 2])
+      pbOnStepTaken(result)
+      $PokemonGlobal.acroBike = false
+    end
+    $PokemonTemp.surfJump = nil
   end
 end
 
