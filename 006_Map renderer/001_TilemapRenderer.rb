@@ -69,6 +69,31 @@ class TilemapRenderer
            1401 => "water_rock_shore03", 1402 => "water_rock_shore04", 1403 => "water_rock_shore05",
 
     },
+
+    8 => { # route-cycling
+           996 => "flowers_orange[10]",
+           991 => "flowers_pink[10]",
+           999 => "flowers_yellow[10]",
+           1007 => "flowers_blue[10]",
+           1015 => "flowers_purple[10]",
+           1023 => "flowers_red[10]",
+           1031 => "flowers_grey[10]",
+           1039 => "flowers_white[10]",
+           #water rocks
+           1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
+           1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
+           1173 => "water_rock_medium[10]",
+           # water cliffs
+           1363 => "water_rock10", 1364 => "water_rock11",
+           1389 => "water_rock01", 1391 => "water_rock09",
+           1381 => "water_rock_shore08", 1382 => "water_rock_shore09",
+
+           1377 => "water_rock08", 1379 => "water_rock07",
+           1384 => "water_rock_shore01", 1385 => "water_rock02", 1387 => "water_rock06", 1397 => "water_rock_shore07",
+           1392 => "water_rock_shore02", 1393 => "water_rock03", 1394 => "water_rock04", 1395 => "water_rock05", 1396 => "water_rock_shore06",
+           1401 => "water_rock_shore03", 1402 => "water_rock_shore04", 1403 => "water_rock_shore05",
+    },
+
     2 => { # small-town
            996 => "flowers_orange[10]",
            991 => "flowers_pink[10]",
@@ -167,6 +192,33 @@ class TilemapRenderer
 
   WIND_TREE_AUTOTILES = {
     1 => { # Route-field
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
+
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
+    },
+    7 => { # Route-sea
+           864 => "tree_sway_single_1",
+           865 => "tree_sway_single_2",
+           872 => "tree_sway_single_3",
+           873 => "tree_sway_single_4",
+           880 => "tree_sway_single_5",
+           881 => "tree_sway_single_6",
+
+           866 => "tree_sway_group_1",
+           867 => "tree_sway_group_2",
+           874 => "tree_sway_group_3",
+           875 => "tree_sway_group_4",
+    },
+
+    8 => { # Route-cycling
            864 => "tree_sway_single_1",
            865 => "tree_sway_single_2",
            872 => "tree_sway_single_3",
