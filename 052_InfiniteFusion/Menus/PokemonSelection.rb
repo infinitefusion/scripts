@@ -61,6 +61,36 @@ module PokemonSelection
     return ret
   end
 
+  def self.force(party_indexes = [])
+    if $PokemonGlobal.pokemonSelectionOriginalParty
+      PokemonSelection.restore
+      echoln "Can't choose a new party until the old one is restored"
+      return false
+    end
+    party_indexes = party_indexes.compact.uniq
+    if party_indexes.empty?
+      echoln "No party indexes provided."
+      return false
+    end
+
+    new_party = []
+    party_indexes.each do |i|
+      if i < 0 || i >= $Trainer.party.length
+        echoln "Invalid party index: #{i}"
+        return false
+      end
+      new_party << $Trainer.party[i]
+    end
+
+    if new_party.size != $Trainer.party.size
+      $PokemonGlobal.pokemonSelectionOriginalParty = $Trainer.party
+    end
+    $Trainer.party = new_party
+    pbBattleChallenge.pbCancel
+    return true
+  end
+
+
   def self.choose(min=1, max=6, canCancel=false, acceptFainted=false, ableproc=nil)
     if $PokemonGlobal.pokemonSelectionOriginalParty
       PokemonSelection.restore

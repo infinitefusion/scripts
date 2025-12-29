@@ -142,12 +142,13 @@ define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL
 
 
 #SIDE QUESTS
-#
+define_quest("template",:FIELD_QUEST,_INTL("Template Quest"), _INTL("Don't forget to change the quest ID if you copy paste this!"),_INTL("Unknown"),"000")
+
 #route 102
 define_quest("route_102_rematch",:FIELD_QUEST,_INTL("Trainer Rematches"), _INTL("A lass you battled wants to switch up her team and rematch you!"),_INTL("Route 102"),"NPC_Hoenn_Lass")
 
 #Petalburg Town
-define_quest("petalburg_rematch",:FIELD_QUEST,_INTL("Berry Contest"), _INTL("Take part in the berry-growing contest in Petalburg Town!"),_INTL("Route 102"),"NPC_Hoenn_Breeder_F")
+define_quest("petalburg_berry",:FIELD_QUEST,_INTL("Berry Contest"), _INTL("Take part in the berry-growing contest in Petalburg Town!"),_INTL("Route 102"),"NPC_Hoenn_Breeder_F")
 
 
     #Route 116
@@ -185,3 +186,4 @@ define_quest("route109_seahouse",:FIELD_QUEST,_INTL("Hot Battles at the Seashore
 
 #Team Magma - Route 103
 define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Route 103"),"NPC_Hoenn_Magma_Exec_M")
+define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel in a way that it's no longer weak to the Water type."),_INTL("Route 103"),"NPC_Hoenn_Magma_Grunt_M")

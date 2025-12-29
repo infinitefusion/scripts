@@ -61,6 +61,13 @@ def pbNicknameAndStore(pkmn)
   #pbStorePokemon(pkmn)
 end
 
+def pbAddRentalPokemon(species,level)
+  original_trainer = "RENTAL"
+  pokemon = Pokemon.new(species,level)
+  pokemon.owner.name=original_trainer
+  pbAddPokemon(pokemon,level)
+end
+
 #===============================================================================
 # Giving Pokémon to the player (will send to storage if party is full)
 #===============================================================================

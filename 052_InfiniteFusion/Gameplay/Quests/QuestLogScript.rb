@@ -165,11 +165,12 @@ def finishQuest(id, silent=false)
   $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
   if is_main_quest?(id)
+    pbMEPlay("Register phone") if !silent
+    quest_name = QUESTS[id].name
+    Kernel.pbMessage(_INTL("\\qp\\C[6]Main quest completed: {1}",quest_name)) if !silent
+  else
     pbMEPlay("match_call") if !silent
     Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
-  else
-    pbMEPlay("Register phone") if !silent
-    Kernel.pbMessage(_INTL("\\qp\\C[6]Main quest completed: {1}"),QUESTS[id].name) if !silent
   end
 
   $Trainer.quest_points+=1
