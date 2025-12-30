@@ -164,6 +164,8 @@ class PokemonTemp
   attr_accessor :overworld_wild_battle_triggered
 
   attr_accessor :overworld_pokemon_on_map
+
+
   attr_accessor :prevent_ow_encounters
   attr_accessor :prevent_ow_battles # For cutscenes where we stil want Pokemon to spawn but shouldn't encounter them (ex: Mr. Briney boat ride)
 

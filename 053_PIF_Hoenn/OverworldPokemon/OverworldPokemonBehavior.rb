@@ -1,4 +1,4 @@
-MULTIPLE_WILD_OW_FUSE_CHANCE = 350
+MULTIPLE_WILD_OW_FUSE_CHANCE = 35
 
 class Game_Event
   def player_near_event?(radius = 1)
@@ -43,8 +43,8 @@ def trigger_overworld_wild_battle
     $PokemonTemp.overworld_wild_battle_triggered = false
     return
   when 2
-    battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
-    battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
+    battler1 = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
+    battler2 = $PokemonTemp.overworld_wild_battle_participants[1].pokemon
     should_fuse = rand(100) <= MULTIPLE_WILD_OW_FUSE_CHANCE
     should_fuse = false if battler1.isFusion? || battler2.isFusion? #&& rand(100) <= MULTIPLE_WILD_OW_FUSE_CHANCE
     should_fuse = false if battler1.shiny? || battler2.shiny?
@@ -60,19 +60,29 @@ def trigger_overworld_wild_battle
     else
       pb1v2WildBattleSpecific(battler1, battler2)
     end
-    $PokemonTemp.overworld_wild_battle_participants = []
   when 3
-    battler1 = $PokemonTemp.overworld_wild_battle_participants[0]
-    battler2 = $PokemonTemp.overworld_wild_battle_participants[1]
-    battler3 = $PokemonTemp.overworld_wild_battle_participants[2]
+    battler1 = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
+    battler2 = $PokemonTemp.overworld_wild_battle_participants[1].pokemon
+    battler3 = $PokemonTemp.overworld_wild_battle_participants[2].pokemon
     pb1v3WildBattleSpecific(battler1, battler2, battler3)
-    $PokemonTemp.overworld_wild_battle_participants = []
-  else
-    battler = $PokemonTemp.overworld_wild_battle_participants[0]
+  when 1
+    battler = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
+    pbWildBattleSpecific(battler)
+  else  #shouldn"t happen
+    battler = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
     pbWildBattleSpecific(battler)
     $PokemonTemp.overworld_wild_battle_participants.shift
   end
+
+  echoln "despawning shit"
+  echoln $PokemonTemp.overworld_wild_battle_participants
+  $PokemonTemp.overworld_wild_battle_participants.each do |ow_pokemon|
+    ow_pokemon.despawn
+  end
+  $PokemonTemp.overworld_wild_battle_participants = []
+
   $PokemonTemp.overworld_wild_battle_triggered = false
+
 end
 
 

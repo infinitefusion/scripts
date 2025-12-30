@@ -135,20 +135,19 @@ class OverworldPokemonEvent < Game_Event
     return if lock?
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
+    return if $PokemonTemp.overworld_wild_battle_triggered
     instance_variable_set(:@_triggered, true)
     playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
     turn_toward_player
     playCry(@species)
     @pokemon.ow_coordinates = [@x, @y]
     $PokemonTemp.overworld_wild_battle_participants = [] if !$PokemonTemp.overworld_wild_battle_participants
-    $PokemonTemp.overworld_wild_battle_participants << @pokemon
-    pbWait(4)
+    $PokemonTemp.overworld_wild_battle_participants << self
+    pbWait(8)
     trigger_overworld_wild_battle
-    echoln @post_battle_switch
     if @post_battle_switch && @post_battle_switch.is_a?(Integer) && @post_battle_switch >=1
       $game_switches[@post_battle_switch] = true
     end
-    despawn
     return
   end
 
@@ -468,6 +467,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def despawn
+    echoln @pokemon.species
     $PokemonTemp.overworld_pokemon_on_map.delete(@id)
     erase
   end
