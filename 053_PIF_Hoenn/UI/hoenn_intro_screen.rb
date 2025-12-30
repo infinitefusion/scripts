@@ -28,6 +28,7 @@ class HoennIntroScreen
     @scrollLayers = {}
     @scrollSprites = {}
     @fusionSprites = []
+
     @spriteLoader = BattleSpriteLoader.new
     @fusionBitmapCache = {}
 
@@ -36,6 +37,7 @@ class HoennIntroScreen
     @sprites = {}
     pbBGMPlay(@bgm)
     setupScrollingLayers
+    setupSprites
     setupUI
     preloadFusionSprites
   end
@@ -61,6 +63,14 @@ class HoennIntroScreen
       @scrollSprites[name] = [sA, sB]
       @scrollLayers[name] = { width: w, speed: speed, posA: 0.0, posB: w.to_f }
     end
+  end
+
+  def setupSprites
+    @sprites["shimmer1"] = Sprite.new(@viewport)
+    @sprites["shimmer1"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer1")
+
+    @sprites["shimmer2"] = Sprite.new(@viewport)
+    @sprites["shimmer2"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer2")
   end
 
   def setupUI
@@ -129,6 +139,7 @@ class HoennIntroScreen
 
   def update
     @currentFrame += 1
+    updateShimmer
     updatePressStartAnimation
     updateScrollingLayers
     updateFusions
@@ -206,4 +217,17 @@ class HoennIntroScreen
       @start_opacity_diff = -@start_opacity_diff
     end
   end
+
+  def updateShimmer
+    max_opacity= 200
+    t = @currentFrame / 10.0 # bigger divisor → slower shimmer
+    rate = (Math.sin(t) + 1) / 2
+
+    opacity1 = (rate * max_opacity).to_i
+    opacity2 = ((1 - rate) * max_opacity).to_i
+
+    @sprites["shimmer1"].opacity = opacity1
+    @sprites["shimmer2"].opacity = opacity2
+  end
 end
+
