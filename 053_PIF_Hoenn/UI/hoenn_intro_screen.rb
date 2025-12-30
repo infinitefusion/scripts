@@ -71,6 +71,12 @@ class HoennIntroScreen
 
     @sprites["shimmer2"] = Sprite.new(@viewport)
     @sprites["shimmer2"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer2")
+
+    @sprites["shimmer3"] = Sprite.new(@viewport)
+    @sprites["shimmer3"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer3")
+
+    @sprites["shimmer4"] = Sprite.new(@viewport)
+    @sprites["shimmer4"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer4")
   end
 
   def setupUI
@@ -219,15 +225,19 @@ class HoennIntroScreen
   end
 
   def updateShimmer
-    max_opacity= 200
-    t = @currentFrame / 10.0 # bigger divisor → slower shimmer
-    rate = (Math.sin(t) + 1) / 2
+    max_opacity = 200
+    cycle_speed = 80.0
 
-    opacity1 = (rate * max_opacity).to_i
-    opacity2 = ((1 - rate) * max_opacity).to_i
-
-    @sprites["shimmer1"].opacity = opacity1
-    @sprites["shimmer2"].opacity = opacity2
+    t = (@currentFrame % cycle_speed) / cycle_speed * 4.0
+    4.times do |i|
+      dist = (t - i).abs
+      dist = [dist, (4 - dist)].min
+      fade = [[1.0 - dist, 0].max, 1].min
+      opacity = (fade * max_opacity).to_i
+      @sprites["shimmer#{i+1}"].opacity = opacity
+    end
   end
+
+
 end
 

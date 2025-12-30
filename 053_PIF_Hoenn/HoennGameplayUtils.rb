@@ -20,7 +20,7 @@ def showTVText(channel = :RANDOM)
     pbTVNews()
   when :WEATHER
     pbMessage(_INTL("It's the weather channel! Let's see how things are looking out today."))
-    pbWeatherMapMap()
+    pbWeatherMap()
   when :TREND
     getTVTrendMessages()
   end

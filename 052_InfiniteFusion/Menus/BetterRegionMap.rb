@@ -28,7 +28,7 @@ def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap 
   return scene.flydata
 end
 
-def pbWeatherMapMap()
+def pbWeatherMap()
   scene = BetterRegionMap.new(-1, true, false, true, nil, false, true)
   return scene.flydata
 end
