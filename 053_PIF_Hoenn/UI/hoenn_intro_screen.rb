@@ -4,8 +4,10 @@ class HoennIntroScreen
   # =========================================================================
 
   SCROLL_LAYERS = [
-    [:back, "Graphics/Titles/bg_back", 1],
-    [:front, "Graphics/Titles/bg_front", 2]
+    [:back, "Graphics/Titles/bg_back", 0],
+    [:clouds, "Graphics/Titles/bg_clouds", 0.3],
+    [:front, "Graphics/Titles/bg_front", 2.0],
+    [:shade, "Graphics/Titles/bg_shade", 0]
   ]
 
   PRESS_START_OPACITY_DIFF = 2
@@ -57,7 +59,7 @@ class HoennIntroScreen
       sB.z = 0
 
       @scrollSprites[name] = [sA, sB]
-      @scrollLayers[name] = { width: w, speed: speed }
+      @scrollLayers[name] = { width: w, speed: speed, posA: 0.0, posB: w.to_f }
     end
   end
 
@@ -145,11 +147,21 @@ class HoennIntroScreen
     speed = layer[:speed]
     width = layer[:width]
 
-    sA.x -= speed
-    sB.x -= speed
+    # Float positions
+    layer[:posA] -= speed
+    layer[:posB] -= speed
 
-    sA.x = sB.x + width if sA.x <= -width
-    sB.x = sA.x + width if sB.x <= -width
+    # Wrap
+    if layer[:posA] <= -width
+      layer[:posA] = layer[:posB] + width
+    end
+    if layer[:posB] <= -width
+      layer[:posB] = layer[:posA] + width
+    end
+
+    # Assign integer positions to sprites
+    sA.x = layer[:posA].round
+    sB.x = layer[:posB].round
   end
 
   # =========================================================================
