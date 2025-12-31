@@ -56,7 +56,6 @@ class PokemonGameOption_Scene < PokemonOption_Scene
       )
     end
 
-
     if $game_switches
       options << EnumOption.new(_INTL("Difficulty"), [_INTL("Easy"), _INTL("Normal"), _INTL("Hard")],
                                 proc { $Trainer.selected_difficulty },
@@ -82,6 +81,19 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                        },
                        _INTL("Automatically saves when healing at Pokémon centers")
         )
+    end
+
+    if $game_switches
+      options <<
+        ButtonOption.new(
+          _INTL("Challenge Options"),
+          proc {
+              @challenge_menu = true
+              openChallengeMenu()
+          },
+          _INTL("Set optional self-imposed challenge options.")
+        )
+
     end
 
     options << EnumOption.new(_INTL("Speed-up type"), [_INTL("Hold"), _INTL("Toggle")],
@@ -183,13 +195,6 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               _INTL("Display move animations in battles")
     )
 
-    options << EnumOption.new(_INTL("Battle Style"), [_INTL("Switch"), _INTL("Set")],
-                              proc { $PokemonSystem.battlestyle },
-                              proc { |value| $PokemonSystem.battlestyle = value },
-                              [_INTL("Prompts to switch Pokémon before the opponent sends out the next one"),
-                               _INTL("No prompt to switch Pokémon before the opponent sends the next one")]
-    )
-
     options << NumberOption.new(_INTL("Speech Frame"), 1, Settings::SPEECH_WINDOWSKINS.length,
                                 proc { $PokemonSystem.textskin },
                                 proc { |value|
@@ -241,11 +246,11 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                               _INTL("Start surfing automatically when interacting with water")
     )
 
-    options << EnumOption.new(_INTL("Level caps"), [_INTL("Off"), _INTL("On")],
-                              proc { $PokemonSystem.level_caps },
-                              proc { |value| $PokemonSystem.level_caps = value },
-                              _INTL("Prevents leveling above the next gym leader's highest leveled Pokemon")
-    )
+    # options << EnumOption.new(_INTL("Level caps"), [_INTL("Off"), _INTL("On")],
+    #                           proc { $PokemonSystem.level_caps },
+    #                           proc { |value| $PokemonSystem.level_caps = value },
+    #                           _INTL("Prevents leveling above the next gym leader's highest leveled Pokemon")
+    # )
 
     device_option_selected = $PokemonSystem.on_mobile ? 1 : 0
     options << EnumOption.new(_INTL("Device"), [_INTL("PC"), _INTL("Mobile")],

@@ -479,6 +479,7 @@ class Pokemon
   # Sets the Pokémon's health.
   # @param value [Integer] new HP value
   def hp=(value)
+    return if fainted? && $PokemonSystem.no_reviving
     @hp = value.clamp(0, @totalhp)
     heal_status if @hp == 0
     checkHPRelatedFormChange()
@@ -508,6 +509,7 @@ class Pokemon
   # Heals all HP of this Pokémon.
   def heal_HP
     return if egg?
+    return if fainted? && $PokemonSystem.no_reviving
     @hp = @totalhp
     checkHPRelatedFormChange()
   end
@@ -535,6 +537,7 @@ class Pokemon
   # Heals all HP, PP, and status problems of this Pokémon.
   def heal
     return if egg?
+    return if fainted? && $PokemonSystem.no_reviving
     heal_HP
     heal_status
     heal_PP

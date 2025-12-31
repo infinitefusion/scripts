@@ -518,6 +518,10 @@ ItemHandlers::UseOnPokemon.add(:FULLRESTORE, proc { |item, pkmn, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:REVIVE, proc { |item, pkmn, scene|
+  if pkmn.fainted? && $PokemonSystem.no_reviving
+    scene.pbDisplay(_INTL("Your challenge options prevent you from reviving fainted Pokémon!"))
+    next false
+  end
   if !pkmn.fainted?
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false

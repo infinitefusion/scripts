@@ -215,6 +215,10 @@ def pbItemRestoreHP(pkmn, restoreHP)
 end
 
 def pbHPItem(pkmn, restoreHP, scene)
+  if $PokemonSystem.no_healing_items
+    scene.pbDisplay(_INTL("Your challenge options prevent healing!"))
+    return false
+  end
   if !pkmn.able? || pkmn.hp == pkmn.totalhp
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
@@ -226,6 +230,10 @@ def pbHPItem(pkmn, restoreHP, scene)
 end
 
 def pbBattleHPItem(pkmn, battler, restoreHP, scene)
+  if $PokemonSystem.no_healing_items
+    scene.pbDisplay(_INTL("Your challenge options prevent healing!"))
+    return false
+  end
   if battler
     if battler.pbRecoverHP(restoreHP) > 0
       scene.pbDisplay(_INTL("{1}'s HP was restored.", battler.pbThis))
@@ -542,8 +550,7 @@ def pbUseItem(bag, item, bagscene = nil)
           break
         end
         pkmn = $Trainer.party[chosen]
-        if
-        pbCheckUseOnPokemon(item, pkmn, screen)
+        if pbCheckUseOnPokemon(item, pkmn, screen)
           ret = ItemHandlers.triggerUseOnPokemon(item, pkmn, screen)
           if ret && useType == 1 # Usable on Pokémon, consumed
             bag.pbDeleteItem(item)

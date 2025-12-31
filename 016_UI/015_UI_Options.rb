@@ -28,6 +28,10 @@ class PokemonSystem
   attr_accessor :overworld_encounters
   attr_accessor :encountered_music
 
+  attr_accessor :no_reviving
+  attr_accessor :no_healing_items
+  attr_accessor :no_pokemon_center
+
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)
     @battlescene = 0 # Battle effects (animations) (0=on, 1=off)
@@ -42,8 +46,8 @@ class PokemonSystem
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
     @quicksurf = 0
     @battle_type = 0
-    @speedup = 0 #0= hold, 1=toggle
-    @speedup_speed = 3 #for hold only
+    @speedup = 0 # 0= hold, 1=toggle
+    @speedup_speed = 3 # for hold only
     @download_sprites = 0
     @max_nb_sprites_download = 5
     @on_mobile = false
@@ -51,6 +55,11 @@ class PokemonSystem
     @use_generated_dex_entries = true
     @hide_custom_eggs = true
     @include_alt_sprites_in_random = false
+
+    @no_reviving = false
+    @no_healing_items = false
+    @no_pokemon_center = false
+
   end
 end
 
@@ -141,7 +150,7 @@ class NumberOption < Option
   attr_reader :optstart
   attr_reader :optend
 
-  def initialize(name, optstart, optend, getProc, setProc, description="")
+  def initialize(name, optstart, optend, getProc, setProc, description = "")
     super(description)
     @name = name
     @optstart = optstart
@@ -196,6 +205,30 @@ class SliderOption < Option
     index -= @optinterval
     index = @optstart if index < @optstart
     return index - @optstart
+  end
+end
+
+class ButtonOption < Option
+  attr_reader :name
+
+  def initialize(name, onPressProc, description = "")
+    super(description)
+    @name = name
+    @onPressProc = onPressProc
+  end
+
+  # Button options don't have values
+  def get
+    0;
+  end
+
+  def set(_value)
+    ;
+  end
+
+  # When the player presses confirm
+  def trigger
+    @onPressProc.call if @onPressProc
   end
 end
 
@@ -315,6 +348,8 @@ class Window_PokemonOption < Window_DrawableCommand
       xpos += optionwidth - self.contents.text_size(value).width
       pbDrawShadowText(self.contents, xpos, rect.y, optionwidth, rect.height, value,
                        @selBaseColor, @selShadowColor)
+    elsif @options[index].is_a?(ButtonOption)
+      return
     else
       value = @options[index].values[self[index]]
       xpos = optionwidth + rect.x
@@ -339,22 +374,33 @@ class Window_PokemonOption < Window_DrawableCommand
     end
 
     if self.active && self.index < @options.length
-      if Input.repeat?(Input::LEFT)
-        self[self.index] = @options[self.index].prev(self[self.index])
-        @selected_position = self[self.index]
-        @mustUpdateOptions = true
-        @mustUpdateDescription = true
-        refresh if self[self.index]
-        return
+
+      if @options[self.index].is_a?(ButtonOption) #submenus
+        if Input.trigger?(Input::USE) || Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
+          @options[self.index].trigger
+          @mustUpdateDescription = true
+          refresh
+          return
+        end
+      else
+        if Input.repeat?(Input::LEFT)
+          self[self.index] = @options[self.index].prev(self[self.index])
+          @selected_position = self[self.index]
+          @mustUpdateOptions = true
+          @mustUpdateDescription = true
+          refresh if self[self.index]
+          return
+        end
+        if Input.repeat?(Input::RIGHT)
+          self[self.index] = @options[self.index].next(self[self.index])
+          @selected_position = self[self.index]
+          @mustUpdateOptions = true
+          @mustUpdateDescription = true
+          refresh
+          return
+        end
       end
-      if Input.repeat?(Input::RIGHT)
-        self[self.index] = @options[self.index].next(self[self.index])
-        @selected_position = self[self.index]
-        @mustUpdateOptions = true
-        @mustUpdateDescription = true
-        refresh
-        return
-      end
+
       if Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)
         @selected_position = self[self.index]
         @mustUpdateOptions = true
@@ -372,7 +418,8 @@ end
 #===============================================================================
 class PokemonOption_Scene
   def getDefaultDescription
-    return _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
+    #return _INTL("Speech frame {1}.", 1 + $PokemonSystem.textskin)
+    return _INTL("Save changes and close the menu.")
   end
 
   def pbUpdate
@@ -385,7 +432,8 @@ class PokemonOption_Scene
 
   def initialize
     @autosave_menu = false
-    @manually_changed_difficulty=false
+    @challenge_menu = false
+    @manually_changed_difficulty = false
   end
 
   def initUIElements
@@ -448,7 +496,7 @@ class PokemonOption_Scene
     end
   end
 
-  #IMPLEMENT IN INHERITED CLASSES
+  # IMPLEMENT IN INHERITED CLASSES
   def pbGetOptions(inloadscreen = false)
     options = []
     return options
@@ -459,13 +507,23 @@ class PokemonOption_Scene
   end
 
   def openAutosaveMenu()
-    return if !@autosave_menu
+    return unless @autosave_menu
     pbFadeOutIn {
       scene = AutosaveOptionsScene.new
       screen = PokemonOptionScreen.new(scene)
       screen.pbStartScreen
     }
     @autosave_menu = false
+  end
+
+  def openChallengeMenu()
+    return unless @challenge_menu
+    pbFadeOutIn {
+      scene = ChallengeOptionsScene.new
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+    }
+    @challenge_menu = false
   end
 
   def pbOptions
