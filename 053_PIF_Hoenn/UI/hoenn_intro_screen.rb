@@ -239,5 +239,72 @@ class HoennIntroScreen
   end
 
 
+  def dispose
+    Kernel.pbClearText()
+
+    # --- Dispose all regular sprites ---
+    preserved_sprites = {}
+    @sprites.each do |key, sprite|
+      if key == :back
+        preserved_sprites[key] = sprite
+      else
+        sprite.dispose
+      end
+    end
+    @sprites = preserved_sprites
+
+    @scrollSprites.each do |name, arr|
+      next if name == :back
+      arr.each(&:dispose)
+    end
+    # Keep only the back layer
+    @scrollSprites.select! { |k,_| k == :back }
+    zoomAndFadeOut
+
+    # --- Dispose the remaining back sprites ---
+    @scrollSprites.each_value { |arr| arr.each(&:dispose) }
+    pbDisposeSpriteHash(@sprites)
+    @viewport.dispose
+    @disposed = true
+  end
+
+
+
+  def zoomAndFadeOut
+    duration = 30   # animation length
+
+    backA, backB = @scrollSprites[:back]
+
+    duration.times do |i|
+      t = i.to_f / duration
+
+      # --- ZOOM ON BG_BACK ---
+      zoom = 1.0 + t * 0.5
+      backA.zoom_x = zoom
+      backA.zoom_y = zoom
+      backB.zoom_x = zoom
+      backB.zoom_y = zoom
+
+      # Prepare center anchors
+      backA.ox = backA.bitmap.width / 2
+      backA.oy = backA.bitmap.height / 2
+      backB.ox = backB.bitmap.width / 2
+      backB.oy = backB.bitmap.height / 2
+
+      # --- MOVE DOWN ---
+      down_offset = 40 * t
+      backA.x = Graphics.width / 2
+      backB.x = Graphics.width / 2
+      backA.y = Graphics.height / 2 + down_offset
+      backB.y = Graphics.height / 2 + down_offset
+
+      Graphics.update
+    end
+  end
+
+
+
+
+
 end
 
