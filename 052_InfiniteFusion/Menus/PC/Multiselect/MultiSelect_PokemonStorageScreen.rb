@@ -101,8 +101,8 @@ class PokemonStorageScreen
     commands = []
     commands << cmd_jump
     commands << cmd_select unless is_holding_pokemon
-    commands << cmd_wallpaper
-    commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_wallpaper unless @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_name unless @storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands << cmd_info if @storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands << cmd_cancel
 
@@ -116,7 +116,7 @@ class PokemonStorageScreen
     when cmd_name
       boxCommandName
     when cmd_info
-      boxCommandTransferInfo
+      transferBoxTutorial
     when cmd_select
       selectAllBox
     end

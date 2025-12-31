@@ -649,8 +649,8 @@ class PokemonStorageScreen
 
     commands = []
     commands << cmd_jump
-    commands << cmd_wallpaper
-    commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_wallpaper unless @storage[@storage.currentBox].is_a?(StorageTransferBox)
+    commands << cmd_name unless @storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands << cmd_info if @storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands << cmd_cancel
 
@@ -664,13 +664,8 @@ class PokemonStorageScreen
     when cmd_name
       boxCommandName
     when cmd_info
-      boxCommandTransferInfo
+      transferBoxTutorial
     end
-  end
-
-  def boxCommandTransferInfo
-    pbMessage(_INTL("This is the Transfer Box. It's used to transfer Pokémon between savefiles!"))
-    pbMessage(_INTL("Any Pokémon that is placed in this box will be shared between all savefiles of Pokémon Infinite Fusion 1 and Pokémon Infinite Fusion 2."))
   end
 
   def boxCommandName

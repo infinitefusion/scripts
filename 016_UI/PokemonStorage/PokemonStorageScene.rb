@@ -483,6 +483,7 @@ class PokemonStorageScene
     @sprites["box"].dispose
     @sprites["box"] = newbox
     newbox.refreshAllBoxSprites
+    checkTransferBoxTutorial(newbox.boxnumber)
   end
 
   def pbSwitchBoxToLeft(newbox)
@@ -504,6 +505,7 @@ class PokemonStorageScene
     @sprites["box"].dispose
     @sprites["box"] = newbox
     newbox.refreshAllBoxSprites
+    checkTransferBoxTutorial(newbox.boxnumber)
   end
 
   def pbJumpToBox(newbox)
@@ -515,8 +517,19 @@ class PokemonStorageScene
       end
       @storage.currentBox = newbox
     end
+    checkTransferBoxTutorial(newbox.boxnumber)
   end
 
+
+  def checkTransferBoxTutorial(newbox)
+    isTransferBox = @storage[newbox].is_a?(StorageTransferBox)
+    if isTransferBox
+      unless $PokemonGlobal.seen_transfer_box_tutorial
+        transferBoxTutorial
+        $PokemonGlobal.seen_transfer_box_tutorial=true
+      end
+    end
+  end
   def pbSetMosaic(selection)
     if !@screen.pbHeldPokemon
       if @boxForMosaic != @storage.currentBox || @selectionForMosaic != selection
@@ -666,6 +679,7 @@ class PokemonStorageScene
         commands.push(_INTL("{1} ({2}/{3})", box.name, box.nitems, box.length))
       end
     end
+
     return pbShowCommands(msg, commands, @storage.currentBox)
   end
 

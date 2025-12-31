@@ -257,6 +257,12 @@ class HoennIntroScreen
       next if name == :back
       arr.each(&:dispose)
     end
+
+    @fusionSprites.each do |s|
+      s.dispose if s && !s.disposed?
+    end
+    @fusionSprites.clear
+
     # Keep only the back layer
     @scrollSprites.select! { |k,_| k == :back }
     zoomAndFadeOut

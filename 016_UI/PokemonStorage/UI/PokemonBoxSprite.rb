@@ -5,7 +5,7 @@ class PokemonBoxSprite < SpriteWrapper
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
   attr_accessor :filterProc
-
+  attr_reader :boxnumber
   def initialize(storage, boxnumber, viewport = nil, fusionsEnabled = true, filter = nil)
     super(viewport)
     @storage = storage

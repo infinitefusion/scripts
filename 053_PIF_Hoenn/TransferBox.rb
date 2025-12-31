@@ -1,19 +1,26 @@
 
-class PokemonStorage
+class PokemonGlobalMetadata
+  attr_accessor :seen_transfer_box_tutorial
 end
 
+def transferBoxTutorial
+  pbMessage(_INTL("This is the \\C[1]Transfer Box\\C[0]."))
+  pbMessage(_INTL("This box can be used to transfer Pokémon between \\C[1]Pokémon Infinite Fusion\\C[0] and \\C[1]Pokémon Infinite Fusion: Hoenn\\C[0] or between savefiles."))
+  pbMessage(_INTL("Any Pokémon that is placed in this box will be accessible from every savefile of either game. You can deposit or withdraw Pokémon just like you would for any other box."))
+end
 
 class StorageTransferBox < PokemonBox
   TRANSFER_BOX_NAME = _INTL("Transfer Box")
   def initialize()
     super(TRANSFER_BOX_NAME,PokemonBox::BOX_SIZE)
     @pokemon = []
-    @background = 16
+    @background = "transfer"
     for i in 0...PokemonBox::BOX_SIZE
       @pokemon[i] = nil
     end
     loadTransferBoxPokemon
   end
+
 
 
   def loadTransferBoxPokemon
@@ -54,6 +61,10 @@ class StorageTransferBox < PokemonBox
     save_dir = System.data_directory  # e.g., %appdata%/infinitefusion
     parent_dir = File.expand_path("..", save_dir)
     File.join(parent_dir, "infinitefusion_common", "transfer_pokemon_storage")
+  end
+
+  def isAvailableWallpaper?
+    return true
   end
 
 end
