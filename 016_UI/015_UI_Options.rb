@@ -31,6 +31,7 @@ class PokemonSystem
   attr_accessor :no_reviving
   attr_accessor :no_healing_items
   attr_accessor :no_pokemon_center
+  attr_accessor :obtained_transfer_box
 
   def initialize
     @textspeed = 1 # Text speed (0=slow, 1=normal, 2=fast)

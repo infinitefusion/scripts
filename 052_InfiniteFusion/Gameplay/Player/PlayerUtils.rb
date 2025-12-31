@@ -20,3 +20,7 @@ def isPlayerBirthDay?
   current_date = Time.now
   return current_date.day == $Trainer.birth_day && current_date.month == $Trainer.birth_month
 end
+
+def obtainedTransferBox?
+  return $PokemonSystem.obtained_transfer_box
+end

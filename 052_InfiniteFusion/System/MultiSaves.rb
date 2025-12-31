@@ -67,6 +67,10 @@ def set_starting_options
     $PokemonSystem.use_generated_dex_entries=true
     $PokemonGlobal.runningShoes=true
   end
+  if $PokemonSystem.obtained_transfer_box
+    addPokemonStorageTransferBox
+  end
+
 end
 
 def migrateOldSavesToCharacterCustomization()
