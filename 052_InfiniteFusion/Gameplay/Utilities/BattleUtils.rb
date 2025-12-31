@@ -41,7 +41,11 @@ def Kernel.getItemNamesAsString(list)
 end
 
 def getCurrentLevelCap()
-  current_max_level = Settings::LEVEL_CAPS[$Trainer.badge_count]
+  if Settings::KANTO
+    current_max_level = Settings::LEVEL_CAPS_KANTO[$Trainer.badge_count]
+  else
+    current_max_level = Settings::LEVEL_CAPS_HOENN[$Trainer.badge_count]
+  end
   current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
   return current_max_level.floor
 end
