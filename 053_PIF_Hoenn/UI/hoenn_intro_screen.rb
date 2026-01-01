@@ -242,37 +242,43 @@ class HoennIntroScreen
   def dispose
     Kernel.pbClearText()
 
-    # --- Dispose all regular sprites ---
+    # --- Dispose all regular sprites except logo ---
     preserved_sprites = {}
     @sprites.each do |key, sprite|
-      if key == :back
-        preserved_sprites[key] = sprite
+      if key == "logo"
+        preserved_sprites[key] = sprite   # KEEP LOGO
       else
         sprite.dispose
       end
     end
     @sprites = preserved_sprites
 
+    # --- Dispose scroll sprites except :back ---
     @scrollSprites.each do |name, arr|
       next if name == :back
       arr.each(&:dispose)
     end
 
-    @fusionSprites.each do |s|
-      s.dispose if s && !s.disposed?
-    end
+    # Dispose fusion sprites
+    @fusionSprites.each { |s| s.dispose if s && !s.disposed? }
     @fusionSprites.clear
 
-    # Keep only the back layer
+    # Keep only back layer
     @scrollSprites.select! { |k,_| k == :back }
+
+    # Zoom effect will now run with bg_back AND logo still alive
     zoomAndFadeOut
 
     # --- Dispose the remaining back sprites ---
     @scrollSprites.each_value { |arr| arr.each(&:dispose) }
+
+    # --- Dispose preserved logo sprite ---
     pbDisposeSpriteHash(@sprites)
+
     @viewport.dispose
     @disposed = true
   end
+
 
 
 
