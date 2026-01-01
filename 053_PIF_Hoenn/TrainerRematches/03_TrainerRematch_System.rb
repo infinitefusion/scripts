@@ -87,6 +87,7 @@ def pbMultiTrainerBattle(trainers_array,canLose=false, outcomeVar=1)
 end
 
 
+
 def postTrainerBattleActions(trainerID, trainerName,trainerVersion,event_id=nil,linked_event=nil)
   event_id = @event_id unless event_id
   trainer = registerBattledTrainer(event_id,$game_map.map_id,trainerID,trainerName,trainerVersion,linked_event)
@@ -100,6 +101,7 @@ end
 def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVersion=0, linked_event=nil)
   key = [event_id,mapId]
   $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
+  return if $PokemonGlobal.battledTrainers.has_key?(key)
   trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion,key)
   trainer.setLinkedTrainer(linked_event) if linked_event
   $PokemonGlobal.battledTrainers[key] = trainer

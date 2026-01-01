@@ -67,6 +67,12 @@ class BattledTrainer
   def setLinkedTrainer(linked_trainer_event)
     @linked_event = linked_trainer_event
   end
+
+  def getLinkedTrainer()
+    trainer = getRebattledTrainer(@linked_event,$game_map.map_id)
+    return trainer if trainer
+    return nil
+  end
   def friendship_level
     @friendship_level =0 if !@friendship_level
     return @friendship_level

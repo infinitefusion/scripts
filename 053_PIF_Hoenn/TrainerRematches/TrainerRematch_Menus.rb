@@ -33,6 +33,8 @@ def doPostBattleAction(actionType)
   case actionType
   when :BATTLE
     trainer,player_won = doNPCTrainerRematch(trainer)
+    echoln trainer
+    echoln player_won
   when :TRADE
     trainer = doNPCTrainerTrade(trainer)
   when :PARTNER

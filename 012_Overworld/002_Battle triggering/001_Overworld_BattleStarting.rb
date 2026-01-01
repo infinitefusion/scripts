@@ -672,6 +672,56 @@ def customTrainerBattle(trainerName, trainerType, party_array, default_level = 5
   return (decision == 1)
 end
 
+
+# trainer: array [trainer_name,trainer_type,party_array]
+def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, canLose = true)
+  battle_trainers = []
+  rematchable_trainers.each do |trainer|
+    trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
+    party = []
+    trainer.currentTeam.each { |pokemon|
+      if pokemon.is_a?(Pokemon)
+        party << pokemon
+      elsif pokemon.is_a?(Symbol)
+        party << Pokemon.new(pokemon, default_level, trainer)
+      end
+    }
+    loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch : "..."
+
+    npc_trainer = NPCTrainer.new(trainer.trainerName, trainer.trainerType, nil, trainer.custom_appearance)
+    npc_trainer.lose_text = loseDialog
+    npc_trainer.items = trainer.foundItems
+    npc_trainer.party = party
+    Events.onTrainerPartyLoad.trigger(nil, npc_trainer)
+    battle_trainers << npc_trainer
+  end
+  $PokemonTemp.battleRules["canLose"] = canLose
+  echoln battle_trainers
+  decision = pbTrainerBattleCore(*battle_trainers)
+  return (decision == 1)
+end
+
+# def generateTrainerRematch(trainer, allow_double=true)
+#   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
+#
+#   loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
+#   player_won = false
+#   if trainer.getLinkedTrainer && allow_double #perma-double battles (twins, etc.)
+#     pbMultiTrainerBattle([])
+#   end
+#   if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
+#     updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
+#     updated_trainer = healRebattledTrainerPokemon(updated_trainer)
+#     player_won=true
+#   else
+#     updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
+#   end
+#   updated_trainer.set_pending_action(false)
+#   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
+#   trainer.increase_friendship(5)
+#   return updated_trainer, player_won
+# end
+
 #===============================================================================
 # Standard methods that start a trainer battle of various sizes
 #===============================================================================

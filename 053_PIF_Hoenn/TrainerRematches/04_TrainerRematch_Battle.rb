@@ -48,6 +48,7 @@ def healRebattledTrainerPokemon(trainer)
   for pokemon in trainer.currentTeam
     pokemon.calc_stats
     pokemon.heal
+    echoln "healing #{pokemon.name}"
   end
   return trainer
 end
@@ -55,27 +56,35 @@ end
 def doNPCTrainerRematch(trainer)
   return generateTrainerRematch(trainer)
 end
-def generateTrainerRematch(trainer)
-  trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
-
-  loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch :  "..."
-  player_won = false
-  if customTrainerBattle(trainer.trainerName,trainer.trainerType, trainer.currentTeam,nil,loseDialog)
-    updated_trainer = makeRebattledTrainerTeamGainExp(trainer,true)
-    updated_trainer = healRebattledTrainerPokemon(updated_trainer)
-    player_won=true
-  else
-    updated_trainer =makeRebattledTrainerTeamGainExp(trainer,false)
+def generateTrainerRematch(trainer, allow_double =true)
+  battle_trainers = []
+  battle_trainers << trainer
+  partner = trainer.getLinkedTrainer
+  if partner && allow_double #perma-double battles (twins, etc.)
+    battle_trainers << partner
   end
+
+  player_won = rematchable_trainer_battle(battle_trainers)
+
+  #trainer
+  updated_trainer = makeRebattledTrainerTeamGainExp(trainer,player_won)
+  updated_trainer = healRebattledTrainerPokemon(updated_trainer)
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
   trainer.increase_friendship(5)
+
+  #partner
+  if partner
+    updated_partner_trainer = makeRebattledTrainerTeamGainExp(partner,player_won)
+    updated_partner_trainer = healRebattledTrainerPokemon(updated_partner_trainer)
+    updated_partner_trainer.set_pending_action(false)
+    updated_partner_trainer = evolveRebattledTrainerPokemon(updated_partner_trainer)
+    updateRebattledTrainerWithKey(updated_partner_trainer&.trainerKey,updated_trainer)
+  end
+
   return updated_trainer, player_won
 end
 
-def generateTrainerRematchDouble(trainer1,trainer2)
-  #TODO
-end
 
 
 def showPrerematchDialog()
