@@ -65,10 +65,13 @@ class BattledTrainer
 
   #For double trainer classes like twins, etc. Adds an additional double rematch option.
   def setLinkedTrainer(linked_trainer_event)
+    return if @linked_event
     @linked_event = linked_trainer_event
   end
 
   def getLinkedTrainer()
+    echoln @linked_event
+
     trainer = getRebattledTrainer(@linked_event,$game_map.map_id)
     return trainer if trainer
     return nil
@@ -103,7 +106,7 @@ class BattledTrainer
         pbMessage(_INTL("You can now partner up with them!"))
       end
 
-      echoln "🎉 #{@trainerName}'s friendship level increased to #{@friendship_level}!"
+      echoln "#{@trainerName}'s friendship level increased to #{@friendship_level}!"
     end
   end
 

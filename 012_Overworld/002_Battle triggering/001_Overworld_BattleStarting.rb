@@ -680,6 +680,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
     trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
     party = []
     trainer.currentTeam.each { |pokemon|
+      break if party.length >= 6
       if pokemon.is_a?(Pokemon)
         party << pokemon
       elsif pokemon.is_a?(Symbol)
@@ -695,8 +696,9 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
     Events.onTrainerPartyLoad.trigger(nil, npc_trainer)
     battle_trainers << npc_trainer
   end
+  $PokemonTemp.setBattleRule("double") if battle_trainers.length > 1
   $PokemonTemp.battleRules["canLose"] = canLose
-  echoln battle_trainers
+
   decision = pbTrainerBattleCore(*battle_trainers)
   return (decision == 1)
 end

@@ -53,9 +53,6 @@ def healRebattledTrainerPokemon(trainer)
   return trainer
 end
 
-def doNPCTrainerRematch(trainer)
-  return generateTrainerRematch(trainer)
-end
 def generateTrainerRematch(trainer, allow_double =true)
   battle_trainers = []
   battle_trainers << trainer
@@ -79,7 +76,7 @@ def generateTrainerRematch(trainer, allow_double =true)
     updated_partner_trainer = healRebattledTrainerPokemon(updated_partner_trainer)
     updated_partner_trainer.set_pending_action(false)
     updated_partner_trainer = evolveRebattledTrainerPokemon(updated_partner_trainer)
-    updateRebattledTrainerWithKey(updated_partner_trainer&.trainerKey,updated_trainer)
+    updateRebattledTrainerWithKey(updated_partner_trainer&.trainerKey,updated_partner_trainer)
   end
 
   return updated_trainer, player_won

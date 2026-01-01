@@ -11,10 +11,19 @@ TIME_FOR_RANDOM_EVENTS = 60#3600 #1 hour
 
 ## Extend pbTrainerBattle to call postTrainerBattleAction at the end of every trainer battle
 alias original_pbTrainerBattle pbTrainerBattle
+
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
   trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
+  displayPreBattleText(trainer_data)
+  result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)
+  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
+  return result
+end
+
+
+def displayPreBattleText(trainer_data)
   if trainer_data.battleText && !trainer_data.battleText.empty? && @event_id
     messages = trainer_data.battleText.split("<br>")
     messages.each do |msg|
@@ -22,9 +31,6 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
       pbMessage(msg)
     end
   end
-  result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
-  return result
 end
 
 # Important: Use this instead of pbDoubleBattle and pbTripleBattle so that the trainers are rematchable!
@@ -49,6 +55,8 @@ def pbMultiTrainerBattle(trainers_array,canLose=false, outcomeVar=1)
     trainer_2_name = trainer_2[1]
     trainer_2_event = trainer_2[2]
 
+    trainer1_data = GameData::Trainer.get(trainer_1_id,trainer_1_name,0)
+    displayPreBattleText(trainer1_data)
     result= pbDoubleTrainerBattle(trainer_1_id,trainer_1_name,0,nil,
                                  trainer_2_id,trainer_2_name,0,nil,
                                  canLose,outcomeVar)

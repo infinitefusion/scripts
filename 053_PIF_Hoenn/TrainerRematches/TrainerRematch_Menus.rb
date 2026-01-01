@@ -23,7 +23,7 @@
 # :BATTLE
 # :TRADE
 # :PARTNER
-def doPostBattleAction(actionType)
+def doPostBattleAction(actionType,double_allowed=true)
   event = pbMapInterpreter.get_character(0)
   map_id = $game_map.map_id if map_id.nil?
   trainer = getRebattledTrainer(event.id,map_id)
@@ -32,9 +32,7 @@ def doPostBattleAction(actionType)
   return if !trainer
   case actionType
   when :BATTLE
-    trainer,player_won = doNPCTrainerRematch(trainer)
-    echoln trainer
-    echoln player_won
+    trainer,player_won = generateTrainerRematch(trainer,double_allowed)
   when :TRADE
     trainer = doNPCTrainerTrade(trainer)
   when :PARTNER
@@ -60,6 +58,10 @@ end
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
 def postBattleActionsMenu()
   rematchCommand = _INTL("Rematch")
+
+  rematchSingleCommand = _INTL("Rematch (Single)")
+  rematchDoubleCommand = _INTL("Rematch (Double)")
+
   tradeCommand = _INTL("Trade Offer")
   partnerCommand = _INTL("Partner up")
   cancelCommand = _INTL("See ya!")
@@ -75,7 +77,12 @@ def postBattleActionsMenu()
   trainer = getRebattledTrainer(event.id,map_id)
   return unless trainer
   options = []
-  options << rematchCommand
+  if trainer.getLinkedTrainer
+    options << rematchSingleCommand if trainer.friendship_level >=1
+    options << rematchDoubleCommand
+  else
+    options << rematchCommand
+  end
   options << tradeCommand if trainer.friendship_level >= 1
   options << partnerCommand if trainer.friendship_level >= 3
 
@@ -93,6 +100,10 @@ def postBattleActionsMenu()
   case options[choice]
   when rematchCommand
     doPostBattleAction(:BATTLE)
+  when rematchSingleCommand
+    doPostBattleAction(:BATTLE,false)
+  when rematchDoubleCommand
+    doPostBattleAction(:BATTLE,true)
   when tradeCommand
     doPostBattleAction(:TRADE)
   when partnerCommand
