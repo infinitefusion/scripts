@@ -134,7 +134,7 @@ class HoennIntroScreen
 
     begin
       Kernel.pbDisplayText(
-        "v." + Settings::GAME_VERSION_NUMBER,
+        "v." + Settings::HOENN_VERSION_NUMBER,
         455, 5, 99999,
         pbColor(:WHITE),
         pbColor(:INVISIBLE)

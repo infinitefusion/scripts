@@ -102,8 +102,8 @@ class BattledTrainer
         pbMessage(_INTL("You can now trade with each other!"))
       when 2
         pbMessage(_INTL("They will now give you items from time to time!"))
-      when 3
-        pbMessage(_INTL("You can now partner up with them!"))
+      # when 3
+      #   pbMessage(_INTL("You can now partner up with them!"))
       end
 
       echoln "#{@trainerName}'s friendship level increased to #{@friendship_level}!"
