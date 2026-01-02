@@ -2,7 +2,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
   def pbGetOptions(inloadscreen = false)
     @current_game_mode = getTrainersDataMode
     options = []
-    options << SliderOption.new(_INTL("Music Volume"), 0, 100, 5,
+    options << SliderOption.new(_INTL("Music Volume"), 0, 100, 1,
                                 proc { $PokemonSystem.bgmvolume },
                                 proc { |value|
                                   if $PokemonSystem.bgmvolume != value
@@ -16,7 +16,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
                                 }, _INTL("Sets the volume for background music")
     )
 
-    options << SliderOption.new(_INTL("SE Volume"), 0, 100, 5,
+    options << SliderOption.new(_INTL("SE Volume"), 0, 100, 1,
                                 proc { $PokemonSystem.sevolume },
                                 proc { |value|
                                   if $PokemonSystem.sevolume != value
