@@ -289,6 +289,7 @@ class Game_Event < Game_Character
   end
 
   def visible?
+    return false unless @page && @page.graphic
     return @page.graphic.character_name != "" && active?
   end
 

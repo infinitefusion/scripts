@@ -74,6 +74,8 @@ class OverworldPokemonEvent < Game_Event
     return if @species == :SURSKIT
     unless @is_flying
       self.forced_bush_depth = 20
+      @step_anime = true
+      self.set_animation_speed(2)
       self.calculate_bush_depth
     end
   end

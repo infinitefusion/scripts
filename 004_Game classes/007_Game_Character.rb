@@ -32,6 +32,7 @@ class Game_Character
   attr_accessor :forced_bush_depth
   attr_reader :move_route
   attr_accessor :shadow_offset
+  attr_accessor :animation_speed
 
   def initialize(map = nil)
     @map = map
@@ -87,6 +88,7 @@ class Game_Character
     @forced_z = nil
     @forced_bush_depth = nil
     @shadow_offset =0
+    @animation_speed = nil #override if the animation  speed needs to be different from move speed
   end
 
   def at_coordinate?(check_x, check_y)
@@ -109,6 +111,15 @@ class Game_Character
 
   def set_opacity(opacity)
     @opacity = opacity
+  end
+
+  def set_animation_speed(speed)
+    echoln "animation_speed = #{speed}"
+    @animation_speed = speed
+  end
+
+  def reset_animation_speed(speed)
+    @animation_speed = nil
   end
 
   def move_speed=(val)
@@ -1278,8 +1289,12 @@ class Game_Character
     # it takes to move half a tile (or a whole tile if cycling). We assume the
     # game uses square tiles.
     real_speed = (jumping?) ? jump_speed_real : move_speed_real
-    frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
-    frames_per_pattern *= 2 if move_speed >= 5 # Cycling speed or faster
+    if @animation_speed
+      frames_per_pattern = Game_Map::REAL_RES_X / (@animation_speed * 2.0)
+    else
+      frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
+      frames_per_pattern *= 2 if move_speed >= 5 # Cycling speed or faster
+    end
     return if @anime_count < frames_per_pattern
     # Advance to the next animation frame
     @pattern = (@pattern + 1) % 4
