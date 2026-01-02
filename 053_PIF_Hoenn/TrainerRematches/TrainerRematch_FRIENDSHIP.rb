@@ -84,8 +84,8 @@ class BattledTrainer
     TEAM_MAGMA_GRUNT_F:       [25, 60, 100],
     TEAM_MAGMAQUA_GRUNT_M:    [25, 60, 100],
     TEAM_MAGMAQUA_GRUNT_F:    [25, 60, 100],
-
-
+    POKEFAN_M:    [10, 22, 38],
+    POKEFAN_F:    [10, 22, 38],
 
     LEADER_Roxanne:    [30, 200, 200],
     LEADER_Brawly:    [30, 200, 200],

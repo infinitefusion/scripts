@@ -174,6 +174,7 @@ class BattledTrainer
     @previous_random_events <<  event
   end
 
+
   def clear_previous_random_events()
     @previous_random_events = []
   end

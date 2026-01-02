@@ -83,6 +83,15 @@ def generateTrainerRematch(trainer, allow_double =true)
 end
 
 
+def showGiftDialog()
+  event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
+  trainer = getRebattledTrainer(event.id,map_id)
+  return if trainer.nil?
+  trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
+  message_text = trainer_data.preRematchText_gift
+  showTrainerMessage(event, trainer, message_text)
+end
 
 def showPrerematchDialog()
   event = pbMapInterpreter.get_character(0)
@@ -103,7 +112,8 @@ def showPrerematchDialog()
         EVOLVE:  trainer_data.preRematchText_evolved,
         FUSE:    trainer_data.preRematchText_fused,
         UNFUSE:  trainer_data.preRematchText_unfused,
-        REVERSE: trainer_data.preRematchText_reversed
+        REVERSE: trainer_data.preRematchText_reversed,
+        GIFT: trainer_data.preRematchText_gift
       }
 
       message_text = event_message_map[previous_random_event.eventType] || trainer_data.preRematchText
@@ -122,9 +132,16 @@ def showPrerematchDialog()
     message_text = message_text.gsub("<UNREVERSED_POKEMON>", getSpeciesRealName(previous_random_event.unreversed_pokemon).to_s)
     message_text = message_text.gsub("<REVERSED_POKEMON>", getSpeciesRealName(previous_random_event.reversed_pokemon).to_s)
     message_text = message_text.gsub("<UNFUSED_POKEMON>", getSpeciesRealName(previous_random_event.unfused_pokemon).to_s)
+    message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
+
   else
     message_text = trainer_data.preRematchText
   end
+  showTrainerMessage(event, trainer, message_text)
+end
+
+
+def showTrainerMessage(event, trainer, message_text)
   if message_text
     split_messages = message_text.split("<br>")
     split_messages.each do |msg|
@@ -133,5 +150,4 @@ def showPrerematchDialog()
       pbMessage(msg)
     end
   end
-
 end

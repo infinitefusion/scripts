@@ -94,6 +94,9 @@ def postBattleActionsMenu()
   options << cancelCommand
 
   trainer = applyTrainerRandomEvents(trainer)
+  if trainer.has_pending_action
+    try_give_gift(trainer)  #only when there's a pending action so that it can't be abused by talking to the npc over and over
+  end
   showPrerematchDialog
   choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
 
@@ -127,6 +130,16 @@ def postBattleActionsMenu()
   else
     return
   end
+end
+
+def try_give_gift(trainer)
+  if should_give_item(trainer)
+    item = select_gift_item(trainer)
+    showGiftDialog()
+    pbReceiveItem(item)
+    return true
+  end
+  return false
 end
 
 #leave event_type empty for random
