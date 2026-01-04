@@ -71,7 +71,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_swimming
-    return if @species == :SURSKIT
+    return if @species == :SURSKIT || @species == :SUICUNE
     unless @is_flying
       self.forced_bush_depth = 20
       @step_anime = true

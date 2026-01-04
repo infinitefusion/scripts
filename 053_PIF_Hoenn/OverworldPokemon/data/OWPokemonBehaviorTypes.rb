@@ -1,27 +1,28 @@
 # behavior_roaming:
 #
-# :random (default, the pokemon walks around randomly)
-# :look_around (the pokemon doesn't move but turns around at random)
-# :still (the pokemon doesn't move at all)
-# :random_vanish (for ghost pokemon. Walks around randomly and sometimes becomes invisible)
-# :burrow (walks around randomly and sometimes disappears with a dig animation for a little bit) - diglett/dugtrio
-# :still_teleport
+#	When roaming
+#	:still	Doesn't move at all
+#	:look around	Doesn't move, looks around randomly
+#	:still_teleport	Doesn't move, looks around randomly and randomly teleports a few tiles away once in a while
+#	:random	Walks randomly
+#	:random_burrow	Moves randomly and sometimes burrows underground and disappear for a few seconds.
+#	:random_dive	Moves randomly and sometimes dives underwater and disappear for a few seconds.
+#	:random_vanish	Moves randomly and sometimes becomes semi-transparent (opacity 50) for a few seconds
+#	:random_spin	Moves randomly and sometimes stops to do a little spin
 #
 #
-#
-# behavior_noticed:
-# # nil (The Pokemon doesn't change behavior)
-#  :skittish (The Pokemon will run away unless you sneak up on it (ex: Ralts, Skitty, etc.)
-# :shy (walks away from the player)
-# :random (The Pokemon walks around randomly)
-# :curious (comes towards the player but stays at a distance)
-# :aggressive (The Pokemon walks towards the player if they get close (ex: Sharpedo, Paras))
-#
-# :still (The Pokemon doesn't move (ex:Metapod, Silcoon)
-#
-# :flee : The Pokemon flees the player, then despawns
-# :flee_flying : Same as flee but goes up instead of sideways
-# can_fly=true
+#	When noticed
+#	nil	The Pokemon doesn't change behavior
+#	:skittish	The Pokémon walks away from the trainer fast until it's at a distance
+#	:shy	The Pokémon walks away from the trainer slowly, while looking at them
+#	:curious	The Pokémon walks towards the player slowly but stays at a distance when it's close
+#	:semi_aggressive	The Pokémon walks towards the player slowly until it starts a fight with them
+#	:aggressive	The Pokémon chases after the player until it starts a fight with them
+#	:still	The Pokémon doesn't move
+#	:flee	The Pokémon flees when it sees the player and despawns
+#	:flee_flying	The Pokémon flees by flying away (at an angle) when it sees the player and despawns
+#	:teleport_away	The Pokémon flees when it sees the player with a a teleport animation and despawns
+# :explode    Waits a bit, then explodes (despawn)
 
 
 POKEMON_BEHAVIOR_DATA =
@@ -125,8 +126,8 @@ POKEMON_BEHAVIOR_DATA =
     :HYPNO => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :KRABBY => { behavior_noticed: :skittish, behavior_roaming: :random },
     :KINGLER => { behavior_noticed: :aggressive, behavior_roaming: :random },
-    :VOLTORB => { behavior_noticed: :still, behavior_roaming: :look_around },
-    :ELECTRODE => { behavior_noticed: :still, behavior_roaming: :look_around },
+    :VOLTORB => { behavior_noticed: :explode, behavior_roaming: :look_around },
+    :ELECTRODE => { behavior_noticed: :explode, behavior_roaming: :random },
     :EXEGGCUTE => { behavior_noticed: nil, behavior_roaming: :random },
     :EXEGGUTOR => { behavior_noticed: nil, behavior_roaming: :random },
     :CUBONE => { behavior_noticed: nil, behavior_roaming: :random },
@@ -134,7 +135,7 @@ POKEMON_BEHAVIOR_DATA =
     :HITMONLEE => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :HITMONCHAN => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :LICKITUNG => { behavior_noticed: nil, behavior_roaming: :random },
-    :KOFFING => { behavior_noticed: nil, behavior_roaming: :random },
+    :KOFFING => { behavior_noticed: :explode, behavior_roaming: :random },
     :WEEZING => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :RHYHORN => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :RHYDON => { behavior_noticed: :aggressive, behavior_roaming: :random },
@@ -207,7 +208,7 @@ POKEMON_BEHAVIOR_DATA =
     :MAREEP => { behavior_noticed: nil, behavior_roaming: :random },
     :FLAAFFY => { behavior_noticed: nil, behavior_roaming: :random },
     :AMPHAROS => { behavior_noticed: nil, behavior_roaming: :random },
-    :BELLOSSOM => { behavior_noticed: nil, behavior_roaming: :random },
+    :BELLOSSOM => { behavior_noticed: nil, behavior_roaming: :random_spin },
     :MARILL => { behavior_noticed: :curious, behavior_roaming: :random },
     :AZUMARILL => { behavior_noticed: :curious, behavior_roaming: :random },
     :SUDOWOODO => { behavior_noticed: :still, behavior_roaming: :random },
@@ -229,7 +230,7 @@ POKEMON_BEHAVIOR_DATA =
     :UNOWN => { behavior_noticed: :flee, behavior_roaming: :random },
     :WOBBUFFET => { behavior_noticed: :still, behavior_roaming: :random },
     :GIRAFARIG => { behavior_noticed: nil, behavior_roaming: :random },
-    :PINECO => { behavior_noticed: nil, behavior_roaming: :random },
+    :PINECO => { behavior_noticed: :explode, behavior_roaming: :look_around },
     :FORRETRESS => { behavior_noticed: nil, behavior_roaming: :random },
     :DUNSPARCE => { behavior_noticed: nil, behavior_roaming: :random },
     :GLIGAR => { behavior_noticed: nil,  behavior_roaming: :random },
@@ -574,7 +575,7 @@ POKEMON_BEHAVIOR_DATA =
     :COTTONEE => { behavior_noticed: :skittish,  behavior_roaming: :random },
     :WHIMSICOTT => { behavior_noticed: :curious,  behavior_roaming: :random },
     :PETILIL => { behavior_noticed: :shy, behavior_roaming: :random },
-    :LILLIGANT => { behavior_noticed: nil, behavior_roaming: :random },
+    :LILLIGANT => { behavior_noticed: nil, behavior_roaming: :random_spin },
     :BASCULIN => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :SANDILE => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :KROKOROK => { behavior_noticed: :aggressive, behavior_roaming: :random },

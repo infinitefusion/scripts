@@ -131,7 +131,16 @@ OW_BEHAVIOR_MOVE_ROUTES = {
       RPG::MoveCommand.new(PBMoveRoute::Opacity, [0]),
       RPG::MoveCommand.new(PBMoveRoute::Script, ["self.despawn"]),
       RPG::MoveCommand.new(PBMoveRoute::End)
-    ]
+    ],
+    :explode => [
+      RPG::MoveCommand.new(PBMoveRoute::Script, ["self.set_animation_speed(2)"]),
+      RPG::MoveCommand.new(PBMoveRoute::StepAnimeOn),
+      RPG::MoveCommand.new(PBMoveRoute::Wait, [30]),
+      RPG::MoveCommand.new(PBMoveRoute::Opacity, [0]),
+      RPG::MoveCommand.new(PBMoveRoute::PlayAnimation, [EXPLODE_ANIMATION]),
+      RPG::MoveCommand.new(PBMoveRoute::Script, ["self.despawn"]),
+      RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
   }
 
 }

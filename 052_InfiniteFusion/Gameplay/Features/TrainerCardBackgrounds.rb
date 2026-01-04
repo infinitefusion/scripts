@@ -179,7 +179,7 @@ end
 def purchaseCardBackground(price = 1000)
   $Trainer.unlocked_card_backgrounds = [] if ! $Trainer.unlocked_card_backgrounds
   purchasable_cards = []
-  current_city = pbGet(VAR_CURRENT_MART)
+  current_city = pbGet(VAR_CURRENT_CITY)
   current_city = :PEWTER if !current_city.is_a?(Symbol)
   for card in CARD_BACKGROUND_CITY_EXCLUSIVES.keys
     purchasable_cards << card if current_city == CARD_BACKGROUND_CITY_EXCLUSIVES[card] && !$Trainer.unlocked_card_backgrounds.include?(card)
