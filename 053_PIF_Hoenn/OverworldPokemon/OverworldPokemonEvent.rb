@@ -13,12 +13,14 @@ class OverworldPokemonEvent < Game_Event
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
+  DISGUISED_POKEMON = [:DITTO, :ZORUA, :ZOROARK]
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     @species = species
     @level = level
     @behavior_roaming = behavior_roaming if behavior_roaming
     @behavior_noticed = behavior_noticed if behavior_noticed
     @terrain = terrain
+    @disguised = false
     species_data = GameData::Species.get(@species)
 
     @pokemon = Pokemon.new(species, level)
@@ -53,6 +55,11 @@ class OverworldPokemonEvent < Game_Event
     @deleted = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
+
+    if DISGUISED_POKEMON.include?(@species)
+      species_data = getRandomPokemonFromRoute(@species)
+      @disguised = true
+    end
 
     initialize_sprite(@terrain, species_data)
     @roaming_sprite = @character_name
@@ -100,7 +107,21 @@ class OverworldPokemonEvent < Game_Event
     return @species
   end
 
+  def getRandomPokemonFromRoute(species)
+    disguised_as_species = species
+    limit = 5
+    i=0
+    while disguised_as_species == species && i < limit
+      wild_pokemon = getRegularEncounter(@terrain)
+      disguised_as_species = wild_pokemon[0]
+      i+=1
+      echoln "#{species} is disguised as #{disguised_as_species}"
+    end
+    return GameData::Species.get(disguised_as_species)
+  end
+
   def initialize_sprite(terrain, species_data)
+    echoln species_data.species
     @land_sprite = getOverworldLandPath(species_data)
     @flying_sprite = getOverworldFlyingPath(species_data)
     @noticed_sprite = getOverworldNoticedPath(species_data)
@@ -179,6 +200,12 @@ class OverworldPokemonEvent < Game_Event
     return true
   end
 
+  def breakDisguise
+    species_data = GameData::Species.get(@species)
+    playAnimation(TELEPORT_ANIMATION_ID, @x, @y)
+    initialize_sprite(@terrain, species_data)
+  end
+
   def playDetectPlayerAnimation
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
@@ -215,6 +242,7 @@ class OverworldPokemonEvent < Game_Event
         if @current_state == :ROAMING
           if check_detect_trainer
             playDetectPlayerAnimation
+            breakDisguise if @disguised
             update_state(:NOTICED_PLAYER)
           end
         end
@@ -359,7 +387,7 @@ class OverworldPokemonEvent < Game_Event
     if is_fusion
       species_name = species_data.get_body_species_symbol.to_s
     else
-      species_name = @species.to_s
+      species_name = species_data.species.to_s
     end
     base_path = get_base_sprite_path(is_fusion, species_name)
     path = "#{base_path}#{species_name}"
@@ -401,6 +429,7 @@ class OverworldPokemonEvent < Game_Event
     when :NOTICED_PLAYER, :FLEEING
       set_sprite(@noticed_sprite) if @noticed_sprite
     when :ROAMING
+      playAnimation(TELEPORT_ANIMATION_ID, @x, @y) if @disguised
       set_sprite(@roaming_sprite) if @roaming_sprite
     end
   end
