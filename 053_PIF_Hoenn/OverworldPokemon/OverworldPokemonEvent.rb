@@ -27,11 +27,11 @@ class OverworldPokemonEvent < Game_Event
     @behavior_species = getBehaviorSpecies(species_data)
 
     unless behavior_roaming
-      @behavior_roaming = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_roaming]
+      @behavior_roaming = get_behavior_for_species(@behavior_species, :behavior_roaming)
       @behavior_roaming = :random unless @behavior_roaming
     end
     unless behavior_noticed
-      @behavior_noticed = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_noticed]
+      @behavior_noticed = get_behavior_for_species(@behavior_species, :behavior_noticed)
       @behavior_noticed = nil unless @behavior_noticed
     end
 
@@ -77,6 +77,17 @@ class OverworldPokemonEvent < Game_Event
     set_roaming_movement
   end
 
+
+  def get_behavior_for_species(species,behavior_type)
+    behavior = POKEMON_BEHAVIOR_DATA[species][behavior_type]
+    if @terrain == :Water
+      behavior = :random_dive if behavior == :random_burrow
+    else
+      behavior = :random if behavior == :random_dive
+    end
+    return behavior
+  end
+
   def set_swimming
     return if @species == :SURSKIT || @species == :SUICUNE
     unless @is_flying
@@ -84,6 +95,9 @@ class OverworldPokemonEvent < Game_Event
       @step_anime = true
       self.set_animation_speed(2)
       self.calculate_bush_depth
+      swimming_sprite = getOverworldSwimmingPath(@species)
+      @roaming_sprite = swimming_sprite if swimming_sprite
+      @character_name = @roaming_sprite
     end
   end
 
@@ -419,6 +433,20 @@ class OverworldPokemonEvent < Game_Event
     end
     base_path = get_base_sprite_path(is_fusion, species_name)
     path = "#{base_path}#{species_name}_notice"
+    if pbResolveBitmap("Graphics/Characters/#{path}")
+      return path
+    end
+  end
+
+  def getOverworldSwimmingPath(species_data)
+    is_fusion = isSpeciesFusion(@species)
+    if is_fusion
+      species_name = species_data.get_body_species_symbol.to_s
+    else
+      species_name = @species.to_s
+    end
+    base_path = get_base_sprite_path(is_fusion, species_name)
+    path = "#{base_path}#{species_name}_swim"
     if pbResolveBitmap("Graphics/Characters/#{path}")
       return path
     end

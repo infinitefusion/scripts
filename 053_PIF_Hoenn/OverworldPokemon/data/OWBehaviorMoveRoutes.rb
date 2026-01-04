@@ -89,6 +89,22 @@ OW_BEHAVIOR_MOVE_ROUTES = {
     ],
 
 
+    :charge => [
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [3]),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
+
+      RPG::MoveCommand.new(PBMoveRoute::PlayAnimation, [DUST_ANIMATION_ID]),
+      RPG::MoveCommand.new(PBMoveRoute::Forward),
+      RPG::MoveCommand.new(PBMoveRoute::Forward),
+      RPG::MoveCommand.new(PBMoveRoute::Forward),
+      RPG::MoveCommand.new(PBMoveRoute::Forward),
+      RPG::MoveCommand.new(PBMoveRoute::Forward),
+      RPG::MoveCommand.new(PBMoveRoute::End)
+
+    ],
+
   },
 
   :noticed => {
