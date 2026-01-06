@@ -11,6 +11,7 @@ module Settings
   HOENN_VERSION_NUMBER = "0.1.0"
   HOENN_LATEST_GAME_RELEASE = "0.1.0"
 
+  SNOW_DAY = false
 
   KANTO = GAME_ID == :IF_KANTO
   HOENN = GAME_ID == :IF_HOENN

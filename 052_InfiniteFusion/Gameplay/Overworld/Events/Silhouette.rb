@@ -68,6 +68,7 @@ Events.onStepTaken += proc { |sender, e|
   spawnSilhouette()
 }
 Events.onMapChange += proc { |sender, e|
+  next unless Settings::KANTO
   next if $PokemonTemp.tempEvents.empty?
   $PokemonTemp.pbClearTempEvents()
 }

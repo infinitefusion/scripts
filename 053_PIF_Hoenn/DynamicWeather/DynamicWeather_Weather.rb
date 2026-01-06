@@ -205,7 +205,7 @@ class GameWeather
   end
 
   def get_updated_weather(type, intensity, map_id)
-    if COLD_MAPS.include?(map_id)
+    if COLD_MAPS.include?(map_id) || Settings::SNOW_DAY
       type = :Snow if type == :Rain
       type = :Blizzard if type == :Storm
       type = :None if type == :Sunny

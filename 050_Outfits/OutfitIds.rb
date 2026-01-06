@@ -48,6 +48,9 @@ HAT_TEAM_ROCKET = "rocketcap"
 HAT_POSTMAN = "postman"
 HAT_PIDGEY_NEST = "pidgey"
 HAT_SWABLU_NEST = "swablu"
+HAT_ZIGZAGOON_NEST = "zigzaghat"
+
+
 HAT_PIKACHUM_NEST = "pikhatchum"
 HAT_PIKACHUF_NEST = "pikhatchuf"
 HAT_PARAS_NEST = "headparas"
