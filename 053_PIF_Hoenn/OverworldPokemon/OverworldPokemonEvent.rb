@@ -123,11 +123,7 @@ class OverworldPokemonEvent < Game_Event
     @flying_sprite = getOverworldFlyingPath(species_data, @pokemon.shiny?)
     @swimming_sprite = getOverworldSwimmingPath(species_data, @pokemon.shiny?)
     @noticed_sprite = getOverworldNoticedPath(species_data, @pokemon.shiny?)
-
-    echoln @land_sprite
-    echoln @flying_sprite
-    echoln @swimming_sprite
-    echoln @noticed_sprite
+    @noticed_sprite = @flying_sprite if !@noticed_sprite && @flying_sprite
 
     if terrain == :Water
       initialize_water_sprite
