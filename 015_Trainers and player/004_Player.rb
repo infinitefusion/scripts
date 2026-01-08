@@ -74,6 +74,10 @@ class Player < Trainer
   attr_accessor :beat_league
   attr_accessor :new_game_plus_unlocked
   attr_accessor :new_game_plus
+
+  attr_accessor :caught_legendaries
+  attr_accessor :encountered_legendaries
+
   def trainer_type
     if @trainer_type.is_a?(Integer)
       @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
@@ -327,6 +331,16 @@ class Player < Trainer
   def new_game_plus=(value)
     @new_game_plus = value
   end
+
+  def register_caught_legendary(species)
+    @caught_legendaries = [] unless @caught_legendaries
+    @caught_legendaries << species
+  end
+
+  def register_seen_legendary(species)
+    @encountered_legendaries = [] unless @encountered_legendaries
+    @encountered_legendaries << species
+  end
   #=============================================================================
 
   # (see Pokedex#seen?)
@@ -390,5 +404,8 @@ class Player < Trainer
     @unlocked_card_backgrounds = [@card_background]
 
     @seen_qmarks_sprite = false
+
+    @caught_legendaries = []
+    @encountered_legendaries = []
   end
 end

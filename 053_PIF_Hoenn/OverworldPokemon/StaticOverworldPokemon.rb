@@ -1,4 +1,5 @@
 OVERWORLD_POKEMON_EVENT_NAME = "OverworldPokemon"
+LEGENDARY_EVENT_NAME = "Legendary"
 # For adding wild overworld Pokemon as static events.
 #
 # The event needs to have the name OverworldPokemon and be have a first comment at the top setup like this
@@ -51,15 +52,30 @@ class Game_Map
 
     if Settings::HOENN && event.name == OVERWORLD_POKEMON_EVENT_NAME
       begin
-        game_event = OverworldPokemonEvent.new(@map_id, event, self)
-        setup_overworld_pokemon_from_comments(game_event)
-        return game_event if game_event
-      rescue
-        return ow_game_map_create_new_event(event)
-      end
+          game_event = OverworldPokemonEvent.new(@map_id, event, self)
+          setup_overworld_pokemon_from_comments(game_event)
+          return game_event if game_event
+       rescue
+          return ow_game_map_create_new_event(event)
+       end
+      elsif event.name.start_with?(LEGENDARY_EVENT_NAME)
+        species =  extract_legendary_species_from_event_name(event.name)
+        unless is_legendary_active?(species)
+          event = ow_game_map_create_new_event(event)
+          event.erase
+          return event
+        end
     end
 
     return ow_game_map_create_new_event(event)
+  end
+
+
+
+  def extract_legendary_species_from_event_name(eventName)
+    match = eventName.match(/#{Regexp.escape(LEGENDARY_EVENT_NAME)}\(([^)]+)\)/)  # Capture anything inside parentheses
+    species = match[1] if match && match.length > 0
+    return species.to_sym if species
   end
 
   def setup_overworld_pokemon_from_comments(event)
@@ -72,7 +88,7 @@ class Game_Map
     should_spawn = spawn_chance >= rand(0..100)
     if should_spawn
       species = params[:species]
-      echoln "spawning a static overworld #{species}"
+      #echoln "spawning a static overworld #{species}"
       min_level = params[:min_level]
       max_level = params[:max_level]
 
@@ -81,7 +97,7 @@ class Game_Map
       behavior_noticed = params[:behavior_noticed]
 
       always_on_top = event.always_on_top
-      event.setup_pokemon(species, level, :Grass, behavior_roaming, behavior_noticed)
+      event.setup_pokemon(species, level, :Land, behavior_roaming, behavior_noticed)
       event.set_swimming if params[:swimming]
       event.set_shiny if params[:shiny]
       event.always_on_top = always_on_top
@@ -127,7 +143,7 @@ class Game_Map
   end
 
   def choose_level(min_level, max_level)
-    raise "No level defined" if min_level.nil? && max_level.nil?
+    #raise "No level defined" if min_level.nil? && max_level.nil?
     return min_level if max_level.nil?
     return max_level if min_level.nil?
     return max_level if min_level > max_level

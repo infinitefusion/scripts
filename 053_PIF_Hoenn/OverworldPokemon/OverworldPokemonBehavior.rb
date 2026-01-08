@@ -74,8 +74,6 @@ def trigger_overworld_wild_battle
     $PokemonTemp.overworld_wild_battle_participants.shift
   end
 
-  echoln "despawning shit"
-  echoln $PokemonTemp.overworld_wild_battle_participants
   $PokemonTemp.overworld_wild_battle_participants.each do |ow_pokemon|
     ow_pokemon.despawn
   end
@@ -106,6 +104,11 @@ def overworldPokemonBehavior()
   rescue
     return
   end
+end
+
+def overworldPokemonDetect(radius=1)
+  event = $MapFactory.getMap(@map_id).events[@event_id]
+  return pbPlayerInEventCone?(event, $game_player, radius)
 end
 
 

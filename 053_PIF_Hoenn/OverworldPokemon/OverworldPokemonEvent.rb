@@ -56,8 +56,8 @@ class OverworldPokemonEvent < Game_Event
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
 
-    if DISGUISED_POKEMON.include?(@species)
-      species_data = getRandomPokemonFromRoute(@species)
+    if DISGUISED_POKEMON.include?(@species) && !@manual_ow_pokemon
+      species_data = getRandomPokemonFromRoute(@species,@terrain)
       @disguised = true
     end
 
@@ -121,25 +121,12 @@ class OverworldPokemonEvent < Game_Event
     return @species
   end
 
-  def getRandomPokemonFromRoute(species)
-    disguised_as_species = species
-    limit = 5
-    i=0
-    while disguised_as_species == species && i < limit
-      wild_pokemon = getRegularEncounter(@terrain)
-      disguised_as_species = wild_pokemon[0]
-      i+=1
-      echoln "#{species} is disguised as #{disguised_as_species}"
-    end
-    return GameData::Species.get(disguised_as_species)
-  end
+
 
   def initialize_sprite(terrain, species_data)
-    echoln species_data.species
-    @land_sprite = getOverworldLandPath(species_data)
-    @flying_sprite = getOverworldFlyingPath(species_data)
-    @noticed_sprite = getOverworldNoticedPath(species_data)
-
+    @land_sprite = getOverworldLandPath(species_data,@pokemon.shiny?)
+    @flying_sprite = getOverworldFlyingPath(species_data,@pokemon.shiny?)
+    @noticed_sprite = getOverworldNoticedPath(species_data,@pokemon.shiny?)
     if terrain == :Water && @flying_sprite
       @character_name = @flying_sprite
     else
@@ -381,76 +368,7 @@ class OverworldPokemonEvent < Game_Event
     value.round
   end
 
-  #####
-  # Noticing player
-  # ###12
 
-  def get_base_sprite_path(is_fusion, species_name)
-    base_path = "Followers/"
-    if is_fusion
-      base_path += "Fusions/"
-    end
-    if @pokemon.shiny?
-      base_path += "Shiny/"
-    end
-    return base_path
-  end
-
-  def getOverworldLandPath(species_data)
-    is_fusion = isSpeciesFusion(@species)
-    if is_fusion
-      species_name = species_data.get_body_species_symbol.to_s
-    else
-      species_name = species_data.species.to_s
-    end
-    base_path = get_base_sprite_path(is_fusion, species_name)
-    path = "#{base_path}#{species_name}"
-    if pbResolveBitmap("Graphics/Characters/#{path}")
-      return path
-    end
-  end
-
-  def getOverworldFlyingPath(species_data)
-    is_fusion = isSpeciesFusion(@species)
-    if is_fusion
-      species_name = species_data.get_body_species_symbol.to_s
-    else
-      species_name = @species.to_s
-    end
-    base_path = get_base_sprite_path(is_fusion, species_name)
-    path = "#{base_path}#{species_name}_fly"
-    if pbResolveBitmap("Graphics/Characters/#{path}")
-      return path
-    end
-  end
-
-  def getOverworldNoticedPath(species_data)
-    is_fusion = isSpeciesFusion(@species)
-    if is_fusion
-      species_name = species_data.get_body_species_symbol.to_s
-    else
-      species_name = @species.to_s
-    end
-    base_path = get_base_sprite_path(is_fusion, species_name)
-    path = "#{base_path}#{species_name}_notice"
-    if pbResolveBitmap("Graphics/Characters/#{path}")
-      return path
-    end
-  end
-
-  def getOverworldSwimmingPath(species_data)
-    is_fusion = isSpeciesFusion(@species)
-    if is_fusion
-      species_name = species_data.get_body_species_symbol.to_s
-    else
-      species_name = @species.to_s
-    end
-    base_path = get_base_sprite_path(is_fusion, species_name)
-    path = "#{base_path}#{species_name}_swim"
-    if pbResolveBitmap("Graphics/Characters/#{path}")
-      return path
-    end
-  end
 
   def set_sprite_to_current_state
     case @current_state
@@ -540,5 +458,7 @@ class OverworldPokemonEvent < Game_Event
       move_type_curious(ready_for_next_movement)
     end
   end
+
+
 end
 

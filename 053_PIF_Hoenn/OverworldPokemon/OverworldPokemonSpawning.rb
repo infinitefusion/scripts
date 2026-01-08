@@ -103,7 +103,6 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     return unless encounter_type && position
     wild_pokemon = getRegularEncounter(encounter_type) if !wild_pokemon
   end
-
   $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
   if $PokemonTemp.overworld_pokemon_on_map.length >= Settings::OVERWORLD_POKEMON_LIMIT
     despawn_overworld_pokemon($PokemonTemp.overworld_pokemon_on_map[0], terrain)

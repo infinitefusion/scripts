@@ -185,6 +185,10 @@ class Game_Event < Game_Character
     end
   end
 
+  def get_page(page_index)
+    return @event.pages[page_index]
+  end
+
   def refresh
     new_page = nil
     unless @erased
