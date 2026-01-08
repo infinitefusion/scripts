@@ -60,6 +60,7 @@ end
 
 def getOverworldSwimmingPath(species_data,shiny=false)
   species = species_data.species
+
   is_fusion = isSpeciesFusion(species)
   if is_fusion
     species_name = species_data.get_body_species_symbol.to_s
