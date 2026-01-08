@@ -423,6 +423,7 @@ class OverworldPokemonEvent < Game_Event
     else
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:noticed][@behavior_noticed])
     end
+    @step_anime = true unless @behavior_noticed == :still
     @move_speed = @noticed_move_speed
   end
 
@@ -443,6 +444,7 @@ class OverworldPokemonEvent < Game_Event
     end
     self.move_frequency = 3
     @move_speed = @roaming_move_speed
+    @step_anime = false unless @is_flying
   end
 
   def set_custom_move_route(move_list, repeating = true)
