@@ -305,14 +305,25 @@ class Window_PokemonOption < Window_DrawableCommand
 
     optionname = (index == @options.length) ? _INTL("Confirm") : @options[index].name
 
-    # Different color for Confirm, default otherwise
-    base_color   = (index == @options.length) ? Color.new(255, 220, 50) : @nameBaseColor   # brighter gold
-    shadow_color = (index == @options.length) ? Color.new(180, 120, 0) : @nameShadowColor  # darker shadow
-
-
+    if index == @options.length
+      base_color = Color.new(
+        [@nameBaseColor.red + 80, 255].min,
+        [@nameBaseColor.green + 80, 255].min,
+        [@nameBaseColor.blue + 80, 255].min
+      )
+      shadow_color = Color.new(
+        [base_color.red - 60, 0].max,
+        [base_color.green - 60, 0].max,
+        [base_color.blue - 60, 0].max
+      )
+    else
+      base_color   = @nameBaseColor
+      shadow_color = @nameShadowColor
+    end
 
     pbDrawShadowText(self.contents, rect.x, rect.y, optionwidth, rect.height, optionname,
                      base_color, shadow_color)
+
 
     return if index == @options.length
     if @options[index].is_a?(EnumOption)
