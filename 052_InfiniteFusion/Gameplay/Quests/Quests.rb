@@ -185,5 +185,9 @@ define_quest("route109_tanning",:FIELD_QUEST,_INTL("Soaking in the sun"), _INTL(
 define_quest("route109_seahouse",:FIELD_QUEST,_INTL("Hot Battles at the Seashore House"), _INTL("Defeat all of the trainers in the Seashore House!"),_INTL("Route 109"),"NPC_Hoenn_Fisherman")
 
 #Team Magma - Route 103
-define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Route 103"),"NPC_Hoenn_Magma_Exec_M")
-define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel in a way that it's no longer weak to the Water type."),_INTL("Route 103"),"NPC_Hoenn_Magma_Grunt_M")
+define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
+define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel in a way that it's no longer weak to the Water type."),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_M")
+
+#Team Aqua - Route 108
+define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")
+define_quest("aqua_carvanha",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")

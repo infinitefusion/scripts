@@ -577,7 +577,7 @@ module Settings
 
   #Experimental
   REMOTE_BATTLES_CONTROL = false
-  REMOTE_NPC_DIALOG = false
+  REMOTE_NPC_DIALOG = true
   REMOTE_BATTLE_CONTROL_SERVER_URL = "http://127.0.0.1:5000/choose_move"
   REMOTE_NPC_DIALOG_SERVER_URL = "http://127.0.0.1:5000"
   #Technical

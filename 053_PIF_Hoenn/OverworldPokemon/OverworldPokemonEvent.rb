@@ -65,6 +65,7 @@ class OverworldPokemonEvent < Game_Event
     initialize_sprite(@terrain, species_data)
     @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
+    @is_swimming = false
     @step_anime = @is_flying
     @forced_z = 300 if @is_flying #@always_on_top = @is_flying
     if @terrain == :Water
@@ -95,6 +96,7 @@ class OverworldPokemonEvent < Game_Event
       @step_anime = true
       self.set_animation_speed(2)
       self.calculate_bush_depth
+      @is_swimming = true
     end
   end
 
@@ -444,7 +446,7 @@ class OverworldPokemonEvent < Game_Event
     end
     self.move_frequency = 3
     @move_speed = @roaming_move_speed
-    @step_anime = false unless @is_flying
+    @step_anime = false unless @is_flying || @is_swimming
   end
 
   def set_custom_move_route(move_list, repeating = true)

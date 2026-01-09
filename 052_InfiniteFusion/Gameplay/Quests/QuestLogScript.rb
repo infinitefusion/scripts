@@ -169,12 +169,13 @@ def finishQuest(id, silent=false)
     pbMEPlay("Register phone") if !silent
     quest_name = QUESTS[id].name
     pbCallBub(3)
-    Kernel.pbMessage(_INTL("\\qp\\C[3]Main quest completed:\\n \\C[6]{1}",quest_name)) if !silent
+    Kernel.pbMessage(_INTL("\\C[3]Main quest completed:\\n \\C[6]{1}",quest_name)) if !silent
   else
     pbMEPlay("match_call") if !silent
     pbCallBub(3)
-    Kernel.pbMessage(_INTL("\\qp\\C[6]Quest completed!")) if !silent
+    Kernel.pbMessage(_INTL("\\C[6]Quest completed!")) if !silent
   end
+  Kernel.pbMessage(_INTL("\\qp\\C[6]Obtained 1 Quest Point!")) if !silent
   $game_variables[VAR_KARMA] += 1 # karma
   $game_variables[VAR_NB_QUEST_ACTIVE] -= 1 #nb. quests active
   $game_variables[VAR_NB_QUEST_COMPLETED] += 1 #nb. quests completed

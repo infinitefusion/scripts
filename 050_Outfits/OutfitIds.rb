@@ -39,8 +39,8 @@ CLOTHES_TEAM_MAGMA_M = "magmaRSE"
 CLOTHES_TEAM_MAGMA_F = "magmaRSE"
 
 
-CLOTHES_TEAM_AQUA_M = "aquaRSE"
-CLOTHES_TEAM_AQUA_F = "aquaRSE"
+CLOTHES_TEAM_AQUA_M = "teamaquaM"
+CLOTHES_TEAM_AQUA_F = "teamaquaF"
 
 
 #Hats
@@ -55,6 +55,8 @@ HAT_PIKACHUM_NEST = "pikhatchum"
 HAT_PIKACHUF_NEST = "pikhatchuf"
 HAT_PARAS_NEST = "headparas"
 HAT_EEVEE_NEST = "eevee"
+HAT_GOOMY_NEST = "headgoomy"
+
 HAT_SILPHSCOPE = "silphscope"
 HAT_BRENDAN = "brendanRSE"
 HAT_MAY = "mayRSE"
@@ -90,6 +92,7 @@ HAT_SPROUT = "sprout"
 HAT_TREVENANT="trevenantforestkingcrown"
 HAT_CHEF = "cheftoque"
 HAT_CLOWN = "clownnose"
+HAT_WHITE_HAND = "whitehand"
 
 HAT_BREEDER_1="breedervisor"
 HAT_BREEDER_2="breederbandana"

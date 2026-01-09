@@ -395,9 +395,75 @@ def obtainBirthdayGift
       :PICHU, :CLEFFA, :IGGLYBUFF, :TOGEPI, :EEVEE, :HAPPINY, :AZURILL, :BUDEW, :CHINGLING, :MUNCHLAX, :RIOLU,
     ]
   species = possible_species.sample
-  pokemon = Pokemon.new(species,Settings::EGG_LEVEL)
-  pokemon.shiny=true
+  pokemon = Pokemon.new(species, Settings::EGG_LEVEL)
+  pokemon.shiny = true
   pokemon.natural_shiny = true
   pokemon.moves[0] = Pokemon::Move.new(:HOLDHANDS)
   pbGenerateEgg(pokemon)
+end
+
+
+
+# Called from an event. The event's name must be the legendary Pokemon's species
+# Returns true is it's not in $trainer.caught_legendaries or $trainer.encountered_legendaries
+# Returns false if it is
+def is_legendary_active?(species)
+  $Trainer.caught_legendaries = [] unless $Trainer.caught_legendaries
+  $Trainer.encountered_legendaries = [] unless $Trainer.encountered_legendaries
+  is_caught = $Trainer.caught_legendaries.include?(species)
+  is_encountered = $Trainer.encountered_legendaries.include?(species)
+
+  return !is_caught && !is_encountered
+end
+
+def setEventGraphicPokemon(species,event_id)
+  species_data = GameData::Species.get(species)
+  event = $game_map.events[event_id]
+  return unless event
+  if event
+    echoln event.get_page(1)
+    event.get_page(1).graphic.character_name = getOverworldLandPath(species_data)
+    #event.character_name= #"Graphics/Characters/#{getOverworldLandPath(species_data)}"
+    event.refresh
+  end
+end
+
+
+#ZORUA FOREST
+#
+ZORUA_FOLLOWED_VARIABLE = 1031
+
+
+def shapeshift_zorua
+
+  zorua_events = [32,36,38,34,37,61,41]
+  nb_active = $game_variables[ZORUA_FOLLOWED_VARIABLE]
+  for i in 0..nb_active
+    event_id = zorua_events[i]
+    event = $game_map.events[event_id]
+    next unless event
+    next if event.erased
+    encounter_type = getTimeBasedEncounter(:Land)
+    disguise_species = getRandomPokemonFromRoute(:ZORUA, encounter_type)
+    species_data = GameData::Species.get(disguise_species)
+    event.character_name = getOverworldLandPath(species_data)
+    event.refresh
+  end
+end
+
+def transfer_subtle(new_x, new_y)
+  return if isWearingHat(HAT_ZOROARK)
+  map = $game_map.map_id
+  $game_temp.player_new_map_id = map
+  $game_temp.player_new_x = new_x
+  $game_temp.player_new_y = new_y
+
+  pbFadeOutIn {
+    $scene.transfer_player(false)
+    shapeshift_zorua
+  }
+end
+
+def this_event()
+  return $game_map.events[@event_id]
 end
