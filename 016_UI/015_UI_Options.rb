@@ -301,10 +301,19 @@ class Window_PokemonOption < Window_DrawableCommand
   def drawItem(index, _count, rect)
     return if dont_draw_item(index)
     rect = drawCursor(index, rect)
-    optionname = (index == @options.length) ? _INTL("Confirm") : @options[index].name
     optionwidth = rect.width * 9 / 20
+
+    optionname = (index == @options.length) ? _INTL("Confirm") : @options[index].name
+
+    # Different color for Confirm, default otherwise
+    base_color   = (index == @options.length) ? Color.new(255, 220, 50) : @nameBaseColor   # brighter gold
+    shadow_color = (index == @options.length) ? Color.new(180, 120, 0) : @nameShadowColor  # darker shadow
+
+
+
     pbDrawShadowText(self.contents, rect.x, rect.y, optionwidth, rect.height, optionname,
-                     @nameBaseColor, @nameShadowColor)
+                     base_color, shadow_color)
+
     return if index == @options.length
     if @options[index].is_a?(EnumOption)
       if @options[index].values.length > 1
@@ -517,15 +526,6 @@ class PokemonOption_Scene
     @autosave_menu = false
   end
 
-  def openChallengeMenu()
-    return unless @challenge_menu
-    pbFadeOutIn {
-      scene = ChallengeOptionsScene.new
-      screen = PokemonOptionScreen.new(scene)
-      screen.pbStartScreen
-    }
-    @challenge_menu = false
-  end
 
   def pbOptions
     oldSystemSkin = $PokemonSystem.frame # Menu
