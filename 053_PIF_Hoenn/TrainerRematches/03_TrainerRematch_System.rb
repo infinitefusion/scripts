@@ -15,6 +15,10 @@ alias original_pbTrainerBattle pbTrainerBattle
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
+  echoln trainerID
+  echoln trainerName
+  echoln trainerPartyID
+
   trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
   displayPreBattleText(trainer_data)
   result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)

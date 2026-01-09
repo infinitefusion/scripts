@@ -48,6 +48,7 @@ def onLoadExistingGame()
   migrateOldSavesToCharacterCustomization()
   clear_all_images()
   loadDateSpecificChanges()
+  $PokemonSystem.overworld_encounters = false if Settings::KANTO
 end
 
 def loadDateSpecificChanges()
