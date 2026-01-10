@@ -16,7 +16,7 @@ CLOTHES_ROCK     = "temp"
 CLOTHES_BUG_1      = "bughakama"
 CLOTHES_BUG_2      = "bughakamapants"
 
-CLOTHES_GHOST    = "temp"
+CLOTHES_GHOST    = "ghostoutfit"
 
 CLOTHES_STEEL_M    = "steelworkerM"
 CLOTHES_STEEL_F    = "steelworkerF"
