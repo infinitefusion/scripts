@@ -68,6 +68,7 @@ class Interpreter
 
     if event_id > 0 && map_id
       return unless $game_map.events[@event_id]
+      return unless $game_map.events[@event_id].trigger
       return unless $game_map.events[@event_id].trigger < 3
       $game_temp.talking_npc_id = event_id
       return unless $game_temp.talking_npc_id
