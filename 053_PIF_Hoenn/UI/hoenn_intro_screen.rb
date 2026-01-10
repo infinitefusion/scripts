@@ -35,9 +35,6 @@ class HoennIntroScreen
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99998
     @sprites = {}
-
-
-    @fusions_list = getSpritesList
     pbBGMPlay(@bgm)
     setupScrollingLayers
     setupSprites
@@ -68,22 +65,6 @@ class HoennIntroScreen
     end
   end
 
-
-  def getSpritesList()
-    spritesList = []
-    $PokemonGlobal.alt_sprite_substitutions.each_value do |value|
-      if value.is_a?(PIFSprite)
-        spritesList << value
-      end
-    end
-    selected_spritesList = spritesList.sample(NB_SPRITES_TO_PRELOAD)
-    spriteLoader = BattleSpriteLoader.new
-    for sprite in selected_spritesList
-      spriteLoader.preload(sprite)
-    end
-
-    return selected_spritesList
-  end
   def setupSprites
     @sprites["shimmer1"] = Sprite.new(@viewport)
     @sprites["shimmer1"].bitmap = pbBitmap("Graphics/Titles/bg_shimmer1")
@@ -119,7 +100,7 @@ class HoennIntroScreen
 
     while count < FUSION_PRELOAD_COUNT
       begin
-        fusion = @fusions_list.sample#getRandomFusionForIntro()
+        fusion = getRandomFusionForIntro()
         next unless fusion
         next if used_fusions[fusion] # ensure uniqueness
 
@@ -209,7 +190,7 @@ class HoennIntroScreen
   end
 
   def spawnFusionIfNeeded
-    return unless (@currentFrame % FUSION_SPAWN_EVERY).zero?
+    return unless @currentFrame == 1 || (@currentFrame % FUSION_SPAWN_EVERY).zero?
 
     hidden_sprites = @fusionSprites.reject { |s| s.visible || s == @lastFusion }
     return if hidden_sprites.empty?
