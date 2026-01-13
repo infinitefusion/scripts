@@ -1,0 +1,37 @@
+##
+##  Hooks for challenges about encountering overworld Pokemon
+##
+
+def all_same_pokemon?(pokemon_array)
+  different_species = pokemon_array.uniq
+  return different_species.length == 1
+end
+
+def all_different_pokemon?(pokemon_array)
+  different_species = pokemon_array.uniq
+  return pokemon_array == different_species
+end
+
+def checkEncounterChallenges(encountered_pokemon)
+  case encountered_pokemon.length
+  when 1
+  when 2
+      $Trainer.complete_challenge(:battle_2_pokemon_at_once)
+      if all_different_pokemon?(encountered_pokemon)
+        $Trainer.complete_challenge(:battle_2_different_pokemon_at_once)
+      elsif all_same_pokemon?(encountered_pokemon)
+        $Trainer.complete_challenge(:battle_2_same_pokemon_at_once)
+      end
+  when 3
+    $Trainer.complete_challenge(:battle_3_pokemon_at_once)
+    if all_different_pokemon?(encountered_pokemon)
+      $Trainer.complete_challenge(:battle_3_different_pokemon_at_once)
+    elsif all_same_pokemon?(encountered_pokemon)
+      $Trainer.complete_challenge(:battle_3_same_pokemon_at_once)
+    end
+  end
+end
+
+def checkWildFusePokemonChallenge(pokemon1,pokemon2)
+  $Trainer.complete_challenge(:fuse_wild_pokemon)
+end

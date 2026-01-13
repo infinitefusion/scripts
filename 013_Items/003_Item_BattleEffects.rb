@@ -335,6 +335,8 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
 ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,battler,battle|
     battle.pbThrowPokeBall(battler.index,item)
+    battle.balls_thrown +=1
+    echoln battle.balls_thrown
   }
 )
 

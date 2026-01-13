@@ -23,6 +23,7 @@ class PokeBattle_Battle
   end
 
   def pbJudgeCheckpoint(user,move=nil)
+
     if pbAllFainted?(0) && pbAllFainted?(1)
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
         if !(move && move.function=="0DD")   # Not a draw if fainting occurred due to Liquid Ooze

@@ -194,6 +194,8 @@ module PokeBattle_BattleCommon
         pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
       BallHandlers.onCatch(ball, self, pkmn)
+      checkCatchChallenge(ball, self, pkmn)
+
       pkmn.poke_ball = ball
       pkmn.makeUnmega if pkmn.mega?
       pkmn.makeUnprimal
@@ -247,7 +249,6 @@ module PokeBattle_BattleCommon
 
     #Increased chances of catching if is on last ball
     isOnLastBall = !$PokemonBag.pbHasItem?(ball)
-    echoln isOnLastBall
     # Critical capture check
     if isOnLastBall
       c = x * 6 / 12

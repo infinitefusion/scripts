@@ -84,6 +84,11 @@ class PokeBattle_Battle
   attr_accessor :moldBreaker      # True if Mold Breaker applies
   attr_reader   :struggle         # The Struggle move
 
+  #statistics
+  attr_accessor   :balls_thrown
+  attr_accessor   :damage_received
+
+
   include PokeBattle_BattleCommon
 
   def pbRandom(x); return rand(x); end
@@ -167,6 +172,9 @@ class PokeBattle_Battle
     else
       @struggle = PokeBattle_Struggle.new(self, nil)
     end
+
+    @balls_thrown =0
+    @damage_received = 0
   end
 
   #=============================================================================

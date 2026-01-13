@@ -362,6 +362,7 @@ end
 
 def pb1v2WildBattleSpecific(pokemon1, pokemon2,
                             outcomeVar = 1, canRun = true, canLose = false)
+  checkEncounterChallenges([pokemon1,pokemon2])
   # Set some battle rules
   setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
@@ -384,6 +385,7 @@ end
 
 def pb1v3WildBattleSpecific(pokemon1, pokemon2, pokemon3,
                             outcomeVar = 1, canRun = true, canLose = false)
+  checkEncounterChallenges([pokemon1,pokemon2,pokemon3])
   # Set some battle rules
   setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("cannotRun") if !canRun
