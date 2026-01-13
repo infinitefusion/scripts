@@ -78,6 +78,8 @@ class Player < Trainer
   attr_accessor :caught_legendaries
   attr_accessor :encountered_legendaries
 
+  attr_accessor :challenges
+
   def trainer_type
     if @trainer_type.is_a?(Integer)
       @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
@@ -407,5 +409,6 @@ class Player < Trainer
 
     @caught_legendaries = []
     @encountered_legendaries = []
+    @challenges ={}
   end
 end

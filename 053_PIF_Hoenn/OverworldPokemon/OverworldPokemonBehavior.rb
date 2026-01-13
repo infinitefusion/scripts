@@ -35,6 +35,14 @@ class Game_Event
 
 end
 
+def fuse_wild_pokemon_animation(battler1, battler2)
+  if battler1.ow_coordinates && battler2.ow_coordinates
+    playAnimation(Settings::FUSE_ANIMATION_ID, battler1.ow_coordinates[0], battler1.ow_coordinates[1])
+    playAnimation(Settings::FUSE_ANIMATION_ID, battler2.ow_coordinates[0], battler2.ow_coordinates[1])
+    pbWait(16)
+  end
+end
+
 def trigger_overworld_wild_battle
   return if $PokemonTemp.overworld_wild_battle_triggered
   $PokemonTemp.overworld_wild_battle_triggered = true
@@ -51,11 +59,8 @@ def trigger_overworld_wild_battle
     if should_fuse
       fusion_species = fusionOf(battler1.species, battler2.species)
       fusion_level = (battler1.level + battler2.level) / 2.ceil
-      if battler1.ow_coordinates && battler2.ow_coordinates
-        playAnimation(Settings::FUSE_ANIMATION_ID, battler1.ow_coordinates[0], battler1.ow_coordinates[1])
-        playAnimation(Settings::FUSE_ANIMATION_ID, battler2.ow_coordinates[0], battler2.ow_coordinates[1])
-        pbWait(16)
-      end
+      fuse_wild_pokemon_animation(battler1, battler2)
+      checkWildFusePokemonChallenge(battler1, battler2)
       pbWildBattleSpecific(Pokemon.new(fusion_species, fusion_level))
     else
       pb1v2WildBattleSpecific(battler1, battler2)
