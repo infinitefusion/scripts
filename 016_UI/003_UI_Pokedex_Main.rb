@@ -357,7 +357,7 @@ class PokemonPokedex_Scene
       if $Trainer.seen?(nationalSpecies)
         if !filter_owned || $Trainer.owned?(nationalSpecies)
           species = GameData::Species.get(nationalSpecies)
-          dexlist.push([species.id_number,species.real_name,0,0,i+1,0])
+          dexlist.push([species.id_number,species.name,0,0,i+1,0])
         end
       end
     end
