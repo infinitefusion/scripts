@@ -1,31 +1,119 @@
+def openChallengeApp
+  echoln "CHALLENGE OPEN 13"
+  pbFadeOutIn {
+    scene = PokemonChallenges_Scene.new
+    screen = PokemonChallenges_Screen.new(scene)
+    screen.pbStartScreen
+    # scene.pbRefresh
+  }
+end
+
 class Player
 
   def accept_challenge(challenge_id)
     @challenges = {} unless @challenges
-    @challenges[challenge_id] = false
+    challenge_template = CHALLENGES[challenge_id]
+    return unless challenge_template
+
+    reward = pick_challenge_reward(challenge_template.category)
+    @challenges[challenge_id] = PlayerChallenge.new(challenge_id, reward)
   end
+
   def complete_challenge(challenge_id)
     @challenges = {} unless @challenges
     if @challenges.has_key?(challenge_id)
-      @challenges[challenge_id] = true
+      challenge = @challenges[challenge_id]
+      challenge.completed = true
+      @challenges[challenge_id] = challenge
     end
   end
 
+  def completed_challenge?(challenge_id)
+    if @challenges.has_key?(challenge_id)
+      return @challenges[challenge_id]
+    end
+    return false
+  end
+
+  def remove_challenge(challenge_id)
+    @challenges.delete(challenge_id)
+  end
+
+  def clear_all_challenges
+    @challenges = {} unless @challenges
+    for id in @challenges
+      remove_challenge(id)
+    end
+  end
+
+  def pick_challenge_reward(category)
+    tier = rand(3) == 0 ? :TIER2 : :TIER1
+    items_list = []
+    case category
+    when :encounter
+      items_list = tier == :TIER1 ? CHALLENGE_ENCOUNTER_REWARDS_TIER1 : CHALLENGE_ENCOUNTER_REWARDS_TIER2
+    when :battle
+      items_list = tier == :TIER1 ? CHALLENGE_BATTLE_REWARDS_TIER1 : CHALLENGE_BATTLE_REWARDS_TIER2
+    when :catch
+      items_list = tier == :TIER1 ? CHALLENGE_CATCH_REWARDS_TIER1 : CHALLENGE_CATCH_REWARDS_TIER2
+    when :fusion
+      items_list = tier == :TIER1 ? CHALLENGE_FUSE_REWARDS_TIER1 : CHALLENGE_FUSE_REWARDS_TIER2
+    end
+    item = items_list.sample
+    if tier == :TIER1
+      quantity = rand(1..3)
+    else
+      quantity = 1
+    end
+    reward = []
+    for i in 1..quantity
+      reward << item
+    end
+    return reward
+  end
 
 end
 
-class Challenge
-  attr_reader :id, :description, :category, :reward
+class PlayerChallenge
+  attr_reader :id
+  attr_reader :item_reward
+  attr_reader :template
+  attr_accessor :completed
 
-  def initialize(id, description, category, reward)
+  def initialize(id, item_reward = [])
+    @id = id
+    @item_reward = item_reward
+    @template = CHALLENGES[id]
+    @completed = false
+  end
+
+  def description
+    return @template.description
+  end
+
+  def category
+    return @template.category
+  end
+
+  def money_reward
+    return @template.money_reward
+  end
+end
+
+class ChallengeTemplate
+  attr_reader :id, :description, :category, :money_reward
+
+  def initialize(id, description, category, money_reward)
     @id = id
     @description = description
-    @reward = reward
+    @money_reward = money_reward
+    @category = category
   end
 end
 
 CHALLENGES = {}
-def define_challenge(id, description:, category:, reward:)
-  CHALLENGES[id] = Challenge.new(id, description, category, reward)
+
+def define_challenge(id, description:, category:, money_reward:)
+  CHALLENGES[id] = ChallengeTemplate.new(id, description, category, money_reward)
 end
 

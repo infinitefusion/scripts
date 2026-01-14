@@ -1,5 +1,10 @@
 class Trainer
   attr_accessor :pokenav
+
+  def install_app(app_id)
+    @pokenav = Pokenav.new unless $Trainer.pokenav
+    @pokenav.install_app(app_id)
+  end
 end
 
 class Pokenav
@@ -11,10 +16,10 @@ class Pokenav
 
     # Unlockable apps
     :CONTACTS => _INTL("Contacts"), # obtained after rematch quest
-    :JUKEBOX => _INTL("Jukebox"),
+    :JUKEBOX => _INTL("Jukebox"), # obtained at devon corp
     :WEATHER => _INTL("Weather"), # obtained at weather institute
-    :POKERADAR => _INTL("Pokeradar"), # obtained at devon corp?
-    :STATISTICS => _INTL("Statistics"),
+    :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
+    :POKECHALLENGE => _INTL("PokéChallenge"),
   }
 
   def initialize
@@ -32,6 +37,7 @@ end
 
 class PokemonPokegearScreen
   def pbStartScreen
+    $Trainer.pokenav = Pokenav.new unless $Trainer.pokenav
     commands = []
     $Trainer.pokenav.installed_apps.each do |app|
       commands << [app.to_s, Pokenav::AVAILABLE_APPS[app]]
@@ -59,6 +65,8 @@ class PokemonPokegearScreen
         next
       elsif chosen == :WEATHER
         pbWeatherMap
+      elsif chosen == :POKECHALLENGE
+        openChallengeApp
 
         # elsif cmdPhone>=0 && cmd==cmdPhone
         #   pbFadeOutIn {

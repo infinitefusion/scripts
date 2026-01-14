@@ -91,3 +91,7 @@ def list_all_item_names()
   end
   return names
 end
+
+def hasItem?(item)
+  return $PokemonBag.pbQuantity(item) >= 1
+end

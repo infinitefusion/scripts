@@ -727,7 +727,6 @@ class PokeBattle_Battler
 
         unless onPlayerSide?
           @battle.damage_received += b.damageState.hpLost
-          echoln @battle.damage_received
         end
       end
       # Animate the hit flashing and HP bar changes

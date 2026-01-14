@@ -2,6 +2,63 @@ def obtainBadgeMessage(badgeName)
   Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!", $Trainer.name, badgeName))
 end
 
+def pbReceiveMoney(amount)
+  msgwindow = pbCreateMessageWindow(nil)
+  goldwindow = pbDisplayGoldWindow(msgwindow)
+  #show current money
+  15.times do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+
+  oldMoney    = $Trainer.money
+  targetMoney = oldMoney + amount
+  $Trainer.money = targetMoney
+  step = [amount / 15, 1].max
+  current = oldMoney
+
+  #count up
+  while current < targetMoney
+    current += step
+    current = targetMoney if current > targetMoney
+    goldwindow.text = _INTL(
+      "Money:\n<ar>{1}</ar>\n<ar><c3=00FF00>+ {2}</c3></ar>",
+      current.to_s_formatted,
+      amount.to_s_formatted
+    )
+    pbSEPlay("Mart buy item") if current < targetMoney
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+
+
+  goldwindow.text = _INTL(
+    "Money:\n<ar>{1}</ar>",
+    targetMoney.to_s_formatted
+  )
+
+  #show final money
+  goldwindow.resizeToFit(goldwindow.text, Graphics.width)
+  goldwindow.width = 160 if goldwindow.width <= 160
+  20.times do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+  goldwindow.dispose
+  pbDisposeMessageWindow(msgwindow)
+end
+
+
+
 def promptCaughtPokemonAction(pokemon)
   pickedOption = false
   return pbStorePokemon(pokemon) if !$Trainer.party_full?
