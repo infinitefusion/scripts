@@ -804,7 +804,6 @@ def reverseFusion(pokemon)
   pokemon.exp_when_fused_body = head_exp
   pokemon.exp_when_fused_head = body_exp
 
-  pokemon.head_shiny, pokemon.body_shiny = pokemon.body_shiny, pokemon.head_shiny
   # play animation
   pbFadeOutInWithMusic(99999) {
     fus = PokemonEvolutionScene.new
@@ -812,6 +811,8 @@ def reverseFusion(pokemon)
     fus.pbEvolution(false, true)
     fus.pbEndScreen
   }
+
+  pokemon.head_shiny, pokemon.body_shiny = pokemon.body_shiny, pokemon.head_shiny
 end
 
 ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|

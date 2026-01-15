@@ -491,6 +491,8 @@ class PokemonEvolutionScene
 
   def pbStartScreen(pokemon,newspecies,reversing=false)
     @pokemon = pokemon
+    @newpokemon = pokemon.clone
+    @newpokemon.head_shiny, @newpokemon.body_shiny = @newpokemon.body_shiny, @newpokemon.head_shiny
     @newspecies = newspecies
     @sprites = {}
     @bgviewport = Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -510,7 +512,7 @@ class PokemonEvolutionScene
     rsprite1.y = (Graphics.height-64)/2
     rsprite2 = PokemonSprite.new(@viewport)
     rsprite2.setOffset(PictureOrigin::Center)
-    rsprite2.setPokemonBitmapSpecies(@pokemon,@newspecies,false)
+    rsprite2.setPokemonBitmapSpecies(@newpokemon,@newspecies,false)
     rsprite2.x       = rsprite1.x
     rsprite2.y       = rsprite1.y
     rsprite2.opacity = 0
