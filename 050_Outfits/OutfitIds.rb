@@ -42,6 +42,9 @@ CLOTHES_TEAM_MAGMA_F = "magmaRSE"
 CLOTHES_TEAM_AQUA_M = "teamaquaM"
 CLOTHES_TEAM_AQUA_F = "teamaquaF"
 
+CLOTHES_ADVENTURER_M = "adventurer_m"
+CLOTHES_ADVENTURER_F = "adventurer_f"
+CLOTHES_VETERAN = "VeteranM"
 
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
@@ -142,6 +145,11 @@ HAT_GYM_REWARD_16 = "magnemitepin"
 HAT_TEAM_MAGMA = "magmaRSE"
 HAT_TEAM_AQUA = "aquaRSE"
 
+HAT_RED = "red"
+HAT_LEAF = "leaf"
+
+HAT_VIKING = "hornedhelm"
+HAT_CROWN = "crown"
 #Hairstyles
 HAIR_RED = "red"
 HAIR_LEAF = "leaf"

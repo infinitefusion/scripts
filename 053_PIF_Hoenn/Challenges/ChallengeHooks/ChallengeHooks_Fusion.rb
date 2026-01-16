@@ -3,7 +3,7 @@ class PokemonTemp
   attr_accessor :unfuse_count_today
 end
 
-def checkFuseChallenges(head_species, body_species)
+def checkFuseChallenges(head_pokemon, body_pokemon)
   case $PokemonTemp.fuse_count_today
   when 1
     $Trainer.complete_challenge(:fuse_1_pokemon)
@@ -13,14 +13,14 @@ def checkFuseChallenges(head_species, body_species)
     $Trainer.complete_challenge(:fuse_5_pokemon)
   end
 
-  if head_species == body_species
+  if head_pokemon.species == body_pokemon.species
     $Trainer.complete_challenge(:fuse_same_species)
   end
 
-  pokemon_head = GameData::Species.get(head_species)
-  pokemon_body = GameData::Species.get(body_species)
-  for type in pokemon_head&.types
-    if pokemon_body.hasType?(type)
+  species_data_head = GameData::Species.get(head_pokemon.species)
+  species_data_body = GameData::Species.get(body_pokemon.species)
+  for type in species_data_head&.types
+    if species_data_body.hasType?(type)
       $Trainer.complete_challenge(:fuse_same_type)
     end
   end

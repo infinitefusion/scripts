@@ -36,6 +36,10 @@ class Pokenav
     pbMEPlay("match_call")
     pbMessage(_INTL("The \\C[3]{1} App\\C[0] was installed in the PokéNav!", app_name))
   end
+
+  def has_app(app_id)
+    return @installed_apps.include?(app_id)
+  end
 end
 
 class PokemonPokegearScreen

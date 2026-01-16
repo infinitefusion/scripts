@@ -79,6 +79,7 @@ class Player < Trainer
   attr_accessor :encountered_legendaries
 
   attr_accessor :challenges
+  attr_accessor :nb_completed_challenges
 
   def trainer_type
     if @trainer_type.is_a?(Integer)
@@ -410,5 +411,6 @@ class Player < Trainer
     @caught_legendaries = []
     @encountered_legendaries = []
     @challenges ={}
+    @nb_completed_challenges = 0
   end
 end

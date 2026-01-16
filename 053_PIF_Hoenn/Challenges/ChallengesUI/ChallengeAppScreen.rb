@@ -8,7 +8,7 @@ class PokemonChallenges_Screen
 
   def pbStartScreen
     challenges = getChallengesList
-    $Trainer.pokenav.last_opened_challenges = pbGetTimeNow
+    $Trainer.pokenav.last_opened_challenges = Time.now
     @scene.pbStartScene(challenges)
     @scene.pbScene
     @scene.pbEndScene
@@ -29,7 +29,7 @@ class PokemonChallenges_Screen
 
   def shouldRefreshChallenges(last_opened_date)
     return true if last_opened_date.nil?
-    return (pbGetTimeNow - last_opened_date) >= 24 * 60 * 60
+    return (Time.now - last_opened_date) >= 24 * 60 * 60  #Replace Time.now by pbGetTimeNow everywhere to use in-game days for testing
   end
 end
 

@@ -64,6 +64,7 @@ class PokeBattle_Battler
     return true
   end
 
+
   def pbRaiseStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
