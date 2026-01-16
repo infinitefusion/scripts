@@ -98,17 +98,14 @@ class PokemonChallenges_Scene
     return $Trainer.completed_challenge?(challenge_id)
   end
 
+  #Removes the challenge button sprite
   def removeChallengeAt(index)
-    # Dispose sprite
     btn = @buttons[index]
     btn.dispose
     @sprites.delete_if { |_, v| v == btn }
-
-    # Remove from arrays
     @buttons.delete_at(index)
     @challenges.delete_at(index)
 
-    # Clamp index so it stays valid
     if @index >= @buttons.length
       @index = @buttons.length - 1
     end

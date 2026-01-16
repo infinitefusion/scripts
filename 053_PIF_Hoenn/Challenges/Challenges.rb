@@ -10,7 +10,7 @@ end
 
 class Player
 
-  def accept_challenge(challenge_id)
+  def add_challenge(challenge_id)
     @challenges = {} unless @challenges
     challenge_template = CHALLENGES[challenge_id]
     return unless challenge_template
@@ -33,6 +33,41 @@ class Player
       return @challenges[challenge_id]
     end
     return false
+  end
+
+  def select_random_challenge(category)
+    candidates = CHALLENGES.select { |_k, v| v.category == category }.keys
+    return nil if candidates.empty?
+    return candidates.sample
+  end
+
+  def refresh_challenges()
+    echoln @challenges
+    @challenges = {} unless @challenges
+    @challenges.each do |challenge_id, challenge|
+      unless challenge.completed
+        remove_challenge(challenge.id)
+      end
+    end
+    categories = [:encounter, :battle, :catch, :fusion]
+    categories.each do |category|
+      unclaimed_challenges = listPlayerChallengesOfCategory(category)
+      if unclaimed_challenges.empty?
+        challenge_id = select_random_challenge(category)
+        add_challenge(challenge_id)
+      end
+    end
+  end
+
+  def listPlayerChallengesOfCategory(category)
+    challenges_list = []
+    echoln @challenges
+    @challenges.each do |challenge_id, challenge|
+      if challenge.category == category
+        challenges_list << challenge.id
+      end
+    end
+    return challenges_list
   end
 
   def remove_challenge(challenge_id)

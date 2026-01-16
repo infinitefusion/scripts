@@ -9,6 +9,8 @@ end
 
 class Pokenav
   attr_accessor :installed_apps
+  attr_accessor :last_opened_challenges #date
+
   AVAILABLE_APPS = {
     # Starting apps
     :QUESTS => _INTL("Quests"),
@@ -24,6 +26,7 @@ class Pokenav
 
   def initialize
     @installed_apps = [:MAP, :QUESTS]
+    @last_opened_challenges = nil
   end
 
   def install_app(app_id)

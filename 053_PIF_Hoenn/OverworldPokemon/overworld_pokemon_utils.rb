@@ -74,15 +74,15 @@ def getOverworldSwimmingPath(species_data,shiny=false)
   end
 end
 
-def getRandomPokemonFromRoute(species,terrain)
-  disguised_as_species = species
+def getRandomPokemonFromRoute(excluded_species,terrain)
+  random_species = excluded_species
   limit = 5
   i=0
-  while disguised_as_species == species && i < limit
+  while random_species == excluded_species || i < limit
     terrain_type = getTimeBasedEncounter(terrain)
     wild_pokemon = getRegularEncounter(terrain_type)
-    disguised_as_species = wild_pokemon[0]
+    random_species = wild_pokemon[0] if wild_pokemon.is_a?(Array)
     i+=1
   end
-  return GameData::Species.get(disguised_as_species)
+  return GameData::Species.get(random_species)
 end

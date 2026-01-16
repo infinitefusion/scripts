@@ -47,7 +47,7 @@ define_challenge :encounter_2_same_pokemon_at_once,
                  money_reward: 350
 
 define_challenge :encounter_3_same_pokemon_at_once,
-                 description: _INTL("Get into a battle against 3 of the same Pokémon at once"),
+                 description: _INTL("Get into a battle against 3 of the same species of Pokémon at once"),
                  category: :encounter,
                  money_reward: 750
 
@@ -74,7 +74,7 @@ define_challenge :battle_enemy_1_hp,
                  money_reward: 1000
 
 define_challenge :battle_flinch,
-                 description: _INTL("Make your opponent flinch in a battle"),
+                 description: _INTL("Make your opponent flinch during a battle"),
                  category: :battle,
                  money_reward: 250
 
@@ -90,10 +90,10 @@ define_challenge :battle_flinch,
 ########################
 
 
-define_challenge :catch_first_try,
-                 description: _INTL("Catch a Pokémon on the first try"),
-                 category: :catch,
-                 money_reward: 400
+# define_challenge :catch_first_try,
+#                  description: _INTL("Catch a Pokémon on the first try"),
+#                  category: :catch,
+#                  money_reward: 400
 #
 define_challenge :catch_full_health,
                  description: _INTL("Catch a Pokémon at full health"),
@@ -144,6 +144,17 @@ define_challenge :catch_premierball,
 #                  description: _INTL("Unfuse a Pokémon"),
 #                 category: :fusion,
 #                  reward: 300
+
+
+define_challenge :fuse_5_pokemon,
+                 description: _INTL("Fuse Pokémon 5 times"),
+                 category: :fusion,
+                 money_reward: 750
+
+define_challenge :fuse_5_pokemon,
+                 description: _INTL("Fuse Pokémon 2 times"),
+                 category: :fusion,
+                 money_reward: 750
 
 define_challenge :fuse_wild_pokemon,
                  description: _INTL("Get two wild Pokémon to fuse before a battle"),
