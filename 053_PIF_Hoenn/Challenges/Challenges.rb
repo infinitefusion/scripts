@@ -1,5 +1,4 @@
 def openChallengeApp
-  echoln "CHALLENGE OPEN 13"
   pbFadeOutIn {
     scene = PokemonChallenges_Scene.new
     screen = PokemonChallenges_Screen.new(scene)
@@ -42,7 +41,6 @@ class Player
   end
 
   def refresh_challenges()
-    echoln @challenges
     @challenges = {} unless @challenges
     @challenges.each do |challenge_id, challenge|
       unless challenge.completed
@@ -61,7 +59,6 @@ class Player
 
   def listPlayerChallengesOfCategory(category)
     challenges_list = []
-    echoln @challenges
     @challenges.each do |challenge_id, challenge|
       if challenge.category == category
         challenges_list << challenge.id

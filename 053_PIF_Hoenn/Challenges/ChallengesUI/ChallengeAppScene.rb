@@ -26,9 +26,20 @@ class PokemonChallenges_Scene
       @buttons << btn
     end
 
+    if @buttons.empty?
+      showEmptyMessage
+    end
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
+  def showEmptyMessage
+    text_pos_x =240
+    text_pos_y =100
+    text_color = pbColor(:WHITE)
+    line_height = 36
+    Kernel.pbDisplayText(_INTL("You finished all your PokéChallenges!"), text_pos_x, text_pos_y,99999, text_color)
+    Kernel.pbDisplayText(_INTL("You'll be assigned new ones tomorrow."), text_pos_x, text_pos_y+line_height,99999, text_color)
+  end
   def pbUpdate
     # Update selection
     @buttons.each_with_index do |btn, idx|
@@ -45,6 +56,9 @@ class PokemonChallenges_Scene
     @buttons.each_with_index do |btn, idx|
       btn.y = Y_START + idx * Y_GAP - scroll_offset
     end
+    if @buttons.empty?
+      showEmptyMessage
+    end
 
     pbUpdateSpriteHash(@sprites)
   end
@@ -59,6 +73,10 @@ class PokemonChallenges_Scene
         pbPlayCloseMenuSE
         break
       elsif Input.trigger?(Input::USE)
+        if @challenges.empty?
+          pbPlayCloseMenuSE
+          break
+        end
         pbPlayDecisionSE
         challenge = @challenges[@index]
 
@@ -115,6 +133,7 @@ class PokemonChallenges_Scene
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
+    Kernel.pbClearText
     @viewport.dispose
   end
 end
