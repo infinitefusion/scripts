@@ -137,11 +137,11 @@ class PokemonPokegear_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0,0,@viewport)
-    if $Trainer.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/bg_f"))
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_f")
-    else
-      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
-    end
+
+    reloadBackground
+    @sprites["UI"] = IconSprite.new(0,0,@viewport)
+    @sprites["UI"].setBitmap("Graphics/Pictures/Pokegear/ui_mainMenu")
+
     for i in 0...@commands.length
       col = i % GRID_COLUMNS
       row = i / GRID_COLUMNS
@@ -157,12 +157,20 @@ class PokemonPokegear_Scene
     @sprites["pokenavIcon"] = AnimatedSprite.new("Graphics/Pictures/Pokegear/pokenav_icon", 8,32,32,4,@viewport)
     @sprites["pokenavIcon"].zoom_x = 2
     @sprites["pokenavIcon"].zoom_y = 2
-    @sprites["pokenavIcon"].z = 999999
+    @sprites["pokenavIcon"].z = 10
     @sprites["pokenavIcon"].x = 400
     @sprites["pokenavIcon"].y = 16
     @sprites["pokenavIcon"].start
 
     pbFadeInAndShow(@sprites) { pbUpdate }
+  end
+
+  def reloadBackground
+    if $Trainer.pokenav.darkMode
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
+    else
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
+    end
   end
 
   def pbScene

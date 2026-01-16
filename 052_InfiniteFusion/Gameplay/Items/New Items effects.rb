@@ -1711,6 +1711,9 @@ end
 # end
 
 def pbFuse(pokemon_body, pokemon_head, splicer_item)
+  original_head = pokemon_head.clone
+  original_body = pokemon_body.clone
+
   use_supersplicers_mechanics = isSuperSplicersMechanics(splicer_item)
 
   newid = (pokemon_body.species_data.id_number) * NB_POKEMON + pokemon_head.species_data.id_number
@@ -1723,7 +1726,7 @@ def pbFuse(pokemon_body, pokemon_head, splicer_item)
     fus.pbEndScreen
     $PokemonTemp.fuse_count_today = 0 unless $PokemonTemp.fuse_count_today
     $PokemonTemp.fuse_count_today += 1
-    checkFuseChallenges(pokemon_head,pokemon_body)
+    checkFuseChallenges(original_head,original_body)
     return true
   end
 end

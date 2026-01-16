@@ -310,7 +310,12 @@ class Questlog
     pbDrawOutlineText(@main, 0, 2 - 178, 512, 384, "Quest Log", Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
 
     @sprites["bg0"] = IconSprite.new(0, 0, @viewport)
-    @sprites["bg0"].setBitmap("Graphics/Pictures/pokegearbg")
+
+    if $Trainer.pokenav.darkMode
+      @sprites["bg0"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
+    else
+      @sprites["bg0"].setBitmap("Graphics/Pictures/Pokegear/bg")
+    end
     @sprites["bg0"].opacity = 0
 
     for i in 0..1
@@ -384,13 +389,16 @@ class Questlog
     return if @mode == 0 ? @ongoing.size == 0 : @completed.size == 0
     quest = @mode == 0 ? @ongoing[@sel_two] : @completed[@sel_two]
     pbWait(1)
+
+    echoln page
+
     if page == 0
       @scene = 2
-      if @sprites["bg1"]
+      #if @sprites["bg1"]
         @sprites["bg1"] = IconSprite.new(0, 0, @viewport)
         @sprites["bg1"].setBitmap("Graphics/Pictures/EQI/quest_page1")
         @sprites["bg1"].opacity = 0
-      end
+      # end
       @sprites["pager"] = IconSprite.new(0, 0, @viewport)
       @sprites["pager"].setBitmap("Graphics/Pictures/EQI/quest_pager")
       @sprites["pager"].x = 442

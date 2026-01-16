@@ -88,8 +88,21 @@ class BetterRegionMap
     @viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport2.z = 100001
     @sprites = SpriteHash.new
-    @sprites["bg"] = Sprite.new(@viewport)
-    @sprites["bg"].bmp("Graphics/Pictures/mapbg")
+
+    @sprites["background"] = Sprite.new(@viewport)
+    if wallmap
+      @sprites["background"].bmp("Graphics/Pictures/map/bg_wall")
+    else
+      if $Trainer.pokenav.darkMode
+        @sprites["background"].bmp("Graphics/Pictures/Pokegear/bg_dark")
+      else
+        @sprites["background"].bmp("Graphics/Pictures/Pokegear/bg")
+      end
+    end
+
+
+    @sprites["bg_frame"] = Sprite.new(@viewport)
+    @sprites["bg_frame"].bmp("Graphics/Pictures/mapbg")
     @window = SpriteHash.new
     @window["map"] = Sprite.new(@mapvp)
     @weatherIcons = SpriteHash.new

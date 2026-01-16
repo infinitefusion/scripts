@@ -10,7 +10,7 @@ end
 class Pokenav
   attr_accessor :installed_apps
   attr_accessor :last_opened_challenges #date
-
+  attr_accessor :darkMode
   AVAILABLE_APPS = {
     # Starting apps
     :QUESTS => _INTL("Quests"),
@@ -82,19 +82,22 @@ class PokemonPokegearScreen
         openChallengeApp
       elsif chosen == :REARRANGE
         @scene.rearrange_order
+      elsif chosen == :DAYNIGHT
+        toggleDarkMode
 
         # elsif cmdPhone>=0 && cmd==cmdPhone
         #   pbFadeOutIn {
         #     PokemonPhoneScene.new.start
         #   }
-        # elsif cmdJukebox>=0 && cmd==cmdJukebox
-        #   pbFadeOutIn {
-        #     scene = PokemonJukebox_Scene.new
-        #     screen = PokemonJukeboxScreen.new(scene)
-        #     screen.pbStartScreen
-        #   }
       end
     end
     @scene.pbEndScene
+  end
+
+  def toggleDarkMode
+    pbSEPlay("GUI storage show party panel")
+    $Trainer.pokenav.darkMode = false if $Trainer.pokenav.darkMode.nil?
+    $Trainer.pokenav.darkMode = !$Trainer.pokenav.darkMode
+    @scene.reloadBackground
   end
 end

@@ -31,7 +31,7 @@ class PokeBattle_Battler
   alias challenge_pbFlinch pbFlinch
   def pbFlinch(_user=nil)
     challenge_pbFlinch(_user)
-    unless _user&.pbOwnedByPlayer?
+    if _user&.pbOwnedByPlayer?
       $Trainer.complete_challenge(:battle_flinch)
     end
   end

@@ -13,8 +13,11 @@ class PokemonChallenges_Scene
 
     # Background
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    @sprites["background"].setBitmap("Graphics/Pictures/Challenges/bg")
-
+    if $Trainer.pokenav.darkMode
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
+    else
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
+    end
     @sprites["header"] = IconSprite.new(0, 0, @viewport)
     @sprites["header"].setBitmap("Graphics/Pictures/Challenges/bg_header")
 

@@ -11,8 +11,15 @@ class PokemonJukebox_Scene
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @sprites = {}
+
     @sprites["background"] = IconSprite.new(0,0,@viewport)
-    @sprites["background"].setBitmap("Graphics/Pictures/jukeboxbg")
+    if $Trainer.pokenav.darkMode
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
+    else
+      @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
+    end
+    @sprites["ui"] = IconSprite.new(0,0,@viewport)
+    @sprites["ui"].setBitmap("Graphics/Pictures/jukeboxbg")
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
        _INTL("Jukebox"),2,-18,128,64,@viewport)
     @sprites["header"].baseColor   = Color.new(248,248,248)

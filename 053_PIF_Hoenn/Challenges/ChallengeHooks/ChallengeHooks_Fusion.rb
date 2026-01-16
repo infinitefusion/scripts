@@ -13,6 +13,9 @@ def checkFuseChallenges(head_pokemon, body_pokemon)
     $Trainer.complete_challenge(:fuse_5_pokemon)
   end
 
+  echoln head_pokemon.species
+  echoln body_pokemon.species
+  echoln head_pokemon.species == body_pokemon.species
   if head_pokemon.species == body_pokemon.species
     $Trainer.complete_challenge(:fuse_same_species)
   end
