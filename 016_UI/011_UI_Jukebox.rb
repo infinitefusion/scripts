@@ -22,12 +22,23 @@ class PokemonJukebox_Scene
     @sprites["ui"].setBitmap("Graphics/Pictures/jukeboxbg")
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
        _INTL("Jukebox"),2,-18,128,64,@viewport)
-    @sprites["header"].baseColor   = Color.new(248,248,248)
-    @sprites["header"].shadowColor = Color.new(0,0,0)
+
+    if $Trainer.pokenav.darkMode
+      @sprites["header"].baseColor   = pbColor(:LIGHT_TEXT_MAIN_COLOR)
+      @sprites["header"].shadowColor = pbColor(:LIGHT_TEXT_SHADOW_COLOR)
+    else
+      @sprites["header"].baseColor   = pbColor(:DARK_TEXT_MAIN_COLOR)
+      @sprites["header"].shadowColor = pbColor(:DARK_TEXT_SHADOW_COLOR)
+    end
+
     @sprites["header"].windowskin  = nil
     @sprites["commands"] = Window_CommandPokemon.newWithSize(@commands,
        94,92,324,224,@viewport)
     @sprites["commands"].windowskin = nil
+
+    @sprites["commands"].baseColor   = pbColor(:DARK_TEXT_MAIN_COLOR)
+    @sprites["commands"].shadowColor = pbColor(:DARK_TEXT_SHADOW_COLOR)
+
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
