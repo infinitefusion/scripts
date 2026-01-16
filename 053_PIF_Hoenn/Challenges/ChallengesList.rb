@@ -34,8 +34,6 @@ define_challenge :encounter_3_different_pokemon_at_once,
                  category: :encounter,
                  money_reward: 750
 
-
-
 define_challenge :encounter_2_fused_pokemon_at_once,
                  description: _INTL("Get into a battle against 2 wild fused Pokémon at once"),
                  category: :encounter,
@@ -53,7 +51,7 @@ define_challenge :encounter_3_same_pokemon_at_once,
 
 # define_challenge :wild_pokemon_chase_20_steps,
 #                  description: _INTL("Get a wild Pokémon to chase you for 20 steps"),
-#                  reward: 1000
+#                  money_reward: 1000
 
 
 ########################
@@ -66,7 +64,7 @@ define_challenge :defeat_1_not_very_effective,
 #
 # define_challenge :defeat_1_indirect_damage,
 #                  description: _INTL("Defeat a wild Pokémon without inflicting any direct damage"),
-#                  reward: 500
+#                  money_reward: 500
 #
 define_challenge :battle_enemy_1_hp,
                  description: _INTL("Get an opposing Pokémon to exactly 1 HP"),
@@ -81,12 +79,38 @@ define_challenge :battle_flinch,
 define_challenge :rematch_trainer,
                  description: _INTL("Rematch a trainer"),
                  category: :battle,
-                 reward: 400
+                 money_reward: 400
+
+# define_challenge :battle_use_healing_item,
+#                  description: _INTL("Use a healing item during a battle."),
+#                  category: :battle,
+#                  money_reward: 200
+#
+define_challenge :battle_stat_boost,
+                 description: _INTL("Use a stat-boosting move or item during a battle"),
+                 category: :battle,
+                 money_reward: 300
+
+define_challenge :battle_stat_boost_sharp,
+                 description: _INTL("Sharply boost your Pokémon's stats in a battle"),
+                 category: :battle,
+                 money_reward: 500
+
+define_challenge :battle_stat_boost_max,
+                 description: _INTL("Max out one of your stats during a battle"),
+                 category: :battle,
+                 money_reward: 1000
+
+#
+# define_challenge :battle_berry,
+#                  description: _INTL("Have a Pokémon use a berry during a battle"),
+#                  category: :battle,
+#                  money_reward: 300
 
 # define_challenge :battle_one_hit_ko,
 #                  description: _INTL("Land a One-Hit-KO move"),
 #                  category: :fight,
-#                  reward: 1000
+#                  money_reward: 1000
 #
 
 ########################
@@ -139,12 +163,12 @@ define_challenge :catch_weather_encounter,
 define_challenge :fuse_same_species,
                  description: _INTL("Fuse two Pokémon of the same species together"),
                 category: :fusion,
-                 reward: 500
+                 money_reward: 500
 
 define_challenge :fuse_same_type,
                  description: _INTL("Fuse two Pokémon that share the same type"),
                 category: :fusion,
-                 reward: 500
+                 money_reward: 500
 
 
 

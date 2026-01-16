@@ -16,6 +16,14 @@ class PokeBattle_Battler
 
       end
     end
+
+    def checkStatRaiseBattleChallenge(stat,increment)
+      $Trainer.complete_challenge(:battle_stat_boost)
+      $Trainer.complete_challenge(:battle_stat_boost_sharp) if increment >= 2
+      if statStageAtMax?(stat)
+        $Trainer.complete_challenge(:battle_stat_boost_max)
+      end
+    end
   end
 
 

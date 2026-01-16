@@ -60,6 +60,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(self.ability,self,stat,user)
     end
+    checkStatRaiseBattleChallenge(stat,increment) if user.pbOwnedByPlayer?
     return true
   end
 
