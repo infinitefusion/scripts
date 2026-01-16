@@ -78,23 +78,27 @@ define_challenge :battle_flinch,
                  category: :battle,
                  money_reward: 250
 
-# define_challenge :rebattle_trainer,
-#                  description: _INTL("Rebattle a trainer"),
-#                  category: :battle,
-#                  reward: 400
+define_challenge :rematch_trainer,
+                 description: _INTL("Rematch a trainer"),
+                 category: :battle,
+                 reward: 400
 
-
+# define_challenge :battle_one_hit_ko,
+#                  description: _INTL("Land a One-Hit-KO move"),
+#                  category: :fight,
+#                  reward: 1000
+#
 
 ########################
 #   Catching challenges
 ########################
 
 
-# define_challenge :catch_first_try,
-#                  description: _INTL("Catch a Pokémon on the first try"),
-#                  category: :catch,
-#                  money_reward: 400
-#
+define_challenge :catch_first_try,
+                 description: _INTL("Catch a Pokémon on the first try"),
+                 category: :catch,
+                 money_reward: 400
+
 define_challenge :catch_full_health,
                  description: _INTL("Catch a Pokémon at full health"),
                  category: :catch,
@@ -110,17 +114,20 @@ define_challenge :catch_premierball,
                  category: :catch,
                  money_reward: 150
 
-# define_challenge :catch_fused,
-#                  description: _INTL("Catch a wild fused Pokémon"),
-#                  category: :catch,
-#                  money_reward: 300
+define_challenge :catch_fused,
+                 description: _INTL("Catch a wild fused Pokémon"),
+                 category: :catch,
+                 money_reward: 300
 
+define_challenge :catch_last_pokeball,
+                 description: _INTL("Catch a Pokémon on your very last ball"),
+                 category: :catch,
+                 money_reward: 1000
 
-# define_challenge :battle_one_hit_ko,
-#                  description: _INTL("Land a One-Hit-KO move"),
-#                  category: :fight,
-#                  reward: 1000
-#
+define_challenge :catch_weather_encounter,
+                 description: _INTL("Catch a Pokémon that appears in special weather conditions"),
+                 category: :catch,
+                 money_reward: 750
 
 
 ########################
@@ -129,21 +136,16 @@ define_challenge :catch_premierball,
 
 
 #
-# define_challenge :fuse_same_species,
-#                  description: _INTL("Fuse two Pokémon of the same species together"),
-#                 category: :fusion,
-#                  reward: 500
+define_challenge :fuse_same_species,
+                 description: _INTL("Fuse two Pokémon of the same species together"),
+                category: :fusion,
+                 reward: 500
 
-# define_challenge :fuse_same_type,
-#                  description: _INTL("Fuse two Pokémon that share the same type"),
-#                 category: :fusion,
-#                  reward: 500
+define_challenge :fuse_same_type,
+                 description: _INTL("Fuse two Pokémon that share the same type"),
+                category: :fusion,
+                 reward: 500
 
-
-# define_challenge :unfuse_pokemon,
-#                  description: _INTL("Unfuse a Pokémon"),
-#                 category: :fusion,
-#                  reward: 300
 
 
 define_challenge :fuse_5_pokemon,
@@ -151,10 +153,30 @@ define_challenge :fuse_5_pokemon,
                  category: :fusion,
                  money_reward: 750
 
-define_challenge :fuse_5_pokemon,
+define_challenge :fuse_1_pokemon,
+                 description: _INTL("Fuse a Pokémon"),
+                 category: :fusion,
+                 money_reward: 200
+
+define_challenge :fuse_2_pokemon,
                  description: _INTL("Fuse Pokémon 2 times"),
                  category: :fusion,
+                 money_reward: 300
+
+define_challenge :unfuse_5_pokemon,
+                 description: _INTL("Unfuse Pokémon 5 times"),
+                 category: :fusion,
                  money_reward: 750
+
+define_challenge :unfuse_2_pokemon,
+                 description: _INTL("Unfuse Pokémon 2 times"),
+                 category: :fusion,
+                 money_reward: 300
+
+define_challenge :unfuse_1_pokemon,
+                 description: _INTL("Unfuse a Pokémon"),
+                 category: :fusion,
+                 money_reward: 200
 
 define_challenge :fuse_wild_pokemon,
                  description: _INTL("Get two wild Pokémon to fuse before a battle"),

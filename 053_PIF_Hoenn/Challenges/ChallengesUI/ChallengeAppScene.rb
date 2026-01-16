@@ -65,9 +65,9 @@ class PokemonChallenges_Scene
         if @buttons[@index].can_claim_reward
           $Trainer.remove_challenge(challenge.id)
           removeChallengeAt(@index)
-          pbUpdate
           pbSEPlay("GUI storage show party panel")
           receiveChallengeReward(challenge)
+          pbUpdate
         else
           pbSEPlay("GUI sel buzzer",80)
           pbMessage(_INTL("The reward can only be collected once you complete the challenge!"))

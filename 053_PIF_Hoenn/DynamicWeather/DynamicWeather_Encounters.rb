@@ -13,6 +13,7 @@ class PokemonEncounters
       if roll_for_weather_encounter(current_weather_intensity)
         weather_encounter_type = get_weather_encounter_type(enc_type,current_weather_type)
         echoln "weather encounter!"
+        $PokemonTemp.pokemon_is_weather_encounter = true
         return pokemonEssentials_PokemonEncounter_choose_wild_pokemon(weather_encounter_type) if(weather_encounter_type)
       end
     end

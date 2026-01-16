@@ -855,6 +855,7 @@ def pbAfterBattle(decision, canLose)
   end
   Events.onEndBattle.trigger(nil, decision, canLose)
   $game_player.straighten
+  $PokemonTemp.pokemon_is_weather_encounter = false
 end
 
 Events.onEndBattle += proc { |_sender, e|

@@ -1,3 +1,8 @@
+
+def checkTrainerRematchChallenges
+  $Trainer.complete_challenge(:rematch_trainer)
+end
+
 class PokeBattle_Battler
   def checkChallengesAfterTurn()
     @battle.eachBattler do |battler|

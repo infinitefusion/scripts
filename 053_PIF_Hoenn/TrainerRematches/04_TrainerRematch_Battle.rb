@@ -62,7 +62,7 @@ def generateTrainerRematch(trainer, allow_double =true)
   end
 
   player_won = rematchable_trainer_battle(battle_trainers)
-
+  checkTrainerRematchChallenges()
   #trainer
   updated_trainer = makeRebattledTrainerTeamGainExp(trainer,player_won)
   updated_trainer = healRebattledTrainerPokemon(updated_trainer)

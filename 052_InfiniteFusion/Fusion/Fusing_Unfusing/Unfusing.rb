@@ -8,6 +8,9 @@ def pbUnfuse(pokemon, scene, partyPosition=nil, pcPosition = nil)
   else
     unfusePokemonLegacy(pokemon, scene, false, pcPosition)  #Wild Fusions
   end
+  $PokemonTemp.unfuse_count_today = 0 unless $PokemonTemp.fuse_count_today
+  $PokemonTemp.unfuse_count_today += 1
+  checkUnfuseChallenges(pokemon)
 end
 
 def unfusePokemonFromPC(fused_pokemon, scene, pcPosition)

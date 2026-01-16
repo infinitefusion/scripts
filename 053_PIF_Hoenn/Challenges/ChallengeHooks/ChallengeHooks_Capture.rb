@@ -1,3 +1,6 @@
+class PokemonTemp
+  attr_accessor :pokemon_is_weather_encounter
+end
 module PokeBattle_BattleCommon
   def checkCatchChallenge(pokeball, battle, caught_pokemon)
     #Caught in 1 try
@@ -17,6 +20,18 @@ module PokeBattle_BattleCommon
 
     if pokeball == :PREMIERBALL
       $Trainer.complete_challenge(:catch_premierball)
+    end
+
+    if caught_pokemon.isFusion?
+      $Trainer.complete_challenge(:catch_fused)
+    end
+
+    if $PokemonBag.pbQuantity(pokeball) == 0
+      $Trainer.complete_challenge(:catch_last_pokeball)
+    end
+
+    if $PokemonTemp.pokemon_is_weather_encounter
+      $Trainer.complete_challenge(:catch_weather_encounter)
     end
   end
 end

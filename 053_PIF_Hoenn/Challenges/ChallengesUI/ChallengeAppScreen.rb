@@ -19,6 +19,8 @@ class PokemonChallenges_Screen
     last_opened = $Trainer.pokenav.last_opened_challenges
     if shouldRefreshChallenges(last_opened)
       $Trainer.refresh_challenges()
+      $PokemonTemp.fuse_count_today = 0
+      $PokemonTemp.unfuse_count_today = 0
     end
 
     return $Trainer.challenges.values

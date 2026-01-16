@@ -1721,6 +1721,9 @@ def pbFuse(pokemon_body, pokemon_head, splicer_item)
     fus.pbFusionScreen(false, use_supersplicers_mechanics)
     $game_variables[VAR_FUSE_COUNTER] += 1 # fuse counter
     fus.pbEndScreen
+    $PokemonTemp.fuse_count_today = 0 unless $PokemonTemp.fuse_count_today
+    $PokemonTemp.fuse_count_today += 1
+    checkFuseChallenges(pokemon_head,pokemon_body)
     return true
   end
 end
