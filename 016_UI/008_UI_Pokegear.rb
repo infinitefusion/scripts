@@ -21,6 +21,7 @@ class PokegearButton < SpriteWrapper
     else
       @button = AnimatedBitmap.new("Graphics/Pictures/Pokegear/icon_button")
     end
+
     @contents = BitmapWrapper.new(@button.width,@button.height)
     self.bitmap = @contents
     self.x = x
@@ -88,6 +89,15 @@ class PokemonPokegear_Scene
       y = 196 - (@commands.length*24) + (i*48)
       @sprites["button#{i}"] = PokegearButton.new(@commands[i],118,y,@viewport)
     end
+
+    @sprites["pokenavIcon"] = AnimatedSprite.new("Graphics/Pictures/Pokegear/pokenav_icon", 8,32,32,4,@viewport)
+    @sprites["pokenavIcon"].zoom_x = 2
+    @sprites["pokenavIcon"].zoom_y = 2
+    @sprites["pokenavIcon"].z = 999999
+    @sprites["pokenavIcon"].x = 400
+    @sprites["pokenavIcon"].y = 16
+    @sprites["pokenavIcon"].start
+
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
