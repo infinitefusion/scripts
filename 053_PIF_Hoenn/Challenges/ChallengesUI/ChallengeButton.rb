@@ -21,8 +21,8 @@ class ChallengeButton < SpriteWrapper
     graphics_incompleted = "Graphics/Pictures/Challenges/button_incomplete_#{@challenge.category.to_s}"
 
     image_path = @can_claim_reward ?  graphics_completed : graphics_incompleted
-    @button = AnimatedBitmap.new(image_path)
-    @contents = BitmapWrapper.new(@button.width, @button.height)
+    @cursor = AnimatedBitmap.new(image_path)
+    @contents = BitmapWrapper.new(@cursor.width, @cursor.height)
     self.bitmap = @contents
     self.x = x
     self.y = y
@@ -32,7 +32,7 @@ class ChallengeButton < SpriteWrapper
   end
 
   def dispose
-    @button.dispose
+    @cursor.dispose
     @contents.dispose
     super
   end
@@ -47,16 +47,16 @@ class ChallengeButton < SpriteWrapper
     self.bitmap.clear
 
     # Draw background
-    rect = Rect.new(0, 0, @button.width, @button.height / 2)
-    rect.y = @button.height / 2 if @selected
-    self.bitmap.blt(0, 0, @button.bitmap, rect)
+    rect = Rect.new(0, 0, @cursor.width, @cursor.height / 2)
+    rect.y = @cursor.height / 2 if @selected
+    self.bitmap.blt(0, 0, @cursor.bitmap, rect)
 
     # Text colors
     text_color   = @can_claim_reward ? Color.new(0,255,0) : Color.new(248,248,248)
     shadow_color = Color.new(40,40,40)
 
     # Description text
-    desc_lines = wrap_text(@challenge.description, @contents, @button.width - 40)[0, 2]
+    desc_lines = wrap_text(@challenge.description, @contents, @cursor.width - 40)[0, 2]
     textpos = []
     y_offset = DESC_Y
     desc_lines.each do |line|

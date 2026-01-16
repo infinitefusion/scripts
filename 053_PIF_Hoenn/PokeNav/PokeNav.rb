@@ -15,6 +15,8 @@ class Pokenav
     # Starting apps
     :QUESTS => _INTL("Quests"),
     :MAP => _INTL("Map"),
+    :DAYNIGHT => _INTL("Toggle Dark/Light"),
+    :REARRANGE => _INTL("Rearrange"),
 
     # Unlockable apps
     :CONTACTS => _INTL("Contacts"), # obtained after rematch quest
@@ -25,7 +27,7 @@ class Pokenav
   }
 
   def initialize
-    @installed_apps = [:MAP, :QUESTS]
+    @installed_apps = [:MAP, :QUESTS, :DAYNIGHT, :REARRANGE]
     @last_opened_challenges = nil
   end
 
@@ -43,17 +45,21 @@ class Pokenav
 end
 
 class PokemonPokegearScreen
-  def pbStartScreen
-    $Trainer.pokenav = Pokenav.new unless $Trainer.pokenav
+
+  def update_commands
     commands = []
     $Trainer.pokenav.installed_apps.each do |app|
       commands << [app.to_s, Pokenav::AVAILABLE_APPS[app]]
     end
-    echoln commands
-
+    return commands
+  end
+  def pbStartScreen
+    $Trainer.pokenav = Pokenav.new unless $Trainer.pokenav
+    commands = update_commands
     @scene.pbStartScene(commands)
     loop do
       cmd = @scene.pbScene
+      commands = update_commands  #in case they're reordered
       chosen = commands[cmd][0].to_sym
       echoln chosen
       if cmd < 0
@@ -74,6 +80,8 @@ class PokemonPokegearScreen
         pbWeatherMap
       elsif chosen == :POKECHALLENGE
         openChallengeApp
+      elsif chosen == :REARRANGE
+        @scene.rearrange_order
 
         # elsif cmdPhone>=0 && cmd==cmdPhone
         #   pbFadeOutIn {

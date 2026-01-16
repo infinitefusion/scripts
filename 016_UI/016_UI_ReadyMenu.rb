@@ -13,11 +13,11 @@ class ReadyMenuButton < SpriteWrapper
     @selected = selected
     @side = side
     if @command[2]
-      @button = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_movebutton")
+      @cursor = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_movebutton")
     else
-      @button = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_itembutton")
+      @cursor = AnimatedBitmap.new("Graphics/Pictures/Ready Menu/icon_itembutton")
     end
-    @contents = BitmapWrapper.new(@button.width,@button.height/2)
+    @contents = BitmapWrapper.new(@cursor.width, @cursor.height/2)
     self.bitmap = @contents
     pbSetSystemFont(self.bitmap)
     if @command[2]
@@ -31,7 +31,7 @@ class ReadyMenuButton < SpriteWrapper
   end
 
   def dispose
-    @button.dispose
+    @cursor.dispose
     @contents.dispose
     @icon.dispose
     super
@@ -56,19 +56,19 @@ class ReadyMenuButton < SpriteWrapper
 
   def refresh
     sel = (@selected==@index && (@side==0)==@command[2])
-    self.y = (Graphics.height-@button.height/2)/2 - (@selected-@index)*(@button.height/2+4)
+    self.y = (Graphics.height-@cursor.height/2)/2 - (@selected-@index)*(@cursor.height/2+4)
     if @command[2]   # Pokémon
       self.x = (sel) ? 0 : -16
       @icon.x = self.x+52
       @icon.y = self.y+32
     else   # Item
-      self.x = (sel) ? Graphics.width-@button.width : Graphics.width+16-@button.width
+      self.x = (sel) ? Graphics.width-@cursor.width : Graphics.width+16-@cursor.width
       @icon.x = self.x+32
-      @icon.y = self.y+@button.height/4
+      @icon.y = self.y+@cursor.height/4
     end
     self.bitmap.clear
-    rect = Rect.new(0,(sel) ? @button.height/2 : 0,@button.width,@button.height/2)
-    self.bitmap.blt(0,0,@button.bitmap,rect)
+    rect = Rect.new(0, (sel) ? @cursor.height/2 : 0, @cursor.width, @cursor.height/2)
+    self.bitmap.blt(0, 0, @cursor.bitmap, rect)
     textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
     textpos = [
        [@command[1],textx,16,2,Color.new(248,248,248),Color.new(40,40,40),1],
