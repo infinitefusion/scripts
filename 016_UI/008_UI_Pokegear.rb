@@ -1,6 +1,11 @@
 #===============================================================================
 #
 #===============================================================================
+class Game_Temp
+  attr_accessor :pokenav_last_index
+end
+
+
 class PokegearButton < SpriteWrapper
   attr_reader :index
   attr_reader :name
@@ -66,6 +71,10 @@ class PokemonPokegear_Scene
   def pbStartScene(commands)
     @commands = commands
     @index = 0
+    if $game_temp.pokenav_last_index
+      @index = $game_temp.pokenav_last_index
+    end
+    $game_temp.pokenav_last_index = @index
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @sprites = {}
@@ -99,10 +108,12 @@ class PokemonPokegear_Scene
         pbPlayCursorSE if @commands.length>1
         @index -= 1
         @index = @commands.length-1 if @index<0
+        $game_temp.pokenav_last_index = @index
       elsif Input.trigger?(Input::DOWN)
         pbPlayCursorSE if @commands.length>1
         @index += 1
         @index = 0 if @index>=@commands.length
+        $game_temp.pokenav_last_index = @index
       end
     end
     return ret
