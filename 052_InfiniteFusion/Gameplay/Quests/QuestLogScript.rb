@@ -45,6 +45,7 @@ def pbColor(color)
   return Color.new(245, 11, 11) if color == :RED
   return Color.new(164, 3, 3) if color == :DARKRED
   return Color.new(47, 46, 46) if color == :DARKGREY
+  return Color.new(47, 46, 46) if color == :DARKGREY
   return Color.new(100, 92, 92) if color == :LIGHTGREY
   return Color.new(226, 104, 250) if color == :PINK
   return Color.new(243, 154, 154) if color == :PINKTWO
@@ -67,7 +68,11 @@ def pbColor(color)
   return Color.new(63, 6, 121) if color == :DARKPURPLE
   return Color.new(113, 16, 209) if color == :PURPLE
   return Color.new(219, 183, 37) if color == :ORANGE
-  return Color.new(255, 255, 255,0) if color == :INVISIBLE
+  return Color.new(255, 255, 255, 0) if color == :INVISIBLE
+  return MessageConfig::LIGHT_TEXT_MAIN_COLOR if color == :LIGHT_TEXT_MAIN_COLOR
+  return MessageConfig::LIGHT_TEXT_SHADOW_COLOR if color == :LIGHT_TEXT_SHADOW_COLOR
+  return MessageConfig::DARK_TEXT_MAIN_COLOR if color == :DARK_TEXT_MAIN_COLOR
+  return MessageConfig::DARK_TEXT_SHADOW_COLOR if color == :DARK_TEXT_SHADOW_COLOR
   return Color.new(255, 255, 255)
 end
 
@@ -89,14 +94,15 @@ class PokeBattle_Trainer
   attr_accessor :quests
 end
 
-#Shortcuts for events
+# Shortcuts for events
 def pbQuest(id)
   pbAcceptNewQuest(id)
 end
-def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
+
+def pbAcceptNewQuest(id, bubblePosition = 20, show_description = true)
   return if isQuestAlreadyAccepted?(id)
-  $game_variables[96] += 1 #nb. quests accepted
-  $game_variables[97] += 1 #nb. quests active
+  $game_variables[96] += 1 # nb. quests accepted
+  $game_variables[97] += 1 # nb. quests active
 
   title = QUESTS[id].name
   description = QUESTS[id].desc
@@ -104,9 +110,9 @@ def pbAcceptNewQuest(id, bubblePosition = 20, show_description=true)
   if type && type == :MAIN_QUEST
     showNewMainQuestMessage(title, description, show_description)
   elsif type && type == :MAGMA_QUEST
-    showEvilTeamMissionMessage(:MAGMA, title,description,show_description)
+    showEvilTeamMissionMessage(:MAGMA, title, description, show_description)
   elsif type && type == :AQUA_QUEST
-    showEvilTeamMissionMessage(:AQUA, title,description,show_description)
+    showEvilTeamMissionMessage(:AQUA, title, description, show_description)
   else
     showNewSideQuestMessage(title, description, show_description)
   end
@@ -136,7 +142,7 @@ def showEvilTeamMissionMessage(team, title, description, show_description)
   pbMEPlay("rocketQuest", 80, 110)
 
   pbCallBub(3)
-  Kernel.pbMessage(_INTL("\\C[{1}]{2} MISSION: ",titleColor,team) + title)
+  Kernel.pbMessage(_INTL("\\C[{1}]{2} MISSION: ", titleColor, team) + title)
   if show_description
     pbCallBub(3)
     Kernel.pbMessage("\\C[#{textColor}]" + description)
@@ -156,20 +162,19 @@ def showNewSideQuestMessage(title, description, show_description)
 end
 
 def isQuestAlreadyAccepted?(id)
-  $Trainer.quests ||= []  # Initializes quests as an empty array if nil
+  $Trainer.quests ||= [] # Initializes quests as an empty array if nil
   return $Trainer.quests.any? { |quest| quest.id.to_s == id.to_s }
 end
 
-
-def finishQuest(id, silent=false)
+def finishQuest(id, silent = false)
   $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
-  $Trainer.quest_points+=1
+  $Trainer.quest_points += 1
   if is_main_quest?(id)
     pbMEPlay("Register phone") if !silent
     quest_name = QUESTS[id].name
     pbCallBub(3)
-    Kernel.pbMessage(_INTL("\\C[3]Main quest completed:\\n \\C[6]{1}",quest_name)) if !silent
+    Kernel.pbMessage(_INTL("\\C[3]Main quest completed:\\n \\C[6]{1}", quest_name)) if !silent
   else
     pbMEPlay("match_call") if !silent
     pbCallBub(3)
@@ -177,8 +182,8 @@ def finishQuest(id, silent=false)
   end
   Kernel.pbMessage(_INTL("\\qp\\C[6]Obtained 1 Quest Point!")) if !silent
   $game_variables[VAR_KARMA] += 1 # karma
-  $game_variables[VAR_NB_QUEST_ACTIVE] -= 1 #nb. quests active
-  $game_variables[VAR_NB_QUEST_COMPLETED] += 1 #nb. quests completed
+  $game_variables[VAR_NB_QUEST_ACTIVE] -= 1 # nb. quests active
+  $game_variables[VAR_NB_QUEST_COMPLETED] += 1 # nb. quests completed
   pbSetQuest(id, true)
 end
 
@@ -195,11 +200,10 @@ def is_main_quest?(id)
   return quest.type == :MAIN_QUEST
 end
 
-
 def pbQuestlog
   if !$Trainer.quests_repaired
     fix_quest_ids
-    $Trainer.quests_repaired=true
+    $Trainer.quests_repaired = true
   end
 
   Questlog.new
@@ -283,7 +287,6 @@ class Questlog
     @completed = []
     @ongoing = []
 
-
     fix_broken_TR_quests()
     for q in $Trainer.quests
       @ongoing << q if !q.completed && @ongoing.include?(q)
@@ -319,8 +322,8 @@ class Questlog
       @sprites["btn#{i}"].src_rect.y = i == 0 ? (@sprites["btn#{i}"].bitmap.height / 2).round : 0
       @sprites["btn#{i}"].opacity = 0
     end
-    #pbDrawOutlineText(@main, 0, 142 - 178, 512, 384, "Ongoing: " + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    #pbDrawOutlineText(@main, 0, 198 - 178, 512, 384, "Completed: " + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    # pbDrawOutlineText(@main, 0, 142 - 178, 512, 384, "Ongoing: " + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    # pbDrawOutlineText(@main, 0, 198 - 178, 512, 384, "Completed: " + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
     pbDrawOutlineText(@main, 0, 142, 512, 384, _INTL("Ongoing: ") + @ongoing.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
     pbDrawOutlineText(@main, 0, 198, 512, 384, _INTL("Completed: ") + @completed.size.to_s, Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
 
@@ -333,7 +336,6 @@ class Questlog
     end
     pbUpdate
   end
-
 
   def pbUpdate
     @frame = 0
@@ -357,8 +359,8 @@ class Questlog
       if @scene == 2
         pbList(@sel_one) if Input.trigger?(Input::B)
         pbChar if @frame == 6 || @frame == 12 || @frame == 18
-        #pbLoad(1) if Input.trigger?(Input::RIGHT) && @page == 0
-        #pbLoad(2) if Input.trigger?(Input::LEFT) && @page == 1
+        # pbLoad(1) if Input.trigger?(Input::RIGHT) && @page == 0
+        # pbLoad(2) if Input.trigger?(Input::LEFT) && @page == 1
       end
       @frame = 0 if @frame == 18
     end
@@ -514,7 +516,7 @@ class Questlog
       @sprites["char"].src_rect.height = (@sprites["char"].bitmap.height / 4).round
       @sprites["char"].src_rect.width = (@sprites["char"].bitmap.width / 4).round
       drawTextExMulti(@text, 188, 54, 318, 8, quest.desc, Color.new(255, 255, 255), Color.new(0, 0, 0))
-      pbDrawOutlineText(@text, 188, 162, 512, 384, _INTL("From {1}",quest.npc), Color.new(255, 172, 115), Color.new(0, 0, 0))
+      pbDrawOutlineText(@text, 188, 162, 512, 384, _INTL("From {1}", quest.npc), Color.new(255, 172, 115), Color.new(0, 0, 0))
       pbDrawOutlineText(@text, 10, -178, 512, 384, quest.name, quest.color, Color.new(0, 0, 0))
       if !quest.completed
         pbDrawOutlineText(@text, 8, 136, 512, 384, _INTL("Not Completed"), pbColor(:LIGHTRED), Color.new(0, 0, 0))
@@ -764,7 +766,7 @@ class Questlog
         @sprites["ongoing#{i}"].opacity = 0
         pbDrawOutlineText(@main, 11, getCellYPosition(i), 512, 384, @ongoing[i].name, @ongoing[i].color, Color.new(0, 0, 0), 1)
 
-        #pbDrawOutlineText(@main, 11, -124 + 52 * i, 512, 384, @ongoing[i].name, @ongoing[i].color, Color.new(0, 0, 0), 1)
+        # pbDrawOutlineText(@main, 11, -124 + 52 * i, 512, 384, @ongoing[i].name, @ongoing[i].color, Color.new(0, 0, 0), 1)
       end
       pbDrawOutlineText(@main, 0, 175, 512, 384, _INTL("No ongoing quests"), pbColor(:WHITE), pbColor(:BLACK), 1) if @ongoing.size == 0
       pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Ongoing Quests"), Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
@@ -820,7 +822,7 @@ class Questlog
   end
 end
 
-#TODO: à terminer
+# TODO: à terminer
 def pbSynchronizeQuestLog()
   ########################
   ### Quest started    ###
@@ -1005,7 +1007,6 @@ def pbSynchronizeQuestLog()
   pbSetQuest("legendary_meloetta_3", true) if $game_switches[1015]
   pbSetQuest("legendary_meloetta_4", true) if $game_switches[750]
 
-
   pbSetQuest("pokemart_johto", true) if $game_switches[SWITCH_JOHTO_HAIR_COLLECTION]
   pbSetQuest("pokemart_hoenn", true) if $game_switches[SWITCH_HOENN_HAIR_COLLECTION]
   pbSetQuest("pokemart_sinnoh", true) if $game_switches[SWITCH_SINNOH_HAIR_COLLECTION]
@@ -1014,8 +1015,6 @@ def pbSynchronizeQuestLog()
   pbSetQuest("pokemart_alola", true) if $game_switches[SWITCH_ALOLA_HAIR_COLLECTION]
 
 end
-
-
 
 def fix_quest_ids
   return unless $Trainer.quests
@@ -1030,7 +1029,6 @@ def fix_quest_ids
 
       quest.id = new_id
 
-
       echoln "AFTER FIX"
       echoln "ID: #{quest.id} "
       echoln "Name: #{quest.name}"
@@ -1041,97 +1039,95 @@ def fix_quest_ids
   pbSynchronizeQuestLog
 end
 
-
 def get_new_quest_id(old_quest_id)
   quest_id_map = {
-      3 => "cerulean_1",
-      4 => "vermillion_2",
-      5 => "pokemart_johto",
+    3 => "cerulean_1",
+    4 => "vermillion_2",
+    5 => "pokemart_johto",
 
-      6 => "cerulean_field_1",
-      7 => "cerulean_field_2",
-      8 => "cerulean_field_3",
+    6 => "cerulean_field_1",
+    7 => "cerulean_field_2",
+    8 => "cerulean_field_3",
 
-      9 => "vermillion_1",
-      12 => "vermillion_3",
-      13 => "vermillion_field_1",
+    9 => "vermillion_1",
+    12 => "vermillion_3",
+    13 => "vermillion_field_1",
 
-      14 => "celadon_1",
-      15 => "celadon_2",
-      16 => "celadon_3",
-      17 => "celadon_field_1",
+    14 => "celadon_1",
+    15 => "celadon_2",
+    16 => "celadon_3",
+    17 => "celadon_field_1",
 
-      18 => "fuchsia_3",
-      19 => "fuchsia_2",
-      20 => "fuchsia_1",
+    18 => "fuchsia_3",
+    19 => "fuchsia_2",
+    20 => "fuchsia_1",
 
-      21 => "crimson_1",
-      22 => "crimson_2",
-      23 => "crimson_3",
+    21 => "crimson_1",
+    22 => "crimson_2",
+    23 => "crimson_3",
 
-      24 => "saffron_field_1",
-      25 => "pokemart_sinnoh",
-      26 => "saffron_1",
-      27 => "saffron_2",
-      28 => "saffron_3",
+    24 => "saffron_field_1",
+    25 => "pokemart_sinnoh",
+    26 => "saffron_1",
+    27 => "saffron_2",
+    28 => "saffron_3",
 
-      29 => "cinnabar_1",
-      30 => "cinnabar_2",
+    29 => "cinnabar_1",
+    30 => "cinnabar_2",
 
-      31 => "pokemart_hoenn",
+    31 => "pokemart_hoenn",
 
-      32 => "goldenrod_1",
+    32 => "goldenrod_1",
 
-      33 => "violet_1",
-      34 => "violet_2",
+    33 => "violet_1",
+    34 => "violet_2",
 
-      35 => "blackthorn_1",
-      36 => "blackthorn_2",
-      37 => "blackthorn_3",
+    35 => "blackthorn_1",
+    36 => "blackthorn_2",
+    37 => "blackthorn_3",
 
-      38 => "pokemart_kalos",
+    38 => "pokemart_kalos",
 
-      39 => "ecruteak_1",
-      40 => "kin_1",
-      41 => "pokemart_unova",
-      42 => "cinnabar_3",
-      43 => "kin_2",
-      44 => "bond_1",
-      45 => "bond_2",
-      46 => "kin_3",
-      47 => "tower_1",
-      48 => "lavender_darkness_1",
-      49 => "celadon_darkness_2",
-      50 => "fuchsia_darkness_3",
-      51 => "fuchsia_darkness_4",
-      52 => "safari_darkness_5",
-      53 => "pallet_darkness_6",
-      54 => "pewter_field_1",
-      55 => "goldenrod_2",
-      56 => "fuchsia_4",
-      57 => "saffron_band_1",
-      58 => "saffron_band_2",
-      59 => "saffron_band_3",
-      60 => "saffron_band_4",
-      61 => "lavender_lunar",
-      62 => "pokemart_alola",
-      63 => "pewter_field_2",
-      64 => "vermillion_field_2",
-      65 => "goldenrod_police_1",
-      66 => "pinkan_police"
+    39 => "ecruteak_1",
+    40 => "kin_1",
+    41 => "pokemart_unova",
+    42 => "cinnabar_3",
+    43 => "kin_2",
+    44 => "bond_1",
+    45 => "bond_2",
+    46 => "kin_3",
+    47 => "tower_1",
+    48 => "lavender_darkness_1",
+    49 => "celadon_darkness_2",
+    50 => "fuchsia_darkness_3",
+    51 => "fuchsia_darkness_4",
+    52 => "safari_darkness_5",
+    53 => "pallet_darkness_6",
+    54 => "pewter_field_1",
+    55 => "goldenrod_2",
+    56 => "fuchsia_4",
+    57 => "saffron_band_1",
+    58 => "saffron_band_2",
+    59 => "saffron_band_3",
+    60 => "saffron_band_4",
+    61 => "lavender_lunar",
+    62 => "pokemart_alola",
+    63 => "pewter_field_2",
+    64 => "vermillion_field_2",
+    65 => "goldenrod_police_1",
+    66 => "pinkan_police"
   }
   return quest_id_map[old_quest_id] || old_quest_id
 end
 
-
-def showQuestStatistics(eventId,includeRocketQuests=false)
+def showQuestStatistics(eventId, includeRocketQuests = false)
   quests_accepted = []
-  quests_in_progress=[]
-  quests_completed=[]
-  $Trainer.quests=[] if !$Trainer.quests
+  quests_in_progress = []
+  quests_completed = []
+  $Trainer.quests = [] if !$Trainer.quests
   for quest in $Trainer.quests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
-    quests_accepted<<quest
+    quests_accepted << quest
     if quest.completed
       quests_completed << quest
     else
@@ -1139,15 +1135,15 @@ def showQuestStatistics(eventId,includeRocketQuests=false)
     end
   end
   pbCallBub(2, eventId)
-  pbMessage(_INTL("Accepted quests: \\C[1]{1}",quests_accepted.length))
+  pbMessage(_INTL("Accepted quests: \\C[1]{1}", quests_accepted.length))
   pbCallBub(2, eventId)
-  pbMessage(_INTL("Completed quests: \\C[1]{1}",quests_completed.length))
+  pbMessage(_INTL("Completed quests: \\C[1]{1}", quests_completed.length))
   pbCallBub(2, eventId)
-  pbMessage(_INTL("In-progress: \\C[1]{1}",quests_in_progress.length))
+  pbMessage(_INTL("In-progress: \\C[1]{1}", quests_in_progress.length))
 end
 
-def get_completed_quests(includeRocketQuests=false)
-  quests_completed=[]
+def get_completed_quests(includeRocketQuests = false)
+  quests_completed = []
   for quest in $Trainer.quests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
     quests_completed << quest if quest.completed
@@ -1157,14 +1153,14 @@ end
 
 def getQuestReward(eventId)
   $PokemonGlobal.questRewardsObtained = [] if !$PokemonGlobal.questRewardsObtained
-  nb_quests_completed = get_completed_quests(false).length #pbGet(VAR_STAT_QUESTS_COMPLETED)
-  pbSet(VAR_STAT_QUESTS_COMPLETED,nb_quests_completed)
+  nb_quests_completed = get_completed_quests(false).length # pbGet(VAR_STAT_QUESTS_COMPLETED)
+  pbSet(VAR_STAT_QUESTS_COMPLETED, nb_quests_completed)
   rewards_to_give = []
   for reward in QUEST_REWARDS
     rewards_to_give << reward if nb_quests_completed >= reward.nb_quests && !$PokemonGlobal.questRewardsObtained.include?(reward.item)
   end
 
-  #Calculate how many until next reward
+  # Calculate how many until next reward
   next_reward = get_next_quest_reward
   nb_to_next_reward = next_reward.nb_quests - nb_quests_completed
 
@@ -1172,7 +1168,7 @@ def getQuestReward(eventId)
     echoln reward.item
 
   end
-  #Give rewards
+  # Give rewards
   for reward in rewards_to_give
     if !reward.can_have_multiple && $PokemonBag.pbQuantity(reward.item) >= 1
       $PokemonGlobal.questRewardsObtained << reward.item
@@ -1185,19 +1181,18 @@ def getQuestReward(eventId)
     pbReceiveItem(reward.item, reward.quantity)
     $PokemonGlobal.questRewardsObtained << reward.item
 
-    #recalculate nb to next reward
+    # recalculate nb to next reward
     next_reward = get_next_quest_reward
     nb_to_next_reward = next_reward.nb_quests - nb_quests_completed
   end
-
 
   pbCallBub(2, eventId)
   if nb_to_next_reward <= 0
     pbMessage(_INTL("I have no more rewards to give you! Thanks for helping all these people!"))
   elsif nb_to_next_reward == 1
-    pbMessage(_INTL("Help {1} more person and I'll give you something good!",nb_to_next_reward))
+    pbMessage(_INTL("Help {1} more person and I'll give you something good!", nb_to_next_reward))
   else
-    pbMessage(_INTL("Help {1} more people and I'll give you something good!",nb_to_next_reward))
+    pbMessage(_INTL("Help {1} more people and I'll give you something good!", nb_to_next_reward))
   end
 end
 

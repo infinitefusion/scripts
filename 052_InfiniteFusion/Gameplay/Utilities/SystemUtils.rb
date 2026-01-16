@@ -113,3 +113,11 @@ end
 def numeric_string?(str)
   str.match?(/\A\d+\z/)
 end
+
+def timeDateGreaterThan(date1, date2)
+  return (
+    date1.year  > date2.year ||
+      date1.month > date2.month && date1.year == date2.year ||
+      date1.day   > date2.day   && date1.month == date2.month && date1.year == date2.year
+  )
+end

@@ -82,7 +82,7 @@ class ChallengeButton < SpriteWrapper
     return if !@challenge.item_reward || @challenge.item_reward.empty?
 
     icon_x = 170          # starting X (adjust to taste)
-    icon_y = reward_y - 4 # align with text nicely
+    icon_y = reward_y #- 4 # align with text nicely
     icon_size = 48
     icon_gap = 8
 

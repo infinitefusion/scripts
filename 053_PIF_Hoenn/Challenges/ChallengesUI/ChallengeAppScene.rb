@@ -1,7 +1,8 @@
 class PokemonChallenges_Scene
   VISIBLE_BUTTONS = 3 # Number of buttons visible at once
-  Y_START = 40
+  Y_START = 41
   Y_GAP = 108
+  BUTTONS_X = 60
 
   def pbStartScene(challenges)
     @challenges = []
@@ -14,6 +15,9 @@ class PokemonChallenges_Scene
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/Pictures/Challenges/bg")
 
+    @sprites["header"] = IconSprite.new(0, 0, @viewport)
+    @sprites["header"].setBitmap("Graphics/Pictures/Challenges/bg_header")
+
     # Buttons
     @buttons = []
 
@@ -21,17 +25,22 @@ class PokemonChallenges_Scene
       challenge = $Trainer.challenges[challenge_id]
       next unless challenge
       @challenges << challenge
-      btn = ChallengeButton.new(challenge, 40, Y_START + i * Y_GAP, @viewport)
+      btn = ChallengeButton.new(challenge, BUTTONS_X, Y_START + i * Y_GAP, @viewport)
       @sprites["button#{i}"] = btn
       @buttons << btn
     end
-
-    if @buttons.empty?
-      showEmptyMessage
-    end
+    displayTextElements
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
+  def displayTextElements
+    Kernel.pbClearText
+    Kernel.pbDisplayText(_INTL("POKÉCHALLENGE"), 256,-8,99999, pbColor(:ORANGE), pbColor(:BROWN))
+    Kernel.pbDisplayText($Trainer.nb_completed_challenges.to_s, 450,-6,99999, pbColor(:GREEN), pbColor(:DARKGREEN))
+    if @buttons.empty?
+      showEmptyMessage
+    end
+  end
   def showEmptyMessage
     text_pos_x =240
     text_pos_y =100
@@ -49,7 +58,12 @@ class PokemonChallenges_Scene
     # Scroll calculation
     scroll_offset = 0
     if @index >= VISIBLE_BUTTONS
+      Kernel.pbClearText
+      @sprites["header"].visible=false
       scroll_offset = (@index - VISIBLE_BUTTONS + 1) * Y_GAP
+    else
+      displayTextElements
+      @sprites["header"].visible=true
     end
 
     # Move buttons according to scroll
