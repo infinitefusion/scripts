@@ -14,16 +14,29 @@ class Pokenav
   AVAILABLE_APPS = {
     # Starting apps
     :QUESTS => _INTL("Quests"),
-    :MAP => _INTL("Map"),
+    :MAP => _INTL("Town Map"),
     :DAYNIGHT => _INTL("Toggle Dark/Light"),
     :REARRANGE => _INTL("Rearrange"),
 
     # Unlockable apps
     :CONTACTS => _INTL("Contacts"), # obtained after rematch quest
     :JUKEBOX => _INTL("Jukebox"), # obtained at devon corp
-    :WEATHER => _INTL("Weather"), # obtained at weather institute
+    :WEATHER => _INTL("Weather Map"), # obtained at weather institute
     :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
-    :POKECHALLENGE => _INTL("PokéChallenge"),
+    :POKECHALLENGE => _INTL("PokéChallenge"), #Obtained at Slateport fan club
+    :BOXLINK => _INTL("Box Link"),
+
+    #To implement
+    # Weather map
+    # Contacts list (A page where you can see all the trainers you can rebattle and their current team)
+    # Statistics  (shows you a bunch of statstics. nb of times you fused, nb of steps taken, etc.)
+    #
+    #Other ideas
+    # Slot machine
+    # Weather
+    # Secret Bases map (a map that lists all the secret bases)
+    # Something to check your Pokemon's EVs / IVs
+    # Daycare app that tells you the status of your eggs
   }
 
   def initialize
@@ -84,7 +97,8 @@ class PokemonPokegearScreen
         @scene.rearrange_order
       elsif chosen == :DAYNIGHT
         toggleDarkMode
-
+      elsif chosen == :BOXLINK
+        openBoxLinkApp
         # elsif cmdPhone>=0 && cmd==cmdPhone
         #   pbFadeOutIn {
         #     PokemonPhoneScene.new.start
@@ -92,6 +106,19 @@ class PokemonPokegearScreen
       end
     end
     @scene.pbEndScene
+  end
+
+  def openBoxLinkApp
+    blacklisted_maps = []
+    if blacklisted_maps.include?($game_map.map_id)
+      Kernel.pbMessage(_INTL("There doesn't seem to be any network coverage here..."))
+    else
+      pbFadeOutIn {
+        scene = PokemonStorageScene.new
+        screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+        screen.pbStartScreen(0) # Boot PC in organize mode
+      }
+    end
   end
 
   def toggleDarkMode
