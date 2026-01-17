@@ -17,7 +17,7 @@ class HoennIntroScreen
   FUSION_SCROLL_SPEED = 2
   FUSION_PRELOAD_COUNT = 10
   FUSION_SPAWN_EVERY = 300
-  FUSION_Y_RANGE = (50..260)
+  FUSION_Y_RANGE = (50..200)
 
   # =========================================================================
   # INITIALIZATION
