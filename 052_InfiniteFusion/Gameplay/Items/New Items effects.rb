@@ -1598,7 +1598,8 @@ def getPokemonPositionInParty(pokemon)
 end
 
 # don't remember why there's two Supersplicers arguments.... probably a mistake
-def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =0)
+def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =nil)
+  echoln caller
   is_supersplicer = isSuperSplicersMechanics(item)
 
   playingBGM = $game_system.getPlayingBGM
@@ -1671,7 +1672,7 @@ def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =0)
       end
     end
   else
-    # UNFUSE
+    partyPosition = getPokemonPositionInParty(pokemon) unless partyPosition
     return true if pbUnfuse(pokemon, scene, partyPosition, nil)
   end
 end

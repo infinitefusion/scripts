@@ -64,7 +64,6 @@ class PokemonStorageScreen
         elsif @fusionMode
           pbFusionCommands(selected)
         else
-          echoln "pcOrganizeCommand?"
           organizeActions(selected, pokemon, heldpoke, isTransferBox)
         end
       end
