@@ -108,7 +108,7 @@ class PokemonPokedexInfo_Scene
 
     @selecting_blacklist = $PokemonSystem.random_sprites && !@pokemon
     echoln $PokemonSystem.random_sprites
-    init_blacklist_icons if $PokemonSystem.random_sprites
+    init_blacklist_icons
   end
 
   def init_blacklist_icons

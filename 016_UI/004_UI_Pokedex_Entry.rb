@@ -612,6 +612,7 @@ class PokemonPokedexInfo_Scene
 
   def updateBlacklistIconVisibility
     visible = (@page == 3 && @selecting_sprites && @selecting_blacklist)
+    visible = false unless $PokemonSystem.random_sprites
     %w[
     selectedSprite
     previousSprite
@@ -628,7 +629,7 @@ class PokemonPokedexInfo_Scene
 
   def updateBlackListInstructionIcons
     visible = (@page == 3 && @fromSummary && !@selecting_sprites)
-
+    visible = false unless $PokemonSystem.random_sprites
     @sprites["downarrow"].visible   = visible
     @sprites["blacklistIcon"].visible = visible
   end
