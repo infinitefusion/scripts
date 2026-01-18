@@ -74,7 +74,7 @@ class BattleSpriteLoader
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
     pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     #pif_sprite.dump_info if pif_sprite
-    if !pif_sprite
+    if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_fusion_sprite(head_id, body_id)
       local_path = check_for_local_sprite(pif_sprite)
       if local_path
@@ -82,7 +82,7 @@ class BattleSpriteLoader
         pif_sprite.type = :CUSTOM
       end
       substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
-      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal
+      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
     return pif_sprite
   end
@@ -104,9 +104,9 @@ class BattleSpriteLoader
   def load_base_sprite(dex_number)
     substitution_id = get_sprite_substitution_id_from_dex_number(dex_number)
     pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
-    if !pif_sprite
+    if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_base_sprite(dex_number)
-      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal
+      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
     if pif_sprite.local_path
       return AnimatedBitmap.new(pif_sprite.local_path)
@@ -117,6 +117,21 @@ class BattleSpriteLoader
       loaded_sprite = handle_unloaded_sprites(extractor,pif_sprite)
     end
     return loaded_sprite
+  end
+
+  def load_sprite_pokemon(pokemon)
+    alt_letter = pokemon.sprite_letter
+    case pokemon.sprite_type
+    when :BASE
+      if alt_letter
+
+      else
+        pokemon.sprite_letter = alt_letter
+      end
+    when :FUSION
+    when :TRIPLE
+    end
+
   end
 
   def handle_unloaded_sprites(extractor,pif_sprite)

@@ -6,6 +6,7 @@ class Pokemon
   attr_accessor :spriteform_body
   attr_accessor :spriteform_head
 
+  attr_accessor :pif_sprite
   # @return [Symbol] this Pokémon's species
   attr_reader :species
   # If defined, this Pokémon's form will be this value even if a MultipleForms
@@ -1638,7 +1639,9 @@ class Pokemon
       end
     end
     @ow_coordinates = nil
+    @sprite_letter = nil
   end
+
 
   def totalIv()
 

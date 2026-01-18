@@ -41,9 +41,22 @@ class SpriteOptionsScene < PokemonOption_Scene
                               ]
     )
 
-    generated_entries_option_selected = $PokemonSystem.include_alt_sprites_in_random ? 1 : 0
+    use_random_sprites = $PokemonSystem.random_sprites ? 1 : 0
+    options << EnumOption.new(_INTL("Species-wide sprites"), [_INTL("Off"), _INTL("On")],
+                              proc { use_random_sprites },
+                              proc { |value|
+                                $PokemonSystem.random_sprites = value == 0
+                              },
+                              [
+                                _INTL("A random sprite is selected each time you encounter a Pokémon."),
+                                _INTL("The game uses the same sprite each time you encounter the same species."),
+                              ]
+    ) ? 1 : 0
+
+
+    allow_joke_sprites = $PokemonSystem.include_alt_sprites_in_random ? 1 : 0
     options << EnumOption.new(_INTL("Joke Sprites"), [_INTL("Off"), _INTL("On")],
-                              proc { generated_entries_option_selected },
+                              proc { allow_joke_sprites },
                               proc { |value|
                                 $PokemonSystem.include_alt_sprites_in_random = value == 1
                               },

@@ -27,6 +27,7 @@ class PokemonSystem
   attr_accessor :include_alt_sprites_in_random
   attr_accessor :overworld_encounters
   attr_accessor :encountered_music
+  attr_accessor :random_sprites
 
   attr_accessor :no_reviving
   attr_accessor :no_healing_items
@@ -60,6 +61,7 @@ class PokemonSystem
     @no_reviving = false
     @no_healing_items = false
     @no_pokemon_center = false
+    @random_sprites = true
 
   end
 end

@@ -4,11 +4,15 @@ module GameData
       species = pkmn.species if !species
       species = GameData::Species.get(species).id_number # Just to be sure it's a number
       return self.egg_sprite_bitmap(species, pkmn.form) if pkmn.egg?
-      if back
-        ret = self.back_sprite_bitmap(species, pkmn.shiny?, pkmn.bodyShiny?, pkmn.headShiny?)
-      else
-        ret = self.front_sprite_bitmap(species, pkmn.shiny?, pkmn.bodyShiny?, pkmn.headShiny?)
-      end
+      ret = front_sprite_bitmap_pokemon(pkmn)
+
+      # if back
+      #   ret = front_sprite_bitmap(pkmn)
+      #   #ret = self.back_sprite_bitmap(species, pkmn.shiny?, pkmn.bodyShiny?, pkmn.headShiny?)
+      # else
+      #   ret = front_sprite_bitmap(pkmn)
+      #   #ret = self.front_sprite_bitmap(species, pkmn.shiny?, pkmn.bodyShiny?, pkmn.headShiny?)
+      # end
       ret.scale_bitmap(pkmn.sprite_scale) if ret #for pokemon with size differences
       return ret
     end
@@ -88,6 +92,8 @@ module GameData
 
 
   # species can be either a number, a Species objet of a symbol
+  # Legacy version - Used when $PokemonSystem.random_sprites is off
+  # Ignores pokemon.pif_sprites and uses whatever is defined as main
     def self.front_sprite_bitmap(species, isShiny = false, bodyShiny = false, headShiny = false)
       dex_number = getDexNumberForSpecies(species)
       if species.is_a?(Species)
@@ -114,6 +120,55 @@ module GameData
 
 
 
+    def self.front_sprite_bitmap_pokemon(pokemon)
+      unless $PokemonSystem.random_sprites
+        return self.front_sprite_bitmap(pokemon.species, pokemon.shiny?, pokemon.bodyShiny?, pokemon.headShiny?)
+      end
+      #todo: integrate triples to pif_sprite system - handled separately for now
+      if pokemon.isTripleFusion?
+        dex_number = getDexNumberForSpecies(pokemon.id_number)
+        sprite = spriteLoader.load_triple_fusion_sprite(dex_number)
+        if pokemon.shiny?
+          sprite.shiftAllColors(dex_number, pokemon.body_shiny, pokemon.head_shiny)
+        end
+        return sprite
+      end
+      ##todo
+
+      spriteLoader = BattleSpriteLoader.new
+      unless pokemon.pif_sprite
+        echoln "setting new pif sprite"
+        pif_sprite = front_pif_sprite(pokemon.species, pokemon.shiny?, pokemon.body_shiny, pokemon.head_shiny)
+        pokemon.pif_sprite = pif_sprite
+      end
+      bitmap_sprite = spriteLoader.load_pif_sprite_directly(pokemon.pif_sprite)
+      if pokemon.shiny?
+        bitmap_sprite.shiftAllColors(pokemon.id_number, pokemon.body_shiny, pokemon.head_shiny)
+      end
+      return bitmap_sprite
+    end
+
+
+    def self.front_pif_sprite(species, isShiny = false, bodyShiny = false, headShiny = false)
+      dex_number = getDexNumberForSpecies(species)
+      if species.is_a?(Species)
+        dex_number = species.id_number
+      end
+
+      spriteLoader = BattleSpriteLoader.new
+      if isFusion(dex_number)
+        body_id = getBodyID(dex_number)
+        head_id = getHeadID(dex_number, body_id)
+        pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_id,body_id)
+      else
+        if isTripleFusion?(dex_number)
+          raise "Triple fusions are not implemented for PIF Sprites"
+        else
+          pif_sprite = spriteLoader.select_new_pif_base_sprite(dex_number)
+        end
+      end
+      return pif_sprite
+    end
 
 
 

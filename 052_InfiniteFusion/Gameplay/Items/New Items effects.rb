@@ -1599,7 +1599,6 @@ end
 
 # don't remember why there's two Supersplicers arguments.... probably a mistake
 def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =nil)
-  echoln caller
   is_supersplicer = isSuperSplicersMechanics(item)
 
   playingBGM = $game_system.getPlayingBGM
