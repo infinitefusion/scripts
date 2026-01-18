@@ -422,7 +422,7 @@ class PokeBattle_Battle
     ret = -1
     party.each_with_index do |pkmn,i|
       next if i<idxPartyStart || i>=idxPartyEnd   # Check the team only
-      next if !pkmn || !pkmn.able?   # Can't copy a non-fainted Pokémon or egg
+      next if !pkmn #|| !pkmn.able?   # Can't copy a non-fainted Pokémon or egg
       ret = i if ret < 0 || partyOrders[i] > partyOrders[ret]
     end
     return ret
