@@ -1321,8 +1321,8 @@ class PokemonPartyScreen
           commands[cmdItem = commands.length] = _INTL("Item")
         end
       end
-      commands[cmdNickname = commands.length] = _INTL("Nickname") if !pkmn.egg?
-      commands[cmdLearnMove = commands.length] = _INTL("Change moves")
+      commands[cmdNickname = commands.length] = _INTL("Nickname") unless pkmn.egg?
+      commands[cmdLearnMove = commands.length] = _INTL("Change moves") unless pkmn.egg?
 
       if playerHasFusionItems
         if pkmn.isFusion?

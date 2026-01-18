@@ -173,7 +173,7 @@ class Interpreter
         end
       elsif $game_map
         map_name = ($game_map.name rescue nil) || "???"
-        err = "Script error in map #{$game_map.map_id} (#{map_name}):\r\n"
+        err = "Script error in map #{$game_map.map_id} (#{map_name}) - event: #{event.id}:\r\n"
         err += "#{message}\r\n#{s}"
         if e.is_a?(Hangup)
           $EVENTHANGUPMSG = err

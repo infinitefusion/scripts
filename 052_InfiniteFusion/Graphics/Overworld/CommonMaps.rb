@@ -26,7 +26,7 @@ COMMON_MAPS_HOENN =
     },
     :CLOTHING_STORE => {
       id: 94,
-      position: [11, 9]
+      position: [11, 11]
     }
   }
 

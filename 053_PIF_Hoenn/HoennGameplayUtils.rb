@@ -284,6 +284,10 @@ def select_altering_cave_encounter
 end
 
 
+def hasOricorio?
+
+end
+
 
 
 
