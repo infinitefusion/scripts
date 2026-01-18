@@ -72,7 +72,6 @@ class Game_Event < Game_Character
 
   def detectQuestIcon(event)
     return nil if !validateEventIsCompatibleWithIcons(event)
-    echoln event.name
     return detectCommentCommand(QUEST_ICON_COMMENT_TRIGGER,event)
   end
 

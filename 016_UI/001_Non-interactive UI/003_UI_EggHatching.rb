@@ -118,7 +118,7 @@ class PokemonEggHatch_Scene
       $Trainer.pokedex.register(@pokemon)
       $Trainer.pokedex.set_owned(@pokemon.species)
       pbMessage(_INTL("{1}'s data was added to the Pokédex", @pokemon.name))
-      pbShowPokedex(@pokemon.species)
+      pbShowPokedex(@pokemon)
     end
     nb_eggs_hatched = pbGet(VAR_NB_EGGS_HATCHED)
     pbSet(VAR_NB_EGGS_HATCHED,nb_eggs_hatched+1)

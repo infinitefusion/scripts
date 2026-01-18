@@ -96,6 +96,13 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
+  def setAnimatedBitmap(animated_bitmap)
+    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap = animated_bitmap
+    self.bitmap = animated_bitmap ? animated_bitmap.bitmap : nil
+    changeOrigin
+  end
+
   def getBitmap
     return @_iconbitmap
   end

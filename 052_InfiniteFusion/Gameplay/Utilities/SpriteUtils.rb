@@ -154,3 +154,18 @@ def GetSpriteName(poke1, poke2, isFused)
   ret = isFused ? sprintf("%d.%d", poke2, poke1) : sprintf("%d", poke2) rescue nil
   return ret
 end
+
+def initialize_species_blacklist(species)
+  black_list = []
+  main_sprite_letters = list_main_sprites_letters_species(species)
+  unless $PokemonSystem.include_alt_sprites_in_random
+    @available.each_with_index do |alt_letter, index|
+      unless main_sprite_letters.include?(@available[index])
+        black_list << alt_letter
+      end
+    end
+  end
+  $PokemonGlobal.sprites_blacklist[species] = black_list
+  echoln black_list
+  return black_list
+end

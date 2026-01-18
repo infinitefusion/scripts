@@ -390,7 +390,19 @@ end
 def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
   spriteName = _INTL("{1}", dex_num)
   if onlyMain
-    letters_list= list_main_sprites_letters(spriteName)
+    if $PokemonSystem.random_sprites
+      # all_letters = list_all_sprites_letters(spriteName)
+      # $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+      # blacklisted_letters = $PokemonGlobal.sprites_blacklist[dex_num]
+      # $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+      # species_blacklist = $PokemonGlobal.sprites_blacklist[@species]
+      # species_blacklist = initialize_species_blacklist(@species) unless species_blacklist
+
+
+      letters_list= list_main_sprites_letters(spriteName)
+    else
+      letters_list= list_main_sprites_letters(spriteName)
+    end
   else
     letters_list= list_all_sprites_letters(spriteName)
   end
@@ -398,9 +410,31 @@ def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
   return letters_list.sample
 end
 
+def get_species_spritename(species_symbol)
+  species_data = GameData::Species.get(species_symbol)
+  if species_data.is_fusion
+    head_number = get_body_number_from_symbol(species_symbol)
+    body_number = get_body_number_from_symbol(species_symbol)
+    return "#{head_number}.#{body_number}"
+  elsif species_data.is_triple_fusion
+    return "" #todo I guess
+  else
+    return "#{species_data.id_number}"
+  end
+end
+
+def list_main_sprites_letters_species(species)
+  spritename = get_species_spritename(species)
+  return list_main_sprites_letters(spritename)
+end
+
 def list_main_sprites_letters(spriteName)
   return list_all_sprites_letters(spriteName) if $PokemonSystem.include_alt_sprites_in_random
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
+
+  echoln "ALL SPRITES:"
+  echoln all_sprites
+
   main_sprites = []
   all_sprites.each do |key, value|
     main_sprites << key if value == "main"
@@ -445,23 +479,44 @@ end
 
 #ex: "1" -> "main"
 #    "1a" -> "alt"
+# def map_alt_sprite_letters_for_pokemon(spriteName)
+#   alt_sprites = {}
+#   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
+#     row = line.split(',')
+#     sprite_name = row[0]
+#     if sprite_name.start_with?(spriteName)
+#       if sprite_name.length > spriteName.length #alt letter
+#         letter = sprite_name[spriteName.length]
+#         if letter.match?(/[a-zA-Z]/)
+#           main_or_alt = row[2] ? row[2] : nil
+#           alt_sprites[letter] = main_or_alt
+#         end
+#       else  #letterless
+#       main_or_alt = row[2] ? row[2].gsub("\n","") : nil
+#       alt_sprites[""] = main_or_alt
+#       end
+#     end
+#   end
+#   return alt_sprites
+# end
+
 def map_alt_sprite_letters_for_pokemon(spriteName)
   alt_sprites = {}
+
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|
-    row = line.split(',')
+    row = line.strip.split(',')
     sprite_name = row[0]
-    if sprite_name.start_with?(spriteName)
-      if sprite_name.length > spriteName.length #alt letter
-        letter = sprite_name[spriteName.length]
-        if letter.match?(/[a-zA-Z]/)
-          main_or_alt = row[2] ? row[2] : nil
-          alt_sprites[letter] = main_or_alt
-        end
-      else  #letterless
-      main_or_alt = row[2] ? row[2].gsub("\n","") : nil
-      alt_sprites[""] = main_or_alt
-      end
+    next unless sprite_name.start_with?(spriteName)
+    suffix = sprite_name[spriteName.length..-1] || ""
+    if suffix.empty?
+      alt_sprites[""] = row[2]
+      next
     end
+    # only accept letter-based suffixes: a, b, aa, ab, etc.
+    next unless suffix.match?(/\A[a-zA-Z]+\z/)
+
+    alt_sprites[suffix] = row[2]
   end
-  return alt_sprites
+
+  alt_sprites
 end

@@ -42,14 +42,14 @@ class SpriteOptionsScene < PokemonOption_Scene
     )
 
     use_random_sprites = $PokemonSystem.random_sprites ? 1 : 0
-    options << EnumOption.new(_INTL("Species-wide sprites"), [_INTL("Off"), _INTL("On")],
+    options << EnumOption.new(_INTL("Random Sprites"), [_INTL("Off"), _INTL("On")],
                               proc { use_random_sprites },
                               proc { |value|
-                                $PokemonSystem.random_sprites = value == 0
+                                $PokemonSystem.random_sprites = value == 1
                               },
                               [
-                                _INTL("A random sprite is selected each time you encounter a Pokémon."),
                                 _INTL("The game uses the same sprite each time you encounter the same species."),
+                                _INTL("A random sprite is selected each time you encounter a Pokémon."),
                               ]
     ) ? 1 : 0
 

@@ -911,7 +911,7 @@ class PokemonFusionScene
         $Trainer.pokedex.set_owned(newSpecies)
         Kernel.pbMessageDisplay(@sprites["msgwindow"],
                                 _INTL("{1}'s data was added to the Pokédex", newspeciesname))
-        @scene.pbShowPokedex(@newspecies)
+        @scene.pbShowPokedex(@pokemon1)
       end
       overlay.dispose
       #first check if hidden ability

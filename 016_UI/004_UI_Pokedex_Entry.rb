@@ -2,7 +2,13 @@
 #
 #===============================================================================
 class PokemonPokedexInfo_Scene
-  def pbStartScene(dexlist, index, region)
+  def pbStartScene(dexlist, index, region, pokemon = nil, fromSummary=false)
+
+    echoln caller
+
+
+    @fromSummary = fromSummary
+    @pokemon = pokemon
     @endscene = false
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -74,7 +80,7 @@ class PokemonPokedexInfo_Scene
   def initializeSpritesPageGraphics()
     @sprites["leftarrow"] = AnimatedSprite.new("Graphics/Pictures/leftarrow", 8, 40, 28, 2, @viewport)
     @sprites["leftarrow"].x = 20
-    @sprites["leftarrow"].y = 250 #268
+    @sprites["leftarrow"].y = 250 # 268
     @sprites["leftarrow"].play
     @sprites["leftarrow"].visible = false
     @sprites["rightarrow"] = AnimatedSprite.new("Graphics/Pictures/rightarrow", 8, 40, 28, 2, @viewport)
@@ -85,17 +91,25 @@ class PokemonPokedexInfo_Scene
 
     @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow", 8, 28, 40, 2, @viewport)
     @sprites["uparrow"].x = 250
-    @sprites["uparrow"].y = 50 #268
+    @sprites["uparrow"].y = 50 # 268
     @sprites["uparrow"].play
     @sprites["uparrow"].visible = false
     @sprites["downarrow"] = AnimatedSprite.new("Graphics/Pictures/downarrow", 8, 28, 40, 2, @viewport)
-    @sprites["downarrow"].x = 250
+    @sprites["downarrow"].x = 25
     @sprites["downarrow"].y = 350
     @sprites["downarrow"].play
     @sprites["downarrow"].visible = false
+
+    @sprites["blacklistIcon"] = IconSprite.new(0, 0, @viewport)
+    @sprites["blacklistIcon"].setBitmap("Graphics/Pictures/Pokedex/enabled_disabled_icon")
+    @sprites["blacklistIcon"].x = 10
+    @sprites["blacklistIcon"].y = 320
+    @sprites["blacklistIcon"].z = 9999999
+    @sprites["blacklistIcon"].visible = false
+
   end
 
-  def pbStartSpritesSelectSceneBrief(species, alts_list)
+  def pbStartSpritesSelectSceneBrief(species, alts_list, pokemon = nil)
     @available = alts_list
     @species = species
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -109,6 +123,7 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"] = PokemonSprite.new(@viewport)
     @spritesLoader = BattleSpriteLoader.new
     @page = 3
+    @pokemon = pokemon
     initializeSpritesPageGraphics
     initializeSpritesPage(@available)
     drawPage(@page)
@@ -116,7 +131,9 @@ class PokemonPokedexInfo_Scene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
-  def pbStartSceneBrief(species)
+  def pbStartSceneBrief(pokemon)
+    species = pokemon.species
+    @pokemon = pokemon
     # For standalone access, shows first page only
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -191,64 +208,15 @@ class PokemonPokedexInfo_Scene
       @sprites["previousSprite"].visible = false
     end
 
-
     # species_data = pbGetSpeciesData(@species)
     species_data = GameData::Species.get_species_form(@species, @form)
-    @sprites["infosprite"].setSpeciesBitmap(@species) #, @gender, @form)
-
-    # if @sprites["formfront"]
-    #   @sprites["formfront"].setSpeciesBitmap(@species,@gender,@form)
-    # end
-    # if @sprites["formback"]
-    #   @sprites["formback"].setSpeciesBitmap(@species,@gender,@form,false,false,true)
-    #   @sprites["formback"].y = 256
-    #   @sprites["formback"].y += species_data.back_sprite_y * 2
-    # end
-    # if @sprites["formicon"]
-    #   @sprites["formicon"].pbSetParams(@species,@gender,@form)
-    # end
+    if @pokemon && @pokemon.pif_sprite
+      animated = @spritesLoader.load_pif_sprite_directly(@pokemon.pif_sprite)
+      @sprites["infosprite"].setAnimatedBitmap(animated)
+    else
+      @sprites["infosprite"].setSpeciesBitmap(@species) #, @gender, @form)
+    end
   end
-
-  # def pbGetAvailableForms
-  #   ret = []
-  #   return ret
-  #   # multiple_forms = false
-  #   # # Find all genders/forms of @species that have been seen
-  #   # GameData::Species.each do |sp|
-  #   #   next if sp.species != @species
-  #   #   next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
-  #   #   next if sp.pokedex_form != sp.form
-  #   #   multiple_forms = true if sp.form > 0
-  #   #   case sp.gender_ratio
-  #   #   when :AlwaysMale, :AlwaysFemale, :Genderless
-  #   #     real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
-  #   #     next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
-  #   #     real_gender = 2 if sp.gender_ratio == :Genderless
-  #   #     ret.push([sp.form_name, real_gender, sp.form])
-  #   #   else   # Both male and female
-  #   #     for real_gender in 0...2
-  #   #       next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
-  #   #       ret.push([sp.form_name, real_gender, sp.form])
-  #   #       break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
-  #   #     end
-  #   #   end
-  #   # end
-  #   # # Sort all entries
-  #   # ret.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
-  #   # # Create form names for entries if they don't already exist
-  #   # ret.each do |entry|
-  #   #   if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
-  #   #     case entry[1]
-  #   #     when 0 then entry[0] = "Male"
-  #   #     when 1 then entry[0] = "Female"
-  #   #     else
-  #   #       entry[0] = multiple_forms ? "One Form" : "Genderless"
-  #   #     end
-  #   #   end
-  #   #   entry[1] = 0 if entry[1] == 2   # Genderless entries are treated as male
-  #   # end
-  #   # return ret
-  # end
 
   def drawPage(page)
     overlay = @sprites["overlay"].bitmap
@@ -278,7 +246,7 @@ class PokemonPokedexInfo_Scene
     end
   end
 
-  def drawPageInfo(reloading=false)
+  def drawPageInfo(reloading = false)
     @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_info")
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
@@ -291,7 +259,7 @@ class PokemonPokedexInfo_Scene
     species_data = GameData::Species.get_species_form(@species, @form)
     # Write various bits of text
     indexText = "???"
-    #if @dexlist[@index][4] > 0
+    # if @dexlist[@index][4] > 0
     indexNumber = @dexlist[@index][4]
     indexNumber -= 1 if @dexlist[@index][5]
     indexNumber = GameData::Species.get(@species).id_number
@@ -324,7 +292,7 @@ class PokemonPokedexInfo_Scene
       #
       #
       #$PokemonSystem.use_generated_dex_entries=true if $PokemonSystem.use_generated_dex_entries ==nil
-      drawEntryText(overlay, species_data,reloading)
+      drawEntryText(overlay, species_data, reloading)
 
       # Draw the footprint
       footprintfile = GameData::Species.footprint_filename(@species, @form)
@@ -362,8 +330,7 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
-
-  def   drawEntryText(overlay, species_data, reloading=false)
+  def drawEntryText(overlay, species_data, reloading = false)
     baseColor = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
     shadowCustom = Color.new(160, 200, 150)
@@ -440,7 +407,7 @@ class PokemonPokedexInfo_Scene
 
   def getCustomEntryText(species_data)
     spriteLoader = BattleSpriteLoader.new
-    pif_sprite=spriteLoader.get_pif_sprite_from_species(species_data)
+    pif_sprite = spriteLoader.get_pif_sprite_from_species(species_data)
     return nil if pif_sprite.type != :CUSTOM
     possibleCustomEntries = getCustomDexEntry(pif_sprite)
     if possibleCustomEntries && possibleCustomEntries.length > 0
@@ -464,7 +431,7 @@ class PokemonPokedexInfo_Scene
     end
   end
 
-  #unused
+  # unused
   def getAIDexEntry(pokemonID, name)
     begin
       head_number = get_head_number_from_symbol(pokemonID).to_s
@@ -641,114 +608,102 @@ class PokemonPokedexInfo_Scene
     end
   end
 
-  def pbChooseAlt(brief = false)
-    index = 0
-    for i in 0...@available.length
-      if @available[i][1] == @gender && @available[i][2] == @form
-        index = i
-        break
-      end
+
+
+  def updateBlacklistIconVisibility
+    visible = (@page == 3 && @selecting_sprites && @selecting_blacklist)
+    %w[
+    selectedSprite
+    previousSprite
+    nextSprite
+  ].each do |base|
+      next unless @sprites["#{base}_blacklistEnabled"]
+
+      @sprites["#{base}_blacklistEnabled"].visible  &&= visible
+      @sprites["#{base}_blacklistDisabled"].visible &&= visible
+      @sprites["#{base}_blacklistAutogen"].visible  &&= visible
     end
-    oldindex = -1
-    loop do
-      if oldindex != index
-        $Trainer.pokedex.set_last_form_seen(@species, @available[index][1], @available[index][2])
-        pbUpdateDummyPokemon
-        drawPage(@page)
-        @sprites["uparrow"].visible = (index > 0)
-        @sprites["downarrow"].visible = (index < @available.length - 1)
-        oldindex = index
-      end
-      Graphics.update
-      Input.update
-      pbUpdate
-      if Input.trigger?(Input::UP)
-        pbPlayCursorSE
-        index = (index + @available.length - 1) % @available.length
-      elsif Input.trigger?(Input::DOWN)
-        pbPlayCursorSE
-        index = (index + 1) % @available.length
-      elsif Input.trigger?(Input::BACK)
-        pbPlayCancelSE
-        break
-      elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
-        break
-      end
-    end
-    @sprites["uparrow"].visible = false
-    @sprites["downarrow"].visible = false
   end
+
+
+  def updateBlackListInstructionIcons
+    visible = (@page == 3 && @fromSummary && !@selecting_sprites)
+
+    @sprites["downarrow"].visible   = visible
+    @sprites["blacklistIcon"].visible = visible
+  end
+
+
 
   def pbScene
     Pokemon.play_cry(@species, @form)
+    @selecting_sprites = false
     until @endscene
       Graphics.update
       Input.update
       pbUpdate
+      updateBlackListInstructionIcons
+
       dorefresh = false
-      if Input.trigger?(Input::ACTION)
-        #changeEntryPage()
-      elsif Input.trigger?(Input::BACK)
+
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
+
       elsif Input.trigger?(Input::USE)
-        if @page == 1 # entry
-          changeEntryPage()
-        elsif @page == 3 # Forms
-          #if @available.length > 1
+        if @page == 1
+          changeEntryPage
+        elsif @page == 3
           pbPlayDecisionSE
           pbChooseAlt
           dorefresh = true
-          # end
         end
+
       elsif Input.trigger?(Input::UP)
-        oldindex = @index
-        pbGoToPrevious
-        if @index != oldindex
-          @selected_index = 0
-          pbUpdateDummyPokemon
-          @available = pbGetAvailableForms
-          pbSEStop
-          (@page == 1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
-          dorefresh = true
-        end
+        handleVerticalInput(-1, dorefresh)
+
       elsif Input.trigger?(Input::DOWN)
-        oldindex = @index
-        pbGoToNext
-        if @index != oldindex
-          @selected_index = 0
-          pbUpdateDummyPokemon
-          @available = pbGetAvailableForms
-          pbSEStop
-          (@page == 1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::LEFT)
+        handleVerticalInput(1, dorefresh)
+
+      elsif Input.trigger?(Input::RIGHT)  && @page == 3 && @fromSummary
+        pbPlayDecisionSE
+        pbChooseAlt
+        dorefresh = true
+      elsif Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
         oldpage = @page
-        @page -= 2
+        @page += (Input.trigger?(Input::RIGHT) ? 2 : -2)
         @page = 1 if @page < 1
         @page = 3 if @page > 3
-        if @page != oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::RIGHT)
-        oldpage = @page
-        @page += 2
-        @page = 1 if @page < 1
-        @page = 3 if @page > 3
-        if @page != oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
+        pbPlayCursorSE if @page != oldpage
+        dorefresh = true if @page != oldpage
       end
-      if dorefresh
-        drawPage(@page)
-      end
+
+      drawPage(@page) if dorefresh
     end
+
     return @index
   end
+
+  def handleVerticalInput(direction, dorefresh)
+    if @page == 3 && @fromSummary
+      pbSEPlay("GUI storage show party panel")
+      @selecting_blacklist = (direction > 0)
+      pbChooseAlt
+    else
+      oldindex = @index
+      direction > 0 ? pbGoToNext : pbGoToPrevious
+
+      if @index != oldindex
+        @selected_index = 0
+        pbUpdateDummyPokemon
+        @available = pbGetAvailableForms
+        pbSEStop
+        (@page == 1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
+        dorefresh = true
+      end
+    end
+  end
+
 
   def pbSceneBrief
     Pokemon.play_cry(@species, @form)
@@ -792,7 +747,8 @@ class PokemonPokedexInfoScreen
     return ret # Index of last species viewed in dexlist
   end
 
-  def pbStartSceneSingle(species)
+  def pbStartSceneSingle(pokemon)
+    species = pokemon.species
     # For use from a Pokémon's summary screen
     region = -1
     if Settings::USE_CURRENT_REGION_DEX
@@ -801,24 +757,26 @@ class PokemonPokedexInfoScreen
     else
       region = $PokemonGlobal.pokedexDex # National Dex -1, regional Dexes 0, 1, etc.
     end
-    dexnum = GameData::Species.get(species).id_number #pbGetRegionalNumber(region,species)
+    dexnum = GameData::Species.get(species).id_number # pbGetRegionalNumber(region,species)
     dexnumshift = Settings::DEXES_WITH_OFFSETS.include?(region)
     dexlist = [[species, GameData::Species.get(species).name, 0, 0, dexnum, dexnumshift]]
-    @scene.pbStartScene(dexlist, 0, region)
+    @scene.pbStartScene(dexlist, 0, region, pokemon, true)
     @scene.pbScene
     @scene.pbEndScene
   end
 
-  def pbDexEntry(species)
+  def pbDexEntry(pokemon)
+    species = pokemon.species
+
     # For use when capturing a new species
     nb_sprites_for_alts_page = isSpeciesFusion(species) ? 2 : 1
     alts_list = @scene.pbGetAvailableForms(species)
     if alts_list.length > nb_sprites_for_alts_page
-      @scene.pbStartSpritesSelectSceneBrief(species, alts_list)
+      @scene.pbStartSpritesSelectSceneBrief(species, alts_list, pokemon)
       @scene.pbSelectSpritesSceneBrief
       @scene.pbEndScene
     end
-    @scene.pbStartSceneBrief(species)
+    @scene.pbStartSceneBrief(pokemon)
     @scene.pbSceneBrief
     @scene.pbEndScene
   end
