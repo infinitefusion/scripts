@@ -73,7 +73,8 @@ def trigger_overworld_wild_battle
   when 1
     battler = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
     pbWildBattleSpecific(battler)
-  else  #shouldn"t happen
+  else
+    # shouldn"t happen
     battler = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
     pbWildBattleSpecific(battler)
     $PokemonTemp.overworld_wild_battle_participants.shift
@@ -88,13 +89,12 @@ def trigger_overworld_wild_battle
 
 end
 
-
 # Called from spawned overworld Pokemon events
 def overworldPokemonBehavior()
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event && event.is_a?(OverworldPokemonEvent)
 
-  #Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
+  # Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
   # They don't have any graphics. This just deactivetes their behavior too which makes them
   # harmless - player won't know they're there... But they are, technically.
   # This doesn't actually fix the glitch - just makes it invisible.
@@ -105,13 +105,17 @@ def overworldPokemonBehavior()
   #
 
   begin
-    event.update_behavior
+    if $game_temp.message_window_showing
+      event.pause_movement
+    else
+      event.update_behavior
+    end
   rescue
     return
   end
 end
 
-def overworldPokemonDetect(radius=1)
+def overworldPokemonDetect(radius = 1)
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return pbPlayerInEventCone?(event, $game_player, radius)
 end

@@ -5,7 +5,7 @@ class HoennIntroScreen
 
   SCROLL_LAYERS = [
     [:back, "Graphics/Titles/bg_back", 0],
-    [:clouds, "Graphics/Titles/bg_clouds", 0.3],
+    [:clouds, "Graphics/Titles/bg_clouds", 0.12],
     [:front, "Graphics/Titles/bg_front", 2.0],
     [:shade, "Graphics/Titles/bg_shade", 0]
   ]

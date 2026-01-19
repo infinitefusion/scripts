@@ -86,9 +86,10 @@ def formatNumberToString(number)
 end
 
 def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)
+  $game_temp.message_window_showing = true
   cmdIfCancel = -1 if !cmdIfCancel
   result = pbShowCommands(nil, options, cmdIfCancel, startingOption)
-  # echoln "menuResult :#{result}"
+  $game_temp.message_window_showing = false
   return result
 end
 

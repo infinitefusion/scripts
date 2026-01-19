@@ -238,6 +238,7 @@ class OverworldPokemonEvent < Game_Event
   def update_behavior()
     return if @opacity == 0
     return if @current_state == :FLEEING
+    return if $game_temp.message_window_showing
     distance = distance_from_player()
     is_near_player = distance <= @detection_radius
     if distance >= DISTANCE_FOR_DESPAWN
@@ -471,6 +472,11 @@ class OverworldPokemonEvent < Game_Event
     when MOVE_TYPE_CURIOUS
       move_type_curious(ready_for_next_movement)
     end
+  end
+
+  def pause_movement
+    @move_type=MOVE_TYPE_FIXED
+    @current_state = :PAUSED
   end
 
 end
