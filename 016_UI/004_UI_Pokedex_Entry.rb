@@ -661,10 +661,10 @@ class PokemonPokedexInfo_Scene
         end
 
       elsif Input.trigger?(Input::UP)
-        handleVerticalInput(-1, dorefresh)
+        dorefresh = handleVerticalInput(-1)
 
       elsif Input.trigger?(Input::DOWN)
-        handleVerticalInput(1, dorefresh)
+        dorefresh = handleVerticalInput(1)
 
       elsif Input.trigger?(Input::RIGHT)  && @page == 3 && @fromSummary
         pbPlayDecisionSE
@@ -685,7 +685,8 @@ class PokemonPokedexInfo_Scene
     return @index
   end
 
-  def handleVerticalInput(direction, dorefresh)
+  def handleVerticalInput(direction)
+    dorefresh = false
     if @page == 3 && @fromSummary
       pbSEPlay("GUI storage show party panel")
       @selecting_blacklist = (direction > 0)
@@ -703,6 +704,7 @@ class PokemonPokedexInfo_Scene
         dorefresh = true
       end
     end
+    return dorefresh
   end
 
 

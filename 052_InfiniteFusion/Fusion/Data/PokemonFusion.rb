@@ -909,9 +909,6 @@ class PokemonFusionScene
       if !$Trainer.pokedex.owned?(newSpecies) && isPlayerPokemon
         $Trainer.pokedex.set_seen(newSpecies)
         $Trainer.pokedex.set_owned(newSpecies)
-        Kernel.pbMessageDisplay(@sprites["msgwindow"],
-                                _INTL("{1}'s data was added to the Pokédex", newspeciesname))
-        @scene.pbShowPokedex(@pokemon1)
       end
       overlay.dispose
       #first check if hidden ability
@@ -966,6 +963,10 @@ class PokemonFusionScene
       @pokemon1.level = setPokemonLevel(@pokemon1.level, @pokemon2.level, superSplicer)
       @pokemon1.calc_stats
       @pokemon1.obtain_method = 0
+
+      Kernel.pbMessageDisplay(@sprites["msgwindow"],
+                              _INTL("{1}'s data was added to the Pokédex", newspeciesname))
+      @scene.pbShowPokedex(@pokemon1)
 
       learned_moves = []
       learned_moves.concat(@pokemon1.learned_moves) if @pokemon1.learned_moves
