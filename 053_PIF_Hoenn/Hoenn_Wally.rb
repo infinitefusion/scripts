@@ -3,6 +3,7 @@ BATTLED_TRAINER_WALLY_KEY = "wally"
 
 SWITCH_WALLY_CATCHING_POKEMON = 2022
 SWITCH_WALLY_GAVE_POKEMON = 2023
+SWITCH_WALLY_SAW_CAUGHT_POKEMON = 2123
 SWITCH_WALLY_GAVE_POKEMON_DIALOGUE = 2024
 
 COMMON_EVENT_WALLY_FOLLOWING_DIALOGUE = 199
@@ -23,6 +24,13 @@ def wally_add_pokemon(pokemon_species,level)
   trainer.currentTeam.push(pokemon)
   updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY,trainer)
 end
+
+def wally_add_pokemon_directly(pokemon)
+  trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY]
+  trainer.currentTeam.push(pokemon)
+  updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY,trainer)
+end
+
 
 def wally_remove_pokemon(pokemon_species)
 
