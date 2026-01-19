@@ -211,6 +211,7 @@ class PokemonPokedexInfo_Scene
     # species_data = pbGetSpeciesData(@species)
     species_data = GameData::Species.get_species_form(@species, @form)
     if @pokemon && @pokemon.pif_sprite
+      @spritesLoader = BattleSpriteLoader.new unless @spritesLoader
       animated = @spritesLoader.load_pif_sprite_directly(@pokemon.pif_sprite)
       @sprites["infosprite"].setAnimatedBitmap(animated)
     else
