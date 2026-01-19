@@ -430,10 +430,6 @@ end
 def list_main_sprites_letters(spriteName)
   return list_all_sprites_letters(spriteName) if $PokemonSystem.include_alt_sprites_in_random
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
-
-  echoln "ALL SPRITES:"
-  echoln all_sprites
-
   main_sprites = []
   all_sprites.each do |key, value|
     main_sprites << key if value == "main"
