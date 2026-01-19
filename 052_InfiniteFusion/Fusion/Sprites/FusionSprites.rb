@@ -13,17 +13,15 @@ module GameData
       #   ret = front_sprite_bitmap(pkmn)
       #   #ret = self.front_sprite_bitmap(species, pkmn.shiny?, pkmn.bodyShiny?, pkmn.headShiny?)
       # end
-      ret.scale_bitmap(pkmn.sprite_scale) if ret #for pokemon with size differences
+      ret.scale_bitmap(pkmn.sprite_scale) if ret # for pokemon with size differences
       return ret
     end
 
-
-
     def self.sprite_bitmap_from_pokemon_id(id, back = false, shiny = false, bodyShiny = false, headShiny = false)
       if back
-        ret = self.back_sprite_bitmap(id,  shiny, bodyShiny, headShiny)
+        ret = self.back_sprite_bitmap(id, shiny, bodyShiny, headShiny)
       else
-        ret = self.front_sprite_bitmap(id,  shiny, bodyShiny, headShiny)
+        ret = self.front_sprite_bitmap(id, shiny, bodyShiny, headShiny)
       end
       return ret
     end
@@ -57,7 +55,6 @@ module GameData
       return offset
     end
 
-
     def self.hex_to_rgb(hex)
       hex = hex.delete("#")
       r = hex[0..1].to_i(16)
@@ -68,8 +65,8 @@ module GameData
 
     def self.calculateShinyHueOffsetDefaultMethod(body_number, head_number, dex_number, isBodyShiny = false, isHeadShiny = false)
       dex_offset = dex_number
-      #body_number = getBodyID(dex_number)
-      #head_number=getHeadID(dex_number,body_number)
+      # body_number = getBodyID(dex_number)
+      # head_number=getHeadID(dex_number,body_number)
       dex_diff = (body_number - head_number).abs
       if isBodyShiny && isHeadShiny
         dex_offset = dex_number
@@ -82,18 +79,15 @@ module GameData
       offset /= MAX_SHIFT_VALUE if offset > NB_POKEMON
       offset = MINIMUM_OFFSET if offset < MINIMUM_OFFSET
       offset = MINIMUM_OFFSET if (MAX_SHIFT_VALUE - offset).abs < MINIMUM_OFFSET
-      offset += pbGet(VAR_SHINY_HUE_OFFSET) #for testing - always 0 during normal gameplay
+      offset += pbGet(VAR_SHINY_HUE_OFFSET) # for testing - always 0 during normal gameplay
       return offset
     end
 
-    def self.getAutogenSprite(head_id, body_id)
+    def self.getAutogenSprite(head_id, body_id) end
 
-    end
-
-
-  # species can be either a number, a Species objet of a symbol
-  # Legacy version - Used when $PokemonSystem.random_sprites is off
-  # Ignores pokemon.pif_sprites and uses whatever is defined as main
+    # species can be either a number, a Species objet of a symbol
+    # Legacy version - Used when $PokemonSystem.random_sprites is off
+    # Ignores pokemon.pif_sprites and uses whatever is defined as main
     def self.front_sprite_bitmap(species, isShiny = false, bodyShiny = false, headShiny = false)
       dex_number = getDexNumberForSpecies(species)
       if species.is_a?(Species)
@@ -104,7 +98,7 @@ module GameData
       if isFusion(dex_number)
         body_id = getBodyID(dex_number)
         head_id = getHeadID(dex_number, body_id)
-        sprite = spriteLoader.load_fusion_sprite(head_id,body_id)
+        sprite = spriteLoader.load_fusion_sprite(head_id, body_id)
       else
         if isTripleFusion?(dex_number)
           sprite = spriteLoader.load_triple_fusion_sprite(dex_number)
@@ -118,13 +112,11 @@ module GameData
       return sprite
     end
 
-
-
     def self.front_sprite_bitmap_pokemon(pokemon)
       unless $PokemonSystem.random_sprites
         return self.front_sprite_bitmap(pokemon.species, pokemon.shiny?, pokemon.bodyShiny?, pokemon.headShiny?)
       end
-      #todo: integrate triples to pif_sprite system - handled separately for now
+      # todo: integrate triples to pif_sprite system - handled separately for now
       if pokemon.isTripleFusion?
         dex_number = getDexNumberForSpecies(pokemon.id_number)
         sprite = spriteLoader.load_triple_fusion_sprite(dex_number)
@@ -148,7 +140,6 @@ module GameData
       return bitmap_sprite
     end
 
-
     def self.front_pif_sprite(species, isShiny = false, bodyShiny = false, headShiny = false)
       dex_number = getDexNumberForSpecies(species)
       if species.is_a?(Species)
@@ -159,7 +150,7 @@ module GameData
       if isFusion(dex_number)
         body_id = getBodyID(dex_number)
         head_id = getHeadID(dex_number, body_id)
-        pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_id,body_id)
+        pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_id, body_id)
       else
         if isTripleFusion?(dex_number)
           raise "Triple fusions are not implemented for PIF Sprites"
@@ -169,8 +160,6 @@ module GameData
       end
       return pif_sprite
     end
-
-
 
     # def self.front_sprite_bitmap(dex_number, isShiny = false, bodyShiny = false, headShiny = false)
     #   # body_id = getBodyID(dex_number)
@@ -196,8 +185,8 @@ module GameData
       #   sprite.shiftColors(self.calculateShinyHueOffset(dex_number, bodyShiny, headShiny))
       # end
       # return sprite
-      sprite = self.front_sprite_bitmap(dex_number,isShiny,bodyShiny,headShiny)
-      return sprite#.mirror
+      sprite = self.front_sprite_bitmap(dex_number, isShiny, bodyShiny, headShiny)
+      return sprite #.mirror
     end
 
     def self.egg_sprite_bitmap(dex_number, form = nil)
@@ -207,43 +196,41 @@ module GameData
   end
 end
 
-
-    # def self.sprite_filename(dex_number)
-    #   #dex_number = GameData::NAT_DEX_MAPPING[dex_number] ? GameData::NAT_DEX_MAPPING[dex_number] : dex_number
-    #   if dex_number.is_a?(GameData::Species)
-    #     dex_number = dex_number.id_number
-    #   end
-    #   if dex_number.is_a?(Symbol)
-    #     dex_number = getDexNumberForSpecies(dex_number)
-    #   end
-    #   return nil if dex_number == nil
-    #   if dex_number <= Settings::NB_POKEMON
-    #     return get_unfused_sprite_path(dex_number)
-    #   else
-    #     if dex_number >= Settings::ZAPMOLCUNO_NB
-    #       specialPath = getSpecialSpriteName(dex_number)
-    #       return pbResolveBitmap(specialPath)
-    #       head_id = nil
-    #     else
-    #       body_id = getBodyID(dex_number)
-    #       head_id = getHeadID(dex_number, body_id)
-    #       return get_fusion_sprite_path(head_id, body_id)
-    #       # folder = head_id.to_s
-    #       # filename = sprintf("%s.%s.png", head_id, body_id)
-    #     end
-    #   end
-    #   # customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
-    #   # customPath = download_custom_sprite(head_id,body_id)
-    #   #
-    #   # species = getSpecies(dex_number)
-    #   # use_custom = customPath && !species.always_use_generated
-    #   # if use_custom
-    #   #   return customPath
-    #   # end
-    #   # #return Settings::BATTLERS_FOLDER + folder + "/" + filename
-    #   # return download_autogen_sprite(head_id,body_id)
-    # end
-
+# def self.sprite_filename(dex_number)
+#   #dex_number = GameData::NAT_DEX_MAPPING[dex_number] ? GameData::NAT_DEX_MAPPING[dex_number] : dex_number
+#   if dex_number.is_a?(GameData::Species)
+#     dex_number = dex_number.id_number
+#   end
+#   if dex_number.is_a?(Symbol)
+#     dex_number = getDexNumberForSpecies(dex_number)
+#   end
+#   return nil if dex_number == nil
+#   if dex_number <= Settings::NB_POKEMON
+#     return get_unfused_sprite_path(dex_number)
+#   else
+#     if dex_number >= Settings::ZAPMOLCUNO_NB
+#       specialPath = getSpecialSpriteName(dex_number)
+#       return pbResolveBitmap(specialPath)
+#       head_id = nil
+#     else
+#       body_id = getBodyID(dex_number)
+#       head_id = getHeadID(dex_number, body_id)
+#       return get_fusion_sprite_path(head_id, body_id)
+#       # folder = head_id.to_s
+#       # filename = sprintf("%s.%s.png", head_id, body_id)
+#     end
+#   end
+#   # customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER_INDEXED + "/" + head_id.to_s + "/" +filename)
+#   # customPath = download_custom_sprite(head_id,body_id)
+#   #
+#   # species = getSpecies(dex_number)
+#   # use_custom = customPath && !species.always_use_generated
+#   # if use_custom
+#   #   return customPath
+#   # end
+#   # #return Settings::BATTLERS_FOLDER + folder + "/" + filename
+#   # return download_autogen_sprite(head_id,body_id)
+# end
 
 # def get_unfused_sprite_path(dex_number_id, localOnly = false)
 #   dex_number = dex_number_id.to_s
@@ -294,14 +281,14 @@ end
 def add_to_autogen_cache(pokemon_id, sprite_name)
   return if !$PokemonGlobal
   return if !$PokemonGlobal.autogen_sprites_cache
-  $PokemonGlobal.autogen_sprites_cache[pokemon_id]=sprite_name
+  $PokemonGlobal.autogen_sprites_cache[pokemon_id] = sprite_name
 end
 
 class PokemonGlobalMetadata
   attr_accessor :autogen_sprites_cache
 end
 
-#To force a specific sprites before a battle
+# To force a specific sprites before a battle
 #
 #  ex:
 # $PokemonTemp.forced_alt_sprites={"20.25" => "20.25a"}
@@ -310,7 +297,7 @@ class PokemonTemp
   attr_accessor :forced_alt_sprites
 end
 
-#todo:
+# todo:
 # DO NOT USE ANYMORE
 # Replace by BattleSpriteLoader
 # def get_fusion_sprite_path(head_id, body_id, localOnly=false)
@@ -376,37 +363,49 @@ end
 
 def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  if onlyMain
-    alts_list = list_main_sprites_letters(spriteName)
-    return nil if alts_list.empty?
+  if $PokemonSystem.random_sprites && $PokemonGlobal
+    $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+    fusion_species = get_fusion_symbol(head_id, body_id)
+    species_blacklist = $PokemonGlobal.sprites_blacklist[fusion_species]
+    if species_blacklist
+      alts_list = list_all_sprites_letters(spriteName)
+                    .reject { |letter| species_blacklist.include?(letter) }
+    else
+      alts_list = list_main_sprites_letters(spriteName)
+    end
     return alts_list.sample
   else
-    alts_list = list_all_sprites_letters(spriteName)
-    return nil if alts_list.empty?
-    return alts_list.sample
+    if onlyMain
+      alts_list = list_main_sprites_letters(spriteName)
+    else
+      alts_list = list_all_sprites_letters(spriteName)
+    end
   end
+  return nil if alts_list.empty?
+  return alts_list.sample
 end
 
 def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
   spriteName = _INTL("{1}", dex_num)
-  if onlyMain
-    if $PokemonSystem.random_sprites
-      # all_letters = list_all_sprites_letters(spriteName)
-      # $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
-      # blacklisted_letters = $PokemonGlobal.sprites_blacklist[dex_num]
-      # $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
-      # species_blacklist = $PokemonGlobal.sprites_blacklist[@species]
-      # species_blacklist = initialize_species_blacklist(@species) unless species_blacklist
 
-
-      letters_list= list_main_sprites_letters(spriteName)
+  if $PokemonSystem.random_sprites
+    $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+    species = GameData::Species.get(dex_num)&.species
+    species_blacklist = $PokemonGlobal.sprites_blacklist[species]
+    if species_blacklist
+      letters_list = list_all_sprites_letters(spriteName)
+                       .reject { |letter| species_blacklist.include?(letter) }
     else
-      letters_list= list_main_sprites_letters(spriteName)
+      letters_list = list_main_sprites_letters(spriteName)
     end
   else
-    letters_list= list_all_sprites_letters(spriteName)
+    if onlyMain
+      letters_list = list_main_sprites_letters(spriteName)
+    else
+      letters_list = list_all_sprites_letters(spriteName)
+    end
+    letters_list << "" # add main sprite
   end
-  letters_list << ""  #add main sprite
   return letters_list.sample
 end
 
@@ -417,7 +416,7 @@ def get_species_spritename(species_symbol)
     body_number = get_body_number_from_symbol(species_symbol)
     return "#{head_number}.#{body_number}"
   elsif species_data.is_triple_fusion
-    return "" #todo I guess
+    return "" # todo I guess
   else
     return "#{species_data.id_number}"
   end
@@ -440,7 +439,7 @@ def list_main_sprites_letters(spriteName)
     main_sprites << key if value == "main"
   end
 
-  #add temp sprites if no main sprites found
+  # add temp sprites if no main sprites found
   if main_sprites.empty?
     all_sprites.each do |key, value|
       main_sprites << key if value == "temp"
@@ -449,7 +448,7 @@ def list_main_sprites_letters(spriteName)
   return main_sprites
 end
 
-def list_all_sprites_letters_head_body(head_id,body_id)
+def list_all_sprites_letters_head_body(head_id, body_id)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
   all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
   letters = []
@@ -476,8 +475,7 @@ def list_alt_sprite_letters(spriteName)
   end
 end
 
-
-#ex: "1" -> "main"
+# ex: "1" -> "main"
 #    "1a" -> "alt"
 # def map_alt_sprite_letters_for_pokemon(spriteName)
 #   alt_sprites = {}
