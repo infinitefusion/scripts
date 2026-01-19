@@ -437,7 +437,7 @@ class PokemonPokedex_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Set Pokémon sprite
-    setIconBitmap(iconspecies)
+    setIconBitmap(iconspecies) if iconspecies
     # Draw slider arrows
     itemlist = @sprites["pokedex"]
     showslider = false
@@ -1190,6 +1190,22 @@ class PokemonPokedex_Scene
         end
         if Input.trigger?(Input::ACTION)
           pbPlayDecisionSE
+          scene = PokedexTextEntry.new
+          scene.pbStartScene(
+            _INTL("Search Pokémon by name."),
+            1,   # min length
+            12,  # max length
+            ""
+          )
+          query = scene.pbEntry
+          scene.pbEndScene
+
+          if query && !query.empty?
+            pbApplyTextNameSearch(query)
+          end
+
+        elsif Input.trigger?(Input::SPECIAL)
+          pbPlayDecisionSE
           @sprites["pokedex"].active = false
           pbDexSearch
           @sprites["pokedex"].active = true
@@ -1210,6 +1226,27 @@ class PokemonPokedex_Scene
       end
     }
   end
+
+
+  def pbApplyTextNameSearch(query)
+    query = query.downcase
+    dexlist = pbGetDexList(@filter_owned)
+
+    dexlist = dexlist.find_all do |item|
+      next false if !$Trainer.seen?(item[0])
+      item[1].downcase.include?(query)
+    end
+
+    @searchResults = true
+    @dexlist = dexlist
+    @sprites["pokedex"].commands = @dexlist
+    @sprites["pokedex"].index = 0
+    @sprites["pokedex"].refresh
+    pbRefresh
+  end
+
+
+
 end
 
 #===============================================================================
