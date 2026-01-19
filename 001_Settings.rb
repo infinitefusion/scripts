@@ -23,9 +23,12 @@ module Settings
   POKERADAR_HIDDEN_ABILITY_POKE_CHANCE = 32
   POKERADAR_BATTERY_STEPS = 0
 
-  LEADER_VICTORY_MUSIC="Battle victory leader"
-  TRAINER_VICTORY_MUSIC="trainer-victory"
-  WILD_VICTORY_MUSIC="wild-victory"
+  LEADER_VICTORY_MUSIC="victory_gymLeader"
+  TRAINER_VICTORY_MUSIC="victory_trainer"
+  WILD_VICTORY_MUSIC="victory_wild"
+  GRUNT_VICTORY_MUSIC="victory_grunt"
+  CHAMPION_VICTORY_MUSIC="victory_champion"
+  FRONTIER_VICTORY_MUSIC="victory_frontierBrain"
 
   #getRandomCustomFusionForIntro
   FUSION_ICON_SPRITE_OFFSET = 10

@@ -124,6 +124,11 @@ begin
 
   if is_gym_leader(npcTrainer)
     ret = pbStringToAudioFile(Settings::LEADER_VICTORY_MUSIC)
+  elsif is_champion(npcTrainer)
+    ret = pbStringToAudioFile(Settings::CHAMPION_VICTORY_MUSIC)
+  elsif is_evil_team(npcTrainer)
+    echoln "is_evil_team"
+    ret = pbStringToAudioFile(Settings::GRUNT_VICTORY_MUSIC)
   else
     ret = pbStringToAudioFile(Settings::TRAINER_VICTORY_MUSIC)
   end
@@ -137,16 +142,33 @@ end
 
 end
 
-GYM_LEADERS=[:LEADER_Brock,:LEADER_Misty, :LEADER_Surge, :LEADER_Erika, :LEADER_Koga, :LEADER_Sabrina, :LEADER_Blaine,
+GYM_LEADERS_TYPES=[:LEADER_Brock,:LEADER_Misty, :LEADER_Surge, :LEADER_Erika, :LEADER_Koga, :LEADER_Sabrina, :LEADER_Blaine,
              :LEADER_Giovanni, :ELITEFOUR_Lorelei, :ELITEFOUR_Bruno, :ELITEFOUR_Agatha, :ELITEFOUR_Lance, :CHAMPION,
              :LEADER_Whitney, :LEADER_Kurt, :LEADER_Falkner, :LEADER_Clair, :LEADER_Morty, :LEADER_Pryce, :LEADER_Chuck,
-             :LEADER_Jasmine, :CHAMPION_Sinnoh,
-
+             :LEADER_Jasmine,
+                   :ROCKETBOSS,
              :LEADER_Roxanne, :LEADER_Brawly, :LEADER_Wattson, :LEADER_Flannery, :LEADER_Norman, :LEADER_Winona,
              :LEADER_Tate, :LEADER_Liza,
              :LEADER_Wallace, :LEADER_Juan,
-             :ELITEFOUR_Sidney, :ELITEFOUR_Phoebe, :ELITEFOUR_Glacia, :ELITEFOUR_Drake, :CHAMPION_Steven
+             :ELITEFOUR_Sidney, :ELITEFOUR_Phoebe, :ELITEFOUR_Glacia, :ELITEFOUR_Drake,
 ]
+EVIL_TEAM_TYPES=[:TEAMROCKET_M,:TEAMROCKET_F,:ROCKETEXEC_F, :ROCKETEXEC_M, :ROCKETEXEC_Ariana, :ROCKETEXEC_Archer,
+                 :TEAM_AQUA_GRUNT_M, :TEAM_AQUA_GRUNT_F, :TEAM_AQUA_EXEC_M, :TEAM_AQUA_EXEC_F, :TEAM_AQUA_BOSS,
+                 :TEAM_MAGMA_GRUNT_M, :TEAM_MAGMA_GRUNT_F, :TEAM_MAGMA_EXEC_M, :TEAM_MAGMA_EXEC_F, :TEAM_MAGMA_BOSS,
+                 :TEAM_MAGMAQUA_GRUNT_M, :TEAM_MAGMAQUA_GRUNT_F]
+
+CHAMPION_TYPES=[:CHAMPION_Steven, :CHAMPION, :CHAMPION_Sinnoh]
+
 def is_gym_leader(trainer)
-  return GYM_LEADERS.include?(trainer.trainer_type)
+  return GYM_LEADERS_TYPES.include?(trainer.trainer_type)
+end
+
+def is_evil_team(trainer)
+  echoln trainer.trainer_type
+  return EVIL_TEAM_TYPES.include?(trainer.trainer_type)
+
+end
+
+def is_champion(trainer)
+  return CHAMPION_TYPES.include?(trainer.trainer_type)
 end
