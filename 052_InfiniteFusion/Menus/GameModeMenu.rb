@@ -9,7 +9,7 @@ def select_game_mode
 
   commands = []
   commands << cmd_mode_classic
-  commands << cmd_mode_remix
+  commands << cmd_mode_remix if Settings::KANTO
   commands << cmd_mode_random
   commands << cmd_mode_legendary if $Trainer.new_game_plus_unlocked
   echoln $Trainer.new_game_plus_unlocked
