@@ -927,6 +927,8 @@ class PokemonFusionScene
       if @pokemon2.egg? || @pokemon1.egg?
         @pokemon1.steps_to_hatch = @pokemon1.species_data.hatch_steps
       end
+
+
       #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       #
       pbChooseAbility(ability1,ability2) if isPlayerPokemon
@@ -966,6 +968,8 @@ class PokemonFusionScene
 
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
                               _INTL("{1}'s data was added to the Pokédex", newspeciesname))
+
+      @pokemon1.pif_sprite = @fusion_pif_sprite
       @scene.pbShowPokedex(@pokemon1)
 
       learned_moves = []
@@ -1129,6 +1133,7 @@ def pbShowPokedex(species)
     screen.pbDexEntry(species)
   }
 end
+
 
 def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   abilityList = poke.getAbilityList

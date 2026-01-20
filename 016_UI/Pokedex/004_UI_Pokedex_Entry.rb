@@ -196,6 +196,9 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
+
+    echoln @species
+
     @gender, @form = $Trainer.pokedex.last_form_seen(@species)
 
     if @sprites["selectedSprite"]
@@ -208,8 +211,6 @@ class PokemonPokedexInfo_Scene
       @sprites["previousSprite"].visible = false
     end
 
-    # species_data = pbGetSpeciesData(@species)
-    species_data = GameData::Species.get_species_form(@species, @form)
     if @pokemon && @pokemon.pif_sprite
       @spritesLoader = BattleSpriteLoader.new unless @spritesLoader
       animated = @spritesLoader.load_pif_sprite_directly(@pokemon.pif_sprite)
