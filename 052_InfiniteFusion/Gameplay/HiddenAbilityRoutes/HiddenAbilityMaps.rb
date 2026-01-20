@@ -25,10 +25,10 @@ Events.onMapUpdate += proc { |sender, e|
 }
 
 def changeHiddenMap()
-  echoln "Setting new hidden ability map"
   maps_list = Settings::KANTO ? RANDOM_HIDDEN_MAP_LIST : RANDOM_HIDDEN_MAP_LIST_HOENN
   i = rand(maps_list.length - 1)
   pbSet(VAR_CURRENT_HIDDEN_MAP, maps_list[i])
+  echoln "Changing hidden ability map to #{getCurrentHiddenAbilityMapName}"
   setHiddenAbilityMapAnnouncement if Settings::HOENN
 end
 
@@ -55,11 +55,11 @@ def isAlwaysHiddenAbilityMap(mapId)
 end
 
 def player_on_hidden_ability_map
-  echoln $game_map.map_id == pbGet(VAR_CURRENT_HIDDEN_MAP)
   return $game_map.map_id == pbGet(VAR_CURRENT_HIDDEN_MAP)
 end
 
-def getCurrentHiddenAbilityMap
+def getCurrentHiddenAbilityMapName
+  echoln "I'm trying bro"
   return Kernel.getMapName(pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
 end
 
