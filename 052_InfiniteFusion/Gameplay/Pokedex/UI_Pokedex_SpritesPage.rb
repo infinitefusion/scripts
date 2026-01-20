@@ -262,13 +262,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def set_displayed_to_current_alt(altsList)
-
-
-
-    echoln @pokemon
-    echoln @pokemon.pif_sprite
     if @pokemon && @pokemon.pif_sprite
-      echoln "OUI"
       current_sprite = @pokemon.pif_sprite
     else
       dex_number = getDexNumberForSpecies(@species)
