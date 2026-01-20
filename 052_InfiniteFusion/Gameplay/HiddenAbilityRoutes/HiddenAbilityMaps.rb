@@ -28,7 +28,6 @@ def changeHiddenMap()
   maps_list = Settings::KANTO ? RANDOM_HIDDEN_MAP_LIST : RANDOM_HIDDEN_MAP_LIST_HOENN
   i = rand(maps_list.length - 1)
   pbSet(VAR_CURRENT_HIDDEN_MAP, maps_list[i])
-  echoln "Changing hidden ability map to #{getCurrentHiddenAbilityMapName}"
   setHiddenAbilityMapAnnouncement if Settings::HOENN
 end
 

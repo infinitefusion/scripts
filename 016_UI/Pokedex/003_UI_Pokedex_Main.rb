@@ -1177,6 +1177,27 @@ class PokemonPokedex_Scene
     return 0
   end
 
+  def pokedexQuickSearch
+
+    if $PokemonSystem.textinput == 1 #keyboard
+      scene = PokedexTextEntry.new
+    else  #cursor
+      scene = PokemonEntryScene2.new
+    end
+    scene.pbStartScene(
+      _INTL("Search Pokémon by name."),
+      1,   # min length
+      12,  # max length
+      ""
+    )
+    query = scene.pbEntry
+    scene.pbEndScene
+
+    if query && !query.empty?
+      pbApplyTextNameSearch(query)
+    end
+  end
+
   def pbPokedex()
     pbActivateWindow(@sprites,"pokedex") {
       loop do
@@ -1190,19 +1211,7 @@ class PokemonPokedex_Scene
         end
         if Input.trigger?(Input::ACTION)
           pbPlayDecisionSE
-          scene = PokedexTextEntry.new
-          scene.pbStartScene(
-            _INTL("Search Pokémon by name."),
-            1,   # min length
-            12,  # max length
-            ""
-          )
-          query = scene.pbEntry
-          scene.pbEndScene
-
-          if query && !query.empty?
-            pbApplyTextNameSearch(query)
-          end
+          pokedexQuickSearch
 
         elsif Input.trigger?(Input::SPECIAL)
           pbPlayDecisionSE
