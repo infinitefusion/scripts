@@ -262,12 +262,21 @@ class PokemonPokedexInfo_Scene
   end
 
   def set_displayed_to_current_alt(altsList)
-    dex_number = getDexNumberForSpecies(@species)
-    species_id = get_substitution_id(dex_number)
-    initialize_alt_sprite_substitutions()
-    return if !$PokemonGlobal.alt_sprite_substitutions[species_id]
 
-    current_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
+
+
+    echoln @pokemon
+    echoln @pokemon.pif_sprite
+    if @pokemon && @pokemon.pif_sprite
+      echoln "OUI"
+      current_sprite = @pokemon.pif_sprite
+    else
+      dex_number = getDexNumberForSpecies(@species)
+      species_id = get_substitution_id(dex_number)
+      initialize_alt_sprite_substitutions()
+      return if !$PokemonGlobal.alt_sprite_substitutions[species_id]
+      current_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
+    end
 
     index = @selected_index
     for alt in altsList
@@ -481,19 +490,23 @@ class PokemonPokedexInfo_Scene
 
 
   def is_main_sprite(index = nil)
-    dex_number = getDexNumberForSpecies(@species)
     if !index
       index = @selected_index
     end
-    species_id = get_substitution_id(dex_number)
+    if @pokemon && @pokemon.pif_sprite && $PokemonSystem.random_sprites
+      selected_pif_sprite = get_pif_sprite(@available[index])
+      return selected_pif_sprite.alt_letter == @pokemon.pif_sprite.alt_letter
+    else
+      dex_number = getDexNumberForSpecies(@species)
+      species_id = get_substitution_id(dex_number)
+      current_pif_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
+      selected_pif_sprite = get_pif_sprite(@available[index])
 
-    current_pif_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
-    selected_pif_sprite = get_pif_sprite(@available[index])
-
-    if current_pif_sprite
-      return current_pif_sprite.equals(selected_pif_sprite)
+      if current_pif_sprite
+        return current_pif_sprite.equals(selected_pif_sprite)
+      end
+      return false
     end
-    return false
   end
 
   def sprite_is_alt(sprite_path)
