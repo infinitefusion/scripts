@@ -91,7 +91,7 @@ class Sprite_Character
     end
 
     if character.character_name ==HOENN_MAX_CHARNAME
-      sprite_path = "Graphics/Characters/player/family/NPC_Hoenn_Mom_May_#{$Trainer.rival_appearance.skin_color.to_s}"
+      sprite_path = "Graphics/Characters/player/family/NPC_Hoenn_Max_#{$Trainer.rival_appearance.skin_color.to_s}"
       setSpriteToStaticAppearance(sprite_path)
     end
     end
