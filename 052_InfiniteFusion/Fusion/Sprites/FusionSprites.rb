@@ -129,7 +129,6 @@ module GameData
 
       spriteLoader = BattleSpriteLoader.new
       unless pokemon.pif_sprite
-        echoln "setting new pif sprite"
         pif_sprite = front_pif_sprite(pokemon.species, pokemon.shiny?, pokemon.body_shiny, pokemon.head_shiny)
         pokemon.pif_sprite = pif_sprite
       end

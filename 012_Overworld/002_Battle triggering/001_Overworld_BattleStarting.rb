@@ -272,6 +272,7 @@ def pbWildBattleCore(*args)
     echoln arg
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
+      Events.onWildPokemonCreate.trigger(nil,arg)
     elsif arg.is_a?(Array)
       species = GameData::Species.get(arg[0]).id
       pkmn = pbGenerateWildPokemon(species, arg[1])
