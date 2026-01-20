@@ -90,7 +90,7 @@ class Sprite_Character < RPG::Sprite
   end
 
   def checkModifySpriteGraphics(character)
-    return if character == $game_player || !character.name
+    return if character.is_a?(Game_Player) || !character.name
     if TYPE_EXPERTS_APPEARANCES.keys.include?(character.name.to_sym)
       typeExpert = character.name.to_sym
       setSpriteToAppearance(TYPE_EXPERTS_APPEARANCES[typeExpert])
@@ -177,7 +177,8 @@ class Sprite_Character < RPG::Sprite
   end
 
   def updateCharacterBitmap
-    AnimatedBitmap.new('Graphics/Characters/' + @character_name, @character_hue)
+    checkModifySpriteGraphics(@character)
+    return AnimatedBitmap.new('Graphics/Characters/' + @character_name, @character_hue)
   end
 
   def should_update?
@@ -276,3 +277,5 @@ class Sprite_Character < RPG::Sprite
     @surfbase.update if @surfbase
   end
 end
+# frozen_string_literal: true
+

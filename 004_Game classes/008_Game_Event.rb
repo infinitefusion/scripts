@@ -8,6 +8,7 @@ class Game_Event < Game_Character
   attr_accessor :need_refresh
   attr_accessor :opacity
   attr_accessor :through
+  attr_reader :page
 
   def initialize(map_id, event, map=nil)
     super(map)
