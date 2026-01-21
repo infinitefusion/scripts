@@ -58,19 +58,6 @@ end
 ##  Built-in Quest Modes
 ##=============================================================================
 
-class OngoingQuestMode < QuestMode
-  def initialize
-    super("Ongoing Quests", "Ongoing")
-  end
-
-  def filter_quests(all_quests)
-    all_quests.select { |q| !q.completed }
-  end
-
-  def empty_message
-    _INTL("No ongoing quests")
-  end
-end
 
 class CompletedQuestMode < QuestMode
   def initialize
@@ -86,32 +73,18 @@ class CompletedQuestMode < QuestMode
   end
 end
 
-# Example: Quest modes by status/priority
-class HighPriorityQuestMode < QuestMode
-  def initialize
-    super("High Priority Quests", "High Priority")
-  end
-
-  def filter_quests(all_quests)
-    all_quests.select { |q| !q.completed && q.respond_to?(:priority) && q.priority == :high }
-  end
-
-  def empty_message
-    _INTL("No high priority quests")
-  end
-end
 
 class MainQuestMode < QuestMode
   def initialize
-    super("Main Story Quests", "Main Story")
+    super("Main Quests", "Main Quests")
   end
 
   def filter_quests(all_quests)
-    all_quests.select { |q| !q.completed && q.respond_to?(:quest_type) && q.quest_type == :main }
+    return all_quests.select { |q| !q.completed && q.type == :MAIN_QUEST }
   end
 
   def empty_message
-    _INTL("No main story quests")
+    _INTL("No ongoing main quests")
   end
 end
 
@@ -121,7 +94,7 @@ class SideQuestMode < QuestMode
   end
 
   def filter_quests(all_quests)
-    all_quests.select { |q| !q.completed && q.respond_to?(:quest_type) && q.quest_type == :side }
+    return all_quests.select { |q| !q.completed && q.type != :MAIN_QUEST }
   end
 
   def empty_message
@@ -129,22 +102,22 @@ class SideQuestMode < QuestMode
   end
 end
 
-class LocationQuestMode < QuestMode
-  attr_reader :location
-
-  def initialize(location)
-    @location = location
-    super("#{location} Quests", location)
-  end
-
-  def filter_quests(all_quests)
-    all_quests.select { |q| !q.completed && q.location.include?(@location) }
-  end
-
-  def empty_message
-    _INTL("No quests in {1}", @location)
-  end
-end
+# class LocationQuestMode < QuestMode
+#   attr_reader :location
+#
+#   def initialize(location)
+#     @location = location
+#     super("#{location} Quests", location)
+#   end
+#
+#   def filter_quests(all_quests)
+#     return all_quests.select { |q| !q.completed && q.location.include?(@location) }
+#   end
+#
+#   def empty_message
+#     _INTL("No quests in {1}", @location)
+#   end
+# end
 
 ##=============================================================================
 ##  Questlog - Main quest interface controller (Refactored)
@@ -196,12 +169,9 @@ class Questlog
   def initialize_modes
     # Register all available modes here
     @modes = [
-      OngoingQuestMode.new,
+      MainQuestMode.new,
+      SideQuestMode.new,
       CompletedQuestMode.new,
-    # Add more modes as needed:
-    # MainQuestMode.new,
-    # SideQuestMode.new,
-    # HighPriorityQuestMode.new,
     ]
 
     # You can dynamically add location-based modes:
