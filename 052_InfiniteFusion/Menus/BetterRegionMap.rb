@@ -17,7 +17,7 @@
 #                          :name => "Better Region Map",
 #                          :version => "1.2",
 #                          :credits => ["Marin", "Boonzeet"],
-#                          :dependencies => "Marin's Scripting Utilities",
+#                          :dependencies => "Marin's Scripting 0_Utilities",
 #                          :link => "https://reliccastle.com/resources/174/"
 #                        })
 

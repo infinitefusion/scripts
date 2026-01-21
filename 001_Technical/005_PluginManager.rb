@@ -131,7 +131,7 @@
 #     Name         = Simple Extension                                          #
 #     Version      = 1.0                                                       #
 #     Requires     = Basic Plugin                                              #
-#     Requires     = Useful Utilities,1.1                                      #
+#     Requires     = Useful 0_Utilities,1.1                                      #
 #     Conflicts    = Complex Extension                                         #
 #     Conflicts    = Extended Windows                                          #
 #     Link         = https://reliccastle.com/link-to-the-plugin/               #
