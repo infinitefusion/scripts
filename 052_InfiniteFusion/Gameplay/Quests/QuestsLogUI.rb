@@ -428,6 +428,7 @@ class Questlog
 
   def return_to_main
     pbWait(1)
+    dispose_quest_list_sprites
     fade_to_main
     reset_list_state
     redraw_main_screen
@@ -606,9 +607,10 @@ class Questlog
     sprite.src_rect.y = (sprite.bitmap.height / 2).round if index == @quest_list_menu_index
     sprite.opacity = 0
 
-    # Draw quest name immediately on the main bitmap
     draw_quest_name_on_main(index, quest)
+    set_quest_list_sprite(index,quest)
   end
+
 
   def draw_quest_name_on_main(index, quest)
     y_pos = get_cell_y_position(index)
@@ -631,25 +633,48 @@ class Questlog
 
       [@filtered_quests.size, MAX_VISIBLE_QUESTS].min.times do |j|
         @sprites["quest#{j}"].opacity += FADE_SPEED if i > 3
+        @sprites["quest_icon#{j}"].opacity += FADE_SPEED if i > 3  # Fade in icon
       end
     end
   end
 
+  def set_quest_list_sprite(index, quest)
+    quest_button = @sprites["quest#{index}"]
+    icon_key = "quest_icon#{index}"
+
+    if @sprites[icon_key]
+      sprite = @sprites[icon_key]
+      sprite.setBitmap("Graphics/Characters/#{quest.sprite}")
+      sprite.x = quest_button.x - 64
+      sprite.y = quest_button.y - 20
+      sprite.src_rect.width = (sprite.bitmap.width / 4).round
+      sprite.src_rect.height = (sprite.bitmap.height / 4).round
+      sprite.src_rect.x = 0
+      sprite.src_rect.y = 0
+      sprite.visible = true
+    else
+      create_character_sprite(icon_key, quest, quest_button.x - 64, quest_button.y - 20, 64)
+    end
+  end
+
+
+
   def refresh_quest_list
     @main.clear if @main
 
-    # Determine which quest should appear in each visible slot
     MAX_VISIBLE_QUESTS.times do |i|
-      next if i >= @filtered_quests.size
-
-      # Calculate which quest should appear in this slot
       quest_index = @quest_list_menu_index - @box + i
-      quest_index = 0 if quest_index < 0
-      quest_index = @filtered_quests.size - 1 if quest_index >= @filtered_quests.size
+      next if quest_index < 0 || quest_index >= @filtered_quests.size
 
-      # Assign quest to sprite and draw its name
-      @sprites["quest#{i}"].quest = @filtered_quests[quest_index]
-      draw_quest_name_on_main(i, @filtered_quests[quest_index])
+      quest = @filtered_quests[quest_index]
+
+      # Update the quest button
+      sprite = @sprites["quest#{i}"]
+      sprite.quest = quest if sprite
+      sprite.src_rect.y = (i == @box ? (sprite.bitmap.height / 2).round : 0) if sprite
+
+      draw_quest_name_on_main(i, quest)
+      set_quest_list_sprite(i, quest)
     end
 
     # Update arrow visibility
@@ -661,20 +686,35 @@ class Questlog
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
   end
 
+
+
   ##---------------------------------------------------------------------------
   ##  Quest Detail Display
   ##---------------------------------------------------------------------------
 
+  def dispose_quest_list_sprites
+    MAX_VISIBLE_QUESTS.times do |i|
+      if @sprites["quest#{i}"]
+        @sprites["quest#{i}"].dispose
+        @sprites.delete("quest#{i}")
+      end
+      if @sprites["quest_icon#{i}"]
+        @sprites["quest_icon#{i}"].dispose
+        @sprites.delete("quest_icon#{i}")
+      end
+    end
+  end
+
   def show_quest_detail
     return if @filtered_quests.empty?
-
+    dispose_quest_list_sprites
     quest = @filtered_quests[@quest_list_menu_index]
     pbWait(1)
 
     @scene = SCENE_DETAIL
     create_detail_background
     fade_to_detail
-    create_character_sprite(quest)
+    create_character_sprite("char",quest,62,130)
     draw_quest_details(quest)
     animate_detail_in
   end
@@ -715,14 +755,14 @@ class Questlog
     end
   end
 
-  def create_character_sprite(quest)
-    @sprites["char"] = IconSprite.new(0, 0, @viewport)
-    @sprites["char"].setBitmap("Graphics/Characters/#{quest.sprite}")
-    @sprites["char"].x = 62
-    @sprites["char"].y = 130
-    @sprites["char"].src_rect.height = (@sprites["char"].bitmap.height / 4).round
-    @sprites["char"].src_rect.width = (@sprites["char"].bitmap.width / 4).round
-    @sprites["char"].opacity = 0
+  def create_character_sprite(spriteId,quest,x,y, max_height=nil)
+    @sprites[spriteId] = IconSprite.new(0, 0, @viewport)
+    @sprites[spriteId].setBitmap("Graphics/Characters/#{quest.sprite}")
+    @sprites[spriteId].x = x
+    @sprites[spriteId].y = y
+    @sprites[spriteId].src_rect.height = max_height ? max_height : (@sprites[spriteId].bitmap.height / 4).round
+    @sprites[spriteId].src_rect.width = (@sprites[spriteId].bitmap.width / 4).round
+    @sprites[spriteId].opacity = 0
   end
 
   def draw_quest_details(quest)
