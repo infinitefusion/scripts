@@ -30,7 +30,7 @@ end
 ##  QuestMode - Base class for quest filtering modes
 ##=============================================================================
 
-class QuestMode
+class QuestCategory
   attr_reader :name, :button_text
 
   def initialize(name, button_text)
@@ -59,7 +59,7 @@ end
 ##=============================================================================
 
 
-class CompletedQuestMode < QuestMode
+class CompletedQuestMode < QuestCategory
   def initialize
     super("Completed Quests", "Completed")
   end
@@ -77,7 +77,7 @@ class CompletedQuestMode < QuestMode
 end
 
 
-class MainQuestMode < QuestMode
+class MainQuestMode < QuestCategory
   def initialize
     super("Main Quests", "Main Quests")
   end
@@ -94,7 +94,7 @@ class MainQuestMode < QuestMode
   end
 end
 
-class SideQuestMode < QuestMode
+class SideQuestMode < QuestCategory
   def initialize
     super("Side Quests", "Side Quests")
   end
