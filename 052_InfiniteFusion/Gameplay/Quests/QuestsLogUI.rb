@@ -1,6 +1,7 @@
 ##=============================================================================
-##  Easy Questing System - Refactored by Claude
+##  Easy Questing System - Refactored with Extensible Mode System
 ##  Original by M3rein
+#   Refactored using by Claude
 #   Adapted for Pokemon Infinite Fusion by chardub
 ##=============================================================================
 ##  Main entry point for the quest log
@@ -26,7 +27,127 @@ class QuestSprite < IconSprite
 end
 
 ##=============================================================================
-##  Questlog - Main quest interface controller
+##  QuestMode - Base class for quest filtering modes
+##=============================================================================
+
+class QuestMode
+  attr_reader :name, :button_text
+
+  def initialize(name, button_text)
+    @name = name
+    @button_text = button_text
+  end
+
+  # Override this method to define filtering logic
+  def filter_quests(all_quests)
+    raise NotImplementedError, "Subclasses must implement filter_quests"
+  end
+
+  # Override to customize empty message
+  def empty_message
+    "No quests"
+  end
+
+  # Override to customize title
+  def title
+    @name
+  end
+end
+
+##=============================================================================
+##  Built-in Quest Modes
+##=============================================================================
+
+class OngoingQuestMode < QuestMode
+  def initialize
+    super("Ongoing Quests", "Ongoing")
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| !q.completed }
+  end
+
+  def empty_message
+    _INTL("No ongoing quests")
+  end
+end
+
+class CompletedQuestMode < QuestMode
+  def initialize
+    super("Completed Quests", "Completed")
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| q.completed }
+  end
+
+  def empty_message
+    _INTL("No completed quests")
+  end
+end
+
+# Example: Quest modes by status/priority
+class HighPriorityQuestMode < QuestMode
+  def initialize
+    super("High Priority Quests", "High Priority")
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| !q.completed && q.respond_to?(:priority) && q.priority == :high }
+  end
+
+  def empty_message
+    _INTL("No high priority quests")
+  end
+end
+
+class MainQuestMode < QuestMode
+  def initialize
+    super("Main Story Quests", "Main Story")
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| !q.completed && q.respond_to?(:quest_type) && q.quest_type == :main }
+  end
+
+  def empty_message
+    _INTL("No main story quests")
+  end
+end
+
+class SideQuestMode < QuestMode
+  def initialize
+    super("Side Quests", "Side Quests")
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| !q.completed && q.respond_to?(:quest_type) && q.quest_type == :side }
+  end
+
+  def empty_message
+    _INTL("No side quests")
+  end
+end
+
+class LocationQuestMode < QuestMode
+  attr_reader :location
+
+  def initialize(location)
+    @location = location
+    super("#{location} Quests", location)
+  end
+
+  def filter_quests(all_quests)
+    all_quests.select { |q| !q.completed && q.location.include?(@location) }
+  end
+
+  def empty_message
+    _INTL("No quests in {1}", @location)
+  end
+end
+
+##=============================================================================
+##  Questlog - Main quest interface controller (Refactored)
 ##=============================================================================
 
 class Questlog
@@ -34,10 +155,6 @@ class Questlog
   SCENE_MAIN = 0
   SCENE_LIST = 1
   SCENE_DETAIL = 2
-
-  # Mode constants
-  MODE_ONGOING = 0
-  MODE_COMPLETED = 1
 
   # UI constants
   MAX_VISIBLE_QUESTS = 6
@@ -47,6 +164,7 @@ class Questlog
 
   def initialize
     initialize_data
+    initialize_modes
     initialize_viewport
     create_sprites
     animate_intro
@@ -67,28 +185,28 @@ class Questlog
     @main_menu_index = 0
     @quest_list_menu_index = 0
     @scene = SCENE_MAIN
-    @mode = MODE_ONGOING
+    @current_mode = nil
     @box = 0          # Visible quest index (0-5)
     @frame = 0
+    @filtered_quests = []
 
-    @completed = []
-    @ongoing = []
-
-    categorize_quests
+    fix_broken_TR_quests
   end
 
-  def categorize_quests
-    fix_broken_TR_quests
+  def initialize_modes
+    # Register all available modes here
+    @modes = [
+      OngoingQuestMode.new,
+      CompletedQuestMode.new,
+    # Add more modes as needed:
+    # MainQuestMode.new,
+    # SideQuestMode.new,
+    # HighPriorityQuestMode.new,
+    ]
 
-    $Trainer.quests.each do |quest|
-      echoln "#{quest.id}: #{quest.completed}"
-
-      if quest.completed
-        @completed << quest unless @completed.include?(quest)
-      else
-        @ongoing << quest unless @ongoing.include?(quest)
-      end
-    end
+    # You can dynamically add location-based modes:
+    # @modes << LocationQuestMode.new("Cerulean City")
+    # @modes << LocationQuestMode.new("Viridian Forest")
   end
 
   def initialize_viewport
@@ -100,7 +218,7 @@ class Questlog
   def create_sprites
     create_main_bitmap
     create_background
-    create_buttons
+    create_mode_buttons
     draw_main_text
   end
 
@@ -121,8 +239,8 @@ class Questlog
     @sprites["bg0"].opacity = 0
   end
 
-  def create_buttons
-    2.times do |i|
+  def create_mode_buttons
+    @modes.size.times do |i|
       @sprites["btn#{i}"] = IconSprite.new(0, 0, @viewport)
       @sprites["btn#{i}"].setBitmap("Graphics/Pictures/eqi/quest_button")
       @sprites["btn#{i}"].x = 84
@@ -136,20 +254,27 @@ class Questlog
   def draw_main_text
     pbDrawOutlineText(@main, 0, 2, 512, 384, "Quest Log",
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 142, 512, 384,
-                      _INTL("Ongoing: ") + @ongoing.size.to_s,
-                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 198, 512, 384,
-                      _INTL("Completed: ") + @completed.size.to_s,
-                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+
+    # Draw button labels and quest counts
+    @modes.each_with_index do |mode, i|
+      quest_count = mode.filter_quests($Trainer.quests).size
+      y_pos = 142 + (56 * i)
+      pbDrawOutlineText(@main, 0, y_pos, 512, 384,
+                        _INTL("{1}: {2}", mode.button_text, quest_count),
+                        Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    end
   end
 
   def animate_intro
     ANIMATION_FRAMES.times do |i|
       Graphics.update
       @sprites["bg0"].opacity += FADE_SPEED if i < 8
-      @sprites["btn0"].opacity += FADE_SPEED if i > 3
-      @sprites["btn1"].opacity += FADE_SPEED if i > 3
+
+      # Fade in all mode buttons
+      @modes.size.times do |j|
+        @sprites["btn#{j}"].opacity += FADE_SPEED if i > 3
+      end
+
       @sprites["main"].opacity += 64 if i > 7
     end
   end
@@ -166,7 +291,7 @@ class Questlog
       Graphics.update
       Input.update
 
-      handle_input
+      break if handle_input
 
       @frame = 0 if @frame == 18
     end
@@ -175,12 +300,13 @@ class Questlog
   def handle_input
     case @scene
     when SCENE_MAIN
-      handle_main_input
+      return handle_main_input
     when SCENE_LIST
       handle_list_input
     when SCENE_DETAIL
       handle_detail_input
     end
+    return false
   end
 
   def handle_main_input
@@ -213,7 +339,7 @@ class Questlog
 
   def handle_detail_input
     if Input.trigger?(Input::B)
-      show_quest_list(@main_menu_index)
+      show_quest_list(@modes.index(@current_mode))
     end
 
     animate_character if [6, 12, 18].include?(@frame)
@@ -224,8 +350,10 @@ class Questlog
   ##---------------------------------------------------------------------------
 
   def switch_button(dir)
+    max_index = @modes.size - 1
+
     if dir == :DOWN
-      return if @main_menu_index == 1
+      return if @main_menu_index == max_index
       @sprites["btn#{@main_menu_index}"].src_rect.y = 0
       @main_menu_index += 1
       @sprites["btn#{@main_menu_index}"].src_rect.y = (@sprites["btn#{@main_menu_index}"].bitmap.height / 2).round
@@ -238,11 +366,10 @@ class Questlog
   end
 
   def move_selection(dir)
-    quest_list = @mode == MODE_ONGOING ? @ongoing : @completed
-    return if quest_list.empty?
+    return if @filtered_quests.empty?
 
     if dir == :DOWN
-      return if @quest_list_menu_index == quest_list.size - 1
+      return if @quest_list_menu_index == @filtered_quests.size - 1
 
       deselect_current_quest
       @quest_list_menu_index += 1
@@ -267,14 +394,12 @@ class Questlog
   end
 
   def deselect_current_quest
-    sprite_key = @mode == MODE_ONGOING ? "ongoing#{@box}" : "completed#{@box}"
-    @sprites[sprite_key].src_rect.y = 0 if @sprites[sprite_key]
+    @sprites["quest#{@box}"].src_rect.y = 0 if @sprites["quest#{@box}"]
   end
 
   def select_current_quest
-    sprite_key = @mode == MODE_ONGOING ? "ongoing#{@box}" : "completed#{@box}"
-    if @sprites[sprite_key]
-      @sprites[sprite_key].src_rect.y = (@sprites[sprite_key].bitmap.height / 2).round
+    if @sprites["quest#{@box}"]
+      @sprites["quest#{@box}"].src_rect.y = (@sprites["quest#{@box}"].bitmap.height / 2).round
     end
   end
 
@@ -321,14 +446,8 @@ class Questlog
   end
 
   def fade_quest_sprites
-    @ongoing.size.times do |i|
-      break if i > 5
-      @sprites["ongoing#{i}"].opacity -= FADE_SPEED if @sprites["ongoing#{i}"]
-    end
-
-    @completed.size.times do |i|
-      break if i > 5
-      @sprites["completed#{i}"].opacity -= FADE_SPEED if @sprites["completed#{i}"]
+    MAX_VISIBLE_QUESTS.times do |i|
+      @sprites["quest#{i}"].opacity -= FADE_SPEED if @sprites["quest#{i}"]
     end
   end
 
@@ -350,20 +469,25 @@ class Questlog
   def redraw_main_screen
     pbDrawOutlineText(@main, 0, 2, 512, 384, _INTL("Quest Log"),
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 142, 512, 384,
-                      _INTL("Ongoing: ") + @ongoing.size.to_s,
-                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 0, 198, 512, 384,
-                      _INTL("Completed: ") + @completed.size.to_s,
-                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+
+    @modes.each_with_index do |mode, i|
+      quest_count = mode.filter_quests($Trainer.quests).size
+      y_pos = 142 + (56 * i)
+      pbDrawOutlineText(@main, 0, y_pos, 512, 384,
+                        _INTL("{1}: {2}", mode.button_text, quest_count),
+                        Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    end
   end
 
   def animate_main_return
     ANIMATION_FRAMES.times do |i|
       Graphics.update
       @sprites["bg0"].opacity += FADE_SPEED if i < 8
-      @sprites["btn0"].opacity += FADE_SPEED if i > 3
-      @sprites["btn1"].opacity += FADE_SPEED if i > 3
+
+      @modes.size.times do |j|
+        @sprites["btn#{j}"].opacity += FADE_SPEED if i > 3
+      end
+
       @sprites["main"].opacity += 48 if i > 5
     end
   end
@@ -372,29 +496,27 @@ class Questlog
   ##  Quest List Display
   ##---------------------------------------------------------------------------
 
-  def show_quest_list(mode)
+  def show_quest_list(mode_index)
     pbWait(2)
     @page = 0
     @scene = SCENE_LIST
-    @mode = mode
+    @current_mode = @modes[mode_index]
+    @quest_list_menu_index = 0
     @box = 0
 
-    @box = [@quest_list_menu_index, MAX_VISIBLE_QUESTS-1].min
+    # Filter quests using the selected mode
+    @filtered_quests = @current_mode.filter_quests($Trainer.quests)
+
     create_arrow_sprites
     fade_to_list
     clear_bitmaps
-
-    if mode == MODE_ONGOING
-      display_ongoing_quests
-    else
-      display_completed_quests
-    end
+    display_quest_list
   end
 
   def create_arrow_sprites
     @sprites["up"] = create_arrow(36, false)
     @sprites["down"] = create_arrow(360, true)
-    @sprites["down"].visible = (@mode == MODE_ONGOING ? @ongoing.size : @completed.size) > MAX_VISIBLE_QUESTS
+    @sprites["down"].visible = @filtered_quests.size > MAX_VISIBLE_QUESTS
     @sprites["down"].opacity = 0
   end
 
@@ -416,8 +538,9 @@ class Questlog
       Graphics.update
 
       if i > 1
-        @sprites["btn0"].opacity -= FADE_SPEED
-        @sprites["btn1"].opacity -= FADE_SPEED
+        @modes.size.times do |j|
+          @sprites["btn#{j}"].opacity -= FADE_SPEED
+        end
         @sprites["main"].opacity -= FADE_SPEED
         fade_detail_sprites
       end
@@ -435,33 +558,25 @@ class Questlog
     @sprites["text2"].opacity -= FADE_SPEED if @sprites["text2"]
   end
 
-  def display_ongoing_quests
-    display_quest_list(@ongoing, "ongoing", _INTL("Ongoing Quests"), _INTL("No ongoing quests"))
-  end
-
-  def display_completed_quests
-    display_quest_list(@completed, "completed", _INTL("Completed Quests"), _INTL("No completed quests"))
-  end
-
-  def display_quest_list(quests, prefix, title, empty_msg)
-    [quests.size, MAX_VISIBLE_QUESTS].min.times do |i|
-      create_quest_sprite(i, quests[i], prefix)
-      draw_quest_name(i, quests[i])
+  def display_quest_list
+    [@filtered_quests.size, MAX_VISIBLE_QUESTS].min.times do |i|
+      create_quest_sprite(i, @filtered_quests[i])
+      draw_quest_name(i, @filtered_quests[i])
     end
 
-    if quests.empty?
-      pbDrawOutlineText(@main, 0, 175, 512, 384, empty_msg,
+    if @filtered_quests.empty?
+      pbDrawOutlineText(@main, 0, 175, 512, 384, @current_mode.empty_message,
                         pbColor(:WHITE), pbColor(:BLACK), 1)
     end
 
-    pbDrawOutlineText(@main, 0, 2, 512, 384, title,
+    pbDrawOutlineText(@main, 0, 2, 512, 384, @current_mode.title,
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
 
-    animate_quest_list(quests.size)
+    animate_quest_list
   end
 
-  def create_quest_sprite(index, quest, prefix)
-    sprite_key = "#{prefix}#{index}"
+  def create_quest_sprite(index, quest)
+    sprite_key = "quest#{index}"
     @sprites[sprite_key] = QuestSprite.new(0, 0, @viewport)
     @sprites[sprite_key].setBitmap("Graphics/Pictures/EQI/quest_button")
     @sprites[sprite_key].quest = quest
@@ -482,15 +597,14 @@ class Questlog
     56 + (52 * index)
   end
 
-  def animate_quest_list(quest_count)
+  def animate_quest_list
     ANIMATION_FRAMES.times do |i|
       Graphics.update
       @sprites["main"].opacity += FADE_SPEED if i < 8
       @sprites["down"].opacity += FADE_SPEED if i > 3
 
-      [quest_count, MAX_VISIBLE_QUESTS].min.times do |j|
-        sprite_key = @mode == MODE_ONGOING ? "ongoing#{j}" : "completed#{j}"
-        @sprites[sprite_key].opacity += FADE_SPEED if i > 3
+      [@filtered_quests.size, MAX_VISIBLE_QUESTS].min.times do |j|
+        @sprites["quest#{j}"].opacity += FADE_SPEED if i > 3
       end
     end
   end
@@ -498,48 +612,27 @@ class Questlog
   def refresh_quest_list
     @main.clear if @main
 
-    quest_list = @mode == MODE_ONGOING ? @ongoing : @completed
-    sprite_prefix = @mode == MODE_ONGOING ? "ongoing" : "completed"
-
     # Determine which quest should appear in each visible slot
     MAX_VISIBLE_QUESTS.times do |i|
-      next if i >= quest_list.size
+      next if i >= @filtered_quests.size
 
       # Calculate which quest should appear in this slot
       quest_index = @quest_list_menu_index - @box + i
       quest_index = 0 if quest_index < 0
-      quest_index = quest_list.size - 1 if quest_index >= quest_list.size
+      quest_index = @filtered_quests.size - 1 if quest_index >= @filtered_quests.size
 
       # Assign quest to sprite and draw its name
-      @sprites["#{sprite_prefix}#{i}"].quest = quest_list[quest_index]
-      draw_quest_name(i, quest_list[quest_index])
+      @sprites["quest#{i}"].quest = @filtered_quests[quest_index]
+      draw_quest_name(i, @filtered_quests[quest_index])
     end
 
     # Update arrow visibility
     @sprites["up"].visible = @quest_list_menu_index > 0
-    @sprites["down"].visible = @quest_list_menu_index < quest_list.size - 1
+    @sprites["down"].visible = @quest_list_menu_index < @filtered_quests.size - 1
 
     # Redraw the title
-    title = @mode == MODE_ONGOING ? _INTL("Ongoing Quests") : _INTL("Completed Quests")
-    pbDrawOutlineText(@main, 0, 2, 512, 384, title,
+    pbDrawOutlineText(@main, 0, 2, 512, 384, @current_mode.title,
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-  end
-
-
-  def calculate_quest_offset(index)
-    case index
-    when 0 then -5
-    when 1 then -4
-    when 2 then -3
-    when 3 then -2
-    when 4 then -1
-    else 0
-    end
-  end
-
-  def update_arrow_visibility(quest_list, sprite_prefix)
-    @sprites["up"].visible = @sprites["#{sprite_prefix}0"].quest != quest_list[0]
-    @sprites["down"].visible = @sprites["#{sprite_prefix}5"].quest != quest_list[quest_list.size - 1]
   end
 
   ##---------------------------------------------------------------------------
@@ -547,10 +640,9 @@ class Questlog
   ##---------------------------------------------------------------------------
 
   def show_quest_detail
-    quest_list = @mode == MODE_ONGOING ? @ongoing : @completed
-    return if quest_list.empty?
+    return if @filtered_quests.empty?
 
-    quest = quest_list[@quest_list_menu_index]
+    quest = @filtered_quests[@quest_list_menu_index]
     pbWait(1)
 
     @scene = SCENE_DETAIL
@@ -593,8 +685,7 @@ class Questlog
 
   def fade_quest_list_sprites
     MAX_VISIBLE_QUESTS.times do |i|
-      @sprites["ongoing#{i}"].opacity -= FADE_SPEED if @sprites["ongoing#{i}"]
-      @sprites["completed#{i}"].opacity -= FADE_SPEED if @sprites["completed#{i}"]
+      @sprites["quest#{i}"].opacity -= FADE_SPEED if @sprites["quest#{i}"]
     end
   end
 
@@ -658,7 +749,6 @@ class Questlog
     end
   end
 
-
   def animate_character
     ["char", "char2"].each do |char_key|
       next unless @sprites[char_key]
@@ -677,8 +767,11 @@ class Questlog
     ANIMATION_FRAMES.times do |i|
       Graphics.update
       @sprites["bg0"].opacity -= FADE_SPEED if @sprites["bg0"] && i > 3
-      @sprites["btn0"].opacity -= FADE_SPEED if @sprites["btn0"]
-      @sprites["btn1"].opacity -= FADE_SPEED if @sprites["btn1"]
+
+      @modes.size.times do |j|
+        @sprites["btn#{j}"].opacity -= FADE_SPEED if @sprites["btn#{j}"]
+      end
+
       @sprites["main"].opacity -= FADE_SPEED if @sprites["main"]
       @sprites["char"].opacity -= 40 if @sprites["char"]
       @sprites["char2"].opacity -= 40 if @sprites["char2"]
