@@ -32,10 +32,11 @@ end
 
 class QuestCategory
   attr_reader :name, :button_text
-
+  attr_accessor :last_index
   def initialize(name, button_text)
     @name = name
     @button_text = button_text
+    @last_index = 0
   end
 
   # Override this method to define filtering logic
@@ -518,13 +519,11 @@ class Questlog
 
   def show_quest_list(mode_index)
     pbWait(2)
-    @page = 0
     @scene = SCENE_LIST
     @current_mode = @modes[mode_index]
-    @quest_list_menu_index = 0
-    @box = 0
 
-    # Filter quests using the selected mode
+    @quest_list_menu_index = @current_mode.last_index
+    @box = [@quest_list_menu_index, MAX_VISIBLE_QUESTS - 1].min
     @filtered_quests = @current_mode.filter_quests($Trainer.quests)
 
     create_arrow_sprites
@@ -532,6 +531,7 @@ class Questlog
     clear_bitmaps
     display_quest_list
   end
+
 
   def create_arrow_sprites
     @sprites["up"] = create_arrow(36, false)
@@ -653,7 +653,7 @@ class Questlog
       sprite.src_rect.y = 0
       sprite.visible = true
     else
-      create_character_sprite(icon_key, quest, quest_button.x - 64, quest_button.y - 20, 64)
+      create_character_sprite(icon_key, quest, quest_button.x - 64, quest_button.y - 20)
     end
   end
 
@@ -707,6 +707,8 @@ class Questlog
 
   def show_quest_detail
     return if @filtered_quests.empty?
+    @current_mode.last_index = @quest_list_menu_index
+
     dispose_quest_list_sprites
     quest = @filtered_quests[@quest_list_menu_index]
     pbWait(1)
@@ -714,10 +716,11 @@ class Questlog
     @scene = SCENE_DETAIL
     create_detail_background
     fade_to_detail
-    create_character_sprite("char",quest,62,130)
+    create_character_sprite("char", quest, 62, 130)
     draw_quest_details(quest)
     animate_detail_in
   end
+
 
   def create_detail_background
     @sprites["bg1"] = IconSprite.new(0, 0, @viewport)
