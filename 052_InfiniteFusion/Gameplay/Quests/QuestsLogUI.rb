@@ -63,6 +63,9 @@ class CompletedQuestMode < QuestMode
   def initialize
     super("Completed Quests", "Completed")
   end
+  def button_path
+    return "Graphics/Pictures/eqi/quest_button_complete"
+  end
 
   def filter_quests(all_quests)
     all_quests.select { |q| q.completed }
@@ -79,6 +82,9 @@ class MainQuestMode < QuestMode
     super("Main Quests", "Main Quests")
   end
 
+  def button_path
+    return "Graphics/Pictures/eqi/quest_button_main"
+  end
   def filter_quests(all_quests)
     return all_quests.select { |q| !q.completed && q.type == :MAIN_QUEST }
   end
@@ -91,6 +97,10 @@ end
 class SideQuestMode < QuestMode
   def initialize
     super("Side Quests", "Side Quests")
+  end
+
+  def button_path
+    return "Graphics/Pictures/eqi/quest_button_side"
   end
 
   def filter_quests(all_quests)
@@ -213,9 +223,16 @@ class Questlog
   end
 
   def create_mode_buttons
+    default_button_path = "Graphics/Pictures/eqi/quest_button"
     @modes.size.times do |i|
       @sprites["btn#{i}"] = IconSprite.new(0, 0, @viewport)
-      @sprites["btn#{i}"].setBitmap("Graphics/Pictures/eqi/quest_button")
+      echoln @modes[i]
+      button_path = @modes[i].button_path
+      if button_path
+        @sprites["btn#{i}"].setBitmap(button_path)
+      else
+        @sprites["btn#{i}"].setBitmap(default_button_path)
+      end
       @sprites["btn#{i}"].x = 84
       @sprites["btn#{i}"].y = 130 + 56 * i
       @sprites["btn#{i}"].src_rect.height = (@sprites["btn#{i}"].bitmap.height / 2).round
