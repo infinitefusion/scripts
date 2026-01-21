@@ -15,6 +15,7 @@ def addTVAnnouncement(announcementId)
 end
 
 def removeTVAnnouncement(announcement_id)
+  $PokemonGlobal.tv_announcements = [] unless $PokemonGlobal.tv_announcements
   if $PokemonGlobal.tv_announcements.include?(announcement_id)
     $PokemonGlobal.tv_announcements.delete(announcement_id)
   end

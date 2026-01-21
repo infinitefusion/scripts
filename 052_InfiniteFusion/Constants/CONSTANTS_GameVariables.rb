@@ -1,6 +1,7 @@
 #############
 # VARIABLES #
 #############
+VAR_CURRENT_MART=291
 VAR_CURRENT_CITY=291
 VAR_CURRENT_CITY_NUMERICAL_ID=14 #for wondertrade/pokemarts
 
