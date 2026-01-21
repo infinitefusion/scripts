@@ -163,6 +163,9 @@ class Questlog
     @frame = 0
     @filtered_quests = []
 
+    @scroll_timer = 12   # Cooldown counter for holding up/down
+    @scroll_delay = 6   # Frames to wait before repeating movement
+
     fix_broken_TR_quests
   end
 
@@ -284,28 +287,51 @@ class Questlog
 
     if Input.trigger?(Input::C)
       show_quest_list(@main_menu_index)
-    elsif Input.press?(Input::DOWN)
-      switch_button(:DOWN)
-    elsif Input.trigger?(Input::UP)
-      switch_button(:UP)
+    end
+    if @scroll_timer > 0
+      @scroll_timer -= 1
+    else
+      if Input.press?(Input::DOWN)
+        switch_button(:DOWN)
+        @scroll_timer = @scroll_delay
+      elsif Input.press?(Input::UP)
+        switch_button(:UP)
+        @scroll_timer = @scroll_delay
+      end
     end
 
     false
   end
 
+
   def handle_list_input
     if Input.trigger?(Input::B)
       return_to_main
-    elsif Input.press?(Input::DOWN)
-      move_selection(:DOWN)
-    elsif Input.press?(Input::UP)
-      move_selection(:UP)
     elsif Input.trigger?(Input::C)
       show_quest_detail
+    else
+      handle_scroll_input
     end
 
     animate_arrows
   end
+
+  def handle_scroll_input
+    # Only scroll when timer allows
+    if @scroll_timer > 0
+      @scroll_timer -= 1
+      return
+    end
+
+    if Input.press?(Input::DOWN)
+      move_selection(:DOWN)
+      @scroll_timer = @scroll_delay
+    elsif Input.press?(Input::UP)
+      move_selection(:UP)
+      @scroll_timer = @scroll_delay
+    end
+  end
+
 
   def handle_detail_input
     if Input.trigger?(Input::B)
@@ -319,21 +345,27 @@ class Questlog
   ##  Navigation
   ##---------------------------------------------------------------------------
 
+  def update_button_selection(index, selected)
+    return unless @sprites["btn#{index}"]
+    height = (@sprites["btn#{index}"].bitmap.height / 2).round
+    @sprites["btn#{index}"].src_rect.y = selected ? height : 0
+  end
+
   def switch_button(dir)
     max_index = @modes.size - 1
-
     if dir == :DOWN
-      return if @main_menu_index == max_index
-      @sprites["btn#{@main_menu_index}"].src_rect.y = 0
+      return if @main_menu_index >= max_index
+      update_button_selection(@main_menu_index, false)
       @main_menu_index += 1
-      @sprites["btn#{@main_menu_index}"].src_rect.y = (@sprites["btn#{@main_menu_index}"].bitmap.height / 2).round
+      update_button_selection(@main_menu_index, true)
     else
-      return if @main_menu_index == 0
-      @sprites["btn#{@main_menu_index}"].src_rect.y = 0
+      return if @main_menu_index <= 0
+      update_button_selection(@main_menu_index, false)
       @main_menu_index -= 1
-      @sprites["btn#{@main_menu_index}"].src_rect.y = (@sprites["btn#{@main_menu_index}"].bitmap.height / 2).round
+      update_button_selection(@main_menu_index, true)
     end
   end
+
 
   def move_selection(dir)
     return if @filtered_quests.empty?
@@ -360,7 +392,7 @@ class Questlog
       refresh_quest_list if @box == 0
     end
 
-    pbWait(4)
+    #pbWait(4)
   end
 
   def deselect_current_quest
@@ -531,7 +563,7 @@ class Questlog
   def display_quest_list
     [@filtered_quests.size, MAX_VISIBLE_QUESTS].min.times do |i|
       create_quest_sprite(i, @filtered_quests[i])
-      draw_quest_name(i, @filtered_quests[i])
+      draw_quest_name_on_main(i, @filtered_quests[i])
     end
 
     if @filtered_quests.empty?
@@ -548,19 +580,26 @@ class Questlog
   def create_quest_sprite(index, quest)
     sprite_key = "quest#{index}"
     @sprites[sprite_key] = QuestSprite.new(0, 0, @viewport)
-    @sprites[sprite_key].setBitmap("Graphics/Pictures/EQI/quest_button")
-    @sprites[sprite_key].quest = quest
-    @sprites[sprite_key].x = 94
-    @sprites[sprite_key].y = 42 + 52 * index
-    @sprites[sprite_key].src_rect.height = (@sprites[sprite_key].bitmap.height / 2).round
-    @sprites[sprite_key].src_rect.y = (@sprites[sprite_key].bitmap.height / 2).round if index == @quest_list_menu_index
-    @sprites[sprite_key].opacity = 0
+    sprite = @sprites[sprite_key]
+    sprite.setBitmap("Graphics/Pictures/EQI/quest_button")
+    sprite.quest = quest
+    sprite.x = 94
+    sprite.y = 42 + 52 * index
+    sprite.src_rect.height = (sprite.bitmap.height / 2).round
+    sprite.src_rect.y = (sprite.bitmap.height / 2).round if index == @quest_list_menu_index
+    sprite.opacity = 0
+
+    # Draw quest name immediately on the main bitmap
+    draw_quest_name_on_main(index, quest)
   end
 
-  def draw_quest_name(index, quest)
+  def draw_quest_name_on_main(index, quest)
     y_pos = get_cell_y_position(index)
-    pbDrawOutlineText(@main, 11, y_pos, 512, 384, quest.name,
-                      quest.color, Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 11, y_pos, 512, 384,
+                      quest.name,
+                      quest.color,
+                      Color.new(0, 0, 0),
+                      1)
   end
 
   def get_cell_y_position(index)
@@ -593,7 +632,7 @@ class Questlog
 
       # Assign quest to sprite and draw its name
       @sprites["quest#{i}"].quest = @filtered_quests[quest_index]
-      draw_quest_name(i, @filtered_quests[quest_index])
+      draw_quest_name_on_main(i, @filtered_quests[quest_index])
     end
 
     # Update arrow visibility
