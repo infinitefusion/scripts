@@ -1,3 +1,32 @@
+
+MainQuestColor = :GREEN
+HotelQuestColor = :GOLD
+
+class Quest
+  attr_accessor :id
+  attr_accessor :name
+  attr_accessor :desc
+  attr_accessor :npc
+  attr_accessor :sprite
+  attr_accessor :location
+  attr_accessor :color
+  attr_accessor :time
+  attr_accessor :completed
+  attr_accessor :type
+
+  def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false)
+    self.id = id
+    self.name = name
+    self.desc = desc
+    self.npc = npc
+    self.sprite = sprite
+    self.location = location
+    self.color = pbColor(color)
+    self.time = time
+    self.completed = completed
+  end
+end
+
 def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite)
   case quest_type
   when :MAIN_QUEST
