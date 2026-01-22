@@ -147,7 +147,8 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
     if tr_type
       tbargraphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
       #tgraphic    = sprintf("vsTrainer_%s", tr_type.to_s) rescue nil
-      tgraphic    = sprintf("trainer%03d", tr_number) rescue nil
+      #tgraphic    = sprintf("trainer%03d", tr_number) rescue nil
+      tgraphic    = tr_type.to_s rescue nil
 
       echoln tbargraphic
       if pbResolveBitmap("Graphics/Transitions/" + tbargraphic)# && pbResolveBitmap("Graphics/Characters/" + tgraphic)

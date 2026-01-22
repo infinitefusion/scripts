@@ -90,7 +90,9 @@ class Sprite_Character < RPG::Sprite
   end
 
   def checkModifySpriteGraphics(character)
-    return if character.is_a?(Game_Player) || !character.name
+    return if character.is_a?(Game_Player)
+    return if character.is_a?(OverworldPokemonEvent)
+    return unless character.name
     if TYPE_EXPERTS_APPEARANCES.keys.include?(character.name.to_sym)
       typeExpert = character.name.to_sym
       setSpriteToAppearance(TYPE_EXPERTS_APPEARANCES[typeExpert])
@@ -148,8 +150,10 @@ class Sprite_Character < RPG::Sprite
   end
 
   def updateBitmap
+    return if @manual_refresh
     @manual_refresh = true
   end
+
 
   def pbLoadOutfitBitmap(outfitFileName)
     # Construct the file path for the outfit bitmap based on the given value
@@ -182,11 +186,12 @@ class Sprite_Character < RPG::Sprite
   end
 
   def should_update?
-    return @tile_id != @character.tile_id ||
+    return true if @manual_refresh
+    return false if !@character
+    @tile_id        != @character.tile_id ||
       @character_name != @character.character_name ||
-      @character_hue != @character.character_hue ||
-      @oldbushdepth != @character.bush_depth ||
-      @manual_refresh
+      @character_hue  != @character.character_hue ||
+      @oldbushdepth   != @character.bush_depth
   end
 
   def refreshOutfit()
@@ -230,12 +235,13 @@ class Sprite_Character < RPG::Sprite
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
         #@spriteoffset = @character_name[/offset/i]
-        @spriteoffset = @character_name[/fish/i] || @character_name[/dive/i] || @character_name[/surf/i]
+        #@spriteoffset = @character_name[/fish/i] || @character_name[/dive/i] || @character_name[/surf/i]
         @cw = @charbitmap.width / 4 if !@charbitmap.disposed?
         @ch = @charbitmap.height / 4 if !@charbitmap.disposed?
         self.ox = @cw / 2
         @character.sprite_size = [@cw, @ch]
       end
+      @manual_refresh = false
     end
     @charbitmap.update if @charbitmapAnimated
     bushdepth = @character.bush_depth
