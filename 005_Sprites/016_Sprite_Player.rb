@@ -1,5 +1,6 @@
 class Sprite_Player < Sprite_Character
   ACRO_BIKE_POSITION_OFFSET = 16
+
   def initialize(viewport, character = nil)
     super
     @viewport = viewport
@@ -98,7 +99,7 @@ class Sprite_Player < Sprite_Character
     return baseBitmap
   end
 
-  #When the player needs to be positioned differently relative to its normal position
+  # When the player needs to be positioned differently relative to its normal position
   def apply_global_player_offsets
     if $PokemonGlobal.acroBike
       self.y -= ACRO_BIKE_POSITION_OFFSET
@@ -108,6 +109,15 @@ class Sprite_Player < Sprite_Character
   def update
     super
     apply_global_player_offsets
+
+    if $game_map.scrolling?
+      @hat.adjustPositionForScreenScrolling if @hat
+      @hat2.adjustPositionForScreenScrolling if @hat2
+      @hair.adjustPositionForScreenScrolling if @hair
+    end
+
+
+
     if Settings::GAME_ID == :IF_HOENN && $PokemonGlobal.diving
       self.z = -4
       @hat.adjust_layer if @hat
@@ -132,3 +142,5 @@ class Sprite_Player < Sprite_Character
     end
   end
 end
+
+
