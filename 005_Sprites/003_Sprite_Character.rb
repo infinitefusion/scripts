@@ -235,7 +235,9 @@ class Sprite_Character < RPG::Sprite
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
         #@spriteoffset = @character_name[/offset/i]
-        #@spriteoffset = @character_name[/fish/i] || @character_name[/dive/i] || @character_name[/surf/i]
+        if @character == $game_player
+          @spriteoffset = @character_name[/fish/i] || @character_name[/dive/i] || @character_name[/surf/i]
+        end
         @cw = @charbitmap.width / 4 if !@charbitmap.disposed?
         @ch = @charbitmap.height / 4 if !@charbitmap.disposed?
         self.ox = @cw / 2

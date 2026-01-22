@@ -152,8 +152,6 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
 
       echoln tbargraphic
       if pbResolveBitmap("Graphics/Transitions/" + tbargraphic)# && pbResolveBitmap("Graphics/Characters/" + tgraphic)
-        echoln "yeah right?"
-
         player_tr_type = $Trainer.trainer_type
         outfit = $Trainer.outfit
         # Set up
