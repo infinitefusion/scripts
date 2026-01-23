@@ -373,7 +373,7 @@ def pbClosestHiddenItem
   playerX = $game_player.x
   playerY = $game_player.y
   for event in $game_map.events.values
-    next if !event.name[/hiddenitem/i]
+    next unless event.name.downcase.start_with?("item")
     next if (playerX - event.x).abs >= 8
     next if (playerY - event.y).abs >= 6
     next if $game_self_switches[[$game_map.map_id, event.id, "A"]]

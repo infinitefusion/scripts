@@ -125,6 +125,7 @@ class Sprite_Character
 
   # Rival catches a Pokemon the same type as the player's starter and fuses it with their starter
   def updateRivalTeamForSecondBattle()
+
     rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
     rival_starter = rival_trainer.currentTeam[0]
     rival_starter_species = rival_starter.species
@@ -146,15 +147,17 @@ class Sprite_Character
 
     rival_trainer.currentTeam = team
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
+    $game_switches[SWITCH_RIVAL_BATTLE_2] = true
   end
 
   # This sets up the rival's main team for the game
-  # Fir further battle, we can just add Pokemon and gain exp the same way as other
+  # Fur further battle, we can just add Pokemon and gain exp the same way as other
   # trainer rematches
   #
   # Basically, rival catches a pokemon the type of their rival's starter - fuses it with their starters
   # Has a team composed of fire/grass, water/grass, water/fire pokemon
   def updateRivalTeamForThirdBattle()
+    updateRivalTeamForSecondBattle unless $game_switches[SWITCH_RIVAL_BATTLE_2]
     rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
     rival_starter = rival_trainer.currentTeam[0]
     starter_species = rival_starter.species
@@ -167,6 +170,7 @@ class Sprite_Character
     evolveRivalTeam
 
     evolution_species = rival_starter.check_evolution_on_level_up(false)
+    echoln evolution_species
     if evolution_species
       starter_species = evolution_species
     end
@@ -222,6 +226,9 @@ class Sprite_Character
     team << Pokemon.new(contains_starter[0], 20)
 
     rival_trainer.currentTeam = team
+    echoln rival_trainer.currentTeam
+
+    evolveRivalTeam
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
   end
 

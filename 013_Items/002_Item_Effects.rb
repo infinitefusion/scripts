@@ -316,7 +316,7 @@ ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
       end
       pbWait(Graphics.frame_rate * 3 / 10)
       pbMessage(_INTL("Huh? The {1}'s responding!\1", GameData::Item.get(item).name))
-      pbMessage(_INTL("There's an item buried around here!"))
+      pbMessage(_INTL("There's an item around here!"))
     end
   end
   next 1

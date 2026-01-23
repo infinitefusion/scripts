@@ -294,7 +294,7 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
-    pbBGMPlay("city_evergrande")
+    pbBGMPlay("pokemon_go_map")
     copyKeybindings()
 
     commands = []
