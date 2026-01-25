@@ -402,8 +402,6 @@ def obtainBirthdayGift
   pbGenerateEgg(pokemon)
 end
 
-
-
 # Called from an event. The event's name must be the legendary Pokemon's species
 # Returns true is it's not in $trainer.caught_legendaries or $trainer.encountered_legendaries
 # Returns false if it is
@@ -416,27 +414,25 @@ def is_legendary_active?(species)
   return !is_caught && !is_encountered
 end
 
-def setEventGraphicPokemon(species,event_id)
+def setEventGraphicPokemon(species, event_id)
   species_data = GameData::Species.get(species)
   event = $game_map.events[event_id]
   return unless event
   if event
     echoln event.get_page(1)
     event.get_page(1).graphic.character_name = getOverworldLandPath(species_data)
-    #event.character_name= #"Graphics/Characters/#{getOverworldLandPath(species_data)}"
+    # event.character_name= #"Graphics/Characters/#{getOverworldLandPath(species_data)}"
     event.refresh
   end
 end
 
-
-#ZORUA FOREST
+# ZORUA FOREST
 #
 ZORUA_FOLLOWED_VARIABLE = 1031
 
-
 def shapeshift_zorua
 
-  zorua_events = [32,36,38,34,37,61,41]
+  zorua_events = [32, 36, 38, 34, 37, 61, 41]
   nb_active = $game_variables[ZORUA_FOLLOWED_VARIABLE]
   for i in 0..nb_active
     event_id = zorua_events[i]

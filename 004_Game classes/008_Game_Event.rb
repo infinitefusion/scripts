@@ -7,8 +7,8 @@ class Game_Event < Game_Character
   attr_reader :character_name
   attr_accessor :need_refresh
   attr_accessor :opacity
-  attr_accessor :through
   attr_reader :page
+  attr_reader :on_bridge
 
   def initialize(map_id, event, map=nil)
     super(map)
@@ -31,8 +31,16 @@ class Game_Event < Game_Character
     if @event.name[/forced_z\s*=\s*(-?\d+)/i]
       @forced_z = $1.to_i
     end
+    if @event.name.include?("on_bridge")
+      @on_bridge = true
+    end
     moveto(@event.x, @event.y) if map
     refresh
+  end
+
+  def through
+    return true if @on_bridge && $PokemonGlobal.bridge <= 0
+    return @through
   end
 
   def id;   return @event.id;   end

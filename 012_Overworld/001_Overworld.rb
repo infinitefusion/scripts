@@ -493,6 +493,7 @@ end
 # Returns whether event is able to walk up to the player.
 def pbEventCanReachPlayer?(event, player, distance)
   return false if !pbEventFacesPlayer?(event, player, distance)
+  return false if event.on_bridge && $PokemonGlobal.bridge <= 0
   delta_x = (event.direction == 6) ? 1 : (event.direction == 4) ? -1 : 0
   delta_y = (event.direction == 2) ? 1 : (event.direction == 8) ? -1 : 0
   case event.direction

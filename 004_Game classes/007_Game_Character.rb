@@ -386,6 +386,7 @@ class Game_Character
     return 0 if @under_player
     return 999 if @always_on_top
     return @forced_z if @forced_z
+    return 999  if @on_bridge && $PokemonGlobal.bridge <= 0
     z = screen_y_ground
     if @tile_id > 0
       begin
