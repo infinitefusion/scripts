@@ -1,3 +1,7 @@
+# todo: Also do trainer class specific items.
+# e.g. Rich boy can give luxury ball
+#
+
 TRAINER_REMATCH_GIFTS = {
   # 2 tiers of gift.
   # common, rare
@@ -7,7 +11,7 @@ TRAINER_REMATCH_GIFTS = {
   :NORMAL => [[:CHILANBERRY, :POTION, :FULLHEAL],
               [:UPGRADE]],
   :FIGHTING => [[:CHOPLEBERRY,],
-                [:PROTEIN]],
+                [:IRON, :CALCIUM]],
   :FLYING => [[:COBABERRY, :PRETTYWING,],
               [:RAZORFANG]],
   :POISON => [[:KEBIABERRY, :ANTIDOTE],
@@ -22,7 +26,7 @@ TRAINER_REMATCH_GIFTS = {
   :GHOST => [[:KASIBBERRY,],
              [:REAPERCLOTH]],
   :STEEL => [[:BABIRIBERRY,],
-             [:METALCOAT, :METALPOWDER]],
+             [:METALCOAT, :METALPOWDER, :IRON]],
   :FIRE => [[:BURNHEAL, :OCCABERRY],
             [:FIRESTONE, :LAVACOOKIE]],
   :WATER => [[:PASSHOBERRY, :HEARTSCALE],
@@ -45,27 +49,44 @@ TRAINER_REMATCH_GIFTS = {
   :ANY => [:DNASPLICERS, :DNAREVERSERS, :REPEL, :POTION, :GREATBALL]
 }
 
+TRAINER_REMATCH_GIFTS = {
+  :RICHBOY => [[:LUXURYBALL], [:NUGGET]],
+  :LADY => [[:LUXURYBALL], [:NUGGET]],
+  :GENTLEMAN => [[:LUXURYBALL], [:NUGGET]],
 
+  :HIKER => [[:TINYMUSHROOM, :REPEL], [:BIGMUSHROOM]],
+  :CRUSHGIRL => [[:XSPEED], [:CARBOS]],
+  :BLACKBELT => [[:XATTACK], [:PROTEIN]],
+  :NURSE => [[:HEALBALL, :SUPERPOTION], [:FULLRESTORE]],
+
+  :ROCKER => [[:PARLYZHEAL], [:THUNDERSTONE]],
+  :SAILOR => [[:HEALBALL, :SUPERPOTION], [:FULLRESTORE]],
+
+}
 
 def should_give_item(trainer)
   echoln trainer.friendship_level
   return false unless trainer.friendship_level >= 2
-  base_rate = 10 #percent
-  item_chances = base_rate+ (trainer.friendship/10).floor
+  base_rate = 10 # percent
+  item_chances = base_rate + (trainer.friendship / 10).floor
   echoln item_chances
   return rand(100) < item_chances
 end
 
 def select_gift_item(trainer)
-  rare_item_chances = 5 + (trainer.friendship/5).floor
+  rare_item_chances = 5 + (trainer.friendship / 5).floor
+  chance_trainer_class_item = 40
 
   giving_rare_item = rand(100) < rare_item_chances
-
   typed_items = TRAINER_REMATCH_GIFTS[trainer.favorite_type]
+  items_list = typed_items
+  if TRAINER_REMATCH_GIFTS.has_key?(trainer.trainer_type) && rand(100) < chance_trainer_class_item
+    items_list = TRAINER_REMATCH_GIFTS[trainer.trainer_type]
+  end
   if giving_rare_item
-    return typed_items[1].sample
+    return items_list[1].sample
   else
-    items = typed_items[0] + TRAINER_REMATCH_GIFTS[:ANY]
+    items = items_list[0] + TRAINER_REMATCH_GIFTS[:ANY]
     return items.sample
   end
 end
