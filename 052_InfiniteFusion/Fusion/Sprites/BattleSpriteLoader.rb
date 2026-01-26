@@ -70,6 +70,19 @@ class BattleSpriteLoader
     $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite
   end
 
+  def obtain_pif_sprite(species)
+    species_data = GameData::Species.get(species)
+    if species_data.is_triple_fusion
+      #todo
+    elsif species_data.is_fusion
+      head= species_data.get_head_species
+      body = species_data.get_body_species
+      pif_sprite = select_new_pif_fusion_sprite(head, body)
+    else
+      pif_sprite = select_new_pif_base_sprite(species_data.id_number)
+    end
+    return pif_sprite
+  end
   def obtain_fusion_pif_sprite(head_id,body_id)
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
     pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal

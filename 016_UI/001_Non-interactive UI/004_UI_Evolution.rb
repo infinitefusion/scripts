@@ -492,6 +492,9 @@ class PokemonEvolutionScene
   def pbStartScreen(pokemon,newspecies,reversing=false)
     @pokemon = pokemon
     @newspecies = newspecies
+    spriteLoader = BattleSpriteLoader.new
+    evolution_pif_sprite = spriteLoader.obtain_pif_sprite(newspecies)
+
     @sprites = {}
     @bgviewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @bgviewport.z = 99999
@@ -508,6 +511,8 @@ class PokemonEvolutionScene
     rsprite1.setPokemonBitmap(@pokemon,false)
     rsprite1.x = Graphics.width/2
     rsprite1.y = (Graphics.height-64)/2
+
+    @pokemon.pif_sprite = evolution_pif_sprite
     rsprite2 = PokemonSprite.new(@viewport)
     rsprite2.setOffset(PictureOrigin::Center)
     rsprite2.setPokemonBitmapSpecies(@pokemon,@newspecies,false)
