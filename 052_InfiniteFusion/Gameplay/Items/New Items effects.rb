@@ -1632,7 +1632,7 @@ def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =nil)
             return false
           end
 
-          selectedHead = selectFusion(pokemon, poke2, is_supersplicer)
+          selectedHead, selected_sprite = selectFusion(pokemon, poke2, is_supersplicer)
           if selectedHead == -1 # cancelled
             return false
           end
@@ -1652,7 +1652,7 @@ def pbDNASplicing(pokemon, scene, item = :DNASPLICERS, partyPosition =nil)
           end
 
           if (Kernel.pbConfirmMessage(_INTL("Fuse {1} and {2}?", selectedHead.name, selectedBase.name)))
-            pbFuse(selectedHead, selectedBase, item)
+            pbFuse(selectedHead, selectedBase, item, selected_sprite)
             pbRemovePokemonAt(chosen)
             scene.pbHardRefresh
             pbBGMPlay(playingBGM)
@@ -1682,8 +1682,9 @@ def selectFusion(pokemon, poke2, supersplicers = false)
 
   selectorWindow = FusionPreviewScreen.new(poke2, pokemon, supersplicers) # PictureWindow.new(picturePath)
   selectedHead = selectorWindow.getSelection
+  fusion_pif_sprite = selectorWindow.get_selected_sprite if selectedHead.is_a?(Pokemon)
   selectorWindow.dispose
-  return selectedHead
+  return selectedHead, fusion_pif_sprite
 end
 
 # firstOptionSelected= selectedHead == pokemon
@@ -1710,7 +1711,7 @@ end
 #   end
 # end
 
-def pbFuse(pokemon_body, pokemon_head, splicer_item)
+def pbFuse(pokemon_body, pokemon_head, splicer_item, fusion_pif_sprite=nil)
   original_head = pokemon_head.clone
   original_body = pokemon_body.clone
 
@@ -1719,7 +1720,7 @@ def pbFuse(pokemon_body, pokemon_head, splicer_item)
   newid = (pokemon_body.species_data.id_number) * NB_POKEMON + pokemon_head.species_data.id_number
   fus = PokemonFusionScene.new
 
-  if (fus.pbStartScreen(pokemon_body, pokemon_head, newid, splicer_item))
+  if (fus.pbStartScreen(pokemon_body, pokemon_head, newid, splicer_item, fusion_pif_sprite))
     returnItemsToBag(pokemon_body, pokemon_head)
     fus.pbFusionScreen(false, use_supersplicers_mechanics)
     $game_variables[VAR_FUSE_COUNTER] += 1 # fuse counter

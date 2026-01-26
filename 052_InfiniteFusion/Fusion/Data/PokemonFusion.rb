@@ -665,7 +665,7 @@ class PokemonFusionScene
   # Starts the fusion screen
 
   #TODO: Refactor
-  def pbStartScreen(pokemon_body, pokemon_head, newspecies,splicerItem)
+  def pbStartScreen(pokemon_body, pokemon_head, newspecies,splicerItem, fusion_pif_sprite=nil)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -704,7 +704,11 @@ class PokemonFusionScene
 
 
     spriteLoader = BattleSpriteLoader.new
-    @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number,poke_body_number)
+    if fusion_pif_sprite
+      @fusion_pif_sprite = fusion_pif_sprite
+    else
+      @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number,poke_body_number)
+    end
 
 
 

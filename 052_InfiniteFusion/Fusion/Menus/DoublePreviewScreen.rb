@@ -1,4 +1,7 @@
 class DoublePreviewScreen
+  attr_reader :sprite_left
+  attr_reader :sprite_right
+
   SELECT_ARROW_X_LEFT= 100
   SELECT_ARROW_X_RIGHT= 350
   SELECT_ARROW_X_CANCEL= 230
@@ -27,6 +30,9 @@ class DoublePreviewScreen
     @last_post=0
     @sprites      = {}
 
+    √ = nil
+    @sprite_right = nil
+    @selected_sprite = nil
     initializeBackground
     initializeSelectArrow
     initializeCancelButton
@@ -42,10 +48,21 @@ class DoublePreviewScreen
     @sprites["cancel"].visible=false
     #@sprites["arrow"].visible=false
 
+
     #todo: il y a un fuck en quelque part.... en attendant ca marche inversé ici
-    return @species_left if selected == 0
-    return @species_right if selected == 1
+    if selected == 0
+      @selected_sprite = @sprite_left
+      return @species_left
+    end
+    if selected == 1
+      @selected_sprite = @sprite_right
+      return @species_right
+    end
     return -1
+  end
+
+  def get_selected_sprite
+    return @selected_sprite
   end
 
   def startSelection
@@ -102,7 +119,7 @@ class DoublePreviewScreen
     pbUpdateSpriteHash(@sprites)
   end
 
-  def draw_window(dexNumber, level, x, y, isShiny=false, bodyShiny = false, headShiny=false)
+  def draw_window(dexNumber, level, x, y, isShiny=false, bodyShiny = false, headShiny=false, window_position=0)
     body_pokemon = getBodyID(dexNumber)
     head_pokemon = getHeadID(dexNumber, body_pokemon)
 
@@ -115,6 +132,12 @@ class DoublePreviewScreen
 
     bitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
     pif_sprite = spriteLoader.obtain_fusion_pif_sprite(head_pokemon,body_pokemon)
+
+    if window_position == 0
+      @sprite_left = pif_sprite
+    else
+      @sprite_right = pif_sprite
+    end
     #hasCustom = picturePath.include?("CustomBattlers")
     #hasCustom = customSpriteExistsBase(body_pokemon,head_pokemon)
     hasCustom = customSpriteExists(body_pokemon,head_pokemon)

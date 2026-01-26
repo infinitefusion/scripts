@@ -858,7 +858,7 @@ class PokemonStorageScreen
         end
         isSuperSplicer = isSuperSplicer?(@fusionItem)
 
-        selectedHead = selectFusion(pokemon, heldpoke, isSuperSplicer)
+        selectedHead, selected_sprite = selectFusion(pokemon, heldpoke, isSuperSplicer)
         if selectedHead == nil
           pbDisplay(_INTL("It won't have any effect."))
           return false
@@ -872,7 +872,7 @@ class PokemonStorageScreen
 
         if (Kernel.pbConfirmMessage(_INTL("Fuse the two Pokémon?")))
           playingBGM = $game_system.getPlayingBGM
-          pbFuse(selectedHead, selectedBase, @fusionItem)
+          pbFuse(selectedHead, selectedBase, @fusionItem, selected_sprite)
           if canDeleteItem(@fusionItem)
             $PokemonBag.pbDeleteItem(@fusionItem)
           end
