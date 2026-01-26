@@ -12,7 +12,7 @@ class BattleSpriteLoader
   end
 
   #random alt
-  def load_pif_sprite(pif_sprite)
+  def load_random_alt_for_pif_sprite(pif_sprite)
     case pif_sprite.type
     when :CUSTOM, :AUTOGEN
       load_fusion_sprite(pif_sprite.head_id, pif_sprite.body_id)
@@ -40,7 +40,7 @@ class BattleSpriteLoader
     echoln "preloading"
     previous_download_allowed = @download_allowed
     @download_allowed = false
-    load_pif_sprite(pif_sprite)
+    load_random_alt_for_pif_sprite(pif_sprite)
     @download_allowed = previous_download_allowed
   end
 
@@ -133,19 +133,13 @@ class BattleSpriteLoader
     return loaded_sprite
   end
 
-  def load_sprite_pokemon(pokemon)
-    alt_letter = pokemon.sprite_letter
-    case pokemon.sprite_type
-    when :BASE
-      if alt_letter
-
-      else
-        pokemon.sprite_letter = alt_letter
-      end
-    when :FUSION
-    when :TRIPLE
+  def load_pif_sprite_pokemon(pokemon)
+    pif_sprite = pokemon.pif_sprite
+    unless pokemon.pif_sprite
+      pif_sprite = GameData::Species.front_pif_sprite(pokemon.species, pokemon.shiny?, pokemon.body_shiny, pokemon.head_shiny)
+      pokemon.pif_sprite = pif_sprite
     end
-
+    return load_pif_sprite_directly(pif_sprite)
   end
 
   def handle_unloaded_sprites(extractor,pif_sprite)

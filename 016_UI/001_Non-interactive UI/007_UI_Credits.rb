@@ -356,7 +356,7 @@ _END_
       @sprites_counter=0
       randomSprite = @customSpritesList.sample
       @customSpritesList.delete(randomSprite)
-      @background_sprite.setBitmapDirectly(spriteLoader.load_pif_sprite(randomSprite))
+      @background_sprite.setBitmapDirectly(spriteLoader.load_random_alt_for_pif_sprite(randomSprite))
       @background_sprite.x = rand(0..300)
       @background_sprite.y = rand(0..200)
       @counter -= SECONDS_PER_BACKGROUND

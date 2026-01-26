@@ -241,7 +241,7 @@ class GenOneStyle
 
     @sprites["fpoke"] = Sprite.new(@viewport)
 
-    fusedPoke = @spriteLoader.load_pif_sprite(random_fusion)
+    fusedPoke = @spriteLoader.load_random_alt_for_pif_sprite(random_fusion)
     if fusedPoke
       @sprites["fpoke"].bitmap = fusedPoke.bitmap
     end
@@ -422,7 +422,7 @@ class GenOneStyle
       @sprites["2poke"].bitmap = @spriteLoader.load_base_sprite(random_fusion_head).bitmap
 
       wait(150)
-      fusedPoke = @spriteLoader.load_pif_sprite(random_fusion)
+      fusedPoke = @spriteLoader.load_random_alt_for_pif_sprite(random_fusion)
       if fusedPoke
         @sprites["fpoke"].bitmap = fusedPoke.bitmap
       end

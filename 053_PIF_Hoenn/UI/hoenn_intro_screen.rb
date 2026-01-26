@@ -105,7 +105,7 @@ class HoennIntroScreen
         next if used_fusions[fusion] # ensure uniqueness
 
         used_fusions[fusion] = true
-        bitmap = (@fusionBitmapCache[fusion] ||= @spriteLoader.load_pif_sprite(fusion).bitmap)
+        bitmap = (@fusionBitmapCache[fusion] ||= @spriteLoader.load_random_alt_for_pif_sprite(fusion).bitmap)
 
         sprite = Sprite.new(@viewport)
         sprite.bitmap = bitmap
