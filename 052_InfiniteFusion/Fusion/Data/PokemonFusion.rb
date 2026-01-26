@@ -679,9 +679,6 @@ class PokemonFusionScene
     poke_body_number = GameData::Species.get(@pokemon1.species).id_number
     poke_head_number = GameData::Species.get(@pokemon2.species).id_number
 
-    echoln poke_body_number
-    echoln poke_head_number
-
 
     @sprites["rsprite1"] = PokemonSprite.new(@viewport)
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
@@ -691,15 +688,28 @@ class PokemonFusionScene
     @sprites["dnasplicer"].y=(Graphics.height/2)-50
     @sprites["dnasplicer"].opacity=0
 
-    @sprites["rsprite1"].setPokemonBitmapFromId(poke_body_number, false, pokemon_body.shiny?)
-    @sprites["rsprite3"].setPokemonBitmapFromId(poke_head_number, false, pokemon_head.shiny?)
+    spriteloader = BattleSpriteLoader.new
+    if pokemon_body.pif_sprite && $PokemonSystem.random_sprites
+      @sprites["rsprite1"].bitmap = spriteloader.load_pif_sprite_directly(pokemon_body.pif_sprite).bitmap
+    else
+      @sprites["rsprite1"].setPokemonBitmapFromId(poke_body_number, false, pokemon_body.shiny?)
+    end
+
+    if pokemon_head.pif_sprite && $PokemonSystem.random_sprites
+      @sprites["rsprite3"].bitmap = spriteloader.load_pif_sprite_directly(pokemon_head.pif_sprite).bitmap
+    else
+      @sprites["rsprite3"].setPokemonBitmapFromId(poke_head_number, false, pokemon_head.shiny?)
+    end
+
 
 
     spriteLoader = BattleSpriteLoader.new
     @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number,poke_body_number)
 
+
+
     #this will use the sprite that is set when we call obtain_fusion_pif_sprite, and apply the shiny effect
-    @sprites["rsprite2"].setPokemonBitmapFromId(@newspecies, false, pokemon_head.shiny? || pokemon_body.shiny?, pokemon_body.shiny?, pokemon_head.shiny?)
+    @sprites["rsprite2"].bitmap = spriteloader.load_pif_sprite_directly(@fusion_pif_sprite).bitmap
 
     splicer_bitmap = _INTL("Graphics/Items/{1}",splicerItem)
     @sprites["dnasplicer"].setBitmap(splicer_bitmap)
