@@ -465,19 +465,16 @@ def this_event()
 end
 
 def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
-  day_care_switches = [2118, 2119]
-  # day_care_switches.each do |daycare_switch|
-  #   $game_switches[daycare_switch] = false
-  # end
-
+  day_care_map = 74
+  return unless $game_map.map_id == day_care_map
   land_event_ids.each_with_index do |event_id, i|
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", false)
+    pbSetSelfSwitch(event.id,"A", false,day_care_map)
     event.character_name = ""
   end
   water_event_ids.each_with_index do |event_id, i|
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", false)
+    pbSetSelfSwitch(event.id,"A", false,day_care_map)
     event.character_name = ""
   end
 
@@ -493,10 +490,8 @@ def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
       swimming = false
     end
 
-
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", true)
-    #$game_switches[day_care_switches[i]] = true
+    pbSetSelfSwitch(event.id,"A", true,day_care_map)
     $game_map.refresh
 
     event.character_name = getOverworldLandPath(day_care_pokemon.species_data,day_care_pokemon.isShiny? )

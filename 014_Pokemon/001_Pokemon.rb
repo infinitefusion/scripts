@@ -198,6 +198,8 @@ class Pokemon
     echoln("Hidden Power Type: #{@hiddenPowerType}")
     echoln("Scale: #{sprite_scale}")
 
+    echoln("Egg groups: #{species_data.egg_groups}")
+
     # Add other attribute print statements here
   end
 

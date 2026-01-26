@@ -58,7 +58,7 @@ module GameData
       @evolutions = calculate_evolutions() # hash[:evolutions] || []
 
       #breeding
-      @egg_groups = [:Undiscovered] #calculate_egg_groups() # hash[:egg_groups] || [:Undiscovered]
+      @egg_groups = calculate_egg_groups() # hash[:egg_groups] || [:Undiscovered]
       @hatch_steps = calculate_hatch_steps() #  hash[:hatch_steps] || 1
       @incense = nil #hash[:incense]
 
@@ -382,11 +382,14 @@ module GameData
       return :Medium
     end
 
-    #TODO
-    # ################## UNFINISHED ####################
     def calculate_gender
-      return :Genderless
+      head_ratio = @head_pokemon.gender_ratio
+      body_ratio = @body_pokemon.gender_ratio
+      return :Genderless if head_ratio == :Genderless || body_ratio == :Genderless
+      return :Female50Percent
     end
+
+
 
     #############################  UTIL METHODS ###############################
 

@@ -823,9 +823,9 @@ PokemonDebugMenuCommands.register("setgender", {
   "name"        => _INTL("Set gender"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    if pkmn.singleGendered?
-      screen.pbDisplay(_INTL("{1} is single-gendered or genderless.", pkmn.speciesName))
-    else
+    # if pkmn.singleGendered?
+    #   screen.pbDisplay(_INTL("{1} is single-gendered or genderless.", pkmn.speciesName))
+    # else
       cmd = 0
       loop do
         msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
@@ -851,7 +851,7 @@ PokemonDebugMenuCommands.register("setgender", {
         $Trainer.pokedex.register(pkmn) if !settingUpBattle
         screen.pbRefreshSingle(pkmnid)
       end
-    end
+    #end
     next false
   }
 })

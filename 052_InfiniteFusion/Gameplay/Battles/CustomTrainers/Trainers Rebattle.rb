@@ -217,7 +217,7 @@ def getFusionSpeciesSymbol(body, head)
   body_num = dexNum(body)
   head_num = dexNum(head)
   nb_pokemon = Settings::NB_POKEMON
-  id = body_num * nb_pokemon + head_num
+  id = (body_num * nb_pokemon) + head_num
   if id > (nb_pokemon*nb_pokemon)+nb_pokemon
     displayRandomizerErrorMessage()
     return body

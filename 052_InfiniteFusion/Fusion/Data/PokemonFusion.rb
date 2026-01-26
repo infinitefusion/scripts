@@ -925,13 +925,6 @@ class PokemonFusionScene
         $Trainer.pokedex.set_owned(newSpecies)
       end
       overlay.dispose
-      #first check if hidden ability
-      # getAbilityList format: [[:ABILITY, index],...]
-      # hiddenAbility1 = @pokemon1.ability == @pokemon1.getAbilityList[-1][0]
-      # hiddenAbility2 = @pokemon2.ability == @pokemon2.getAbilityList[-1][0]
-
-      # ability1 = @pokemon1.ability_index
-      # ability2 = @pokemon2.ability_index
 
       #change species
       ability1 = @pokemon1.ability
@@ -942,24 +935,10 @@ class PokemonFusionScene
         @pokemon1.steps_to_hatch = @pokemon1.species_data.hatch_steps
       end
 
-
-      #@pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
-      #
       pbChooseAbility(ability1,ability2) if isPlayerPokemon
 
       setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves && isPlayerPokemon
 
-      # if superSplicer
-      #   @pokemon1.nature = pbChooseNature(@pokemon1.nature, @pokemon2.nature)
-      # end
-      #Check moves for new species
-      # movelist = @pokemon1.getMoveList
-      # for i in movelist
-      #   if i[0] == @pokemon1.level
-      #     pbLearnMove(@pokemon1, i[1]) if !noMoves #(pokemon,move,ignoreifknown=true, byTM=false , quick =true)
-      #   end
-      # end
-      #@pokemon1.ability = pbChooseAbility(@pokemon1,@pokemon2)
       removeItem = false
       if @pokemon2.isShiny? || @pokemon1.isShiny?
         @pokemon1.makeShiny
