@@ -63,10 +63,12 @@ end
 def pbDayCareWithdraw(index)
   if !$PokemonGlobal.daycare[index][0]
     raise _INTL("There's no Pokémon here...")
-  elsif $Trainer.party_full?
-    raise _INTL("Can't store the Pokémon...")
   else
-    $Trainer.party[$Trainer.party.length] = $PokemonGlobal.daycare[index][0]
+    pokemon = $PokemonGlobal.daycare[index][0]
+    if $Trainer.party_full?
+      pbMessage(_INTL("{1} was sent to the PC.",pokemon.name))
+    end
+    pbAddPokemonSilent(pokemon)
     $PokemonGlobal.daycare[index][0] = nil
     $PokemonGlobal.daycare[index][1] = 0
     $PokemonGlobal.daycareEgg = 0
