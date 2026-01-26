@@ -244,7 +244,7 @@ class PokeBattle_Scene
     trainer = pbAddSprite("trainer_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     spriteOverrideBitmap = setTrainerSpriteOverrides(trainerType)
     trainer.bitmap = spriteOverrideBitmap if spriteOverrideBitmap
-    trainer.bitmap = generate_front_trainer_sprite_bitmap_from_appearance(custom_appearance,true).bitmap if custom_appearance
+    trainer.bitmap = generate_front_trainer_sprite_bitmap_from_appearance(custom_appearance,false).bitmap if custom_appearance
     return if !trainer.bitmap
     # Alter position of sprite
     trainer.z = 7 + idxTrainer

@@ -51,7 +51,7 @@ def init_rival_name
 end
 
 def set_rival_hat(hat)
-  $Trainer.rival_appearance = TrainerAppearance.new(
+  $Trainer.rival_àce = TrainerAppearance.new(
     $Trainer.rival_appearance.skin_color,
     hat,
     $Trainer.rival_appearance.clothes,
