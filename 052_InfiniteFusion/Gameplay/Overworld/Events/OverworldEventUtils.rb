@@ -507,42 +507,4 @@ def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
       event.calculate_bush_depth
     end
   end
-
-  # land_event_ids.each_with_index do |event_id, i|
-  #   day_care_slot = $PokemonGlobal.daycare[i]
-  #   next unless day_care_slot
-  #   day_care_pokemon = day_care_slot[0]
-  #   next unless day_care_pokemon
-  #   event = $game_map.events[event_id]
-  #   $game_switches[day_care_switches[i]] = true
-  #   $game_map.refresh
-  #   event.character_name = getOverworldLandPath(day_care_pokemon.species_data,day_care_pokemon.isShiny? )
-  # end
-
 end
-
-
-
-# def setDayCareOverworlds(event_ids = [])
-#   day_care_switches = [2118, 2119]
-#   day_care_switches.each do |daycare_switch|
-#     $game_switches[daycare_switch] = false
-#   end
-#   event_ids.each_with_index do |event_id, i|
-#     event = $game_map.events[event_id]
-#     event.character_name = ""
-#   end
-#
-#
-#   event_ids.each_with_index do |event_id, i|
-#     day_care_slot = $PokemonGlobal.daycare[i]
-#     next unless day_care_slot
-#     day_care_pokemon = day_care_slot[0]
-#     next unless day_care_pokemon
-#     event = $game_map.events[event_id]
-#     $game_switches[day_care_switches[i]] = true
-#     $game_map.refresh
-#     event.character_name = getOverworldLandPath(day_care_pokemon.species_data,day_care_pokemon.isShiny? )
-#   end
-#
-# end
