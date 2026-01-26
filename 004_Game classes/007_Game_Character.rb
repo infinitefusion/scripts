@@ -33,6 +33,7 @@ class Game_Character
   attr_reader :move_route
   attr_accessor :shadow_offset
   attr_accessor :animation_speed
+  attr_accessor :step_anime
 
   def initialize(map = nil)
     @map = map

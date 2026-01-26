@@ -52,30 +52,34 @@ class Game_Map
 
     if Settings::HOENN && event.name == OVERWORLD_POKEMON_EVENT_NAME
       begin
-          game_event = OverworldPokemonEvent.new(@map_id, event, self)
-          setup_overworld_pokemon_from_comments(game_event)
-          return game_event if game_event
-       rescue
-          return ow_game_map_create_new_event(event)
-       end
-      elsif event.name.start_with?(LEGENDARY_EVENT_NAME)
-        species =  extract_legendary_species_from_event_name(event.name)
-        unless is_legendary_active?(species)
-          event = ow_game_map_create_new_event(event)
-          event.erase
-          return event
-        end
+        game_event = OverworldPokemonEvent.new(@map_id, event, self)
+        setup_overworld_pokemon_from_comments(game_event)
+        return game_event if game_event
+      rescue
+        return ow_game_map_create_new_event(event)
+      end
+    elsif event.name.start_with?(LEGENDARY_EVENT_NAME)
+      species = extract_legendary_species_from_event_name(event.name)
+      unless is_legendary_active?(species)
+        event = ow_game_map_create_new_event(event)
+        event.erase
+        return event
+      end
     end
 
     return ow_game_map_create_new_event(event)
   end
 
-
-
   def extract_legendary_species_from_event_name(eventName)
-    match = eventName.match(/#{Regexp.escape(LEGENDARY_EVENT_NAME)}\(([^)]+)\)/)  # Capture anything inside parentheses
+    match = eventName.match(/#{Regexp.escape(LEGENDARY_EVENT_NAME)}\(([^)]+)\)/) # Capture anything inside parentheses
     species = match[1] if match && match.length > 0
     return species.to_sym if species
+  end
+
+  def setup_overworld_pokemon(event, pokemon, terrain = :Land, behavior_roaming = nil, behavior_noticed = nil)
+    event.setup_pokemon(pokemon.species, pokemon.level, terrain, behavior_roaming, behavior_noticed)
+    event.set_shiny if pokemon.isShiny?
+    event.manual_ow_pokemon = true
   end
 
   def setup_overworld_pokemon_from_comments(event)
@@ -88,7 +92,7 @@ class Game_Map
     should_spawn = spawn_chance >= rand(0..100)
     if should_spawn
       species = params[:species]
-      #echoln "spawning a static overworld #{species}"
+      # echoln "spawning a static overworld #{species}"
       min_level = params[:min_level]
       max_level = params[:max_level]
 
@@ -135,7 +139,7 @@ class Game_Map
         result[:flying] = true
       elsif line =~ /shiny/
         result[:shiny] = true
-      elsif line =~ /switch\s*=\s*(\d+)/  #A switch that will be turned on after the pokemon is battled
+      elsif line =~ /switch\s*=\s*(\d+)/ # A switch that will be turned on after the pokemon is battled
         result[:post_battle_switch] = $1.to_i
       end
     end
@@ -143,7 +147,7 @@ class Game_Map
   end
 
   def choose_level(min_level, max_level)
-    #raise "No level defined" if min_level.nil? && max_level.nil?
+    # raise "No level defined" if min_level.nil? && max_level.nil?
     return min_level if max_level.nil?
     return max_level if min_level.nil?
     return max_level if min_level > max_level
