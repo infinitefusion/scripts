@@ -15,9 +15,6 @@ alias original_pbTrainerBattle pbTrainerBattle
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
                     *args)
-  echoln trainerID
-  echoln trainerName
-  echoln trainerPartyID
 
   trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
   displayPreBattleText(trainer_data)
@@ -30,7 +27,9 @@ end
 def displayPreBattleText(trainer_data)
   if trainer_data.battleText && !trainer_data.battleText.empty? && @event_id
     messages = trainer_data.battleText.split("<br>")
+
     messages.each do |msg|
+      msg = msg.gsub("<PLAYER_NAME>", $Trainer.name)
       pbCallBub(2,@event_id)
       pbMessage(msg)
     end

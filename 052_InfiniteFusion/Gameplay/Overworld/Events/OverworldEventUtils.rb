@@ -392,7 +392,7 @@ end
 def obtainBirthdayGift
   possible_species =
     [
-      :PICHU, :CLEFFA, :IGGLYBUFF, :TOGEPI, :EEVEE, :HAPPINY, :AZURILL, :BUDEW, :CHINGLING, :MUNCHLAX, :RIOLU,
+      :PICHU, :CLEFFA, :IGGLYBUFF, :TOGEPI, :EEVEE, :HAPPINY, :BUDEW, :CHINGLING, :MUNCHLAX, :RIOLU,
     ]
   species = possible_species.sample
   pokemon = Pokemon.new(species, Settings::EGG_LEVEL)

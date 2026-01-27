@@ -74,7 +74,6 @@ class PokemonPokegearScreen
       cmd = @scene.pbScene
       commands = update_commands  #in case they're reordered
       chosen = commands[cmd][0].to_sym
-      echoln chosen
       if cmd < 0
         break
       elsif chosen == :MAP

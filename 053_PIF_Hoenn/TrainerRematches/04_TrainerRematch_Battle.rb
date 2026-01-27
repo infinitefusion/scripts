@@ -121,7 +121,7 @@ def showPrerematchDialog()
       message_text = trainer_data.preRematchText
     end
   end
-
+  message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
   if previous_random_event
     message_text = message_text.gsub("<CAUGHT_POKEMON>", getSpeciesRealName(previous_random_event.caught_pokemon).to_s)
     message_text = message_text.gsub("<UNEVOLVED_POKEMON>", getSpeciesRealName(previous_random_event.unevolved_pokemon).to_s)
@@ -132,8 +132,6 @@ def showPrerematchDialog()
     message_text = message_text.gsub("<UNREVERSED_POKEMON>", getSpeciesRealName(previous_random_event.unreversed_pokemon).to_s)
     message_text = message_text.gsub("<REVERSED_POKEMON>", getSpeciesRealName(previous_random_event.reversed_pokemon).to_s)
     message_text = message_text.gsub("<UNFUSED_POKEMON>", getSpeciesRealName(previous_random_event.unfused_pokemon).to_s)
-    message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
-
   else
     message_text = trainer_data.preRematchText
   end
