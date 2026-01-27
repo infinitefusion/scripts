@@ -37,7 +37,7 @@ class SystemOptionsScene < PokemonOption_Scene
                                 proc { |value|
                                   if $PokemonSystem.bgmvolume != value
                                     $PokemonSystem.bgmvolume = value
-                                    if $game_system.playing_bgm != nil && !inloadscreen
+                                    if $game_system.playing_bgm != nil# && !inloadscreen
                                       playingBGM = $game_system.getPlayingBGM
                                       $game_system.bgm_pause
                                       $game_system.bgm_resume(playingBGM)

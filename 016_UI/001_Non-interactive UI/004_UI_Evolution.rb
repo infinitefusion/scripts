@@ -494,7 +494,6 @@ class PokemonEvolutionScene
     @newspecies = newspecies
     spriteLoader = BattleSpriteLoader.new
     evolution_pif_sprite = spriteLoader.obtain_pif_sprite(newspecies)
-
     @sprites = {}
     @bgviewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @bgviewport.z = 99999
@@ -515,7 +514,8 @@ class PokemonEvolutionScene
     @pokemon.pif_sprite = evolution_pif_sprite
     rsprite2 = PokemonSprite.new(@viewport)
     rsprite2.setOffset(PictureOrigin::Center)
-    rsprite2.setPokemonBitmapSpecies(@pokemon,@newspecies,false)
+
+    rsprite2.setPokemonBitmapPIFSprite(evolution_pif_sprite)
     rsprite2.x       = rsprite1.x
     rsprite2.y       = rsprite1.y
     rsprite2.opacity = 0

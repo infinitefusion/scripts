@@ -273,6 +273,7 @@ class PokemonLoad_Scene
   end
 
   def pbStartScene(commands, show_continue, trainer, frame_count, map_id)
+
     @commands = commands
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -504,11 +505,11 @@ class PokemonLoadScreen
       @scene.pbSetParty(@save_data[:player]) if show_continue
       if first_time
         @scene.pbStartScene2
+        pbBGMPlay("pokemon_go_map")
         first_time = false
       else
         @scene.pbUpdate
       end
-
       loop do
         # Inner loop is used for going to other menus and back and stuff (vanilla)
         command = @scene.pbChoose(commands, cmd_continue)

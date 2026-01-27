@@ -50,6 +50,19 @@ class PokemonSprite < SpriteWrapper
     end
   end
 
+  def setPokemonBitmapPIFSprite(pif_sprite)
+    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap = nil
+    spriteLoader = BattleSpriteLoader.new
+    animatedBitmap = spriteLoader.load_pif_sprite_directly(pif_sprite)
+    @_iconbitmap = SpriteWrapper.new
+    @_iconbitmap.bitmap = animatedBitmap.bitmap
+
+    self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
+    self.color = Color.new(0, 0, 0, 0)
+    changeOrigin
+  end
+
   def setPokemonBitmap(pokemon, back = false)
     # Dispose of existing icon bitmap if it exists
     @_iconbitmap.dispose if @_iconbitmap
@@ -82,9 +95,9 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
-  def setPokemonBitmapSpecies(pokemon, species, back = false)
+  def setPokemonBitmapSpecies(species, back = false)
     @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back, species) : nil
+    @_iconbitmap = GameData::Species.front_sprite_bitmap(species)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
   end
