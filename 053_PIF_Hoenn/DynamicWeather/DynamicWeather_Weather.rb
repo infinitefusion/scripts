@@ -31,7 +31,7 @@ class GameWeather
   CHANCE_OF_FOG = 30 #/100    Only possible in the morning, otherwise, when rain and sun combine
 
   MAX_INTENSITY_ON_NEW_WEATHER = 4
-
+  MAX_WEATHER_INTENSITY = 10
 
   CHANCES_OF_INTENSITY_INCREASE = 30 # /100
   CHANCES_OF_INTENSITY_DECREASE = 20 # /100
@@ -179,7 +179,9 @@ class GameWeather
     return unless can_weather_increase(map_weather_type)
     should_change_intensity = roll_for_weather_increase(map_weather_type)
     return if !should_change_intensity
-    new_weather = [map_weather_type,weather_intensity+1]
+    new_intensity = [weather_intensity + 1, MAX_WEATHER_INTENSITY].min
+    new_weather = [map_weather_type, new_intensity]
+
     @current_weather[map_id] = adjust_weather_for_map(new_weather,map_id)
   end
 
@@ -229,6 +231,7 @@ class GameWeather
       type = :None
       intensity = 0
     end
+    intensity = [intensity, MAX_WEATHER_INTENSITY].min
     return [type, intensity]
   end
 
