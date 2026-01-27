@@ -54,7 +54,11 @@
 #                            :credits => "FL"
 #                          })
 # end
-#
+
+class Game_Temp
+  attr_accessor :faster_time
+end
+
 module UnrealTime
   # Set false to disable this system (returns Time.now)
   ENABLED = true
@@ -63,7 +67,6 @@ module UnrealTime
   # So if it is 100, one second in real time will be 100 seconds in game.
   # If it is 60, one second in real time will be one minute in game.
   PROPORTION = 60
-
   # Starting on Essentials v17, the map tone only try to refresh tone each 30
   # real time seconds.
   # If this variable number isn't -1, the game use this number instead of 30.
@@ -132,8 +135,16 @@ module UnrealTime
   # Does the same thing as EXTRA_SECONDS variable.
   def self.add_seconds(seconds)
     raise "Method doesn't work when TIME_STOPS is false!" if !TIME_STOPS
-    $PokemonGlobal.newFrameCount += (seconds * Graphics.frame_rate) / PROPORTION.to_f
+    $PokemonGlobal.newFrameCount += (seconds * Graphics.frame_rate) / UnrealTime.proportion.to_f
     PBDayNight.sheduleToneRefresh
+  end
+
+  def self.proportion
+    if $game_temp.faster_time
+      return UnrealTime::PROPORTION*$game_temp.faster_time
+    else
+      return UnrealTime::PROPORTION
+    end
   end
 
   def self.add_days(days)
@@ -243,11 +254,18 @@ if UnrealTime::ENABLED
     attr_accessor :newFrameCount # Became float when using extra values
     attr_accessor :extraYears
 
+    # def addNewFrameCount
+    #   return if (UnrealTime::SWITCH_STOPS > 0 &&
+    #     $game_switches[UnrealTime::SWITCH_STOPS])
+    #   self.newFrameCount += 1
+    # end
     def addNewFrameCount
-      return if (UnrealTime::SWITCH_STOPS > 0 &&
-        $game_switches[UnrealTime::SWITCH_STOPS])
-      self.newFrameCount += 1
+      return if (UnrealTime::SWITCH_STOPS > 0 && $game_switches[UnrealTime::SWITCH_STOPS])
+      mult = $game_temp&.faster_time
+      mult = 1 if !mult || mult <= 0
+      self.newFrameCount += mult
     end
+
 
     def newFrameCount
       @newFrameCount = 0 if !@newFrameCount

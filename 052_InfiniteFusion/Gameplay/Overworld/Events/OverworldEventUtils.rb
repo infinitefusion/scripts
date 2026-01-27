@@ -178,40 +178,72 @@ def kick_ball(eventId)
   end
 end
 
-def sit_on_chair()
+def showTimeWindow
+  timeText = pbGetTimeNow.strftime(_INTL("%I:%M %p"))
+  window = LocationWindow.new(timeText)
+  window.set_close_automatically(false)
+  $scene.spriteset.addUserSprite(window)
+  return window
+end
+
+def updateTimeWindow(window)
+  return if !window || window.disposed?
+  window.text = pbGetTimeNow.strftime(_INTL("%I:%M %p"))
+end
+
+
+def sit_on_chair
   pbSEPlay("jump", 80, 100)
+  max_faster_time = 20
+
+  # Enter sitting state
+  $game_temp.faster_time = 4
+  time_window = showTimeWindow
+
   $game_player.through = true
   $game_player.jump_forward
   $game_player.turn_180
   $game_player.through = false
+
+  time_on_chair = 0
   loop do
     Graphics.update
     Input.update
     pbUpdateSceneMap
-
-    direction = checkInputDirection
-    if direction
-      facing_terrain = $game_player.pbFacingTerrainTag(direction)
-      if facing_terrain.chair
-        pbSEPlay("jump", 80, 100)
-        $game_player.direction_fix = true
-        $game_player.jumpTowards(direction)
-        $game_player.direction_fix = false
-      else
-        passable_from_direction = $game_map.passable?($game_player.x, $game_player.y, direction)
-        if passable_from_direction
-          $game_player.turn_generic(direction)
-          $game_player.jump_forward
-          break
-        else
-          $game_player.turn_generic(direction)
-          $game_player.turn_180
-        end
-      end
-      pbWait(8)
+    updateTimeWindow(time_window)
+    time_on_chair +=1
+    if time_on_chair % 100 == 0
+      $game_temp.faster_time +=1 if $game_temp.faster_time < max_faster_time
     end
+    direction = checkInputDirection
+    next if !direction
+
+    facing_terrain = $game_player.pbFacingTerrainTag(direction)
+    if facing_terrain&.chair
+      pbSEPlay("jump", 80, 100)
+      $game_player.direction_fix = true
+      $game_player.jumpTowards(direction)
+      $game_player.direction_fix = false
+    else
+      passable = $game_map.passable?($game_player.x, $game_player.y, direction)
+      if passable
+        $game_player.turn_generic(direction)
+        $game_player.jump_forward
+        break
+      else
+        $game_player.turn_generic(direction)
+        $game_player.turn_180
+      end
+    end
+    pbWait(8)
   end
+
+ensure
+  # Always clean up
+  $game_temp.faster_time = nil
+  time_window.dispose if time_window && !time_window.disposed?
 end
+
 
 def checkInputDirection
   return DIRECTION_UP if Input.trigger?(Input::UP)

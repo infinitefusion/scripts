@@ -190,6 +190,14 @@ class Scene_Map
     Events.onMapUpdate.trigger(self)
   end
 
+  def showLocationWindow
+    dayOfWeek = getDayOfTheWeek().to_s
+    location_window_text = $game_map.name
+    location_window_text += "\n"+ pbGetTimeNow.strftime(_INTL("%I:%M %p"))# unless $game_switches[SWITCH_TIME_PAUSED]
+    location_window_text += "\n"+ dayOfWeek
+    $scene.spriteset.addUserSprite(LocationWindow.new(location_window_text))
+  end
+
   def update
     loop do
       pbMapInterpreter.update
@@ -230,11 +238,7 @@ class Scene_Map
         unless $game_system.menu_disabled || $game_player.moving?
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
-          dayOfWeek = getDayOfTheWeek().to_s
-          location_window_text = $game_map.name
-          location_window_text += "\n"+ pbGetTimeNow.strftime(_INTL("%I:%M %p"))# unless $game_switches[SWITCH_TIME_PAUSED]
-          location_window_text += "\n"+ dayOfWeek
-          $scene.spriteset.addUserSprite(LocationWindow.new(location_window_text))
+          showLocationWindow
         end
       elsif Input.trigger?(Input::SPECIAL)
         unless $game_system.menu_disabled || $game_player.moving?
