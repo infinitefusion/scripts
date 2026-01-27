@@ -44,6 +44,19 @@ def unfuseCore(fused_pokemon)
   head_pokemon = fused_pokemon.original_head
   body_pokemon = fused_pokemon.original_body
 
+  fused_head_species = fused_pokemon.species_data.head_pokemon.species
+  fused_body_species = fused_pokemon.species_data.body_pokemon.species
+
+  #If the Pokemon evolved while fused
+  if fused_head_species != head_pokemon.species
+    head_pokemon.species = fused_head_species
+    head_pokemon.pif_sprite = nil
+  end
+  if fused_body_species != body_pokemon.species
+    body_pokemon.species = fused_body_species
+    body_pokemon.pif_sprite = nil
+  end
+
   #Items
   $PokemonBag.pbStoreItem(fused_pokemon.item, 1) if fused_pokemon.item
 
