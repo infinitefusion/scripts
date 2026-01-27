@@ -51,7 +51,7 @@ def init_rival_name
 end
 
 def set_rival_hat(hat)
-  $Trainer.rival_àce = TrainerAppearance.new(
+  $Trainer.rival_appearance = TrainerAppearance.new(
     $Trainer.rival_appearance.skin_color,
     hat,
     $Trainer.rival_appearance.clothes,
@@ -271,5 +271,5 @@ class Sprite_Character
     else
       rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
     end
-    return customTrainerBattle(rival_trainer.trainerName, rival_trainer.trainerType, rival_trainer.currentTeam, rival_trainer, loseDialog, nil, rival_trainer.custom_appearance, items, canLose)
+    return customTrainerBattle(rival_trainer.trainerName, rival_trainer.trainerType, rival_trainer.currentTeam, rival_trainer, loseDialog, nil, $Trainer.rival_appearance, items, canLose)
   end
