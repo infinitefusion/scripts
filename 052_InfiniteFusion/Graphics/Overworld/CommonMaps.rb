@@ -71,6 +71,7 @@ def enter_pokemon_center(city_symbol)
   pbSetPokemonCenter
   pbSet(VAR_CURRENT_CITY,city_symbol)
   pokemon_center_type = isPlayerBirthDay? ? :POKEMON_CENTER_BIRTHDAY : :POKEMON_CENTER
+  echoln "WAAA"
   enter_common_building(pokemon_center_type,city_symbol)
 end
 

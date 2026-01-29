@@ -191,6 +191,17 @@ def updateTimeWindow(window)
   window.text = pbGetTimeNow.strftime(_INTL("%I:%M %p"))
 end
 
+def update_weather(last_weather_hour)
+  now = pbGetTimeNow
+  current_hour = now.hour
+  if current_hour != last_weather_hour
+    if current_hour % 4 == 0  #Update every 4 hours
+      $game_weather.update_weather
+    end
+    last_weather_hour = current_hour
+  end
+  return if last_weather_hour
+end
 
 def sit_on_chair
   pbSEPlay("jump", 80, 100)
@@ -205,7 +216,7 @@ def sit_on_chair
   $game_player.jump_forward
   $game_player.turn_180
   $game_player.through = false
-
+  last_weather_hour = pbGetTimeNow.hour
   time_on_chair = 0
   loop do
     Graphics.update
@@ -213,6 +224,7 @@ def sit_on_chair
     pbUpdateSceneMap
     if is_outdoor
       updateTimeWindow(time_window)
+      last_weather_hour = update_weather(last_weather_hour) if time_on_chair % 100 == 0
       time_on_chair +=1
       if time_on_chair % 100 == 0
         $game_temp.faster_time +=1 if $game_temp.faster_time < max_faster_time
