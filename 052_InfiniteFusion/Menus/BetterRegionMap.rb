@@ -21,8 +21,6 @@
 #                          :link => "https://reliccastle.com/resources/174/"
 #                        })
 
-
-
 def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil, fly_anywhere = false)
   scene = BetterRegionMap.new(-1, show_player, can_fly, wallmap, species, fly_anywhere)
   return scene.flydata
@@ -88,7 +86,7 @@ class BetterRegionMap
     @viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport2.z = 100001
     @sprites = SpriteHash.new
-
+    @show_weather = show_weather
     @sprites["background"] = Sprite.new(@viewport)
     if wallmap
       @sprites["background"].bmp("Graphics/Pictures/map/bg_wall")
@@ -99,7 +97,6 @@ class BetterRegionMap
         @sprites["background"].bmp("Graphics/Pictures/Pokegear/bg")
       end
     end
-
 
     @sprites["bg_frame"] = Sprite.new(@viewport)
     @sprites["bg_frame"].bmp("Graphics/Pictures/mapbg")
@@ -256,13 +253,13 @@ class BetterRegionMap
         secretGameBaseMapId = $Trainer.secretBase.outside_map_id
         secretBaseCoordinates = $Trainer.secretBase.outside_entrance_position
         secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
-        secret_base_town_map_coordinates = [1,1] if !secret_base_town_map_coordinates || secret_base_town_map_coordinates.empty?
+        secret_base_town_map_coordinates = [1, 1] if !secret_base_town_map_coordinates || secret_base_town_map_coordinates.empty?
         healspot = [secretGameBaseMapId, secretBaseCoordinates[0], secretBaseCoordinates[1]]
         add_fly_location(healspot, secret_base_town_map_coordinates, "secretBase_")
       end
     end
 
-    draw_all_weather if show_weather && $game_weather
+    draw_all_weather if @show_weather && $game_weather
     initial_position = calculate_initial_position(player)
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()
@@ -528,7 +525,7 @@ class BetterRegionMap
         end
       end
       if Input.repeat?(Input::AUX1)
-        #print_current_position()
+        # print_current_position()
         new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
         frame += 1
       end
@@ -711,19 +708,12 @@ class BetterRegionMap
         e[1] == $PokemonGlobal.regionMapSel[1]
     end
 
-    if Settings::GAME_ID == :IF_HOENN
-      weather = update_weather_icon(location)
-      if !weather
-        @sprites["cursor"].bmp("Graphics/Pictures/mapCursor")
-        @sprites["cursor"].src_rect.width = @sprites["cursor"].bmp.height
-      end
-    end
-
     text = ""
     text = location[2] if location
     poi = ""
     poi = location[3] if location && location[3]
 
+    update_weather_text(location) if @show_weather && $game_weather
     if $Trainer.secretBase
       secretGameBaseMapId = $Trainer.secretBase.outside_map_id
       secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
@@ -742,6 +732,7 @@ class BetterRegionMap
   end
 
   def dispose
+    Kernel.pbClearText
     showBlk { update(false) }
     @sprites.dispose
     @window.dispose
