@@ -99,7 +99,7 @@ def assign_vendors_to_spots(vendors_ids)
     vendors_ids.pop
     assigned_vendor_event = $game_map.events[assigned_vendor_id]
     assigned_vendor_event.moveto(coordinates.first, coordinates.last)
-    #assigned_vendor_event.direction = direction
+    # assigned_vendor_event.direction = direction
     pbSetSelfSwitch(assigned_vendor_id, "B", false)
   end
 end
@@ -127,18 +127,94 @@ def select_altering_cave_encounter
   level_range = 8..16
   encounter_table =
     {
-      :MONDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:HOUNDOUR],
-      :TUESDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:SCRAGGY],
-      :WEDNESDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:ZORUA],
-      :THURSDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:WOOBAT],
-      :FRIDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:TEDDIURSA],
-      :SATURDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:TYNAMO],
-      :SUNDAY => [:ZUBAT,:ZUBAT,:ZUBAT,:ZUBAT,:SMEARGLE],
+      :MONDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :HOUNDOUR],
+      :TUESDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :SCRAGGY],
+      :WEDNESDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :ZORUA],
+      :THURSDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT],
+      :FRIDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :TEDDIURSA],
+      :SATURDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :TYNAMO],
+      :SUNDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :ZUBAT, :SMEARGLE],
     }
   day_of_week = getDayOfTheWeek
   species = encounter_table[day_of_week].sample
   level = rand(level_range)
   return [species, level]
+end
+
+
+def build_electricity_gym_map(variable=VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+  events = {}
+  $game_map.events.each do |id, event|
+    if event.name =~ /ELEC\((\d+),(\d+)\)/
+      echoln event.name
+      x = $1.to_i
+      y = $2.to_i
+      coordinates = [x,y]
+      events[coordinates] = id
+    end
+  end
+  pbSet(variable,events)
+end
+
+# coordinates:
+# [1,2]
+# status :ver, :hor, :off
+# color: :red, :blue, nil
+def gym_electricity(coordinates, status, color=nil)
+  hue =0
+  hue = 60 if color == :blue
+  hue = 180 if color == :red
+
+  events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+  build_electricity_gym_map(VAR_MAUVILLE_GYM_ELECTRICITY_MAP) unless events_map.is_a?(Hash)
+  events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+  event_id = events_map[coordinates]
+
+  if event_id
+    event= $game_map.events[event_id]
+    return unless event
+    if status == :ver
+      event.width, event.height = 1, 5
+      event.character_hue = hue
+      pbSetSelfSwitch(event_id,"B",false)
+      pbSetSelfSwitch(event_id,"A",true)
+    elsif status == :hor
+      event.width, event.height = 5, 1
+      event.character_hue = hue
+      pbSetSelfSwitch(event_id,"B",false)
+      pbSetSelfSwitch(event_id,"A",false)
+    elsif status == :off
+      event.width, event.height = 1, 1
+      pbSetSelfSwitch(event_id,"B",true)
+    end
+
+    event.refresh_hue = false
+  end
+
+end
+
+def mauville_reset_switches
+  switch_events = []
+  $game_map.events.each do |id, event|
+    if event.name.start_with?("switch")
+      switch_events << id
+    end
+  end
+  switch_events.each do |id|
+    pbSetSelfSwitch(id,"A",false)
+  end
+end
+def set_gym_elec_all_off
+  events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+  build_electricity_gym_map(VAR_MAUVILLE_GYM_ELECTRICITY_MAP) unless events_map.is_a?(Hash)
+  events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+  events_map.keys.each do |key|
+    event_id= events_map[key]
+    event= $game_map.events[event_id]
+    return unless event
+    event.width, event.height = 1, 1
+    pbSetSelfSwitch(event_id,"B",true)
+  end
 end
 
 

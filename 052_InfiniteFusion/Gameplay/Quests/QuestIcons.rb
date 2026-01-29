@@ -38,6 +38,7 @@ class Game_Event < Game_Character
     alias _orig_start start
     def start
       setDialogIconManualOffValue(true)
+      setQuestIconManualOffValue(true)
       _orig_start
     end
 

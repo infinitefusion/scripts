@@ -198,7 +198,8 @@ def sit_on_chair
 
   # Enter sitting state
   $game_temp.faster_time = 4
-  time_window = showTimeWindow
+  is_outdoor = isOutdoor()
+  time_window = showTimeWindow if is_outdoor
 
   $game_player.through = true
   $game_player.jump_forward
@@ -210,10 +211,12 @@ def sit_on_chair
     Graphics.update
     Input.update
     pbUpdateSceneMap
-    updateTimeWindow(time_window)
-    time_on_chair +=1
-    if time_on_chair % 100 == 0
-      $game_temp.faster_time +=1 if $game_temp.faster_time < max_faster_time
+    if is_outdoor
+      updateTimeWindow(time_window)
+      time_on_chair +=1
+      if time_on_chair % 100 == 0
+        $game_temp.faster_time +=1 if $game_temp.faster_time < max_faster_time
+      end
     end
     direction = checkInputDirection
     next if !direction

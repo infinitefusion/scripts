@@ -78,6 +78,7 @@ class Spriteset_Map
     @fog2 =nil
   end
 
+
   def dispose
     if $scene.is_a?(Scene_Map)
       $scene.map_renderer.remove_tileset(@map.tileset_name)

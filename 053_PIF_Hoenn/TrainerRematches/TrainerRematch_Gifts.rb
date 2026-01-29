@@ -49,7 +49,7 @@ TRAINER_REMATCH_GIFTS = {
   :ANY => [:DNASPLICERS, :DNAREVERSERS, :REPEL, :POTION, :GREATBALL]
 }
 
-TRAINER_REMATCH_GIFTS = {
+TRAINER_REMATCH_SPECIFIC_GIFTS = {
   :RICHBOY => [[:LUXURYBALL], [:NUGGET]],
   :LADY => [[:LUXURYBALL], [:NUGGET]],
   :GENTLEMAN => [[:LUXURYBALL], [:NUGGET]],
@@ -65,11 +65,9 @@ TRAINER_REMATCH_GIFTS = {
 }
 
 def should_give_item(trainer)
-  echoln trainer.friendship_level
   return false unless trainer.friendship_level >= 2
   base_rate = 10 # percent
   item_chances = base_rate + (trainer.friendship / 10).floor
-  echoln item_chances
   return rand(100) < item_chances
 end
 
@@ -79,9 +77,10 @@ def select_gift_item(trainer)
 
   giving_rare_item = rand(100) < rare_item_chances
   typed_items = TRAINER_REMATCH_GIFTS[trainer.favorite_type]
+
   items_list = typed_items
-  if TRAINER_REMATCH_GIFTS.has_key?(trainer.trainer_type) && rand(100) < chance_trainer_class_item
-    items_list = TRAINER_REMATCH_GIFTS[trainer.trainer_type]
+  if TRAINER_REMATCH_SPECIFIC_GIFTS.has_key?(trainer.trainerType) && rand(100) < chance_trainer_class_item
+    items_list = TRAINER_REMATCH_GIFTS[trainer.trainerType]
   end
   if giving_rare_item
     return items_list[1].sample

@@ -220,3 +220,12 @@ define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fu
 #Team Aqua - Route 108
 define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")
 define_quest("aqua_carvanha",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")
+
+#Mauville
+define_quest("mauville_quests_1",:FIELD_QUEST,_INTL("Associate Producer! - Episode 1"), _INTL("You've been hired as an associate producer on a TV show! Complete 2 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_2",:FIELD_QUEST,_INTL("Associate Producer! - Episode 2"), _INTL("You've been hired as an associate producer on a TV show! Complete 5 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_3",:FIELD_QUEST,_INTL("Associate Producer! - Episode 3"), _INTL("You've been hired as an associate producer on a TV show! Complete 10 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_4",:FIELD_QUEST,_INTL("Associate Producer! - Episode 4"), _INTL("You've been hired as an associate producer on a TV show! Complete 15 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_5",:FIELD_QUEST,_INTL("Associate Producer! - Episode 5"), _INTL("You've been hired as an associate producer on a TV show! Complete 20 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_6",:FIELD_QUEST,_INTL("Associate Producer! - Episode 6"), _INTL("You've been hired as an associate producer on a TV show! Complete 25 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+define_quest("mauville_quests_6",:FIELD_QUEST,_INTL("Associate Producer! - Episode 7"), _INTL("You've been hired as an associate producer on a TV show! Complete 25 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
