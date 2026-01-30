@@ -198,6 +198,7 @@ module GameData
     end
 
     def generateRandomGymSpecies(old_species)
+      echoln "GENERATING GYM SPECIES"
       gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
       return old_species if gym_index == -1
       return generateRandomChampionSpecies(old_species) if gym_index == 999
@@ -207,10 +208,12 @@ module GameData
       customsList = getCustomSpeciesList()
       bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
       gym_type = GameData::Type.get(type_id)
+      echoln "type: #{gym_type.id}"
+
       while true
         new_species = $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? getSpecies(getNewCustomSpecies(old_species, customsList, bst_range)) : getSpecies(getNewSpecies(old_species, bst_range))
-        if new_species.hasType?(gym_type) || $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] || $game_switches[SWITCH_LEGENDARY_MODE]
-          # Note: gym Type validation is handled in-house for legendary mode
+        return new_species if $game_switches[SWITCH_LEGENDARY_MODE] #        new_species = $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? getSpecies(getNewCustomSpecies(old_species, customsList, bst_range)) : getSpecies(getNewSpecies(old_species, bst_range))
+        if new_species.hasType?(gym_type)
           return new_species
         end
       end
