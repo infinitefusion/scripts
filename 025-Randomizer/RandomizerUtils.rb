@@ -22,7 +22,7 @@ HELD_ITEMS = [:AIRBALLOON, :BRIGHTPOWDER, :EVIOLITE, :FLOATSTONE, :DESTINYKNOT, 
 
 INVALID_ITEMS = [:COVERFOSSIL, :PLUMEFOSSIL, :ACCURACYUP, :DAMAGEUP, :ANCIENTSTONE, :ODDKEYSTONE_FULL,
                  :DEVOLUTIONSPRAY, :INVISIBALL]
-RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS,:POKEBALL, :DYNAMITE, :PINKANBERRY]
+RANDOM_ITEM_EXCEPTIONS = [:DNASPLICERS, :POKEBALL, :DYNAMITE, :PINKANBERRY]
 
 def getRandomGivenTM(item)
   return item if item == nil
@@ -90,8 +90,8 @@ def pbGetRandomItem(item_id)
   return item if !($game_switches[SWITCH_RANDOM_ITEMS] || $game_switches[SWITCH_RANDOM_TMS])
   if $game_switches[SWITCH_RANDOM_ITEMS_MAPPED]
     return getMappedRandomItem(item)
-  # elsif $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
-  #   return getDynamicRandomItem(item)
+    # elsif $game_switches[SWITCH_RANDOM_ITEMS_DYNAMIC]
+    #   return getDynamicRandomItem(item)
   end
   return item
 end
@@ -138,4 +138,26 @@ def ensureRandomHashInitialized()
     end
     $PokemonGlobal.psuedoBSTHash = psuedoHash
   end
+end
+
+def get_gym_types_array
+  if Settings::KANTO
+    gym_types = GYM_TYPES_ARRAY
+  else
+    gym_types = GYM_TYPES_ARRAY_HOENN
+  end
+  randomized_gyms = $game_variables[VAR_GYM_TYPES_ARRAY]
+  echoln randomized_gyms
+  return randomized_gyms if $game_switches[SWITCH_RANDOM_GYM_CUSTOMS]
+  return gym_types
+end
+
+def set_current_gym_type_name(gym_index = nil, variable = VAR_CURRENT_GYM_TYPE_NAME)
+  unless gym_index
+    gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
+  end
+  gym_types = get_gym_types_array
+  current_type_id = gym_types[gym_index]
+  type_name = GameData::Type.get(current_type_id).name.downcase
+  pbSet(variable, type_name)
 end
