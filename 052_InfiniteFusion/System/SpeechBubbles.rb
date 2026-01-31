@@ -205,9 +205,9 @@ def pbCallBubDown(status=0,value=0)
 end
 
 #always_down, always_up is not ideal but used everywhere in game so too late to change
-def pbCallBub(status=0,value=0,always_down=false, always_up=false)
+def pbCallBub(status=0,event_id=0,always_down=false, always_up=false)
   begin
-  $PokemonTemp.speechbubble_talking=get_character(value).id if status<3
+  $PokemonTemp.speechbubble_talking=get_character(event_id).id if status<3
   $PokemonTemp.speechbubble_bubble=status
   $PokemonTemp.speechbubble_alwaysDown=always_down
   $PokemonTemp.speechbubble_alwaysUp=always_up

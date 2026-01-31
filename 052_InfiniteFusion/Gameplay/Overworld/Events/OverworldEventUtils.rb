@@ -518,11 +518,8 @@ def select_tv_show_quests(episode = 0)
   episode_5_quests = [:mauville_quests_1]
 
   completed_quests = get_completed_quests.map(&:id)
-  echoln completed_quests
   episode_quests = [nil, episode_1_quests, episode_2_quests, episode_3_quests, episode_4_quests, episode_5_quests][episode]
-  echoln episode_quests
-  episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
-  echoln episode_quests
+  #episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
   return episode_quests.sample(2)
 end
 
@@ -533,7 +530,7 @@ def get_show_dialog(quest_id)
   when :main_stolen_parts
     return _INTL("Sootopolis Void attacked the city and tried to steal a precious package from the Rangers headquarters. Littleroot Crimson was able to stop him, but now he's coming back with a vengeance...")
   when :route_102_rematch
-    return _INTL("There was a part where Littleroot Crimson had a rematch with Fallarbor Bordeaux who finally evolved his Combusken.")
+    return _INTL("There was a part where Littleroot Crimson had a rematch with Fallarbor Bordeaux and he finally evolved his Combusken.")
   when :petalburg_berry
     return _INTL("There was an entire subplot about Rustboro Ivory entering a berry-growing contest that he ended up winning with a super-mutant berry.")
   when :route104_rivalWeather
@@ -543,13 +540,13 @@ def get_show_dialog(quest_id)
 
     # Episode 2
   when :main_steven_letter
-    return _INTL("Littleroot Crimson seeked out the help of the grandmaster that was hiding in the Cave of Secrets.")
+    return _INTL("Littleroot Crimson seeked out the help of the grandmaster that hiding at the end of the dark cave.")
   when :route104_oricorio
     return _INTL("Rustboro Ivory befriended that lonely Oricorio in the flowers field.")
   when :route104_oricorio_forms
     return _INTL("The Oricorio kept switching forms!")
   when :rustboro_whismur
-    return _INTL("Mauville Yellow fused a Pellipper with and Exploud to create a sonic weapon and it ended up being much too loud. That so funny!")
+    return _INTL("Mauville Yellow fused a Pellipper with Exploud to create a sonic weapon. And then it ended up being much too loud, it was so funny!")
   when :rustboro_shiny
     return _INTL("Pacifidlog Cobalt found that shiny Azumarill. I never saw it coming!")
 
@@ -559,7 +556,7 @@ def get_show_dialog(quest_id)
   when :dewford_fishing
     return _INTL("Hey, that part where Fallarbor Bordeaux fished up that Dragalge was pretty neat.")
   when :route109_tanning
-    return _INTL("That whole subplot about Pacificlog Cobalt tanning definitely dragged on a bit...")
+    return _INTL("That whole subplot about Pacifidlog Cobalt trying to get a tan definitely dragged on a bit...")
   when :route109_seahouse
     return _INTL("Although that scene with Lilicove Viridian beating up all the bad guys in the beach house was really fun!")
 
