@@ -195,7 +195,7 @@ def update_weather(last_weather_hour)
   now = pbGetTimeNow
   current_hour = now.hour
   if current_hour != last_weather_hour
-    if current_hour % 4 == 0  #Update every 4 hours
+    if current_hour % 4 == 0 # Update every 4 hours
       $game_weather.update_weather
     end
     last_weather_hour = current_hour
@@ -225,9 +225,9 @@ def sit_on_chair
     if is_outdoor
       updateTimeWindow(time_window)
       last_weather_hour = update_weather(last_weather_hour) if time_on_chair % 100 == 0
-      time_on_chair +=1
+      time_on_chair += 1
       if time_on_chair % 100 == 0
-        $game_temp.faster_time +=1 if $game_temp.faster_time < max_faster_time
+        $game_temp.faster_time += 1 if $game_temp.faster_time < max_faster_time
       end
     end
     direction = checkInputDirection
@@ -258,7 +258,6 @@ ensure
   $game_temp.faster_time = nil
   time_window.dispose if time_window && !time_window.disposed?
 end
-
 
 def checkInputDirection
   return DIRECTION_UP if Input.trigger?(Input::UP)
@@ -511,22 +510,86 @@ def this_event()
   return $game_map.events[@event_id]
 end
 
+def select_tv_show_quests(episode = 0)
+  episode_1_quests = [:main_stolen_parts, :route_102_rematch, :petalburg_berry, :route104_rivalWeather, :petalburgwoods_spores]
+  episode_2_quests = [:main_steven_letter, :route104_oricorio, :route104_oricorio_forms, :rustboro_whismur, :rustboro_shiny,]
+  episode_3_quests = [:main_devon_parts, :dewford_fishing, :route109_tanning, :route109_seahouse,]
+  episode_4_quests = [:magma_help_grunts, :aqua_help_grunts,]
+  episode_5_quests = [:mauville_quests_1]
+
+  completed_quests = get_completed_quests.map(&:id)
+  echoln completed_quests
+  episode_quests = [nil, episode_1_quests, episode_2_quests, episode_3_quests, episode_4_quests, episode_5_quests][episode]
+  echoln episode_quests
+  episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
+  echoln episode_quests
+  return episode_quests.sample(2)
+end
+
+def get_show_dialog(quest_id)
+  echoln quest_id
+  case quest_id
+    # Episode 1
+  when :main_stolen_parts
+    return _INTL("Sootopolis Void attacked the city and tried to steal a precious package from the Rangers headquarters. Littleroot Crimson was able to stop him, but now he's coming back with a vengeance...")
+  when :route_102_rematch
+    return _INTL("There was a part where Littleroot Crimson had a rematch with Fallarbor Bordeaux who finally evolved his Combusken.")
+  when :petalburg_berry
+    return _INTL("There was an entire subplot about Rustboro Ivory entering a berry-growing contest that he ended up winning with a super-mutant berry.")
+  when :route104_rivalWeather
+    return _INTL("There was a part where Lilicove Viridian waited until the wind picked up to catch a Pidgeot that had been terrorizing the town.")
+  when :petalburgwoods_spores
+    return _INTL("At one point, Mauville Yellow met a scientist in the woods and helped him collect highly toxic spore.")
+
+    # Episode 2
+  when :main_steven_letter
+    return _INTL("Littleroot Crimson seeked out the help of the grandmaster that was hiding in the Cave of Secrets.")
+  when :route104_oricorio
+    return _INTL("Rustboro Ivory befriended that lonely Oricorio in the flowers field.")
+  when :route104_oricorio_forms
+    return _INTL("The Oricorio kept switching forms!")
+  when :rustboro_whismur
+    return _INTL("Mauville Yellow fused a Pellipper with and Exploud to create a sonic weapon and it ended up being much too loud. That so funny!")
+  when :rustboro_shiny
+    return _INTL("Pacifidlog Cobalt found that shiny Azumarill. I never saw it coming!")
+
+    # Episode 3
+  when :main_devon_parts
+    return _INTL("At least, Littleroot Crimson finally delivered that precious package. I can't wait to see what happens next with that.")
+  when :dewford_fishing
+    return _INTL("Hey, that part where Fallarbor Bordeaux fished up that Dragalge was pretty neat.")
+  when :route109_tanning
+    return _INTL("That whole subplot about Pacificlog Cobalt tanning definitely dragged on a bit...")
+  when :route109_seahouse
+    return _INTL("Although that scene with Lilicove Viridian beating up all the bad guys in the beach house was really fun!")
+
+    # Episode 4
+  when :magma_help_grunts
+    return _INTL("I never expected Littleroot Crimson to infiltrate the villains's lair like that!")
+  when :aqua_help_grunts
+    return _INTL("I never expected Littleroot Crimson to infiltrate the villains's lair like that!")
+
+    # Episode 5
+  when :mauville_quests_1
+    return "" #directly in the event's dialog
+  end
+end
+
 def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
   day_care_map = 74
   return unless $game_map.map_id == day_care_map
   land_event_ids.each_with_index do |event_id, i|
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", false,day_care_map)
+    pbSetSelfSwitch(event.id, "A", false, day_care_map)
     event.character_name = ""
   end
   water_event_ids.each_with_index do |event_id, i|
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", false,day_care_map)
+    pbSetSelfSwitch(event.id, "A", false, day_care_map)
     event.character_name = ""
   end
 
-
-  $PokemonGlobal.daycare.each_with_index do |day_care_slot,i|
+  $PokemonGlobal.daycare.each_with_index do |day_care_slot, i|
     day_care_pokemon = day_care_slot[0]
     next unless day_care_pokemon
     if day_care_pokemon.hasType?(:WATER)
@@ -538,10 +601,10 @@ def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
     end
 
     event = $game_map.events[event_id]
-    pbSetSelfSwitch(event.id,"A", true,day_care_map)
+    pbSetSelfSwitch(event.id, "A", true, day_care_map)
     $game_map.refresh
 
-    event.character_name = getOverworldLandPath(day_care_pokemon.species_data,day_care_pokemon.isShiny? )
+    event.character_name = getOverworldLandPath(day_care_pokemon.species_data, day_care_pokemon.isShiny?)
     if swimming
       event.forced_bush_depth = 20
       event.step_anime = true
