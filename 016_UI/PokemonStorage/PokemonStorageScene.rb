@@ -517,7 +517,7 @@ class PokemonStorageScene
       end
       @storage.currentBox = newbox
     end
-    checkTransferBoxTutorial(newbox.boxnumber)
+    checkTransferBoxTutorial(newbox)
   end
 
 
