@@ -97,13 +97,13 @@ def berryContestTVNews
   when 0 #First time in contest? Yes
     case $game_variables[VAR_REPORTER_Q2]
     when 0 #Really fun
-      second_part = _INTL(", but they seemed very confident about it!")
+      second_part = _INTL(" but they seemed very confident about it!")
     when 1
-      second_part = _INTL(", and they seemed to be having fun already!")
+      second_part = _INTL(" and they seemed to be having fun already!")
     when 2
-      second_part = _INTL(", and they understandably seemed a bit nervous!")
+      second_part = _INTL(" and they understandably seemed a bit nervous!")
     when 2
-      second_part = _INTL(", but they didn't really seem very interested in it. Perhaps, they only joined for the prize?")
+      second_part = _INTL(" but they didn't really seem very interested in it. Perhaps, they only joined for the prize?")
     end
     pbMessage(_INTL("\"This was {1}'s first time participating {2}\"",$Trainer.name,second_part))
     pbMessage(_INTL("\"Apparently, their strategy to win is to {1}. We'll see how that pays off for them!\"",$game_variables[VAR_REPORTER_Q3].downcase))

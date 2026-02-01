@@ -452,7 +452,7 @@ module Settings
     [:FEEBAS, 15, 4, 3, "Pokemon HeartGold and SoulSilver - Wild Pokemon Battle (Kanto)",SEVII_ROAMING,:Rain]
   ]
 
-  PINKAN_ISLAND_MAPS=[51,46,428,531]
+  PINKAN_ISLAND_MAPS= Settings::KANTO ? [51,46,428,531] : []
 
   #=============================================================================
 

@@ -36,7 +36,10 @@ def evolveRebattledTrainerPokemon(trainer)
     if evolution_species
       trainer.log_evolution_event(pokemon.species,evolution_species)
       trainer.set_pending_action(true)
-      pokemon.species = evolution_species if evolution_species
+      if evolution_species
+        pokemon.species = evolution_species
+        pokemon.pif_sprite =nil
+      end
     end
     updated_team.push(pokemon)
   end
