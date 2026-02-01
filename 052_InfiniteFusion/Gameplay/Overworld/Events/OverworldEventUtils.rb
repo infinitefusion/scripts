@@ -300,6 +300,11 @@ def check_beach_seashell
   end
 end
 
+#shortcut for events
+def spawn_near(species,level,group_size)
+  spawn_random_overworld_pokemon_group([species, level], 1, group_size)
+end
+
 def clefairy_minigame(length = 4)
   possible_elements = ["Left!", " Up!", "Right!", "Down!"]
   pbMessage("Listen up and remember this!")
