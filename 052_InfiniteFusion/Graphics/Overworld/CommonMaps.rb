@@ -35,10 +35,10 @@ def enter_common_building(building_id, city)
   $PokemonGlobal.common_map_entrance_position = [$game_player.x, $game_player.y]
 
   maps_list = Settings::HOENN ? COMMON_MAPS_HOENN : COMMON_MAPS_KANTO
-  new_map_data= maps_list[building_id]
+  new_map_data = maps_list[building_id]
   return unless new_map_data
   pbSet(VAR_CURRENT_CITY, city)
-  new_map =new_map_data[:id]
+  new_map = new_map_data[:id]
   new_position = new_map_data[:position]
   pbFadeOutIn {
     $game_temp.player_new_map_id = new_map
@@ -58,6 +58,7 @@ def exit_common_building()
     $game_temp.player_new_map_id = $PokemonGlobal.common_map_entrance_id
     $game_temp.player_new_x = $PokemonGlobal.common_map_entrance_position[0]
     $game_temp.player_new_y = $PokemonGlobal.common_map_entrance_position[1]
+    $game_temp.player_new_direction = DIRECTION_DOWN
     $scene.transfer_player(true)
     $game_map.autoplay
     $game_map.refresh
@@ -69,10 +70,10 @@ end
 
 def enter_pokemon_center(city_symbol)
   pbSetPokemonCenter
-  pbSet(VAR_CURRENT_CITY,city_symbol)
+  pbSet(VAR_CURRENT_CITY, city_symbol)
   pokemon_center_type = isPlayerBirthDay? ? :POKEMON_CENTER_BIRTHDAY : :POKEMON_CENTER
   echoln "WAAA"
-  enter_common_building(pokemon_center_type,city_symbol)
+  enter_common_building(pokemon_center_type, city_symbol)
 end
 
 def exit_pokemon_center()
@@ -81,17 +82,20 @@ def exit_pokemon_center()
   $PokemonGlobal.common_map_entrance_position = nil
   reset_pokemart_variables
   pbFadeOutIn {
-    if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId>=0
+    if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId >= 0
       pbCancelVehicles
-      $game_temp.player_new_map_id    = $PokemonGlobal.pokecenterMapId
-      $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
-      $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
+      $game_temp.player_new_map_id = $PokemonGlobal.pokecenterMapId
+      $game_temp.player_new_x = $PokemonGlobal.pokecenterX
+      $game_temp.player_new_y = $PokemonGlobal.pokecenterY
+      $game_temp.player_new_direction = DIRECTION_DOWN
+
       $scene.transfer_player if $scene.is_a?(Scene_Map)
       $game_map.refresh
-    else#Home
-      $game_temp.player_new_map_id    = 9
-      $game_temp.player_new_x         = 16
-      $game_temp.player_new_y         = 23
+    else
+      # Home
+      $game_temp.player_new_map_id = 9
+      $game_temp.player_new_x = 16
+      $game_temp.player_new_y = 23
       $scene.transfer_player if $scene.is_a?(Scene_Map)
       $game_map.refresh
     end
