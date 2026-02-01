@@ -1308,7 +1308,7 @@ class PokemonSummary_Scene
       pbFadeOutIn {
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)
-        screen.pbStartSceneSingle(@pokemon.species)
+        screen.pbStartSceneSingle(@pokemon)
       }
       pbChangePokemon
       dorefresh = true
