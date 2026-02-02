@@ -127,7 +127,7 @@ def changeOricorioForm(pokemon, form = nil)
   newForm = pokemon.isFusion? ? getSpeciesIdForFusion(head_number, body_number) : head_id
   $Trainer.pokedex.set_seen(newForm)
   $Trainer.pokedex.set_owned(newForm)
-
+  pokemon.pif_sprite = nil
   pokemon.species = newForm
   return true
 end

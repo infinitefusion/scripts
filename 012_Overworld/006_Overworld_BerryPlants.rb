@@ -255,9 +255,9 @@ class BerryPlantSprite
       else
         @event.character_name = "Object ball"
       end
-      if @oldstage != berryData[0] && berryData.length > 6 # Gen 4 growth mechanisms
-        $scene.spriteset.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID, @event.x, @event.y, false, 1) if $scene.spriteset
-      end
+      # if @oldstage != berryData[0] && berryData.length > 6 # Gen 4 growth mechanisms
+      #   $scene.spriteset.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID, @event.x, @event.y, false, 1) if $scene.spriteset
+      # end
     end
     @oldstage = berryData[0]
   end
