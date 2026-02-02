@@ -2291,7 +2291,7 @@ ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
 
 ItemHandlers::BattleUseOnPokemon.add(:YELLOWNECTAR, proc { |item, poke, scene|
   form_name = "Pom-Pom"
-  form = 1
+  form = 2
   next changeOricorioFormFromItem(poke, form_name, form)
 })
 
