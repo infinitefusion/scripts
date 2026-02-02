@@ -403,6 +403,7 @@ def get_pokemon_readable_internal_name(pokemon)
 end
 
 def get_species_readable_internal_name(species_symbol)
+  return unless species_symbol
   if isSpeciesFusion(species_symbol)
     body_pokemon = get_body_species_from_symbol(species_symbol)
     head_pokemon = get_head_species_from_symbol(species_symbol)

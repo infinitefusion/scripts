@@ -151,7 +151,7 @@ class Sprite_Character
   end
 
   # This sets up the rival's main team for the game
-  # Fur further battle, we can just add Pokemon and gain exp the same way as other
+  # For later battles, we can just add Pokemon and gain exp the same way as other
   # trainer rematches
   #
   # Basically, rival catches a pokemon the type of their rival's starter - fuses it with their starters
@@ -167,13 +167,13 @@ class Sprite_Character
     team << rival_starter
     rival_trainer.currentTeam = team
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
-    evolveRivalTeam
 
-    evolution_species = rival_starter.check_evolution_on_level_up(false)
-    echoln evolution_species
-    if evolution_species
-      starter_species = evolution_species
-    end
+    #twice so that starter evolves both head and body
+    # evolution_species = rival_starter.check_evolution_on_level_up(false)
+    # echoln evolution_species
+    # if evolution_species
+    #   starter_species = evolution_species
+    # end
 
     player_chosen_starter_index = pbGet(VAR_HOENN_CHOSEN_STARTER_INDEX)
     case player_chosen_starter_index
@@ -226,8 +226,8 @@ class Sprite_Character
     team << Pokemon.new(contains_starter[0], 20)
 
     rival_trainer.currentTeam = team
-    echoln rival_trainer.currentTeam
 
+    evolveRivalTeam
     evolveRivalTeam
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
   end
@@ -256,7 +256,6 @@ class Sprite_Character
     trainer_appearance = $Trainer.rival_appearance
     rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
     rivalBattledTrainer.set_custom_appearance(trainer_appearance)
-    echoln rivalBattledTrainer.currentTeam
     team = []
     team << Pokemon.new(get_hoenn_rival_starter, 5)
     rivalBattledTrainer.currentTeam = team

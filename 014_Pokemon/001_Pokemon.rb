@@ -1299,7 +1299,7 @@ class Pokemon
       }
       if body_evolution && head_evolution
         return prompt_evolution_choice(body_evolution, head_evolution) if prompt_choice
-        return [body_evolution,head_evolution].sample
+        return [fusionOf(head,body_evolution),fusionOf(head_evolution,body)].sample
       end
     end
 
