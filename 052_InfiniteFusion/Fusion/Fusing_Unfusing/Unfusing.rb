@@ -11,6 +11,7 @@ def pbUnfuse(pokemon, scene, partyPosition=nil, pcPosition = nil)
   $PokemonTemp.unfuse_count_today = 0 unless $PokemonTemp.unfuse_count_today
   $PokemonTemp.unfuse_count_today += 1
   checkUnfuseChallenges(pokemon)
+  return true
 end
 
 def unfusePokemonFromPC(fused_pokemon, scene, pcPosition)
