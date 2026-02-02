@@ -93,9 +93,15 @@ def obtainUnfusedPokemonPC(head_pokemon, body_pokemon, pcPosition)
   box = pcPosition[0]
   index = pcPosition[1]
   # todo: store at next available position from current position
+  echoln "box: #{box} index: #{index}"
   $PokemonStorage.pbDelete(box,index)
-  $PokemonStorage.pbStoreCaught(head_pokemon)
-  $PokemonStorage.pbStoreCaught(body_pokemon)
+  if box == -1 #Player party
+    pbAddPokemonSilent(head_pokemon)
+    pbAddPokemonSilent(body_pokemon)
+  else
+    $PokemonStorage.pbStoreCaught(head_pokemon)
+    $PokemonStorage.pbStoreCaught(body_pokemon)
+  end
 end
 
 def obtainUnfusedPokemonParty(head_pokemon, body_pokemon, partyPosition)
