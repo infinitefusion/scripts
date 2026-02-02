@@ -147,17 +147,17 @@ def get_gym_types_array
     gym_types = GYM_TYPES_ARRAY_HOENN
   end
   randomized_gyms = $game_variables[VAR_GYM_TYPES_ARRAY]
-  echoln randomized_gyms
   return randomized_gyms if $game_switches[SWITCH_RANDOM_GYM_CUSTOMS]
   return gym_types
 end
 
-def set_current_gym_type_name(gym_index = nil, variable = VAR_CURRENT_GYM_TYPE_NAME)
+def set_current_gym_type_name(gym_index = nil, capitalize=false, variable = VAR_CURRENT_GYM_TYPE_NAME)
   unless gym_index
     gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
   end
   gym_types = get_gym_types_array
   current_type_id = gym_types[gym_index]
-  type_name = GameData::Type.get(current_type_id) .name.downcase
+  type_name = GameData::Type.get(current_type_id)
+  type_name = type_name.name.downcase unless capitalize
   pbSet(variable, type_name)
 end
