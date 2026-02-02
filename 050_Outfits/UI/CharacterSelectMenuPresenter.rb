@@ -109,7 +109,7 @@ class CharacterSelectMenuPresenter
     case selected_option
     when OPTION_NAME
       pbSEPlay("GUI summary change page", 80, 100)
-      @name = pbEnterPlayerName(_INTL("Name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
+      @name = pbEnterPlayerName(_INTL("Name?"), 0, Settings::MAX_PLAYER_NAME_SIZE, @name)
       @name = getDefaultName() if @name == ''
       pbSEPlay("GUI trainer card open", 80, 100)
       updateDisplayedName(current_index)
@@ -137,6 +137,9 @@ class CharacterSelectMenuPresenter
   end
 
   def getDefaultName()
+    if @rival
+      return init_rival_name
+    end
     return getPlayerDefaultName(@gender)
   end
 

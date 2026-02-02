@@ -43,9 +43,14 @@ end
 
 BATTLED_TRAINER_RIVAL_KEY = "rival"
 
+
+def get_rival_name
+  rival_name = _INTL("Brendan") if isPlayerFemale
+  rival_name = _INTL("May") if isPlayerMale
+  return rival_name
+end
 def init_rival_name
-  rival_name = "Brendan" if isPlayerFemale
-  rival_name = "May" if isPlayerMale
+  rival_name = get_rival_name
   @name = rival_name
   return rival_name
 end
