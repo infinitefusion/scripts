@@ -88,7 +88,7 @@ end
 def optionsMenu(options = [], cmdIfCancel = -1, startingOption = 0)
   $game_temp.message_window_showing = true
   cmdIfCancel = -1 if !cmdIfCancel
-  result = pbShowCommands(nil, options, cmdIfCancel, startingOption)
+  result = pbShowCommands(nil, options, cmdIfCancel+1, startingOption)  #+1 parce que pbShowCommands fait un "-1" pour être "user friendly"...
   $game_temp.message_window_showing = false
   return result
 end

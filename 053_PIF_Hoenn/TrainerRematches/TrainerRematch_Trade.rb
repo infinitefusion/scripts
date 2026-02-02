@@ -200,7 +200,7 @@ def offerPokemonForTrade(player_pokemon, npc_party, trainer_class)
 end
 
 def doNPCTrainerTrade(trainer)
-  echoln trainer.getTimeSinceLastTrade
+  echoln "Time since last trade: #{trainer.getTimeSinceLastTrade}"
   if trainer.isNextTradeReady?
     pbMessage(_INTL("The trainer is not ready to trade yet. Wait a little bit before you make your offer."))
     return trainer

@@ -99,7 +99,6 @@ def postBattleActionsMenu()
   end
   showPrerematchDialog
   choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
-
   case options[choice]
   when rematchCommand
     doPostBattleAction(:BATTLE)
