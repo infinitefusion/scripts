@@ -157,6 +157,11 @@ class Game_Map
     end
   end
 
+  def bgm
+    return @map.bgm
+  end
+
+
   def setFog2(filename,sx=0,sy=0,opacity=32)
     @fog2_sx=sx
     @fog2_sy=-sy

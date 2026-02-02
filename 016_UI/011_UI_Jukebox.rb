@@ -103,12 +103,16 @@ class PokemonJukeboxScreen
             break
           elsif cmd2==0
             pbPlayDecisionSE
+            pbBGMPlay($game_map.bgm)
             $game_system.setDefaultBGM(nil)
             $PokemonMap.whiteFluteUsed = false if $PokemonMap
             $PokemonMap.blackFluteUsed = false if $PokemonMap
           else
             pbPlayDecisionSE
-            $game_system.setDefaultBGM(files[cmd2])
+            $game_system.bgm_stop
+            bgm_name = files[cmd2]
+            pbBGMPlay(bgm_name)
+            $game_system.setDefaultBGM(bgm_name)
             $PokemonMap.whiteFluteUsed = false if $PokemonMap
             $PokemonMap.blackFluteUsed = false if $PokemonMap
           end
@@ -121,6 +125,8 @@ class PokemonJukeboxScreen
     end
     @scene.pbEndScene
   end
+
+
 
 
   def getFolderMusic
