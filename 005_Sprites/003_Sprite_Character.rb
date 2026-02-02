@@ -262,7 +262,7 @@ class Sprite_Character < RPG::Sprite
       self.bitmap = @bushbitmap.bitmap
     end
     self.visible = !@character.transparent
-    if @character_name == "000"
+    if @character_name == "000" && !$DEBUG
       self.visible = false
     end
     if @tile_id == 0
