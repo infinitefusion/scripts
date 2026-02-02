@@ -277,6 +277,7 @@ def getOffBoat
   reset_player_graphics
   $PokemonTemp.prevent_ow_battles = false
   $PokemonGlobal.boat = false
+  $game_map.refresh
 end
 
 def check_beach_seashell

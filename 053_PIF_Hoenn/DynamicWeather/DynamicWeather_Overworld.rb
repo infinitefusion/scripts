@@ -12,6 +12,7 @@ Events.onMapChange+= proc { |_old_map_id|
     $game_screen.weather(:None,0,0) if !mapMetadata.outdoor_map
     next unless mapMetadata.outdoor_map
     $game_weather.update_weather
+    $game_map.refresh
   }
 
 def update_overworld_weather(current_map)

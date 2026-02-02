@@ -206,6 +206,10 @@ class Sprite_Character < RPG::Sprite
     return if @character.is_a?(Game_Event) && !@character.should_update?
     super
     if should_update?
+      unless self.is_a?(Sprite_Player)
+        @shadow.visible = self.visible if @shadow
+      end
+
       @manual_refresh = false
       @tile_id = @character.tile_id
       @character_name = @character.character_name
