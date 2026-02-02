@@ -174,6 +174,7 @@ def pbChangeLevel(pkmn, newlevel, scene)
     end
     # Check for evolution
     newspecies = pkmn.check_evolution_on_level_up
+    echoln newspecies
     if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new

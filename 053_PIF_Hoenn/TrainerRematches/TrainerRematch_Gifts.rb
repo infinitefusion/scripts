@@ -61,7 +61,6 @@ TRAINER_REMATCH_SPECIFIC_GIFTS = {
 
   :ROCKER => [[:PARLYZHEAL], [:THUNDERSTONE]],
   :SAILOR => [[:HEALBALL, :SUPERPOTION], [:FULLRESTORE]],
-
 }
 
 def should_give_item(trainer)
@@ -80,7 +79,7 @@ def select_gift_item(trainer)
 
   items_list = typed_items
   if TRAINER_REMATCH_SPECIFIC_GIFTS.has_key?(trainer.trainerType) && rand(100) < chance_trainer_class_item
-    items_list = TRAINER_REMATCH_GIFTS[trainer.trainerType]
+    items_list = TRAINER_REMATCH_GIFTS[trainer.trainerType] if TRAINER_REMATCH_GIFTS[trainer.trainerType]
   end
   if giving_rare_item
     return items_list[1].sample

@@ -701,7 +701,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
   end
   $PokemonTemp.setBattleRule("double") if battle_trainers.length > 1
   $PokemonTemp.battleRules["canLose"] = canLose
-
+  $PokemonTemp.battleRules["moneyGain"] = false
   decision = pbTrainerBattleCore(*battle_trainers)
   return (decision == 1)
 end
