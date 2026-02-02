@@ -6,7 +6,7 @@ def pbUnfuse(pokemon, scene, partyPosition=nil, pcPosition = nil)
       unfusePokemonFromParty(pokemon, scene, partyPosition)
     end
   else
-    unfusePokemonLegacy(pokemon, scene, false, pcPosition)  #Wild Fusions
+    unfusePokemonLegacy(pokemon, scene, false, pcPosition)  #still used for wild Fusions
   end
   $PokemonTemp.unfuse_count_today = 0 unless $PokemonTemp.unfuse_count_today
   $PokemonTemp.unfuse_count_today += 1
@@ -93,7 +93,6 @@ def obtainUnfusedPokemonPC(head_pokemon, body_pokemon, pcPosition)
   box = pcPosition[0]
   index = pcPosition[1]
   # todo: store at next available position from current position
-  echoln "box: #{box} index: #{index}"
   $PokemonStorage.pbDelete(box,index)
   if box == -1 #Player party
     pbAddPokemonSilent(head_pokemon)

@@ -1802,6 +1802,10 @@ def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
       pokemon.exp_when_fused_head = nil
       pokemon.exp_when_fused_body = nil
 
+      pokemon.pif_sprite = nil
+      poke1.pif_sprite=nil
+      poke2.pif_sprite = nil
+
       if pokemon.shiny?
         pokemon.shiny = false
         if pokemon.bodyShiny? && pokemon.headShiny?
