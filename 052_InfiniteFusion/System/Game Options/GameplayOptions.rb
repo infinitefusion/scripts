@@ -86,10 +86,12 @@ class GameplayOptionsScene < PokemonOption_Scene
                                 }, _INTL("Sets by how much to speed up the game when holding the speed up button (Default: 3x)")
     )
 
-    options << EnumOption.new(_INTL("Quick Surf"), [_INTL("Off"), _INTL("On")],
-                              proc { $PokemonSystem.quicksurf },
-                              proc { |value| $PokemonSystem.quicksurf = value },
-                              _INTL("Start surfing automatically when interacting with water")
+    options << EnumOption.new(_INTL("Quick HMs"), [_INTL("Off"), _INTL("On")],
+                              proc { $PokemonSystem.quickHM },
+                              proc { |value| $PokemonSystem.quickHM = value },
+                              [
+                                _INTL("Prompt to use HMs when interacting with an obstacle"),
+                                _INTL("Use HMs automatically when interacting with an obstacle")]
     )
 
     if $game_switches && $game_switches[SWITCH_LEGENDARY_MODE]

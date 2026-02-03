@@ -197,6 +197,9 @@ def pbCut
       return false
     end
   end
+  if $PokemonSystem.quickHM == 1
+    return true
+  end
   pbMessage(_INTL("This tree looks like it can be cut down!\1"))
   if pbConfirmMessage(_INTL("Would you like to cut it?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
@@ -336,6 +339,11 @@ def pbDive
       return false
     end
   end
+  if $PokemonSystem.quickHM == 1
+    diveTransfer(map_metadata)
+    return true
+  end
+
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     if movefinder
@@ -348,22 +356,26 @@ def pbDive
     end
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
-    pbFadeOutIn {
-      $game_temp.player_new_map_id = map_metadata.dive_map_id
-      $game_temp.player_new_x = $game_player.x
-      $game_temp.player_new_y = $game_player.y
-      $game_temp.player_new_direction = $game_player.direction
-      $PokemonGlobal.surfing = false
-      $PokemonGlobal.diving = true
-      pbUpdateVehicle
-      $scene.transfer_player(false)
-      addWaterCausticsEffect()
-      $game_map.autoplay
-      $game_map.refresh
-    }
+    diveTransfer(map_metadata)
     return true
   end
   return false
+end
+
+def diveTransfer(map_metadata)
+  pbFadeOutIn {
+    $game_temp.player_new_map_id = map_metadata.dive_map_id
+    $game_temp.player_new_x = $game_player.x
+    $game_temp.player_new_y = $game_player.y
+    $game_temp.player_new_direction = $game_player.direction
+    $PokemonGlobal.surfing = false
+    $PokemonGlobal.diving = true
+    pbUpdateVehicle
+    $scene.transfer_player(false)
+    addWaterCausticsEffect()
+    $game_map.autoplay
+    $game_map.refresh
+  }
 end
 
 def pbSurfacing
@@ -745,6 +757,12 @@ def pbRockSmash
       return false
     end
   end
+  if $PokemonSystem.quickHM == 1
+    facingEvent = $game_player.pbFacingEvent(true)
+    pbSEPlay("Rock Smash", 80)
+    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID, facingEvent.x, facingEvent.y, false)
+    return true
+  end
   if pbConfirmMessage(_INTL("This rock appears to be breakable. Would you like to use Rock Smash?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
@@ -795,6 +813,11 @@ def pbStrength
       return false
     end
   end
+  if $PokemonSystem.quickHM == 1
+    $PokemonMap.strengthUsed = true
+    return true
+  end
+
   pbMessage(_INTL("It looks heavy, but a Pokémon may be able to push it aside.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
@@ -845,7 +868,7 @@ def pbSurf
       return false
     end
   end
-  if $PokemonSystem.quicksurf == 1
+  if $PokemonSystem.quickHM == 1
     surfbgm = GameData::Metadata.get.surf_BGM
     pbCueBGM(surfbgm, 0.5) if surfbgm
     surfingPoke = movefinder.species if movefinder
@@ -1241,6 +1264,11 @@ def pbWaterfall
       return false
     end
   end
+  if $PokemonSystem.quickHM == 1
+    pbAscendWaterfall
+    return true
+  end
+
   if pbConfirmMessage(_INTL("It's a large waterfall. Would you like to use Waterfall?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))

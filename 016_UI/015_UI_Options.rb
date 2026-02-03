@@ -13,7 +13,7 @@ class PokemonSystem
   attr_accessor :bgmvolume
   attr_accessor :sevolume
   attr_accessor :textinput
-  attr_accessor :quicksurf
+  attr_accessor :quickHM
   attr_accessor :level_caps
   attr_accessor :battle_type
   attr_accessor :download_sprites
@@ -46,7 +46,7 @@ class PokemonSystem
     @bgmvolume = 40 # Volume of background music and ME
     @sevolume = 40 # Volume of sound effects
     @textinput = 1 # Text input mode (0=cursor, 1=keyboard)
-    @quicksurf = 0
+    @quickHM = 0
     @battle_type = 0
     @speedup = 0 # 0= hold, 1=toggle
     @speedup_speed = 3 # for hold only
