@@ -771,8 +771,8 @@ def pbPokemonMart(stock, speech_welcome = nil, cantsell = false, speech_bye=nil,
   end
 
   for i in 0...stock.length
-    stock[i] = GameData::Item.get(stock[i]).id
-    stock[i] = nil if GameData::Item.get(stock[i]).is_important? && $PokemonBag.pbHasItem?(stock[i])
+    stock[i] = GameData::Item.get(stock[i])&.id
+    stock[i] = nil if GameData::Item.get(stock[i])&.is_important? && $PokemonBag.pbHasItem?(stock[i])
   end
   stock.compact!
   commands = []
