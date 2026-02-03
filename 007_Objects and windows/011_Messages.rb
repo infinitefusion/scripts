@@ -476,8 +476,6 @@ def pbDisplayHeartScalesWindow(msgwindow)
   return pointswindow
 end
 
-
-
 def pbDisplayCoinsWindow(msgwindow, goldwindow)
   coinString = ($Trainer) ? $Trainer.coins.to_s_formatted : "0"
   coinwindow = Window_AdvancedTextPokemon.new(_INTL("Coins:\n<ar>{1}</ar>", coinString))
@@ -592,7 +590,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   linecount = (Graphics.height > 400) ? 3 : 2
   ### Text replacement
   text.gsub!(/\\sign\[([^\]]*)\]/i) { # \sign[something] gets turned into
-  next "\\op\\cl\\ts[]\\w[" + $1 + "]" # \op\cl\ts[]\w[something]
+    next "\\op\\cl\\ts[]\\w[" + $1 + "]" # \op\cl\ts[]\w[something]
   }
   text.gsub!(/\\\\/, "\5")
   text.gsub!(/\\1/, "\1")
@@ -629,6 +627,14 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     end
     next ""
   }
+  echoln $PokemonTemp.windowSkin
+  if $PokemonTemp.windowSkin
+    path = "Graphics/Windowskins/#{$PokemonTemp.windowSkin}"
+    if pbResolveBitmap(path)
+      msgwindow.setSkin(path)
+    end
+    $PokemonTemp.windowSkin = nil
+  end
   isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
   text.gsub!(/\\[Cc]\[([0-9]+)\]/) {
     m = $1.to_i
@@ -760,10 +766,10 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
           head = getBasePokemonID(param.to_i, false)
           body = getBasePokemonID(param.to_i, true)
           facewindow.dispose if facewindow
-          #path = obtainPokemonSpritePath(body, head, true) if isFusion
+          # path = obtainPokemonSpritePath(body, head, true) if isFusion
 
           spriteLoader = BattleSpriteLoader.new
-          facewindow = isFusion ? PictureWindow.new(spriteLoader.load_fusion_sprite(head,body)) : PictureWindow.new(spriteLoader.load_base_sprite(head))
+          facewindow = isFusion ? PictureWindow.new(spriteLoader.load_fusion_sprite(head, body)) : PictureWindow.new(spriteLoader.load_base_sprite(head))
           pbPositionNearMsgWindow(facewindow, msgwindow, :left)
           facewindow.viewport = msgwindow.viewport
           facewindow.z = msgwindow.z
@@ -937,10 +943,9 @@ def pbMessageChooseNumber(message, params, &block)
   return ret
 end
 
-
-def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0, x_offset=nil, y_offset=nil)
+def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0, x_offset = nil, y_offset = nil)
   return 0 if !commands
-  $PokemonTemp.speechbubble_arrow.visible =false if $PokemonTemp.speechbubble_arrow && !$PokemonTemp.speechbubble_arrow.disposed?
+  $PokemonTemp.speechbubble_arrow.visible = false if $PokemonTemp.speechbubble_arrow && !$PokemonTemp.speechbubble_arrow.disposed?
   if defaultCmd == 0 && ($game_variables && $game_variables[VAR_COMMAND_WINDOW_INDEX] != 0)
     defaultCmd = $game_variables[VAR_COMMAND_WINDOW_INDEX]
   end

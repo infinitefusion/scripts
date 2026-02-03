@@ -28,6 +28,9 @@ class PokemonTemp
   attr_accessor :speechbubble_talking
   attr_accessor :speechbubble_alwaysDown
   attr_accessor :speechbubble_alwaysUp
+
+  attr_accessor :windowSkin
+
 end
 
 module MessageConfig
@@ -215,4 +218,16 @@ def pbCallBub(status=0,event_id=0,always_down=false, always_up=false)
   rescue
     return #Let's not crash the game if error
   end
+end
+
+def setSign(type=:NORMAL)
+  case type
+  when :NORMAL
+    setWindowSkin("sign_2")
+  when :WOOD
+    setWindowSkin("sign_1")
+  end
+end
+def setWindowSkin(skin)
+  $PokemonTemp.windowSkin=skin
 end
