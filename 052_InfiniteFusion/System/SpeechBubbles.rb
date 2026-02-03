@@ -223,9 +223,11 @@ end
 def setSign(type=:NORMAL)
   case type
   when :NORMAL
-    setWindowSkin("sign_2")
+    setWindowSkin("sign_normal")
   when :WOOD
-    setWindowSkin("sign_1")
+    setWindowSkin("sign_wood")
+  when :WALL
+    setWindowSkin("sign_wall")
   end
 end
 def setWindowSkin(skin)
