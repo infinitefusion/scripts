@@ -64,12 +64,12 @@ class BetterRegionMap
     showBlk
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
 
-    if map_metadata
-      playerpos = $game_map ? map_metadata.town_map_position : nil # pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
-    end
-    if playerpos == nil
-      playerpos = [0, 0]
-    end
+    # if map_metadata
+    #   playerpos = $game_map ? map_metadata.town_map_position : nil # pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
+    # end
+    # if playerpos == nil
+    #   playerpos = [0, 0]
+    # end
     @fly_anywhere = fly_anywhere
     @region = 0 #(region < 0) ? playerpos[0] : region
     @species = species
@@ -131,18 +131,20 @@ class BetterRegionMap
     if @show_player
       if map_metadata
         player = map_metadata.town_map_position
-        if true # player && player[0] == @region  #only use 1 region
-          $PokemonGlobal.regionMapSel = [0, 0]
-          gender = $Trainer.gender.to_digits(3)
-          # @window["player"].bmp("Graphics/Pictures/map/Player#{gender}")
-          @window["player"].bmp("Graphics/Pictures/map/location_icon")
-          @window["player"].x = TileWidth * player[1] + (TileWidth / 2.0) if player
-          @window["player"].y = TileHeight * player[2] + (TileHeight / 2.0) if player
-          @window["player"].center_origins
-        end
-      else
-
       end
+      player_coordinates = getPlayerPosition
+      # if true # player && player[0] == @region  #only use 1 region
+      $PokemonGlobal.regionMapSel = [0, 0]
+      gender = $Trainer.gender.to_digits(3)
+      # @window["player"].bmp("Graphics/Pictures/map/Player#{gender}")
+      @window["player"].bmp("Graphics/Pictures/map/location_icon")
+      @window["player"].x = TileWidth * player_coordinates[0] + (TileWidth / 2.0) if player_coordinates
+      @window["player"].y = TileHeight * player_coordinates[1] + (TileHeight / 2.0) if player_coordinates
+      @window["player"].center_origins
+      # end
+      # else
+      #
+      # end
 
     end
     @window["areahighlight"] = BitmapSprite.new(@window["map"].bitmap.width, @window["map"].bitmap.height, @mapoverlayvp)
@@ -260,13 +262,32 @@ class BetterRegionMap
     end
 
     draw_all_weather if @show_weather && $game_weather
-    initial_position = calculate_initial_position(player)
+    initial_position = player_coordinates
+    initial_position = [0,0] unless initial_position
     init_cursor_position(initial_position[0], initial_position[1])
     center_window()
 
     hideBlk { update(false) }
     main
   end
+
+  def getPlayerPosition
+    all_maps = @mapdata[0][2]
+    return [0, 0] unless all_maps
+
+    position = find_position_for_map(all_maps, $game_map.map_id)
+    return position if position
+    #If didn't find current map
+    last_map_id = $Trainer.last_visited_town_map_location
+    if last_map_id
+      position = find_position_for_map(all_maps, last_map_id)
+      return position if position
+    end
+    return [0, 0]
+  end
+
+
+
 
   def add_fly_location(healspot, position, n)
     @window["point#{n}"] = Sprite.new(@mapvp)
@@ -756,6 +777,18 @@ ItemHandlers::UseInField.add(:TOWNMAP, proc { |item|
 def pbShowMap(region = -1, wallmap = true)
   # pokegear
   pbBetterRegionMap(region, true, false, wallmap)
+end
+
+def find_position_for_map(all_maps, target_map_id)
+  all_maps.each do |map_data|
+    map_id = map_data[4]
+    next unless map_id == target_map_id
+    x = map_data[0]
+    y = map_data[1]
+    return [x, y]
+  end
+
+  return nil
 end
 
 def calculatePointsAndCenter(mapwidth)

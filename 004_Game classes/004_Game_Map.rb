@@ -87,6 +87,7 @@ class Game_Map
     @scroll_speed = 4
   end
 
+
   def create_new_game_event(event)
     return Game_Event.new(@map_id,event , self)
   end

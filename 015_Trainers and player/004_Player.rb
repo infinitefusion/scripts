@@ -81,6 +81,10 @@ class Player < Trainer
   attr_accessor :challenges
   attr_accessor :nb_completed_challenges
 
+  attr_accessor :last_visited_town_map_location
+
+
+
   def trainer_type
     if @trainer_type.is_a?(Integer)
       @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
@@ -412,5 +416,6 @@ class Player < Trainer
     @encountered_legendaries = []
     @challenges ={}
     @nb_completed_challenges = 0
+    @last_visited_town_map_location = nil
   end
 end

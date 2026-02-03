@@ -97,6 +97,7 @@ class Scene_Map
     #pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
     clear_quest_icons()
+    update_last_visited_location
     if $game_map.map_id != $game_temp.player_new_map_id
       $MapFactory.setup($game_temp.player_new_map_id)
     end
@@ -127,6 +128,17 @@ class Scene_Map
     Graphics.frame_reset
     Input.update
   end
+
+  def update_last_visited_location
+    old_map = $game_map.map_id
+    mapdata = pbLoadTownMapData
+    all_maps = mapdata[0][2]
+    if find_position_for_map(all_maps,old_map)
+      $Trainer.last_visited_town_map_location = old_map
+    end
+  end
+
+
 
   def call_menu
     $game_temp.menu_calling = false

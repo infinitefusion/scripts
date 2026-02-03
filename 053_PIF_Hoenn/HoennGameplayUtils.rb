@@ -217,6 +217,9 @@ def set_gym_elec_all_off
   end
 end
 
+def reset_gym_2_darkness
+
+end
 
 
 
