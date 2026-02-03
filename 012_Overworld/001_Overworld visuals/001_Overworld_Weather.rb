@@ -21,6 +21,9 @@ module RPG
     FADE_NEW_TILES_START     = 4   # Shouldn't be sooner than FADE_OLD_TILES_END
     FADE_NEW_TILES_END       = 5
 
+    FADE_FOG_OPACITY_START      = 0   # Shouldn't be sooner than FADE_FOG_OPACITY_END + 1
+    FADE_FOG_OPACITY_END        = 20
+
     def initialize(viewport = nil)
       @viewport         = Viewport.new(0, 0, Graphics.width, Graphics.height)
       @viewport.z       = viewport.z + 1
@@ -52,6 +55,8 @@ module RPG
       @lightning_overlay.opacity = 0
       @lightning_overlay.z = 2000  # On top of everything
 
+      @old_fog_opacity = 0
+      @target_fog_opacity = 0
     end
 
     def dispose
@@ -81,7 +86,6 @@ module RPG
       new_type = GameData::Weather.get(new_type).id
       new_max = 0 if new_type == :None
       return if @type == new_type && @max == new_max
-      set_fog(new_type)
       if duration > 0
         @target_type = new_type
         @target_max = new_max
@@ -467,6 +471,22 @@ module RPG
           end
         end
       end
+
+      # Update fog opacity during fade
+      if @type != @target_type
+        weather = GameData::Weather.get(@target_type)
+        if !weather.fog_name.nil?
+          if @fade_time >= [FADE_FOG_OPACITY_START - @time_shift, 0].max &&
+            @fade_time < [FADE_FOG_OPACITY_END - @time_shift, 0].max
+            fraction = (@fade_time - [FADE_FOG_OPACITY_START - @time_shift, 0].max) / (FADE_FOG_OPACITY_END - FADE_FOG_OPACITY_START)
+            $game_map.fog_name = weather.fog_name
+            $game_map.fog_opacity = (40 * @target_max * fraction).to_i
+            $game_map.fog_sx = weather.tile_delta_x
+            $game_map.fog_sy = weather.tile_delta_y
+          end
+        end
+      end
+
       # Reduce the number of old weather particles
       if @max > 0 && @fade_time >= [FADE_OLD_PARTICLES_START - @time_shift, 0].max
         fraction = (@fade_time - [FADE_OLD_PARTICLES_START - @time_shift, 0].max) / (FADE_OLD_PARTICLES_END - FADE_OLD_PARTICLES_START)
@@ -485,6 +505,7 @@ module RPG
         if !@sprites.any? { |sprite| sprite.visible }
           @type                 = @target_type
           @max                  = @target_max
+          set_fog(@type)
           @target_type          = nil
           @target_max           = nil
           @old_max              = nil
