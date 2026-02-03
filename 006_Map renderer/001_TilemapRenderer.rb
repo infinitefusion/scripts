@@ -306,6 +306,7 @@ class TilemapRenderer
       @load_counts = {}
       @bridge = 0
       @changed = true
+      @last_weather_type = nil
     end
 
     def [](filename)
@@ -856,6 +857,19 @@ class TilemapRenderer
       end
       @old_color = @color.clone
     end
+
+
+    #Check for updated weather
+    current_weather = $game_weather&.map_current_weather_type($game_map.map_id)
+    if current_weather != @last_weather_type
+      tileset_id = $game_map.tileset_id
+      add_extra_autotiles(tileset_id, $game_map.map_id)
+      refresh
+      @last_weather_type = current_weather
+    end
+
+
+
     # Recalculate autotile frames
     @tilesets.update
     @autotiles.update
