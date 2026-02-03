@@ -129,27 +129,42 @@ class BerryPlantSprite
       when :STABLEMULCH
         ripestages = 6
       end
+
+      #Auto replant mechanics - Disabled
       # Cycle through all replants since last check
-      loop do
-        secondsalive = berryData[2]
-        growinglife = (berryData[5] > 0) ? 3 : 4 # number of growing stages
-        numlifestages = growinglife + ripestages # number of growing + ripe stages
-        # Should replant itself?
-        if secondsalive + timeDiff >= timeperstage * numlifestages
-          # Should replant
-          if berryData[5] >= maxreplants # Too many replants
-            return [0, 0, 0, 0, 0, 0, 0, 0]
-          end
-          # Replant
-          berryData[0] = 2 # replants start in sprouting stage
-          berryData[2] = 0 # seconds alive
-          berryData[5] += 1 # add to replant count
-          berryData[6] = 0 # yield penalty
-          timeDiff -= (timeperstage * numlifestages - secondsalive)
-        else
-          break
-        end
+      # loop do
+      #   secondsalive = berryData[2]
+      #   growinglife = (berryData[5] > 0) ? 3 : 4 # number of growing stages
+      #   numlifestages = growinglife + ripestages # number of growing + ripe stages
+      #   # Should replant itself?
+      #   if secondsalive + timeDiff >= timeperstage * numlifestages
+      #     # Should replant
+      #     # if berryData[5] >= maxreplants # Too many replants
+      #     #   return [0, 0, 0, 0, 0, 0, 0, 0]
+      #     # end
+      #     # Replant
+      #     berryData[0] = 2 # replants start in sprouting stage
+      #     berryData[2] = 0 # seconds alive
+      #     berryData[5] += 1 # add to replant count
+      #     berryData[6] = 0 # yield penalty
+      #     timeDiff -= (timeperstage * numlifestages - secondsalive)
+      #   else
+      #     break
+      #   end
+      # end
+
+      secondsalive = berryData[2]
+      growinglife  = (berryData[5] > 0) ? 3 : 4
+      numlifestages = growinglife + ripestages
+      maxlife = timeperstage * numlifestages
+
+      if secondsalive + timeDiff >= maxlife
+        berryData[2] = maxlife
+        timeDiff = 0
       end
+
+
+
       # Update current stage and dampness
       if berryData[0] > 0
         # Advance growth stage
@@ -389,31 +404,32 @@ def pbBerryPlant
           return
         end
       end
-    else
-      # Gen 3 planting mechanics
-      if pbConfirmMessage(_INTL("It's soft, loamy soil.\nPlant a berry?"))
-        pbFadeOutIn {
-          scene = PokemonBag_Scene.new
-          screen = PokemonBagScreen.new(scene, $PokemonBag)
-          berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
-        }
-        if berry
-          timenow = pbGetTimeNow
-          berryData[0] = 1 # growth stage (1-5)
-          berryData[1] = berry # item ID of planted berry
-          berryData[2] = false # watered in this stage?
-          berryData[3] = timenow.to_i # time planted
-          berryData[4] = 0 # total waterings
-          berryData[5] = 0 # number of replants
-          berryData[6] = nil; berryData[7] = nil; berryData.compact! # for compatibility
-          $PokemonBag.pbDeleteItem(berry, 1)
-          pbMessage(_INTL("{1} planted a {2} in the soft loamy soil.",
-                          $Trainer.name, GameData::Item.get(berry).name))
-          interp.setVariable(berryData)
-        end
-        return
-      end
     end
+    # else
+    #   # Gen 3 planting mechanics
+    #   if pbConfirmMessage(_INTL("It's soft, loamy soil.\nPlant a berry?"))
+    #     pbFadeOutIn {
+    #       scene = PokemonBag_Scene.new
+    #       screen = PokemonBagScreen.new(scene, $PokemonBag)
+    #       berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
+    #     }
+    #     if berry
+    #       timenow = pbGetTimeNow
+    #       berryData[0] = 1 # growth stage (1-5)
+    #       berryData[1] = berry # item ID of planted berry
+    #       berryData[2] = false # watered in this stage?
+    #       berryData[3] = timenow.to_i # time planted
+    #       berryData[4] = 0 # total waterings
+    #       berryData[5] = 0 # number of replants
+    #       berryData[6] = nil; berryData[7] = nil; berryData.compact! # for compatibility
+    #       $PokemonBag.pbDeleteItem(berry, 1)
+    #       pbMessage(_INTL("{1} planted a {2} in the soft loamy soil.",
+    #                       $Trainer.name, GameData::Item.get(berry).name))
+    #       interp.setVariable(berryData)
+    #     end
+    #     return
+    #   end
+    # end
   when 1 # X planted
     pbMessage(_INTL("A {1} was planted here.", GameData::Item.get(berry).name))
   when 2 # X sprouted
