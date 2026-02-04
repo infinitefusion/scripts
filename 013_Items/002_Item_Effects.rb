@@ -334,17 +334,17 @@ ItemHandlers::UseInField.add(:COINCASE, proc { |item|
   next 1
 })
 
-ItemHandlers::UseInField.add(:EXPALL, proc { |item|
-  $PokemonBag.pbChangeItem(:EXPALL, :EXPALLOFF)
-  pbMessage(_INTL("The Exp Share was turned off."))
-  next 1
-})
-
-ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
-  $PokemonBag.pbChangeItem(:EXPALLOFF, :EXPALL)
-  pbMessage(_INTL("The Exp Share was turned on."))
-  next 1
-})
+# ItemHandlers::UseInField.add(:EXPALL, proc { |item|
+#   $PokemonBag.pbChangeItem(:EXPALL, :EXPALLOFF)
+#   pbMessage(_INTL("The Exp Share was turned off."))
+#   next 1
+# })
+#
+# ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
+#   $PokemonBag.pbChangeItem(:EXPALLOFF, :EXPALL)
+#   pbMessage(_INTL("The Exp Share was turned on."))
+#   next 1
+# })
 
 #===============================================================================
 # UseOnPokemon handlers

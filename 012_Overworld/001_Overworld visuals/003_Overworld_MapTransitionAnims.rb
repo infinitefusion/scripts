@@ -124,19 +124,28 @@ def pbStartOver(gameover=false)
     $scene.transfer_player if $scene.is_a?(Scene_Map)
     $game_map.refresh
   else
-    homedata = GameData::Metadata.get.home
-    if homedata && !pbRgssExists?(sprintf("Data/Map%03d.rxdata",homedata[0]))
-      if $DEBUG
-        pbMessage(_ISPRINTF("Can't find the map 'Map{1:03d}' in the Data folder. The game will resume at the player's position.",homedata[0]))
+    if Settings::HOENN
+      if isPlayerMale
+        homedata = [9,12,14,DIRECTION_DOWN]
+      else
+        homedata = [9,22,14,DIRECTION_DOWN]
       end
-      $Trainer.heal_party
-      return
-    end
-    if gameover
-      pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]After the unfortunate defeat, you scurry back home."))
     else
-      pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]You scurry back home, protecting your exhausted Pokémon from any further harm..."))
+      homedata = GameData::Metadata.get.home
+      if homedata && !pbRgssExists?(sprintf("Data/Map%03d.rxdata",homedata[0]))
+        if $DEBUG
+          pbMessage(_ISPRINTF("Can't find the map 'Map{1:03d}' in the Data folder. The game will resume at the player's position.",homedata[0]))
+        end
+        $Trainer.heal_party
+        return
+      end
+      if gameover
+        pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]After the unfortunate defeat, you scurry back home."))
+      else
+        pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]You scurry back home, protecting your exhausted Pokémon from any further harm..."))
+      end
     end
+
     if homedata
       pbCancelVehicles
       pbRemoveDependencies
