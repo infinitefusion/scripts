@@ -323,6 +323,7 @@ class Game_Map
       if terrain
         return false if terrain.ledge
         return false if terrain.acroBike
+        return false if $game_map.event_at_position(x,y)
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing
