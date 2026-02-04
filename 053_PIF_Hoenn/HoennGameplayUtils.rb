@@ -5,6 +5,13 @@ def hoennSelectStarter
   return selected_starter
 end
 
+def hoennSelectCustomStarter
+  starter = pbGet(VAR_PLAYER_STARTER_CHOICE)
+  selected_starter = StartersSelectionSceneSingle.new(starter).startScene
+  pbAddPokemonSilent(selected_starter)
+  return selected_starter
+end
+
 def secretBaseQuest_pickedNearbySpot()
   return false if !$Trainer.secretBase
   expected_map = 65

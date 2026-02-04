@@ -10,7 +10,7 @@ class StartersSelectionScene
     @starters_species = starters
     @starter_pokemon = []
     @starters_species.each do |species|
-      @starter_pokemon.push(Pokemon.new(species, 5))
+      @starter_pokemon.push(Pokemon.new(species, 5)) if species
     end
 
     @spritesLoader = BattleSpriteLoader.new
