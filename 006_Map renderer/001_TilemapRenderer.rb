@@ -54,7 +54,7 @@ class TilemapRenderer
            1023 => "flowers_red[10]",
            1031 => "flowers_grey[10]",
            1039 => "flowers_white[10]",
-           #water rocks
+           # water rocks
            1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
            1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
            1173 => "water_rock_medium[10]",
@@ -79,7 +79,7 @@ class TilemapRenderer
            1023 => "flowers_red[10]",
            1031 => "flowers_grey[10]",
            1039 => "flowers_white[10]",
-           #water rocks
+           # water rocks
            1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
            1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
            1173 => "water_rock_medium[10]",
@@ -135,6 +135,11 @@ class TilemapRenderer
     },
 
     7 => { # Sea Route
+           # Mangroves
+           1062 => "mangrove_small_2[15]", 1063 => "mangrove_small_1[15]",
+           1088 => "mangrove_1_left[15]", 1089 => "mangrove_1_right[15]", 1090 => "mangrove_2_left[15]", 1091 => "mangrove_2_right[15]",
+           1092 => "mangrove_3_left[15]", 1093 => "mangrove_3_center_left[15]", 1094 => "mangrove_3_center_right[15]", 1095 => "mangrove_3_right[15]",
+
            # water rocks
            1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
            1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
@@ -151,7 +156,7 @@ class TilemapRenderer
     },
 
     12 => { # Slateport
-            #water rocks
+            # water rocks
             1162 => "water_rock_large01[5]", 1163 => "water_rock_large02[5]",
             1170 => "water_rock_large03[5]", 1171 => "water_rock_large04[5]",
             1173 => "water_rock_medium[10]",
@@ -216,6 +221,17 @@ class TilemapRenderer
            867 => "tree_sway_group_2",
            874 => "tree_sway_group_3",
            875 => "tree_sway_group_4",
+
+           1055 => "mangrove_small_1_wind_1",
+           1063 => "mangrove_small_1_wind_2",
+
+           1066 => "mangrove_2_wind_1",
+           1067 => "mangrove_2_wind_2",
+           1074 => "mangrove_2_wind_3",
+           1075 => "mangrove_2_wind_4",
+           1082 => "mangrove_2_wind_5",
+           1083 => "mangrove_2_wind_6",
+
     },
 
     8 => { # Route-cycling
@@ -858,8 +874,7 @@ class TilemapRenderer
       @old_color = @color.clone
     end
 
-
-    #Check for updated weather
+    # Check for updated weather
     current_weather = $game_weather&.map_current_weather_type($game_map.map_id)
     if current_weather != @last_weather_type
       tileset_id = $game_map.tileset_id
@@ -867,8 +882,6 @@ class TilemapRenderer
       refresh
       @last_weather_type = current_weather
     end
-
-
 
     # Recalculate autotile frames
     @tilesets.update
