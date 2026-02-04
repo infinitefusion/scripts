@@ -281,7 +281,7 @@ def getOffBoat
 end
 
 def check_beach_seashell
-  pbMessage("\PN flipped the seashell over...")
+  pbMessage(_INTL("{1} flipped the seashell over...",$Trainer.name))
   pearl_chance = 2
   pokemon_chance = 200
   roll = rand(1..100)

@@ -29,6 +29,7 @@ end
 def promptGiveToPartner(caughtPokemon)
   return false if !$Trainer.npcPartner
   return false if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && $game_switches[SWITCH_WALLY_GAVE_POKEMON]
+  return false if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && $game_switches[SWITCH_DIED_WITH_WALLY]
 
   if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY
     $game_switches[SWITCH_WALLY_SAW_CAUGHT_POKEMON] = true

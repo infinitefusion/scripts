@@ -115,13 +115,23 @@ def catch_new_team_pokemon(trainer)
   wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   echoln wild_pokemon
   if wild_pokemon
-    trainer.currentTeam << Pokemon.new(wild_pokemon[0],wild_pokemon[1])
+    trainer_highest_level = get_trainer_highest_level(trainer)
+    species = wild_pokemon[0]
+    level = [wild_pokemon[1], trainer_highest_level].max
+
+    trainer.currentTeam << Pokemon.new(species,level)
     trainer.log_catch_event(wild_pokemon[0])
   end
   return trainer
 end
 
-
+def get_trainer_highest_level(trainer)
+  highest_level = 1
+  trainer.currentTeam.each do |pokemon|
+    highest_level = pokemon.level if pokemon.level > highest_level
+  end
+  return highest_level
+end
 
 
 def reverse_random_team_pokemon(trainer)
