@@ -627,7 +627,6 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     end
     next ""
   }
-  echoln $PokemonTemp.windowSkin
   if $PokemonTemp.windowSkin
     path = "Graphics/Windowskins/#{$PokemonTemp.windowSkin}"
     if pbResolveBitmap(path)

@@ -271,7 +271,7 @@ class Sprite_Character
     ow_shadow_update
     position_shadow
 
-    if @character.is_a?(Game_Event) && should_update?
+    if @character.is_a?(Game_Event)# && should_update?
       page = pbGetActiveEventPage(@character)
       if @old_page != page
         @shadow.dispose if @shadow
