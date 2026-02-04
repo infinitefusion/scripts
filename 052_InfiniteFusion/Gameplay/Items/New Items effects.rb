@@ -1806,6 +1806,7 @@ def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
       poke1.pif_sprite=nil
       poke2.pif_sprite = nil
 
+
       if pokemon.shiny?
         pokemon.shiny = false
         if pokemon.bodyShiny? && pokemon.headShiny?
@@ -1825,8 +1826,10 @@ def unfusePokemonLegacy(pokemon, scene, supersplicers, pcPosition = nil)
           # shiny was obtained already fused
           if rand(2) == 0
             pokemon.shiny = true
+            pokemon.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
           else
             poke2.shiny = true
+            poke2.natural_shiny = true if pokemon.natural_shiny && !pokemon.debug_shiny
           end
         end
       end
