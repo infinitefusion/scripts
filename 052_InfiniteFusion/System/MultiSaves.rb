@@ -505,7 +505,7 @@ class PokemonLoadScreen
       @scene.pbSetParty(@save_data[:player]) if show_continue
       if first_time
         @scene.pbStartScene2
-        pbBGMPlay("pokemon_go_map")
+        pbBGMPlay("pokemon_go_map") if Settings::HOENN
         first_time = false
       else
         @scene.pbUpdate
