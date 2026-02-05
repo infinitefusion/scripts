@@ -14,15 +14,24 @@ def update_global_hats_list()
   # Iterate through the JSON data and create Hat objects
   hat_data.each do |data|
     tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
-    store_locations = data['store-location'] ? data['store-location'].split(',').map(&:strip) : []
-    tags += store_locations
+    storeLocations = data['storelocation'] ? data['storelocation'].split(',').map(&:strip) : []
+    tags += storeLocations
+
+    regionTags = data['regiontags'] ? data['regiontags'].split(',').map(&:strip) : []
+    tags += regionTags
+
+    pokemonTags = data['pokemontags'] ? data['pokemontags'].split(',').map(&:strip) : []
+    pokemonTags.each do |tag|
+      tags << "pokemon-#{tag.downcase}"
+    end
 
     hat = Hat.new(
       data['id'],
       data['name'],
       data['description'],
       data['price'],
-      tags
+      tags,
+      storeLocations
     )
     $PokemonGlobal.hats_data[hat.id] = hat
   end
@@ -38,8 +47,12 @@ def update_global_hairstyles_list()
   # Iterate through the JSON data and create Hat objects
   hair_data.each do |data|
     tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
-    store_locations = data['store-location'] ? data['store-location'].split(',').map(&:strip) : []
-    tags += store_locations
+    storeLocations = data['storelocation'] ? data['storelocation'].split(',').map(&:strip) : []
+    echoln storeLocations
+    tags += storeLocations
+
+    regionTags = data['regiontags'] ? data['regiontags'].split(',').map(&:strip) : []
+    tags += regionTags
 
     hair = Hairstyle.new(
       data['id'],
@@ -47,7 +60,7 @@ def update_global_hairstyles_list()
       data['description'],
       data['price'],
       tags,
-      store_locations
+      storeLocations
     )
     $PokemonGlobal.hairstyles_data[hair.id] = hair
   end
@@ -66,14 +79,23 @@ def update_global_clothes_list()
   # Iterate through the JSON data and create Hat objects
   outfits_data.each do |data|
     tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
-    store_locations = data['store-location'] ? data['store-location'].split(',').map(&:strip) : []
-    tags += store_locations
+    storeLocations = data['storelocation'] ? data['storelocation'].split(',').map(&:strip) : []
+    tags += storeLocations
+
+    regionTags = data['regiontags'] ? data['regiontags'].split(',').map(&:strip) : []
+    tags += regionTags
+
+    pokemonTags = data['pokemontags'] ? data['pokemontags'].split(',').map(&:strip) : []
+    pokemonTags.each do |tag|
+      tags << "pokemon-#{tag.downcase}"
+    end
     outfit = Clothes.new(
       data['id'],
       data['name'],
       data['description'],
       data['price'],
-      tags
+      tags,
+      storeLocations
     )
     $PokemonGlobal.clothes_data[outfit.id] = outfit
   end
