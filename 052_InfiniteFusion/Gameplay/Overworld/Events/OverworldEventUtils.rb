@@ -283,11 +283,14 @@ end
 def check_beach_seashell
   pbMessage(_INTL("{1} flipped the seashell over...",$Trainer.name))
   pearl_chance = 2
-  pokemon_chance = 200
+  heartscale_chance = 5
+  pokemon_chance = 40
   roll = rand(1..100)
   if roll <= pearl_chance
     pbReceiveItem(:PEARL)
-  elsif roll <= pearl_chance + pokemon_chance
+  elsif roll <= pearl_chance + heartscale_chance
+    pbReceiveItem(:HEARTSCALE)
+  elsif roll <= pearl_chance + heartscale_chance + pokemon_chance
     possible_pokemon = [:KRABBY] # if added to the game, also dwebble, binacle?
     event = $game_map.events[@event_id]
     # Spawn Pokémon
