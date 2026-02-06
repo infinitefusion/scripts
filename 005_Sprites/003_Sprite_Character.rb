@@ -250,7 +250,7 @@ class Sprite_Character < RPG::Sprite
       @manual_refresh = false
     end
     @charbitmap.update if @charbitmapAnimated
-    bushdepth = @character.bush_depth
+    bushdepth = @character.bush_depth if @character
     if bushdepth == 0
       if @character == $game_player
         self.bitmap = getClothedPlayerSprite() #generateClothedBitmap()

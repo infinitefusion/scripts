@@ -84,7 +84,7 @@ def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
   pbMessageChooseNumber(_INTL("\\GHow many Exp. Candies to extract?"), params, &update_proc)
 
   new_exp = pokemon.exp - expExtraction.exp_to_extract
-  new_exp -= LOSS_PER_CANDY*expExtraction.nb_candies
+  new_exp -= ExpExtraction::LOSS_PER_CANDY*expExtraction.nb_candies
 
   nb_candies = expExtraction.nb_candies
 

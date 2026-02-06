@@ -34,14 +34,22 @@ class GameplayOptionsScene < PokemonOption_Scene
                                _INTL("Default to running when not holding the Run key")]
     )
 
+    difficulty_description = []
+    if Settings::KANTO
+      difficulty_description = [_INTL("All Pokémon in the team gain experience. Otherwise the same as Normal difficulty."),
+                                _INTL("The default experience. Levels are similar to the official games."),
+                                _INTL("Higher levels and smarter AI. All trainers have access to healing items.")]
+    else
+      difficulty_description = [_INTL("Trainer Pokémon levels are 10% lower"),
+                                _INTL("The default experience. Levels are similar to the official games."),
+                                _INTL("Trainer Pokémon levels are 10% higher"),]
+    end
     options << EnumOption.new(_INTL("Difficulty"), [_INTL("Easy"), _INTL("Normal"), _INTL("Hard")],
                               proc { $Trainer.selected_difficulty },
                               proc { |value|
                                 setDifficulty(value)
                                 @manually_changed_difficulty = true
-                              }, [_INTL("All Pokémon in the team gain experience. Otherwise the same as Normal difficulty."),
-                                  _INTL("The default experience. Levels are similar to the official games."),
-                                  _INTL("Higher levels and smarter AI. All trainers have access to healing items.")]
+                              }, difficulty_description
     )
 
     if Settings::HOENN

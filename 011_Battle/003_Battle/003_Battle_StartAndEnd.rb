@@ -332,6 +332,7 @@ class PokeBattle_Battle
   end
 
   def calculateMoneyGain
+    return unless trainerBattle?
     tMoney = 0
     @opponent.each_with_index do |t,i|
       tMoney += pbMaxLevelInTeam(1, i) * t.base_money
@@ -346,6 +347,8 @@ class PokeBattle_Battle
   #=============================================================================
   def pbGainCosmeticsMoney
     return 0 unless Settings::HOENN
+    return 0 unless trainerBattle?
+
     cosmetics_money = (calculateMoneyGain/4).floor
     $Trainer.cosmetics_money = 0 unless $Trainer.cosmetics_money
     pbPlayer.cosmetics_money += cosmetics_money
