@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-
 CITIES_MAP_IDS = {
   :LITTLEROOT => 9,
   :OLDALE => 8,
-  :PETALBURG =>7,
+  :PETALBURG => 7,
   :RUSTBORO => 47,
   :DEWFORD => 51,
   :SLATEPORT => 6,
@@ -21,7 +20,6 @@ CITIES_MAP_IDS = {
   :BATTLEFRONTIER => 0,
 
 }
-
 
 # Necessary dor setting the various events within the pokemart map, uses the numbers as wondertrade
 def get_city_numerical_id_hoenn(city_sym)
@@ -65,13 +63,6 @@ end
 #     $game_map.refresh
 #   }
 # end
-
-
-
-def get_mart_exclusive_items_hoenn(city)
-  items_list = []
-  return items_list
-end
 
 
 

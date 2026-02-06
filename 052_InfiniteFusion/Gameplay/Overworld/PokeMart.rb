@@ -190,3 +190,38 @@ def get_mart_exclusive_items(city)
   end
   return items_list
 end
+
+def get_mart_exclusive_items_hoenn(city)
+  items_list = []
+  case city
+  when :OLDALE
+    items_list = [:BERRYJUICE]
+  when :PETALBURG
+    items_list = [:POKETOY, :NESTBALL]
+  when :RUSTBORO
+    items_list = [:EVERSTONE, :LEVELBALL]
+  when :DEWFORD
+    items_list = [:RINGTARGET, :LUREBALL]
+  when :SLATEPORT
+    items_list = [:SOOTHEBELL, :NETBALL]
+  when :MAUVILLE
+    items_list = [:CELLBATTERY, :FASTBALL]
+  when :LAVARIDGE
+    items_list = [:LAVACOOKIE, :REPEATBALL]
+  when :FALLARBOR
+    items_list = [:LIGHTCLAY, :HEAVYBALL]
+  when :FORTREE
+    items_list = [:ABSORBBULB, :FRIENDBALL]
+  when :LILYCOVE
+    items_list = [:METRONOME, :QUICKBALL, :TIMERBALL]
+  when :MOSSDEEP
+    items_list = [:AIRBALLOON, :MOONBALL]
+  when :SOOTOPOLIS
+    items_list = [:CLEANSETAG, :DUSKBALL]
+  when :EVERGRANDE
+    items_list = [:ABILITYURGE, :PUREBALL]
+  when :PACIFIDLOG
+    items_list = [:FLOATSTONE, :DIVEBALL]
+  end
+  return items_list
+end
