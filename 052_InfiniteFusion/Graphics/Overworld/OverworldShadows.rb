@@ -150,6 +150,7 @@ end
 
 unless defined?(pbGetActiveEventPage)
   def pbGetActiveEventPage(event, mapid = nil)
+    return nil unless event
     mapid ||= event.map.map_id if event.respond_to?(:map)
     pages = (event.is_a?(RPG::Event) ? event.pages : event.instance_eval { @event.pages })
     for i in 0...pages.size
@@ -270,7 +271,7 @@ class Sprite_Character
   def update
     ow_shadow_update
     position_shadow
-
+    return unless @character
     if @character.is_a?(Game_Event)# && should_update?
       page = pbGetActiveEventPage(@character)
       if @old_page != page

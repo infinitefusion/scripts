@@ -203,6 +203,7 @@ class Sprite_Character < RPG::Sprite
       self.bitmap = self.pending_bitmap
       self.pending_bitmap = nil
     end
+    return unless @character
     return if @character.is_a?(Game_Event) && !@character.should_update?
     super
     if should_update?

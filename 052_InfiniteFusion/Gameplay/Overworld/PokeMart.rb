@@ -137,7 +137,7 @@ def pokemart_hat_shop(include_defaults = true)
 end
 
 def get_mart_exclusive_items(city)
-  return get_mart_exclusive_items_hoenn if Settings::GAME_ID == :IF_HOENN
+  return get_mart_exclusive_items_hoenn(city) if Settings::GAME_ID == :IF_HOENN
   items_list = []
   case city
   when :PEWTER;

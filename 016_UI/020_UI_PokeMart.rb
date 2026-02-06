@@ -769,7 +769,7 @@ def pbPokemonMart(stock, speech_welcome = nil, cantsell = false, speech_bye=nil,
   if $game_switches[SWITCH_RANDOM_ITEMS_GENERAL] && $game_switches[SWITCH_RANDOM_SHOP_ITEMS]
     stock = replaceShopStockWithRandomized(stock)
   end
-
+  stock = [] unless stock
   for i in 0...stock.length
     stock[i] = GameData::Item.get(stock[i])&.id
     stock[i] = nil if GameData::Item.get(stock[i])&.is_important? && $PokemonBag.pbHasItem?(stock[i])
