@@ -48,7 +48,6 @@ def update_global_hairstyles_list()
   hair_data.each do |data|
     tags = data['tags'] ? data['tags'].split(',').map(&:strip) : []
     storeLocations = data['storelocation'] ? data['storelocation'].split(',').map(&:strip) : []
-    echoln storeLocations
     tags += storeLocations
 
     regionTags = data['regiontags'] ? data['regiontags'].split(',').map(&:strip) : []

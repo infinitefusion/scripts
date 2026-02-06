@@ -126,6 +126,7 @@ HAT_SCRIBBLES4 = "scribbles4"
 HAT_CARDBOARD_BOX = "box"
 HAT_CAPTAIN = "seacaptain"
 
+HAT_GRADUATION = "professorhat"
 
 HAT_GYM_REWARD_1 = Settings::KANTO ? "brockpan" : "aronmask"
 HAT_GYM_REWARD_2 = Settings::KANTO ? "starmieclip" : "brawlyshades"
