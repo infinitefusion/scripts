@@ -805,6 +805,7 @@ def reverseFusion(pokemon)
   pokemon.exp_when_fused_head = body_exp
 
   pokemon.head_shiny, pokemon.body_shiny = pokemon.body_shiny, pokemon.head_shiny
+  pokemon.original_body, pokemon.original_head = pokemon.original_head, pokemon.original_body
   # play animation
   pbFadeOutInWithMusic(99999) {
     fus = PokemonEvolutionScene.new
