@@ -134,28 +134,40 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
   pbCallBub(2, @event_id)
   pbMessage(_INTL("\\GWhat's more is that it's reusable so you can go completely wild with it if you want! Are you interested?"))
 
+  money = Settings::HOENN ? $Trainer.cosmetics_money : $Trainer.money
+
   choice = optionsMenu(commands, commands.length)
   case commands[choice]
   when command_hats
-    if $Trainer.money < hats_kit_price
+    if money < hats_kit_price
       pbCallBub(2, @event_id)
       pbMessage(_INTL("Oh, you don't have enough money..."))
       return
     end
     pbMessage(_INTL("\\G\\PN purchased the dye kit."))
-    $Trainer.money -= hats_kit_price
+
+    if Settings::HOENN
+      $Trainer.cosmetics_money -= hats_kit_price
+    else
+      $Trainer.money -= hats_kit_price
+    end
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:HATSDYEKIT)
     pbCallBub(2, @event_id)
     pbMessage(_INTL("\\GHere you go! Have fun dyeing your hats!"))
   when command_clothes
-    if $Trainer.money < clothes_kit_price
+    if money < clothes_kit_price
       pbCallBub(2, @event_id)
       pbMessage(_INTL("Oh, you don't have enough money..."))
       return
     end
     pbMessage(_INTL("\\G\\PN purchased the dye kit."))
-    $Trainer.money -= clothes_kit_price
+    if Settings::HOENN
+      $Trainer.cosmetics_money -= clothes_kit_price
+    else
+      $Trainer.money -= clothes_kit_price
+    end
+
     pbSEPlay("SlotsCoin")
     Kernel.pbReceiveItem(:CLOTHESDYEKIT)
     pbCallBub(2, @event_id)

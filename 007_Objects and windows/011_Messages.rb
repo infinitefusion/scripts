@@ -406,6 +406,7 @@ def pbGetGoldString
   return moneyString
 end
 
+
 def pbDisplayGoldWindow(msgwindow)
   moneyString = pbGetGoldString()
   goldwindow = Window_AdvancedTextPokemon.new(_INTL("Money:\n<ar>{1}</ar>", moneyString))
@@ -420,6 +421,31 @@ def pbDisplayGoldWindow(msgwindow)
   goldwindow.viewport = msgwindow.viewport
   goldwindow.z = msgwindow.z
   return goldwindow
+end
+
+def pbDisplayCosmeticsMoneyWindow(msgwindow)
+  moneyString = pbGetCosmeticsMoneyString()
+  goldwindow = Window_AdvancedTextPokemon.new(_INTL("{2}:\n<ar>{1}</ar>", moneyString,COSMETIC_CURRENCY_NAME))
+  goldwindow.setSkin("Graphics/Windowskins/goldskin")
+  goldwindow.resizeToFit(goldwindow.text, Graphics.width)
+  goldwindow.width = 160 if goldwindow.width <= 160
+  if msgwindow.y <= 10
+    goldwindow.y = Graphics.height - goldwindow.height
+  else
+    goldwindow.y = 0
+  end
+  goldwindow.viewport = msgwindow.viewport
+  goldwindow.z = msgwindow.z
+  return goldwindow
+end
+
+def pbGetCosmeticsMoneyString
+  begin
+    moneyString = _INTL("{1}", $Trainer.cosmetics_money.to_s_formatted)
+  rescue
+    moneyString = ""
+  end
+  return moneyString
 end
 
 def pbDisplayBattleFactoryPointsWindow(msgwindow)

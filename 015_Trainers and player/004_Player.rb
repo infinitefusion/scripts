@@ -51,6 +51,8 @@ class Player < Trainer
   attr_accessor :badges
   # @return [Integer] the player's money
   attr_reader   :money
+  attr_accessor   :cosmetics_money
+
   # @return [Integer] the player's Game Corner coins
   attr_reader   :coins
   # @return [Integer] the player's battle points

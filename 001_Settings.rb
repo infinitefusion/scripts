@@ -318,6 +318,7 @@ module Settings
 
   #=============================================================================
 
+
   # The name of the person who created the Pokémon storage system.
   def self.storage_creator_name
     return _INTL("Bill")

@@ -58,6 +58,69 @@ def pbReceiveMoney(amount)
 end
 
 
+def pbReceiveCosmeticsMoney(amount)
+  msgwindow = pbCreateMessageWindow(nil)
+  # Assuming goldwindow handles the display for currency
+  goldwindow = pbDisplayCosmeticsMoneyWindow(msgwindow)
+
+  # Show current cosmetic money initial pause
+  15.times do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+
+  oldMoney    = $Trainer.cosmetics_money
+  targetMoney = oldMoney + amount
+  $Trainer.cosmetics_money = targetMoney
+  step = [amount / 15, 1].max
+  current = oldMoney
+
+  # Count up animation
+  while current < targetMoney
+    current += step
+    current = targetMoney if current > targetMoney
+
+    # Updated to use COSMETIC_CURRENCY_NAME and cosmetic_money
+    goldwindow.text = _INTL(
+      "{1}:\n<ar>{2}</ar>\n<ar><c3=00FF00>+ {3}</c3></ar>",
+      COSMETIC_CURRENCY_NAME,
+      current.to_s_formatted,
+      amount.to_s_formatted
+    )
+
+    pbSEPlay("Mart buy item") if current < targetMoney
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+
+  # Final display text
+  goldwindow.text = _INTL(
+    "{1}:\n<ar>{2}</ar>",
+    COSMETIC_CURRENCY_NAME,
+    targetMoney.to_s_formatted
+  )
+
+  # Show final balance pause
+  goldwindow.resizeToFit(goldwindow.text, Graphics.width)
+  goldwindow.width = 160 if goldwindow.width <= 160
+  20.times do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    goldwindow.update
+  end
+
+  goldwindow.dispose
+  pbDisposeMessageWindow(msgwindow)
+end
+
 
 def promptCaughtPokemonAction(pokemon)
   pickedOption = false

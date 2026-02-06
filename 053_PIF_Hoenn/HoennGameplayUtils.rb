@@ -224,9 +224,45 @@ def set_gym_elec_all_off
   end
 end
 
+def convertHeartScalesToCoins
+  conversion_rate = 500 #nb coins per heart scale
+  params = ChooseNumberParams.new
+  params.setRange(0, $PokemonBag.pbQuantity(:HEARTSCALE))
+  params.setDefaultValue(0)
+  pbCallBubDown(2,@event_id)
+  number_heartscales = pbMessageChooseNumber(_INTL("\\hsAwesome! And how many Heart Scales would you like to convert into Heart Coins?"),params)
+  if number_heartscales > 0
+    nb_coins = conversion_rate*number_heartscales
+
+    pbCallBubDown(2,@event_id)
+    pbMessage(_INTL("\\hsPerfect!"))
+    $PokemonBag.pbDeleteItem(:HEARTSCALE,number_heartscales)
+    pbMessage(_INTL("\\hs{1} handed over the Heart Scales", $Trainer.name))
+    pbWait(12)
+    pbSEPlay("MiningPick")
+    pbWait(8)
+    pbSEPlay("MiningPick")
+    pbWait(4)
+    pbSEPlay("MiningPick")
+    pbWait(16)
+    pbSEPlay("MiningRevealItem")
+    pbWait(4)
+    pbCallBubDown(2,@event_id)
+    pbMessage(_INTL("Here you go! I converted your Heart Scales into {1} \\C[1]{2}\\C[0]!",nb_coins,COSMETIC_CURRENCY_NAME))
+    pbReceiveCosmeticsMoney(nb_coins)
+    pbCallBubDown(2,@event_id)
+    pbMessage(_INTL("Come back whenever you find more Heart Scales to convert!"))
+  else
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("If you find some Heart Scales, bring them to me and I'll convert them for you!"))
+  end
+end
+
 def reset_gym_2_darkness
 
 end
+
+
 
 
 

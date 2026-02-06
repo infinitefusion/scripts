@@ -23,6 +23,7 @@ class OutfitsMartAdapter < PokemonMartAdapter
     $Trainer.dyed_clothes = {} if !$Trainer.dyed_clothes
   end
 
+
   def list_regional_set_items()
     return []
   end
@@ -121,15 +122,28 @@ class OutfitsMartAdapter < PokemonMartAdapter
   end
 
   def getMoney
-    super
+    if Settings::HOENN
+      return $Trainer.cosmetics_money
+    else
+      super
+    end
   end
 
   def getMoneyString
-    super
+    if Settings::HOENN
+      $Trainer.cosmetics_money = 0 unless $Trainer.cosmetics_money
+      return pbGetCosmeticsMoneyString
+    else
+      super
+    end
   end
 
   def setMoney(value)
-    super
+    if Settings::HOENN
+      $Trainer.cosmetics_money = value
+    else
+      super
+    end
   end
 
   def getItemIconRect(_item)

@@ -331,25 +331,46 @@ class PokeBattle_Battle
     pbEndOfBattle
   end
 
+  def calculateMoneyGain
+    tMoney = 0
+    @opponent.each_with_index do |t,i|
+      tMoney += pbMaxLevelInTeam(1, i) * t.base_money
+    end
+    tMoney *= 2 if @field.effects[PBEffects::AmuletCoin]
+    tMoney *= 2 if @field.effects[PBEffects::HappyHour]
+    return tMoney
+  end
+
   #=============================================================================
   # End of battle
   #=============================================================================
-  def pbGainMoney
+  def pbGainCosmeticsMoney
+    return 0 unless Settings::HOENN
+    cosmetics_money = (calculateMoneyGain/4).floor
+    $Trainer.cosmetics_money = 0 unless $Trainer.cosmetics_money
+    pbPlayer.cosmetics_money += cosmetics_money
+    if !@moneyGain && cosmetics_money > 0 #message displayed in pbGainMoney if player wins money
+      pbDisplayPaused(_INTL("You got some {1} for winning!",COSMETIC_CURRENCY_NAME))
+    end
+    return cosmetics_money
+  end
+
+  def pbGainMoney(cosmetics_money=0)
     return if $game_switches[SWITCH_IS_REMATCH] #is rematch
     return if !@internalBattle || !@moneyGain
     # Money rewarded from opposing trainers
     if trainerBattle?
-      tMoney = 0
-      @opponent.each_with_index do |t,i|
-        tMoney += pbMaxLevelInTeam(1, i) * t.base_money
-      end
-      tMoney *= 2 if @field.effects[PBEffects::AmuletCoin]
-      tMoney *= 2 if @field.effects[PBEffects::HappyHour]
+      tMoney = calculateMoneyGain
       oldMoney = pbPlayer.money
       pbPlayer.money += tMoney
       moneyGained = pbPlayer.money-oldMoney
+
       if moneyGained>0
-        pbDisplayPaused(_INTL("You got ${1} for winning!",moneyGained.to_s_formatted))
+        if cosmetics_money>0
+          pbDisplayPaused(_INTL("You got ${1} and some {2} for winning!",moneyGained.to_s_formatted, COSMETIC_CURRENCY_NAME))
+        else
+          pbDisplayPaused(_INTL("You got ${1} for winning!",moneyGained.to_s_formatted))
+        end
       end
     end
     # Pick up money scattered by Pay Day
@@ -412,7 +433,8 @@ class PokeBattle_Battle
         end
       end
       # Gain money from winning a trainer battle, and from Pay Day
-      pbGainMoney if @decision!=4
+      cosmetics_money = pbGainCosmeticsMoney
+      pbGainMoney(cosmetics_money) if @decision!=4
       # Hide remaining trainer
       @scene.pbShowOpponent(@opponent.length) if trainerBattle? && @caughtPokemon.length>0
       if $game_switches[AUTOSAVE_WIN_SWITCH]
