@@ -51,11 +51,15 @@ class OverworldPokemonEvent < Game_Event
     # @nearby_notice_limit depends on the size of the pokemon. (usually around 3-5 ticks)
     @nearby_notice_timer = 0
     @nearby_notice_limit = 4 # calculate_value_from_ref_value(species_data.weight.to_f/10,2,12, 8)# weight is multiplied by 10 in the pokemon data for some reason
+    @nearby_notice_limit += 1 * @weather_level_at_spawn if @weather_type_at_spawn == :Storm
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
 
     @deleted = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
+    weather = $game_weather.current_weather
+    @weather_type_at_spawn = weather[0]
+    @weather_level_at_spawn = weather[1]
 
     if DISGUISED_POKEMON.include?(@species) && !@manual_ow_pokemon
       species_data = getRandomPokemonFromRoute(@species, @terrain)
@@ -347,12 +351,24 @@ class OverworldPokemonEvent < Game_Event
 
   # The rarer the Pokemon, the more skittish it is (larger sight radius)
   def calculate_ow_pokemon_sight_radius(species_data)
-    min_radius = 2
-    max_radius = 6
-    speed = species_data.base_stats[:SPEED] # Get base Speed stat
-    # Scale speed (1–255) to radius
-    radius = min_radius + ((speed - 1) / 254.0) * (max_radius - min_radius)
-    return radius.round
+    #--- Fog level ---
+    fog_level = 0
+    fog_level = @weather_level_at_spawn if @weather_level_at_spawn == :Fog
+
+    #--- Base radius limits (no fog) ---
+    min_base_radius = 2
+    max_base_radius = 6
+
+    #--- Base radius from Speed (1–255) ---
+    speed = species_data.base_stats[:SPEED]
+    base_radius = min_base_radius + ((speed - 1) / 254.0) * (max_base_radius - min_base_radius)
+
+    #--- Fog effect (quadratic: light fog mild, heavy fog strong) ---
+    fog_factor = (fog_level / 10.0) ** 2
+    radius = base_radius * (1.0 - fog_factor)
+
+    #--- Absolute minimum visibility ---
+    return [radius.round, 1].max
   end
 
   def calculate_value_from_stat(species_data, stat, min_value, max_value)
@@ -475,7 +491,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def pause_movement
-    @move_type=MOVE_TYPE_FIXED
+    @move_type = MOVE_TYPE_FIXED
     @current_state = :PAUSED
   end
 
