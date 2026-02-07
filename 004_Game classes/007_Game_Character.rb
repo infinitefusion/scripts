@@ -115,7 +115,7 @@ class Game_Character
   end
 
   def set_animation_speed(speed)
-    echoln "animation_speed = #{speed}"
+    #echoln "animation_speed = #{speed}"
     @animation_speed = speed
   end
 

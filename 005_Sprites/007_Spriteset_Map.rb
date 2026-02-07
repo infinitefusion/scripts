@@ -28,9 +28,6 @@ class ClippableSprite < Sprite_Character
     end
   end
 end
-
-
-
 class Spriteset_Map
   attr_reader :map
   @@viewport0 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Panorama
@@ -167,3 +164,6 @@ class Spriteset_Map
     @@viewport3.update
   end
 end
+
+
+

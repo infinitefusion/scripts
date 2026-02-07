@@ -84,6 +84,7 @@ class Player < Trainer
   attr_accessor :nb_completed_challenges
 
   attr_accessor :last_visited_town_map_location
+  attr_accessor :last_visited_map
 
 
 
@@ -419,5 +420,6 @@ class Player < Trainer
     @challenges ={}
     @nb_completed_challenges = 0
     @last_visited_town_map_location = nil
+    @last_visited_map = nil
   end
 end
