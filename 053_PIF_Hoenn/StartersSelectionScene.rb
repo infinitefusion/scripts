@@ -18,10 +18,10 @@ class StartersSelectionScene
   end
 
   def initializeGraphics()
-    @background = displayPicture("Graphics/Pictures/Trades/hoenn_starter_bag_bg.png", -20, -20)
+    @background = displayPicture("Graphics/Pictures/StarterSelection/hoenn_starter_bag_bg.png", -16, -16)
     @background.z = 0
 
-    @foreground = displayPicture("Graphics/Pictures/Trades/hoenn_starter_bag_foreground.png", -20, -20)
+    @foreground = displayPicture("Graphics/Pictures/StarterSelection/hoenn_starter_bag_foreground.png", -16, -16)
     @foreground.z = 999
 
     @pokeball_closed_left = displayPicture("Graphics/Pictures/StarterSelection/trade_pokeball_closed_1.png", POKEBALL_LEFT_X, POKEBALL_LEFT_Y)
