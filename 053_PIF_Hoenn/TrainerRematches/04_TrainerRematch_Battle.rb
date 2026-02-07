@@ -93,6 +93,7 @@ def showGiftDialog()
   return if trainer.nil?
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
   message_text = trainer_data.preRematchText_gift
+  message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
   showTrainerMessage(event, trainer, message_text)
 end
 
