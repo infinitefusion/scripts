@@ -61,6 +61,7 @@ def pbShouldGetShadow?(event)
   page = pbGetActiveEventPage(event)
   return false unless page
   return false unless event.visible?
+  return false if page.graphic.character_name == ""
   comments = page.list.select { |e| e.code == 108 || e.code == 408 }.map do |e|
     e.parameters.join
   end
@@ -273,33 +274,34 @@ class Sprite_Character
     position_shadow
     return unless @character
     if @character.is_a?(Game_Event)# && should_update?
-      page = pbGetActiveEventPage(@character)
-      if @old_page != page
-        @shadow.dispose if @shadow
-        @shadow = nil
-        if page && page.graphic && page.graphic.character_name != "" &&
-          pbShouldGetShadow?(@character)
-          unless @is_follower && defined?(Toggle_Following_Switch) &&
-            !$game_switches[Toggle_Following_Switch]
-            unless @is_follower && defined?(Following_Activated_Switch) &&
-              !$game_switches[Following_Activated_Switch]
-              make_shadow
-            end
-          end
+      page_index = @character.page
+      if @old_page_index != page_index
+        if pbShouldGetShadow?(@character)
+          make_shadow
+        else
+          dispose_shadow
         end
       end
     end
+    @old_page_index = page_index
+    update_shadow_for_bushdepth
+  end
 
-    @old_page = (@character.is_a?(Game_Event) ? pbGetActiveEventPage(@character) : nil)
-
-    bushdepth = @character.bush_depth
-    if @shadow
-      @shadow.opacity = self.opacity
-      @shadow.visible = (bushdepth == 0)
+  def update_shadow_for_bushdepth
+    bushdepth = @character&.bush_depth
+    if @shadow && bushdepth
+      @shadow&.opacity = self.opacity
+      @shadow&.visible = (bushdepth == 0)
       if !self.visible || (@is_follower || @character == $game_player) &&
         ($PokemonGlobal.surfing || $PokemonGlobal.diving || $PokemonGlobal.boat || $PokemonGlobal.acroBike)
-        @shadow.visible = false
+        @shadow&.visible = false
       end
     end
+  end
+
+
+  def dispose_shadow
+    @shadow.dispose if @shadow && !@shadow.disposed?
+    @shadow = nil
   end
 end
