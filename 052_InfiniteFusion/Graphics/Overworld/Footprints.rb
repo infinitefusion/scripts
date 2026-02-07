@@ -170,7 +170,7 @@ class Game_Character
 
   def triggerLeaveTile
     leave_tile_footprints
-    $scene.spriteset.putFootprint(self, get_last_pos) if foot_prints?
+    $scene&.spriteset&.putFootprint(self, get_last_pos) if foot_prints?
   end
 
 end

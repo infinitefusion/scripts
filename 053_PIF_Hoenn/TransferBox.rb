@@ -18,10 +18,16 @@ class StorageTransferBox < PokemonBox
     for i in 0...PokemonBox::BOX_SIZE
       @pokemon[i] = nil
     end
-    loadTransferBoxPokemon
+    if can_use_transfer_box?
+      loadTransferBoxPokemon
+    else
+      pbMessage(_INTL("The Transfer Box is disabled because your savefile is flagged as randomized. You can still use it as a normal PC box, but the Pokémon you put in it won't be available in your other savefiles"))
+    end
   end
 
-
+  def can_use_transfer_box?
+    return !$game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
+  end
 
   def loadTransferBoxPokemon
     path = transferBoxSavePath
@@ -37,11 +43,14 @@ class StorageTransferBox < PokemonBox
 
   def []=(i,value)
     @pokemon[i] = value
-    saveTransferBox()
-    Game.save()
+    if can_use_transfer_box?
+      saveTransferBox()
+      Game.save()
+    end
   end
 
   def saveTransferBox
+    return unless can_use_transfer_box?
     path = transferBoxSavePath
     dir = File.dirname(path)
     Dir.mkdir(dir) unless Dir.exist?(dir)
@@ -71,7 +80,6 @@ end
 
 #Never add more than 1, it would just be a copy
 def addPokemonStorageTransferBox()
-
   $PokemonStorage.boxes << StorageTransferBox.new
 end
 

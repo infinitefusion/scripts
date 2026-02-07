@@ -97,6 +97,7 @@ class Game_Event < Game_Character
     switchname = $data_system.switches[id]
     return false if !switchname
     if switchname[/^s\:/]
+      #echoln caller
       return eval($~.post_match)
     else
       return $game_switches[id]
