@@ -38,6 +38,9 @@ class Game_Map
   attr_accessor :need_refresh # refresh request flag
   attr_accessor :scroll_direction
 
+  attr_accessor :fog2_name
+  attr_accessor :fog2_opacity
+
   TILE_WIDTH = 32
   TILE_HEIGHT = 32
   X_SUBPIXELS = 4
@@ -64,6 +67,7 @@ class Game_Map
     @fog2_sx = 0
     @fog2_sy = 0
     @fog2_opacity = 0
+    @fog2_name = ""
 
     @fog_tone = Tone.new(0, 0, 0, 0)
     @fog_tone_target = Tone.new(0, 0, 0, 0)
@@ -87,9 +91,8 @@ class Game_Map
     @scroll_speed = 4
   end
 
-
   def create_new_game_event(event)
-    return Game_Event.new(@map_id,event , self)
+    return Game_Event.new(@map_id, event, self)
   end
 
   def updateTileset
@@ -131,7 +134,7 @@ class Game_Map
     return @map.data;
   end
 
-  def tileset_id;
+  def tileset_id
     return @map.tileset_id;
   end
 
@@ -162,8 +165,8 @@ class Game_Map
     return @map.bgm
   end
 
-
   def setFog2(filename,sx=0,sy=0,opacity=32,zoom=nil)
+    @fog2_name = filename
     @fog2_sx=sx
     @fog2_sy=-sy
     @fog2_opacity = opacity
@@ -172,12 +175,11 @@ class Game_Map
   end
 
   def eraseFog2()
-    @fog2_sx=0
-    @fog2_sy=-0
+    @fog2_sx = 0
+    @fog2_sy = -0
     @fog2_opacity = 0
     $scene.spriteset.disposeFog2()
   end
-
 
   #-----------------------------------------------------------------------------
   # * Plays background music
@@ -298,7 +300,7 @@ class Game_Map
         # Make water tiles passable if player is surfing
         return true if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && terrain.can_surf && !terrain.waterfall
         # Prevent cycling in really tall grass/on ice
-        #return false if $PokemonGlobal.bicycle && terrain.must_walk
+        # return false if $PokemonGlobal.bicycle && terrain.must_walk
         # Depend on passability of bridge tile if on bridge
         if terrain.bridge && $PokemonGlobal.bridge > 0
           return (passage & bit == 0 && passage & 0x0f != 0x0f)
@@ -313,7 +315,7 @@ class Game_Map
     return true
   end
 
-  #Just a copy of playerPassable? without the ledges
+  # Just a copy of playerPassable? without the ledges
   def OWPokemonPassable?(x, y, d, self_event = nil)
     bit = (1 << (d / 2 - 1)) & 0x0f
     for i in [2, 1, 0]
@@ -324,13 +326,13 @@ class Game_Map
       if terrain
         return false if terrain.ledge
         return false if terrain.acroBike
-        return false if $game_map.event_at_position(x,y)
+        return false if $game_map.event_at_position(x, y)
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing
         return true if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && terrain.can_surf && !terrain.waterfall
         # Prevent cycling in really tall grass/on ice
-        #return false if $PokemonGlobal.bicycle && terrain.must_walk
+        # return false if $PokemonGlobal.bicycle && terrain.must_walk
         # Depend on passability of bridge tile if on bridge
         if terrain.bridge && $PokemonGlobal.bridge > 0
           return (passage & bit == 0 && passage & 0x0f != 0x0f)
