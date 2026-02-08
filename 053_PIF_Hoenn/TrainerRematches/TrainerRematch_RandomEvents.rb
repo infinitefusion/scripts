@@ -67,17 +67,24 @@ end
 
 
 def chooseEncounterType(trainerClass)
-  water_trainer_classes = [:SWIMMER_F, :SWIMMER_M, :FISHERMAN]
+  water_trainer_classes = [:SWIMMER_F, :SWIMMER_M,:SWIMMER2_M,:SWIMMER2_F, :FISHERMAN, :SURFER, :DIVER_M, :DIVER_F]
+  hybrid_trainer_classes = [:COOLTRAINER_M, :COOLTRAINER_F, :TRIATHLETE_SWIM_M, :TRIATHLETE_SWIM_F,
+                            :TRIATHLETE_RUN_M, :TRIATHLETE_RUN_F, :SAILOR, :TUBER_M, :TUBER_F]
   if water_trainer_classes.include?(trainerClass )
-    chance_of_land_encounter = 1
+    chance_of_land_encounter = 0
     chance_of_surf_encounter= 5
-    chance_of_cave_encounter = 1
+    chance_of_cave_encounter = 0
     chance_of_fishing_encounter = 5
+  elsif hybrid_trainer_classes.include?(trainerClass )
+    chance_of_land_encounter = 5
+    chance_of_surf_encounter= 2
+    chance_of_cave_encounter = 5
+    chance_of_fishing_encounter = 2
   else
     chance_of_land_encounter = 5
-    chance_of_surf_encounter= 1
+    chance_of_surf_encounter= 0
     chance_of_cave_encounter = 5
-    chance_of_fishing_encounter = 1
+    chance_of_fishing_encounter = 0
   end
 
   if pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false)
