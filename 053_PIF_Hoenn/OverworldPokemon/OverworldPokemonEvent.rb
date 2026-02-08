@@ -67,7 +67,6 @@ class OverworldPokemonEvent < Game_Event
     end
 
     initialize_sprite(@terrain, species_data)
-    @roaming_sprite = @character_name
     @is_flying = @character_name == @flying_sprite
     @is_swimming = false
     @step_anime = @is_flying
@@ -128,8 +127,10 @@ class OverworldPokemonEvent < Game_Event
     @land_sprite = getOverworldLandPath(species_data, @pokemon.shiny?)
     @flying_sprite = getOverworldFlyingPath(species_data, @pokemon.shiny?)
     @swimming_sprite = getOverworldSwimmingPath(species_data, @pokemon.shiny?)
+
     @noticed_sprite = getOverworldNoticedPath(species_data, @pokemon.shiny?)
     @noticed_sprite = @flying_sprite if !@noticed_sprite && @flying_sprite
+    @roaming_sprite = @land_sprite
 
     if terrain == :Water
       initialize_water_sprite
@@ -475,7 +476,6 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def despawn
-    echoln @pokemon.species
     $PokemonTemp.overworld_pokemon_on_map.delete(@id)
     erase
   end

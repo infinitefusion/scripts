@@ -26,8 +26,10 @@ class Spriteset_Map
   def fade_in_fog(old_intensity, new_intensity)
     @fog_target_opacity = (new_intensity * 20).clamp(0, 255)
     @current_fog_opacity = (old_intensity * 20).clamp(0, 255)
-
-    @map.fog_name = "fog_tile" if @map.fog_name == "" && (new_intensity > 0 || old_intensity > 0)
+    fog_weather = GameData::Weather.get(:Fog)
+    @map.fog_name =fog_weather&.fog_name if @map.fog_name == "" && (new_intensity > 0 || old_intensity > 0)
+    @map.fog_sx = fog_weather&.tile_delta_x
+    @map.fog_sy = fog_weather&.tile_delta_y
     @fog_fade_speed = (@fog_target_opacity > @current_fog_opacity) ? 2 : -5
     @fog_target_opacity = nil if @current_fog_opacity == @fog_target_opacity
   end

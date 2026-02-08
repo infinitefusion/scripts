@@ -1164,8 +1164,15 @@ HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(nil, 1) if $game_screen.weather == :Fog
-  next true
+  current_weather =$game_weather.map_current_weather_type($game_map.map_id)
+  if current_weather == :Fog
+    changeCurrentWeather(:None, 1)
+    pbMessage(_INTL("The fog cleared out!"))
+    next true
+  else
+    pbMessage(_INTL("There's no fog to clear."))
+    next false
+  end
 })
 
 #===============================================================================
