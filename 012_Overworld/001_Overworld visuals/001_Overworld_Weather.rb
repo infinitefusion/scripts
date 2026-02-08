@@ -81,7 +81,7 @@ module RPG
       new_type = GameData::Weather.get(new_type).id
       new_max = 0 if new_type == :None
       return if @type == new_type && @max == new_max
-      set_fog(new_type)
+      #set_fog(new_type)
       if duration > 0
         @target_type = new_type
         @target_max = new_max
@@ -117,7 +117,7 @@ module RPG
         @fading = false
       end
       @type = type
-      set_fog(type)
+      #set_fog(type)
       prepare_bitmaps(@type)
       if GameData::Weather.get(@type).has_tiles?
         w = @weatherTypes[@type][2][0].width
@@ -134,13 +134,13 @@ module RPG
     end
 
     def set_fog(weather_type)
-      return #handled elsewhere
-      # weather = GameData::Weather.get(weather_type)
-      # return if weather.fog_name.nil?
-      # $game_map.fog_name       = weather.fog_name
-      # $game_map.fog_opacity    = 40* $game_screen.weather_power
-      # $game_map.fog_sx         = weather.tile_delta_x
-      # $game_map.fog_sy         = weather.tile_delta_y
+      # return #handled elsewhere
+      weather = GameData::Weather.get(weather_type)
+      return if weather.fog_name.nil?
+      $game_map.fog_name       = weather.fog_name
+      $game_map.fog_opacity    = 40* $game_screen.weather_power
+      $game_map.fog_sx         = weather.tile_delta_x
+      $game_map.fog_sy         = weather.tile_delta_y
     end
 
     def set_max(value,weather_type)

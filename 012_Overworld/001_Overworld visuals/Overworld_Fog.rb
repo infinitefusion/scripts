@@ -28,7 +28,7 @@ class Spriteset_Map
     @current_fog_opacity = (old_intensity * 20).clamp(0, 255)
 
     @map.fog_name = "fog_tile" if @map.fog_name == "" && (new_intensity > 0 || old_intensity > 0)
-    @fog_fade_speed = (@fog_target_opacity > @current_fog_opacity) ? 2 : -2
+    @fog_fade_speed = (@fog_target_opacity > @current_fog_opacity) ? 2 : -5
     @fog_target_opacity = nil if @current_fog_opacity == @fog_target_opacity
   end
 

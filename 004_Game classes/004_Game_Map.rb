@@ -163,11 +163,12 @@ class Game_Map
   end
 
 
-  def setFog2(filename,sx=0,sy=0,opacity=32)
+  def setFog2(filename,sx=0,sy=0,opacity=32,zoom=nil)
     @fog2_sx=sx
     @fog2_sy=-sy
     @fog2_opacity = opacity
-    $scene.spriteset.setFog2(filename)
+    @fog_zoom = zoom if zoom
+    $scene.spriteset.setFog2(filename) if $scene.is_a?(Scene_Map)
   end
 
   def eraseFog2()
