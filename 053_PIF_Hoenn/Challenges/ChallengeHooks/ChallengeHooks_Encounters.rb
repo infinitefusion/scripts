@@ -3,13 +3,15 @@
 ##
 
 def all_same_pokemon?(pokemon_array)
-  different_species = pokemon_array.uniq
+  species_array = pokemon_array.map {|pokemon| pokemon.species}
+  different_species = species_array.uniq
   return different_species.length == 1
 end
 
 def all_different_pokemon?(pokemon_array)
-  different_species = pokemon_array.uniq
-  return pokemon_array == different_species
+  species_array = pokemon_array.map {|pokemon| pokemon.species}
+  different_species = species_array.uniq
+  return different_species.length > 1
 end
 
 def checkEncounterChallenges(encountered_pokemon)
