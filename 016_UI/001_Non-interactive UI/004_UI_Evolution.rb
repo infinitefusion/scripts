@@ -510,7 +510,7 @@ class PokemonEvolutionScene
     rsprite1.setPokemonBitmap(@pokemon,false)
     rsprite1.x = Graphics.width/2
     rsprite1.y = (Graphics.height-64)/2
-
+    @pokemon.preEvolved_pif_sprite = @pokemon.pif_sprite
     @pokemon.pif_sprite = evolution_pif_sprite
     rsprite2 = PokemonSprite.new(@viewport)
     rsprite2.setOffset(PictureOrigin::Center)
@@ -577,6 +577,14 @@ class PokemonEvolutionScene
     if canceled
       pbMessageDisplay(@sprites["msgwindow"],
          _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
+      if @pokemon.preEvolved_pif_sprite
+        @pokemon.pif_sprite = @pokemon.preEvolved_pif_sprite
+        @pokemon.preEvolved_pif_sprite = nil
+      else
+        spriteLoader = BattleSpriteLoader.new
+        evolution_pif_sprite = spriteLoader.obtain_pif_sprite(@pokemon.species)
+        @pokemon.pif_sprite = evolution_pif_sprite
+      end
     else
       pbEvolutionSuccess(reversing)
     end

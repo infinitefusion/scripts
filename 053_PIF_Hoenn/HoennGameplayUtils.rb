@@ -22,10 +22,6 @@ def secretBaseQuest_pickedNearbySpot()
 
   picked_base_map = $Trainer.secretBase.outside_map_id
   picked_position = $Trainer.secretBase.outside_entrance_position
-
-  echoln picked_base_map
-  echoln picked_position
-  echoln picked_base_map == expected_map && expected_positions.include?(picked_position)
   return picked_base_map == expected_map && expected_positions.include?(picked_position)
 end
 
@@ -153,7 +149,6 @@ def build_electricity_gym_map(variable=VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
   events = {}
   $game_map.events.each do |id, event|
     if event.name =~ /ELEC\((\d+),(\d+)\)/
-      echoln event.name
       x = $1.to_i
       y = $2.to_i
       coordinates = [x,y]

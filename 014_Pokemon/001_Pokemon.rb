@@ -6,6 +6,7 @@ class Pokemon
   attr_accessor :spriteform_body
   attr_accessor :spriteform_head
 
+  attr_accessor :preEvolved_pif_sprite #Used for cancelling evolution
   attr_accessor :pif_sprite
   # @return [Symbol] this Pokémon's species
   attr_reader :species
