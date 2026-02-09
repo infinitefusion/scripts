@@ -1,4 +1,3 @@
-
 def checkTrainerRematchChallenges
   $Trainer.complete_challenge(:rematch_trainer)
 end
@@ -16,20 +15,19 @@ class PokeBattle_Battler
 
       end
     end
+  end
 
-    def checkStatRaiseBattleChallenge(stat,increment)
-      $Trainer.complete_challenge(:battle_stat_boost)
-      $Trainer.complete_challenge(:battle_stat_boost_sharp) if increment >= 2
-      if statStageAtMax?(stat)
-        $Trainer.complete_challenge(:battle_stat_boost_max)
-      end
+  def checkStatRaiseBattleChallenge(stat, increment)
+    $Trainer.complete_challenge(:battle_stat_boost)
+    $Trainer.complete_challenge(:battle_stat_boost_sharp) if increment >= 2
+    if statStageAtMax?(stat)
+      $Trainer.complete_challenge(:battle_stat_boost_max)
     end
   end
 
-
-
   alias challenge_pbFlinch pbFlinch
-  def pbFlinch(_user=nil)
+
+  def pbFlinch(_user = nil)
     challenge_pbFlinch(_user)
     if _user&.pbOwnedByPlayer?
       $Trainer.complete_challenge(:battle_flinch)
@@ -40,11 +38,12 @@ end
 
 class PokeBattle_Move
   alias challenge_pbInflictHPDamage pbInflictHPDamage
+
   def pbInflictHPDamage(target)
     challenge_pbInflictHPDamage(target)
 
     return if target.pbOwnedByPlayer?
-    #Not very effective 1 hit KO
+    # Not very effective 1 hit KO
     if target.fainted? &&
       target.damageState.initialHP == target.totalhp &&
       Effectiveness.not_very_effective?(target.damageState.typeMod)
