@@ -4,7 +4,7 @@ end
 module PokeBattle_BattleCommon
   def checkCatchChallenge(pokeball, battle, caught_pokemon)
     #Caught in 1 try
-    if battle.balls_thrown == 1
+    if battle.balls_thrown == 0 #It's incremented after this method gets checked
       $Trainer.complete_challenge(:catch_first_try)
     end
 
