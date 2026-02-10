@@ -55,9 +55,6 @@ def applyTrainerRandomEvents(trainer,event_type=nil)
     trainer = reverse_random_team_pokemon(trainer)
   end
   new_team = trainer.currentTeam
-
-  echoln original_team
-  echoln new_team
   team_changed = original_team != new_team
   trainer.set_pending_action(team_changed)
   printNPCTrainerCurrentTeam(trainer)
@@ -86,12 +83,7 @@ def chooseEncounterType(trainerClass)
     chance_of_cave_encounter = 5
     chance_of_fishing_encounter = 0
   end
-
-  if pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false)
-    chance_of_surf_encounter =0
-    chance_of_fishing_encounter = 0
-  end
-
+  $PokemonEncounters.has_water_encounters?
   possible_encounter_types = []
   if $PokemonEncounters.has_land_encounters?
     possible_encounter_types += [:Land] * chance_of_land_encounter
@@ -103,7 +95,6 @@ def chooseEncounterType(trainerClass)
     possible_encounter_types += [:GoodRod] * chance_of_fishing_encounter
     possible_encounter_types += [:Water] * chance_of_surf_encounter
   end
-  echoln "possible_encounter_types: #{possible_encounter_types}"
   return getTimeBasedEncounter(possible_encounter_types.sample)
 end
 
@@ -120,12 +111,10 @@ def catch_new_team_pokemon(trainer)
 
   echoln "Catching a pokemon via encounter_type #{encounter_type}"
   wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
-  echoln wild_pokemon
   if wild_pokemon
     trainer_highest_level = get_trainer_highest_level(trainer)
     species = wild_pokemon[0]
-    level = [wild_pokemon[1], trainer_highest_level].max
-
+    level = [wild_pokemon[1], trainer_highest_level].min
     trainer.currentTeam << Pokemon.new(species,level)
     trainer.log_catch_event(wild_pokemon[0])
   end
