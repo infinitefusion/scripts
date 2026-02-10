@@ -189,3 +189,135 @@ def print_map_tiles
 
 end
 
+SWITCH_LITTLEROOT_FINISHED_MOVING = 2005
+SWITCH_LITTLEROOT_TRUCK = 2001
+SWITCH_LITTLEROOT_DAD_ON_TV = 2006
+SWITCH_LITTLEROOT_MOM_INTRO_OVER = 2007
+SWITCH_HOENN_RIVAL_APPEARANCE_SET = 1998
+SWITCH_HOENN_MET_RIVAL = 2010
+SWITCH_HOENN_CHOOSING_STARTER = 2013
+SWITCH_HOENN_SAVED_BIRCH = 2011
+
+SWITCH_NO_BUMP_SOUND = 108
+
+SWITCH_HOENN_GO_SEE_RIVAL = 2012
+SWITCH_HOENN_BEAT_RIVAL_INTRO = 2014
+SWITCH_HOENN_INTRO_GOT_POKEDEX = 2017
+
+MAP_ROUTE_101 = 5
+MAP_LITTLEROOT = 9
+MAP_LITTLEROOT_INTERIOR = 13
+
+def hoenn_dev_quick_start
+  return false unless $DEBUG
+  choices = []
+  cmd_truck = "Intro (Normal)"
+  cmd_starter = "Starter Selection"
+  cmd_pokedex = "Pokédex obtained"
+  choices << cmd_truck
+  choices << cmd_starter
+  choices << cmd_pokedex
+  chosen = pbMessage("[Debug] Start where?",choices)
+  case choices[chosen]
+  when cmd_truck
+    return false
+  when cmd_starter
+    setHoennDefaultIntroSwitches
+    hoennCharacterSelection
+    setHoennSwitchesToStarter
+    pbFadeOutIn {
+      $game_temp.player_new_map_id = MAP_ROUTE_101
+      $game_temp.player_new_x = 15
+      $game_temp.player_new_y = 19
+      $game_temp.player_new_direction = DIRECTION_UP
+      $scene.transfer_player(true)
+      $game_map.autoplay
+      $game_map.refresh
+    }
+  when cmd_pokedex
+    setHoennDefaultIntroSwitches
+    hoennCharacterSelection
+    setHoennSwitchesToStarter
+    setHoennSwitchesFromStarterToPokedex
+    pbFadeOutIn {
+      $game_temp.player_new_map_id = MAP_LITTLEROOT
+      $game_temp.player_new_x = 16
+      $game_temp.player_new_y = 23
+      $game_temp.player_new_direction = DIRECTION_DOWN
+      $scene.transfer_player(true)
+      $game_map.autoplay
+      $game_map.refresh
+    }
+  end
+  return true
+end
+
+VAR_BATTLE_UI_STYLE = 199
+
+def setHoennDefaultIntroSwitches
+  pbSet(VAR_BATTLE_UI_STYLE, 0)
+  $game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE] = true
+  $game_switches[SWITCH_TIME_PAUSED] = true
+  $game_switches[SWITCH_NO_BUMP_SOUND]
+
+  $PokemonSystem.overworld_encounters= true
+  $PokemonGlobal.runningShoes=true
+  pbChangePlayer(0)
+  set_starting_options
+  pbShuffleItems
+  pbShuffleTMs
+  Kernel.initRandomTypeArray()
+  $game_switches[SWITCH_NEW_GAME_PLUS]= SaveData.exists?
+end
+
+def hoennCharacterSelection
+  menu = CharacterSelectionMenuView.new
+  menu.start
+  setupStartingOutfit()
+end
+def setHoennSwitchesToStarter
+  #Mom switches
+  pbSetSelfSwitch(7,"A",true,MAP_LITTLEROOT) #outside (male)
+  pbSetSelfSwitch(8,"A",true,MAP_LITTLEROOT) #outside (female)
+  pbSetSelfSwitch(25,"A",true,MAP_LITTLEROOT_INTERIOR) #inside (male)
+  pbSetSelfSwitch(39,"A",true,MAP_LITTLEROOT_INTERIOR) #inside (female)
+  pbSetSelfSwitch(37,"A",true,MAP_LITTLEROOT_INTERIOR) #inside upstairs (male)
+  pbSetSelfSwitch(38,"A",true,MAP_LITTLEROOT_INTERIOR) #inside upstairs (male)
+  pbSetSelfSwitch(46,"A",true,MAP_LITTLEROOT_INTERIOR) #inside 3 (male)
+  pbSetSelfSwitch(47,"A",true,MAP_LITTLEROOT_INTERIOR) #inside 3 (male)
+
+  $game_switches[SWITCH_LITTLEROOT_FINISHED_MOVING] = true
+  $game_switches[SWITCH_LITTLEROOT_TRUCK] = false
+  $game_switches[SWITCH_LITTLEROOT_DAD_ON_TV] = true
+  $game_switches[SWITCH_LITTLEROOT_MOM_INTRO_OVER] = true
+
+  #Rival
+  menu = CharacterSelectionMenuView.new
+  menu.start_rival
+  $game_switches[SWITCH_HOENN_RIVAL_APPEARANCE_SET] = true
+  $game_switches[SWITCH_HOENN_MET_RIVAL] = true
+  #Starter
+  $game_switches[SWITCH_HOENN_CHOOSING_STARTER] = true
+end
+
+def setHoennSwitchesFromStarterToPokedex
+  starter = hoennSelectStarter
+  pbAddPokemonSilent(starter,5)
+  pbSet(VAR_HOENN_STARTER,starter)
+  $game_switches[SWITCH_HOENN_SAVED_BIRCH] = true
+
+  $game_switches[SWITCH_HOENN_GO_SEE_RIVAL] = true
+  $game_switches[SWITCH_HOENN_BEAT_RIVAL_INTRO] = true
+  $PokemonGlobal.battledTrainers = {} if !$PokemonGlobal.battledTrainers
+  rival_trainer = initializeRivalBattledTrainer()
+  $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
+  $game_switches[SWITCH_TIME_PAUSED] = false
+  $game_switches[SWITCH_HOENN_INTRO_GOT_POKEDEX] = true
+
+  pbSetSelfSwitch(20,"A",true,MAP_ROUTE_101) #Rival route 101
+  pbSetSelfSwitch(21,"A",true,MAP_ROUTE_101) #Rival route 101
+
+  $Trainer.has_pokedex = true
+  pbUnlockDex
+  $PokemonBag.pbStoreItem(:POKEBALL,5)
+end
