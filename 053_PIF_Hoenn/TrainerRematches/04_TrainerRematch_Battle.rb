@@ -23,6 +23,11 @@ def makeRebattledTrainerTeamGainExp(trainer, playerWon=true, gained_exp=nil)
     growth_rate = pokemon.growth_rate
     new_exp = growth_rate.add_exp(pokemon.exp, gained_exp)
     pokemon.exp = new_exp
+    #NPC trainers capped at level cap
+    level_cap = getCurrentLevelCap
+    if pokemon.level > level_cap
+      pokemon.level = level_cap
+    end
     updated_team.push(pokemon)
   end
   trainer.currentTeam = updated_team
