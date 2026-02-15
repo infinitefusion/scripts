@@ -2,6 +2,9 @@ def obtainBadgeMessage(badgeName)
   Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!", $Trainer.name, badgeName))
 end
 
+def pbSpendMoney(amount)
+  pbReceiveMoney(0- amount)
+end
 def pbReceiveMoney(amount)
   msgwindow = pbCreateMessageWindow(nil)
   goldwindow = pbDisplayGoldWindow(msgwindow)

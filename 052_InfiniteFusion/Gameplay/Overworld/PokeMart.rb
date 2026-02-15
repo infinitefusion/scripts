@@ -109,6 +109,12 @@ def reset_pokemart_variables
   pbSet(VAR_CURRENT_CITY_NUMERICAL_ID, 0)
   pbSet(VAR_CURRENT_CITY, 0)
 end
+
+def get_current_city_tag()
+  current_city = pbGet(VAR_CURRENT_CITY) if !current_city
+  current_city = :PEWTER if !current_city.is_a?(Symbol)
+  current_city_tag = current_city.to_s.downcase
+end
 def pokemart_clothes_shop(current_city = nil, include_defaults = true)
   current_city = pbGet(VAR_CURRENT_CITY) if !current_city
   current_city = :PEWTER if !current_city.is_a?(Symbol)
