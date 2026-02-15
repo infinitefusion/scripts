@@ -19,9 +19,9 @@ class Pokenav
     :REARRANGE => _INTL("Rearrange"),
 
     # Unlockable apps
-    :CONTACTS => _INTL("Contacts"), # obtained after rematch quest
+    :CONTACTS => _INTL("Contacts"), # obtained after rematch quest TODO
     :JUKEBOX => _INTL("Jukebox"), # obtained at devon corp
-    :WEATHER => _INTL("Weather Map"), # obtained at weather institute
+    :WEATHER => _INTL("Weather Map"), # obtained at TV Mauville
     :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
     :POKECHALLENGE => _INTL("PokéChallenge"), #Obtained at Slateport fan club
     :BOXLINK => _INTL("Box Link"),
@@ -92,6 +92,8 @@ class PokemonPokegearScreen
         pbWeatherMap
       elsif chosen == :POKECHALLENGE
         openChallengeApp
+      elsif chosen == :POKERADAR
+        openPokeRadarApp
       elsif chosen == :REARRANGE
         @scene.rearrange_order
       elsif chosen == :DAYNIGHT
@@ -118,6 +120,14 @@ class PokemonPokegearScreen
         screen.pbStartScreen(0) # Boot PC in organize mode
       }
     end
+  end
+
+  def openPokeRadarApp
+    pbFadeOutIn {
+      scene = PokeRadarAppScene.new
+      screen = PokeRadarAppScreen.new(scene)
+      screen.pbStartScreen
+    }
   end
 
   def toggleDarkMode

@@ -1,5 +1,5 @@
 class PokeRadar_UI
-  attr_reader :sprites
+  attr_accessor :sprites
   attr_reader :disposed
 
   ICON_START_X = 50
