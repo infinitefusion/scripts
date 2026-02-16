@@ -126,7 +126,7 @@ class PokemonPokegearScreen
     pbFadeOutIn {
       scene = PokeRadarAppScene.new
       screen = PokeRadarAppScreen.new(scene)
-      screen.pbStartScreen
+      screen.pbStartScreen(@scene)
     }
   end
 

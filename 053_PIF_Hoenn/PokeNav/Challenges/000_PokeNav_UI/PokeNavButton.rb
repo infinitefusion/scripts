@@ -6,6 +6,8 @@ class PokenavButton < SpriteWrapper
   LINE_HEIGHT = 22
   REWARD_LINE = DESC_Y + LINE_HEIGHT * 2
 
+  attr_reader :id
+
   attr_accessor :height
   attr_accessor :width
   attr_accessor :image_path
@@ -19,31 +21,37 @@ class PokenavButton < SpriteWrapper
   DEFAULT_HEIGHT = 20
 
   def initialize(id, image = nil, text = nil, viewport = nil)
-    if image.is_a?(String)
-      image_path = image
-    elsif image.is_a?(AnimatedBitmap)
-      @source_bitmap = image
-    end
     super(viewport)
-    @crop_width = nil
-    @crop_height = nil
+
     @id = id
     @selected = false
     @text = text || get_text
+    @crop_width = nil
+    @crop_height = nil
 
-    # Create a base bitmap no matter what
-    if image_path && image_path != ""
-      @source_bitmap = AnimatedBitmap.new(image_path) unless @source_bitmap
+    # Determine source bitmap
+    if image.is_a?(String)
+      @source_bitmap = AnimatedBitmap.new(image)
       bmp = @source_bitmap.bitmap
+    elsif image.is_a?(AnimatedBitmap)
+      @source_bitmap = image
+      bmp = image.bitmap
+    elsif image.is_a?(Bitmap)
+      bmp = image
+    else
+      bmp = nil
+    end
+
+    # Create display bitmap
+    if bmp
       self.bitmap = Bitmap.new(bmp.width, bmp.height)
       self.bitmap.blt(0, 0, bmp, Rect.new(0, 0, bmp.width, bmp.height))
     else
       create_empty_bitmap
     end
-
-    load_cursor
     refresh
   end
+
 
 
 
@@ -51,12 +59,6 @@ class PokenavButton < SpriteWrapper
     self.bitmap = Bitmap.new(get_width, get_height)
     pbSetSystemFont(self.bitmap)
   end
-
-  def load_cursor
-    return unless cursor_path
-    @cursor_bitmap = AnimatedBitmap.new(cursor_path)
-  end
-
 
 
   def x=(value)
@@ -69,10 +71,6 @@ class PokenavButton < SpriteWrapper
     super(value)
   end
 
-
-  def cursor_path
-    return nil
-  end
 
   def get_height
     return DEFAULT_HEIGHT
@@ -92,7 +90,6 @@ class PokenavButton < SpriteWrapper
 
   def dispose
     dispose_source
-    @cursor_bitmap.dispose if @cursor_bitmap
     super
   end
 
@@ -101,10 +98,12 @@ class PokenavButton < SpriteWrapper
     @source_bitmap = nil
   end
 
-
-
   def click
-    return
+    echoln "clicked #{@id}"
+  end
+
+  def hover
+    echoln "hovering over #{@id}"
   end
 
   def selected=(val)
@@ -117,20 +116,12 @@ class PokenavButton < SpriteWrapper
     return unless self.bitmap
     self.bitmap.clear
 
-    # Draw base image
     if @source_bitmap
       bmp = @source_bitmap.bitmap
       width = @crop_width || bmp.width
       height = @crop_height || bmp.height
       self.bitmap.blt(0, 0, bmp, Rect.new(0, 0, width, height))
     end
-
-    # Draw selection overlay if exists
-    if @selected && @cursor_bitmap
-      cur = @cursor_bitmap.bitmap
-      self.bitmap.blt(0, 0, cur, Rect.new(0, 0, cur.width, cur.height))
-    end
-
     draw_text if @text && @text != ""
   end
 

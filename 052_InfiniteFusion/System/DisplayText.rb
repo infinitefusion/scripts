@@ -8,6 +8,8 @@ def Kernel.pbDisplayText(message,xposition,yposition,z=nil, baseColor=nil, shado
     sprite = BitmapSprite.new(Graphics.width,Graphics.height,@viewport1)
     if z != nil
       sprite.z=z
+    else
+      sprite.z = 999999
     end
     @hud.push(sprite)
 

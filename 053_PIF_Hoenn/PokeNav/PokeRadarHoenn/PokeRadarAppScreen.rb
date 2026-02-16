@@ -6,8 +6,8 @@ class PokeRadarAppScreen
     @scene = scene
   end
 
-  def pbStartScreen
-    @scene.pbStartScene
+  def pbStartScreen(main_menu_scene)
+    @scene.pbStartScene(main_menu_scene)
     @scene.pbScene
     @scene.pbEndScene
   end

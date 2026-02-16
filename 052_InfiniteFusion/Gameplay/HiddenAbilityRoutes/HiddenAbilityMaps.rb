@@ -58,7 +58,6 @@ def player_on_hidden_ability_map
 end
 
 def getCurrentHiddenAbilityMapName
-  echoln "I'm trying bro"
   return Kernel.getMapName(pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
 end
 

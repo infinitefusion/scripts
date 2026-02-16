@@ -1,7 +1,10 @@
 class PokeNavAppScene
+
+
   #--------------------------------------------------------------------------
   # Configuration (override in child classes)
   #--------------------------------------------------------------------------
+  HEADER_HEIGHT = -6
   def display_mode
     return :LIST # :LIST or :GRID
   end
@@ -26,6 +29,14 @@ class PokeNavAppScene
     return 4;
   end
 
+  def header_path
+    return "Graphics/Pictures/Pokegear/bg_header"
+  end
+
+  def header_name
+    return _INTL("PokeNav App")
+  end
+
   def columns
     return (display_mode == :GRID) ? 2 : 1
   end
@@ -47,8 +58,7 @@ class PokeNavAppScene
       b.viewport = @viewport
       @sprites["button#{i}"] = b
     end
-
-    displayTextElements
+    createCursor
     layoutButtons
 
     pbFadeInAndShow(@sprites) { pbUpdate }
@@ -60,6 +70,7 @@ class PokeNavAppScene
   end
 
   def layoutButtons
+    return if @exit
     cols = columns
     rows_visible = visible_rows
 
@@ -83,13 +94,37 @@ class PokeNavAppScene
       btn.visible = (btn.y >= start_y - y_gap && btn.y <= Graphics.height)
       btn.selected = (i == @index)
     end
-
+    updateCursor
     updateHeader(scroll_row)
+  end
+
+  def updateCursor
+    cursor = @sprites["cursor"]
+    return unless cursor
+    return if @buttons.empty?
+
+    btn = @buttons[@index]
+    return unless btn
+
+    cursor.x = btn.x
+    cursor.y = btn.y
+    cursor.visible = btn.visible
+  end
+
+  def cursor_path
+    return "Graphics/Pictures/Pokegear/icon_button"
+  end
+
+  def createCursor
+    return unless cursor_path
+    @sprites["cursor"] = IconSprite.new(0, 0, @viewport)
+    @sprites["cursor"].setBitmap(cursor_path)
+    @sprites["cursor"].z = 100000
   end
 
   def createHeader
     @sprites["header"] = IconSprite.new(0, 0, @viewport)
-    @sprites["header"].setBitmap("Graphics/Pictures/Challenges/bg_header")
+    @sprites["header"].setBitmap(header_path)
   end
 
   def createBackground
@@ -106,10 +141,8 @@ class PokeNavAppScene
     return unless @sprites["header"]
 
     if scroll_row > 0
-      Kernel.pbClearText
       @sprites["header"].visible = false
     else
-      displayTextElements
       @sprites["header"].visible = true
     end
   end
@@ -118,11 +151,14 @@ class PokeNavAppScene
     return true
   end
 
-
   def displayTextElements
     Kernel.pbClearText
+    showHeaderName
   end
 
+  def showHeaderName
+    Kernel.pbDisplayText(header_name, Graphics.width/2 , HEADER_HEIGHT)
+  end
   def pbScene
     loop do
       Graphics.update
@@ -146,8 +182,7 @@ class PokeNavAppScene
       return
     elsif Input.trigger?(Input::USE)
       pbPlayDecisionSE
-      @buttons[@index]&.click
-
+      click(@buttons[@index]&.id)
     elsif Input.trigger?(Input::LEFT) && cols > 1
       move_index(-1)
 
@@ -162,13 +197,23 @@ class PokeNavAppScene
     end
   end
 
+  def hover(button_id)
+    @buttons[@index]&.hover
+  end
+
+  def click(button_id)
+    @buttons[@index]&.click
+  end
   def move_index(delta)
     return if @buttons.empty?
     pbPlayCursorSE
     @index = (@index + delta) % @buttons.length
+    hover(@buttons[@index]&.id)
+
   end
 
   def pbEndScene
+    @exit = true
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
     Kernel.pbClearText
