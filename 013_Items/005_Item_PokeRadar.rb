@@ -1,6 +1,5 @@
 class PokemonGlobalMetadata
   attr_accessor :pokeradarBattery
-  attr_accessor :pokeradarPokemon
 end
 
 class PokemonTemp
@@ -165,7 +164,7 @@ def getTerrainTilesNearPlayer(terrainType,min_distance_from_player = 2, max_dist
   for x in (px - max_distance_from_player)..(px + max_distance_from_player)
     for y in (py - max_distance_from_player)..(py + max_distance_from_player)
       next unless $game_map.OWPokemonPassable?(x,y,DIRECTION_ALL)
-
+      next if x == px && y == py
       # Manhattan distance (PokéRadar-style ring)
       distance = (x - px).abs + (y - py).abs
       next if distance < min_distance_from_player
@@ -244,6 +243,7 @@ def pbPokeRadarHighlightGrass(showmessage = true)
 end
 
 def pbPokeRadarGetShakingGrass
+  return -1 if $PokemonSystem.overworld_encounters
   return -1 if !$PokemonTemp.pokeradar
   grasses = $PokemonTemp.pokeradar[3]
   return -1 if grasses.length == 0
@@ -254,6 +254,7 @@ def pbPokeRadarGetShakingGrass
 end
 
 def pbPokeRadarOnShakingGrass
+  return false if $PokemonSystem.overworld_encounters
   return pbPokeRadarGetShakingGrass >= 0
 end
 
@@ -285,6 +286,7 @@ end
 # Event handlers
 ################################################################################
 EncounterModifier.register(proc { |encounter|
+  next if $PokemonSystem.overworld_encounters
   if GameData::EncounterType.get($PokemonTemp.encounterType).type != :land ||
     $PokemonGlobal.partner # $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel

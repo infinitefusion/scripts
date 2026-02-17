@@ -60,6 +60,7 @@ class PokeNavAppScene
     end
     createCursor
     layoutButtons
+    pbUpdateSpriteHash(@sprites)
 
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
