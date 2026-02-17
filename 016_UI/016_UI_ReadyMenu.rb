@@ -238,61 +238,63 @@ class PokemonReadyMenu
     @scene.pbShowMenu
   end
 
-  def pbStartReadyMenu(moves,items)
-    commands = [[],[]]   # Moves, items
-    for i in moves
-      commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
-    end
-    commands[0].sort! { |a,b| a[1]<=>b[1] }
-    for i in items
-      commands[1].push([i, GameData::Item.get(i).name, false])
-    end
-    commands[1].sort! { |a,b| a[1]<=>b[1] }
-    @scene.pbStartScene(commands)
-    loop do
-      command = @scene.pbShowCommands
-      break if command==-1
-      if command[0]==0   # Use a move
-        move = commands[0][command[1]][0]
-        user = $Trainer.party[commands[0][command[1]][3]]
-        if move == :FLY
-          ret = nil
-          pbFadeOutInWithUpdate(99999,@scene.sprites) {
-            pbHideMenu
-            scene = PokemonRegionMap_Scene.new(-1,false)
-            screen = PokemonRegionMapScreen.new(scene)
-            ret = screen.pbStartFlyScreen
-            pbShowMenu if !ret
-          }
-          if ret
-            $PokemonTemp.flydata = ret
-            $game_temp.in_menu = false
-            pbUseHiddenMove(user,move)
-            break
-          end
-        else
-          pbHideMenu
-          if pbConfirmUseHiddenMove(user,move)
-            $game_temp.in_menu = false
-            pbUseHiddenMove(user,move)
-            break
-          else
-            pbShowMenu
-          end
-        end
-      else   # Use an item
-        item = commands[1][command[1]][0]
-        pbHideMenu
-        if ItemHandlers.triggerConfirmUseInField(item)
-          $game_temp.in_menu = false
-          break if pbUseKeyItemInField(item)
-          $game_temp.in_menu = true
-        end
-      end
-      pbShowMenu
-    end
-    @scene.pbEndScene
-  end
+  #Overriden in BetterRegionMap.rb
+
+  # def pbStartReadyMenu(moves,items)
+  #   commands = [[],[]]   # Moves, items
+  #   for i in moves
+  #     commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
+  #   end
+  #   commands[0].sort! { |a,b| a[1]<=>b[1] }
+  #   for i in items
+  #     commands[1].push([i, GameData::Item.get(i).name, false])
+  #   end
+  #   commands[1].sort! { |a,b| a[1]<=>b[1] }
+  #   @scene.pbStartScene(commands)
+  #   loop do
+  #     command = @scene.pbShowCommands
+  #     break if command==-1
+  #     if command[0]==0   # Use a move
+  #       move = commands[0][command[1]][0]
+  #       user = $Trainer.party[commands[0][command[1]][3]]
+  #       if move == :FLY
+  #         ret = nil
+  #         pbFadeOutInWithUpdate(99999,@scene.sprites) {
+  #           pbHideMenu
+  #           scene = PokemonRegionMap_Scene.new(-1,false)
+  #           screen = PokemonRegionMapScreen.new(scene)
+  #           ret = screen.pbStartFlyScreen
+  #           pbShowMenu if !ret
+  #         }
+  #         if ret
+  #           $PokemonTemp.flydata = ret
+  #           $game_temp.in_menu = false
+  #           pbUseHiddenMove(user,move)
+  #           break
+  #         end
+  #       else
+  #         pbHideMenu
+  #         if pbConfirmUseHiddenMove(user,move)
+  #           $game_temp.in_menu = false
+  #           pbUseHiddenMove(user,move)
+  #           break
+  #         else
+  #           pbShowMenu
+  #         end
+  #       end
+  #     else   # Use an item
+  #       item = commands[1][command[1]][0]
+  #       pbHideMenu
+  #       if ItemHandlers.triggerConfirmUseInField(item)
+  #         $game_temp.in_menu = false
+  #         break if pbUseKeyItemInField(item)
+  #         $game_temp.in_menu = true
+  #       end
+  #     end
+  #     pbShowMenu
+  #   end
+  #   @scene.pbEndScene
+  # end
 end
 
 #===============================================================================
@@ -314,6 +316,7 @@ def pbUseKeyItem
     itm = GameData::Item.get(i).id
     real_items.push(itm) if $PokemonBag.pbHasItem?(itm)
   end
+  real_items << GameData::Item.get(:POKENAV) if $Trainer.has_pokegear
   if real_items.length == 0 && real_moves.length == 0
     pbMessage(_INTL("An item in the Bag can be registered to this key for instant use."))
   else

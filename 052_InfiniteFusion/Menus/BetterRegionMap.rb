@@ -852,11 +852,22 @@ class PokemonReadyMenu
     for i in moves
       commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
     end
+    echoln commands
     commands[0].sort! { |a, b| a[1] <=> b[1] }
     for i in items
       commands[1].push([i, GameData::Item.get(i).name, false])
     end
-    commands[1].sort! { |a, b| a[1] <=> b[1] }
+    commands[1].sort! do |a, b|
+      # Force :POKENAV to always come first
+      if a[0] == :POKENAV
+        -1
+      elsif b[0] == :POKENAV
+        1
+      else
+        a[1] <=> b[1]  # Alphabetical otherwise
+      end
+    end
+
     @scene.pbStartScene(commands)
     loop do
       command = @scene.pbShowCommands
@@ -890,6 +901,18 @@ class PokemonReadyMenu
         # Use an item
         item = commands[1][command[1]][0]
         pbHideMenu
+
+        if item == :POKENAV
+          pbPlayDecisionSE
+          pbFadeOutIn {
+            @scene.pbHideMenu
+            scene = PokemonPokegear_Scene.new
+            screen = PokemonPokegearScreen.new(scene)
+            screen.pbStartScreen
+          }
+          break
+        end
+
         if ItemHandlers.triggerConfirmUseInField(item)
           $game_temp.in_menu = false
           break if pbUseKeyItemInField(item)
