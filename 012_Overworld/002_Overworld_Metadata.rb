@@ -282,6 +282,7 @@ class PokemonTemp
   attr_accessor :surfJump
   attr_accessor :endSurf
   attr_accessor :forceSingleBattle
+  attr_accessor :pokeradar_pokemon
 
   def initialize
     @menuLastChoice         = 0
@@ -290,5 +291,6 @@ class PokemonTemp
     @begunNewGame           = false
     @miniupdate             = false
     @forceSingleBattle      = false
+    @pokeradar_pokemon      = nil
   end
 end

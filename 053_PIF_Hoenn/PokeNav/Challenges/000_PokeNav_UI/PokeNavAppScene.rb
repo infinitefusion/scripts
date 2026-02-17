@@ -46,7 +46,7 @@ class PokeNavAppScene
     @buttons = buttons
     @index = 0
     @mode = display_mode
-    @exit = false
+    @exiting = false
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     @sprites = {}
@@ -70,7 +70,7 @@ class PokeNavAppScene
   end
 
   def layoutButtons
-    return if @exit
+    return if @exiting
     cols = columns
     rows_visible = visible_rows
 
@@ -168,7 +168,7 @@ class PokeNavAppScene
       layoutButtons
       pbUpdateSpriteHash(@sprites)
 
-      break if @exit
+      break if @exiting
     end
   end
 
@@ -178,7 +178,7 @@ class PokeNavAppScene
 
     if Input.trigger?(Input::BACK)
       pbPlayCloseMenuSE
-      @exit = true
+      @exiting = true
       return
     elsif Input.trigger?(Input::USE)
       pbPlayDecisionSE
@@ -213,7 +213,7 @@ class PokeNavAppScene
   end
 
   def pbEndScene
-    @exit = true
+    @exiting = true
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
     Kernel.pbClearText

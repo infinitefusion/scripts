@@ -205,10 +205,13 @@ class PokemonPauseMenu
       elsif cmdPokegear >= 0 && command == cmdPokegear
         pbPlayDecisionSE
         pbFadeOutIn {
+          @scene.pbHideMenu
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
           screen.pbStartScreen
-          @scene.pbRefresh
+          # @scene.pbRefresh
+          # @scene.pbHideMenu
+          # @scene.pbEndScene
         }
       elsif cmdTrainer >= 0 && command == cmdTrainer
         pbPlayDecisionSE

@@ -1,5 +1,6 @@
 class PokemonGlobalMetadata
   attr_accessor :pokeradarBattery
+  attr_accessor :pokeradarPokemon
 end
 
 class PokemonTemp
@@ -154,6 +155,37 @@ def canEncounterRarePokemon(unseenPokemon)
     terrain.land_wild_encounters &&
     terrain.shows_grass_rustle
 end
+
+def getTerrainTilesNearPlayer(terrainType,min_distance_from_player = 2, max_distance_from_player = 10)
+  tiles = []
+  px = $game_player.x
+  py = $game_player.y
+
+  # Scan square area around player
+  for x in (px - max_distance_from_player)..(px + max_distance_from_player)
+    for y in (py - max_distance_from_player)..(py + max_distance_from_player)
+      next unless $game_map.OWPokemonPassable?(x,y,DIRECTION_ALL)
+
+      # Manhattan distance (PokéRadar-style ring)
+      distance = (x - px).abs + (y - py).abs
+      next if distance < min_distance_from_player
+      next if distance > max_distance_from_player
+
+      # Check terrain
+      terrain = $game_map.terrain_tag(x, y)
+      if terrainType == :Grass
+        tiles << [x, y] if terrain.land_wild_encounters
+      elsif terrainType == :Water
+        tiles << [x, y] if terrain.can_surf
+      else
+        tiles << [x, y]
+      end
+    end
+  end
+
+  return tiles
+end
+
 
 def pbPokeRadarHighlightGrass(showmessage = true)
   grasses = [] # x, y, ring (0-3 inner to outer), rarity§

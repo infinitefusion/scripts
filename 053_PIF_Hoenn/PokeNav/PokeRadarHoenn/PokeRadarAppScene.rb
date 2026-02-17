@@ -45,7 +45,7 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def pbStartScene(main_menu_scene)
-    @main_menu_scene = main_menu_scene
+    @pokenav_main_menu_scene = main_menu_scene
     echoln 'START'
     @encounter_type = $PokemonEncounters.encounter_type
     @unseenPokemon = listPokemonInCurrentRoute(@encounter_type, false, true)
@@ -170,19 +170,29 @@ class PokeRadarAppScene < PokeNavAppScene
     case options[chosen]
     when cmd_scan
       energy_needed = get_energy_for_scan(species)
-      if Settings::POKERADAR_BATTERY_STEPS - $PokemonGlobal.pokeradarBattery >= energy_needed
+      if true#Settings::POKERADAR_BATTERY_STEPS - $PokemonGlobal.pokeradarBattery >= energy_needed
         $PokemonGlobal.pokeradarBattery += energy_needed
         displayTextElements
-        @exit = true
-        pbMessage(_INTL("Scanning for {1}...", GameData::Species.get(species).real_name))
+        @exiting = true
+
+        pbEndScene
+        @pokenav_main_menu_scene.exiting = true
+        @pokenav_main_menu_scene.pbEndScene
+
 
         encounter = get_encounter(species)
         min_level = encounter[2]
         max_level = encounter[3]
         level = rand(min_level..max_level)
-        pbEndScene
-        @main_menu_scene.pbEndScene
-        spawn_pokeradar_pokemon(species,level)
+        pbWait(16)
+        pbMessage(_INTL("Scanning for {1}...", GameData::Species.get(species).real_name))
+        position = getTerrainTilesNearPlayer(getTerrainType,3).sample
+        if position
+          spawn_pokeradar_pokemon(species, level)
+          $PokemonGlobal.pokeradarPokemon = species
+        else
+          pbMessage(_INTL("The Pokéradar scan failed... Try again somewhere else"))
+        end
       else
         pbMessage(_INTL("The battery is not charged enough for this scan!"))
       end
@@ -254,15 +264,24 @@ class PokeRadarAppScene < PokeNavAppScene
 
 end
 
+def getTerrainType
+  encounter_type = $PokemonEncounters.encounter_type
+  case encounter_type
+  when :Land, :Land1, :Land2, :Land3, :LandMorning, :LandDay, :LandNight, :TallGrass
+    return :Grass
+  else
+    return encounter_type
+  end
+end
+
 def spawn_pokeradar_pokemon(species,level)
   return unless species && level
   pbWait(20)
   playAnimation(Settings::POKERADAR_LIGHT_ANIMATION_RED_ID, $game_player.x, $game_player.y)
   pbWait(10)
-  spawned_events = spawn_ow_pokemon(species, level,1)
-  #spawned_events = spawn_random_overworld_pokemon_group([species, level], 16, 1, nil, $PokemonEncounters.encounter_type)
+  spawned_events = spawn_ow_pokemon(species, level,1,4)
   echoln "spawned events: #{spawned_events}"
-  if spawned_events
+  if spawned_events && spawned_events.length > 0
     event = spawned_events[0]
     event.behavior_roaming = :look_around
     event.behavior_noticed = :flee

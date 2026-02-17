@@ -93,6 +93,7 @@ end
 #
 #===============================================================================
 class PokemonPokegear_Scene
+  attr_accessor :exiting
 
   GRID_COLUMNS = 4
   GRID_X_START = 72
@@ -101,6 +102,7 @@ class PokemonPokegear_Scene
   GRID_Y_GAP   = 72
 
   def pbUpdate
+    return if @exiting
     for i in 0...@commands.length
       button = @sprites["button#{i}"]
       button.rearranging = @rearranging
@@ -179,7 +181,7 @@ class PokemonPokegear_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::BACK)
+      if Input.trigger?(Input::BACK) || @exiting
         if @rearranging
           pbPlayCloseMenuSE
           @rearranging = false
