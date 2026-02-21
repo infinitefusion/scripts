@@ -92,8 +92,10 @@ class OverworldPokemonEvent < Game_Event
     return behavior
   end
 
+  #Crops land sprite to make it look underwater
   def set_swimming
-    return if @species == :SURSKIT || @species == :SUICUNE
+    return if @swimming_sprite
+    #return if @species == :SURSKIT || @species == :SUICUNE
     unless @is_flying
       self.forced_bush_depth = 20
       @step_anime = true

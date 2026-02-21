@@ -120,7 +120,6 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
     new_position = [position[0] + offset_x, position[1] + offset_y]
     begin
       if can_spawn_pokemon_there(new_position[0], new_position[1], terrain)
-        echoln "trying to spawn"
         event = spawn_overworld_pokemon(wild_pokemon, new_position, terrain)
         spawned_events << event
         echoln event.name
