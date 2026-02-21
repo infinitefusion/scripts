@@ -37,7 +37,7 @@ def pbSetTextMessages
     end
     # If Scripts.rxdata only has 1 section, scripts have been extracted. Get
     # script texts from .rb files in Data/Scripts
-    if $RGSS_SCRIPTS.length == 1
+    if true #$RGSS_SCRIPTS.length == 1 is always false somehow so the intl isn't full added
       Dir.all("Data/Scripts").each do |script_file|
         if System.uptime - t >= 5
           t += 5
