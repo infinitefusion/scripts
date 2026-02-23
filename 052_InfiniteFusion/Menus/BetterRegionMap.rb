@@ -852,7 +852,6 @@ class PokemonReadyMenu
     for i in moves
       commands[0].push([i[0], GameData::Move.get(i[0]).name, true, i[1]])
     end
-    echoln commands
     commands[0].sort! { |a, b| a[1] <=> b[1] }
     for i in items
       commands[1].push([i, GameData::Item.get(i).name, false])

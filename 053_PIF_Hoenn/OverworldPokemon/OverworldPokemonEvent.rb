@@ -10,6 +10,7 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :pokemon
   attr_accessor :manual_ow_pokemon
 
+  attr_reader :part_of_pokeradar_chain
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
@@ -71,6 +72,7 @@ class OverworldPokemonEvent < Game_Event
     @is_swimming = false
     @step_anime = @is_flying
     @forced_z = 300 if @is_flying #@always_on_top = @is_flying
+    @part_of_pokeradar_chain = is_pokeradar_chain
     if @terrain == :Water
       set_swimming
     end
@@ -80,6 +82,20 @@ class OverworldPokemonEvent < Game_Event
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, @x, @y)
     end
     set_roaming_movement
+  end
+
+  def make_shiny
+    @pokemon.shiny = true
+    @pokemon.natural_shiny = true
+    species_data = GameData::Species.get(@species)
+    initialize_sprite(@terrain, species_data)
+  end
+  def is_pokeradar_chain
+    if $PokemonTemp.pokeradar
+      pokeradar_species = $PokemonTemp.pokeradar[0]
+      return @species == pokeradar_species
+    end
+    return false
   end
 
   def get_behavior_for_species(species, behavior_type)
@@ -92,15 +108,16 @@ class OverworldPokemonEvent < Game_Event
     return behavior
   end
 
-  #Crops land sprite to make it look underwater
+  # Crops land sprite to make it look underwater
   def set_swimming
-    return if @swimming_sprite
-    #return if @species == :SURSKIT || @species == :SUICUNE
+    # return if @species == :SURSKIT || @species == :SUICUNE
     unless @is_flying
-      self.forced_bush_depth = 20
-      @step_anime = true
       self.set_animation_speed(2)
-      self.calculate_bush_depth
+      @step_anime = true
+      unless @swimming_sprite
+        self.forced_bush_depth = 20
+        self.calculate_bush_depth
+      end
       @is_swimming = true
     end
   end
@@ -205,11 +222,26 @@ class OverworldPokemonEvent < Game_Event
       flee_behavior = OW_BEHAVIOR_MOVE_ROUTES[:noticed][:flee]
     end
     set_custom_move_route(flee_behavior, false)
+    check_pokeradar_chain_break
     @through = true
     @detection_radius = 10
     force_move_route(@move_route)
     @always_on_top = true if behavior == :flee_flying
     @current_state = :FLEEING
+  end
+
+  def check_pokeradar_chain_break
+    return unless $PokemonTemp.pokeradar && @part_of_pokeradar_chain
+    remaining_pokeradar_species = false
+    $game_map.events.each do |event|
+      if event.is_a?(OverworldPokemonEvent)
+        remaining_pokeradar_species = true if event.part_of_pokeradar_chain
+        break if remaining_pokeradar_species
+      end
+    end
+    unless remaining_pokeradar_species
+      pbPokeRadarCancel
+    end
   end
 
   #####

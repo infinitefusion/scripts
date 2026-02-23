@@ -87,7 +87,6 @@ end
 
 def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_group_size = 4, position = nil, terrain = nil)
   return unless $PokemonEncounters && $PokemonGlobal
-  echoln terrain
   unless wild_pokemon && position
     if ($PokemonGlobal.surfing || $PokemonGlobal.boat) && $PokemonEncounters.has_water_encounters?
       terrain = :Water
@@ -122,7 +121,6 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
       if can_spawn_pokemon_there(new_position[0], new_position[1], terrain)
         event = spawn_overworld_pokemon(wild_pokemon, new_position, terrain)
         spawned_events << event
-        echoln event.name
       end
     rescue
       next

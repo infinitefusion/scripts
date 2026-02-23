@@ -123,7 +123,7 @@ class PokemonEncounters
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
     return false if !has_encounter_type?(enc_type)
     #Always check encounter if pokeradar is active
-    return true if $PokemonTemp.pokeradar != nil
+    return true if $PokemonTemp.pokeradar != nil && !$PokemonSystem.overworld_encounters
 
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
@@ -387,11 +387,18 @@ class PokemonEncounters
 
 
 
-  def listPossibleEncounters(enctype)
+  def listPossibleEncounters(enctype,include_weather=false)
     if !enctype
       raise ArgumentError.new(_INTL("Encounter type out of range"))
     end
-    return @encounter_tables[enctype]
+    list= @encounter_tables[enctype]
+    if include_weather && $game_weather
+      current_weather = $game_weather.current_weather[$game_map.map_id][0]
+      weather_encounter_type = get_weather_encounter_type(enctype, current_weather)
+      weather_encounters = @encounter_tables[weather_encounter_type]
+      list += weather_encounters if weather_encounters
+    end
+    return list
   end
 
 

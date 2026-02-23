@@ -119,12 +119,12 @@ end
 
 
 
-def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false)
+def listPokemonInCurrentRoute(encounterType, onlySeen = false, onlyUnseen = false, include_weather=false)
   return [] if encounterType == nil
   processed = []
   seen = []
   unseen = []
-  for encounter in $PokemonEncounters.listPossibleEncounters(encounterType)
+  for encounter in $PokemonEncounters.listPossibleEncounters(encounterType,include_weather)
     species = $game_switches[SWITCH_RANDOM_WILD] && !$game_switches[SWITCH_RANDOM_WILD_AREA] ? getRandomizedTo(encounter[1]) : encounter[1]
 
     if !processed.include?(species)
@@ -155,7 +155,7 @@ def canEncounterRarePokemon(unseenPokemon)
     terrain.shows_grass_rustle
 end
 
-def getTerrainTilesNearPlayer(terrainType,min_distance_from_player = 2, max_distance_from_player = 10)
+def getTerrainTilesNearPlayer(terrainType,min_distance_from_player = 2, max_distance_from_player = 10,max_attempts = 5)
   tiles = []
   px = $game_player.x
   py = $game_player.y
@@ -181,7 +181,6 @@ def getTerrainTilesNearPlayer(terrainType,min_distance_from_player = 2, max_dist
       end
     end
   end
-
   return tiles
 end
 
@@ -325,14 +324,16 @@ EncounterModifier.register(proc { |encounter|
 
 Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
+  next if $PokemonSystem.overworld_encounters #pokeradar shininess is handled in spawn_pokeradar_pokemon for overworld pokemon pokeradar
   next if !$PokemonTemp.pokeradar
   grasses = $PokemonTemp.pokeradar[3]
   next if !grasses
-  for grass in grasses
-    next if $game_player.x != grass[0] || $game_player.y != grass[1]
-    pokemon.shiny = true if grass[3] == 2
-    break
-  end
+    for grass in grasses
+      next if $game_player.x != grass[0] || $game_player.y != grass[1]
+      pokemon.shiny = true if grass[3] == 2
+      break
+    end
+
 }
 
 Events.onWildBattleEnd += proc { |_sender, e|
@@ -344,7 +345,11 @@ Events.onWildBattleEnd += proc { |_sender, e|
     $PokemonTemp.pokeradar[1] = level
     $PokemonTemp.pokeradar[2] += 1
     $PokemonTemp.pokeradar[2] = 40 if $PokemonTemp.pokeradar[2] > 40
-    pbPokeRadarHighlightGrass(false)
+    if $PokemonSystem.overworld_encounters
+      continue_pokeradar_app_chain
+    else
+      pbPokeRadarHighlightGrass(false)
+    end
   else
     pbPokeRadarCancel
   end

@@ -5,7 +5,7 @@ class PokeRadarAppScene < PokeNavAppScene
   INFO_TEXT_Y = 270
 
   def header_name
-    return _INTL("PokeRadar")
+    return _INTL("PokéRadar")
   end
 
   def cursor_path
@@ -29,7 +29,7 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def columns
-    return 8
+    return 6
   end
 
   def visible_rows
@@ -55,27 +55,28 @@ class PokeRadarAppScene < PokeNavAppScene
       super(buttons)
       hover(@buttons[0]&.id)
     end
+    if @unseenPokemon.empty? && @seenPokemon.empty?
+      showEmpty
+    end
     showBattery
+    showHeaderName
     showAreaName
   end
 
   def showWildPokemonList
     @encounter_type = $PokemonEncounters.encounter_type
-    @unseenPokemon = listPokemonInCurrentRoute(@encounter_type, false, true)
-    @seenPokemon = listPokemonInCurrentRoute(@encounter_type, true, false)
-    echoln @unseenPokemon
+    @unseenPokemon = listPokemonInCurrentRoute(@encounter_type, false, true,true)
+    @seenPokemon = listPokemonInCurrentRoute(@encounter_type, true, false,true)
     buttons = []
     @seenPokemon.each do |pokemon_species|
-      echoln pokemon_species
       icon_path = pbCheckPokemonIconFiles(pokemon_species)
       bmp = load_bitmap(icon_path, false)
-      button = PokenavButton.new(pokemon_species, bmp, nil, nil
-      )
+      button = PokenavButton.new(pokemon_species, bmp)
       button.crop_width = button.source_bitmap.bitmap.width / 2
+      button.refresh
       buttons << button if button
     end
     @unseenPokemon.each do |pokemon_species|
-      echoln pokemon_species
       icon_path = pbCheckPokemonIconFiles(pokemon_species)
       bmp = load_bitmap(icon_path, true)
       button = PokenavButton.new(pokemon_species, bmp)
@@ -90,16 +91,20 @@ class PokeRadarAppScene < PokeNavAppScene
     return if $PokemonTemp.pokeradar
     super
   end
+
+  def showEmpty
+    Kernel.pbDisplayText(_INTL("No Pokémon found nearby."),Graphics.width/2,Graphics.height/2)
+  end
+
   def showCurrentScanningTarget
-    echoln $PokemonTemp.pokeradar
     scanningPokemon = $PokemonTemp.pokeradar[0]
     icon_path = pbCheckPokemonIconFiles(scanningPokemon)
     bmp = load_bitmap(icon_path, false)
     button = PokenavButton.new(scanningPokemon, bmp)
-
+    button.refresh
     species_name = GameData::Species.get(scanningPokemon).real_name
-    Kernel.pbDisplayText(_INTL("Currently scanning for {1}.", species_name), Graphics.width / 2, 200,500000)
-    Kernel.pbDisplayText(_INTL("Current chain: {1}.", $PokemonTemp.pokeradar[2]), Graphics.width / 2, 230,500000)
+    Kernel.pbDisplayText(_INTL("Currently scanning for {1}.", species_name), Graphics.width / 2, 200, 500000)
+    Kernel.pbDisplayText(_INTL("Current chain: {1}.", $PokemonTemp.pokeradar[2]), Graphics.width / 2, 230, 500000)
     return [button]
   end
 
@@ -132,7 +137,7 @@ class PokeRadarAppScene < PokeNavAppScene
 
   #[rareness, species, minLevel, maxLevel]
   def get_encounter(species)
-    for encounter in $PokemonEncounters.listPossibleEncounters(@encounter_type)
+    for encounter in $PokemonEncounters.listPossibleEncounters(@encounter_type,true)
       if encounter[1] == species
         return encounter
       end
@@ -150,6 +155,7 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def get_rarity_flavor_text(species)
     encounter = get_encounter(species)
+    return unless encounter
     if encounter[1] == species
       rareness = encounter[0]
       if rareness < 5
@@ -237,15 +243,18 @@ class PokeRadarAppScene < PokeNavAppScene
         level = rand(min_level..max_level)
         pbWait(16)
         pbMessage(_INTL("Scanning for {1}...\\wtnp[5]", GameData::Species.get(species).real_name))
-        position = getTerrainTilesNearPlayer(getTerrainType, 3).sample
+        possible_tiles = getTerrainTilesNearPlayer(getTerrainType, 3)
+        position = possible_tiles.sample
+        echoln possible_tiles
         if position
-          echoln species
           set_pokeradar_data(species, level, position)
           spawn_pokeradar_pokemon(species, level)
         else
+          pbPokeRadarCancel
           pbMessage(_INTL("The Pokéradar scan failed... Try again somewhere else"))
         end
       else
+        pbPokeRadarCancel
         pbMessage(_INTL("The battery is not charged enough for this scan!"))
       end
     else
@@ -298,8 +307,8 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def hover_unseen()
+    return unless @unseenPokemon.any?
     displayTextElements
-    echoln "hover unseen"
     pokemon_name = _INTL("Unknown Pokémon")
     Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 999999)
   end
@@ -319,7 +328,12 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def showAreaName
     map_name = Kernel.getMapName($game_map.map_id)
-    Kernel.pbDisplayText(_INTL("{1} ({2})", map_name, get_encounter_type_name), Graphics.width / 2, 40)
+    text = _INTL("{1}",map_name)
+    encounter_type = get_encounter_type_name
+    if encounter_type && !encounter_type.empty?
+      text += _INTL(" ({1})",encounter_type)
+    end
+    Kernel.pbDisplayText(text, Graphics.width / 2, 40)
   end
 
   def get_encounter_type_name
@@ -334,11 +348,11 @@ class PokeRadarAppScene < PokeNavAppScene
     when :Land3
       return _INTL("Flowers")
     when :LandMorning
-      return _INTL("Grass (Morning)")
+      return _INTL("Grass - Morning")
     when :LandDay
-      return _INTL("Grass (Daytime)")
+      return _INTL("Grass - Daytime")
     when :LandNight
-      return _INTL("Grass (Nighttime)")
+      return _INTL("Grass - Nighttime")
     when :TallGrass
       return _INTL("Tall Grass")
     else
@@ -358,20 +372,65 @@ def getTerrainType
   end
 end
 
+def continue_pokeradar_app_chain()
+  echoln "continue pokeradar app chain"
+  pbWait(12)
+  species = $PokemonTemp.pokeradar[0]
+  level = $PokemonTemp.pokeradar[1]
+  spawn_pokeradar_pokemon(species, level)
+end
+
+def update_pokeradar_overworld_ui
+  if $PokemonTemp.pokeradar
+    current_chain = $PokemonTemp.pokeradar[2]
+    return unless current_chain >= 1
+    species = $PokemonTemp.pokeradar[0]
+    $PokemonTemp.pokeradar_ui.dispose if $PokemonTemp.pokeradar
+    $PokemonTemp.pokeradar_ui = PokeRadar_UI.new([species], [], [])
+    $PokemonTemp.pokeradar_ui.set_text(_INTL("PokéRadar Chain: {1}",current_chain),72,12)
+  else
+    $PokemonTemp.pokeradar_ui.dispose if $PokemonTemp.pokeradar_ui
+  end
+
+end
 def spawn_pokeradar_pokemon(species, level)
+  max_attempts = 10
   return unless species && level
   pbWait(20)
   playAnimation(Settings::POKERADAR_LIGHT_ANIMATION_RED_ID, $game_player.x, $game_player.y)
   pbWait(10)
-  spawned_events = spawn_ow_pokemon(species, level, 1, 4)
-  echoln "spawned events: #{spawned_events}"
+  current_attempt = 0
+  while current_attempt < max_attempts
+    spawned_events = spawn_ow_pokemon(species, level, 1, 4)
+    break if spawned_events
+    current_attempt += 1
+  end
   if spawned_events && spawned_events.length > 0
     event = spawned_events[0]
+    grass = $PokemonTemp.pokeradar[3]
+    if grass[3] == 2
+      pbSEPlay("shiny", 60)
+      playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, event.x, event.y)
+      event.make_shiny
+    end
     event.behavior_roaming = :look_around
-    # event.behavior_noticed = :flee
-    event.direction = $game_player.direction
+    if event.pokemon.shiny?
+      event.behavior_noticed = :curious
+    else
+      event.behavior_noticed = :flee
+    end
+    event.turn_away_from_player
     playAnimation(Settings::POKERADAR_LIGHT_ANIMATION_RED_ID, event.x, event.y)
   else
+    echoln "failed to spawn"
+    pbPokeRadarCancel
     pbMessage(_INTL("The Pokéradar scan failed... Try again somewhere else"))
   end
+  update_pokeradar_overworld_ui
 end
+
+Events.onMapChange += proc { |_sender, e|
+  pbPokeRadarCancel
+}
+
+

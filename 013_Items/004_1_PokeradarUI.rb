@@ -34,6 +34,18 @@ class PokeRadar_UI
     displayRare()
   end
 
+  def set_text(text,x,y)
+    @sprites["text"]=BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
+    @sprites["text"].x=x
+    @sprites["text"].y=y
+    pbSetSystemFont(@sprites["text"].bitmap)
+    #@sprites["text"].bitmap.font.size=26
+    pbDrawShadowText(@sprites["text"].bitmap,x,y,-1,-1, text,pbColor(:DARK_TEXT_MAIN_COLOR),pbColor(:DARK_TEXT_SHADOW_COLOR))
+  end
+
+  def set_background_visible(value)
+    @sprites["background"].visible = value
+  end
   def dispose
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose if @viewport != nil

@@ -181,7 +181,8 @@ end
 
 def isRepelActive()
   return false if $game_switches[SWITCH_USED_AN_INCENSE]
-  return ($PokemonGlobal.repel > 0) || $PokemonTemp.pokeradar
+  classic_pokeradar = $PokemonTemp.pokeradar && ! $PokemonSystem.overworld_encounters
+  return ($PokemonGlobal.repel > 0) || classic_pokeradar
 end
 
 def pbOnStepTaken(eventTriggered)

@@ -58,11 +58,12 @@ class PokeNavAppScene
       b.viewport = @viewport
       @sprites["button#{i}"] = b
     end
-    createCursor
-    layoutButtons
+    unless @buttons.empty?
+      createCursor
+      layoutButtons
+    end
     pbUpdateSpriteHash(@sprites)
-
-    pbFadeInAndShow(@sprites) { pbUpdate }
+     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
   def pbUpdate
@@ -110,6 +111,12 @@ class PokeNavAppScene
     cursor.x = btn.x
     cursor.y = btn.y
     cursor.visible = btn.visible
+  end
+
+  def set_cursor_visible(value)
+    if @sprites["cursor"]
+      @sprites["cursor"].visible = value
+    end
   end
 
   def cursor_path
