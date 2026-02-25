@@ -393,14 +393,35 @@ class PokemonEncounters
     end
     list= @encounter_tables[enctype]
     if include_weather && $game_weather
-      current_weather = $game_weather.current_weather[$game_map.map_id][0]
-      weather_encounter_type = get_weather_encounter_type(enctype, current_weather)
-      weather_encounters = @encounter_tables[weather_encounter_type]
-      list += weather_encounters if weather_encounters
+      list += $PokemonEncounters.list_weather_encounters(enctype)
     end
     return list
   end
 
+  def list_weather_encounters(enctype)
+    list = []
+    current_weather = $game_weather.current_weather[$game_map.map_id][0]
+    weather_encounter_type = get_weather_encounter_type(enctype, current_weather)
+
+    echoln enctype
+    echoln current_weather
+    echoln weather_encounter_type
+
+    weather_encounters = @encounter_tables[weather_encounter_type]
+
+    echoln weather_encounters
+    list += weather_encounters if weather_encounters
+    return list
+  end
+
+  def list_weather_encounters_species(enctype)
+    species_list = []
+    weather_encounters= list_weather_encounters(enctype)
+    weather_encounters.each do |encounter|
+      species_list.push(encounter[1])
+    end
+    return species_list
+  end
 
 end
 

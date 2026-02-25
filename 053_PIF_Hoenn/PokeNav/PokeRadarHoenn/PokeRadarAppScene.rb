@@ -61,12 +61,15 @@ class PokeRadarAppScene < PokeNavAppScene
     showBattery
     showHeaderName
     showAreaName
+    showWeatherIcon
   end
 
   def showWildPokemonList
     @encounter_type = $PokemonEncounters.encounter_type
-    @unseenPokemon = listPokemonInCurrentRoute(@encounter_type, false, true,true)
-    @seenPokemon = listPokemonInCurrentRoute(@encounter_type, true, false,true)
+    @weatherEncounters = $PokemonEncounters.list_weather_encounters_species(@encounter_type)
+
+    @unseenPokemon = listPokemonInCurrentRoute(@encounter_type, false, true, true)
+    @seenPokemon = listPokemonInCurrentRoute(@encounter_type, true, false, true)
     buttons = []
     @seenPokemon.each do |pokemon_species|
       icon_path = pbCheckPokemonIconFiles(pokemon_species)
@@ -93,7 +96,7 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def showEmpty
-    Kernel.pbDisplayText(_INTL("No Pokémon found nearby."),Graphics.width/2,Graphics.height/2)
+    Kernel.pbDisplayText(_INTL("No Pokémon found nearby."), Graphics.width / 2, Graphics.height / 2)
   end
 
   def showCurrentScanningTarget
@@ -136,14 +139,24 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   #[rareness, species, minLevel, maxLevel]
-  def get_encounter(species)
-    for encounter in $PokemonEncounters.listPossibleEncounters(@encounter_type,true)
+  def get_encounter(species,include_weather=true)
+    for encounter in $PokemonEncounters.listPossibleEncounters(@encounter_type, include_weather)
       if encounter[1] == species
         return encounter
       end
     end
     return nil
   end
+
+  def get_weather_encounter(species)
+    for encounter in $PokemonEncounters.list_weather_encounters(@encounter_type)
+      if encounter[1] == species
+        return encounter
+      end
+    end
+    return nil
+  end
+
 
   def get_energy_for_scan(species)
     encounter = get_encounter(species)
@@ -154,24 +167,50 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def get_rarity_flavor_text(species)
-    encounter = get_encounter(species)
-    return unless encounter
-    if encounter[1] == species
-      rareness = encounter[0]
-      if rareness < 5
-        return _INTL("Very rare")
-      elsif rareness < 10
-        return _INTL("Rare")
-      elsif rareness < 25
-        return _INTL("Uncommon")
-      elsif rareness < 40
-        return _INTL("Common")
-      else
-        return _INTL("Very Common")
-      end
-    end
+    encounter = get_encounter(species,false)
+    weather_encounter = get_weather_encounter(species)
 
-    return ""
+    return unless encounter || weather_encounter
+    if (encounter && encounter[1] == species) || (weather_encounter && weather_encounter[1] == species)
+      base_rareness =0
+      base_rareness = encounter[0] if encounter
+      if @weatherEncounters.include?(species)
+        rareness = calculate_weather_encounter_rareness(weather_encounter,base_rareness)
+      else
+        rareness = base_rareness
+      end
+      if rareness < 5
+        text = _INTL("Very rare")
+      elsif rareness < 10
+        text = _INTL("Rare")
+      elsif rareness < 25
+        text = _INTL("Uncommon")
+      elsif rareness < 40
+        text = _INTL("Common")
+      else
+        text = _INTL("Very Common")
+      end
+      return text
+    end
+  end
+
+  def calculate_weather_encounter_rareness(encounter,base_rareness)
+    map_weather = $game_weather.current_weather[$game_map.map_id]
+    if map_weather
+      weather_intensity = map_weather[1]
+      weather_intensity = 0 if !weather_intensity
+      chance_of_weather_encounter = $PokemonEncounters.weather_encounter_chance(weather_intensity)
+      weather_rareness = encounter[0]
+
+      echoln encounter
+      echoln chance_of_weather_encounter
+      echoln weather_rareness
+      echoln base_rareness
+
+      echoln weather_rareness * (chance_of_weather_encounter.to_f / 100) + base_rareness
+      return weather_rareness * (chance_of_weather_encounter.to_f / 100) + base_rareness
+    end
+    return 0
   end
 
   def click(button_id)
@@ -328,12 +367,20 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def showAreaName
     map_name = Kernel.getMapName($game_map.map_id)
-    text = _INTL("{1}",map_name)
+    text = _INTL("{1}", map_name)
     encounter_type = get_encounter_type_name
     if encounter_type && !encounter_type.empty?
-      text += _INTL(" ({1})",encounter_type)
+      text += _INTL(" ({1})", encounter_type)
     end
     Kernel.pbDisplayText(text, Graphics.width / 2, 40)
+  end
+
+  def showWeatherIcon
+    icon_path = get_current_weather_icon
+    return unless icon_path
+    @sprites["weather"] = IconSprite.new(400, 48, @viewport)
+    @sprites["weather"].setBitmap(icon_path)
+    @sprites["weather"].z = 100000
   end
 
   def get_encounter_type_name
@@ -347,12 +394,10 @@ class PokeRadarAppScene < PokeNavAppScene
       return _INTL("Dry Grass")
     when :Land3
       return _INTL("Flowers")
-    when :LandMorning
-      return _INTL("Grass - Morning")
-    when :LandDay
-      return _INTL("Grass - Daytime")
-    when :LandNight
-      return _INTL("Grass - Nighttime")
+    when :LandMorning, :LandDay, :LandNight
+      return _INTL("Grass")
+    when :WaterMorning, :WaterDay, :WaterNight
+      return _INTL("Water")
     when :TallGrass
       return _INTL("Tall Grass")
     else
@@ -385,14 +430,15 @@ def update_pokeradar_overworld_ui
     current_chain = $PokemonTemp.pokeradar[2]
     return unless current_chain >= 1
     species = $PokemonTemp.pokeradar[0]
-    $PokemonTemp.pokeradar_ui.dispose if $PokemonTemp.pokeradar
+    $PokemonTemp.pokeradar_ui.dispose if $PokemonTemp.pokeradar_ui
     $PokemonTemp.pokeradar_ui = PokeRadar_UI.new([species], [], [])
-    $PokemonTemp.pokeradar_ui.set_text(_INTL("PokéRadar Chain: {1}",current_chain),72,12)
+    $PokemonTemp.pokeradar_ui.set_text(_INTL("PokéRadar Chain: {1}", current_chain), 72, 12)
   else
     $PokemonTemp.pokeradar_ui.dispose if $PokemonTemp.pokeradar_ui
   end
 
 end
+
 def spawn_pokeradar_pokemon(species, level)
   max_attempts = 10
   return unless species && level
@@ -401,8 +447,9 @@ def spawn_pokeradar_pokemon(species, level)
   pbWait(10)
   current_attempt = 0
   while current_attempt < max_attempts
+    echoln "attempt #{current_attempt}/#{max_attempts}"
     spawned_events = spawn_ow_pokemon(species, level, 1, 4)
-    break if spawned_events
+    break if spawned_events && spawned_events.length > 0
     current_attempt += 1
   end
   if spawned_events && spawned_events.length > 0
