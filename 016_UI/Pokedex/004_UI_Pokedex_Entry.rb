@@ -3,10 +3,6 @@
 #===============================================================================
 class PokemonPokedexInfo_Scene
   def pbStartScene(dexlist, index, region, pokemon = nil, fromSummary=false)
-
-    echoln caller
-
-
     @fromSummary = fromSummary
     @pokemon = pokemon
     @endscene = false

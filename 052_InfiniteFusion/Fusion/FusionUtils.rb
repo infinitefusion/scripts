@@ -133,12 +133,12 @@ def get_head_id_from_symbol(id)
   return split_id[0].to_i
 end
 
+#returns [BODY num, HEAD num]
 def splitHeadBody(id)
-  split_id = id.to_s.match(/(?<=H)\d+/)
-  if !split_id #non-fusion
-    return nil
+  if (m = id.to_s.match(/\AB(\d+)H(\d+)\z/))
+    return [m[1].to_i, m[2].to_i]
   end
-  return split_id
+  return nil
 end
 
 def obtainPokemonSpritePath(id, includeCustoms = true)

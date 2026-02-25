@@ -184,7 +184,6 @@ class PokemonPokedexInfo_Scene
     @sprites["nextSprite_blacklistAutogen"].visible = false
   end
 
-
   def setBlacklistIconDisabled(spritename)
     @sprites["#{spritename}_blacklistEnabled"].visible = false
     @sprites["#{spritename}_blacklistDisabled"].visible = true
@@ -209,7 +208,6 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite_blacklistAutogen"].visible = false
   end
 
-
   def update_blacklist_icons
     $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
     species_blacklist = $PokemonGlobal.sprites_blacklist[@species_id]
@@ -220,13 +218,13 @@ class PokemonPokedexInfo_Scene
     current_position = @selected_index
     next_position = @selected_index + 1 > @available.length - 1 ? 0 : @selected_index + 1
 
-    setIconStatus("previousSprite",previous_position,species_blacklist)
-    setIconStatus("selectedSprite",current_position,species_blacklist)
-    setIconStatus("nextSprite",next_position,species_blacklist)
+    setIconStatus("previousSprite", previous_position, species_blacklist)
+    setIconStatus("selectedSprite", current_position, species_blacklist)
+    setIconStatus("nextSprite", next_position, species_blacklist)
   end
 
-  def setIconStatus(iconName,position,species_blacklist)
-    sprite  = @available[position]
+  def setIconStatus(iconName, position, species_blacklist)
+    sprite = @available[position]
     if sprite.type == :AUTOGEN && @available.length == 1
       if @available.length > 1
         setBlacklistIconDisabled(iconName)
@@ -281,16 +279,67 @@ class PokemonPokedexInfo_Scene
     end
   end
 
+  SHARED_BODIES = {
+    :MINUN => :PLUSLE,
+    :PLUSLE => :MINUN,
+  }
+
+  SHARED_HEADS = {}
+
+  def list_shared_sprites(species_id)
+    pokedexUtils = PokedexUtils.new
+    shared_alts = []
+
+    body_num, head_num = splitHeadBody(species_id)
+    if body_num && head_num # fusion
+      body_species = GameData::Species.get(body_num)&.species
+      head_species = GameData::Species.get(head_num)&.species
+
+      if SHARED_BODIES[body_species]
+        shared_dex_num = GameData::Species.get(SHARED_BODIES[body_species]).id_number
+        fusion_species = getFusedPokemonIdFromDexNum(shared_dex_num, head_num)
+        fusion_number = GameData::Species.get(fusion_species).id_number
+        shared_body_alts = pokedexUtils.pbGetAvailableAlts(fusion_number, false)
+        shared_body_sprites = []
+        shared_body_alts.each do |alt|
+          shared_body_sprites << get_pif_sprite(alt,fusion_species)
+        end
+        shared_alts+= shared_body_sprites
+      end
+
+
+      if SHARED_HEADS[head_species]
+        shared_dex_num = GameData::Species.get(SHARED_HEADS[head_species]).id_number
+        fusion_species = getFusedPokemonIdFromDexNum(body_num, shared_dex_num)
+        fusion_number = GameData::Species.get(fusion_species).id_number
+        shared_head_alts = pokedexUtils.pbGetAvailableAlts(fusion_number, false)
+        shared_head_sprites = []
+        shared_head_alts.each do |alt|
+          shared_head_sprites << get_pif_sprite(alt,fusion_species)
+        end
+        shared_alts+= shared_head_sprites
+      end
+    end
+
+    return shared_alts
+  end
+
   def pbGetAvailableForms(species = nil)
+    pokedexUtils = PokedexUtils.new
+
     chosen_species = species != nil ? species : @species
-    dex_num = getDexNumberForSpecies(chosen_species)
+
+    species_data = GameData::Species.get(chosen_species)
+    dex_num = species_data.id_number
     includeAutogens = isFusion(dex_num)
-    available_alt_letters= PokedexUtils.new.pbGetAvailableAlts(chosen_species, includeAutogens)
+    available_alt_letters = pokedexUtils.pbGetAvailableAlts(dex_num, includeAutogens)
 
     available_sprites = []
     available_alt_letters.each do |alt|
       available_sprites << get_pif_sprite(alt)
     end
+
+    available_sprites += list_shared_sprites(species_data.species)
     return available_sprites
   end
 
@@ -311,8 +360,9 @@ class PokemonPokedexInfo_Scene
     @sprites["bgSelected_next"].visible = true if is_main_sprite(next_index) && @available.size > 1
   end
 
-  def get_pif_sprite(alt_letter)
-    dex_number = getDexNumberForSpecies(@species) #@species is a symbol when called from the summary screen and an int from the pokedex... Would be nice to refactor
+  def get_pif_sprite(alt_letter,species=nil)
+    species = @species unless species
+    dex_number = getDexNumberForSpecies(species) #@species is a symbol when called from the summary screen and an int from the pokedex... Would be nice to refactor
     if isFusion(dex_number)
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number, body_id)
@@ -436,10 +486,10 @@ class PokemonPokedexInfo_Scene
       Input.update
       pbUpdate
 
-      @sprites["leftarrow"].visible  = true
+      @sprites["leftarrow"].visible = true
       @sprites["rightarrow"].visible = true
-      @sprites["uparrow"].visible    = @forms_list.length > 0
-      @sprites["downarrow"].visible  = @forms_list.length > 0
+      @sprites["uparrow"].visible = @forms_list.length > 0
+      @sprites["downarrow"].visible = @forms_list.length > 0
 
       if Input.trigger?(Input::LEFT)
         pbPlayCursorSE
@@ -468,13 +518,13 @@ class PokemonPokedexInfo_Scene
 
       elsif Input.trigger?(Input::BACK)
         pbPlayCancelSE
-        @sprites["leftarrow"].visible  = false
+        @sprites["leftarrow"].visible = false
         @sprites["rightarrow"].visible = false
         break
 
       elsif Input.trigger?(Input::UP) && @selecting_blacklist
         pbPlayCancelSE
-        @sprites["leftarrow"].visible  = false
+        @sprites["leftarrow"].visible = false
         @sprites["rightarrow"].visible = false
         @selecting_blacklist = false
       end
@@ -482,11 +532,10 @@ class PokemonPokedexInfo_Scene
     @selecting_blacklist = false
     @selecting_sprites = false
     hide_blacklist_icons
-    @sprites["uparrow"].visible  = false
+    @sprites["uparrow"].visible = false
     @sprites["downarrow"].visible = false
     updateBlackListInstructionIcons
   end
-
 
   def is_main_sprite(index = nil)
     if !index
@@ -494,10 +543,9 @@ class PokemonPokedexInfo_Scene
     end
     if @pokemon && @pokemon.pif_sprite && $PokemonSystem.random_sprites
       selected_pif_sprite = @available[index]
-      echoln "ici?"
-      echoln selected_pif_sprite.alt_letter
-      echoln @pokemon.pif_sprite.alt_letter
-      return selected_pif_sprite.alt_letter == @pokemon.pif_sprite.alt_letter
+      same_alt = selected_pif_sprite.alt_letter == @pokemon.pif_sprite.alt_letter
+      same_species = selected_pif_sprite.species == @pokemon.pif_sprite.species
+      return same_alt && same_species
     else
       dex_number = getDexNumberForSpecies(@species)
       species_id = get_substitution_id(dex_number)
@@ -542,7 +590,6 @@ class PokemonPokedexInfo_Scene
 
     $PokemonGlobal.sprites_blacklist[@species_id] = species_blacklist
   end
-
 
   def select_species_sprite(brief = false)
     if @available.length > 1
