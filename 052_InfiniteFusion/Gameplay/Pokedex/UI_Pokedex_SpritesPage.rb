@@ -90,9 +90,9 @@ class PokemonPokedexInfo_Scene
     @sprites["previousSprite"].z = 9999999
     @sprites["nextSprite"].z = 9999999
 
-    @selected_pif_sprite = get_pif_sprite(@available[@selected_index])
-    @previous_pif_sprite = get_pif_sprite(@available[@selected_index - 1])
-    @next_pif_sprite = get_pif_sprite(@available[@selected_index + 1])
+    @selected_pif_sprite = @available[@selected_index]
+    @previous_pif_sprite = @available[@selected_index - 1]
+    @next_pif_sprite = @available[@selected_index + 1]
 
     @sprites["selectedSprite"].bitmap = load_pif_sprite(@selected_pif_sprite)
     if altsList.size >= 2
@@ -227,7 +227,7 @@ class PokemonPokedexInfo_Scene
 
   def setIconStatus(iconName,position,species_blacklist)
     sprite  = @available[position]
-    if sprite == "autogen" && @available.length == 1
+    if sprite.type == :AUTOGEN && @available.length == 1
       if @available.length > 1
         setBlacklistIconDisabled(iconName)
       else
@@ -285,7 +285,13 @@ class PokemonPokedexInfo_Scene
     chosen_species = species != nil ? species : @species
     dex_num = getDexNumberForSpecies(chosen_species)
     includeAutogens = isFusion(dex_num)
-    return PokedexUtils.new.pbGetAvailableAlts(chosen_species, includeAutogens)
+    available_alt_letters= PokedexUtils.new.pbGetAvailableAlts(chosen_species, includeAutogens)
+
+    available_sprites = []
+    available_alt_letters.each do |alt|
+      available_sprites << get_pif_sprite(alt)
+    end
+    return available_sprites
   end
 
   def hide_all_selected_windows
@@ -299,7 +305,7 @@ class PokemonPokedexInfo_Scene
     previous_index = @selected_index == 0 ? @available.size - 1 : @selected_index - 1
     next_index = @selected_index == @available.size - 1 ? 0 : @selected_index + 1
 
-    get_pif_sprite(@available[@selected_index])
+    @available[@selected_index]
     @sprites["bgSelected_previous"].visible = true if is_main_sprite(previous_index) && @available.size > 2
     @sprites["bgSelected_center"].visible = true if is_main_sprite(@selected_index)
     @sprites["bgSelected_next"].visible = true if is_main_sprite(next_index) && @available.size > 1
@@ -313,7 +319,7 @@ class PokemonPokedexInfo_Scene
 
       # Autogen sprite
       if alt_letter == "autogen"
-        pif_sprite = PIFSprite.new(:AUTOGEN, head_id, body_id)
+        pif_sprite = PIFSprite.new(:AUTOGEN, head_id, body_id, "autogen")
         # Imported custom sprite
       else
         # Spritesheet custom sprite
@@ -349,10 +355,10 @@ class PokemonPokedexInfo_Scene
     if previousIndex < 0
       previousIndex = @available.size - 1
     end
-    @selected_pif_sprite = get_pif_sprite(@available[@selected_index])
+    @selected_pif_sprite = @available[@selected_index]
 
-    @previous_pif_sprite = get_pif_sprite(@available[previousIndex])
-    @next_pif_sprite = get_pif_sprite(@available[nextIndex])
+    @previous_pif_sprite = @available[previousIndex]
+    @next_pif_sprite = @available[nextIndex]
 
     @sprites["previousSprite"].bitmap = load_pif_sprite(@previous_pif_sprite) if previousIndex != nextIndex
     @sprites["selectedSprite"].bitmap = load_pif_sprite(@selected_pif_sprite)
@@ -487,13 +493,16 @@ class PokemonPokedexInfo_Scene
       index = @selected_index
     end
     if @pokemon && @pokemon.pif_sprite && $PokemonSystem.random_sprites
-      selected_pif_sprite = get_pif_sprite(@available[index])
+      selected_pif_sprite = @available[index]
+      echoln "ici?"
+      echoln selected_pif_sprite.alt_letter
+      echoln @pokemon.pif_sprite.alt_letter
       return selected_pif_sprite.alt_letter == @pokemon.pif_sprite.alt_letter
     else
       dex_number = getDexNumberForSpecies(@species)
       species_id = get_substitution_id(dex_number)
       current_pif_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
-      selected_pif_sprite = get_pif_sprite(@available[index])
+      selected_pif_sprite = @available[index]
 
       if current_pif_sprite
         return current_pif_sprite.equals(selected_pif_sprite)
