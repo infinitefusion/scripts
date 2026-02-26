@@ -136,6 +136,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def getBehaviorSpecies(species_data)
+    echoln @species
     if isSpeciesFusion(@species)
       return species_data.get_head_species_symbol
     end
