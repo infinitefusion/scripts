@@ -280,8 +280,10 @@ class PokemonPokedexInfo_Scene
   end
 
   SHARED_BODIES = {
-    :MINUN => :PLUSLE,
-    :PLUSLE => :MINUN,
+    :SHELLOS_E => :SHELLOS_W,
+    :SHELLOS_W => :SHELLOS_E,
+    :GASTRODON_E => :GASTRODON_W,
+    :GASTRODON_W => :GASTRODON_E,
   }
 
   SHARED_HEADS = {}
@@ -302,11 +304,10 @@ class PokemonPokedexInfo_Scene
         shared_body_alts = pokedexUtils.pbGetAvailableAlts(fusion_number, false)
         shared_body_sprites = []
         shared_body_alts.each do |alt|
-          shared_body_sprites << get_pif_sprite(alt,fusion_species)
+          shared_body_sprites << get_pif_sprite(alt, fusion_species)
         end
-        shared_alts+= shared_body_sprites
+        shared_alts += shared_body_sprites
       end
-
 
       if SHARED_HEADS[head_species]
         shared_dex_num = GameData::Species.get(SHARED_HEADS[head_species]).id_number
@@ -315,9 +316,9 @@ class PokemonPokedexInfo_Scene
         shared_head_alts = pokedexUtils.pbGetAvailableAlts(fusion_number, false)
         shared_head_sprites = []
         shared_head_alts.each do |alt|
-          shared_head_sprites << get_pif_sprite(alt,fusion_species)
+          shared_head_sprites << get_pif_sprite(alt, fusion_species)
         end
-        shared_alts+= shared_head_sprites
+        shared_alts += shared_head_sprites
       end
     end
 
@@ -360,7 +361,7 @@ class PokemonPokedexInfo_Scene
     @sprites["bgSelected_next"].visible = true if is_main_sprite(next_index) && @available.size > 1
   end
 
-  def get_pif_sprite(alt_letter,species=nil)
+  def get_pif_sprite(alt_letter, species = nil)
     species = @species unless species
     dex_number = getDexNumberForSpecies(species) #@species is a symbol when called from the summary screen and an int from the pokedex... Would be nice to refactor
     if isFusion(dex_number)

@@ -10,7 +10,11 @@ def select_game_mode
   commands = []
   commands << cmd_mode_classic
   commands << cmd_mode_remix if Settings::KANTO
-  commands << cmd_mode_random
+  if Settings::KANTO
+    commands << cmd_mode_random
+  else
+    commands << cmd_mode_random if $Trainer.new_game_plus_unlocked
+  end
   commands << cmd_mode_legendary if $Trainer.new_game_plus_unlocked
   echoln $Trainer.new_game_plus_unlocked
   commands_choose_mode = []
