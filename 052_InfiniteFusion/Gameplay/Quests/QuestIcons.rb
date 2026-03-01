@@ -91,6 +91,7 @@ class Game_Event < Game_Character
   def validateEventIsCompatibleWithIcons(event)
     return false if event.is_a?(Game_Player)
     return false if event.erased
+    return false unless event.visible?
     page = pbGetActiveEventPage(event)
     return false unless page
     return false if page.graphic.character_name.empty?
