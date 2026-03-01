@@ -70,8 +70,6 @@ class BattledTrainer
   end
 
   def getLinkedTrainer()
-    echoln @linked_event
-
     trainer = getRebattledTrainer(@linked_event,$game_map.map_id)
     return trainer if trainer
     return nil
@@ -90,8 +88,6 @@ class BattledTrainer
     echoln "Friendship with #{@trainerName} increased by #{gain.round(2)} (total: #{@friendship.round(2)})"
 
     thresholds = FRIENDSHIP_LEVELS[@trainerType] || []
-    echoln thresholds
-
     while @friendship_level < thresholds.length && @friendship >= thresholds[@friendship_level]
       @friendship_level += 1
 
