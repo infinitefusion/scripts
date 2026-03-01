@@ -544,7 +544,7 @@ end
 def select_tv_show_quests(episode = 0)
   episode_1_quests = [:main_stolen_parts, :route_102_rematch, :petalburg_berry, :route104_rivalWeather, :petalburgwoods_spores]
   episode_2_quests = [:main_steven_letter, :route104_oricorio, :route104_oricorio_forms, :rustboro_whismur, :rustboro_shiny,]
-  episode_3_quests = [:main_devon_parts, :dewford_fishing, :route109_tanning, :route109_seahouse,]
+  episode_3_quests = [:main_devon_parts, :dewford_fishing, :route109_tanning, :route109_seahouse, :route109_beachball]
   episode_4_quests = [:magma_help_grunts, :aqua_help_grunts,]
   episode_5_quests = [:mauville_quests_1]
 
@@ -590,7 +590,8 @@ def get_show_dialog(quest_id)
     return _INTL("That whole subplot about Pacifidlog Cobalt trying to get a tan definitely dragged on a bit...")
   when :route109_seahouse
     return _INTL("Although that scene with Lilicove Viridian beating up all the bad guys in the beach house was really fun!")
-
+  when :route109_beachball
+    return _INTL("The chase sequence with the Kingler and Mauville Yellow when he was carrying that beach ball was so funny!")
     # Episode 4
   when :magma_help_grunts
     return _INTL("I never expected Littleroot Crimson to infiltrate the villains's lair like that!")

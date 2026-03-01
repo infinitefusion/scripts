@@ -159,10 +159,16 @@ class PokeBattle_Scene
     battlebase_name = @battle.backdropBase ? @battle.backdropBase.downcase : background_name
     message_name = background_name + "_message"
 
+    #To avoid duplicating files too much, some backgrounds have a common prefix separated by -
+    # Ex: city-rustboro
+    # Will use the full name (city-rustboro) for the background, but "city" for the bases
+    simplified_name = background_name.downcase.split("-")[0]
+
+
     battleBG =getBackdropSpriteFullPath(background_name, :BACKGROUND)
-    playerBase =getBackdropSpriteFullPath(battlebase_name, :PLAYERBASE)
-    enemyBase =getBackdropSpriteFullPath(battlebase_name, :ENEMYBASE)
-    messageBG =getBackdropSpriteFullPath(message_name, :MESSAGE)
+    playerBase =getBackdropSpriteFullPath(simplified_name, :PLAYERBASE)
+    enemyBase =getBackdropSpriteFullPath(simplified_name, :ENEMYBASE)
+    messageBG =getBackdropSpriteFullPath(simplified_name, :MESSAGE)
     if !pbResolveBitmap(messageBG)
       messageBG = "Graphics/Battlebacks/default_message"
     end
