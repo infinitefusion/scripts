@@ -119,7 +119,8 @@ DIRECTION_RIGHT = 6
 DIRECTION_DOWN = 2
 DIRECTION_UP = 8
 
-def kick_ball(eventId)
+def kick_ball(eventId, obstacleName = nil, targetDestination = nil, targetSwitch = nil)
+  target_radius = 2
   ball = $game_map.events[eventId]
   return if !ball
 
@@ -137,14 +138,21 @@ def kick_ball(eventId)
   current_dir = dir
   total_bounces = 0
   max_bounces = 3
-
+  will_pop = false
   while remaining_distance > 0 && total_bounces < max_bounces
     travel = 0
     while travel < remaining_distance
       test_x = ball.x + dx * (travel + 1)
       test_y = ball.y + dy * (travel + 1)
-      break if !$game_map.passable?(test_x - dx, test_y - dy, current_dir) ||
-        !$game_map.passable?(test_x, test_y, current_dir)
+      event_at_test = $game_map.get_event_at_position(test_x, test_y)
+      if event_at_test && event_at_test.name == obstacleName && event_at_test.active?
+        ball.through = true
+        will_pop = true
+      else
+        break if !$game_map.passable?(test_x - dx, test_y - dy, current_dir) ||
+          !$game_map.passable?(test_x, test_y, current_dir)
+      end
+
       travel += 1
     end
 
@@ -175,6 +183,20 @@ def kick_ball(eventId)
     else
       remaining_distance = 0
     end
+
+    # After it lands
+    if will_pop
+      pbWait(24)
+      pbSetSelfSwitch(eventId, "A", true)
+    elsif targetDestination && targetSwitch
+      pbWait(24)
+      dist = (ball.x - targetDestination[0]).abs + (ball.y - targetDestination[1]).abs
+      if dist <= target_radius
+        $game_switches[targetSwitch] = true
+        $scene.reset_map(false)
+      end
+    end
+
   end
 end
 
@@ -281,7 +303,7 @@ def getOffBoat
 end
 
 def check_beach_seashell
-  pbMessage(_INTL("{1} flipped the seashell over...",$Trainer.name))
+  pbMessage(_INTL("{1} flipped the seashell over...", $Trainer.name))
   pearl_chance = 2
   heartscale_chance = 5
   pokemon_chance = 40
@@ -304,8 +326,8 @@ def check_beach_seashell
   end
 end
 
-#shortcut for events
-def spawn_near(species,level,group_size)
+# shortcut for events
+def spawn_near(species, level, group_size)
   spawn_random_overworld_pokemon_group([species, level], 1, group_size)
 end
 
@@ -528,7 +550,7 @@ def select_tv_show_quests(episode = 0)
 
   completed_quests = get_completed_quests.map(&:id)
   episode_quests = [nil, episode_1_quests, episode_2_quests, episode_3_quests, episode_4_quests, episode_5_quests][episode]
-  #episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
+  # episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
   return episode_quests.sample(2)
 end
 
@@ -577,7 +599,7 @@ def get_show_dialog(quest_id)
 
     # Episode 5
   when :mauville_quests_1
-    return "" #directly in the event's dialog
+    return "" # directly in the event's dialog
   end
 end
 
