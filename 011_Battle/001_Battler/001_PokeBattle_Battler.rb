@@ -798,4 +798,6 @@ class PokeBattle_Battler
     @battle.scene.pbAnimation(moveID, self,self)
     @battle.scene.pbRefreshOne(@index)
   end
+
+
 end

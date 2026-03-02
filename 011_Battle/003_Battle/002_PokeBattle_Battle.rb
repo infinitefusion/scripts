@@ -87,6 +87,7 @@ class PokeBattle_Battle
   #statistics
   attr_accessor   :balls_thrown
   attr_accessor   :damage_received
+  attr_accessor   :favored_moves
 
 
   include PokeBattle_BattleCommon
@@ -173,6 +174,7 @@ class PokeBattle_Battle
       @struggle = PokeBattle_Struggle.new(self, nil)
     end
 
+    @favored_moves = []   #Some trainers can be set to prioritize certain moves (ex: move tutor battles)
     @balls_thrown =0
     @damage_received = 0
   end
@@ -212,6 +214,8 @@ class PokeBattle_Battle
       else                      default  # Single, 1v1 (default)
       end
   end
+
+
 
   def singleBattle?
     return pbSideSize(0)==1 && pbSideSize(1)==1
