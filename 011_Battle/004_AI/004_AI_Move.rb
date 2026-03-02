@@ -158,6 +158,9 @@ class PokeBattle_AI
     skill = PBTrainerAI.minimumSkill if skill < PBTrainerAI.minimumSkill
     score = 100
     score = pbGetMoveScoreFunctionCode(score, move, user, target, skill)
+
+    echoln "Move #{move.id} : score"
+
     # A score of 0 here means it absolutely should not be used
     return 0 if score <= 0
     if skill >= PBTrainerAI.mediumSkill

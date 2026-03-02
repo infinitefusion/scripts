@@ -159,7 +159,6 @@ class PokeBattle_AI
         if skill>=PBTrainerAI.mediumSkill
           score -= 90 if move.statusMove?
         end
-        echoln "confusion: #{score}"
       end
       #---------------------------------------------------------------------------
     when "016"
@@ -839,7 +838,7 @@ class PokeBattle_AI
         score += 30 if target.stages[:SPECIAL_ATTACK]<0
       end
       #---------------------------------------------------------------------------
-    when "041"
+    when "041"  #Swagger
       if !target.pbCanConfuse?(user,false)
         score -= 90
       else
@@ -1483,25 +1482,19 @@ class PokeBattle_AI
 
       if skill >= PBTrainerAI.highSkill
         # opponent already has hindering ability: don't swap
-        echoln "target ability: #{target.ability.id}"
-        echoln "self ability: #{user.ability.id}"
-        echoln "hindering abilities: #{hindering_abilities.inspect}"
         if hindering_abilities.include?(target.ability.id) && user.opposes?(target)
           score -= 90
           # user has hindering ability: immediately swap
         elsif hindering_abilities.include?(user.ability.id) && user.opposes?(target)
-          echoln "should go through here"
           score += 90
         end
 
         #Special cases
-        #TODO: generalize this
-        if user.ability.id == :NORMALIZE && user.pbHasType?(:GHOST)
+        if user.ability != user.original_ability  #Don't re-use the move
+          score -= 90
+        elsif user.ability.id == :NORMALIZE && user.pbHasType?(:GHOST)          #TODO: generalize this
           score += 90
         end
-
-        echoln "Skill swap score : #{score}"
-
       end
 
       #---------------------------------------------------------------------------
@@ -3068,7 +3061,12 @@ class PokeBattle_AI
       score += 30 if target.effects[PBEffects::Minimize]
       #---------------------------------------------------------------------------
     end
-    score+= 40 if @battle.favored_moves.include?(move)
+
+    if @battle.favored_moves.include?(move.id)
+      score+= 90
+      score += 50 if score <= 100
+    end
     return score
   end
 end
+

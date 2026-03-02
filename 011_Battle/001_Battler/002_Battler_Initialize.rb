@@ -83,6 +83,7 @@ class PokeBattle_Battler
     @type2        = pkmn.type2
     @ability_id   = pkmn.ability_id
     @ability2_id   = pkmn.ability2_id
+    @original_ability = @ability_id
     @item_id      = pkmn.item_id
     @gender       = pkmn.gender
     @attack       = pkmn.attack

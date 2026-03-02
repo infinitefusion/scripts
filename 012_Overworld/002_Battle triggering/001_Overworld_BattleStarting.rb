@@ -24,7 +24,6 @@ class PokemonTemp
 
   def recordBattleRule(rule, var = nil)
     rules = self.battleRules
-    echoln rule
     case rule.to_s.downcase
     when "single", "1v1", "1v2", "2v1", "1v3", "3v1",
       "double", "2v2", "2v3", "3v2", "triple", "3v3"
@@ -270,7 +269,6 @@ def pbWildBattleCore(*args)
   foeParty = []
   sp = nil
   for arg in args
-    echoln arg
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
       Events.onWildPokemonCreate.trigger(nil, arg)
@@ -353,7 +351,6 @@ def pbWildBattleSpecific(pokemon, outcomeVar = 1, canRun = true, canLose = false
   setBattleRule("cannotRun") if !canRun
   setBattleRule("canLose") if canLose
   # Perform the battle
-  echoln pokemon
   decision = pbWildBattleCore(pokemon)
   # Used by the Poké Radar to update/break the chain
   # Events.onWildBattleEnd.trigger(nil,species,level,decision)
@@ -727,17 +724,26 @@ end
 #   return updated_trainer, player_won
 # end
 
-def pbMoveTutorBattle(trainerID, trainerName, move)
+def pbMoveTutorBattle(trainerID, trainerName, moves, scaleLevel=true)
+  if moves && moves.is_a?(Array)
+    favored_moves = moves
+  else
+    favored_moves = [moves]
+  end
 
-  $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH] = true
-  $game_switches[SWITCH_DONT_RANDOMIZE] = true
+  if scaleLevel
+    $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH] = true
+    $game_switches[SWITCH_DONT_RANDOMIZE] = true
+  end
+
   pbSet(Settings::OVERRIDE_BATTLE_LEVEL_VALUE_VAR, $Trainer.highest_level_pokemon_in_party)
 
-  $PokemonTemp.recordBattleRule("favoredMoves", [move]) if move
-  pbTrainerBattle(trainerID, trainerName)
+  $PokemonTemp.recordBattleRule("favoredMoves", favored_moves) if favored_moves
+  res = pbTrainerBattle(trainerID, trainerName)
 
   $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH] = false
   $game_switches[SWITCH_DONT_RANDOMIZE] = false
+  return res
 end
 
 #===============================================================================
