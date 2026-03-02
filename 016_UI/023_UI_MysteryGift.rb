@@ -6,7 +6,7 @@
 # You should change it to your file's url once you upload it.
 #===============================================================================
 module MysteryGift
-  URL = "https://pastebin.com/raw/w6BqqUsm"
+  URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/mystery_gift.txt"
 end
 
 #===============================================================================
@@ -228,8 +228,10 @@ def pbRefreshMGCommands(master, online)
     elsif gift[1] > 0
       itemname = GameData::Item.get(gift[2]).name + sprintf(" x%d", gift[1])
     end
-    ontext = ["[  ]", "[X]"][(online.include?(gift[0])) ? 1 : 0]
-    commands.push("#{ontext} #{gift[0]}: #{gift[3]} (#{itemname})")
+    # ontext = ["[  ]", "[X]"][(online.include?(gift[0])) ? 1 : 0]
+    # commands.push("#{ontext} #{gift[0]}: #{gift[3]} (#{itemname})")
+
+    commands.push("#{gift[0]}: #{gift[3]} (#{itemname})")
   end
   commands.push(_INTL("Export selected to file"))
   commands.push(_INTL("Cancel"))

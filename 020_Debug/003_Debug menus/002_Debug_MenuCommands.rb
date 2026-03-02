@@ -995,22 +995,22 @@ DebugMenuCommands.register("exportanims", {
 #===============================================================================
 # Other options
 #===============================================================================
-# DebugMenuCommands.register("othermenu", {
-#   "parent"      => "main",
-#   "name"        => _INTL("Other options..."),
-#   "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
-#   "always_show" => true
-# })
-#
-# DebugMenuCommands.register("mysterygift", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Manage Mystery Gifts"),
-#   "description" => _INTL("Edit and enable/disable Mystery Gifts."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbManageMysteryGifts
-#   }
-# })
+DebugMenuCommands.register("othermenu", {
+  "parent"      => "main",
+  "name"        => _INTL("Other options..."),
+  "description" => _INTL("Mystery Gifts, translations, compile data, etc."),
+  "always_show" => true
+})
+
+DebugMenuCommands.register("mysterygift", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Manage Mystery Gifts"),
+  "description" => _INTL("Edit and enable/disable Mystery Gifts."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbManageMysteryGifts
+  }
+})
 #
 # DebugMenuCommands.register("extracttext", {
 #   "parent"      => "othermenu",
