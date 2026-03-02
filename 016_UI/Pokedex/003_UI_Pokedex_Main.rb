@@ -7,7 +7,13 @@ class Window_Pokedex < Window_DrawableCommand
     super(x,y,width,height,viewport)
     @selarrow     = AnimatedBitmap.new("Graphics/Pictures/Pokedex/cursor_list")
     @pokeballOwn  = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_own")
-    @pokeballSeen = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_seen")
+
+    icon_seen_path = "Graphics/Pictures/Pokedex/icon_seen"
+    if $Trainer&.pokenav&.darkMode
+      icon_seen_path_dark = icon_seen_path + "_dark"
+      icon_seen_path = icon_seen_path_dark if pbResolveBitmap(icon_seen_path_dark)
+    end
+    @pokeballSeen = AnimatedBitmap.new(icon_seen_path)
     @allow_arrows_jump=true
     self.baseColor   = Color.new(88,88,80)
     self.shadowColor = Color.new(168,184,184)

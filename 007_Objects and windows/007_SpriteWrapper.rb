@@ -407,6 +407,10 @@ class IconSprite < SpriteWrapper
 
   # Sets the icon's filename.
   def setBitmap(file, hue = 0)
+    if $Trainer.pokenav.darkMode
+      darkmode_file = file + "_dark"
+      file = darkmode_file if pbResolveBitmap(darkmode_file)
+    end
     oldrc = self.src_rect
     clearBitmaps()
     @name = file
