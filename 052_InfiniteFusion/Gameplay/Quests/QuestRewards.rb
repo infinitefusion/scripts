@@ -15,8 +15,9 @@ QUEST_REWARDS = Settings::KANTO ? [
   # Hoenn quest rewards
   QuestReward.new(2, :AMULETCOIN, 1, _INTL("This doubles the money you get in Pokémon battles. Maybe it'll help finance the show!")),
   QuestReward.new(5, :LANTERN, 1, _INTL("The note that came with it said that it allows you to illuminate caves without using the move Flash.")),
-  QuestReward.new(10, :ITEMFINDER, 1, _INTL("There's a not with it. If there's a hidden item anywhere near you, that little thing will react to tell you.")),
-  QuestReward.new(15, :MACHETE, 3, _INTL("The note that came with it said that it should allow you to cut through small trees without a Pokémon!")),
+  QuestReward.new(10, :ITEMFINDER, 1, _INTL("There's a note with it. If there's a hidden item anywhere near you, that little thing will react to tell you.")),
+  QuestReward.new(15, :MACHETE, 1, _INTL("The note that came with it said that it should allow you to cut through small trees without a Pokémon!")),
+  QuestReward.new(20, :SLEEPINGBAG, 1, _INTL("There's a note with it. This deluxe sleeping bag will allow you to sleep anywhere you want. It's so comfortable that you can sleep in it for hours!")),
   QuestReward.new(25, :LINKINGCORD, 1, _INTL("Apparently, this strange cable triggers the evolution of Pokémon that typically evolve via trade. I know you'll put it to good use!")),
   QuestReward.new(50, :MISTSTONE, 1, _INTL("This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!"), true),
   QuestReward.new(60, :GSBALL, 1, _INTL("This mysterious ball is rumored to be the key to call upon the protector of Ilex Forest.  It's a precious relic.")),

@@ -43,6 +43,7 @@ def count_nb_quests(stage,var_nb_total=1,var_nb_remaining=2, var_nb_relative_to_
 end
 
 def enough_quest_for_reward?(stage)
+  return true
   nb_quests_for_next_reward = QUEST_REWARDS[stage].nb_quests
   return get_completed_quests(false).length >= nb_quests_for_next_reward
 end

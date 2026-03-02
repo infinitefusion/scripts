@@ -542,16 +542,21 @@ def this_event()
 end
 
 def select_tv_show_quests(episode = 0)
-  episode_1_quests = [:main_stolen_parts, :route_102_rematch, :petalburg_berry, :route104_rivalWeather, :petalburgwoods_spores]
-  episode_2_quests = [:main_steven_letter, :route104_oricorio, :route104_oricorio_forms, :rustboro_whismur, :rustboro_shiny,]
-  episode_3_quests = [:main_devon_parts, :dewford_fishing, :route109_tanning, :route109_seahouse, :route109_beachball]
-  episode_4_quests = [:magma_help_grunts, :aqua_help_grunts,]
-  episode_5_quests = [:mauville_quests_1]
+  all_episodes = [
+    [],
+    [:main_stolen_parts, :route_102_rematch, :petalburg_berry, :route104_rivalWeather, :petalburgwoods_spores],
+    [:main_steven_letter, :route104_oricorio, :route104_oricorio_forms, :rustboro_whismur, :rustboro_shiny],
+    [:main_devon_parts, :dewford_fishing, :route109_tanning, :route109_seahouse, :route109_beachball],
+    [:magma_help_grunts, :aqua_help_grunts],
+    [:mauville_quests_1]
+  ]
 
-  completed_quests = get_completed_quests.map(&:id)
-  episode_quests = [nil, episode_1_quests, episode_2_quests, episode_3_quests, episode_4_quests, episode_5_quests][episode]
-  # episode_quests = episode_quests.select { |q| completed_quests.include?(q.to_s) }
-  return episode_quests.sample(2)
+  episode_quests = all_episodes[episode] || []
+  completed_ids = get_completed_quests.map { |q| q.id.to_s }
+  filtered = episode_quests.select { |q| completed_ids.include?(q.to_s) }
+  filtered = episode_quests # For debugging with all quests
+
+  filtered.sample(2)
 end
 
 def get_show_dialog(quest_id)
@@ -563,7 +568,7 @@ def get_show_dialog(quest_id)
   when :route_102_rematch
     return _INTL("There was a part where Littleroot Crimson had a rematch with Fallarbor Bordeaux and he finally evolved his Combusken.")
   when :petalburg_berry
-    return _INTL("There was an entire subplot about Rustboro Ivory entering a berry-growing contest that he ended up winning with a super-mutant berry.")
+    return _INTL("There was an entire subplot about Rustboro Ivory entering a berry-growing contest that she ended up winning with a super-mutant berry.")
   when :route104_rivalWeather
     return _INTL("There was a part where Lilicove Viridian waited until the wind picked up to catch a Pidgeot that had been terrorizing the town.")
   when :petalburgwoods_spores
@@ -571,7 +576,7 @@ def get_show_dialog(quest_id)
 
     # Episode 2
   when :main_steven_letter
-    return _INTL("Littleroot Crimson seeked out the help of the grandmaster that hiding at the end of the dark cave.")
+    return _INTL("Littleroot Crimson seeked out the help of the grandmaster that was hiding at the end of the dark cave.")
   when :route104_oricorio
     return _INTL("Rustboro Ivory befriended that lonely Oricorio in the flowers field.")
   when :route104_oricorio_forms
@@ -591,7 +596,7 @@ def get_show_dialog(quest_id)
   when :route109_seahouse
     return _INTL("Although that scene with Lilicove Viridian beating up all the bad guys in the beach house was really fun!")
   when :route109_beachball
-    return _INTL("The chase sequence with the Kingler and Mauville Yellow when he was carrying that beach ball was so funny!")
+    return _INTL("The chase sequence with the Kingler when Mauville Yellow was carrying that beach ball was really funny though!")
     # Episode 4
   when :magma_help_grunts
     return _INTL("I never expected Littleroot Crimson to infiltrate the villains's lair like that!")
