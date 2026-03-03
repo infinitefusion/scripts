@@ -201,6 +201,10 @@ class Window_PokemonMart < Window_DrawableCommand
     @selarrow = AnimatedBitmap.new("Graphics/Pictures/martSel")
     @baseColor = Color.new(88, 88, 80)
     @shadowColor = Color.new(168, 184, 184)
+
+    if $Trainer&.pokenav&.darkMode
+      @baseColor, @shadowColor = @shadowColor, @baseColor
+    end
     self.windowskin = nil
   end
 
@@ -222,8 +226,8 @@ class Window_PokemonMart < Window_DrawableCommand
       item = @stock[index]
       if item.is_a?(Symbol) && @adapter.getAdapter().is_a?(OutfitsMartAdapter)
         itemname = @adapter.getSpecialItemCaption(item)
-        baseColor = @adapter.getSpecialItemBaseColor(item) ? @adapter.getSpecialItemBaseColor(item) : baseColor
-        shadowColor = @adapter.getSpecialItemShadowColor(item) ? @adapter.getSpecialItemShadowColor(item) : shadowColor
+        baseColor = @adapter.getSpecialItemBaseColor(item) || self.baseColor
+        shadowColor = @adapter.getSpecialItemShadowColor(item) || self.shadowColor
         textpos.push([itemname, rect.x, ypos - 4, false, baseColor, shadowColor])
       else
         itemname = @adapter.getDisplayName(item)

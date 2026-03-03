@@ -1131,8 +1131,17 @@ def drawTextEx(bitmap,x,y,width,numlines,text,baseColor,shadowColor)
 end
 
 def drawFormattedTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil,lineheight=32)
+  default_base = baseColor.nil?
+  default_shadow = shadowColor.nil?
   base=!baseColor ? Color.new(12*8,12*8,12*8) : baseColor.clone
   shadow=!shadowColor ? Color.new(26*8,26*8,25*8) : shadowColor.clone
+
+  if default_base && default_shadow
+    if $Trainer&.pokenav&.darkMode
+      base, shadow = shadow, base
+    end
+  end
+
   text="<c2="+colorToRgb16(base)+colorToRgb16(shadow)+">"+text
   chars=getFormattedText(bitmap,x,y,width,-1,text,lineheight)
   drawFormattedChars(bitmap,chars)

@@ -66,11 +66,20 @@ class Window_PokemonBag < Window_DrawableCommand
     rect = Rect.new(rect.x+16,rect.y+16,rect.width-16,rect.height)
     thispocket = @bag.pockets[@pocket]
     if index==self.itemCount-1
-      textpos.push([_INTL("CLOSE BAG"),rect.x,rect.y-2,false,self.baseColor,self.shadowColor])
+      closeBase   = @baseColor
+      closeShadow = @shadowColor
+      if $Trainer&.pokenav&.darkMode
+        closeBase, closeShadow = closeShadow, closeBase
+      end
+      textpos.push([_INTL("CLOSE BAG"),rect.x,rect.y-2,false,closeBase,closeShadow])
     else
       item = (@filterlist) ? thispocket[@filterlist[@pocket][index]][0] : thispocket[index][0]
-      baseColor   = self.baseColor
-      shadowColor = self.shadowColor
+      baseColor   = @baseColor
+      shadowColor = @shadowColor
+
+      if $Trainer&.pokenav&.darkMode
+        baseColor, shadowColor = shadowColor, baseColor
+      end
       if @sorting && index==self.index
         baseColor   = Color.new(224,0,0)
         shadowColor = Color.new(248,144,144)
@@ -280,8 +289,13 @@ class PokemonBag_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     # Draw the pocket name
+    pnBase   = POCKETNAMEBASECOLOR
+    pnShadow = POCKETNAMESHADOWCOLOR
+    if $Trainer&.pokenav&.darkMode
+      pnBase, pnShadow = pnShadow, pnBase
+    end
     pbDrawTextPositions(overlay,[
-       [PokemonBag.pocketNames[@bag.lastpocket],94,176,2,POCKETNAMEBASECOLOR,POCKETNAMESHADOWCOLOR]
+      [PokemonBag.pocketNames[@bag.lastpocket],94,176,2,pnBase,pnShadow]
     ])
     # Draw slider arrows
     showslider = false

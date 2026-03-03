@@ -900,6 +900,11 @@ class PokemonStorageScene
     shadow = Color.new(168, 184, 184)
     nonbase = Color.new(208, 208, 208)
     nonshadow = Color.new(224, 224, 224)
+
+    if $Trainer&.pokenav&.darkMode
+      base, shadow = shadow, base
+    end
+
     pokename = pokemon.name
     textstrings = [
       [pokename, 10, 2, false, base, shadow]

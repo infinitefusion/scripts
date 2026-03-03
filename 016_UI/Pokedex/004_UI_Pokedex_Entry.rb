@@ -250,6 +250,10 @@ class PokemonPokedexInfo_Scene
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
 
+    if $Trainer&.pokenav&.darkMode
+      base, shadow = shadow, base
+    end
+
     imagepos = []
     if @brief
       imagepos.push(["Graphics/Pictures/Pokedex/overlay_info", 0, 0])
@@ -333,6 +337,10 @@ class PokemonPokedexInfo_Scene
     shadow = Color.new(168, 184, 184)
     shadowCustom = Color.new(160, 200, 150)
     shadowAI = Color.new(168, 184, 220)
+
+    if $Trainer&.pokenav&.darkMode
+      baseColor, shadow = shadow, baseColor
+    end
 
     if species_data.is_fusion
       customEntry = getCustomEntryText(species_data)
@@ -491,6 +499,11 @@ class PokemonPokedexInfo_Scene
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
+
+    if $Trainer&.pokenav&.darkMode
+      base, shadow = shadow, base
+    end
+
     @sprites["areahighlight"].bitmap.clear
     # Fill the array "points" with all squares of the region map in which the
     # species can be found
@@ -567,6 +580,11 @@ class PokemonPokedexInfo_Scene
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
+
+    if $Trainer&.pokenav&.darkMode
+      base, shadow = shadow, base
+    end
+
     # Write species and form name
     formname = ""
     for i in @available
