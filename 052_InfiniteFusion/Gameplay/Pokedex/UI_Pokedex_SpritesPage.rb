@@ -337,7 +337,7 @@ class PokemonPokedexInfo_Scene
 
     available_sprites = []
     available_alt_letters.each do |alt|
-      available_sprites << get_pif_sprite(alt)
+      available_sprites << get_pif_sprite(alt,chosen_species)
     end
 
     available_sprites += list_shared_sprites(species_data.species)

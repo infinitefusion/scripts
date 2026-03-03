@@ -95,7 +95,7 @@ def build_magma_song_pt2(event_id1, event_id2)
     when cmd_goals
       segment1 = _INTL("\\ts[4]\\C[2]Land is the cradle of all\\n\\wt[5]We must ex\\wt[2]pand \\wt[2]its \\wt[2]sprawl!")
     when cmd_style
-      segment1 = _INTL("\\ts[4]\\C[2]Our uniforms are sleek\\n\\wt[5]Our style is tru\\wt[2]ly \\wt[6]unique!")
+      segment1 = _INTL("\\ts[4]\\C[2]Our uniforms are sleek\\n\\wt[5]Our style is \\wt[6]unique!")
     when cmd_strength
       segment1 = _INTL("\\ts[4]\\C[2]No one can match our power\\n\\wt[5]We grow stronger \\wt[2]by \\wt[2]the \\wt[2]hour!")
     end
@@ -110,7 +110,7 @@ def build_magma_song_pt2(event_id1, event_id2)
   pbCallBubUp(2, event_id2) # Right
   pbMessage(_INTL("That's pretty good!"))
   pbCallBubUp(2, event_id2) # Right
-  pbMessage(_INTL("I think that the next line should talk about our inspirations."))
+  pbMessage(_INTL("The next line should talk about something that inspires us."))
   cmd_leader = _INTL("Maxie")
   cmd_land = _INTL("The land")
   cmd_pokemon = _INTL("Pokémon")

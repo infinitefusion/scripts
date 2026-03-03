@@ -103,10 +103,6 @@ end
 #===============================================================================
 class PokemonSummary_Scene
   NB_PAGES = 5
-
-
-
-
     def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -208,6 +204,10 @@ class PokemonSummary_Scene
     @sprites["movesel"].visible = false
     @sprites["movesel"].visible = true
     @sprites["movesel"].index = 0
+
+    @text_color_base = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
+    @text_color_shadow = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
+
     new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     drawSelectedMove(new_move, @pokemon.moves[0])
     pbFadeInAndShow(@sprites)
@@ -878,12 +878,11 @@ class PokemonSummary_Scene
   end
 
   def drawSelectedMove(move_to_learn, selected_move)
-    # Draw all of page four, except selected move's details
     drawPageFourSelecting(move_to_learn)
-    # Set various values
     overlay = @sprites["overlay"].bitmap
     base = @text_color_base
     shadow = @text_color_shadow
+
     @sprites["pokemon"].visible = false if @sprites["pokemon"]
     @sprites["pokeicon"].pokemon = @pokemon
     @sprites["pokeicon"].visible = true
