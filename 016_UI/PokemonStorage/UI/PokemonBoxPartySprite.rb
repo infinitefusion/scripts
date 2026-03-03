@@ -8,7 +8,10 @@ class PokemonBoxPartySprite < SpriteWrapper
   def initialize(party, viewport = nil, filter= nil)
     super(viewport)
     @party = party
-    @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
+    dark_mode = $Trainer&.pokenav&.darkMode
+    party_tab_path ="Graphics/Pictures/Storage/overlay_party"
+    party_tab_path += "_dark" if dark_mode
+    @boxbitmap = AnimatedBitmap.new(party_tab_path)
     @pokemonsprites = []
     @filterProc = filter
 
