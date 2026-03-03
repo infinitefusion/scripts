@@ -335,17 +335,20 @@ class PokemonPokedexInfo_Scene
   def drawEntryText(overlay, species_data, reloading = false)
     baseColor = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
+    baseCustom = Color.new(88, 88, 80)
     shadowCustom = Color.new(160, 200, 150)
     shadowAI = Color.new(168, 184, 220)
 
     if $Trainer&.pokenav&.darkMode
       baseColor, shadow = shadow, baseColor
+      baseCustom, shadowCustom = shadowCustom, baseCustom
     end
 
     if species_data.is_fusion
       customEntry = getCustomEntryText(species_data)
       if customEntry
         entryText = customEntry
+        baseColor = baseCustom
         shadowColor = shadowCustom
       else
         if $PokemonSystem.use_generated_dex_entries && species_data.is_a?(GameData::FusedSpecies)
