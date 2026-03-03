@@ -76,6 +76,7 @@ def pbReceiveCosmeticsMoney(amount)
   end
 
   oldMoney    = $Trainer.cosmetics_money
+  oldMoney = 0 unless oldMoney
   targetMoney = oldMoney + amount
   $Trainer.cosmetics_money = targetMoney
   step = [amount / 15, 1].max
