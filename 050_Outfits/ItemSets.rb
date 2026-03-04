@@ -24,6 +24,7 @@ CLOTHES_STEEL_F    = "steelworkerF"
 CLOTHES_FIRE     = "fire"
 
 CLOTHES_WATER    = "waterdress"
+CLOTHES_WATER_NEUTRAL    = "waterneutral"
 
 CLOTHES_GRASS    = "grassexpert"
 
@@ -107,7 +108,7 @@ def isWearingFireOutfit()
 end
 
 def isWearingWaterOutfit()
-  return (isWearingClothes(CLOTHES_WATER))
+  return (isWearingClothes(CLOTHES_WATER) || isWearingClothes(CLOTHES_WATER_NEUTRAL))
 end
 
 def isWearingGrassOutfit()
