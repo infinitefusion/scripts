@@ -109,8 +109,8 @@ class PokemonSummary_Scene
 
   def pbStartScene(party, partyindex, inbattle = false)
 
-    @text_color_base = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
-    @text_color_shadow = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
+    @text_color_base = isDarkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
+    @text_color_shadow = isDarkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
 
 
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -205,8 +205,8 @@ class PokemonSummary_Scene
     @sprites["movesel"].visible = true
     @sprites["movesel"].index = 0
 
-    @text_color_base = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
-    @text_color_shadow = $Trainer&.pokenav&.darkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
+    @text_color_base = isDarkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
+    @text_color_shadow = isDarkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
 
     new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     drawSelectedMove(new_move, @pokemon.moves[0])

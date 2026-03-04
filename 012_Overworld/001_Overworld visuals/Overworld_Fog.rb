@@ -1,4 +1,5 @@
 Events.onSpritesetCreate += proc { |_sender, e|
+  next unless $game_weather
   spriteset = e[0]
   new_map_id = spriteset.map.map_id
   old_map_id = $Trainer.last_visited_map

@@ -216,7 +216,7 @@ class Questlog
 
   def create_background
     @sprites["bg0"] = IconSprite.new(0, 0, @viewport)
-    bg_path = $Trainer.pokenav.darkMode ?
+    bg_path = isDarkMode ?
                 "Graphics/Pictures/Pokegear/bg_dark" :
                 "Graphics/Pictures/Pokegear/bg"
     @sprites["bg0"].setBitmap(bg_path)

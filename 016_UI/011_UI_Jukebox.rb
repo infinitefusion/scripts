@@ -13,7 +13,7 @@ class PokemonJukebox_Scene
     @sprites = {}
 
     @sprites["background"] = IconSprite.new(0,0,@viewport)
-    if $Trainer.pokenav.darkMode
+    if isDarkMode
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
@@ -23,7 +23,7 @@ class PokemonJukebox_Scene
     @sprites["header"] = Window_UnformattedTextPokemon.newWithSize(
        _INTL("Jukebox"),2,-18,128,64,@viewport)
 
-    if $Trainer.pokenav.darkMode
+    if isDarkMode
       @sprites["header"].baseColor   = pbColor(:LIGHT_TEXT_MAIN_COLOR)
       @sprites["header"].shadowColor = pbColor(:LIGHT_TEXT_SHADOW_COLOR)
     else

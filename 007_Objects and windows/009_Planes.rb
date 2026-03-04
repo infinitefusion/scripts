@@ -225,7 +225,7 @@ class AnimatedPlane < LargePlane
   def setBitmap(file, hue=0)
     clearBitmaps()
     return if file==nil
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       darkmode_file = file + "_dark"
       file = darkmode_file if pbResolveBitmap(darkmode_file)
     end

@@ -137,7 +137,7 @@ class PokeNavAppScene
 
   def createBackground
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
-    if $Trainer.pokenav.darkMode
+    if isDarkMode
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")

@@ -327,3 +327,8 @@ def pbColor(color)
   return MessageConfig::DARK_TEXT_SHADOW_COLOR if color == :DARK_TEXT_SHADOW_COLOR
   return Color.new(255, 255, 255)
 end
+
+
+def isDarkMode
+  return $Trainer&.pokenav&.darkMode
+end

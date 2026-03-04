@@ -168,7 +168,7 @@ class PokemonPokegear_Scene
   end
 
   def reloadBackground
-    if $Trainer.pokenav.darkMode
+    if isDarkMode
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_dark")
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")

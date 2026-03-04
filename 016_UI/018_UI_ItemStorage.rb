@@ -66,7 +66,7 @@ class ItemStorage_Scene
      @title_base_color      = Color.new(248,248,248)
      @title_shadow_color    = Color.new(0,0,0)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       @item_list_base_color, @item_list_shadow_color = @item_list_shadow_color, @item_list_base_color
     end
     

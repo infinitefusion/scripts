@@ -1137,7 +1137,7 @@ def drawFormattedTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil,line
   shadow=!shadowColor ? Color.new(26*8,26*8,25*8) : shadowColor.clone
 
   if default_base && default_shadow
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
   end

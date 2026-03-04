@@ -250,7 +250,7 @@ class PokemonPokedexInfo_Scene
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 
@@ -339,7 +339,7 @@ class PokemonPokedexInfo_Scene
     shadowCustom = Color.new(160, 200, 150)
     shadowAI = Color.new(168, 184, 220)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       baseColor, shadow = shadow, baseColor
       baseCustom, shadowCustom = shadowCustom, baseCustom
     end
@@ -503,7 +503,7 @@ class PokemonPokedexInfo_Scene
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 
@@ -584,7 +584,7 @@ class PokemonPokedexInfo_Scene
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 

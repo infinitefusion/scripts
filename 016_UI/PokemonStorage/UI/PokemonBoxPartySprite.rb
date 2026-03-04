@@ -8,7 +8,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   def initialize(party, viewport = nil, filter= nil)
     super(viewport)
     @party = party
-    dark_mode = $Trainer&.pokenav&.darkMode
+    dark_mode = isDarkMode
     party_tab_path ="Graphics/Pictures/Storage/overlay_party"
     party_tab_path += "_dark" if dark_mode
     @boxbitmap = AnimatedBitmap.new(party_tab_path)

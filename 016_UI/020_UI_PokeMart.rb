@@ -202,7 +202,7 @@ class Window_PokemonMart < Window_DrawableCommand
     @baseColor = Color.new(88, 88, 80)
     @shadowColor = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       @baseColor, @shadowColor = @shadowColor, @baseColor
     end
     self.windowskin = nil

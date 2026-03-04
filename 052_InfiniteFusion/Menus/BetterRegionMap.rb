@@ -91,7 +91,7 @@ class BetterRegionMap
     if wallmap
       @sprites["background"].bmp("Graphics/Pictures/map/bg_wall")
     else
-      if $Trainer.pokenav&.darkMode
+      if isDarkMode
         @sprites["background"].bmp("Graphics/Pictures/Pokegear/bg_dark")
       else
         @sprites["background"].bmp("Graphics/Pictures/Pokegear/bg")

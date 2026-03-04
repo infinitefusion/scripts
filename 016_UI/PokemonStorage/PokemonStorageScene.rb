@@ -901,7 +901,7 @@ class PokemonStorageScene
     nonbase = Color.new(208, 208, 208)
     nonshadow = Color.new(224, 224, 224)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 

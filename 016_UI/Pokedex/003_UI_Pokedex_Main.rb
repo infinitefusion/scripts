@@ -9,7 +9,7 @@ class Window_Pokedex < Window_DrawableCommand
     @pokeballOwn = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_own")
 
     icon_seen_path = "Graphics/Pictures/Pokedex/icon_seen"
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       icon_seen_path_dark = icon_seen_path + "_dark"
       icon_seen_path = icon_seen_path_dark if pbResolveBitmap(icon_seen_path_dark)
     end
@@ -18,7 +18,7 @@ class Window_Pokedex < Window_DrawableCommand
     self.baseColor = Color.new(88, 88, 80)
     self.shadowColor = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       self.baseColor, self.shadowColor = self.shadowColor, self.baseColor
     end
 
@@ -425,7 +425,7 @@ class PokemonPokedex_Scene
     base = Color.new(88, 88, 80)
     shadow = Color.new(168, 184, 184)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 
@@ -492,7 +492,7 @@ class PokemonPokedex_Scene
     base = Color.new(248, 248, 248)
     shadow = Color.new(72, 72, 72)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 
@@ -569,7 +569,7 @@ class PokemonPokedex_Scene
     base = Color.new(248, 248, 248)
     shadow = Color.new(72, 72, 72)
 
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       base, shadow = shadow, base
     end
 

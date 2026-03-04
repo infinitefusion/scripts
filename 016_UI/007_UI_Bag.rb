@@ -68,7 +68,7 @@ class Window_PokemonBag < Window_DrawableCommand
     if index==self.itemCount-1
       closeBase   = @baseColor
       closeShadow = @shadowColor
-      if $Trainer&.pokenav&.darkMode
+      if isDarkMode
         closeBase, closeShadow = closeShadow, closeBase
       end
       textpos.push([_INTL("CLOSE BAG"),rect.x,rect.y-2,false,closeBase,closeShadow])
@@ -77,7 +77,7 @@ class Window_PokemonBag < Window_DrawableCommand
       baseColor   = @baseColor
       shadowColor = @shadowColor
 
-      if $Trainer&.pokenav&.darkMode
+      if isDarkMode
         baseColor, shadowColor = shadowColor, baseColor
       end
       if @sorting && index==self.index
@@ -291,7 +291,7 @@ class PokemonBag_Scene
     # Draw the pocket name
     pnBase   = POCKETNAMEBASECOLOR
     pnShadow = POCKETNAMESHADOWCOLOR
-    if $Trainer&.pokenav&.darkMode
+    if isDarkMode
       pnBase, pnShadow = pnShadow, pnBase
     end
     pbDrawTextPositions(overlay,[
