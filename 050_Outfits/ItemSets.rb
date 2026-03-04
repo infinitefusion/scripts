@@ -25,11 +25,12 @@ CLOTHES_FIRE     = "fire"
 
 CLOTHES_WATER    = "waterdress"
 
-CLOTHES_GRASS    = "temp"
+CLOTHES_GRASS    = "grassexpert"
 
 CLOTHES_ELECTRIC = "urbanelectric"
 
-CLOTHES_PSYCHIC  = "temp"
+CLOTHES_PSYCHIC_M  = "psyshamanm"
+CLOTHES_PSYCHIC  = "psyshamanm"
 
 CLOTHES_ICE      = "iceoutfit"
 
@@ -114,7 +115,7 @@ def isWearingGrassOutfit()
 end
 
 def isWearingPsychicOutfit()
-  return (isWearingClothes(CLOTHES_PSYCHIC))
+  return ((isWearingClothes(CLOTHES_PSYCHIC_M) || isWearingClothes(CLOTHES_PSYCHIC_F)))
 end
 
 def isWearingIceOutfit()

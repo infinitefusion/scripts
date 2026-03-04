@@ -70,6 +70,9 @@ HAT_LUCHA = "hawluchamask"
 HAT_EEVEE_EARS = "eeveeears"
 HAT_PARASHROOM = "parashroom"
 HAT_AERODACTYL = "aerodactylSkull"
+HAT_TYRUNT = "tyruntmask"
+
+
 HAT_DUSKULL_MASK = "duskullmask"
 HAT_SLEEPMASK = "sleepmask"
 HAT_DITTO_MASK = "creepydittomask"
@@ -145,8 +148,12 @@ HAT_GYM_REWARD_14 = "prycemask"
 HAT_GYM_REWARD_15 = "mortyHeadband"
 HAT_GYM_REWARD_16 = "magnemitepin"
 
-HAT_TEAM_MAGMA = "magmaRSE"
-HAT_TEAM_AQUA = "aquaRSE"
+
+HAT_TEAM_MAGMA = "magmaORAS"
+HAT_TEAM_AQUA = "aquaORAS"
+
+HAT_TEAM_MAGMA_RSE = "magmaRSE"
+HAT_TEAM_AQUA_RSE = "aquaRSE"
 
 HAT_RED = "red"
 HAT_LEAF = "leaf"
