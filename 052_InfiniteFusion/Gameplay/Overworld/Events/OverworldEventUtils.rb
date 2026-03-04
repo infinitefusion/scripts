@@ -554,7 +554,7 @@ def select_tv_show_quests(episode = 0)
   episode_quests = all_episodes[episode] || []
   completed_ids = get_completed_quests.map { |q| q.id.to_s }
   filtered = episode_quests.select { |q| completed_ids.include?(q.to_s) }
-  filtered = episode_quests # For debugging with all quests
+  #filtered = episode_quests # For debugging with all quests
 
   filtered.sample(2)
 end
