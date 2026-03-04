@@ -1015,10 +1015,11 @@ class PokemonPartyScreen
     @scene.pbAnnotate(nil)
   end
 
-  def pbPokemonMultipleEntryScreenEx(ruleset,ableProc=nil)
+  #indexesVar: (Optional) saves the selected indexes in a variable
+  def pbPokemonMultipleEntryScreenEx(ruleset,ableProc=nil,indexesVar=nil)
     annot = []
     statuses = []
-    ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("BANNED")]
+    ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("CANNOT ENTER")]
     positions = [_INTL("FIRST"), _INTL("SECOND"), _INTL("THIRD"), _INTL("FOURTH"),
                  _INTL("FIFTH"), _INTL("SIXTH"), _INTL("SEVENTH"), _INTL("EIGHTH"),
                  _INTL("NINTH"), _INTL("TENTH"), _INTL("ELEVENTH"), _INTL("TWELFTH")]
@@ -1042,6 +1043,7 @@ class PokemonPartyScreen
       annot[i] = ordinals[statuses[i]]
     end
     @scene.pbStartScene(@party, _INTL("Choose Pokémon and confirm."), annot, true)
+    selected_indexes = []
     loop do
       realorder = []
       for i in 0...@party.length
@@ -1070,6 +1072,7 @@ class PokemonPartyScreen
         for i in realorder;
           ret.push(@party[i]);
         end
+        selected_indexes = realorder.dup
         error = []
         break if ruleset.isValid?(ret, error)
         pbDisplay(error[0])
@@ -1107,6 +1110,7 @@ class PokemonPartyScreen
       end
     end
     @scene.pbEndScene
+    pbSet(indexesVar, selected_indexes) if indexesVar && ret
     return ret
   end
 

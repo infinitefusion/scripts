@@ -22,6 +22,10 @@ class Game_Event < Game_Character
       @width = $~[1].to_i
       @height = $~[2].to_i
     end
+    if @event.name[/bush_depth\((\d+)\)/i]
+      @forced_bush_depth = $~[1].to_i
+    end
+
     @erased       = false
     @starting     = false
     @need_refresh = false

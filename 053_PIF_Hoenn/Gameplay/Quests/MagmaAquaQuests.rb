@@ -1,14 +1,11 @@
-
-
 ################
 #### AQUA     ##
 ################
 
-
 def build_aqua_song(event_id1, event_id2)
   chorus = _INTL("Oh! \\wt[10]Hey!\\wt[10\\wt[10] Aqua!\\wt[10] We're Team Aqua!")
   add_aqua_song_segment(chorus)
-  segment1 = build_aqua_song_pt1(event_id1, event_id2,chorus)
+  segment1 = build_aqua_song_pt1(event_id1, event_id2, chorus)
   build_aqua_song_pt2(event_id1, event_id2)
   add_aqua_song_segment(chorus)
   add_aqua_song_segment(segment1)
@@ -16,7 +13,7 @@ def build_aqua_song(event_id1, event_id2)
 
 end
 
-def build_aqua_song_pt1(event_id1, event_id2,chorus)
+def build_aqua_song_pt1(event_id1, event_id2, chorus)
   pbCallBubDown(2, event_id1) # Left
   pbMessage(_INTL("Let's see, this is what we have so far."))
   pbCallBubDown(2, event_id1) # Left
@@ -113,7 +110,6 @@ def build_aqua_song_pt2(event_id1, event_id2)
   end
   add_aqua_song_segment(segment1)
 
-
   pbCallBubUp(2, event_id2) # Right
   pbMessage(_INTL("Yeah, this rules!"))
   pbCallBubUp(2, event_id2) # Right
@@ -163,7 +159,6 @@ def build_aqua_song_pt3(event_id1, event_id2)
   add_aqua_song_segment(line)
 end
 
-
 def sing_aqua_song
   pbMEPlay("aqua_theme_song")
   lyrics = pbGet(VAR_AQUA_SONG)
@@ -183,8 +178,6 @@ def add_aqua_song_segment(text)
   pbSet(VAR_AQUA_SONG, current_song)
 end
 
-
-
 ################
 #### MAGMA     ##
 ################
@@ -192,7 +185,7 @@ end
 def build_magma_song(event_id1, event_id2)
   chorus = _INTL("Ma\\wt[10]gma!\\n\\wt[5]Team Ma\\wt[10]gma!")
   add_magma_song_segment(chorus)
-  segment1 = build_magma_song_pt1(event_id1, event_id2,chorus)
+  segment1 = build_magma_song_pt1(event_id1, event_id2, chorus)
   build_magma_song_pt2(event_id1, event_id2)
   add_magma_song_segment(chorus)
   add_magma_song_segment(segment1)
@@ -200,7 +193,7 @@ def build_magma_song(event_id1, event_id2)
 
 end
 
-def build_magma_song_pt1(event_id1, event_id2,chorus)
+def build_magma_song_pt1(event_id1, event_id2, chorus)
   pbCallBubDown(2, event_id1) # Left
   pbMessage(_INTL("Let's see, this is what we have so far."))
   pbCallBubDown(2, event_id1) # Left
@@ -297,7 +290,6 @@ def build_magma_song_pt2(event_id1, event_id2)
   end
   add_magma_song_segment(segment1)
 
-
   pbCallBubUp(2, event_id2) # Right
   pbMessage(_INTL("That's pretty good!"))
   pbCallBubUp(2, event_id2) # Right
@@ -347,10 +339,6 @@ def build_magma_song_pt3(event_id1, event_id2)
   add_magma_song_segment(line)
 end
 
-
-
-
-
 def sing_magma_song
   pbMEPlay("magma_theme_song")
   lyrics = pbGet(VAR_MAGMA_SONG)
@@ -368,4 +356,26 @@ def add_magma_song_segment(text)
   current_song = [] unless current_song.is_a?(Array)
   current_song << text
   pbSet(VAR_MAGMA_SONG, current_song)
+end
+
+################################
+def aquaCarvanhaQuestValidPokemon?(pokemon)
+  valid_species = isPartPokemon(pokemon, :ZUBAT) || isPartPokemon(pokemon, :GEODUDE)
+  is_water_type = pokemon.hasType?(:WATER)
+  echoln "#{pokemon.species}: valid species: #{valid_species}, waterType: #{is_water_type}"
+  return valid_species && is_water_type
+end
+
+# Check that there's 2 ZUBAT and 1 GEODUDE in party
+def aquaCarvanhaPostValidation()
+  echoln pbGet(5)
+  nb_zubat = 0
+  nb_geodude = 0
+  target_nb_zubat = 2
+  target_nb_geodude = 1
+  $Trainer.party.each do |pokemon|
+    nb_zubat += 1 if isPartPokemon(pokemon, :ZUBAT)
+    nb_geodude += 1 if isPartPokemon(pokemon, :GEODUDE)
+  end
+  return nb_zubat == target_nb_zubat && nb_geodude == target_nb_geodude
 end

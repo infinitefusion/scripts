@@ -133,17 +133,14 @@ def promptCaughtPokemonAction(pokemon)
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
                         [_INTL("Add to your party"), _INTL("Store to PC"),], 2)
-    echoln ("command " + command.to_s)
     case command
     when 0 # SWAP
       if swapCaughtPokemon(pokemon)
-        echoln pickedOption
         pickedOption = true
       end
     else
       # STORE
       pbStorePokemon(pokemon)
-      echoln pickedOption
       pickedOption = true
     end
   end
@@ -155,7 +152,6 @@ def promptKeepOrRelease(pokemon)
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
                         [_INTL("Release a party member"), _INTL("Release this #{pokemon.name}"),], 2)
-    echoln ("command " + command.to_s)
     case command
     when 0 # SWAP
       if swapReleaseCaughtPokemon(pokemon)

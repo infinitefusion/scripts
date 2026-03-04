@@ -127,7 +127,6 @@ begin
   elsif is_champion(npcTrainer)
     ret = pbStringToAudioFile(Settings::CHAMPION_VICTORY_MUSIC)
   elsif is_evil_team(npcTrainer)
-    echoln "is_evil_team"
     ret = pbStringToAudioFile(Settings::GRUNT_VICTORY_MUSIC)
   else
     ret = pbStringToAudioFile(Settings::TRAINER_VICTORY_MUSIC)
@@ -164,9 +163,7 @@ def is_gym_leader(trainer)
 end
 
 def is_evil_team(trainer)
-  echoln trainer.trainer_type
   return EVIL_TEAM_TYPES.include?(trainer.trainer_type)
-
 end
 
 def is_champion(trainer)

@@ -384,6 +384,9 @@ def has_species_or_fusion?(species, form = -1)
 end
 
 
-def getPokemonSpecies(dex_number)
-
+def delete_party_pokemon_multi(indexes=[])
+  indexes.sort.reverse_each do |i|
+    echoln "Deleting #{$Trainer.party[i].name} (index #{i})"
+    $Trainer.remove_pokemon_at_index(i)
+  end
 end

@@ -90,8 +90,8 @@ module PokemonSelection
     return true
   end
 
-
-  def self.choose(min=1, max=6, canCancel=false, acceptFainted=false, ableproc=nil)
+  #indexedVar Optionally store the indexes of the chosen pokemon in that variable
+  def self.choose(min=1, max=6, canCancel=false, acceptFainted=false, ableproc=nil, indexesVar=nil)
     if $PokemonGlobal.pokemonSelectionOriginalParty
       PokemonSelection.restore
       echoln "Can't choose a new party until restore the old one"
@@ -99,7 +99,7 @@ module PokemonSelection
     validPartyChosen=false
     pbBattleChallenge.set("pokemonSelectionRules",7,self.rules(min,max))
     loop do
-      pbEntryScreen(ableproc)
+      pbEntryScreen(ableproc,indexesVar)
       validPartyChosen=(pbBattleChallenge.getParty!=nil)
       break if(canCancel || validPartyChosen)
       Kernel.pbMessage(_INTL("Choose a Pokémon."))
