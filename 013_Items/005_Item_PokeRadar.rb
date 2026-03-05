@@ -282,7 +282,7 @@ end
 # Event handlers
 ################################################################################
 EncounterModifier.register(proc { |encounter|
-  next if $PokemonSystem.overworld_encounters
+  next encounter if $PokemonSystem.overworld_encounters
   if GameData::EncounterType.get($PokemonTemp.encounterType).type != :land ||
     $PokemonGlobal.partner # $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel

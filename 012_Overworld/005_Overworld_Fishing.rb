@@ -44,23 +44,20 @@ end
 
 def getFishingItems
   if Settings::KANTO
-    return [:PEARL,
+    return [
             :OLDBOOT,
             :OLDBOOT,
             :OLDBOOT,
             :OLDBOOT,
             :WATERGEM,
-            :PEARL,
             :WATERGEM
     ]
   elsif  Settings::HOENN
-    return [:PEARL,
+    return [
             :SEAWEED,
             :SEAWEED,
             :SEAWEED,
-            :OLDBOOT,
             :WATERGEM,
-            :PEARL,
     ]
   end
   return []
