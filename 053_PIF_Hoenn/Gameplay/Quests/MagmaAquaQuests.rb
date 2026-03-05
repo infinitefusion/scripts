@@ -8,7 +8,7 @@ def build_aqua_song(event_id1, event_id2)
   segment1 = build_aqua_song_pt1(event_id1, event_id2, chorus)
   build_aqua_song_pt2(event_id1, event_id2)
   add_aqua_song_segment(chorus)
-  add_aqua_song_segment(segment1)
+  #add_aqua_song_segment(segment1)
   build_aqua_song_pt3(event_id1, event_id2)
 
 end
@@ -161,10 +161,12 @@ end
 
 def sing_aqua_song
   pbMEPlay("aqua_theme_song")
+  pbWait(160) #Wait for intro
   lyrics = pbGet(VAR_AQUA_SONG)
+  lyrics = [] unless lyrics.is_a?(Array)
   for line in lyrics
     pbMEPlay("aqua_theme_song")
-    line = "\\ts[4]\\C[1]#{line}\\wtnp[20]"
+    line = "\\ts[2]\\C[1]#{line}\\wtnp[12]"
     pbCallBub(3)
     pbMessage(line)
   end
@@ -188,7 +190,7 @@ def build_magma_song(event_id1, event_id2)
   segment1 = build_magma_song_pt1(event_id1, event_id2, chorus)
   build_magma_song_pt2(event_id1, event_id2)
   add_magma_song_segment(chorus)
-  add_magma_song_segment(segment1)
+  #add_magma_song_segment(segment1)
   build_magma_song_pt3(event_id1, event_id2)
 
 end
@@ -342,9 +344,10 @@ end
 def sing_magma_song
   pbMEPlay("magma_theme_song")
   lyrics = pbGet(VAR_MAGMA_SONG)
+  lyrics = [] unless lyrics.is_a?(Array)
   for line in lyrics
     pbMEPlay("magma_theme_song")
-    line = "\\ts[4]\\C[2]#{line}\\wtnp[20]"
+    line = "\\ts[3]\\C[2]#{line}\\wtnp[20]"
     pbCallBub(3)
     pbMessage(line)
   end
