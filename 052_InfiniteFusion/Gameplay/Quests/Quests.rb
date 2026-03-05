@@ -216,7 +216,7 @@ define_quest("route109_beachball",:FIELD_QUEST,_INTL("Find a New Beach Ball!"), 
 define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
 define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel in a way that it's no longer weak to the Water type."),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_M")
 define_quest("magma_graffiti",:MAGMA_QUEST,_INTL("Painting the Town Red"), _INTL("Team Aqua painted their logo on various walls in Slateport City. Cover them up with the Team Magma logo instead!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_F")
-define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Help compose lyrics to the official Team Magma theme song!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_M")
+define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Help compose lyrics to the official Team Magma theme song!"),_INTL("Magma Camp"),"√")
 
 #Team Aqua - Route 108
 define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")
@@ -232,3 +232,6 @@ define_quest("mauville_quests_4",:FIELD_QUEST,_INTL("Associate Producer! - Episo
 define_quest("mauville_quests_5",:FIELD_QUEST,_INTL("Associate Producer! - Episode 5"), _INTL("You've been hired as an associate producer on a TV show! Complete 20 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
 define_quest("mauville_quests_6",:FIELD_QUEST,_INTL("Associate Producer! - Episode 6"), _INTL("You've been hired as an associate producer on a TV show! Complete 25 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
 define_quest("mauville_quests_7",:FIELD_QUEST,_INTL("Associate Producer! - Episode 7"), _INTL("You've been hired as an associate producer on a TV show! Complete 30 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
+
+define_quest("mauville_magma",:MAGMA_QUEST,_INTL("The Element of Surprise!"), _INTL("Catch a Tynamo in the waters near New Mauville to catch Team Aqua by surprise."),_INTL("Mauville City"),"NPC_Hoenn_Magma_Grunt_M")
+define_quest("mauville_aqua",:AQUA_QUEST,_INTL("The Element of Surprise!"), _INTL("Catch a Tynamo in the waters near New Mauville to catch Team Magma by surprise."),_INTL("Mauville City"),"NPC_Hoenn_Aqua_Grunt_M")

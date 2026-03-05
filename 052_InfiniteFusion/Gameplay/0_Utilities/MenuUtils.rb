@@ -5,9 +5,12 @@ end
 def pbSpendMoney(amount)
   pbReceiveMoney(0- amount)
 end
-def pbReceiveMoney(amount)
+def pbReceiveMoney(amount,showMessage=true)
   msgwindow = pbCreateMessageWindow(nil)
   goldwindow = pbDisplayGoldWindow(msgwindow)
+  if showMessage
+    pbMessage(_INTL("{1} received ${2}!",$Trainer.name, amount.to_s_formatted))
+  end
   #show current money
   15.times do
     Graphics.update

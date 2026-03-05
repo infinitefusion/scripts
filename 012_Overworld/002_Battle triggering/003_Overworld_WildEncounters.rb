@@ -287,7 +287,6 @@ class PokemonEncounters
     if map_is_altering_cave?
       return select_altering_cave_encounter
     end
-
     enc_list = @encounter_tables[enc_type]
     return nil if !enc_list || enc_list.length == 0
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.
@@ -330,6 +329,7 @@ class PokemonEncounters
       encounter = enc
       break
     end
+
     # Get the chosen species and level
     level = rand(encounter[2]..encounter[3])
     # Some abilities alter the level of the wild Pokémon
@@ -402,14 +402,7 @@ class PokemonEncounters
     list = []
     current_weather = $game_weather.current_weather[$game_map.map_id][0]
     weather_encounter_type = get_weather_encounter_type(enctype, current_weather)
-
-    echoln enctype
-    echoln current_weather
-    echoln weather_encounter_type
-
     weather_encounters = @encounter_tables[weather_encounter_type]
-
-    echoln weather_encounters
     list += weather_encounters if weather_encounters
     return list
   end

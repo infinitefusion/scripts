@@ -83,6 +83,10 @@ def getArceusPlateType(heldItem)
   end
 end
 
+def hasFishingRod()
+  return hasItem?(:OLDROD) || hasItem?(:GOODROD) || hasItem?(:SUPERROD)
+end
+
 
 def list_all_item_names()
   names = []
