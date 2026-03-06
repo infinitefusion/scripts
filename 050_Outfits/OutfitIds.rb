@@ -149,11 +149,11 @@ HAT_GYM_REWARD_15 = "mortyHeadband"
 HAT_GYM_REWARD_16 = "magnemitepin"
 
 
-HAT_TEAM_MAGMA = "magmaORAS"
-HAT_TEAM_AQUA = "aquaORAS"
+HAT_TEAM_MAGMA = "magmaRSE"
+HAT_TEAM_AQUA = "aquaRSE"
 
-HAT_TEAM_MAGMA_RSE = "magmaRSE"
-HAT_TEAM_AQUA_RSE = "aquaRSE"
+HAT_TEAM_MAGMA_ALT = "magmaORAS"
+HAT_TEAM_AQUA_ALT = "aquaORAS"
 
 HAT_RED = "red"
 HAT_LEAF = "leaf"
