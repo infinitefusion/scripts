@@ -12,14 +12,17 @@ TIME_FOR_RANDOM_EVENTS = 60#3600 #1 hour
 ## Extend pbTrainerBattle to call postTrainerBattleAction at the end of every trainer battle
 alias original_pbTrainerBattle pbTrainerBattle
 
+
 def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     doubleBattle=false, trainerPartyID=0,
-                    *args)
-
+                    canLose=false, outcomeVar=1,
+                    name_override = nil, trainer_type_overide = nil,
+                    event_id = nil, map_id = nil)
   trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
   displayPreBattleText(trainer_data)
-  result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID, *args)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID) if Settings::GAME_ID == :IF_HOENN
+  result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID,
+                                    canLose, outcomeVar,name_override,trainer_type_overide,event_id,map_id)
+  postTrainerBattleActions(trainerID, trainerName,trainerPartyID,event_id) if Settings::GAME_ID == :IF_HOENN
   return result
 end
 
@@ -99,9 +102,10 @@ end
 
 
 
-def postTrainerBattleActions(trainerID, trainerName,trainerVersion,event_id=nil,linked_event=nil)
+def postTrainerBattleActions(trainerID, trainerName,trainerVersion,event_id=nil,linked_event=nil, map_id = nil)
   event_id = @event_id unless event_id
-  trainer = registerBattledTrainer(event_id,$game_map.map_id,trainerID,trainerName,trainerVersion,linked_event)
+  map_id = $game_map.map_id unless map_id
+  trainer = registerBattledTrainer(event_id,map_id,trainerID,trainerName,trainerVersion,linked_event)
   makeRebattledTrainerTeamGainExp(trainer)
 end
 

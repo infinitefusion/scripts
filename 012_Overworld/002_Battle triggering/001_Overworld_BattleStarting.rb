@@ -756,7 +756,8 @@ end
 # deals with that case and can cause a double trainer battle instead.
 def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
                     doubleBattle = false, trainerPartyID = 0, canLose = false, outcomeVar = 1,
-                    name_override = nil, trainer_type_overide = nil)
+                    name_override = nil, trainer_type_overide = nil,
+                    event_id = nil, map_id = nil)
 
   # level override applies to every pokemon
 
