@@ -144,26 +144,25 @@ def select_altering_cave_encounter
   return [species, level]
 end
 
-
-def build_electricity_gym_map(variable=VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
+def build_electricity_gym_map(variable = VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
   events = {}
   $game_map.events.each do |id, event|
     if event.name =~ /ELEC\((\d+),(\d+)\)/
       x = $1.to_i
       y = $2.to_i
-      coordinates = [x,y]
+      coordinates = [x, y]
       events[coordinates] = id
     end
   end
-  pbSet(variable,events)
+  pbSet(variable, events)
 end
 
 # coordinates:
 # [1,2]
 # status :ver, :hor, :off
 # color: :red, :blue, nil
-def gym_electricity(coordinates, status, color=nil)
-  hue =0
+def gym_electricity(coordinates, status, color = nil)
+  hue = 0
   hue = 60 if color == :blue
   hue = 180 if color == :red
 
@@ -173,21 +172,21 @@ def gym_electricity(coordinates, status, color=nil)
   event_id = events_map[coordinates]
 
   if event_id
-    event= $game_map.events[event_id]
+    event = $game_map.events[event_id]
     return unless event
     if status == :ver
       event.width, event.height = 1, 5
       event.character_hue = hue
-      pbSetSelfSwitch(event_id,"B",false)
-      pbSetSelfSwitch(event_id,"A",true)
+      pbSetSelfSwitch(event_id, "B", false)
+      pbSetSelfSwitch(event_id, "A", true)
     elsif status == :hor
       event.width, event.height = 5, 1
       event.character_hue = hue
-      pbSetSelfSwitch(event_id,"B",false)
-      pbSetSelfSwitch(event_id,"A",false)
+      pbSetSelfSwitch(event_id, "B", false)
+      pbSetSelfSwitch(event_id, "A", false)
     elsif status == :off
       event.width, event.height = 1, 1
-      pbSetSelfSwitch(event_id,"B",true)
+      pbSetSelfSwitch(event_id, "B", true)
     end
 
     event.refresh_hue = false
@@ -203,35 +202,36 @@ def mauville_reset_switches
     end
   end
   switch_events.each do |id|
-    pbSetSelfSwitch(id,"A",false)
+    pbSetSelfSwitch(id, "A", false)
   end
 end
+
 def set_gym_elec_all_off
   events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
   build_electricity_gym_map(VAR_MAUVILLE_GYM_ELECTRICITY_MAP) unless events_map.is_a?(Hash)
   events_map = pbGet(VAR_MAUVILLE_GYM_ELECTRICITY_MAP)
   events_map.keys.each do |key|
-    event_id= events_map[key]
-    event= $game_map.events[event_id]
+    event_id = events_map[key]
+    event = $game_map.events[event_id]
     return unless event
     event.width, event.height = 1, 1
-    pbSetSelfSwitch(event_id,"B",true)
+    pbSetSelfSwitch(event_id, "B", true)
   end
 end
 
 def convertHeartScalesToCoins
-  conversion_rate = 500 #nb coins per heart scale
+  conversion_rate = 500 # nb coins per heart scale
   params = ChooseNumberParams.new
   params.setRange(0, $PokemonBag.pbQuantity(:HEARTSCALE))
   params.setDefaultValue(0)
-  pbCallBubDown(2,@event_id)
-  number_heartscales = pbMessageChooseNumber(_INTL("\\hsAwesome! And how many Heart Scales would you like to convert into Heart Coins?"),params)
+  pbCallBubDown(2, @event_id)
+  number_heartscales = pbMessageChooseNumber(_INTL("\\hsAwesome! And how many Heart Scales would you like to convert into Heart Coins?"), params)
   if number_heartscales > 0
-    nb_coins = conversion_rate*number_heartscales
+    nb_coins = conversion_rate * number_heartscales
 
-    pbCallBubDown(2,@event_id)
+    pbCallBubDown(2, @event_id)
     pbMessage(_INTL("\\hsPerfect!"))
-    $PokemonBag.pbDeleteItem(:HEARTSCALE,number_heartscales)
+    $PokemonBag.pbDeleteItem(:HEARTSCALE, number_heartscales)
     pbMessage(_INTL("\\hs{1} handed over the Heart Scales", $Trainer.name))
     pbWait(12)
     pbSEPlay("MiningPick")
@@ -242,13 +242,13 @@ def convertHeartScalesToCoins
     pbWait(16)
     pbSEPlay("MiningRevealItem")
     pbWait(4)
-    pbCallBubDown(2,@event_id)
-    pbMessage(_INTL("Here you go! I converted your Heart Scales into {1} \\C[1]{2}\\C[0]!",nb_coins,COSMETIC_CURRENCY_NAME))
+    pbCallBubDown(2, @event_id)
+    pbMessage(_INTL("Here you go! I converted your Heart Scales into {1} \\C[1]{2}\\C[0]!", nb_coins, COSMETIC_CURRENCY_NAME))
     pbReceiveCosmeticsMoney(nb_coins)
-    pbCallBubDown(2,@event_id)
+    pbCallBubDown(2, @event_id)
     pbMessage(_INTL("Come back whenever you find more Heart Scales to convert!"))
   else
-    pbCallBub(2,@event_id)
+    pbCallBub(2, @event_id)
     pbMessage(_INTL("If you find some Heart Scales, bring them to me and I'll convert them for you!"))
   end
 end
@@ -257,6 +257,74 @@ def reset_gym_2_darkness
 
 end
 
+def mauville_info_desk
+  pbCallBub(2, @event_id)
+  cmd_gym = _INTL("The Gym")
+  cmd_tunnels = _INTL("The Tunnels")
+  cmd_pokecenter = _INTL("The Pokémon Center")
+  cmd_bike = _INTL("The Bicycle Shop")
+  cmd_mart = _INTL("The PokéMart")
+  cmd_clothes = _INTL("The Clothing Boutique")
+  cmd_exp = _INTL("The Exp. Lab")
+  cmd_tv = _INTL("TV Mauville")
+  cmd_gamecorner = _INTL("The Game Corner")
+  cmd_workshop = _INTL("The Pokéball Workshop")
+  cmd_cancel = _INTL("Never mind")
+  commands = [cmd_cancel,cmd_tunnels, cmd_gym, cmd_pokecenter, cmd_bike, cmd_mart, cmd_clothes, cmd_exp, cmd_tv, cmd_gamecorner, cmd_workshop]
+  choice = optionsMenu(commands,0)
+  case commands[choice]
+  when cmd_gym
+    pbCallBubDown(2, @event_id)
+    pbMessage(_INTL("The Gym Leader in Mauville City is \\C[1]Wattson\\C[0]. He specializes in Electric-type Pokémon."))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("His Gym is located in the North-West part of the city. You can find it by exiting straight ahead and following the road, then turning left at the Pokémon Center."))
+  when cmd_tunnels
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Mauville has an interconnected network of tunnels to make it easy to get around the city. You're in them right now!"))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("There is also a lower level that you can access through the stairs on the left."))
+  when cmd_pokecenter
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The Pokémon Center is right in the middle of the city!"))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("You can find it easily by exiting the tunnel straight ahead and following the road."))
+  when cmd_bike
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Rydel's bicycle shop is one of the most popular stores in the city! The owner is known to be very generous with Pokémon Trainers."))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("To get to it, just exit the tunnel straight ahead and follow the road, then turn right at the Pokémon Center. You can't miss it!"))
+  when cmd_mart
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The Mauville Pokémart sells a variety of items for trainers. One of their top-selling items is the Cell Battery!"))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("It's located right outside the tunnel, straight ahead."))
+  when cmd_clothes
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The Clothing Boutique is a popular store in Mauville. They sell several exclusive clothes and even offer \\C[1]Dye kits\\C[0] that can be used to dye your clothes and hats. It's a must-see!"))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("It's located right outside the tunnel, straight ahead, then to the right."))
+  when cmd_exp
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The Exp. Lab is a high-tech laboratory where they can make \\C[1]Experience Candies\\C[0] for your Pokémon."))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("If you'd like to check it out, it's located on the upper level behind the gym, in the northernmost part of the city."))
+  when cmd_tv
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Most of the region's TV broadcasts are filmed right here at the TV Mauville studios. "))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The studios are free to tour! To find it, just take a left in the tunnel and head to the lower level."))
+  when cmd_gamecorner
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Mauville is very well known for its Game Corner. People come from all over the region to gamble!"))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("The fastest way there is to take the stairs to the lower level of tunnel on the left and then head outside!"))
+  when cmd_workshop
+      pbCallBub(2, @event_id)
+      pbMessage(_INTL("The Pokéball Workshop is a family-owned workshop that can swap your Pokémon's Pokéball for a different one."))
+      pbCallBub(2, @event_id)
+      pbMessage(_INTL("You can find the workshop by taking a left and heading to the lower level of tunnel."))
+  end
+end
 
 
 

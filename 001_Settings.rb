@@ -291,7 +291,7 @@ module Settings
   #        To require at least 2 badges, put true and 2.
   BADGE_FOR_CUT = 1
   BADGE_FOR_FLASH = Settings::KANTO ? 1 : 2
-  BADGE_FOR_ROCKSMASH = 0
+  BADGE_FOR_ROCKSMASH = Settings::KANTO ? 0 : 4
   BADGE_FOR_SURF = 6
   BADGE_FOR_FLY = 3
   BADGE_FOR_STRENGTH = 5

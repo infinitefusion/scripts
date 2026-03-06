@@ -9,11 +9,6 @@
 
 
 
-
-
-
-
-
 ####
 # Methods to be called from events
 ####
@@ -23,10 +18,12 @@
 # :BATTLE
 # :TRADE
 # :PARTNER
-def doPostBattleAction(actionType,double_allowed=true)
+def doPostBattleAction(actionType,trainer, double_allowed=true)
   event = pbMapInterpreter.get_character(0)
-  map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id,map_id)
+  unless trainer
+    map_id = $game_map.map_id if map_id.nil?
+    trainer = getRebattledTrainer(event.id,map_id)
+  end
   trainer.clear_previous_random_events()
 
   return if !trainer
@@ -56,7 +53,7 @@ end
 # [[:SPECIES,level], ... ]
 #
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
-def postBattleActionsMenu()
+def postBattleActionsMenu(trainer=nil)
   rematchCommand = _INTL("Rematch")
 
   rematchSingleCommand = _INTL("Rematch (Single)")
@@ -71,10 +68,11 @@ def postBattleActionsMenu()
   setFriendshipDebugCommand = _INTL("(Debug) Set Friendship")
   printTrainerTeamDebugCommand = _INTL("(Debug) Print team")
 
-
-  event = pbMapInterpreter.get_character(0)
-  map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id,map_id)
+  unless trainer
+    event = pbMapInterpreter.get_character(0)
+    map_id = $game_map.map_id if map_id.nil?
+    trainer = getRebattledTrainer(event.id,map_id)
+  end
   return unless trainer
   options = []
   if trainer.getLinkedTrainer
@@ -101,15 +99,15 @@ def postBattleActionsMenu()
   choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
   case options[choice]
   when rematchCommand
-    doPostBattleAction(:BATTLE)
+    doPostBattleAction(:BATTLE,trainer)
   when rematchSingleCommand
-    doPostBattleAction(:BATTLE,false)
+    doPostBattleAction(:BATTLE,trainer,false)
   when rematchDoubleCommand
-    doPostBattleAction(:BATTLE,true)
+    doPostBattleAction(:BATTLE,trainer,true)
   when tradeCommand
-    doPostBattleAction(:TRADE)
+    doPostBattleAction(:TRADE,trainer)
   when partnerCommand
-    doPostBattleAction(:PARTNER)
+    doPostBattleAction(:PARTNER,trainer)
   when updateTeamDebugCommand
     echoln("")
     echoln "---------------"
