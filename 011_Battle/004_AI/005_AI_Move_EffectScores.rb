@@ -843,6 +843,8 @@ class PokeBattle_AI
         score -= 90
       else
         score += 30 if target.stages[:ATTACK]<0
+        score += 40 if user.ability == :PRANKSTER
+        score += 30 if user.pbHasMove?(:FOULPLAY)
       end
       #---------------------------------------------------------------------------
     when "042"
