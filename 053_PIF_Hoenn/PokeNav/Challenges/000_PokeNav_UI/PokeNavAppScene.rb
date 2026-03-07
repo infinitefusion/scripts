@@ -41,6 +41,14 @@ class PokeNavAppScene
     return (display_mode == :GRID) ? 2 : 1
   end
 
+  def initialize
+    @text_color_base = pbColor(:DARK_TEXT_MAIN_COLOR)
+    @text_color_shadow = pbColor(:DARK_TEXT_SHADOW_COLOR)
+    if isDarkMode
+      @text_color_base, @text_color_shadow = @text_color_shadow, @text_color_base
+    end
+  end
+
   # buttons should be a list of PokeNavButton
   def pbStartScene(buttons = [])
     @buttons = buttons
@@ -58,7 +66,7 @@ class PokeNavAppScene
       b.viewport = @viewport
       @sprites["button#{i}"] = b
     end
-    unless @buttons.empty?
+    if @buttons && !@buttons.empty?
       createCursor
       layoutButtons
     end

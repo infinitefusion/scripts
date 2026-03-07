@@ -1493,9 +1493,10 @@ class PokeBattle_AI
 
         #Special cases
         if user.ability != user.original_ability  #Don't re-use the move
-          score -= 90
+          score -= 180
         elsif user.ability.id == :NORMALIZE && user.pbHasType?(:GHOST)          #TODO: generalize this
           score += 90
+
         end
       end
 

@@ -45,8 +45,9 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def pbStartScene(main_menu_scene)
+    @unseenPokemon = [] unless @unseenPokemon
+    @seenPokemon = [] unless @seenPokemon
     @pokenav_main_menu_scene = main_menu_scene
-    echoln 'START'
     if $PokemonTemp.pokeradar
       buttons = showCurrentScanningTarget
       super(buttons)
@@ -54,10 +55,12 @@ class PokeRadarAppScene < PokeNavAppScene
       buttons = showWildPokemonList
       super(buttons)
       hover(@buttons[0]&.id)
+      if @unseenPokemon.empty? && @seenPokemon.empty?
+        showEmpty
+      end
     end
-    if @unseenPokemon.empty? && @seenPokemon.empty?
-      showEmpty
-    end
+    echoln @text_color_base
+
     showBattery
     showHeaderName
     showAreaName
@@ -96,18 +99,20 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def showEmpty
-    Kernel.pbDisplayText(_INTL("No Pokémon found nearby."), Graphics.width / 2, Graphics.height / 2)
+    Kernel.pbDisplayText(_INTL("No Pokémon found nearby."), Graphics.width / 2, Graphics.height / 2, nil, @text_color_base, @text_color_shadow)
   end
 
   def showCurrentScanningTarget
+    echoln @text_color_base
+    echoln @text_color_shadow
     scanningPokemon = $PokemonTemp.pokeradar[0]
     icon_path = pbCheckPokemonIconFiles(scanningPokemon)
     bmp = load_bitmap(icon_path, false)
     button = PokenavButton.new(scanningPokemon, bmp)
     button.refresh
     species_name = GameData::Species.get(scanningPokemon).real_name
-    Kernel.pbDisplayText(_INTL("Currently scanning for {1}.", species_name), Graphics.width / 2, 200, 500000)
-    Kernel.pbDisplayText(_INTL("Current chain: {1}.", $PokemonTemp.pokeradar[2]), Graphics.width / 2, 230, 500000)
+    Kernel.pbDisplayText(_INTL("Currently scanning for {1}.", species_name), Graphics.width / 2, 200, 500000, @text_color_base, @text_color_shadow)
+    Kernel.pbDisplayText(_INTL("Current chain: {1}.", $PokemonTemp.pokeradar[2]), Graphics.width / 2, 230, 500000, @text_color_base, @text_color_shadow)
     return [button]
   end
 
@@ -340,16 +345,16 @@ class PokeRadarAppScene < PokeNavAppScene
   def hover_seen(species)
     displayTextElements
     pokemon_name = GameData::Species.get(species).real_name
-    Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 99999)
-    Kernel.pbDisplayText(get_rarity_flavor_text(species), Graphics.width / 2, INFO_TEXT_Y + 30, 99999)
-    Kernel.pbDisplayText(_INTL("Battery for scan: {1}", get_energy_for_scan(species)), Graphics.width / 2, INFO_TEXT_Y + 60, 99999)
+    Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 99999, @text_color_base, @text_color_shadow)
+    Kernel.pbDisplayText(get_rarity_flavor_text(species), Graphics.width / 2, INFO_TEXT_Y + 30, 99999, @text_color_base, @text_color_shadow)
+    Kernel.pbDisplayText(_INTL("Battery for scan: {1}", get_energy_for_scan(species)), Graphics.width / 2, INFO_TEXT_Y + 60, 99999, @text_color_base, @text_color_shadow)
   end
 
   def hover_unseen()
     return unless @unseenPokemon.any?
     displayTextElements
     pokemon_name = _INTL("Unknown Pokémon")
-    Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 999999)
+    Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 999999, @text_color_base, @text_color_shadow)
   end
 
   def displayTextElements
@@ -362,7 +367,7 @@ class PokeRadarAppScene < PokeNavAppScene
   def showBattery
     $PokemonGlobal.pokeradarBattery = Settings::POKERADAR_BATTERY_STEPS unless $PokemonGlobal.pokeradarBattery
     battery_power = Settings::POKERADAR_BATTERY_STEPS - $PokemonGlobal.pokeradarBattery
-    Kernel.pbDisplayText(_INTL("{1}/1000", battery_power), 450, HEADER_HEIGHT)
+    Kernel.pbDisplayText(_INTL("{1}/1000", battery_power), 450, HEADER_HEIGHT,nil, @text_color_base, @text_color_shadow)
   end
 
   def showAreaName
@@ -372,7 +377,7 @@ class PokeRadarAppScene < PokeNavAppScene
     if encounter_type && !encounter_type.empty?
       text += _INTL(" ({1})", encounter_type)
     end
-    Kernel.pbDisplayText(text, Graphics.width / 2, 40)
+    Kernel.pbDisplayText(text, Graphics.width / 2, 40,nil, @text_color_base, @text_color_shadow)
   end
 
   def showWeatherIcon

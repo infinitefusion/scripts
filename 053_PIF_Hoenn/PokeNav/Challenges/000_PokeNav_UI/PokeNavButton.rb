@@ -71,7 +71,6 @@ class PokenavButton < SpriteWrapper
     super(value)
   end
 
-
   def get_height
     return DEFAULT_HEIGHT
   end
