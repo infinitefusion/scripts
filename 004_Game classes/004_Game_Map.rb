@@ -250,6 +250,16 @@ class Game_Map
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
+
+      # BRIDGE LOGIC FOR NPCs
+      # If we are on a bridge, ignore non-bridge tiles (like water underneath)
+      if terrain.bridge && $PokemonGlobal.bridge > 0
+        passage = @passages[tile_id]
+        return (passage & bit == 0 && passage & 0x0f != 0x0f)
+      end
+      next if terrain.bridge && $PokemonGlobal.bridge == 0
+
+
       # If already on water, only allow movement to another water tile
       if self_event != nil && terrain.can_surf_freely
         for j in [2, 1, 0]

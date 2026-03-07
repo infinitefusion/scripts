@@ -125,6 +125,7 @@ def postBattleActionsMenu(trainer=nil)
     printNPCTrainerCurrentTeam(trainer)
   when cancelCommand
   else
+    $PokemonGlobal.nextBattleBack=nil
     return
   end
 end
