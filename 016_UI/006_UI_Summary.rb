@@ -103,15 +103,15 @@ end
 #===============================================================================
 class PokemonSummary_Scene
   NB_PAGES = 5
-    def pbUpdate
+
+  def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbStartScene(party, partyindex, inbattle = false)
-
+  def pbStartScene(party, partyindex, inbattle = false, is_player = true)
+    @is_player = is_player
     @text_color_base = isDarkMode ? pbColor(:LIGHT_TEXT_MAIN_COLOR) : Color.new(64, 64, 64)
     @text_color_shadow = isDarkMode ? pbColor(:LIGHT_TEXT_SHADOW_COLOR) : Color.new(176, 176, 176)
-
 
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -296,6 +296,7 @@ class PokemonSummary_Scene
     return ret
   end
 
+
   def drawMarkings(bitmap, x, y)
     markings = @pokemon.markings
     markrect = Rect.new(0, 0, 16, 16)
@@ -345,7 +346,7 @@ class PokemonSummary_Scene
     # Show shininess star
     if @pokemon.shiny?
       addShinyStarsToGraphicsArray(imagepos, 2, 134, @pokemon.bodyShiny?, @pokemon.headShiny?, @pokemon.debugShiny?, nil, nil, nil, nil, true)
-      #imagepos.push([sprintf("Graphics/Pictures/shiny"), 2, 134])
+      # imagepos.push([sprintf("Graphics/Pictures/shiny"), 2, 134])
     end
     # Draw all images
     pbDrawImagePositions(overlay, imagepos)
@@ -474,7 +475,7 @@ class PokemonSummary_Scene
     # Write Original Trainer's name and ID number
     if @pokemon.owner.name.empty?
       textpos.push([_INTL("RENTAL"), 435, ot_y, 2, @text_color_base, @text_color_shadow])
-      #textpos.push(["?????", 435, 202, 2, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
+      # textpos.push(["?????", 435, 202, 2, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
     else
       ownerbase = @text_color_base
       ownershadow = @text_color_shadow
@@ -487,7 +488,7 @@ class PokemonSummary_Scene
         ownershadow = Color.new(224, 152, 144)
       end
       textpos.push([@pokemon.owner.name, 435, ot_y, 2, ownerbase, ownershadow])
-      #textpos.push([sprintf("%05d", @pokemon.owner.public_id), 435, 202, 2, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
+      # textpos.push([sprintf("%05d", @pokemon.owner.public_id), 435, 202, 2, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
     end
     # Write Exp text OR heart gauge message (if a Shadow Pokémon)
     # if @pokemon.shadowPokemon?
@@ -506,7 +507,7 @@ class PokemonSummary_Scene
     textpos.push([@pokemon.exp.to_s_formatted, 488, 266, 1, @text_color_base, @text_color_shadow])
     textpos.push([_INTL("To Next Lv."), 238, 298, 0, base, shadow])
     textpos.push([(endexp - @pokemon.exp).to_s_formatted, 488, 330, 1, @text_color_base, @text_color_shadow])
-    #end
+    # end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
     # Draw Pokémon type(s)
@@ -592,8 +593,6 @@ class PokemonSummary_Scene
     # Draw the Pokémon's markings
     drawMarkings(overlay, 84, 292)
   end
-
-
 
   def drawPageTwo
     overlay = @sprites["overlay"].bitmap
@@ -689,7 +688,7 @@ class PokemonSummary_Scene
     # Write all text
     drawFormattedTextEx(overlay, 232, 82, 268, memo)
   end
-  
+
   def drawPageThree
     overlay = @sprites["overlay"].bitmap
     base = Color.new(248, 248, 248)
@@ -727,7 +726,7 @@ class PokemonSummary_Scene
       drawTextEx(overlay, 224, 320, 282, 2, ability.description, base, shadow)
     end
 
-    #fixme temp double abilities
+    # fixme temp double abilities
     # if ability
     #   textpos.push([ability.name, 362, 278, 0, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
     #   if ability2
@@ -921,7 +920,7 @@ class PokemonSummary_Scene
     }
     pbChangePokemon
     @page -= 1
-    drawPageFour #stay on the same page
+    drawPageFour # stay on the same page
   end
 
   # def drawPageFive
@@ -1278,6 +1277,7 @@ class PokemonSummary_Scene
   end
 
   def pbOptions
+    return unless @is_player
     dorefresh = false
     commands = []
     cmdGiveItem = -1
@@ -1327,15 +1327,15 @@ class PokemonSummary_Scene
   end
 
   def pbOpenHatScreenSummary(pokemon)
-    #oldsprites = pbFadeOutAndHide(@sprites)
-    x_pos = -8 #todo: Set as relative position instead of hardcoded value
-    y_pos = 94#
+    # oldsprites = pbFadeOutAndHide(@sprites)
+    x_pos = -8 # todo: Set as relative position instead of hardcoded value
+    y_pos = 94 #
 
-    scene = PokemonHatView.new(x_pos,y_pos,false)
+    scene = PokemonHatView.new(x_pos, y_pos, false)
     screen = PokemonHatPresenter.new(scene, pokemon)
     screen.pbStartScreen()
     yield if block_given?
-    #pbFadeInAndShow(@sprites, oldsprites)
+    # pbFadeInAndShow(@sprites, oldsprites)
   end
 
   def pbPokemonHatFromSummary(pokemon)
@@ -1344,21 +1344,21 @@ class PokemonSummary_Scene
     msg = "What should you do?"
     loop do
       cmd = pbShowCommands([
-        _INTL("Put on hat"),
-        _INTL("Remove hat"),
-        _INTL("Back")])
+                             _INTL("Put on hat"),
+                             _INTL("Remove hat"),
+                             _INTL("Back")])
       break if cmd == -1
-      if cmd == 0   #Put on hat
-        @sprites["pokemon"].visible=false
+      if cmd == 0 # Put on hat
+        @sprites["pokemon"].visible = false
         pbOpenHatScreenSummary(pokemon)
-        @sprites["pokemon"].visible=true
-        pbDisplay(_INTL("{1} put on a hat!",pokemon.name))
+        @sprites["pokemon"].visible = true
+        pbDisplay(_INTL("{1} put on a hat!", pokemon.name))
         #@sprites["pokemon"].visible=false
 
-      elsif cmd == 1 #remove hat
-        if pbConfirm(_INTL("Remove {1}'s hat?",pokemon.name))
-          pokemon.hat=nil
-          pbDisplay(_INTL("{1}'s hat was removed",pokemon.name))
+      elsif cmd == 1 # remove hat
+        if pbConfirm(_INTL("Remove {1}'s hat?", pokemon.name))
+          pokemon.hat = nil
+          pbDisplay(_INTL("{1}'s hat was removed", pokemon.name))
         end
       else
         break
@@ -1426,8 +1426,8 @@ class PokemonSummary_Scene
         elsif @page == 5
           @page -= 1
           pbPlayDecisionSE
-          #pbRibbonSelection
-          #dorefresh = true
+          # pbRibbonSelection
+          # dorefresh = true
         elsif !@inbattle
           pbPlayDecisionSE
           dorefresh = pbOptions
@@ -1459,7 +1459,7 @@ class PokemonSummary_Scene
           dorefresh = true
         end
       elsif Input.trigger?(Input::RIGHT) && !@pokemon.egg?
-        if @page == 4 && !$Trainer.has_pokedex
+        if @page == 4 && !$Trainer.has_pokedex || !@is_player
           pbSEPlay("GUI sel buzzer")
         else
           oldpage = @page
@@ -1490,8 +1490,9 @@ class PokemonSummaryScreen
     @inbattle = inbattle
   end
 
-  def pbStartScreen(party, partyindex)
-    @scene.pbStartScene(party, partyindex, @inbattle)
+  def pbStartScreen(party, partyindex, is_player = true)
+    @is_player = is_player # If viewing the team of not the player
+    @scene.pbStartScene(party, partyindex, @inbattle, @is_player)
     ret = @scene.pbScene
     @scene.pbEndScene
     return ret
@@ -1504,7 +1505,7 @@ class PokemonSummaryScreen
       ret = @scene.pbChooseMoveToForget(move_to_learn)
       break if ret < 0 || !move_to_learn
       break if party[partyindex].moves[ret]
-      #pbMessage("HM moves can't be forgotten now.") { @scene.pbUpdate }
+      # pbMessage("HM moves can't be forgotten now.") { @scene.pbUpdate }
     end
     @scene.pbEndScene
     return ret

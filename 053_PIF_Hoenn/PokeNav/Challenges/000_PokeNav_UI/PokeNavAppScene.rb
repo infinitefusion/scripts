@@ -71,7 +71,8 @@ class PokeNavAppScene
       layoutButtons
     end
     pbUpdateSpriteHash(@sprites)
-     pbFadeInAndShow(@sprites) { pbUpdate }
+    pbFadeInAndShow(@sprites) { pbUpdate }
+
   end
 
   def pbUpdate
@@ -191,7 +192,7 @@ class PokeNavAppScene
   def updateInput
     cols = columns
     total = @buttons.length
-
+    move_delay = 2
     if Input.trigger?(Input::BACK)
       pbPlayCloseMenuSE
       @exiting = true
@@ -199,17 +200,18 @@ class PokeNavAppScene
     elsif Input.trigger?(Input::USE)
       pbPlayDecisionSE
       click(@buttons[@index]&.id)
-    elsif Input.trigger?(Input::LEFT) && cols > 1
-      move_index(-1)
-
-    elsif Input.trigger?(Input::RIGHT) && cols > 1
-      move_index(1)
-
-    elsif Input.trigger?(Input::UP)
+    elsif Input.repeat?(Input::LEFT) && cols > 1
+      move_to_index(-1)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::RIGHT) && cols > 1
+      move_to_index(1)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::UP)
       move_index(-cols)
-
-    elsif Input.trigger?(Input::DOWN)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::DOWN)
       move_index(cols)
+      pbWait(move_delay)
     end
   end
 
@@ -225,7 +227,13 @@ class PokeNavAppScene
     pbPlayCursorSE
     @index = (@index + delta) % @buttons.length
     hover(@buttons[@index]&.id)
+  end
 
+  def move_to_index(index)
+    return if @buttons.empty?
+    pbPlayCursorSE
+    @index = index
+    hover(@buttons[@index]&.id)
   end
 
   def pbEndScene
