@@ -150,6 +150,7 @@ def reverse_random_team_pokemon(trainer)
   head_pokemon = get_head_species_from_symbol(pokemon_to_reverse.species)
 
   pokemon_to_reverse.species = getFusedPokemonIdFromSymbols(head_pokemon,body_pokemon)
+  pokemon_to_reverse.pif_sprite=nil
   trainer.currentTeam.push(pokemon_to_reverse)
   trainer.log_reverse_event(old_species,pokemon_to_reverse.species)
   return trainer
