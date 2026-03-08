@@ -4,7 +4,7 @@ def getRemoteNPCResponse(event_id)
   npc_event = $game_map.events[event_id]
   npc_context = get_npc_context(event_id) # ["NPC: Hello...", "Player: ..."]
   npc_sprite_name = npc_event.character_name
-  current_location = Kernel.getMapName($game_map.map_id)
+  current_location = getMapName($game_map.map_id)
 
   rematchable_trainer = getRebattledTrainer(event_id, $game_map.map_id)
   trainer_dialogs = {}

@@ -371,7 +371,7 @@ class PokeRadarAppScene < PokeNavAppScene
   end
 
   def showAreaName
-    map_name = Kernel.getMapName($game_map.map_id)
+    map_name = getMapName($game_map.map_id)
     text = _INTL("{1}", map_name)
     encounter_type = get_encounter_type_name
     if encounter_type && !encounter_type.empty?

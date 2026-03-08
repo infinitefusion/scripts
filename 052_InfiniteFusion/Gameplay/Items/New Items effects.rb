@@ -622,7 +622,7 @@ end
 
 def useDreamMirror
   visitedMap = $PokemonGlobal.visitedMaps[pbGet(226)]
-  map_name = visitedMap ? Kernel.getMapName(pbGet(226)).to_s : _INTL("an unknown location")
+  map_name = visitedMap ? getMapName(pbGet(226)).to_s : _INTL("an unknown location")
 
   Kernel.pbMessage(_INTL("You peeked into the Dream Mirror..."))
 

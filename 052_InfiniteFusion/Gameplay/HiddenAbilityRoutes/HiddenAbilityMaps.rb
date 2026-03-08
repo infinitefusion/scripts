@@ -58,10 +58,10 @@ def player_on_hidden_ability_map
 end
 
 def getCurrentHiddenAbilityMapName
-  return Kernel.getMapName(pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
+  return getMapName(pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
 end
 
-def Kernel.getMapName(id)
+def getMapName(id)
   mapinfos = pbLoadMapInfos
   return _INTL("Unknown location") if !mapinfos[id]
   return mapinfos[id].name
