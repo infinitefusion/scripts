@@ -106,3 +106,12 @@ Events.onMapChange += proc { |_sender, e|
   $game_player.floating=false
   $game_player.walk_anime = true
 }
+
+def showLocation(map_name=nil)
+  scene = $scene
+  if scene.is_a?(Scene_Map)
+    map_name = $game_map.name unless map_name
+    LocationWindow.new($game_map.name)
+    scene.spriteset.addUserSprite(LocationWindow.new(map_name))
+  end
+end

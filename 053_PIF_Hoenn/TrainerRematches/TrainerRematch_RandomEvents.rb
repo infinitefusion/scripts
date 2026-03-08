@@ -23,14 +23,20 @@ def applyTrainerRandomEvents(trainer,event_type=nil)
   #time_passed = trainer.getTimeSinceLastAction
   #return trainer if time_passed < TIME_FOR_RANDOM_EVENTS
   catch_chance_for_number_in_team = [100,40,30,20,10,5,0]
+  unfuse_chance_for_number_in_team = [0,20,20,10,10,0,0]
+  fuse_chance_for_number_in_team = [0,0,40,60,65,75,85]
+
+  #Odds of certain events depends on nb. of pokemon in current party
   catch_chance = catch_chance_for_number_in_team[trainer.currentTeam.length]
+  unfuse_chance = unfuse_chance_for_number_in_team[trainer.currentTeam.length]
+  fuse_chance = fuse_chance_for_number_in_team[trainer.currentTeam.length]
 
   # Weighted chances out of 100
   weighted_events = [
-    [:CATCH,   catch_chance], #depends on nb. of pokemon in current party
-    [:FUSE,    60],
+    [:CATCH,   catch_chance],
+    [:FUSE,    fuse_chance],
     [:REVERSE, 10],
-    [:UNFUSE,  20]
+    [:UNFUSE,  unfuse_chance]
   ]
 
   # Create a flat array of events based on weight

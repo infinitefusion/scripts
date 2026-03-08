@@ -2,6 +2,8 @@
 # Max is 100 - put a value above that if a level should not be attainable
 class BattledTrainer
   FRIENDSHIP_LEVELS = {
+
+    #Normal trainers
     AROMALADY:      [10, 25, 45],
     BEAUTY:         [15, 30, 60],
     BIKER:          [20, 40, 80],
@@ -86,7 +88,36 @@ class BattledTrainer
     TEAM_MAGMAQUA_GRUNT_F:    [25, 60, 100],
     POKEFAN_M:    [10, 22, 38],
     POKEFAN_F:    [10, 22, 38],
+    SCHOOLMATE_SR:      [12, 25, 50],
+    SCHOOLMATE_JR:      [10, 22, 42],
+    POKEMONBREEDER_M:   [8, 18, 35],
+    STREETTHUG:         [22, 45, 85],
+    DELINQUENT:         [22, 45, 85],
+    BUGMANIAC:          [15, 30, 60],
+    EXPERT_M:           [25, 55, 100],
+    EXPERT_F:           [25, 55, 100],
+    COLLECTOR:          [25, 50, 90],
+    SURFER:             [12, 28, 55],
+    DIVER_M:            [12, 28, 55],
+    DIVER_F:            [12, 28, 55],
+    REPORTER:           [15, 30, 60],
+    CAMERAMAN:          [15, 30, 60],
+    NINJABOY:           [12, 25, 45],
+    DRAGONTAMER:        [22, 45, 95],
+    HEXMANIAC:          [15, 35, 70],
+    PARASOLLADY:        [12, 28, 55],
+    SECRETBASEEXPERT:   [15, 35, 75],
+    YOUNGCOUPLE_M:      [15, 30, 65],
+    YOUNGCOUPLE_F:      [15, 30, 65],
+    TRIATHLETE_BIKE_M:  [15, 35, 70],
+    TRIATHLETE_BIKE_F:  [15, 35, 70],
+    TRIATHLETE_SWIM_M:  [15, 35, 70],
+    TRIATHLETE_SWIM_F:  [15, 35, 70],
+    TRIATHLETE_RUN_M:   [15, 35, 70],
+    TRIATHLETE_RUN_F:   [15, 35, 70],
 
+
+    #story / bosses
     LEADER_Roxanne:    [30, 200, 200],
     LEADER_Brawly:    [30, 200, 200],
     LEADER_Wattson:    [30, 200, 200],
@@ -102,8 +133,8 @@ class BattledTrainer
     ELITEFOUR_Glacia:    [50, 200, 200],
     ELITEFOUR_Drake:    [50, 200, 200],
     CHAMPION_Steven:    [100, 200, 200],
-
-
+    TEAM_AQUA_BOSS:     [60, 200, 200],
+    TEAM_MAGMA_BOSS:    [60, 200, 200]
 
   }
 

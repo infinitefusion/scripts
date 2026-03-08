@@ -414,6 +414,7 @@ Events.onMapSceneChange += proc { |_sender, e|
       oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
       nosignpost = true if $game_map.name == oldmapname
     end
+    nosignpost = true if $game_switches[SWITCH_AQUA_CAMP]  #Camp is split between 2 maps. Don't want the window when in.
     scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
     scene.spriteset.addUserSprite(WeatherIcon.new) if !nosignpost
   end

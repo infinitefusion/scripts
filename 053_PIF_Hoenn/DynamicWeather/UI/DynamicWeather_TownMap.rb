@@ -104,7 +104,7 @@ class BetterRegionMap
 
   def weather_intensity_adjective(i, weather_type)
     case i
-    when 0..2
+    when -1..2
       return _INTL("Mild") if weather_type == :Sunny
       return _INTL("Thin") if weather_type == :Fog
       return _INTL("Light")
