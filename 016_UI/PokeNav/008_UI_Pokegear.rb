@@ -110,7 +110,7 @@ class PokemonPokegear_Scene
       button.held        = (@rearranging && i == @held_index)
       button.update_wobble
     end
-
+    return unless @commands && @commands[@index]
     # Draw selected app name
     name_sprite = @sprites["appName"]
     name_sprite.bitmap.clear

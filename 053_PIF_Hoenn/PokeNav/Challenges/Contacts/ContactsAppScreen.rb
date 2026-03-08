@@ -14,15 +14,17 @@ class ContactsAppScreen
                               :TEAM_AQUA_BOSS, :TEAM_MAGMA_BOSS
   ]
 
-  def pbStartScreen(main_menu_scene)
+  def pbStartScreen(main_menu_scene, screen)
     @main_menu_scene = main_menu_scene
     @scene.pbStartScene(self)
     @scene.pbScene
     @scene.pbEndScene
+    @screen = screen
   end
 
   def list_contacts
     contacts_list_by_location = {}
+    $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
     $PokemonGlobal.battledTrainers.each do |id, trainer|
       location = trainer.location
       contacts_list_by_location[location] ||= []
@@ -46,7 +48,7 @@ class ContactsAppScreen
       pbFadeOutIn {
         scene = ContactsAppInfoPageScene.new
         screen = ContactsAppInfoPageScreen.new
-        screen.pbStartScreen(scene)
+        screen.pbStartScreen(scene, trainer)
       }
     else
       pbSEPlay("buzzer", 80)

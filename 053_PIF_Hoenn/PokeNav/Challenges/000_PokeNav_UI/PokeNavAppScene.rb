@@ -33,6 +33,10 @@ class PokeNavAppScene
     return "Graphics/Pictures/Pokegear/bg_header"
   end
 
+  def bg_path
+    return ""
+  end
+
   def header_name
     return _INTL("PokeNav App")
   end
@@ -70,9 +74,15 @@ class PokeNavAppScene
       createCursor
       layoutButtons
     end
+    init_graphics
     pbUpdateSpriteHash(@sprites)
     pbFadeInAndShow(@sprites) { pbUpdate }
 
+  end
+
+  def init_graphics
+    @sprites["bg"] = IconSprite.new(0, 0, @viewport)
+    @sprites["bg"].setBitmap(bg_path)
   end
 
   def pbUpdate

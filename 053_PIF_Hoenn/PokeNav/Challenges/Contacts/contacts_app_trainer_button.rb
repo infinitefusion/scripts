@@ -1,5 +1,5 @@
 class ContactsAppTrainerButton < PokenavButton
-  IMAGE_TEXT_GAP = 32
+  IMAGE_TEXT_GAP = 96
   DEFAULT_SPRITE_PATH = "000"
 
   def get_width
@@ -57,7 +57,7 @@ class ContactsAppTrainerButton < PokenavButton
   def draw_text(x_offset = 0)
     return unless self.bitmap && @text && @text != ""
     frame_w = @image_sprite ? @image_sprite.src_rect.width : 0
-    text_x = frame_w + IMAGE_TEXT_GAP
+    text_x = IMAGE_TEXT_GAP
     max_width = self.bitmap.width - text_x
 
     lines = wrap_text(@text, self.bitmap, max_width)

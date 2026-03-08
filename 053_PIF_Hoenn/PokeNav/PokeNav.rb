@@ -127,7 +127,7 @@ class PokemonPokegearScreen
     pbFadeOutIn {
       scene = ContactsAppScene.new
       screen = ContactsAppScreen.new(scene)
-      screen.pbStartScreen(@scene)
+      screen.pbStartScreen(@scene,screen)
     }
   end
 

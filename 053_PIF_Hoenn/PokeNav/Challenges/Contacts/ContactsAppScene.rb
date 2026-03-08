@@ -9,11 +9,11 @@ class ContactsAppScene < PokeNavAppScene
   end
 
   def cursor_path
-    return "Graphics/Pictures/Pokeradar/icon_button"
+    return "Graphics/Pictures/Pokegear/Trainers/icon_button_static"
   end
 
   def header_path
-    return "Graphics/Pictures/Pokeradar/bg_header"
+    return "Graphics/Pictures/Pokegear/Trainers/bg_header_trainers"
   end
 
   def display_mode
@@ -25,7 +25,7 @@ class ContactsAppScene < PokeNavAppScene
   end
 
   def y_gap
-    return 50;
+    return 64;
   end
 
   def columns
@@ -43,6 +43,7 @@ class ContactsAppScene < PokeNavAppScene
   def start_y
     return 80;
   end
+
 
   def pbStartScene(screen)
     @screen = screen
@@ -129,8 +130,8 @@ class ContactsAppScene < PokeNavAppScene
   end
 
   def createCursor
-    return if $PokemonTemp.pokeradar
     super
+    @sprites["cursor"].x=36
   end
 
   def click(button_id)
