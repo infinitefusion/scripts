@@ -19,7 +19,7 @@ class Pokenav
     :REARRANGE => _INTL("Rearrange"),
 
     # Unlockable apps
-    :CONTACTS => _INTL("Contacts"), # obtained after rematch quest TODO
+    :CONTACTS => _INTL("Trainers"), # obtained after rematch quest TODO
     :JUKEBOX => _INTL("Jukebox"), # obtained at devon corp
     :WEATHER => _INTL("Weather Map"), # obtained at TV Mauville
     :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
@@ -87,6 +87,7 @@ class PokemonPokegearScreen
       elsif chosen == :QUESTS
         pbQuestlog()
       elsif chosen == :CONTACTS
+        openContactsApp
         next
       elsif chosen == :WEATHER
         pbWeatherMap
@@ -120,6 +121,14 @@ class PokemonPokegearScreen
         screen.pbStartScreen(0) # Boot PC in organize mode
       }
     end
+  end
+
+  def openContactsApp
+    pbFadeOutIn {
+      scene = ContactsAppScene.new
+      screen = ContactsAppScreen.new(scene)
+      screen.pbStartScreen(@scene)
+    }
   end
 
   def openPokeRadarApp

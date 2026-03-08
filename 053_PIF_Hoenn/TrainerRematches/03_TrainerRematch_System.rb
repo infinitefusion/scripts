@@ -119,11 +119,28 @@ def registerBattledTrainer(event_id, mapId, trainerType, trainerName, trainerVer
   return if $PokemonGlobal.battledTrainers.has_key?(key)
   trainer = BattledTrainer.new(trainerType, trainerName, trainerVersion,key)
   trainer.setLinkedTrainer(linked_event) if linked_event
+  trainer.setOverworldSprite(getOverworldSprite(event_id,mapId))
+  trainer.setLocation(getMapName(mapId))
   $PokemonGlobal.battledTrainers[key] = trainer
   echoln "Registered rematchable trainer #{key}"
   return trainer
 end
 
+
+def getOverworldSprite(event_id,mapId)
+  current_map = $game_map.map_id
+  if mapId == current_map
+    event = $game_map.events[event_id]
+  else
+    mapData = Compiler::MapData.new
+    map = mapData.getMap(id)
+    event = map&.events[event_id]
+  end
+  if event
+    return event.character_name
+  end
+  return ""
+end
 def unregisterBattledTrainer(event_id, mapId)
   key = [event_id,mapId]
   $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers

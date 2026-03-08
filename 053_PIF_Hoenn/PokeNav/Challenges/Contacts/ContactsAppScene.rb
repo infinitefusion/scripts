@@ -1,0 +1,154 @@
+# todo:
+# When all pokemon in the route are seen, can "scan" for species
+#  - spawns a pokemon of that species nearby with notice behavior to flee
+class ContactsAppScene < PokeNavAppScene
+  INFO_TEXT_Y = 270
+
+  def header_name
+    return _INTL("Trainers")
+  end
+
+  def cursor_path
+    return "Graphics/Pictures/Pokeradar/icon_button"
+  end
+
+  def header_path
+    return "Graphics/Pictures/Pokeradar/bg_header"
+  end
+
+  def display_mode
+    return :LIST
+  end
+
+  def x_gap
+    return 75;
+  end
+
+  def y_gap
+    return 50;
+  end
+
+  def columns
+    return 1
+  end
+
+  def visible_rows
+    return 3
+  end
+
+  def start_x
+    return 40;
+  end
+
+  def start_y
+    return 80;
+  end
+
+  def pbStartScene(screen)
+    @screen = screen
+    buttons = []
+    @contacts_list = screen.list_contacts
+    @contacts_list.each do |location, trainers_list|
+      next unless location
+      buttons << ContactsAppLocationButton.new(location, nil, location)
+      next unless trainers_list && trainers_list.size > 0
+      trainers_list.each do |trainer|
+        next unless trainer
+        next unless screen.can_be_listed(trainer)
+        trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
+        trainer_name = "#{trainerClassName} #{trainer.trainerName}"
+        buttons << ContactsAppTrainerButton.new(trainer.id, trainer.overworld_sprite, trainer_name)
+      end
+    end
+
+    super(buttons)
+    @index = 1
+    showHeaderName
+  end
+
+
+  def updateInput
+    cols = columns
+    total = @buttons.length
+    move_delay = 2
+    if Input.trigger?(Input::BACK)
+      pbPlayCloseMenuSE
+      @exiting = true
+      return
+    elsif Input.trigger?(Input::USE)
+      pbPlayDecisionSE
+      click(@buttons[@index]&.id)
+    elsif Input.repeat?(Input::LEFT)
+      prev_location = find_previous_location_index
+      move_to_index(prev_location+1)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::RIGHT)
+      next_location = find_next_location_index
+      move_to_index(next_location+1)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::UP)
+      move_index(-cols)
+      pbWait(move_delay)
+    elsif Input.repeat?(Input::DOWN)
+      move_index(cols)
+      pbWait(move_delay)
+    end
+  end
+
+  def find_next_location_index
+    for i in @index..@buttons.length-1
+      if @buttons[i].is_a?(ContactsAppLocationButton)
+        return i
+      end
+    end
+    return @buttons.length-1
+  end
+
+
+  def find_previous_location_index
+    found_current_location = false
+    for i in @index.downto(0)
+      if @buttons[i].is_a?(ContactsAppLocationButton)
+        return i if found_current_location
+        found_current_location = true
+      end
+    end
+    return 1
+  end
+
+  def move_index(delta)
+    return if @buttons.empty?
+    pbPlayCursorSE
+    new_index = (@index + delta) % @buttons.length
+    if @buttons[new_index].is_a?(ContactsAppLocationButton)
+      new_index = new_index + delta
+    end
+    new_index = @buttons.length - 1 if new_index < 0
+    @index = new_index
+    hover(@buttons[@index]&.id)
+  end
+
+  def createCursor
+    return if $PokemonTemp.pokeradar
+    super
+  end
+
+  def click(button_id)
+    super
+    cmd_info = _INTL("Info")
+    cmd_team = _INTL("View Team")
+    cmd_cancel = _INTL("Cancel")
+    commands = [cmd_info, cmd_team, cmd_cancel]
+    choice = pbMessage(_INTL("What would you like to do?"), commands, commands.size)
+    case commands[choice]
+    when cmd_info
+      @screen.view_trainer_page(button_id)
+    when cmd_team
+      @screen.view_trainer_team(button_id)
+    end
+  end
+
+  def hover(button_id)
+    super
+  end
+end

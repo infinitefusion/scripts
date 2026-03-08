@@ -17,8 +17,11 @@ class PokenavButton < SpriteWrapper
   attr_accessor :crop_width
   attr_accessor :crop_height
 
-  DEFAULT_WIDTH = 20
-  DEFAULT_HEIGHT = 20
+  attr_accessor :text_color
+  attr_accessor :shadow_color
+
+  DEFAULT_WIDTH = 200
+  DEFAULT_HEIGHT = 40
 
   def initialize(id, image = nil, text = nil, viewport = nil)
     super(viewport)
@@ -28,6 +31,13 @@ class PokenavButton < SpriteWrapper
     @text = text || get_text
     @crop_width = nil
     @crop_height = nil
+
+    @text_color = pbColor(:DARK_TEXT_MAIN_COLOR)
+    @shadow_color = pbColor(:DARK_TEXT_SHADOW_COLOR)
+
+    if isDarkMode
+      @text_color, @shadow_color = @shadow_color, @text_color
+    end
 
     # Determine source bitmap
     if image.is_a?(String)
@@ -122,6 +132,23 @@ class PokenavButton < SpriteWrapper
       self.bitmap.blt(0, 0, bmp, Rect.new(0, 0, width, height))
     end
     draw_text if @text && @text != ""
+  end
+
+  def draw_text
+    return unless self.bitmap && @text && @text != ""
+    padding = 4
+    max_width = self.bitmap.width - (padding * 2)
+
+    # Wrap text to fit within button width
+    lines = wrap_text(@text, self.bitmap, max_width)
+
+    lines.each_with_index do |line, i|
+      y_pos = DESC_Y + (LINE_HEIGHT * i)
+      self.bitmap.font.color = @shadow_color
+      self.bitmap.draw_text(padding + 1, y_pos + 1, max_width, LINE_HEIGHT, line)
+      self.bitmap.font.color = @text_color
+      self.bitmap.draw_text(padding, y_pos, max_width, LINE_HEIGHT, line)
+    end
   end
 
 

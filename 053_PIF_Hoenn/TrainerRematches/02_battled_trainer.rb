@@ -46,6 +46,8 @@ class BattledTrainer
 
   attr_accessor :friendship #increases the more you interact with them, unlocks more interact options
   attr_accessor :friendship_level
+
+  attr_accessor :overworld_sprite
   def initialize(trainerType,trainerName,trainerVersion,trainerKey)
     @trainerKey = trainerKey
     @trainerType = trainerType
@@ -61,6 +63,18 @@ class BattledTrainer
     @favorite_type = pick_favorite_type(trainerType)
     @friendship = 0
     @friendship_level = 0
+    @overworld_sprite = ""
+    @location = _INTL("Unknown location")
+  end
+
+  def id
+    return @trainerKey
+  end
+  def location
+    if @location.nil?
+      return _INTL("Unknown location")
+    end
+    return @location
   end
 
   #For double trainer classes like twins, etc. Adds an additional double rematch option.
@@ -69,6 +83,13 @@ class BattledTrainer
     @linked_event = linked_trainer_event
   end
 
+  def setOverworldSprite(overworld_sprite)
+    @overworld_sprite = overworld_sprite
+  end
+
+  def setLocation(location_name)
+    @location = location_name
+  end
   def getLinkedTrainer()
     trainer = getRebattledTrainer(@linked_event,$game_map.map_id)
     return trainer if trainer
@@ -191,7 +212,7 @@ class BattledTrainer
       elsif partyMember.is_a?(Array)  #normally always gonna be this
         pokemon_species = partyMember[0]
         pokemon_level = partyMember[1]
-        current_party << Pokemon.new(pokemon_species,pokemon_level)
+        current_party << Pokemon.new(pokemon_species,pokemon_level, original_trainer.name)
       else
         echoln "Could not add Pokemon #{partyMember} to rematchable trainer's party."
       end

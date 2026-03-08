@@ -168,10 +168,7 @@ class PokeNavAppScene
     return true
   end
 
-  def displayTextElements
-    Kernel.pbClearText
-    showHeaderName
-  end
+
 
   def showHeaderName
     Kernel.pbDisplayText(header_name, Graphics.width/2 , HEADER_HEIGHT)
