@@ -11,6 +11,8 @@ class Pokenav
   attr_accessor :installed_apps
   attr_accessor :last_opened_challenges #date
   attr_accessor :darkMode
+  attr_accessor :viewed_trainers
+
   AVAILABLE_APPS = {
     # Starting apps
     :QUESTS => _INTL("Quests"),
@@ -42,6 +44,7 @@ class Pokenav
   def initialize
     @installed_apps = [:MAP, :QUESTS, :DAYNIGHT, :REARRANGE]
     @last_opened_challenges = nil
+    @viewed_trainers = []
   end
 
   def install_app(app_id)

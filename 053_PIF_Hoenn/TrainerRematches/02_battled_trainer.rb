@@ -234,7 +234,19 @@ class BattledTrainer
   end
 
   def isNextTradeReady?()
-    return getTimeSinceLastTrade < DELAY_BETWEEN_NPC_TRADES
+    return getTimeSinceLastTrade >= DELAY_BETWEEN_NPC_TRADES
+  end
+
+  def can_trade?()
+    echoln "-------"
+    echoln @trainerName
+
+    echoln @friendship_level
+    trade_unlocked = @friendship_level >= FRIENDSHIP_LEVEL_FOR_TRADE
+    if trade_unlocked
+      return isNextTradeReady?
+    end
+    return false
   end
 
   def list_team_unfused_pokemon

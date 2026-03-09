@@ -1,10 +1,10 @@
 class ContactsAppScene < PokeNavAppScene
   INFO_TEXT_Y = 270
   def cursor_x_offset
-    return 32
+    return 16
   end
   def cursor_y_offset
-    return -24
+    return -16
   end
 
   def header_name
@@ -64,8 +64,10 @@ class ContactsAppScene < PokeNavAppScene
         trainer_name = "#{trainerClassName} #{trainer.trainerName}"
         @trainers << trainer.id
         button = ContactsAppTrainerButton.new(trainer.id, trainer.overworld_sprite, trainer_name)
+
+        $Trainer.pokenav.viewed_trainers = [] unless $Trainer&.pokenav&.viewed_trainers
         button.set_trade_available(trainer.can_trade?)
-        button.set_new(true) #todo
+        button.set_new(!$Trainer.pokenav.viewed_trainers.include?(trainer.id))
         buttons << button
       end
     end
@@ -73,6 +75,7 @@ class ContactsAppScene < PokeNavAppScene
     super(buttons)
     @index = 1
     showHeaderName
+    @buttons[@index].hover
   end
 
 
@@ -184,6 +187,10 @@ class ContactsAppScene < PokeNavAppScene
     updateHeader(scroll_row)
   end
 
+  def pbUpdate
+    super
+    @buttons.each { |btn| btn.update if btn.respond_to?(:update) }
+  end
 
   def hover(button_id)
     super

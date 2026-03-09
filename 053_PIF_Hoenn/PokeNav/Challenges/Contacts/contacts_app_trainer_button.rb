@@ -4,9 +4,14 @@ class ContactsAppTrainerButton < PokenavButton
   IMAGE_X_OFFSET = 32
   SOURCE_IMAGE_Y_CROP = 24
 
+  ICON_SIZE = 24
+  ICON_X_MARGIN = 8
+  ICON_GAP = 4
+
   TRADE_AVAILABLE_ICON = "Graphics/Pictures/Pokegear/Trainers/tradeIcon"
   IS_NEW_ICON = "Graphics/Pictures/Pokegear/Trainers/dialogIcon"
-
+  ICON_X_OFFSET = -20
+  FADE_SPEED = 16
 
 
   def get_width
@@ -22,12 +27,15 @@ class ContactsAppTrainerButton < PokenavButton
   end
 
   def set_trade_available(value)
-    @is_trade_available = true #value
+    @is_trade_available = value
+    create_icon_sprites
   end
 
   def set_new(value)
     @is_new = value
+    create_icon_sprites
   end
+
 
   def initialize(id, image = nil, text = nil, viewport = nil)
     @image_path = image
@@ -41,6 +49,7 @@ class ContactsAppTrainerButton < PokenavButton
   def viewport=(vp)
     super(vp)
     create_image_sprite
+    create_icon_sprites
   end
 
   def create_image_sprite
@@ -62,24 +71,77 @@ class ContactsAppTrainerButton < PokenavButton
     @image_sprite.src_rect.y = 16
     @image_sprite.z = self.z + 1
   end
+
+  def create_icon_sprites
+    return unless self.viewport
+    @icon_sprites&.each(&:dispose)
+    @icon_sprites = []
+    icons = []
+    icons << TRADE_AVAILABLE_ICON if @is_trade_available
+    icons << IS_NEW_ICON if @is_new
+    icons.each do |path|
+      sprite = IconSprite.new(0, 0, self.viewport)
+      sprite.setBitmap(path)
+      sprite.z = self.z + 1
+      @icon_sprites << sprite
+    end
+    update_icon_positions
+  end
+
+  def update_icon_positions
+    return unless @icon_sprites
+    right_edge = (self.x || 0) + get_width - ICON_X_MARGIN
+    @icon_sprites.each_with_index do |sprite, i|
+      sprite.x = right_edge - ICON_SIZE - (i * (ICON_SIZE + ICON_GAP)) + ICON_X_OFFSET
+      sprite.y = (self.y || 0) + (get_height - ICON_SIZE) / 2
+      sprite.visible = self.visible
+    end
+  end
+
+  def hover
+    if @is_new
+      $Trainer.pokenav.viewed_trainers << @id
+      @is_new = false
+      @fading_new_icon = @icon_sprites.last  # IS_NEW_ICON is last in array
+    end
+    super
+  end
+
+  def update
+    return unless @fading_new_icon
+    @fading_new_icon.opacity -= FADE_SPEED
+    if @fading_new_icon.opacity <= 0
+      @fading_new_icon.dispose
+      @icon_sprites.delete(@fading_new_icon)
+      @fading_new_icon = nil
+      update_icon_positions  # reflow remaining icons
+    end
+  end
+
+
+
   def x=(value)
     super
     @image_sprite&.x = value + IMAGE_X_OFFSET
+    update_icon_positions
   end
 
   def y=(value)
     super
     frame_h = @image_sprite ? @image_sprite.src_rect.height : 0
     @image_sprite&.y = value + (get_height - frame_h) / 2 - 8
+    update_icon_positions
   end
 
   def visible=(value)
     super
     @image_sprite&.visible = value
+    @icon_sprites&.each { |s| s.visible = value }
   end
 
   def dispose
     @image_sprite&.dispose
+    @icon_sprites&.each(&:dispose)
     super
   end
 

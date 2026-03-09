@@ -19,6 +19,12 @@ class ContactsAppInfoPageScene < PokeNavAppScene
   INFO_TEXT_GAP = 40
   INFO_HEADER_GAP = 30
 
+  FRIENDSHIP_ICON = "Graphics/Pictures/Pokegear/Trainers/friendship"
+  FRIENDSHIP_ICON_GAP = 4
+  ICON_SIZE = 16
+  FRIENDSHIP_ICON_START_X = 40
+  FRIENDSHIP_ICON_START_Y = 20
+
   def header_name
     return _INTL("Trainers")
   end
@@ -81,6 +87,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     if @trainer
       showTrainerSprite
       showTrainerInfo
+      showFriendshipIcons
     else
       pbEndScene
     end
@@ -109,6 +116,21 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     @sprites["trainer"].x = SPRITE_POSITION_X
     @sprites["trainer"].y = SPRITE_POSITION_Y
 
+  end
+
+
+  def showFriendshipIcons
+    @friendship_icons&.each(&:dispose)
+    @friendship_icons = []
+    (@trainer.friendship_level || 0).times do |i|
+      sprite = IconSprite.new(0, 0, @viewport)
+      sprite.setBitmap(FRIENDSHIP_ICON)
+      sprite.x = FRIENDSHIP_ICON_START_X + i * (ICON_SIZE + FRIENDSHIP_ICON_GAP)
+      sprite.y = FRIENDSHIP_ICON_START_Y
+      sprite.z = 50
+      @friendship_icons << sprite
+      @sprites["friendship_icon_#{i}"] = sprite
+    end
   end
 
   def showTrainerInfo
@@ -195,9 +217,11 @@ class ContactsAppInfoPageScene < PokeNavAppScene
   def change_trainer(index_delta)
     @screen.change_trainer(index_delta)
     @sprites["trainer"]&.dispose
+    @friendship_icons&.each_with_index { |_, i| @sprites.delete("friendship_icon_#{i}") }
     Kernel.pbClearText()
     showTrainerSprite
     showTrainerInfo
+    showFriendshipIcons
   end
 
   def displayText(text, x_position, y_position)
