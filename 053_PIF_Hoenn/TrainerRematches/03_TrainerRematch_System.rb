@@ -20,9 +20,10 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
                     event_id = nil, map_id = nil)
   trainer_data = GameData::Trainer.get(trainerID,trainerName,trainerPartyID)
   displayPreBattleText(trainer_data)
+  map_id = $game_map.map_id
   result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID,
                                     canLose, outcomeVar,name_override,trainer_type_overide,event_id,map_id)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID,event_id) if Settings::GAME_ID == :IF_HOENN
+  postTrainerBattleActions(trainerID, trainerName,trainerPartyID,event_id,nil, map_id) if Settings::GAME_ID == :IF_HOENN
   return result
 end
 
@@ -132,8 +133,7 @@ def getOverworldSprite(event_id,mapId)
   if mapId == current_map
     event = $game_map.events[event_id]
   else
-    mapData = Compiler::MapData.new
-    map = mapData.getMap(id)
+    map = $MapFactory.getMap(mapId,false)
     event = map&.events[event_id]
   end
   if event

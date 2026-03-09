@@ -133,7 +133,7 @@ TRAINER_CLASS_PICKINESS = {
   PRESCHOOLER_F:      0.6
 }
 
-def evaluate_pokemon_worth(pkmn, compare_level: nil)
+def evaluate_pokemon_worth(pkmn, compare_level: nil, favorite_type: nil)
   species_data = pkmn.species_data
   return 0 unless species_data
 
@@ -146,13 +146,15 @@ def evaluate_pokemon_worth(pkmn, compare_level: nil)
   iv_score         = (pkmn.iv&.values&.sum || 0) / 4.0
   shiny_score      = pkmn.shiny? ? 50 : 0
   fusion_bonus     = pkmn.isFusion? ? 40 : 0
+  type_bonus       = (favorite_type && pkmn.hasType?(favorite_type)) ? 30 : 0
 
   score = level_score +
     base_stats_score +
     rarity_score +
     iv_score +
     shiny_score +
-    fusion_bonus
+    fusion_bonus +
+    type_bonus
 
   echoln("#{pkmn.name} - Score : #{score}")
   return score
@@ -160,13 +162,13 @@ end
 
 
 
-def offerPokemonForTrade(player_pokemon, npc_party, trainer_class)
-  player_score = evaluate_pokemon_worth(player_pokemon)
+def offerPokemonForTrade(player_pokemon, npc_party, trainer_class, favorite_type)
+  player_score = evaluate_pokemon_worth(player_pokemon, favorite_type:favorite_type)
   pickiness = TRAINER_CLASS_PICKINESS[trainer_class] || 1.0
 
   # Evaluate all NPC Pokémon scores
   npc_scores = npc_party.map do |npc_pkmn|
-    [npc_pkmn, evaluate_pokemon_worth(npc_pkmn, compare_level: player_pokemon.level)]
+    [npc_pkmn, evaluate_pokemon_worth(npc_pkmn, compare_level: player_pokemon.level, favorite_type:favorite_type)]
   end
   best_npc_pokemon, best_score = npc_scores.max_by { |_, score| score }
   return best_npc_pokemon if player_score > best_score
@@ -196,22 +198,33 @@ end
 #
 def generateTrainerTradeOffer(trainer)
   bg_image_id=20
-  wanted_type = trainer.favorite_type
-  wanted_type = :NORMAL if !wanted_type
+  wanted_types = BattledTrainer::TRAINER_CLASS_FAVORITE_TYPES[trainer.trainerType]
+  wanted_types = [:NORMAL] if !wanted_types || wanted_types.empty?
 
-  wanted_type_name = GameData::Type.get(wanted_type).real_name
+  wanted_types_string = wanted_types.map { |type|
+    type_name = GameData::Type.get(type).real_name
+    "- \\C[1]#{type_name}\\C[0]"
+  }.join("\\n")
+
+  # wanted_type = trainer.favorite_type
+  # wanted_type = :NORMAL if !wanted_type
+
+  #wanted_type_name = GameData::Type.get(wanted_type).real_name
+
   trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
-  pbMessage(_INTL("{1} {2} is looking for {3}-type Pokémon. Which Pokémon do you want to trade?", trainerClassName, trainer.trainerName, wanted_type_name))
+
+  pbMessage(_INTL("{1} {2} is looking for Pokémon of the following type(s):\\n{3}\\nWhich Pokémon do you want to trade?",
+                  trainerClassName, trainer.trainerName, wanted_types_string))
   pbChoosePokemon(1,2,
                   proc {|pokemon|
-                    pokemon.hasType?(wanted_type)
+                    pokemon.hasOneOfTheseTypes?(wanted_types)
                   })
 
   chosen_index = pbGet(1)
   echoln pbGet(1)
   if chosen_index && chosen_index >= 0
     chosen_pokemon = $Trainer.party[chosen_index]
-    offered_pokemon = offerPokemonForTrade(chosen_pokemon,trainer.currentTeam,trainer.trainerType)
+    offered_pokemon = offerPokemonForTrade(chosen_pokemon,trainer.currentTeam,trainer.trainerType, trainer.favorite_type)
     if !offered_pokemon
       pbMessage(_INTL("{1} {2} does not want to trade...", trainerClassName, trainer.trainerName))
       return trainer
@@ -226,10 +239,12 @@ def generateTrainerTradeOffer(trainer)
     if pbConfirmMessage(_INTL("Trade away {1} for {2} {3}'s {4}?", chosen_pokemon.name, trainerClassName, trainer.trainerName, offered_pokemon.name))
       pbStartTrade(chosen_index, offered_pokemon,offered_pokemon.name,trainer.trainerName,0)
       updated_party = trainer.currentTeam
+      trainer.increase_friendship(10) if offered_pokemon.hasType?(trainer.favorite_type)
       updated_party.delete(offered_pokemon)
       updated_party << chosen_pokemon.clone
       trainer.previous_trade_timestamp= Time.now
       trainer.increase_friendship(20)
+
       return trainer
     end
   end

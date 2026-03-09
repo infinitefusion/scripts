@@ -592,6 +592,13 @@ class Pokemon
     return self.types.include?(type)
   end
 
+  def hasOneOfTheseTypes?(type_array)
+    type_array.each do |type|
+      return true if hasType?(type)
+    end
+    return false
+  end
+
   def getHeldPlateType()
     return getArceusPlateType(@item)
   end
