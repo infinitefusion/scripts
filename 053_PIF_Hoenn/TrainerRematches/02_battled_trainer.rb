@@ -238,10 +238,6 @@ class BattledTrainer
   end
 
   def can_trade?()
-    echoln "-------"
-    echoln @trainerName
-
-    echoln @friendship_level
     trade_unlocked = @friendship_level >= FRIENDSHIP_LEVEL_FOR_TRADE
     if trade_unlocked
       return isNextTradeReady?

@@ -21,6 +21,7 @@ module GameData
     attr_accessor :preRematchText_unfused
     attr_accessor :preRematchText_reversed
     attr_accessor :preRematchText_gift
+    attr_accessor :infoText
 
     DATA = {}
     DATA_FILENAME = "trainers.dat"
@@ -55,6 +56,7 @@ module GameData
       "PreRematchText_unfused" => [:preRematchText_unfused, "s"],
       "PreRematchText_reversed" => [:preRematchText_reversed, "s"],
       "PreRematchText_gift" => [:preRematchText_gift, "s"],
+      "TrainerInfo" => [:infoText, "s"],
 
 
     }
@@ -121,13 +123,15 @@ module GameData
       end
       @battleText  = hash[:battleText]
       @loseText_rematch = hash[:loseText_rematch] || @real_lose_text
-      @preRematchText  = hash[:preRematchText] || "Are you up for a rematch? Or maybe you want to trade..."
+      @preRematchText  = hash[:preRematchText] || _INTL("Are you up for a rematch? Or maybe you want to trade...")
       @preRematchText_caught = hash[:preRematchText_caught] || @preRematchText
       @preRematchText_evolved = hash[:preRematchText_evolved] || @preRematchText
       @preRematchText_fused = hash[:preRematchText_fused] || @preRematchText
       @preRematchText_unfused = hash[:preRematchText_unfused] || @preRematchText
       @preRematchText_reversed = hash[:preRematchText_reversed] || @preRematchText
       @preRematchText_gift = hash[:preRematchText_gift] || @preRematchText
+      @infoText = hash[:infoText]
+
     end
 
     # @return [String] the translated name of this trainer

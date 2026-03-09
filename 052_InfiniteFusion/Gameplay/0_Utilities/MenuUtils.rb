@@ -291,7 +291,23 @@ def selectDate(confirm_text = _INTL("You chose "))
 
 end
 
-
+# Helper method to wrap text into multiple lines
+def wrap_text(text, bitmap, max_width)
+  words = text.split(" ")
+  lines = []
+  line = ""
+  words.each do |word|
+    test_line = line.empty? ? word : "#{line} #{word}"
+    if bitmap.text_size(test_line).width > max_width
+      lines << line
+      line = word
+    else
+      line = test_line
+    end
+  end
+  lines << line unless line.empty?
+  return lines
+end
 
 def pbColor(color)
   # Mix your own colors: http://www.rapidtables.com/web/color/RGB_Color.htm

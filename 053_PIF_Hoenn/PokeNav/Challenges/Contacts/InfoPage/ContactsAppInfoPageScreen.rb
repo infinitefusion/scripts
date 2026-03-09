@@ -12,8 +12,6 @@ class ContactsAppInfoPageScreen
 
   def updateStatus
     trainer_id = @trainers_list[@index]
-    echoln "status"
-    echoln trainer_id
     unless $Trainer.pokenav.viewed_trainers.include?(trainer_id)
       $Trainer.pokenav.viewed_trainers << trainer_id
     end
@@ -35,8 +33,6 @@ class ContactsAppInfoPageScreen
   end
 
   def get_current_index(current_trainer_id)
-    echoln current_trainer_id
-    echoln @trainers_list
     @trainers_list.each_with_index do |trainer_id, i|
       if trainer_id == current_trainer_id
         return i
@@ -46,13 +42,7 @@ class ContactsAppInfoPageScreen
   end
 
   def change_trainer(delta)
-
-    echoln @index
-
     new_index = @index + delta
-
-    echoln new_index
-
     new_index = @trainers_list.length - 1 if new_index >= @trainers_list.length
     new_index = 0 if new_index < 0
     @index = new_index

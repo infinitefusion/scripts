@@ -82,7 +82,19 @@ Title screen and logo
 Doctor Miawoo
 
 Custom sprites collecting and handling
-Kiwikelly, Payapon, Thornsoflight
+Kiwikelly, Payapon, Thornsoflight, Greystorm
+
+Hoenn Trainer teams and dialogs: 
+.Realthree
+Chardub
+Funkytomate
+Kiwikelly
+Pory
+Shiro0170
+Gordogamr
+Theheroicorange
+
+
 
 Discord custom sprites coordination
 avianAnnihilator<s>Blaquaza

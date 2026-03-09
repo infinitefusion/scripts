@@ -1131,6 +1131,7 @@ module Compiler
     trainer_preRematchText_unfused = []
     trainer_preRematchText_reversed = []
     trainer_preRematchText_gift = []
+    trainer_infoText = []
 
     trainer_hash = nil
     trainer_id = -1
@@ -1219,7 +1220,7 @@ module Compiler
         end
         # Record XXX=YYY setting
         case property_name
-        when "Items", "LoseText", "BattleText", "LoseTextRematch", "PreRematchText", "PreRematchText_caught", "PreRematchText_evolved", "PreRematchText_fused", "PreRematchText_unfused", "PreRematchText_reversed", "PreRematchText_gift"
+        when "Items", "LoseText", "BattleText", "LoseTextRematch", "PreRematchText", "PreRematchText_caught", "PreRematchText_evolved", "PreRematchText_fused", "PreRematchText_unfused", "PreRematchText_reversed", "PreRematchText_gift", "TrainerInfo"
           trainer_hash[line_schema[0]] = property_value
           trainer_lose_texts[trainer_id] = property_value if property_name == "LoseText"
           trainer_battleText[trainer_id] = property_value if property_name == "BattleText"
@@ -1231,6 +1232,7 @@ module Compiler
           trainer_preRematchText_unfused[trainer_id] = property_value if property_name == "PreRematchText_unfused"
           trainer_preRematchText_reversed[trainer_id] = property_value if property_name == "PreRematchText_reversed"
           trainer_preRematchText_gift[trainer_id] = property_value if property_name == "PreRematchText_gift"
+          trainer_infoText[trainer_id] = property_value if property_name == "TrainerInfo"
 
         when "Pokemon"
           current_pkmn = {
@@ -1407,6 +1409,9 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_unfused)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_reversed)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_gift)
+
+    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_infoText)
+
     Graphics.update
   end
 

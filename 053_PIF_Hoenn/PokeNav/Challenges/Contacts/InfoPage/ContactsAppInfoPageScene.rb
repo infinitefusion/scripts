@@ -174,8 +174,10 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     current_y += INFO_HEADER_GAP
     displayValue(favorite_type, INFO_TEXT_X, current_y)
 
+    trainer_data = GameData::Trainer.try_get(@trainer.trainerType, @trainer.trainerName, 0)
+
+    current_y += INFO_TEXT_GAP * 1.5
     if @trainer.previous_random_events
-      trainer_data = GameData::Trainer.try_get(@trainer.trainerType, @trainer.trainerName, 0)
       action = getBestMatchingPreviousRandomEvent(trainer_data, @trainer.previous_random_events)
       if action
         case action.eventType
@@ -196,8 +198,24 @@ class ContactsAppInfoPageScene < PokeNavAppScene
           action_text = _INTL("Recently reversed their {1}",
                               GameData::Species.get(action.reversed_pokemon).real_name)
         end
-        current_y += INFO_TEXT_GAP * 1.5
         displayText(action_text, INFO_HEADER_X, current_y)
+      else
+        displayInfoText(current_y,trainer_data)
+      end
+    end
+  end
+
+  def displayInfoText(current_y, trainer_data)
+    infoText = trainer_data&.infoText
+    if infoText
+      full_text = "\"" + infoText + "\""
+      max_width = SPRITE_POSITION_X - INFO_HEADER_X - 20
+      temp_bitmap = Bitmap.new(1, 1)
+      lines = wrap_text(full_text, temp_bitmap, max_width)
+      temp_bitmap.dispose
+      lines.each do |line|
+        displayText(line, INFO_HEADER_X, current_y)
+        current_y += INFO_TEXT_GAP
       end
     end
   end
