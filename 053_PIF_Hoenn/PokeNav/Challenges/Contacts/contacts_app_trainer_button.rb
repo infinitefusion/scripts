@@ -1,19 +1,40 @@
 class ContactsAppTrainerButton < PokenavButton
-  IMAGE_TEXT_GAP = 96
+  IMAGE_TEXT_GAP = 128
   DEFAULT_SPRITE_PATH = "000"
+  IMAGE_X_OFFSET = 32
+  SOURCE_IMAGE_Y_CROP = 24
+
+  TRADE_AVAILABLE_ICON = "Graphics/Pictures/Pokegear/Trainers/tradeIcon"
+  IS_NEW_ICON = "Graphics/Pictures/Pokegear/Trainers/dialogIcon"
+
+
 
   def get_width
-    return Graphics.width
+    return Graphics.width-72
   end
 
   def get_height
-    return 48
+    return 56
+  end
+
+  def background_image
+    return "Graphics/Pictures/Pokegear/Trainers/trainer_list_button.png"
+  end
+
+  def set_trade_available(value)
+    @is_trade_available = true #value
+  end
+
+  def set_new(value)
+    @is_new = value
   end
 
   def initialize(id, image = nil, text = nil, viewport = nil)
     @image_path = image
     @image_path = DEFAULT_SPRITE_PATH if @image_path.nil?
     super(id, nil, text, viewport)
+    @is_trade_available = false
+    @is_new = false
     refresh
   end
 
@@ -32,22 +53,24 @@ class ContactsAppTrainerButton < PokenavButton
     else
       @image_sprite.setBitmap("Graphics/Characters/#{@image_path}")
     end
-    @image_sprite.src_rect.width = (@image_sprite.bitmap.width / 4).round
-    @image_sprite.src_rect.height = (@image_sprite.bitmap.height / 4).round
-    @image_sprite.src_rect.x = 0
-    @image_sprite.src_rect.y = 0
+    frame_w = (@image_sprite.bitmap.width / 4).round
+    frame_h = (@image_sprite.bitmap.height / 4).round
+
+    @image_sprite.src_rect.width  = frame_w
+    @image_sprite.src_rect.height = [frame_h - SOURCE_IMAGE_Y_CROP, get_height].min
+    @image_sprite.src_rect.x = 16
+    @image_sprite.src_rect.y = 16
     @image_sprite.z = self.z + 1
   end
-
   def x=(value)
     super
-    @image_sprite&.x = value
+    @image_sprite&.x = value + IMAGE_X_OFFSET
   end
 
   def y=(value)
     super
     frame_h = @image_sprite ? @image_sprite.src_rect.height : 0
-    @image_sprite&.y = value + (get_height - frame_h) / 2
+    @image_sprite&.y = value + (get_height - frame_h) / 2 - 8
   end
 
   def visible=(value)

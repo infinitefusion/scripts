@@ -36,7 +36,7 @@ CLOTHES_BRENDAN = "brendanRS"
 CLOTHES_MAY = "mayRS"
 
 CLOTHES_TEAM_MAGMA_M = "magmaRSE"
-CLOTHES_TEAM_MAGMA_F = "magmaRSE"
+CLOTHES_TEAM_MAGMA_F = "magmarsef"
 
 
 CLOTHES_TEAM_AQUA_M = "teamaquaM"

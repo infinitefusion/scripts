@@ -1,3 +1,9 @@
+#
+#todo: Phonebook- like visuals for the list page
+# Have a "trainer-fact" display when there's no recent event defined in trainer.txt
+#
+#
+
 class ContactsAppInfoPageScene < PokeNavAppScene
   attr_accessor :trainer
 
@@ -117,7 +123,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
       level_sum += pokemon.level
     end
     average_level = (level_sum / @trainer.currentTeam.length).round
-    location = @trainer.location == _INTL("Favorites") ? _INTL("Unknown location") : @trainer.location
+    location = @trainer.location
     favorite_type = GameData::Type.get(@trainer.favorite_type).real_name
     if @trainer.id == BATTLED_TRAINER_RIVAL_KEY
       favorite_type = _INTL("All")

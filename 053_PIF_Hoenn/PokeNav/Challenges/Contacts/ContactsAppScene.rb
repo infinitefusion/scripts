@@ -1,8 +1,11 @@
-# todo:
-# When all pokemon in the route are seen, can "scan" for species
-#  - spawns a pokemon of that species nearby with notice behavior to flee
 class ContactsAppScene < PokeNavAppScene
   INFO_TEXT_Y = 270
+  def cursor_x_offset
+    return 32
+  end
+  def cursor_y_offset
+    return -24
+  end
 
   def header_name
     return _INTL("Trainers")
@@ -21,7 +24,7 @@ class ContactsAppScene < PokeNavAppScene
   end
 
   def x_gap
-    return 75;
+    return 74;
   end
 
   def y_gap
@@ -60,7 +63,10 @@ class ContactsAppScene < PokeNavAppScene
         trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
         trainer_name = "#{trainerClassName} #{trainer.trainerName}"
         @trainers << trainer.id
-        buttons << ContactsAppTrainerButton.new(trainer.id, trainer.overworld_sprite, trainer_name)
+        button = ContactsAppTrainerButton.new(trainer.id, trainer.overworld_sprite, trainer_name)
+        button.set_trade_available(trainer.can_trade?)
+        button.set_new(true) #todo
+        buttons << button
       end
     end
 
@@ -133,23 +139,51 @@ class ContactsAppScene < PokeNavAppScene
 
   def createCursor
     super
-    @sprites["cursor"].x=36
+    @sprites["cursor"].x=16
+    @sprites["cursor"].y=-32
   end
 
   def click(button_id)
     super
-    cmd_info = _INTL("Info")
-    cmd_team = _INTL("View Team")
-    cmd_cancel = _INTL("Cancel")
-    commands = [cmd_info, cmd_team, cmd_cancel]
-    choice = pbMessage(_INTL("What would you like to do?"), commands, commands.size)
-    case commands[choice]
-    when cmd_info
-      @screen.view_trainer_page(button_id, @trainers)
-    when cmd_team
-      @screen.view_trainer_team(button_id)
-    end
+    @screen.view_trainer_page(button_id, @trainers)
+    # cmd_info = _INTL("Info")
+    # cmd_team = _INTL("View Team")
+    # cmd_cancel = _INTL("Cancel")
+    # commands = [cmd_info, cmd_team, cmd_cancel]
+    # choice = pbMessage(_INTL("What would you like to do?"), commands, commands.size)
+    # case commands[choice]
+    # when cmd_info
+    #   @screen.view_trainer_page(button_id, @trainers)
+    # when cmd_team
+    #   @screen.view_trainer_team(button_id)
+    # end
   end
+
+  def layoutButtons
+    return if @exiting
+    current_row = @index
+    scroll_row = [current_row - visible_rows + 1, 0].max
+
+    y_positions = []
+    cumulative_y = 0
+    @buttons.each do |btn|
+      y_positions << cumulative_y
+      cumulative_y += btn.get_height + (btn.respond_to?(:bottom_margin) ? btn.bottom_margin : 0)
+    end
+
+    scroll_pixels = y_positions[[scroll_row, @buttons.length - 1].min]
+
+    @buttons.each_with_index do |btn, i|
+      btn.x = start_x
+      btn.y = start_y + y_positions[i] - scroll_pixels
+      btn.visible = (btn.y >= start_y - btn.get_height && btn.y <= Graphics.height)
+      btn.selected = (i == @index)
+    end
+
+    updateCursor
+    updateHeader(scroll_row)
+  end
+
 
   def hover(button_id)
     super

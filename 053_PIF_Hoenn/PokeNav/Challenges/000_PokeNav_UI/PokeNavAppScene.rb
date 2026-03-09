@@ -5,6 +5,7 @@ class PokeNavAppScene
   # Configuration (override in child classes)
   #--------------------------------------------------------------------------
   HEADER_HEIGHT = -6
+
   def display_mode
     return :LIST # :LIST or :GRID
   end
@@ -27,6 +28,14 @@ class PokeNavAppScene
 
   def visible_rows
     return 4;
+  end
+
+  def cursor_x_offset
+    return 0
+  end
+
+  def cursor_y_offset
+    return 0
   end
 
   def header_path
@@ -127,8 +136,8 @@ class PokeNavAppScene
     btn = @buttons[@index]
     return unless btn
 
-    cursor.x = btn.x
-    cursor.y = btn.y
+    cursor.x = btn.x + cursor_x_offset
+    cursor.y = btn.y + cursor_y_offset
     cursor.visible = btn.visible
   end
 

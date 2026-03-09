@@ -38,7 +38,9 @@ class PokenavButton < SpriteWrapper
     if isDarkMode
       @text_color, @shadow_color = @shadow_color, @text_color
     end
-
+    @bg = IconSprite.new(0, 0, @viewport)
+    @bg.setBitmap(background_image)
+    @bg.z = self.z - 1
     # Determine source bitmap
     if image.is_a?(String)
       @source_bitmap = AnimatedBitmap.new(image)
@@ -63,22 +65,42 @@ class PokenavButton < SpriteWrapper
   end
 
 
-
+  def background_image
+    return ""
+  end
 
   def create_empty_bitmap
     self.bitmap = Bitmap.new(get_width, get_height)
     pbSetSystemFont(self.bitmap)
+
+    # Draw background image directly onto bitmap
+    bg_path = background_image
+    if bg_path && bg_path != ""
+      bg_bmp = AnimatedBitmap.new(bg_path).bitmap
+      self.bitmap.stretch_blt(
+        Rect.new(0, 0, get_width, get_height),
+        bg_bmp,
+        Rect.new(0, 0, bg_bmp.width, bg_bmp.height)
+      )
+    end
   end
 
 
   def x=(value)
     @x = value
     super(value)
+    @bg.x = value if @bg
   end
 
   def y=(value)
     @y = value
     super(value)
+    @bg.y = value if @bg
+  end
+
+  def z=(value)
+    super(value)
+    @bg.z = value - 1 if @bg
   end
 
   def get_height
@@ -98,11 +120,11 @@ class PokenavButton < SpriteWrapper
   end
 
   def dispose
-    dispose_source
+    dispose_graphics
     super
   end
 
-  def dispose_source
+  def dispose_graphics
     @source_bitmap.dispose if @source_bitmap
     @source_bitmap = nil
   end
@@ -125,12 +147,24 @@ class PokenavButton < SpriteWrapper
     return unless self.bitmap
     self.bitmap.clear
 
+    # Redraw background
+    bg_path = background_image
+    if bg_path && bg_path != ""
+      bg_bmp = AnimatedBitmap.new(bg_path).bitmap
+      self.bitmap.stretch_blt(
+        Rect.new(0, 0, self.bitmap.width, self.bitmap.height),
+        bg_bmp,
+        Rect.new(0, 0, bg_bmp.width, bg_bmp.height)
+      )
+    end
+
     if @source_bitmap
       bmp = @source_bitmap.bitmap
       width = @crop_width || bmp.width
       height = @crop_height || bmp.height
       self.bitmap.blt(0, 0, bmp, Rect.new(0, 0, width, height))
     end
+
     draw_text if @text && @text != ""
   end
 

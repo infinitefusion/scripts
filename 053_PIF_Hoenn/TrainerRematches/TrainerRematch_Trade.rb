@@ -182,6 +182,10 @@ def offerPokemonForTrade(player_pokemon, npc_party, trainer_class)
   end.first
 end
 
+def can_trade?(trainer)
+  return trainer.isNextTradeReady? && trainer.friendship_level >= FRIENDSHIP_LEVEL_FOR_TRADE
+end
+
 def doNPCTrainerTrade(trainer)
   echoln "Time since last trade: #{trainer.getTimeSinceLastTrade}"
   if trainer.isNextTradeReady?

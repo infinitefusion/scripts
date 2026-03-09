@@ -13,6 +13,7 @@
 # Methods to be called from events
 ####
 
+FRIENDSHIP_LEVEL_FOR_TRADE = 1
 
 #actionType :
 # :BATTLE
@@ -81,7 +82,7 @@ def postBattleActionsMenu(trainer=nil)
   else
     options << rematchCommand
   end
-  options << tradeCommand if trainer.friendship_level >= 1
+  options << tradeCommand if trainer.friendship_level >= FRIENDSHIP_LEVEL_FOR_TRADE
   #options << partnerCommand if trainer.friendship_level >= 3
 
   options << updateTeamDebugCommand if $DEBUG
