@@ -74,6 +74,7 @@ class ContactsAppScene < PokeNavAppScene
 
     super(buttons)
     @index = 1
+    scroll_to_current_location
     showHeaderName
     @buttons[@index].hover
   end
@@ -107,6 +108,16 @@ class ContactsAppScene < PokeNavAppScene
     end
   end
 
+  def scroll_to_current_location
+    current_location_name = getMapName($game_map.map_id)
+    for i in @index..@buttons.length-1
+      if @buttons[i].is_a?(ContactsAppLocationButton) && @buttons[i].id == current_location_name
+        new_index = i+1 #next index for the first trainer in that location
+        move_to_index(new_index)
+      end
+    end
+  end
+
   def find_next_location_index
     for i in @index..@buttons.length-1
       if @buttons[i].is_a?(ContactsAppLocationButton)
@@ -115,7 +126,6 @@ class ContactsAppScene < PokeNavAppScene
     end
     return @buttons.length-1
   end
-
 
   def find_previous_location_index
     found_current_location = false

@@ -43,7 +43,7 @@ def promptGiveToPartner(caughtPokemon)
   return false if $Trainer.npcPartner == BATTLED_TRAINER_WALLY_KEY && partnerTrainer.currentTeam.length > 0
   return false if !partnerTrainer
     command = pbMessage(_INTL("Would you like to give the newly caught {1} to {2}?",caughtPokemon.name,partnerTrainer.trainerName),
-                        [_INTL("Keep"),_INTL("Give to {1}",partnerTrainer.trainerName)], 2)
+                        [_INTL("Keep"),_INTL("Give to {1}",partnerTrainer.trainerName)], 0)
     case command
     when 0 # Keep
       return

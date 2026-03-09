@@ -23,7 +23,11 @@ class ContactsAppTrainerButton < PokenavButton
   end
 
   def background_image
-    return "Graphics/Pictures/Pokegear/Trainers/trainer_list_button.png"
+    if isDarkMode
+      return "Graphics/Pictures/Pokegear/Trainers/trainer_list_button_dark.png"
+    else
+      return "Graphics/Pictures/Pokegear/Trainers/trainer_list_button.png"
+    end
   end
 
   def set_trade_available(value)

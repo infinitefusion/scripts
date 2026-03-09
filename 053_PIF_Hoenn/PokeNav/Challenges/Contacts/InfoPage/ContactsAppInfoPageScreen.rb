@@ -2,11 +2,21 @@ class ContactsAppInfoPageScreen
 
   def pbStartScreen(scene, trainer, trainers_list)
     @trainers_list = trainers_list
-    @index = get_current_index(@trainer)
     @scene = scene
+    @index = get_current_index(trainer.id)
     @scene.pbStartScene(self, trainer)
     @scene.pbScene
     @scene.pbEndScene
+    updateStatus
+  end
+
+  def updateStatus
+    trainer_id = @trainers_list[@index]
+    echoln "status"
+    echoln trainer_id
+    unless $Trainer.pokenav.viewed_trainers.include?(trainer_id)
+      $Trainer.pokenav.viewed_trainers << trainer_id
+    end
   end
 
   def view_trainer_team(trainer_id)
@@ -25,6 +35,8 @@ class ContactsAppInfoPageScreen
   end
 
   def get_current_index(current_trainer_id)
+    echoln current_trainer_id
+    echoln @trainers_list
     @trainers_list.each_with_index do |trainer_id, i|
       if trainer_id == current_trainer_id
         return i
@@ -47,5 +59,6 @@ class ContactsAppInfoPageScreen
 
     new_trainer_id = @trainers_list[new_index]
     @scene.trainer = getRebattledTrainerFromKey(new_trainer_id)
+    updateStatus
   end
 end

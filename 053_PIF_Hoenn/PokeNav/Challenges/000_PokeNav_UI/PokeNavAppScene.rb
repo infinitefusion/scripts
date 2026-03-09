@@ -121,7 +121,8 @@ class PokeNavAppScene
 
       btn.x = start_x + col * x_gap
       btn.y = start_y + row * y_gap - scroll_pixels
-      btn.visible = (btn.y >= start_y - y_gap && btn.y <= Graphics.height)
+      # Only show buttons fully within the scrollable content area, never over the header
+      btn.visible = (btn.y >= start_y && btn.y <= Graphics.height)
       btn.selected = (i == @index)
     end
     updateCursor
@@ -161,6 +162,8 @@ class PokeNavAppScene
   def createHeader
     @sprites["header"] = IconSprite.new(0, 0, @viewport)
     @sprites["header"].setBitmap(header_path)
+    # Ensure header always renders above buttons and cursor
+    @sprites["header"].z = 100001
   end
 
   def createBackground
@@ -175,12 +178,6 @@ class PokeNavAppScene
   def updateHeader(scroll_row)
     return unless use_header?
     return unless @sprites["header"]
-
-    if scroll_row > 0
-      @sprites["header"].visible = false
-    else
-      @sprites["header"].visible = true
-    end
   end
 
   def use_header?

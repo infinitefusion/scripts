@@ -13,6 +13,7 @@ def wally_initialize()
   battledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_WALLY_KEY)
   battledTrainer.currentTeam = [] # team
   battledTrainer.setFavorite(true)
+  battledTrainer.setOverworldSprite("NPC_Hoenn_Wally")
   $PokemonGlobal.battledTrainers = {} if !$PokemonGlobal.battledTrainers
   $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY] = battledTrainer
   return battledTrainer

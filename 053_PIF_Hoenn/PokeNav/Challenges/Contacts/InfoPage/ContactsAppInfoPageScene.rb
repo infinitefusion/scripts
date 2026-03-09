@@ -7,7 +7,7 @@
 class ContactsAppInfoPageScene < PokeNavAppScene
   attr_accessor :trainer
 
-  SPRITE_POSITION_X = 400
+  SPRITE_POSITION_X = 375
   SPRITE_POSITION_Y = 230
 
   TITLE_TEXT_X = 380
@@ -141,10 +141,15 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     trainer_name = "#{trainerClassName} #{@trainer.trainerName}"
 
     level_sum = 0
-    @trainer.currentTeam.each do |pokemon|
-      level_sum += pokemon.level
+    if @trainer.currentTeam.size > 0
+      @trainer.currentTeam.each do |pokemon|
+        level_sum += pokemon.level
+      end
+      average_level = (level_sum / @trainer.currentTeam.length).round
+    else
+      average_level = _INTL("N/A")
     end
-    average_level = (level_sum / @trainer.currentTeam.length).round
+
     location = @trainer.location
     favorite_type = GameData::Type.get(@trainer.favorite_type).real_name
     if @trainer.id == BATTLED_TRAINER_RIVAL_KEY
@@ -243,8 +248,11 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     super
     cmd_team = _INTL("View Team")
     cmd_cancel = _INTL("Cancel")
-    commands = [cmd_team, cmd_cancel]
-    choice = pbMessage(_INTL("What would you like to do?"), commands, commands.size)
+    commands = []
+    commands << cmd_team if @trainer.currentTeam.size > 0
+    commands << cmd_cancel
+    #choice = pbMessage(nil, commands, commands.size)
+    choice = pbShowCommands(nil, commands, commands.size, 0, 330,200)
     case commands[choice]
     when cmd_team
       Kernel.pbClearText()
@@ -255,5 +263,11 @@ class ContactsAppInfoPageScene < PokeNavAppScene
 
   def hover(button_id)
     super
+  end
+
+  def pbEndScene
+    super
+    #Re-write the header name since going back to trainers list which has already been initialized
+    Kernel.pbDisplayText(header_name, Graphics.width/2 , HEADER_HEIGHT)
   end
 end

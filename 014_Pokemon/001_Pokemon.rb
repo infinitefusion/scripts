@@ -1607,6 +1607,8 @@ class Pokemon
       @owner = owner
     elsif owner.is_a?(Player) || owner.is_a?(NPCTrainer)
       @owner = Owner.new_from_trainer(owner)
+    elsif owner.is_a?(String)
+      @owner = Owner.new(0, owner, 2, 2)
     else
       @owner = Owner.new(0, '', 2, 2)
     end

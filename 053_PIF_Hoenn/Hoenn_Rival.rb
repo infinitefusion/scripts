@@ -148,7 +148,7 @@ class Sprite_Character
       pokemon_species = getFusionSpeciesSymbol(:WAILMER, rival_starter_species) if isPlayerMale()
     end
     team = []
-    team << Pokemon.new(pokemon_species, 15)
+    team << Pokemon.new(pokemon_species, 15, rival_trainer.trainerName)
 
     rival_trainer.currentTeam = team
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
@@ -226,9 +226,14 @@ class Sprite_Character
     end
 
     team = []
-    team << Pokemon.new(other_pokemon[0], 18)
-    team << Pokemon.new(other_pokemon[1], 18)
-    team << Pokemon.new(contains_starter[0], 20)
+
+    echoln "HEY LA"
+    echoln rival_trainer.trainerName
+
+
+    team << Pokemon.new(other_pokemon[0], 18, rival_trainer.trainerName)
+    team << Pokemon.new(other_pokemon[1], 18, rival_trainer.trainerName)
+    team << Pokemon.new(contains_starter[0], 20, rival_trainer.trainerName)
 
     rival_trainer.currentTeam = team
 
@@ -251,7 +256,7 @@ class Sprite_Character
 
   def addPokemonToRivalTeam(species, level)
     rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
-    rival_trainer.currentTeam << Pokemon.new(species, level)
+    rival_trainer.currentTeam << Pokemon.new(species, level, rival_trainer.trainerName)
     $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
   end
 
@@ -262,7 +267,7 @@ class Sprite_Character
     rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
     rivalBattledTrainer.set_custom_appearance(trainer_appearance)
     team = []
-    team << Pokemon.new(get_hoenn_rival_starter, 5)
+    team << Pokemon.new(get_hoenn_rival_starter, 5, trainer_name)
     rivalBattledTrainer.currentTeam = team
     return rivalBattledTrainer
   end
