@@ -20,8 +20,8 @@
 # :PARTNER
 def doPostBattleAction(actionType,trainer, double_allowed=true)
   event = pbMapInterpreter.get_character(0)
+  map_id = $game_map.map_id if map_id.nil?
   unless trainer
-    map_id = $game_map.map_id if map_id.nil?
     trainer = getRebattledTrainer(event.id,map_id)
   end
   trainer.clear_previous_random_events()

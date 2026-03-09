@@ -12,6 +12,7 @@ def wally_initialize()
   trainer_name = "Wally"
   battledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_WALLY_KEY)
   battledTrainer.currentTeam = [] # team
+  battledTrainer.setFavorite(true)
   $PokemonGlobal.battledTrainers = {} if !$PokemonGlobal.battledTrainers
   $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY] = battledTrainer
   return battledTrainer

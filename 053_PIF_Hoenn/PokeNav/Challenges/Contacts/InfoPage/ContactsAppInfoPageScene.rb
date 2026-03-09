@@ -1,8 +1,10 @@
 class ContactsAppInfoPageScene < PokeNavAppScene
+  attr_accessor :trainer
+
   SPRITE_POSITION_X = 400
   SPRITE_POSITION_Y = 230
 
-  TITLE_TEXT_X = 370
+  TITLE_TEXT_X = 380
   TITLE_TEXT_Y = 50
 
   INFO_HEADER_X = 40
@@ -76,12 +78,11 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     else
       pbEndScene
     end
-
   end
 
   def showTrainerSprite
     if @trainer.id == BATTLED_TRAINER_RIVAL_KEY
-      bitmap = generate_front_trainer_sprite_bitmap_from_appearance($Trainer.rival_appearance).bitmap
+      bitmap = generate_front_trainer_sprite_bitmap_from_appearance($Trainer.rival_appearance)
       @sprites["trainer"] = IconSprite.new(0, 0, @viewport)
       @sprites["trainer"].setBitmapDirectly(bitmap)
     else
@@ -105,7 +106,6 @@ class ContactsAppInfoPageScene < PokeNavAppScene
   end
 
   def showTrainerInfo
-    echoln "show trainer info"
     Kernel.pbClearText
     showHeaderName
 
@@ -117,13 +117,19 @@ class ContactsAppInfoPageScene < PokeNavAppScene
       level_sum += pokemon.level
     end
     average_level = (level_sum / @trainer.currentTeam.length).round
+    location = @trainer.location == _INTL("Favorites") ? _INTL("Unknown location") : @trainer.location
+    favorite_type = GameData::Type.get(@trainer.favorite_type).real_name
+    if @trainer.id == BATTLED_TRAINER_RIVAL_KEY
+      favorite_type = _INTL("All")
+    elsif @trainer.id == BATTLED_TRAINER_WALLY_KEY
+      favorite_type = _INTL("Unknown")
+    end
 
     Kernel.pbDisplayText(trainer_name, TITLE_TEXT_X, TITLE_TEXT_Y, 999999, @text_color_base, @text_color_shadow)
-
     current_y = INFO_TEXT_START_Y
     displayText(_INTL("Location:"), INFO_HEADER_X, current_y)
     current_y += INFO_HEADER_GAP
-    displayValue(_INTL(@trainer.location), INFO_TEXT_X, current_y)
+    displayValue(location, INFO_TEXT_X, current_y)
 
     current_y += INFO_TEXT_GAP
     displayText(_INTL("Average team level:"), INFO_HEADER_X, current_y)
@@ -133,7 +139,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     current_y += INFO_TEXT_GAP
     displayText(_INTL("Favorite type:"), INFO_HEADER_X, current_y)
     current_y += INFO_HEADER_GAP
-    displayValue(GameData::Type.get(@trainer.favorite_type).real_name, INFO_TEXT_X, current_y)
+    displayValue(favorite_type, INFO_TEXT_X, current_y)
 
     if @trainer.previous_random_events
       trainer_data = GameData::Trainer.try_get(@trainer.trainerType, @trainer.trainerName, 0)
@@ -157,10 +163,35 @@ class ContactsAppInfoPageScene < PokeNavAppScene
           action_text = _INTL("Recently reversed their {1}",
                               GameData::Species.get(action.reversed_pokemon).real_name)
         end
-        current_y += INFO_TEXT_GAP*1.5
+        current_y += INFO_TEXT_GAP * 1.5
         displayText(action_text, INFO_HEADER_X, current_y)
       end
     end
+  end
+
+  def updateInput
+    if Input.trigger?(Input::UP)
+      change_trainer(-1)
+      pbSEPlay("GUI naming tab swap start")
+    elsif Input.trigger?(Input::DOWN)
+      change_trainer(1)
+      pbSEPlay("GUI naming tab swap start")
+    elsif Input.trigger?(Input::BACK)
+      pbPlayCloseMenuSE
+      @exiting = true
+      return
+    elsif Input.trigger?(Input::USE)
+      pbPlayDecisionSE
+      click(@buttons[@index]&.id)
+    end
+  end
+
+  def change_trainer(index_delta)
+    @screen.change_trainer(index_delta)
+    @sprites["trainer"]&.dispose
+    Kernel.pbClearText()
+    showTrainerSprite
+    showTrainerInfo
   end
 
   def displayText(text, x_position, y_position)

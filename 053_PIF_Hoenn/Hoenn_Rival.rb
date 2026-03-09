@@ -271,6 +271,7 @@ class Sprite_Character
     $PokemonGlobal.battledTrainers = {} if !$PokemonGlobal.battledTrainers
     if !$PokemonGlobal.battledTrainers.has_key?(BATTLED_TRAINER_RIVAL_KEY)
       rival_trainer = initializeRivalBattledTrainer()
+      rival_trainer.setFavorite(true)
       $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY] = rival_trainer
     else
       rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]

@@ -25,7 +25,7 @@ class ContactsAppScene < PokeNavAppScene
   end
 
   def y_gap
-    return 64;
+    return 48;
   end
 
   def columns
@@ -48,6 +48,7 @@ class ContactsAppScene < PokeNavAppScene
   def pbStartScene(screen)
     @screen = screen
     buttons = []
+    @trainers = []
     @contacts_list = screen.list_contacts
     @contacts_list.each do |location, trainers_list|
       next unless location
@@ -58,6 +59,7 @@ class ContactsAppScene < PokeNavAppScene
         next unless screen.can_be_listed(trainer)
         trainerClassName = GameData::TrainerType.get(trainer.trainerType).real_name
         trainer_name = "#{trainerClassName} #{trainer.trainerName}"
+        @trainers << trainer.id
         buttons << ContactsAppTrainerButton.new(trainer.id, trainer.overworld_sprite, trainer_name)
       end
     end
@@ -143,7 +145,7 @@ class ContactsAppScene < PokeNavAppScene
     choice = pbMessage(_INTL("What would you like to do?"), commands, commands.size)
     case commands[choice]
     when cmd_info
-      @screen.view_trainer_page(button_id)
+      @screen.view_trainer_page(button_id, @trainers)
     when cmd_team
       @screen.view_trainer_team(button_id)
     end

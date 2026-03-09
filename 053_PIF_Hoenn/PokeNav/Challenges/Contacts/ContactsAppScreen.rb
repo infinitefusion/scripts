@@ -23,15 +23,27 @@ class ContactsAppScreen
   end
 
   def list_contacts
+    echoln $PokemonGlobal.battledTrainers
     contacts_list_by_location = {}
     $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
     $PokemonGlobal.battledTrainers.each do |id, trainer|
-      location = trainer.location
-      contacts_list_by_location[location] ||= []
-      contacts_list_by_location[location] << trainer
+      next unless can_be_listed(trainer)
+      if trainer.favorite
+        contacts_list_by_location[_INTL("Favorites")] ||= []
+        contacts_list_by_location[_INTL("Favorites")] << trainer
+      else
+        location = trainer.location
+        contacts_list_by_location[location] ||= []
+        contacts_list_by_location[location] << trainer
+      end
     end
     contacts_list_by_location.each_value do |trainer_array|
       trainer_array.sort_by! { |t| t.trainerName }
+    end
+    # Move Favorites to front
+    favorites = contacts_list_by_location.delete(_INTL("Favorites"))
+    if favorites
+      contacts_list_by_location = { _INTL("Favorites") => favorites }.merge(contacts_list_by_location)
     end
     return contacts_list_by_location
   end
@@ -42,13 +54,13 @@ class ContactsAppScreen
     return true
   end
 
-  def view_trainer_page(trainer_id)
+  def view_trainer_page(trainer_id, trainers_list)
     trainer= getRebattledTrainerFromKey(trainer_id)
     if trainer
       pbFadeOutIn {
         scene = ContactsAppInfoPageScene.new
         screen = ContactsAppInfoPageScreen.new
-        screen.pbStartScreen(scene, trainer)
+        screen.pbStartScreen(scene, trainer, trainers_list)
       }
     else
       pbSEPlay("buzzer", 80)

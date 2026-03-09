@@ -48,6 +48,8 @@ class BattledTrainer
   attr_accessor :friendship_level
 
   attr_accessor :overworld_sprite
+
+  attr_reader :favorite
   def initialize(trainerType,trainerName,trainerVersion,trainerKey)
     @trainerKey = trainerKey
     @trainerType = trainerType
@@ -65,6 +67,7 @@ class BattledTrainer
     @friendship_level = 0
     @overworld_sprite = ""
     @location = _INTL("Unknown location")
+    @favorite = false
   end
 
   def id
@@ -89,6 +92,10 @@ class BattledTrainer
 
   def setLocation(location_name)
     @location = location_name
+  end
+
+  def setFavorite(value)
+    @favorite = value
   end
   def getLinkedTrainer()
     trainer = getRebattledTrainer(@linked_event,$game_map.map_id)

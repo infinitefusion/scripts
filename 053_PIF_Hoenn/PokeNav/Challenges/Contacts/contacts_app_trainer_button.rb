@@ -7,7 +7,7 @@ class ContactsAppTrainerButton < PokenavButton
   end
 
   def get_height
-    return 64
+    return 48
   end
 
   def initialize(id, image = nil, text = nil, viewport = nil)
@@ -25,7 +25,13 @@ class ContactsAppTrainerButton < PokenavButton
   def create_image_sprite
     return unless @image_path && self.viewport
     @image_sprite = IconSprite.new(0, 0, self.viewport)
-    @image_sprite.setBitmap("Graphics/Characters/#{@image_path}")
+    if @id == BATTLED_TRAINER_RIVAL_KEY
+      rival_bitmap = AnimatedBitmap.new(getBaseOverworldSpriteFilename())
+      rival_bitmap.bitmap = generateNPCClothedBitmapStatic($Trainer.rival_appearance)
+      @image_sprite.setBitmapDirectly(rival_bitmap)
+    else
+      @image_sprite.setBitmap("Graphics/Characters/#{@image_path}")
+    end
     @image_sprite.src_rect.width = (@image_sprite.bitmap.width / 4).round
     @image_sprite.src_rect.height = (@image_sprite.bitmap.height / 4).round
     @image_sprite.src_rect.x = 0
