@@ -71,7 +71,7 @@ class OverworldPokemonEvent < Game_Event
     @is_flying = @character_name == @flying_sprite
     @is_swimming = false
     @step_anime = @is_flying
-    @forced_z = 300 if @is_flying #@always_on_top = @is_flying
+    @forced_z = 300 if @is_flying && $PokemonGlobal.boat#@always_on_top = @is_flying
     @part_of_pokeradar_chain = is_pokeradar_chain
     if @terrain == :Water
       set_swimming

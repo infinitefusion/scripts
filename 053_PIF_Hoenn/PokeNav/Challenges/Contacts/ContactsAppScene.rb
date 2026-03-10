@@ -75,7 +75,7 @@ class ContactsAppScene < PokeNavAppScene
     super(buttons)
     @index = 1
     scroll_to_current_location
-    showHeaderName
+    displayTextElements
     @buttons[@index].hover
   end
 

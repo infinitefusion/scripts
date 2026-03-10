@@ -24,7 +24,7 @@ class ContactsAppInfoPageScreen
       pbFadeOutIn {
         scene = PokemonSummary_Scene.new
         screen = PokemonSummaryScreen.new(scene)
-        screen.pbStartScreen(team, 0)
+        screen.pbStartScreen(team, 0, false)
       }
     else
       pbSEPlay("buzzer", 80)

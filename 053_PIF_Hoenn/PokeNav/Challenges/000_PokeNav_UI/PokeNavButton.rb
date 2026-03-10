@@ -126,7 +126,9 @@ class PokenavButton < SpriteWrapper
 
   def dispose_graphics
     @source_bitmap.dispose if @source_bitmap
+    @bg.dispose if @bg
     @source_bitmap = nil
+    @bg =nil
   end
 
   def click

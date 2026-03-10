@@ -180,6 +180,11 @@ class PokeNavAppScene
     return unless @sprites["header"]
   end
 
+  def displayTextElements
+    Kernel.pbClearText
+    showHeaderName
+  end
+
   def use_header?
     return true
   end
@@ -214,10 +219,10 @@ class PokeNavAppScene
       pbPlayDecisionSE
       click(@buttons[@index]&.id)
     elsif Input.repeat?(Input::LEFT) && cols > 1
-      move_to_index(-1)
+      move_index(-1)
       pbWait(move_delay)
     elsif Input.repeat?(Input::RIGHT) && cols > 1
-      move_to_index(1)
+      move_index(1)
       pbWait(move_delay)
     elsif Input.repeat?(Input::UP)
       move_index(-cols)
@@ -236,23 +241,38 @@ class PokeNavAppScene
     @buttons[@index]&.click
   end
   def move_index(delta)
+    echoln "old: #{@index}"
+
     return if @buttons.empty?
     pbPlayCursorSE
     @index = (@index + delta) % @buttons.length
     hover(@buttons[@index]&.id)
+
+    echoln "new: #{@index}"
+
   end
 
   def move_to_index(index)
+    echoln "old: #{@index}"
+
+
     return if @buttons.empty?
     pbPlayCursorSE
     @index = index
+    echoln "new: #{@index}"
+
     hover(@buttons[@index]&.id)
+
+
   end
 
   def pbEndScene
     @exiting = true
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
+    @buttons.each do |button|
+      button.dispose
+    end
     Kernel.pbClearText
     @viewport.dispose
   end

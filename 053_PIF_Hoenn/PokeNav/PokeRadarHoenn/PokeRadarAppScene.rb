@@ -59,8 +59,6 @@ class PokeRadarAppScene < PokeNavAppScene
         showEmpty
       end
     end
-    echoln @text_color_base
-
     showBattery
     showHeaderName
     showAreaName
@@ -206,13 +204,6 @@ class PokeRadarAppScene < PokeNavAppScene
       weather_intensity = 0 if !weather_intensity
       chance_of_weather_encounter = $PokemonEncounters.weather_encounter_chance(weather_intensity)
       weather_rareness = encounter[0]
-
-      echoln encounter
-      echoln chance_of_weather_encounter
-      echoln weather_rareness
-      echoln base_rareness
-
-      echoln weather_rareness * (chance_of_weather_encounter.to_f / 100) + base_rareness
       return weather_rareness * (chance_of_weather_encounter.to_f / 100) + base_rareness
     end
     return 0

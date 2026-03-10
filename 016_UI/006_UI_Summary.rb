@@ -1459,7 +1459,7 @@ class PokemonSummary_Scene
           dorefresh = true
         end
       elsif Input.trigger?(Input::RIGHT) && !@pokemon.egg?
-        if @page == 4 && !$Trainer.has_pokedex || !@is_player
+        if @page == 4 && (!$Trainer.has_pokedex || !@is_player)
           pbSEPlay("GUI sel buzzer")
         else
           oldpage = @page

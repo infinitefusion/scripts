@@ -127,7 +127,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
       sprite.setBitmap(FRIENDSHIP_ICON)
       sprite.x = FRIENDSHIP_ICON_START_X + i * (ICON_SIZE + FRIENDSHIP_ICON_GAP)
       sprite.y = FRIENDSHIP_ICON_START_Y
-      sprite.z = 50
+      sprite.z = 100002
       @friendship_icons << sprite
       @sprites["friendship_icon_#{i}"] = sprite
     end
