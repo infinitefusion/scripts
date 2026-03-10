@@ -732,7 +732,13 @@ end
 # _viewport_ is a viewport to place the background in.
 def addBackgroundPlane(sprites,planename,background,viewport=nil)
   sprites[planename]=AnimatedPlane.new(viewport)
-  bitmapName=pbResolveBitmap("Graphics/Pictures/#{background}")
+
+  background_dark = "Graphics/Pictures/#{background}_dark"
+  background_normal = "Graphics/Pictures/#{background}"
+
+  bitmapName = (isDarkMode && pbResolveBitmap(background_dark)) ||
+    pbResolveBitmap(background_normal)
+
   if bitmapName==nil
     # Plane should exist in any case
     sprites[planename].bitmap=nil
