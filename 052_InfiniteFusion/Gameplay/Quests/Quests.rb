@@ -238,3 +238,6 @@ define_quest("mauville_aqua",:AQUA_QUEST,_INTL("The Element of Surprise!"), _INT
 
 #Route 111
 define_quest("route111_winstrate",:FIELD_QUEST,_INTL("The Winstrate Family"), _INTL("Defeat all 4 members of the Winstrate family in back-to-back battles."),_INTL("Route 111"),"NPC_Hoenn_Pokefan_M")
+
+#Verdanturf
+define_quest("verdanturf_shroomish",:FIELD_QUEST,_INTL("A Lost Shroomish"), _INTL("A girl lost her Shroomish and needs your help to find it."),_INTL("Verdanturf Town"),"NPC_Hoenn_Schoolgirl")

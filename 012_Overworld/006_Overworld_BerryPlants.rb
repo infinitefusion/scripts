@@ -569,5 +569,9 @@ def pbPickBerry(berry, qty = 1)
     end
     interp.setVariable(berryData)
     pbSetSelfSwitch(thisEvent.id, "A", true)
+
+    if berry == :ORANBERRY && !hasHat?(HAT_ORAN)
+      obtainHat(HAT_ORAN)
+    end
   end
 end
