@@ -208,17 +208,23 @@ class PokemonPokedexInfo_Scene
     end
 
     if @pokemon && @pokemon.pif_sprite
-      @spritesLoader = BattleSpriteLoader.new unless @spritesLoader
+      @spritesLoader = BattleSpriteLoader.new unless @spritesLoaderﬂ
       animated = @spritesLoader.load_pif_sprite_directly(@pokemon.pif_sprite)
+      @displayed_pif_sprite = @pokemon.pif_sprite
       @sprites["infosprite"].setAnimatedBitmap(animated)
+    elsif @displayed_pif_sprite
+      @sprites["infosprite"].setPokemonBitmapPIFSprite(@displayed_pif_sprite)
     else
-      @sprites["infosprite"].setSpeciesBitmap(@species) #, @gender, @form)
+      spritesLoader = BattleSpriteLoader.new
+      @displayed_pif_sprite = spritesLoader.obtain_pif_sprite(GameData::Species.get(@species).species)
+      @sprites["infosprite"].setPokemonBitmapPIFSprite(@displayed_pif_sprite)
     end
   end
 
   def drawPage(page)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
+    @creditsOverlay.clear if @creditsOverlay && !@creditsOverlay.disposed?
     # Make certain sprites visible
     @sprites["infosprite"].visible = (@page == 1)
     @sprites["areamap"].visible = (@page == 2) if @sprites["areamap"]
@@ -245,6 +251,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def drawPageInfo(reloading = false)
+    pbUpdateDummyPokemon
     @sprites["background"].setBitmap("Graphics/Pictures/Pokedex/bg_info")
     overlay = @sprites["overlay"].bitmap
     base = Color.new(88, 88, 80)
@@ -295,7 +302,7 @@ class PokemonPokedexInfo_Scene
       #
       #$PokemonSystem.use_generated_dex_entries=true if $PokemonSystem.use_generated_dex_entries ==nil
       drawEntryText(overlay, species_data, reloading)
-
+      echoln species_data.name
       # Draw the footprint
       footprintfile = GameData::Species.footprint_filename(@species, @form)
       if footprintfile
@@ -352,7 +359,7 @@ class PokemonPokedexInfo_Scene
         shadowColor = shadowCustom
       else
         if $PokemonSystem.use_generated_dex_entries && species_data.is_a?(GameData::FusedSpecies)
-          @randomEntryText = species_data.get_random_dex_entry if !reloading
+          @randomEntryText = species_data.get_random_dex_entry if !reloading || @randomEntryText.nil?
           entryText = @randomEntryText
           shadowColor = shadow
         else
@@ -416,7 +423,11 @@ class PokemonPokedexInfo_Scene
 
   def getCustomEntryText(species_data)
     spriteLoader = BattleSpriteLoader.new
-    pif_sprite = spriteLoader.get_pif_sprite_from_species(species_data)
+    if @displayed_pif_sprite
+      pif_sprite = @displayed_pif_sprite
+    else  #fallback - should never go through here in theory
+      pif_sprite = spriteLoader.get_pif_sprite_from_species(species_data)
+    end
     return nil if pif_sprite.type != :CUSTOM
     possibleCustomEntries = getCustomDexEntry(pif_sprite)
     if possibleCustomEntries && possibleCustomEntries.length > 0
@@ -604,7 +615,9 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbGoToPrevious
+    @displayed_pif_sprite=nil
     @entry_page = 0
+    @randomEntryText = nil
     newindex = @index
     while newindex > 0
       newindex -= 1
@@ -616,7 +629,9 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbGoToNext
+    @displayed_pif_sprite=nil
     @entry_page = 0
+    @randomEntryText = nil
     newindex = @index
     while newindex < @dexlist.length - 1
       newindex += 1
@@ -696,6 +711,16 @@ class PokemonPokedexInfo_Scene
         @page = 3 if @page > 3
         pbPlayCursorSE if @page != oldpage
         dorefresh = true if @page != oldpage
+      elsif Input.trigger?(Input::SPECIAL)
+        playCry(@species)
+        if @available && @available.size > 1
+          @selected_index = ((@selected_index || 0) + 1) % @available.size
+          @displayed_pif_sprite = @available[@selected_index]
+          @sprites["infosprite"].setPokemonBitmapPIFSprite(@displayed_pif_sprite)
+        else
+          @displayed_pif_sprite = nil
+        end
+        reloadDexEntry()
       end
 
       drawPage(@page) if dorefresh

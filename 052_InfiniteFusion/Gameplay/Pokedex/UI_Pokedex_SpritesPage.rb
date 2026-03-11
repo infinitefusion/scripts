@@ -418,6 +418,7 @@ class PokemonPokedexInfo_Scene
     # selected_bitmap = @sprites["selectedSprite"].getBitmap
     # sprite_path = selected_bitmap.path
     # isBaseSprite = isBaseSpritePath(@available[@selected_index])
+    @displayed_pif_sprite=  @selected_pif_sprite
     is_generated = @selected_pif_sprite.type == :AUTOGEN
     spritename = @selected_pif_sprite.to_filename()
     showSpriteCredits(spritename, is_generated)
