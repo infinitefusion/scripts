@@ -102,6 +102,13 @@ class PokemonSprite < SpriteWrapper
     changeOrigin
   end
 
+  def setBitmapDirectly(bitmap)
+    @_iconbitmap.dispose if @_iconbitmap
+    @_iconbitmap = nil
+    self.bitmap = bitmap
+    changeOrigin
+  end
+
   def setSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false, egg = false)
     @_iconbitmap.dispose if @_iconbitmap
     @_iconbitmap = GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)

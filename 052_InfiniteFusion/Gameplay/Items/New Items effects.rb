@@ -264,6 +264,17 @@ ItemHandlers::UseFromBag.add(:DEBUGGER, proc { |item|
   end
 })
 
+ItemHandlers::UseInField.add(:SPAWNER, proc { |item|
+  old_id = pbGet(1)
+  unless old_id.is_a?(Integer)
+    old_id =1
+  end
+  species = pbChooseSpeciesList(old_id,NB_POKEMON)
+  pbSet(1,species.id_number)
+  echoln species.species
+  spawn_ow_pokemon(species.species,5,1)
+})
+
 def useSleepingBag()
   currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
   choices = [_INTL("1 hour"), _INTL("6 hours"), _INTL("12 hours"), _INTL("24 hours"), _INTL("Cancel")]
