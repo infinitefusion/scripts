@@ -43,6 +43,8 @@ CLOTHES_FAIRY_M    = "mikufairym"
 CLOTHES_FAIRY_F    = "mikufairyf"
 
 
+
+
 NORMAL_ITEMS   = [:NORMALGEM,:MOOMOOMILK,:POTION,:FULLHEAL,:CHILANBERRY,]
 FIGHTING_ITEMS = [:FIGHTINGGEM,:PROTEIN,:CHOPLEBERRY,]
 FLYING_ITEMS   = [:FLYINGGEM,:HEALTHWING,:MUSCLEWING,:RESISTWING,:GENIUSWING,:CLEVERWING,:SWIFTWING,:AIRBALLOON,:PRETTYWING,:COBABERRY, ]
@@ -136,8 +138,23 @@ def isWearingFairyOutfit()
 end
 
 
+def isWearingNurseOutfit()
+  return (isWearingClothes(CLOTHES_NURSE))
+end
 
-
+def nurseOutfitHeal
+  if isWearingNurseOutfit()
+    $Trainer.party.each do |pokemon|
+      next if pokemon.fainted?
+      new_hp = pokemon.hp + (pokemon.totalhp/16)
+      if new_hp > pokemon.totalhp
+        pokemon.hp=pokemon.totalhp
+      else
+        pokemon.hp=new_hp
+      end
+    end
+  end
+end
 
 def pickUpTypeItemSetBonus()
   return if rand(10) != 0

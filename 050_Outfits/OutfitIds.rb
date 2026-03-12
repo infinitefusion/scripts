@@ -46,6 +46,9 @@ CLOTHES_ADVENTURER_M = "adventurer_m"
 CLOTHES_ADVENTURER_F = "adventurer_f"
 CLOTHES_VETERAN = "VeteranM"
 
+CLOTHES_NURSE    = "nursejoy"
+
+
 #Hats
 HAT_TEAM_ROCKET = "rocketcap"
 HAT_POSTMAN = "postman"
@@ -130,6 +133,9 @@ HAT_CARDBOARD_BOX = "box"
 HAT_CAPTAIN = "seacaptain"
 
 HAT_GRADUATION = "professorhat"
+
+HAT_NURSE_BLANK = "nursejoy"
+HAT_NURSE = "nursejoyhat"
 
 HAT_GYM_REWARD_1 = Settings::KANTO ? "brockpan" : "aronmask"
 HAT_GYM_REWARD_2 = Settings::KANTO ? "starmieclip" : "brawlyshades"

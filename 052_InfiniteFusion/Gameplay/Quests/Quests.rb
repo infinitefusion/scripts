@@ -241,3 +241,4 @@ define_quest("route111_winstrate",:FIELD_QUEST,_INTL("The Winstrate Family"), _I
 
 #Verdanturf
 define_quest("verdanturf_shroomish",:FIELD_QUEST,_INTL("A Lost Shroomish"), _INTL("A girl lost her Shroomish and needs your help to find it."),_INTL("Verdanturf Town"),"NPC_Hoenn_Schoolgirl")
+define_quest("verdanturf_nurse",:FIELD_QUEST,_INTL("The Bored Nurse"), _INTL("The Pokémon Center's nurse challenged you to a battle. Meet her in the meadow behind the Pokémon Center."),_INTL("Verdanturf Town"),"NPC_Hoenn_Nurse")

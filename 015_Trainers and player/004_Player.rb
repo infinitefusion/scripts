@@ -370,6 +370,11 @@ class Player < Trainer
     return true
   end
 
+  def stats()
+    @stats = TrainerStatistics.new unless @statistics
+    return @stats
+  end
+
   #=============================================================================
 
   def initialize(name, trainer_type)
@@ -421,5 +426,6 @@ class Player < Trainer
     @nb_completed_challenges = 0
     @last_visited_town_map_location = nil
     @last_visited_map = nil
+    @stats = TrainerStatistics.new
   end
 end

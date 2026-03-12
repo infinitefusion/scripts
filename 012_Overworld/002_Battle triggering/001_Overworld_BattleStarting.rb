@@ -897,6 +897,7 @@ Events.onEndBattle += proc { |_sender, e|
       pbHoneyGather(pkmn)
     end
     pickUpTypeItemSetBonus()
+    nurseOutfitHeal()
     qmarkMaskCheck()
   when 2, 5 # Lose, draw
     if !canLose
