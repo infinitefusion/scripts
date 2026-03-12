@@ -1,6 +1,8 @@
 class BattledTrainer
   TRAINER_CLASS_FAVORITE_TYPES =
     {
+      RIVAL1: [:ANY],
+      RIVAL2: [:ANY],
       AROMALADY:      [:GRASS, :FAIRY],
       BEAUTY:         [:FAIRY, :WATER, :NORMAL, :GRASS],
       BIKER:          [:POISON, :DARK],
