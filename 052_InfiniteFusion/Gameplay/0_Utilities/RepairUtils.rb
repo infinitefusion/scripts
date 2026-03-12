@@ -229,3 +229,24 @@ def fix_missing_infinite_splicers
     pbReceiveItem(:INFINITESPLICERS2)
   end
 end
+
+
+#Called from the fix game npc common event.
+# Would be nice to migrate all the stuff in there over here
+
+SWITCH_HOENN_GOT_POKEBALLS = 2018
+SWITCH_HOENN_BEAT_RIVAL_RT_110 = 2116
+def fixStuff
+  if $game_switches[SWITCH_HOENN_GOT_POKEBALLS]
+    $Trainer.install_app(:QUESTS) unless $Trainer.pokenav.has_app(:QUESTS)
+    $Trainer.install_app(:MAP) unless $Trainer.pokenav.has_app(:MAP)
+    $Trainer.install_app(:DAYNIGHT) unless $Trainer.pokenav.has_app(:DAYNIGHT)
+    $Trainer.install_app(:REARRANGE) unless $Trainer.pokenav.has_app(:REARRANGE)
+    $Trainer.install_app(:CONTACTS) unless $Trainer.pokenav.has_app(:CONTACTS)
+  end
+  if $game_switches[SWITCH_HOENN_BEAT_RIVAL_RT_110]
+    $Trainer.install_app(:POKERADAR) unless $Trainer.pokenav.has_app(:POKERADAR)
+  end
+
+
+end
