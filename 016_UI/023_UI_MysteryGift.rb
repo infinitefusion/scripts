@@ -6,7 +6,7 @@
 # You should change it to your file's url once you upload it.
 #===============================================================================
 module MysteryGift
-  URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/mystery_gift.txt"
+  URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/MysteryGift.txt"
 end
 
 #===============================================================================
