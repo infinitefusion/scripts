@@ -163,7 +163,7 @@ class GameWeather
       result_weather_type = resolve_weather_interaction(map_weather_type, neighbor_weather_type, weather_intensity, neighbor_weather_intensity)
       result_weather_intensity = weather_intensity
       new_weather = [result_weather_type,result_weather_intensity]
-      @current_weather[neighbor_id] = adjust_weather_for_map(new_weather,map_id)
+      @current_weather[neighbor_id] = adjust_weather_for_map(new_weather,neighbor_id)
     end
   end
 

@@ -14,47 +14,48 @@ class BetterRegionMap
 
     weather_name = ""
     echoln weather_intensity
-    adjective = weather_intensity_adjective(weather_intensity,weather_type)
+    adjective = weather_intensity_adjective(weather_intensity,weather_type,)
     case weather_type
     when :Sandstorm
       weather_name = _INTL("Sandstorm")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Snow
       weather_name = _INTL("#{adjective} snow")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :StrongWinds,
       weather_name = _INTL("Heavy Winds")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :HeavyRain,
       weather_name = _INTL("Heavy Rain")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :HarshSun
       weather_name = _INTL("Drought")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Sunny
       weather_name = _INTL("#{adjective} sunshine")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Rain
       weather_name = _INTL("#{adjective} rain")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Fog
       weather_name = _INTL("#{adjective} fog")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Wind
       weather_name = _INTL("#{adjective} wind")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Storm
       weather_name = _INTL("#{adjective} thunderstorm")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity)
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     end
     if weather_name && intensity_text
       Kernel.pbClearText
       Kernel.pbDisplayText(weather_name, 400,25,9999999, pbColor(:LIGHT_TEXT_MAIN_COLOR), pbColor(:LIGHT_TEXT_SHADOW_COLOR))
       Kernel.pbDisplayText(intensity_text, 400,50,9999999,pbColor(:LIGHT_TEXT_MAIN_COLOR), pbColor(:LIGHT_TEXT_SHADOW_COLOR))
     end
+    echoln selected_map
   end
 
-  def get_weather_intensity_text(weather_type, weather_intensity)
+  def get_weather_intensity_text(weather_type, weather_intensity,map_id)
     i   = weather_intensity.clamp(1, 10)
     case weather_type
     when :Sandstorm
@@ -75,10 +76,14 @@ class BetterRegionMap
 
     when :HarshSun
       value = 34 + (i * 1.4).round
+      value -= 10 if GameWeather::COLD_MAPS.include?(map_id)
+      value -= 10 if Settings::SNOW_DAY
       return _INTL("#{value} °C")
 
     when :Sunny
       value = 21 + (i * 1.4).round
+      value -= 10 if GameWeather::COLD_MAPS.include?(map_id)
+      value -= 10 if Settings::SNOW_DAY
       return _INTL("#{value} °C")
 
     when :Rain
