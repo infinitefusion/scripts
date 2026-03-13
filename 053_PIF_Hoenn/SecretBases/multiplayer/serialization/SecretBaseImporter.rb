@@ -79,44 +79,7 @@ class SecretBaseImporter
       app[:hat2], app[:hat2_color]
     )
 
-    team = trainer_json[:team].map do |poke_json|
-      pokemon = Pokemon.new(poke_json[:species], poke_json[:level])
-      pokemon.name     = poke_json[:name]
-      pokemon.item     = poke_json[:item]
-      pokemon.ability  = poke_json[:ability]
-      pokemon.nature   = poke_json[:nature]
-      pokemon.moves    = poke_json[:moves]
-
-      if poke_json[:ivs]
-        poke_json[:ivs].each do |stat, value|
-          case stat.to_s.downcase
-          when "hp"   then pokemon.iv[:HP] = value
-          when "atk"  then pokemon.iv[:ATTACK] = value
-          when "def"  then pokemon.iv[:DEFENSE] = value
-          when "spe"  then pokemon.iv[:SPEED] = value
-          when "spa"  then pokemon.iv[:SPECIAL_ATTACK] = value
-          when "spd"  then pokemon.iv[:SPECIAL_DEFENSE] = value
-          end
-        end
-      end
-
-      if poke_json[:evs]
-        poke_json[:evs].each do |stat, value|
-          case stat.to_s.downcase
-          when "hp"   then pokemon.ev[:HP] = value
-          when "atk"  then pokemon.ev[:ATTACK] = value
-          when "def"  then pokemon.ev[:DEFENSE] = value
-          when "spe"  then pokemon.ev[:SPEED] = value
-          when "spa"  then pokemon.ev[:SPECIAL_ATTACK] = value
-          when "spd"  then pokemon.ev[:SPECIAL_DEFENSE] = value
-          end
-        end
-      end
-
-      pokemon.calc_stats
-      pokemon
-    end
-
+    team = trainer_json[:team].map { |poke_json| import_pokemon_from_json(poke_json) }
     SecretBaseTrainer.new(
       trainer_json[:name],
       trainer_json[:nb_badges],
@@ -124,6 +87,60 @@ class SecretBaseImporter
       trainer_appearance,
       team
     )
+  end
+
+  def import_pokemon_from_json(poke_json)
+
+    echoln poke_json
+    pokemon = Pokemon.new(poke_json[:species], poke_json[:level])
+    pokemon.name     = poke_json[:name]
+    pokemon.item     = poke_json[:item]
+    pokemon.ability  = poke_json[:ability]
+    pokemon.nature   = poke_json[:nature]
+    pokemon.ot = poke_json[:owner] if poke_json[:owner]
+    pokemon.hat = poke_json[:hat]
+    pokemon.hat_x = poke_json[:hat_x]
+    pokemon.hat_y = poke_json[:hat_y]
+    pokemon.steps_to_hatch = poke_json[:steps_to_hatch] || 0
+    pokemon.poke_ball = poke_json[:ball]
+
+    moves = poke_json[:moves]
+    pokemon_moves = []
+    moves.each do |move_id|
+      move = Pokemon::Move.new(move_id)
+      pokemon_moves << Pokemon::Move.new(move_id)
+      pokemon.add_learned_move(move)
+    end
+    pokemon.moves    = pokemon_moves
+
+    if poke_json[:ivs]
+      poke_json[:ivs].each do |stat, value|
+        case stat.to_s.downcase
+        when "hp"   then pokemon.iv[:HP] = value
+        when "atk"  then pokemon.iv[:ATTACK] = value
+        when "def"  then pokemon.iv[:DEFENSE] = value
+        when "spe"  then pokemon.iv[:SPEED] = value
+        when "spa"  then pokemon.iv[:SPECIAL_ATTACK] = value
+        when "spd"  then pokemon.iv[:SPECIAL_DEFENSE] = value
+        end
+      end
+    end
+
+    if poke_json[:evs]
+      poke_json[:evs].each do |stat, value|
+        case stat.to_s.downcase
+        when "hp"   then pokemon.ev[:HP] = value
+        when "atk"  then pokemon.ev[:ATTACK] = value
+        when "def"  then pokemon.ev[:DEFENSE] = value
+        when "spe"  then pokemon.ev[:SPEED] = value
+        when "spa"  then pokemon.ev[:SPECIAL_ATTACK] = value
+        when "spd"  then pokemon.ev[:SPECIAL_DEFENSE] = value
+        end
+      end
+    end
+
+    pokemon.calc_stats
+    pokemon
   end
 
   private

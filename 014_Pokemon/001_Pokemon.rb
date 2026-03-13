@@ -139,6 +139,13 @@ class Pokemon
 
   S_CHANCE_VALIDATOR = 16
 
+  def export_to_json
+    exporter = SecretBaseExporter.new
+    json = exporter.export_fused_pokemon_hash(self)
+    Input.clipboard = json
+    pbMessage(_INTL("The Pokémon's data was copied to the clipboard."))
+  end
+
   def print_all_attributes
     echoln("Spriteform Body: #{@spriteform_body}")
     echoln("Spriteform Head: #{@spriteform_head}")
@@ -1473,7 +1480,7 @@ class Pokemon
       this_level = self.level
     this_IV = self.calcIV
 
-    if $game_switches[SWITCH_NO_LEVELS_MODE]
+    if $game_switches && $game_switches[SWITCH_NO_LEVELS_MODE]
       this_level = adjust_level_for_base_stats_mode()
     end
 

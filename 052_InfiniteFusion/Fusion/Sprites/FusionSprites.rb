@@ -388,9 +388,11 @@ def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
   spriteName = _INTL("{1}", dex_num)
 
   if $PokemonSystem.random_sprites
-    $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
     species = GameData::Species.get(dex_num)&.species
-    species_blacklist = $PokemonGlobal.sprites_blacklist[species]
+    if $PokemonGlobal
+      $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+      species_blacklist = $PokemonGlobal.sprites_blacklist[species]
+    end
     if species_blacklist
       letters_list = list_all_sprites_letters(spriteName)
                        .reject { |letter| species_blacklist.include?(letter) }

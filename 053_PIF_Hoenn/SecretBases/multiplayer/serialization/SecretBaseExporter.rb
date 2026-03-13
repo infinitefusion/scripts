@@ -94,6 +94,13 @@ class SecretBaseExporter
       item: pokemon.item ? pokemon.item.id.to_s : "",
       ability: pokemon.ability ? pokemon.ability.id.to_s : "",
       level: pokemon.level || 1,
+      owner: pokemon.owner,
+      ball: pokemon.poke_ball,
+
+      hat: pokemon.hat,
+      hat_x: pokemon.hat_x,
+      hat_y: pokemon.hat_y,
+      steps_to_hatch: pokemon.steps_to_hatch,
       evs: {
         hp: pokemon.ev[:HP] || 0,
         atk: pokemon.ev[:ATTACK] || 0,

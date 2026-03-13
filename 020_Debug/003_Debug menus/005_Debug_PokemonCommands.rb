@@ -866,6 +866,17 @@ PokemonDebugMenuCommands.register("printInfo", {
     next false
   }
 })
+
+PokemonDebugMenuCommands.register("jsonExport", {
+  "parent"      => "main",
+  "name"        => _INTL("Export to JSON"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    pkmn.export_to_json
+    next false
+  }
+})
+
 PokemonDebugMenuCommands.register("speciesform", {
   "parent"      => "main",
   "name"        => _INTL("Species/form..."),
@@ -1252,14 +1263,14 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
   }
 })
 
-PokemonDebugMenuCommands.register("mysterygift", {
-  "parent"      => "main",
-  "name"        => _INTL("Mystery Gift"),
-  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    pbCreateMysteryGift(0, pkmn)
-    next false
-  }
-})
+# PokemonDebugMenuCommands.register("mysterygift", {
+#   "parent"      => "main",
+#   "name"        => _INTL("Mystery Gift"),
+#   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+#     pbCreateMysteryGift(0, pkmn)
+#     next false
+#   }
+# })
 
 PokemonDebugMenuCommands.register("duplicate", {
   "parent"      => "main",
