@@ -235,13 +235,9 @@ class AbilitySplashAppearAnimation < PokeBattle_Animation
   end
 
   def createProcesses
-    if @secondAbility
-      return if !@sprites["ability2Bar_#{@side}"]
-      bar = addSprite(@sprites["ability2Bar_#{@side}"])
-    else
-      return if !@sprites["abilityBar_#{@side}"]
-      bar = addSprite(@sprites["abilityBar_#{@side}"])
-    end
+
+    return if !@sprites["abilityBar_#{@side}"]
+    bar = addSprite(@sprites["abilityBar_#{@side}"])
 
     bar.setVisible(0,true)
     dir = (@side==0) ? 1 : -1

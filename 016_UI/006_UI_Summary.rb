@@ -726,13 +726,6 @@ class PokemonSummary_Scene
       drawTextEx(overlay, 224, 320, 282, 2, ability.description, base, shadow)
     end
 
-    # fixme temp double abilities
-    # if ability
-    #   textpos.push([ability.name, 362, 278, 0, @text_color_base_LIGHT, @text_color_shadow_LIGHT])
-    #   if ability2
-    #     drawTextEx(overlay, 224, 320, 282, 2, ability2.name, @text_color_base_LIGHT, @text_color_shadow_LIGHT)
-    #   end
-    # end
 
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

@@ -83,6 +83,14 @@ def pbNewBattleScene
   return PokeBattle_Scene.new
 end
 
+def getWaterBattleBackgroundFromMetadata(metadata)
+  battle_bg = metadata.battle_background_water
+  echoln metadata.battle_background_water
+
+  return battle_bg if battle_bg
+  return "water" #Default fallback when none defined
+end
+
 def getBattleBackgroundFromMetadata(metadata)
   # if battle bg specified, return that
   battle_bg = metadata.battle_background
@@ -169,7 +177,8 @@ def pbPrepareBattle(battle)
   elsif $PokemonGlobal.nextBattleBack
     backdrop = $PokemonGlobal.nextBattleBack
   elsif $PokemonGlobal.surfing
-    backdrop = "water" # This applies wherever you are, including in caves
+    back = getWaterBattleBackgroundFromMetadata(GameData::MapMetadata.get($game_map.map_id))
+    backdrop = back if back && back != ""
   elsif GameData::MapMetadata.exists?($game_map.map_id)
     back = getBattleBackgroundFromMetadata(GameData::MapMetadata.get($game_map.map_id))
     backdrop = back if back && back != ""

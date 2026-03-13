@@ -283,7 +283,6 @@ class PokeBattle_Battler
     @effects[PBEffects::TransformSpecies] = target.species
     pbChangeTypes(target)
     self.ability = target.ability
-    self.ability2 = target.ability2 if target.ability2
     @attack  = target.attack
     @defense = target.defense
     @spatk   = target.spatk

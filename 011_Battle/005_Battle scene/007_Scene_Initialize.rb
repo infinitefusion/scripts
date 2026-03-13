@@ -61,10 +61,6 @@ class PokeBattle_Scene
       # Ability splash bars
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         @sprites["abilityBar_#{side}"] = AbilitySplashBar.new(side, @viewport)
-        if $game_switches[SWITCH_DOUBLE_ABILITIES]
-          @sprites["ability2Bar_#{side}"] = AbilitySplashBar.new(side, @viewport, true)
-          @sprites["ability2Bar_#{side}"].y = @sprites["ability2Bar_#{side}"].y + 30
-        end
       end
     end
     # Player's and partner trainer's back sprite
@@ -156,18 +152,19 @@ class PokeBattle_Scene
   DEFAULT_MESSAGE_NAME = "default_message"
   def pbCreateBackdropSprites
     background_name = @battle.backdrop ? @battle.backdrop.downcase : DEFAULT_BACKGROUND_NAME
-    battlebase_name = @battle.backdropBase ? @battle.backdropBase.downcase : background_name
+    simplified_name = background_name.downcase.split("-")[0]
+
+    battlebase_name = @battle.backdropBase ? @battle.backdropBase.downcase : simplified_name
     message_name = background_name + "_message"
 
     #To avoid duplicating files too much, some backgrounds have a common prefix separated by -
     # Ex: city-rustboro
     # Will use the full name (city-rustboro) for the background, but "city" for the bases
-    simplified_name = background_name.downcase.split("-")[0]
 
 
     battleBG =getBackdropSpriteFullPath(background_name, :BACKGROUND)
-    playerBase =getBackdropSpriteFullPath(simplified_name, :PLAYERBASE)
-    enemyBase =getBackdropSpriteFullPath(simplified_name, :ENEMYBASE)
+    playerBase =getBackdropSpriteFullPath(battlebase_name, :PLAYERBASE)
+    enemyBase =getBackdropSpriteFullPath(battlebase_name, :ENEMYBASE)
     messageBG =getBackdropSpriteFullPath(simplified_name, :MESSAGE)
     if !pbResolveBitmap(messageBG)
       messageBG = "Graphics/Battlebacks/default_message"

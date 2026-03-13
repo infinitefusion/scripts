@@ -1583,10 +1583,8 @@ class Pokemon
     @gender = nil
     @shiny = nil
     @ability_index = nil
-    @ability2_index = nil
 
     @ability = nil
-    @ability2 = nil
 
     @nature = nil
     @nature_for_stats = nil

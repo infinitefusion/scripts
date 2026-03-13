@@ -1597,6 +1597,7 @@ module Compiler
             :snap_edges => contents["SnapEdges"],
             :random_dungeon => contents["Dungeon"],
             :battle_background => contents["BattleBack"],
+            :battle_background_water => contents["BattleBackWater"],
             :wild_battle_BGM => contents["WildBattleBGM"],
             :trainer_battle_BGM => contents["TrainerBattleBGM"],
             :wild_victory_ME => contents["WildVictoryME"],

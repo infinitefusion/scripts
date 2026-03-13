@@ -521,7 +521,7 @@ class AbilitySplashBar < SpriteWrapper
     textPos.push([_INTL("{1}'s",@battler.name),textX,-4,@side==1,
        TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true]) if !@secondAbility
     # Draw Pokémon's ability
-    abilityName = @secondAbility ? @battler.ability2Name : @battler.abilityName
+    abilityName = @battler.abilityName
     abilityName = @ability_name if @ability_name
     #return if abilityName ==""
     textPos.push([abilityName,textX,26,@side==1,
