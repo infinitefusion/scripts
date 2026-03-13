@@ -199,6 +199,7 @@ define_quest("route115_secretBase",:FIELD_QUEST,_INTL("Your Very Own Secret Base
 define_quest("rustboro_whismur",:FIELD_QUEST,_INTL("Volume Booster!"), _INTL("Find a Wingull to fuse with a Whismur to make it louder."),_INTL("Rustboro City"),"NPC_schoolgirl")
 define_quest("rustboro_shiny",:FIELD_QUEST,_INTL("A Green Marill?"), _INTL("A child claims they've seen a green Marill by the pond on Route 104. Go investigate!"),_INTL("Rustboro City"),"NPC_preschooler_m")
 define_quest("rustboro_trash",:FIELD_QUEST,_INTL("Clean Up the Beach!"), _INTL("Help the ranger clean-up the beach behind the Devon Corp. building."),_INTL("Rustboro City"),"NPC_Hoenn_Ranger_M")
+define_quest("rustboro_fusion",:FIELD_QUEST,_INTL("Wild Fusion Study"), _INTL("Help a scientist gather data by getting wild Pokémon to fuse before a battle 3 different times."),_INTL("Rustboro City"),"NPC_Hoenn_Ranger_M")
 
 #Dewford
 define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
@@ -217,7 +218,7 @@ define_quest("route109_beachball",:FIELD_QUEST,_INTL("Find a New Beach Ball!"), 
 define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
 define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel in a way that it's no longer weak to the Water type."),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_M")
 define_quest("magma_graffiti",:MAGMA_QUEST,_INTL("Painting the Town Red"), _INTL("Team Aqua painted their logo on various walls in Slateport City. Cover them up with the Team Magma logo instead!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_F")
-define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Help compose lyrics to the official Team Magma theme song!"),_INTL("Magma Camp"),"√")
+define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Help compose lyrics to the official Team Magma theme song!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_F")
 
 #Team Aqua - Route 108
 define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_M")

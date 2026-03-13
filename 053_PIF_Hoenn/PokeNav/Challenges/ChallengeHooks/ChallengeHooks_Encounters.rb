@@ -36,4 +36,14 @@ end
 
 def checkWildFusePokemonChallenge(pokemon1,pokemon2)
   $Trainer.complete_challenge(:fuse_wild_pokemon)
+  if $game_switches[SWITCH_WILD_FUSION_QUEST]
+    current_nb = pbGet(VAR_NB_WILD_FUSING_SEEN)
+    current_nb+=1
+    pbSet(VAR_NB_WILD_FUSING_SEEN,current_nb)
+    if current_nb <= 3
+      pbMEPlay("Register phone")
+      pbCallBub(3)
+      pbMessage(_INTL("Wild Fusion Study: {1} / 3",current_nb))
+    end
+  end
 end
