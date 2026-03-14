@@ -475,6 +475,7 @@ class PokemonLoadScreen
       cmd_language = -1
       cmd_mystery_gift = -1
       cmd_debug = -1
+      cmd_savefile = -1
       cmd_quit = -1
       show_continue = !@save_data.empty?
       new_game_plus = show_continue && (@save_data[:player].new_game_plus_unlocked || $DEBUG)
@@ -494,6 +495,7 @@ class PokemonLoadScreen
       commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES.length >= 2
       commands[cmd_discord = commands.length] = _INTL('Discord')
       commands[cmd_wiki = commands.length] = _INTL('Wiki')
+      commands[cmd_savefile = commands.length] = _INTL('Savefile management') if show_continue
       commands[cmd_debug = commands.length] = _INTL('Debug') if $DEBUG
       commands[cmd_quit = commands.length] = _INTL('Quit Game')
       cmd_left = -3
@@ -561,6 +563,13 @@ class PokemonLoadScreen
           end
           $scene = pbCallTitle
           return
+        when cmd_savefile
+          save_data_to_load = savefileOptions(SaveData.get_full_path(@selected_file))
+          if save_data_to_load
+            @scene.pbEndScene
+            Game.load(save_data_to_load)
+            return
+          end
         when cmd_debug
           pbFadeOutIn { pbDebugMenu(false) }
         when cmd_quit
@@ -582,6 +591,92 @@ class PokemonLoadScreen
       end
     end
   end
+
+  def savefileOptions(selected_file)
+    cmd_cancel = _INTL("Cancel")
+    cmd_loadBackup = _INTL("Load an older backup")
+    cmd_delete = _INTL("Delete this savefile")
+    commands = [cmd_cancel, cmd_loadBackup, cmd_delete]
+    choice = optionsMenu(commands,0)
+    case commands[choice]
+    when cmd_loadBackup
+      echoln selected_file
+      return load_specific_backup(selected_file)
+    when cmd_delete
+      delete_savefile_menu(selected_file)
+      return nil
+    end
+  end
+
+  def delete_savefile_menu(selected_file)
+    file_name=  File.basename(selected_file)
+    pbMessage(_INTL("\\C[2]WARNING: You are trying to delete {1}.",file_name))
+    if pbConfirmMessageSerious(_INTL("\\C[2]This operation cannot be undone. Do you still wish to continue?"))
+      confirm_text = pbEnterText(_INTL("Type DELETE to continue."),0,10)
+      if confirm_text == "DELETE"
+        self.delete_save_data(selected_file)
+        pbMessage(_INTL("The game will now close automatically."))
+        exit
+      else
+        pbMessage(_INTL("The savefile was NOT deleted."))
+      end
+    end
+  end
+
+  def load_specific_backup(file_path)
+    file_name = File.basename(file_path, ".rxdata")
+    save_folder = File.dirname(file_path)
+    backup_dir = File.join(save_folder, "backups", file_name)
+
+    unless Dir.exist?(backup_dir)
+      pbMessage(_INTL("No backup folder found for this save file."))
+      return nil
+    end
+
+    backups = Dir.children(backup_dir).select { |f|
+      f.start_with?(file_name + "_") && f.end_with?(".rxdata")
+    }
+
+    if backups.empty?
+      pbMessage(_INTL("No backups found for this save file."))
+      return nil
+    end
+
+    # Sort by timestamp, newest first
+    backups.sort_by! do |fname|
+      timestamp = fname.sub(/^#{Regexp.escape(file_name)}_/, "").sub(/\.rxdata$/, "")
+      timestamp.to_i
+    end.reverse!
+
+    # Build menu options
+    backup_options = backups.map do |fname|
+      timestamp_str = fname.sub(/^#{Regexp.escape(file_name)}_/, "").sub(/\.rxdata$/, "")
+      timestamp_str.length >= 12 ? formatSaveDate(timestamp_str) : timestamp_str
+    end
+    backup_options << _INTL("Cancel")
+
+    choice = optionsMenu(backup_options, backup_options.length - 1)
+
+    # Cancelled or out of range
+    return nil if choice < 0 || choice >= backups.length
+
+    chosen_file = backups[choice]
+    chosen_date = backup_options[choice]
+
+    return nil unless pbConfirmMessage(_INTL("Load the backup from {1}?", chosen_date))
+
+    backup_path = File.join(backup_dir, chosen_file)
+    save_data = SaveData.read_from_file(backup_path) rescue nil
+
+    unless SaveData.valid?(save_data)
+      pbMessage(_INTL("This backup appears to be corrupt and could not be loaded."))
+      return nil
+    end
+
+    return save_data
+  end
+
+
 end
 
 #===============================================================================

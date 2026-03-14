@@ -280,10 +280,6 @@ class PokemonPokedexInfo_Scene
   end
 
   SHARED_BODIES = {
-    :SHELLOS_E => :SHELLOS_W,
-    :SHELLOS_W => :SHELLOS_E,
-    :GASTRODON_E => :GASTRODON_W,
-    :GASTRODON_W => :GASTRODON_E,
   }
 
   SHARED_HEADS = {}
