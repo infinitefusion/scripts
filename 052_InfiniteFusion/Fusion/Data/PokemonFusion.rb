@@ -476,6 +476,9 @@ class PokemonFusionScene
     acceleration = 2
     sprite_head.opacity = 255
     sprite_body.opacity = 255
+    sprite_fused.tone = Tone.new(255, 255, 255)
+    crossfade_start_frame = duration * 0.9  # last 10% of the spin
+
     for j in 0...duration
       if j % 20 == 0
         ellipse_major_axis_length -= 10 if ellipse_minor_axis_length > 100
@@ -503,17 +506,59 @@ class PokemonFusionScene
       update_sprite_color(sprite_body,j)
       update_sprite_color(sprite_head,j)
 
+      if j >= crossfade_start_frame
+        sprite_fused.opacity = [sprite_fused.opacity + 16, 255].min
+        sprite_head.opacity = [sprite_head.opacity - 8, 0].max
+        sprite_body.opacity = [sprite_body.opacity - 8, 0].max
+        # Shake grows as fused sprite fades in
+        shake_progress = (sprite_fused.opacity / 255.0)
+        shake = (j % 6 < 3) ? (3 * shake_progress).ceil : -(3 * shake_progress).ceil
+        sprite_fused.x = ellipse_center_x + shake
+        sprite_fused.y = ellipse_center_y
+      end
 
       sprite_head.update
       sprite_fused.update
       sprite_body.update
-
-
-
     end
+
+
+    # Guarantee clean state regardless of how many passes the loop made
+    sprite_fused.x = ellipse_center_x
+    sprite_fused.y = ellipse_center_y
     sprite_head.opacity = 0
     sprite_body.opacity = 0
     sprite_fused.opacity = 255
+    sprite_fused.update
+
+    # Linger at center, fully white, with shake effect
+    linger_frames = Graphics.frame_rate * 1
+    linger_frames.times do |j|
+      shake = (j % 6 < 3) ? 2 : -2
+      sprite_fused.x = ellipse_center_x + shake
+      sprite_fused.y = ellipse_center_y
+      sprite_fused.update
+    end
+
+    # Short fade: white cocoon bursts into fused sprite
+    fade_frames = Graphics.frame_rate / 4  # 0.25 seconds
+    fade_frames.times do |j|
+      progress = j.to_f / fade_frames
+      sprite_head.opacity = 0
+      sprite_body.opacity = 0
+      sprite_fused.opacity = (255 * progress).to_i
+      sprite_head.update
+      sprite_fused.update
+      sprite_body.update
+    end
+
+    sprite_head.opacity = 0
+    sprite_body.opacity = 0
+    sprite_fused.tone = Tone.new(0, 0, 0)
+    sprite_fused.opacity = 255
+    sprite_head.update
+    sprite_fused.update
+    sprite_body.update
 
     @metafile1 = sprite_head
     @metafile2 = sprite_fused
@@ -521,13 +566,10 @@ class PokemonFusionScene
   end
 
   def update_sprite_color(sprite, current_frame)
-    start_tone_change = 100 # frame at which the tone starts to change
+    start_tone_change = 60 # frame at which the tone starts to change
     return if current_frame < start_tone_change
-    new_tone = current_frame - start_tone_change
+    new_tone = current_frame - start_tone_change +50
     sprite.tone = Tone.new(new_tone, new_tone, new_tone)
-    if current_frame % 2 == 0
-      # sprite.opacity-= 1
-    end
   end
 
 
@@ -810,10 +852,14 @@ class PokemonFusionScene
     @sprites["rsprite3"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(Math::PI) + 100
     @sprites["rsprite3"].y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(Math::PI)
 
-    pbGenerateMetafiles(7.2, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
-    generateSplicerMetaFile(7.2, @sprites["dnasplicer"].x, @sprites["dnasplicer"].y)
 
-    confetti_start = (Graphics.frame_rate * 7.2).to_i  # starts when fusion ends
+    spin_seconds = 6.2
+    pbGenerateMetafiles(spin_seconds, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
+    generateSplicerMetaFile(spin_seconds, @sprites["dnasplicer"].x, @sprites["dnasplicer"].y)
+
+    linger_seconds = 1.0
+    fade_seconds = 0.01
+    confetti_start = (Graphics.frame_rate * (spin_seconds + linger_seconds + fade_seconds)).to_i
     generateConfettiMetaFile(confetti_start, 25)
 
     @sprites["msgwindow"] = Kernel.pbCreateMessageWindow(@viewport)
@@ -930,7 +976,7 @@ class PokemonFusionScene
       @confetti_metafiles.each_with_index do |mf, i|
         sprite = IconSprite.new(-100, -100, @viewport)
         if superSplicer
-          colors = ["confetti_white","confetti_red"]
+          colors = ["confetti_white","confetti_green"]
         else
           colors = ["confetti_white"]
         end
@@ -956,7 +1002,7 @@ class PokemonFusionScene
     oldstate2 = pbSaveSpriteState(@sprites["rsprite2"])
     oldstate3 = pbSaveSpriteState(@sprites["rsprite3"])
 
-    pbBGMPlay("fusion")
+    pbBGMPlay("fusion_short")
 
     canceled = false
     noMoves = false
@@ -986,6 +1032,7 @@ class PokemonFusionScene
     else
       frames = pbCryFrameLength(@newspecies)
       pbBGMStop()
+      pbBGMPlay(pbGetWildVictoryME)
       pbPlayCry(@newspecies)
       frames.times do
         Graphics.update
@@ -1000,7 +1047,6 @@ class PokemonFusionScene
       sprite_bitmap = @sprites["rsprite2"].getBitmap
 
       drawSpriteCredits(@fusion_pif_sprite, @viewport)
-      pbBGMPlay(pbGetWildVictoryME)
 
       if isPlayerPokemon
         Kernel.pbMessageDisplay(@sprites["msgwindow"],
