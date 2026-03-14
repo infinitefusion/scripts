@@ -138,12 +138,12 @@ class ClothesShopView < PokemonMart_Scene
         if itemwindow.item != olditem
           displayNewItem(itemwindow)
         end
-        if Input.trigger?(Input::AUX1) #L button  - disabled  because same key as speed up...
-          #@adapter.switchVersion(itemwindow.item, -1)
-          #updateTrainerPreview()
+        if Input.trigger?(Input::AUX1) #L button
+          @adapter.switchVersion(itemwindow.item, -1)
+          updateTrainerPreview()
         end
 
-        if Input.trigger?(Input::AUX2) || Input.trigger?(Input::SHIFT) #R button
+        if Input.trigger?(Input::AUX2)  #R button
           switchItemVersion(itemwindow)
         end
         if Input.trigger?(Input::SPECIAL) #R button

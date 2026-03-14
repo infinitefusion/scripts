@@ -50,11 +50,11 @@ module Graphics
   end
 
   def self.update
-    if $DEBUG && Input.trigger?(Input::AUX2)
+    if $DEBUG && Input.trigger?(Input::X)
       spawn_random_overworld_pokemon_group
     end
 
-    if $CanToggle && Input.trigger?(Input::AUX1)
+    if $CanToggle && Input.trigger?(Input::X)
       $GameSpeed += 1
       $GameSpeed = 0 if $GameSpeed >= SPEEDUP_STAGES.size
     end
@@ -63,7 +63,7 @@ module Graphics
       speedStage = SPEEDUP_STAGES[$GameSpeed]
     else
       speedStage = 1
-      if Input.press?(Input::AUX1) && $CanToggle
+      if Input.press?(Input::X) && $CanToggle
         $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed==0
         speedStage=$PokemonSystem.speedup_speed+1
       end
