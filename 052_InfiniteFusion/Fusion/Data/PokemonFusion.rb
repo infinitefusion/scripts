@@ -140,7 +140,7 @@ class SpriteMetafile
   end
 
   def bitmap=(value)
-    @values[BITMAP]= value
+    @values[BITMAP] = value
     @metafile.push([BITMAP, value])
 
     # if value && !value.disposed?
@@ -415,13 +415,13 @@ end
 
 #####################
 
-#TODO: Refactor
+# TODO: Refactor
 class PokemonFusionScene
   private
 
-  def generateSplicerMetaFile(nb_seconds,x_pos,y_pos)
+  def generateSplicerMetaFile(nb_seconds, x_pos, y_pos)
     dna_splicer = SpriteMetafile.new
-     dna_splicer.opacity = 255
+    dna_splicer.opacity = 255
     dna_splicer.x = x_pos
     dna_splicer.y = y_pos
 
@@ -431,7 +431,7 @@ class PokemonFusionScene
     dna_splicer.z = 0
     duration = Graphics.frame_rate * nb_seconds
     direction = 1
-    #dna_splicer.bitmap = pbBitmap("Graphics/Items/POTION")
+    # dna_splicer.bitmap = pbBitmap("Graphics/Items/POTION")
 
     for j in 0...Graphics.frame_rate * 50
       # if j % 2 ==0
@@ -446,15 +446,14 @@ class PokemonFusionScene
         direction = 1 if dna_splicer.y == min_y
       end
 
-
-      dna_splicer.opacity=0 if j >= duration * 0.75
+      dna_splicer.opacity = 0 if j >= duration * 0.75
       dna_splicer.update
     end
     @metafile4 = dna_splicer
 
   end
 
-  #NEW FUSION ANIMATION (WIP)
+  # NEW FUSION ANIMATION (WIP)
   # def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
   #   sprite_head = SpriteMetafile.new
   #   sprite_body = SpriteMetafile.new
@@ -521,23 +520,22 @@ class PokemonFusionScene
   #   @metafile3 = sprite_body
   # end
 
-
-  def update_sprite_color(sprite,current_frame)
-    start_tone_change = 100  #frame at which the tone starts to change
+  def update_sprite_color(sprite, current_frame)
+    start_tone_change = 100 # frame at which the tone starts to change
     return if current_frame < start_tone_change
-    new_tone = current_frame-start_tone_change
-    sprite.tone=Tone.new(new_tone,new_tone,new_tone)
-    if current_frame %2 ==0
-      #sprite.opacity-= 1
+    new_tone = current_frame - start_tone_change
+    sprite.tone = Tone.new(new_tone, new_tone, new_tone)
+    if current_frame % 2 == 0
+      # sprite.opacity-= 1
     end
   end
+
   # def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
 
-  #def pbGenerateMetafiles(s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx)
+  # def pbGenerateMetafiles(s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx)
 
-
-  #OLD ANIMATION
-  def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
+  # OLD ANIMATION
+  def pbGenerateMetafiles(nb_seconds, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
 
     @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
     @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
@@ -554,7 +552,7 @@ class PokemonFusionScene
 
     @sprites["rsprite1"].x = (Graphics.width / 2) - 100
     @sprites["rsprite3"].x = (Graphics.width / 2) + 100
-    s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx =@sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x
+    s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx = @sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x
 
     second = Graphics.frame_rate * 1
 
@@ -599,7 +597,7 @@ class PokemonFusionScene
       sprite2.update
     end
     anglechange = 0
-    sevenseconds = Graphics.frame_rate * 3 #actually 3 seconds
+    sevenseconds = Graphics.frame_rate * 3 # actually 3 seconds
     for j in 0...sevenseconds
       sprite.angle += anglechange
       sprite.angle %= 360
@@ -617,8 +615,8 @@ class PokemonFusionScene
         sprite.x += 2
         sprite3.x -= 2
       else
-        #sprite.ox+=1
-        #sprite3.ox+=1
+        # sprite.ox+=1
+        # sprite3.ox+=1
       end
 
       sprite.update
@@ -661,11 +659,10 @@ class PokemonFusionScene
 
   end
 
-
   # Starts the fusion screen
 
-  #TODO: Refactor
-  def pbStartScreen(pokemon_body, pokemon_head, newspecies,splicerItem, fusion_pif_sprite=nil)
+  # TODO: Refactor
+  def pbStartScreen(pokemon_body, pokemon_head, newspecies, splicerItem, fusion_pif_sprite = nil)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
@@ -679,14 +676,13 @@ class PokemonFusionScene
     poke_body_number = GameData::Species.get(@pokemon1.species).id_number
     poke_head_number = GameData::Species.get(@pokemon2.species).id_number
 
-
     @sprites["rsprite1"] = PokemonSprite.new(@viewport)
     @sprites["rsprite2"] = PokemonSprite.new(@viewport)
     @sprites["rsprite3"] = PokemonSprite.new(@viewport)
     @sprites["dnasplicer"] = IconSprite.new(300, 150, @viewport)
-    @sprites["dnasplicer"].x=(Graphics.width/2)-30
-    @sprites["dnasplicer"].y=(Graphics.height/2)-50
-    @sprites["dnasplicer"].opacity=0
+    @sprites["dnasplicer"].x = (Graphics.width / 2) - 30
+    @sprites["dnasplicer"].y = (Graphics.height / 2) - 50
+    @sprites["dnasplicer"].opacity = 0
 
     spriteloader = BattleSpriteLoader.new
     if pokemon_body.pif_sprite && $PokemonSystem.random_sprites
@@ -701,21 +697,17 @@ class PokemonFusionScene
       @sprites["rsprite3"].setPokemonBitmapFromId(poke_head_number, false, pokemon_head.shiny?)
     end
 
-
-
     spriteLoader = BattleSpriteLoader.new
     if fusion_pif_sprite
       @fusion_pif_sprite = fusion_pif_sprite
     else
-      @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number,poke_body_number)
+      @fusion_pif_sprite = spriteLoader.obtain_fusion_pif_sprite(poke_head_number, poke_body_number)
     end
 
-
-
-    #this will use the sprite that is set when we call obtain_fusion_pif_sprite, and apply the shiny effect
+    # this will use the sprite that is set when we call obtain_fusion_pif_sprite, and apply the shiny effect
     @sprites["rsprite2"].bitmap = spriteloader.load_pif_sprite_directly(@fusion_pif_sprite).bitmap
 
-    splicer_bitmap = _INTL("Graphics/Items/{1}",splicerItem)
+    splicer_bitmap = _INTL("Graphics/Items/{1}", splicerItem)
     @sprites["dnasplicer"].setBitmap(splicer_bitmap)
 
     @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
@@ -746,21 +738,21 @@ class PokemonFusionScene
     @sprites["rsprite3"].zoom_x = Settings::FRONTSPRITE_SCALE
     @sprites["rsprite3"].zoom_y = Settings::FRONTSPRITE_SCALE
 
-    #pbGenerateMetafiles(@sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x)
+    # pbGenerateMetafiles(@sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x)
 
-    ellipse_center_x = (Graphics.width/2)
-    ellipse_center_y = (Graphics.height/2)-50
+    ellipse_center_x = (Graphics.width / 2)
+    ellipse_center_y = (Graphics.height / 2) - 50
     ellipse_major_axis_length = 250
     ellipse_minor_axis_length = 100
 
-    @sprites["rsprite1"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(0)-75
+    @sprites["rsprite1"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(0) - 75
     @sprites["rsprite1"].y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(0)
 
-    @sprites["rsprite3"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(Math::PI)+75
+    @sprites["rsprite3"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(Math::PI) + 75
     @sprites["rsprite3"].y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(Math::PI)
 
-    pbGenerateMetafiles(7.2,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
-    generateSplicerMetaFile(7.2,@sprites["dnasplicer"].x,@sprites["dnasplicer"].y)
+    pbGenerateMetafiles(7.2, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
+    generateSplicerMetaFile(7.2, @sprites["dnasplicer"].x, @sprites["dnasplicer"].y)
     @sprites["msgwindow"] = Kernel.pbCreateMessageWindow(@viewport)
     pbFadeInAndShow(@sprites)
 
@@ -795,6 +787,44 @@ class PokemonFusionScene
     end
   end
 
+  def pbChooseAbility(ability1Id, ability2Id)
+    ability1 = GameData::Ability.get(ability1Id)
+    ability2 = GameData::Ability.get(ability2Id)
+    availableNatures = []
+    availableNatures << @pokemon1.nature
+    availableNatures << @pokemon2.nature
+
+    setAbilityAndNatureAndNickname([ability1, ability2], availableNatures)
+  end
+
+  def setAbilityAndNatureAndNickname(abilitiesList, naturesList)
+    clearUIForMoves
+    if $game_switches[SWITCH_DOUBLE_ABILITIES]
+      scene = FusionSelectOptionsScene.new(nil, naturesList, @pokemon1, @pokemon2)
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+
+      @pokemon1.ability = abilitiesList[0]
+      @pokemon1.ability2 = abilitiesList[1]
+    else
+      scene = FusionSelectOptionsScene.new(abilitiesList, naturesList, @pokemon1, @pokemon2)
+      screen = PokemonOptionScreen.new(scene)
+      screen.pbStartScreen
+
+      selectedAbility = scene.selectedAbility
+      @pokemon1.body_original_ability_index = @pokemon1.ability_index
+      @pokemon1.head_original_ability_index = @pokemon2.ability_index
+
+      @pokemon1.ability = selectedAbility
+      @pokemon1.ability_index = getAbilityIndexFromID(selectedAbility.id, @pokemon1)
+    end
+
+    @pokemon1.nature = scene.selectedNature
+    if scene.hasNickname
+      @pokemon1.name = scene.nickname
+    end
+  end
+
   def averageFusionIvs()
     @pokemon1.iv[:HP] = calculateAverageValue(@pokemon1.iv[:HP], @pokemon2.iv[:HP])
     @pokemon1.iv[:ATTACK] = calculateAverageValue(@pokemon1.iv[:ATTACK], @pokemon2.iv[:ATTACK])
@@ -804,7 +834,7 @@ class PokemonFusionScene
     @pokemon1.iv[:SPEED] = calculateAverageValue(@pokemon1.iv[:SPEED], @pokemon2.iv[:SPEED])
   end
 
-  #unused. was meant for super splicers, but too broken
+  # unused. was meant for super splicers, but too broken
   def setHighestFusionIvs()
     @pokemon1.iv[:HP] = pickHighestOfTwoValues(@pokemon1.iv[:HP], @pokemon2.iv[:HP])
     @pokemon1.iv[:ATTACK] = pickHighestOfTwoValues(@pokemon1.iv[:ATTACK], @pokemon2.iv[:ATTACK])
@@ -823,9 +853,9 @@ class PokemonFusionScene
   end
 
   # Opens the fusion screen
-  #TODO: Refactor
+  # TODO: Refactor
 
-  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false, isPlayerPokemon= true)
+  def pbFusionScreen(cancancel = false, superSplicer = false, firstOptionSelected = false, isPlayerPokemon = true)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1, @sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2, @sprites["rsprite2"])
     metaplayer3 = SpriteMetafilePlayer.new(@metafile3, @sprites["rsprite3"])
@@ -877,7 +907,7 @@ class PokemonFusionScene
       frames.times do
         Graphics.update
       end
-      #pbMEPlay("Voltorb Flip Win")
+      # pbMEPlay("Voltorb Flip Win")
       newSpecies = GameData::Species.get(@newspecies)
       newspeciesname = newSpecies.real_name
       oldspeciesname = GameData::Species.get(@pokemon1.species).real_name
@@ -900,15 +930,13 @@ class PokemonFusionScene
       body_pokemon = @pokemon1.clone
       head_pokemon = @pokemon2.clone
 
-
       @pokemon1.original_body = body_pokemon
       echoln "body pokemon is #{body_pokemon.species}"
       @pokemon1.original_head = head_pokemon
-      #exp
+      # exp
       @pokemon1.exp_when_fused_head = @pokemon2.exp
       @pokemon1.exp_when_fused_body = @pokemon1.exp
       @pokemon1.exp_gained_since_fused = 0
-
 
       if @pokemon2.shiny?
         @pokemon1.head_shiny = true
@@ -919,14 +947,14 @@ class PokemonFusionScene
       @pokemon1.debug_shiny = true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
 
       setFusionIVs(superSplicer)
-      #add to pokedex
+      # add to pokedex
       if !$Trainer.pokedex.owned?(newSpecies) && isPlayerPokemon
         $Trainer.pokedex.set_seen(newSpecies)
         $Trainer.pokedex.set_owned(newSpecies)
       end
       overlay.dispose
 
-      #change species
+      # change species
       ability1 = @pokemon1.ability
       ability2 = @pokemon2.ability
 
@@ -935,7 +963,7 @@ class PokemonFusionScene
         @pokemon1.steps_to_hatch = @pokemon1.species_data.hatch_steps
       end
 
-      pbChooseAbility(ability1,ability2) if isPlayerPokemon
+      pbChooseAbility(ability1, ability2) if isPlayerPokemon
 
       setFusionMoves(@pokemon1, @pokemon2, firstOptionSelected) if !noMoves && isPlayerPokemon
 
@@ -947,7 +975,7 @@ class PokemonFusionScene
         end
       end
 
-      #make it untraded, pour qu'on puisse le unfused après, même si un des 2 était traded
+      # make it untraded, pour qu'on puisse le unfused après, même si un des 2 était traded
       @pokemon1.obtain_method = 0
       @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer) if isPlayerPokemon
 
@@ -1013,9 +1041,6 @@ def drawSpriteCredits(pif_sprite, viewport)
   pbDrawTextPositions(overlay, textpos)
 end
 
-
-
-
 def clearUIForMoves
   addBackgroundOrColoredPlane(@sprites, "background", "DNAbg",
                               Color.new(248, 248, 248), @viewport)
@@ -1023,7 +1048,7 @@ def clearUIForMoves
 
 end
 
-#todo: find a better name for this method...
+# todo: find a better name for this method...
 def setAbilityAndNatureAndNickname(abilitiesList, naturesList)
   clearUIForMoves
 
@@ -1054,7 +1079,7 @@ def locate_ability_index(pokemon, ability)
 end
 
 def setFusionMoves(fusedPoke, poke2, selected2ndOption = false)
-  #NEW METHOD (not ready)
+  # NEW METHOD (not ready)
 
   # clearUIForMoves
   #
@@ -1086,7 +1111,7 @@ def setFusionMoves(fusedPoke, poke2, selected2ndOption = false)
     end
     return
   else
-    #Learn moves
+    # Learn moves
     movelist = poke2.moves
     for move in movelist
       if move.id != 0
@@ -1127,33 +1152,6 @@ def pbShowPokedex(species)
   }
 end
 
-
-def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
-  abilityList = poke.getAbilityList
-  #pas sur de l'ordre pour les hidden (3 et 4) peut-être a inverser
-  #Mais les fusions ont tjrs 4 hidden abilities
-  #2. l'autre ability du poke 1
-  #3. l'autre ability du poke 2
-  #4. hidden du poke 1
-  #5. hidden du poke2
-
-  abID1 = hidden1 ? abilityList[4][0] : abilityList[0][0]
-  abID2 = hidden2 ? abilityList[5][0] : abilityList[1][0]
-
-  ability1_name = GameData::Ability.get(abID1).name
-  ability2_name = GameData::Ability.get(abID2).name
-  availableNatures = []
-  availableNatures << @pokemon1.nature
-  availableNatures << @pokemon2.nature
-
-  setAbilityAndNatureAndNickname([GameData::Ability.get(abID1), GameData::Ability.get(abID2)], availableNatures)
-
-  # if (Kernel.pbMessage("Choose an ability. ???", ["{1}", ability1_name, "{1}", ability2_name], 2)) == 0
-  #   return abID1 #hidden1 ? 4 : 0
-  # end
-  # return abID2 #hidden2 ? 5 : 1
-end
-
 def pbChooseNature(species1_nature, species2_nature)
   nature1 = GameData::Nature.get(species1_nature)
   nature2 = GameData::Nature.get(species2_nature)
@@ -1165,15 +1163,15 @@ def pbChooseNature(species1_nature, species2_nature)
   end
 end
 
-#EDITED FOR GEN2
+# EDITED FOR GEN2
 def fixEvolutionOverflow(retB, retH, oldSpecies)
-  #raise Exception.new("retB: " + retB.to_s + " retH: " + retH.to_s)
+  # raise Exception.new("retB: " + retB.to_s + " retH: " + retH.to_s)
 
   oldBody = getBasePokemonID(oldSpecies)
   oldHead = getBasePokemonID(oldSpecies, false)
   return -1 if isNegativeOrNull(retB) && isNegativeOrNull(retH)
-  return oldBody * NB_POKEMON + retH if isNegativeOrNull(retB) #only head evolves
-  return retB * NB_POKEMON + oldHead if isNegativeOrNull(retH) #only body evolves
-  return retB * NB_POKEMON + retH #both evolve
+  return oldBody * NB_POKEMON + retH if isNegativeOrNull(retB) # only head evolves
+  return retB * NB_POKEMON + oldHead if isNegativeOrNull(retH) # only body evolves
+  return retB * NB_POKEMON + retH # both evolve
 end
 
