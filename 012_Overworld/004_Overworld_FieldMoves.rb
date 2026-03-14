@@ -666,22 +666,22 @@ def pbHeadbutt(event = nil)
   return false
 end
 
-HiddenMoveHandlers::CanUseMove.add(:HEADBUTT, proc { |move, pkmn, showmsg|
-  facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || !facingEvent.name[/headbutttree/i]
-    pbMessage(_INTL("Can't use that here.")) if showmsg
-    next false
-  end
-  next true
-})
-
-HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
-  if !pbHiddenMoveAnimation(pokemon)
-    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
-  end
-  facingEvent = $game_player.pbFacingEvent
-  pbHeadbuttEffect(facingEvent)
-})
+# HiddenMoveHandlers::CanUseMove.add(:HEADBUTT, proc { |move, pkmn, showmsg|
+#   facingEvent = $game_player.pbFacingEvent
+#   if !facingEvent || !facingEvent.name[/headbutttree/i]
+#     pbMessage(_INTL("Can't use that here.")) if showmsg
+#     next false
+#   end
+#   next true
+# })
+#
+# HiddenMoveHandlers::UseMove.add(:HEADBUTT, proc { |move, pokemon|
+#   if !pbHiddenMoveAnimation(pokemon)
+#     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+#   end
+#   facingEvent = $game_player.pbFacingEvent
+#   pbHeadbuttEffect(facingEvent)
+# })
 
 HiddenMoveHandlers::UseMove.add(:SECRETPOWER, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)

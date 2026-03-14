@@ -301,7 +301,7 @@ end
 # Using a registered item
 #===============================================================================
 def pbUseKeyItem
-  moves = [:CUT, :DEFOG, :DIG, :DIVE, :FLASH, :FLY, :HEADBUTT, :ROCKCLIMB,
+  moves = [:CUT, :DEFOG, :DIG, :DIVE, :FLASH, :FLY, :ROCKCLIMB,
            :ROCKSMASH, :SECRETPOWER, :STRENGTH, :SURF, :SWEETSCENT, :TELEPORT,
            :WATERFALL, :WHIRLPOOL, :BOUNCE, :SUNNYDAY, :RAINDANCE, :WHIRLWIND]
   real_moves = []
