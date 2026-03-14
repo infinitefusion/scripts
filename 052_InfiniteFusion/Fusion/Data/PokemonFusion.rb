@@ -454,71 +454,71 @@ class PokemonFusionScene
   end
 
   # NEW FUSION ANIMATION (WIP)
-  # def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
-  #   sprite_head = SpriteMetafile.new
-  #   sprite_body = SpriteMetafile.new
-  #   sprite_fused = SpriteMetafile.new
-  #
-  #   sprite_head.z = 10
-  #   sprite_body.z = 10
-  #
-  #   sprite_head.opacity = 0
-  #   sprite_body.opacity = 0
-  #   sprite_fused.opacity = 0
-  #
-  #   duration = Graphics.frame_rate * nb_seconds
-  #
-  #   sprite_head_angle = 0
-  #   sprite_body_angle = Math::PI
-  #
-  #   #Spinning
-  #   angle_incr = 0.1 #speed basically
-  #   acceleration = 2
-  #   sprite_head.opacity = 255
-  #   sprite_body.opacity = 255
-  #   for j in 0...duration
-  #     if j % 20 == 0
-  #       ellipse_major_axis_length -= 10 if ellipse_minor_axis_length > 100
-  #       ellipse_major_axis_length -= 18 if ellipse_minor_axis_length > 40
-  #       ellipse_minor_axis_length -= 5 if ellipse_minor_axis_length > 10
-  #       angle_incr += 0.02*acceleration
-  #       acceleration+=0.01
-  #     end
-  #
-  #     sprite_head.x = ellipse_center_x + ellipse_major_axis_length * Math.cos(sprite_head_angle)
-  #     sprite_head.y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(sprite_head_angle)
-  #
-  #     sprite_body.x = ellipse_center_x + ellipse_major_axis_length * Math.cos(sprite_body_angle)
-  #     sprite_body.y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(sprite_body_angle)
-  #
-  #     sprite_head_angle += angle_incr
-  #     sprite_body_angle += angle_incr
-  #
-  #
-  #     sprite_head.mirror= sprite_head.y <  ellipse_center_y
-  #     sprite_body.mirror= sprite_body.y <  ellipse_center_y
-  #
-  #     #sprite_body.mirror if sprite_body_angle == 0 || sprite_body_angle == Math::PI
-  #
-  #     update_sprite_color(sprite_body,j)
-  #     update_sprite_color(sprite_head,j)
-  #
-  #
-  #     sprite_head.update
-  #     sprite_fused.update
-  #     sprite_body.update
-  #
-  #
-  #
-  #   end
-  #   sprite_head.opacity = 0
-  #   sprite_body.opacity = 0
-  #   sprite_fused.opacity = 255
-  #
-  #   @metafile1 = sprite_head
-  #   @metafile2 = sprite_fused
-  #   @metafile3 = sprite_body
-  # end
+  def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
+    sprite_head = SpriteMetafile.new
+    sprite_body = SpriteMetafile.new
+    sprite_fused = SpriteMetafile.new
+
+    sprite_head.z = 10
+    sprite_body.z = 10
+
+    sprite_head.opacity = 0
+    sprite_body.opacity = 0
+    sprite_fused.opacity = 0
+
+    duration = Graphics.frame_rate * nb_seconds
+
+    sprite_head_angle = 0
+    sprite_body_angle = Math::PI
+
+    #Spinning
+    angle_incr = 0.1 #speed basically
+    acceleration = 2
+    sprite_head.opacity = 255
+    sprite_body.opacity = 255
+    for j in 0...duration
+      if j % 20 == 0
+        ellipse_major_axis_length -= 10 if ellipse_minor_axis_length > 100
+        ellipse_major_axis_length -= 18 if ellipse_minor_axis_length > 40
+        ellipse_minor_axis_length -= 5 if ellipse_minor_axis_length > 10
+        angle_incr += 0.02*acceleration
+        acceleration+=0.01
+      end
+
+      sprite_head.x = ellipse_center_x + ellipse_major_axis_length * Math.cos(sprite_head_angle)
+      sprite_head.y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(sprite_head_angle)
+
+      sprite_body.x = ellipse_center_x + ellipse_major_axis_length * Math.cos(sprite_body_angle)
+      sprite_body.y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(sprite_body_angle)
+
+      sprite_head_angle += angle_incr
+      sprite_body_angle += angle_incr
+
+
+      sprite_head.mirror= sprite_head.y <  ellipse_center_y
+      sprite_body.mirror= sprite_body.y <  ellipse_center_y
+
+      #sprite_body.mirror if sprite_body_angle == 0 || sprite_body_angle == Math::PI
+
+      update_sprite_color(sprite_body,j)
+      update_sprite_color(sprite_head,j)
+
+
+      sprite_head.update
+      sprite_fused.update
+      sprite_body.update
+
+
+
+    end
+    sprite_head.opacity = 0
+    sprite_body.opacity = 0
+    sprite_fused.opacity = 255
+
+    @metafile1 = sprite_head
+    @metafile2 = sprite_fused
+    @metafile3 = sprite_body
+  end
 
   def update_sprite_color(sprite, current_frame)
     start_tone_change = 100 # frame at which the tone starts to change
@@ -530,134 +530,189 @@ class PokemonFusionScene
     end
   end
 
+
+  def generateConfettiMetaFile(start_frame_offset, nb_particles = 30)
+    @confetti_metafiles = []
+
+    center_x = Graphics.width / 2
+    center_y = (Graphics.height / 2) - 50
+
+    nb_particles.times do |i|
+      particle = SpriteMetafile.new
+
+      particle.x = center_x
+      particle.y = center_y
+      particle.opacity = 0
+      particle.z = 20
+
+      # Burst outward in all directions
+      angle = (2 * Math::PI / nb_particles) * i + rand * 0.5  # evenly spread + slight randomness
+      speed = rand(8) + 5  # 5 to 12 px/frame initial burst speed
+      vel_x = Math.cos(angle) * speed
+      vel_y = Math.sin(angle) * speed - rand(4)  # bias upward slightly
+
+      gravity = 0.4
+
+      start_frame_offset.times { particle.update }
+
+      particle.opacity = 255
+      particle.update
+
+      fall_frames = Graphics.frame_rate * 2  # 2 seconds
+      cur_x = center_x.to_f
+      cur_y = center_y.to_f
+      cur_vel_y = vel_y
+
+      fall_frames.times do |j|
+        cur_vel_y += gravity
+        cur_x += vel_x
+        cur_y += cur_vel_y
+
+        particle.x = cur_x.to_i
+        particle.y = cur_y.to_i
+
+        if j > fall_frames - 30
+          particle.opacity = ((fall_frames - j) / 30.0 * 255).to_i
+        end
+
+        particle.update
+      end
+
+      particle.opacity = 0
+      particle.update
+
+      @confetti_metafiles << particle
+    end
+  end
+
   # def pbGenerateMetafiles(nb_seconds,ellipse_center_x,ellipse_center_y,ellipse_major_axis_length,ellipse_minor_axis_length)
 
   # def pbGenerateMetafiles(s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx)
 
   # OLD ANIMATION
-  def pbGenerateMetafiles(nb_seconds, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
-
-    @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
-    @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
-
-    @sprites["rsprite3"].ox = @sprites["rsprite3"].bitmap.width / 2
-    @sprites["rsprite3"].oy = @sprites["rsprite3"].bitmap.height / 2
-
-    @sprites["rsprite2"].ox = @sprites["rsprite2"].bitmap.width / 2
-    @sprites["rsprite2"].oy = @sprites["rsprite2"].bitmap.height / 2
-
-    @sprites["rsprite2"].x = Graphics.width / 2
-    @sprites["rsprite1"].y = (Graphics.height - 96) / 2
-    @sprites["rsprite3"].y = (Graphics.height - 96) / 2
-
-    @sprites["rsprite1"].x = (Graphics.width / 2) - 100
-    @sprites["rsprite3"].x = (Graphics.width / 2) + 100
-    s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx = @sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x
-
-    second = Graphics.frame_rate * 1
-
-    sprite = SpriteMetafile.new
-    sprite3 = SpriteMetafile.new
-    sprite2 = SpriteMetafile.new
-
-    sprite.opacity = 255
-    sprite3.opacity = 255
-    sprite2.opacity = 0
-
-    sprite.ox = s1x
-    sprite.oy = s1y
-    sprite2.ox = s2x
-    sprite2.oy = s2y
-    sprite3.ox = s3x
-    sprite3.oy = s3y
-
-    sprite.x = sxx
-    sprite3.x = s3xx
-
-    red = 10
-    green = 5
-    blue = 90
-
-    for j in 0...26
-      sprite.color.red = red
-      sprite.color.green = green
-      sprite.color.blue = blue
-      sprite.color.alpha = j * 10
-      sprite.color = sprite.color
-
-      sprite3.color.red = red
-      sprite3.color.green = green
-      sprite3.color.blue = blue
-      sprite3.color.alpha = j * 10
-      sprite3.color = sprite3.color
-
-      sprite2.color = sprite.color
-      sprite.update
-      sprite3.update
-      sprite2.update
-    end
-    anglechange = 0
-    sevenseconds = Graphics.frame_rate * 3 # actually 3 seconds
-    for j in 0...sevenseconds
-      sprite.angle += anglechange
-      sprite.angle %= 360
-
-      sprite3.angle += anglechange
-      sprite3.angle %= 360
-
-      anglechange += 5 if j % 2 == 0
-      if j >= sevenseconds - 50
-        sprite2.angle = sprite.angle
-        sprite2.opacity += 6
-      end
-
-      if sprite.x < sprite3.x && j >= 20
-        sprite.x += 2
-        sprite3.x -= 2
-      else
-        # sprite.ox+=1
-        # sprite3.ox+=1
-      end
-
-      sprite.update
-      sprite3.update
-      sprite2.update
-    end
-    sprite.angle = 360 - sprite.angle
-    sprite3.angle = 360 - sprite.angle
-    sprite2.angle = 360 - sprite2.angle
-    for j in 0...sevenseconds
-      sprite2.angle += anglechange
-      sprite2.angle %= 360
-      anglechange -= 5 if j % 2 == 0
-      if j < 50
-        sprite.angle = sprite2.angle
-        sprite.opacity -= 6
-
-        sprite3.angle = sprite2.angle
-        sprite3.opacity -= 6
-      end
-
-      sprite3.update
-      sprite.update
-      sprite2.update
-
-    end
-    for j in 0...26
-      sprite2.color.red = 30
-      sprite2.color.green = 230
-      sprite2.color.blue = 55
-      sprite2.color.alpha = (26 - j) * 10
-      sprite2.color = sprite2.color
-      sprite.color = sprite2.color
-      sprite.update
-      sprite2.update
-    end
-    @metafile1 = sprite
-    @metafile2 = sprite2
-    @metafile3 = sprite3
-
-  end
+  # def pbGenerateMetafiles(nb_seconds, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
+  #
+  #   @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
+  #   @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
+  #
+  #   @sprites["rsprite3"].ox = @sprites["rsprite3"].bitmap.width / 2
+  #   @sprites["rsprite3"].oy = @sprites["rsprite3"].bitmap.height / 2
+  #
+  #   @sprites["rsprite2"].ox = @sprites["rsprite2"].bitmap.width / 2
+  #   @sprites["rsprite2"].oy = @sprites["rsprite2"].bitmap.height / 2
+  #
+  #   @sprites["rsprite2"].x = Graphics.width / 2
+  #   @sprites["rsprite1"].y = (Graphics.height - 96) / 2
+  #   @sprites["rsprite3"].y = (Graphics.height - 96) / 2
+  #
+  #   @sprites["rsprite1"].x = (Graphics.width / 2) - 100
+  #   @sprites["rsprite3"].x = (Graphics.width / 2) + 100
+  #   s1x, s1y, s2x, s2y, s3x, s3y, sxx, s3xx = @sprites["rsprite1"].ox, @sprites["rsprite1"].oy, @sprites["rsprite2"].ox, @sprites["rsprite2"].oy, @sprites["rsprite3"].ox, @sprites["rsprite3"].oy, @sprites["rsprite1"].x, @sprites["rsprite3"].x
+  #
+  #   second = Graphics.frame_rate * 1
+  #
+  #   sprite = SpriteMetafile.new
+  #   sprite3 = SpriteMetafile.new
+  #   sprite2 = SpriteMetafile.new
+  #
+  #   sprite.opacity = 255
+  #   sprite3.opacity = 255
+  #   sprite2.opacity = 0
+  #
+  #   sprite.ox = s1x
+  #   sprite.oy = s1y
+  #   sprite2.ox = s2x
+  #   sprite2.oy = s2y
+  #   sprite3.ox = s3x
+  #   sprite3.oy = s3y
+  #
+  #   sprite.x = sxx
+  #   sprite3.x = s3xx
+  #
+  #   red = 10
+  #   green = 5
+  #   blue = 90
+  #
+  #   for j in 0...26
+  #     sprite.color.red = red
+  #     sprite.color.green = green
+  #     sprite.color.blue = blue
+  #     sprite.color.alpha = j * 10
+  #     sprite.color = sprite.color
+  #
+  #     sprite3.color.red = red
+  #     sprite3.color.green = green
+  #     sprite3.color.blue = blue
+  #     sprite3.color.alpha = j * 10
+  #     sprite3.color = sprite3.color
+  #
+  #     sprite2.color = sprite.color
+  #     sprite.update
+  #     sprite3.update
+  #     sprite2.update
+  #   end
+  #   anglechange = 0
+  #   sevenseconds = Graphics.frame_rate * 3 # actually 3 seconds
+  #   for j in 0...sevenseconds
+  #     sprite.angle += anglechange
+  #     sprite.angle %= 360
+  #
+  #     sprite3.angle += anglechange
+  #     sprite3.angle %= 360
+  #
+  #     anglechange += 5 if j % 2 == 0
+  #     if j >= sevenseconds - 50
+  #       sprite2.angle = sprite.angle
+  #       sprite2.opacity += 6
+  #     end
+  #
+  #     if sprite.x < sprite3.x && j >= 20
+  #       sprite.x += 2
+  #       sprite3.x -= 2
+  #     else
+  #       # sprite.ox+=1
+  #       # sprite3.ox+=1
+  #     end
+  #
+  #     sprite.update
+  #     sprite3.update
+  #     sprite2.update
+  #   end
+  #   sprite.angle = 360 - sprite.angle
+  #   sprite3.angle = 360 - sprite.angle
+  #   sprite2.angle = 360 - sprite2.angle
+  #   for j in 0...sevenseconds
+  #     sprite2.angle += anglechange
+  #     sprite2.angle %= 360
+  #     anglechange -= 5 if j % 2 == 0
+  #     if j < 50
+  #       sprite.angle = sprite2.angle
+  #       sprite.opacity -= 6
+  #
+  #       sprite3.angle = sprite2.angle
+  #       sprite3.opacity -= 6
+  #     end
+  #
+  #     sprite3.update
+  #     sprite.update
+  #     sprite2.update
+  #
+  #   end
+  #   for j in 0...26
+  #     sprite2.color.red = 30
+  #     sprite2.color.green = 230
+  #     sprite2.color.blue = 55
+  #     sprite2.color.alpha = (26 - j) * 10
+  #     sprite2.color = sprite2.color
+  #     sprite.color = sprite2.color
+  #     sprite.update
+  #     sprite2.update
+  #   end
+  #   @metafile1 = sprite
+  #   @metafile2 = sprite2
+  #   @metafile3 = sprite3
+  #
+  # end
 
   # Starts the fusion screen
 
@@ -710,6 +765,10 @@ class PokemonFusionScene
     splicer_bitmap = _INTL("Graphics/Items/{1}", splicerItem)
     @sprites["dnasplicer"].setBitmap(splicer_bitmap)
 
+    #rsprite1 : left pokemon
+    # rsprite2 : fused pokemon (middle - invisible at first)
+    # rsprite3: right pokemon
+
     @sprites["rsprite1"].ox = @sprites["rsprite1"].bitmap.width / 2
     @sprites["rsprite1"].oy = @sprites["rsprite1"].bitmap.height / 2
 
@@ -745,14 +804,18 @@ class PokemonFusionScene
     ellipse_major_axis_length = 250
     ellipse_minor_axis_length = 100
 
-    @sprites["rsprite1"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(0) - 75
+    @sprites["rsprite1"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(0) - 100
     @sprites["rsprite1"].y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(0)
 
-    @sprites["rsprite3"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(Math::PI) + 75
+    @sprites["rsprite3"].x = ellipse_center_x + ellipse_major_axis_length * Math.cos(Math::PI) + 100
     @sprites["rsprite3"].y = ellipse_center_y + ellipse_minor_axis_length * Math.sin(Math::PI)
 
     pbGenerateMetafiles(7.2, ellipse_center_x, ellipse_center_y, ellipse_major_axis_length, ellipse_minor_axis_length)
     generateSplicerMetaFile(7.2, @sprites["dnasplicer"].x, @sprites["dnasplicer"].y)
+
+    confetti_start = (Graphics.frame_rate * 7.2).to_i  # starts when fusion ends
+    generateConfettiMetaFile(confetti_start, 25)
+
     @sprites["msgwindow"] = Kernel.pbCreateMessageWindow(@viewport)
     pbFadeInAndShow(@sprites)
 
@@ -861,6 +924,23 @@ class PokemonFusionScene
     metaplayer3 = SpriteMetafilePlayer.new(@metafile3, @sprites["rsprite3"])
     metaplayer4 = SpriteMetafilePlayer.new(@metafile4, @sprites["dnasplicer"])
 
+
+    confetti_players = []
+    if @confetti_metafiles
+      @confetti_metafiles.each_with_index do |mf, i|
+        sprite = IconSprite.new(-100, -100, @viewport)
+        if superSplicer
+          colors = ["confetti_white","confetti_red"]
+        else
+          colors = ["confetti_white"]
+        end
+        sprite.setBitmap("Graphics/Pictures/Confetti/#{colors[i % colors.length]}")
+        player = SpriteMetafilePlayer.new(mf, sprite)
+        player.play
+        confetti_players << { player: player, sprite: sprite }
+      end
+    end
+
     metaplayer1.play
     metaplayer2.play
     metaplayer3.play
@@ -885,15 +965,18 @@ class PokemonFusionScene
       metaplayer2.update
       metaplayer3.update
       metaplayer4.update
+      confetti_players.each { |cp| cp[:player].update }
 
       Graphics.update
       Input.update
-      if Input.trigger?(Input::B) && Input.trigger?(Input::C) # && Input.trigger?(Input::A)# && cancancel
+      if Input.trigger?(Input::B) && Input.trigger?(Input::C)
         noMoves = true
         pbSEPlay("buzzer")
         Graphics.update
       end
-    end while metaplayer1.playing? && metaplayer2.playing?
+    end while metaplayer1.playing? || metaplayer2.playing? || confetti_players.any? { |cp| cp[:player].playing? }
+
+    confetti_players.each { |cp| cp[:sprite].dispose }
     if canceled
       pbBGMStop()
       pbPlayCancelSE()
