@@ -78,7 +78,7 @@ ItemHandlers::CanUseInBattle.add(:POTION,proc { |item,pokemon,battler,move,first
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
-  if $PokemonSystem.no_healing_items
+  if $PokemonSystem.no_healing_items_battles
     scene.pbDisplay(_INTL("Your challenge options prevent healing!")) if showMessages
     next false
   end
@@ -151,7 +151,7 @@ ItemHandlers::CanUseInBattle.add(:FULLRESTORE,proc { |item,pokemon,battler,move,
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
-  if $PokemonSystem.no_healing_items
+  if $PokemonSystem.no_healing_items_battles
     scene.pbDisplay(_INTL("Your challenge options prevent healing!")) if showMessages
     next false
   end

@@ -30,7 +30,8 @@ class PokemonSystem
   attr_accessor :random_sprites
 
   attr_accessor :no_reviving
-  attr_accessor :no_healing_items
+  attr_accessor :no_healing_items_battles
+  attr_accessor :no_healing_items_ow
   attr_accessor :no_pokemon_center
   attr_accessor :obtained_transfer_box
 
@@ -59,7 +60,7 @@ class PokemonSystem
     @include_alt_sprites_in_random = false
 
     @no_reviving = false
-    @no_healing_items = false
+    @no_healing_items_battles = false
     @no_pokemon_center = false
     @random_sprites = true
 

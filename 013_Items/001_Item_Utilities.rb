@@ -216,7 +216,7 @@ def pbItemRestoreHP(pkmn, restoreHP)
 end
 
 def pbHPItem(pkmn, restoreHP, scene)
-  if $PokemonSystem.no_healing_items
+  if $PokemonSystem.no_healing_items_ow
     scene.pbDisplay(_INTL("Your challenge options prevent healing!"))
     return false
   end
@@ -231,7 +231,7 @@ def pbHPItem(pkmn, restoreHP, scene)
 end
 
 def pbBattleHPItem(pkmn, battler, restoreHP, scene)
-  if $PokemonSystem.no_healing_items
+  if $PokemonSystem.no_healing_items_battles
     scene.pbDisplay(_INTL("Your challenge options prevent healing!"))
     return false
   end

@@ -488,7 +488,6 @@ class PokemonPokedex_Scene
 
   def setIconBitmap(species)
     @sprites_cache = {} unless @sprites_cache
-    echoln @sprites_cache
     if @sprites_cache[species]
       @sprites["icon"].setBitmapDirectly(@sprites_cache[species])
     else

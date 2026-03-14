@@ -49,10 +49,15 @@ class ChallengeOptionsScene < PokemonOption_Scene
     #                           proc { |value| $PokemonSystem.level_caps = value },
     #                           _INTL("You're only allowed to catch the first X Pokémon on every route."))
 
-    options << EnumOption.new(_INTL("No healing items"), [_INTL("Off"), _INTL("On")],
-                              proc { $PokemonSystem.no_healing_items ? 1 : 0},
-                              proc { |value| $PokemonSystem.no_healing_items = value == 1 },
-                              _INTL("Healing items cannot be used (excluding berries)."))
+    options << EnumOption.new(_INTL("No heals (battles)"), [_INTL("Off"), _INTL("On")],
+                              proc { $PokemonSystem.no_healing_items_battles ? 1 : 0},
+                              proc { |value| $PokemonSystem.no_healing_items_battles = value == 1 },
+                              _INTL("Healing items cannot be used during battles (excluding held berries)."))
+
+    options << EnumOption.new(_INTL("No heals (overworld)"), [_INTL("Off"), _INTL("On")],
+                              proc { $PokemonSystem.no_healing_items_ow ? 1 : 0},
+                              proc { |value| $PokemonSystem.no_healing_items_ow = value == 1 },
+                              _INTL("Healing items cannot be used in the overworld."))
 
     if Settings::HOENN
       options << EnumOption.new(_INTL("No Pokécenters"), [_INTL("Off"), _INTL("On")],
