@@ -508,8 +508,8 @@ class PokemonFusionScene
 
       if j >= crossfade_start_frame
         sprite_fused.opacity = [sprite_fused.opacity + 16, 255].min
-        sprite_head.opacity = [sprite_head.opacity - 8, 0].max
-        sprite_body.opacity = [sprite_body.opacity - 8, 0].max
+        # sprite_head.opacity = [sprite_head.opacity - 8, 0].max
+        # sprite_body.opacity = [sprite_body.opacity - 8, 0].max
         # Shake grows as fused sprite fades in
         shake_progress = (sprite_fused.opacity / 255.0)
         shake = (j % 6 < 3) ? (3 * shake_progress).ceil : -(3 * shake_progress).ceil
