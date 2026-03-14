@@ -711,22 +711,28 @@ class PokemonPokedexInfo_Scene
         @page = 3 if @page > 3
         pbPlayCursorSE if @page != oldpage
         dorefresh = true if @page != oldpage
-      elsif Input.trigger?(Input::SPECIAL)
-        playCry(@species)
-        if @available && @available.size > 1
-          @selected_index = ((@selected_index || 0) + 1) % @available.size
-          @displayed_pif_sprite = @available[@selected_index]
-          @sprites["infosprite"].setPokemonBitmapPIFSprite(@displayed_pif_sprite)
-        else
-          @displayed_pif_sprite = nil
-        end
-        reloadDexEntry()
+      elsif Input.trigger?(Input::AUX2)
+        update_displayed_sprite(1)
+      elsif Input.trigger?(Input::AUX1)
+        update_displayed_sprite(-1)
       end
 
       drawPage(@page) if dorefresh
     end
 
     return @index
+  end
+
+  def update_displayed_sprite(delta)
+    playCry(@species)
+    if @available && @available.size > 1
+      @selected_index = ((@selected_index || 0) + delta) % @available.size
+      @displayed_pif_sprite = @available[@selected_index]
+      @sprites["infosprite"].setPokemonBitmapPIFSprite(@displayed_pif_sprite)
+    else
+      @displayed_pif_sprite = nil
+    end
+    reloadDexEntry()
   end
 
   def handleVerticalInput(direction)
