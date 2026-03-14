@@ -50,9 +50,9 @@ module Graphics
   end
 
   def self.update
-    if $DEBUG && Input.trigger?(Input::X)
-      spawn_random_overworld_pokemon_group
-    end
+    # if $DEBUG && Input.trigger?(Input::AUX1)
+    #   spawn_random_overworld_pokemon_group
+    # end
 
     if $CanToggle && Input.trigger?(Input::X)
       $GameSpeed += 1
