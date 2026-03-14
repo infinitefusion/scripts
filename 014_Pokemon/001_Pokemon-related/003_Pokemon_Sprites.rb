@@ -56,7 +56,7 @@ class PokemonSprite < SpriteWrapper
     spriteLoader = BattleSpriteLoader.new
     animatedBitmap = spriteLoader.load_pif_sprite_directly(pif_sprite)
     @_iconbitmap = SpriteWrapper.new
-    @_iconbitmap.bitmap = animatedBitmap.bitmap
+    @_iconbitmap.bitmap = animatedBitmap.bitmap if animatedBitmap&.bitmap
 
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     self.color = Color.new(0, 0, 0, 0)

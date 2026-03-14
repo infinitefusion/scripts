@@ -4,6 +4,7 @@ class BattleSpriteLoader
   end
 
   def load_pif_sprite_directly(pif_sprite)
+    echoln pif_sprite.dump_info
     if pif_sprite.local_path && pbResolveBitmap(pif_sprite.local_path)
       return AnimatedBitmap.new(pif_sprite.local_path)
     end
