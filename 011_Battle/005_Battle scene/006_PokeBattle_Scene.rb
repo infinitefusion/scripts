@@ -348,4 +348,31 @@ class PokeBattle_Scene
     @battleEnd = true
     pbBGMPlay(pbGetTrainerVictoryME(@battle.opponent))
   end
+
+
+  def pbShowAbilitySplash(battler,secondAbility=false, abilityName=nil)
+    return if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+    side = battler.index%2
+    if secondAbility
+      pbHideAbilitySplash(battler) if @sprites["ability2Bar_#{side}"].visible
+    else
+      pbHideAbilitySplash(battler) if @sprites["abilityBar_#{side}"].visible
+    end
+    if abilityName
+      @sprites["abilityBar_#{side}"].ability_name = abilityName if !secondAbility
+      @sprites["ability2Bar_#{side}"].ability_name = abilityName if secondAbility
+    end
+
+
+    @sprites["abilityBar_#{side}"].battler = battler
+    @sprites["ability2Bar_#{side}"].battler = battler if @sprites["ability2Bar_#{side}"]
+
+    abilitySplashAnim = AbilitySplashAppearAnimation.new(@sprites,@viewport,side,secondAbility)
+    loop do
+      abilitySplashAnim.update
+      pbUpdate
+      break if abilitySplashAnim.animDone?
+    end
+    abilitySplashAnim.dispose
+  end
 end
