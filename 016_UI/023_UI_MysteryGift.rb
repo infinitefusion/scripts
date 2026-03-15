@@ -267,6 +267,7 @@ def pbDownloadMysteryGift(trainer)
   when cmd_code
     code = pbEnterText(_INTL("Enter code to redeem"),1,10)
     url = MysteryGift::PRIVATE_URL + code + ".json"
+    echoln url
     downloadMysteryGifts(url,sprites, viewport, trainer)
   when cmd_cancel
     pbFadeOutAndHide(sprites)

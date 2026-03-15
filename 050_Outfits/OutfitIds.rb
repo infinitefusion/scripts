@@ -174,6 +174,8 @@ HAIR_HEXMANIAC = "HexManiac"
 HAIR_LASS = "lass"
 
 HAIR_BALD = "bald"
+HAIR_BALD_POLISHED = "polishedbald"
+
 HAIR_RIVAL = "gary"
 HAIR_BROCK = "brock"
 HAIR_MISTY1 = "mistyRBY"
@@ -195,6 +197,11 @@ HAIR_PRYCE = "pryce" #does not exist yet
 HAIR_MORTY = "morty" #does not exist yet
 HAIR_JASMINE = "jasmine" #does not exist yet
 
+
+HAIR_ROXANNE = "roxanne"
+HAIR_BRAWLY = "brawly"
+HAIR_WATTSON = "wattson"
+
 HAIR_HOOH = "ho-oh"
 HAIR_CRESSELIA = "lunarbob"
 HAIR_LYCANROC="lycanrocshorthair"
@@ -204,6 +211,7 @@ HAIR_GARDEVOIR="gardevoir"
 HAIR_EEVEE="eeveetail"
 HAIR_LEAFEON="leafeonbob"
 HAIR_ORICORIO="oricoriopuffs"
+HAIR_TYRANITAR="tyranaspikes"
 
 HAIR_BRENDAN = "brendan"
 HAIR_MAY = "may"

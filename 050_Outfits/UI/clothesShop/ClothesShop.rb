@@ -73,6 +73,14 @@ def hairShop(outfits_list = [],free=false, customMessage=nil)
   genericOutfitsShopMenu(stock, :HAIR, true,!free,customMessage)
 end
 
+def pokemonHairstylesShop()
+  hairShop([HAIR_EEVEE,HAIR_LYCANROC,
+            HAIR_HAPPINY,HAIR_GARDEVOIR,
+            HAIR_LEAFEON,HAIR_ORICORIO,
+            HAIR_HOOH,HAIR_CRESSELIA,
+            HAIR_LATIAS,HAIR_TYRANITAR])
+end
+
 def switchHatsPosition()
   hat1 = $Trainer.hat
   hat2 = $Trainer.hat2
