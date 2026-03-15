@@ -80,6 +80,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
   end
 
   def pbStartScene(screen, trainer)
+    echoln "start"
     @screen = screen
     buttons = []
     @trainer = trainer
@@ -140,6 +141,10 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     trainerClassName = GameData::TrainerType.get(@trainer.trainerType).real_name
     trainer_name = "#{trainerClassName} #{@trainer.trainerName}"
 
+    echoln @trainer.trainerType
+    echoln @trainer.trainerName
+    echoln trainer_name
+
     level_sum = 0
     if @trainer.currentTeam.size > 0
       @trainer.currentTeam.each do |pokemon|
@@ -151,11 +156,12 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     end
 
     location = @trainer.location
-    favorite_type = GameData::Type.get(@trainer.favorite_type).real_name
     if @trainer.id == BATTLED_TRAINER_RIVAL_KEY
       favorite_type = _INTL("All")
     elsif @trainer.id == BATTLED_TRAINER_WALLY_KEY
       favorite_type = _INTL("Unknown")
+    else
+      favorite_type = (GameData::Type.try_get(@trainer.favorite_type)&.real_name) || _INTL("Unknown")
     end
 
     Kernel.pbDisplayText(trainer_name, TITLE_TEXT_X, TITLE_TEXT_Y, 999999, @text_color_base, @text_color_shadow)
@@ -174,8 +180,9 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     current_y += INFO_HEADER_GAP
     displayValue(favorite_type, INFO_TEXT_X, current_y)
 
+    echoln "before trainer_data"
     trainer_data = GameData::Trainer.try_get(@trainer.trainerType, @trainer.trainerName, 0)
-
+    echoln "after trainer_data"
     current_y += INFO_TEXT_GAP * 1.5
     if @trainer.previous_random_events
       action = getBestMatchingPreviousRandomEvent(trainer_data, @trainer.previous_random_events)
