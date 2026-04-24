@@ -13,6 +13,12 @@ class AnimatedBitmap
       shiny_directory = "Graphics/Battlers/Shiny/#{head_id}.#{body_id}"
       shiny_file_path = "#{shiny_directory}/#{head_id}.#{body_id}"
       offsets = [SHINY_COLOR_OFFSETS[body_id], SHINY_COLOR_OFFSETS[head_id]]
+    elsif isTripleFusion?(dex_number)
+      path = get_triple_fusion_path(dex_number)
+      all_id = get_triple_fusion_components(dex_number)
+      shiny_directory = "Graphics/Battlers/Shiny/#{path}"
+      shiny_file_path = "#{shiny_directory}/#{path}"
+      offsets = all_id.first(3).map { |id| SHINY_COLOR_OFFSETS[id] }
     else
       shiny_directory = "Graphics/Battlers/Shiny/#{dex_number}"
       shiny_file_path = "#{shiny_directory}/#{dex_number}"
