@@ -173,7 +173,7 @@ def promptCaughtPokemonAction(pokemon)
     end
     options << cmd_pc
 
-    command = pbMessage(_INTL("\\ts[]Your team is full!"), options, 2)
+    command = pbMessage(_INTL("\\ts[]Your team is full!"), options, options.length)
     case options[command]
     when cmd_swap
       if swapCaughtPokemon(pokemon)
