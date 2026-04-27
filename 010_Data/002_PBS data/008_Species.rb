@@ -287,6 +287,73 @@ module GameData
       return ret
     end
 
+    def get_family_evolutions_ordered(exclude_invalid = true)
+      evos = self.get_evolutions(exclude_invalid)
+
+      evos = evos.sort do |a, b|
+        a_method = a[1]  # evolution method symbol
+        b_method = b[1]
+        a_param = a[2]   # parameter (level number, item, etc.)
+        b_param = b[2]
+
+        a_is_level = (a_method == :Level)
+        b_is_level = (b_method == :Level)
+
+        if a_is_level && b_is_level
+          # both level evos: sort by level number
+          (a_param || 0) <=> (b_param || 0)
+        elsif a_is_level
+          -1  # level evos come first
+        elsif b_is_level
+          1
+        else
+          # both non-level: sort alphabetically by method name for consistency
+          a_method.to_s <=> b_method.to_s
+        end
+      end
+
+      ret = []
+      evos.each do |evo|
+        ret.push([@species].concat(evo))  # [Prevo species, evo species, method, parameter]
+        evo_array = GameData::Species.get(evo[0]).get_family_evolutions(exclude_invalid)
+        ret.concat(evo_array) if evo_array && evo_array.length > 0
+      end
+      return ret
+    end
+
+    def list_final_evolutions(exclude_invalid = false)
+      evos = self.get_evolutions(exclude_invalid)
+      if evos.empty?
+        return [@species]
+      end
+      ret = []
+      evos.each do |evo|
+        finals = GameData::Species.get(evo[0]).list_final_evolutions(exclude_invalid)
+        ret.concat(finals)
+      end
+      return ret.uniq
+    end
+
+
+    def build_evo_tree(exclude_invalid = true)
+      evos = self.get_evolutions(exclude_invalid)
+      evos = evos.sort do |a, b|
+        a_is_level = (a[1] == :Level)
+        b_is_level = (b[1] == :Level)
+        if a_is_level && b_is_level
+          (a[2] || 0) <=> (b[2] || 0)
+        elsif a_is_level then -1
+        elsif b_is_level then 1
+        else a[1].to_s <=> b[1].to_s
+        end
+      end
+
+      {
+        species: @species,
+        children: evos.map { |evo| GameData::Species.get(evo[0]).build_evo_tree(exclude_invalid) }
+      }
+    end
+
     def get_previous_species
       return @species if @evolutions.length == 0
       @evolutions.each { |evo| return evo[0] if evo[3] } # Is the prevolution

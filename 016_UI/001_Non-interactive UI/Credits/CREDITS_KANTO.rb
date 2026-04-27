@@ -79,7 +79,7 @@ locpic_
 blood.wolf58 (Willi)
 ragzzh
 
-The following free ressources were also used 
+The following free resources were also used 
 with their respective authors' consent:
 
 Public use tileset graphics:

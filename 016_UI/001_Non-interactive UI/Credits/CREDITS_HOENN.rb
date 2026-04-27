@@ -105,7 +105,7 @@ Doctor Miawoo<s>TCGrunler#4583
 Chardub<s>
 
 
-The following free ressources were also used 
+The following free resources were also used 
 with their respective authors' consent:
 
 <title>Trainer Overworld and Battle sprites

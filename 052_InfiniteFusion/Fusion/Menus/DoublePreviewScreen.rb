@@ -8,11 +8,17 @@ class DoublePreviewScreen
 
   SELECT_ARROW_Y_SELECT= 0
   SELECT_ARROW_Y_CANCEL= 210
-  ARROW_GRAPHICS_PATH = "Graphics/Pictures/selHand"
-  CANCEL_BUTTON_PATH = "Graphics/Pictures/previewScreen_Cancel"
+  ARROW_GRAPHICS_PATH = "Graphics/Pictures/Fusion/selHand"
+  CANCEL_BUTTON_PATH = "Graphics/Pictures/Fusion/previewScreen_Cancel"
   BACKGROUND_PATH = "Graphics/Pictures/shadeFull_"
+  EVO_BUTTON_PATH = "Graphics/Pictures/Fusion/previewScreen_evolution"
+  EVO_BUTTON_X= 240
+  EVO_BUTTON_Y= 4
 
 
+  ICON_EVO_HAS_CUSTOM = "Graphics/Pictures/Fusion/evoCustom"
+  ICON_EVO_HAS_NO_CUSTOM = "Graphics/Pictures/Fusion/evoNoCustom"
+  ICON_EVO_FULL_CUSTOM =  "Graphics/Pictures/Fusion/evoCustom_full"
   CANCEL_BUTTON_X= 140
   CANCEL_BUTTON_Y= 260
 
@@ -29,13 +35,13 @@ class DoublePreviewScreen
     @selected = 0
     @last_post=0
     @sprites      = {}
-
-    √ = nil
     @sprite_right = nil
     @selected_sprite = nil
     initializeBackground
     initializeSelectArrow
     initializeCancelButton
+    initializeEvolutionsButton
+    hideAllEvoIcons
   end
 
   def getBackgroundPicture
@@ -88,20 +94,49 @@ class DoublePreviewScreen
   end
 
   def updateSelectionIndex
-    if Input.trigger?(Input::LEFT)
-      @selected = 0
-    elsif Input.trigger?(Input::RIGHT)
-      @selected = 1
-    end
+    @up_hold_frames ||= 0
+
     if @selected == -1
+      @up_hold_frames = 0
       if Input.trigger?(Input::UP)
         @selected = @last_post
       end
     else
-      if Input.trigger?(Input::DOWN)
+      if Input.trigger?(Input::LEFT)
+        @selected = 0
+      elsif Input.trigger?(Input::RIGHT)
+        @selected = 1
+      elsif Input.trigger?(Input::DOWN)
         @last_post = @selected
         @selected = -1
       end
+
+      if Input.press?(Input::UP) && @selected > -1
+        @up_hold_frames += 1
+
+        showAllEvoIcons if @up_hold_frames >= 6
+      else
+        @up_hold_frames = 0
+        hideAllEvoIcons
+      end
+    end
+  end
+
+  def hideAllEvoIcons
+    @evo_icons_visible = false
+    @sprites.each do |key, sprite|
+      sprite.visible = false if key.start_with?("evo_icon_")
+    end
+  end
+
+
+  def showAllEvoIcons
+    unless @evo_icons_visible
+      pbSEPlay("GUI storage show party panel")
+      @evo_icons_visible = true
+    end
+    @sprites.each do |key, sprite|
+      sprite.visible = true if key.start_with?("evo_icon_")
     end
   end
 
@@ -141,10 +176,15 @@ class DoublePreviewScreen
     #hasCustom = picturePath.include?("CustomBattlers")
     #hasCustom = customSpriteExistsBase(body_pokemon,head_pokemon)
     hasCustom = customSpriteExists(body_pokemon,head_pokemon)
+
+    @viewport_evo = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    @viewport_evo.z = 100001
+    drawEvolutionIcons(dexNumber, @viewport_evo, x+16, y + 12, window_position)
+
     previewwindow = PictureWindow.new(bitmap)
     previewwindow.x = x
     previewwindow.y = y
-    previewwindow.z = 100000
+    previewwindow.z = 99999
 
     drawFusionInformation(dexNumber, level, x)
 
@@ -160,6 +200,62 @@ class DoublePreviewScreen
     return previewwindow
   end
 
+
+  def drawEvolutionIcons(dexNumber, viewport, x, y, window_position)
+    current_species = GameData::Species.get(dexNumber)
+    final_evolutions = current_species&.get_family_evolutions_ordered
+
+    evolution_customs = [customSpriteExistsSpecies(current_species.species)]
+    current_species_index = 0
+
+    final_evolutions&.each_with_index do |evolution, i|
+      evoSpecies = evolution[1]
+      echoln get_readable_fusion_name(evoSpecies)
+      hasCustom = customSpriteExistsSpecies(evoSpecies)
+      evolution_customs.push(hasCustom)
+      current_species_index = i if evoSpecies == current_species.species
+    end
+
+    return if evolution_customs.empty?
+
+    all_true = evolution_customs.all?
+    icon_width = 16
+    icon_spacing = 4
+    max_per_row = 10
+    row_height = icon_width + 4
+
+    # if all_true
+    #   # Draw only the blue dot
+    #   icon_sprite = Sprite.new(viewport)
+    #   icon_sprite.bitmap = AnimatedBitmap.new(ICON_EVO_FULL_CUSTOM).bitmap
+    #   icon_sprite.x = x + icon_spacing
+    #   icon_sprite.y = y
+    #   icon_sprite.z = 10000
+    #   @sprites["evo_icon_#{window_position}_full"] = icon_sprite
+    #   return
+    # end
+
+    rows = evolution_customs.each_slice(max_per_row).to_a
+
+    rows.each_with_index do |row_customs, row_index|
+      start_x = x + icon_spacing
+      row_y = y + (row_index * row_height)
+
+      row_customs.each_with_index do |has_custom, col_index|
+        global_index = (row_index * max_per_row) + col_index
+        icon_path = has_custom ? ICON_EVO_HAS_CUSTOM : ICON_EVO_HAS_NO_CUSTOM
+        icon_path += "_selected" if global_index == current_species_index
+
+        icon_bitmap = AnimatedBitmap.new(icon_path).bitmap
+        icon_sprite = Sprite.new(viewport)
+        icon_sprite.bitmap = icon_bitmap
+        icon_sprite.x = start_x + (col_index * (icon_width + icon_spacing))
+        icon_sprite.y = row_y
+        icon_sprite.z = 10000
+        @sprites["evo_icon_#{window_position}_#{global_index}"] = icon_sprite
+      end
+    end
+  end
 
   def drawFusionInformation(fusedDexNum, level, x = 0)
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -177,6 +273,13 @@ class DoublePreviewScreen
     @sprites["arrow"].z = 100001
   end
 
+  def initializeEvolutionsButton()
+    @sprites["evo"] = IconSprite.new(0, 0, @viewport)
+    @sprites["evo"].setBitmap(EVO_BUTTON_PATH)
+    @sprites["evo"].x = EVO_BUTTON_X
+    @sprites["evo"].y = EVO_BUTTON_Y
+    @sprites["evo"].z = 100000
+  end
 
   def initializeCancelButton()
     @sprites["cancel"] = IconSprite.new(0, 0, @viewport)
