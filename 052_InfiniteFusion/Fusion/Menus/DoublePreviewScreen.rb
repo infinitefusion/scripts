@@ -12,7 +12,7 @@ class DoublePreviewScreen
   CANCEL_BUTTON_PATH = "Graphics/Pictures/Fusion/previewScreen_Cancel"
   BACKGROUND_PATH = "Graphics/Pictures/shadeFull_"
   EVO_BUTTON_PATH = "Graphics/Pictures/Fusion/previewScreen_evolution"
-  EVO_BUTTON_X= 240
+  EVO_BUTTON_X= 272
   EVO_BUTTON_Y= 4
 
 
@@ -113,7 +113,6 @@ class DoublePreviewScreen
 
       if Input.press?(Input::UP) && @selected > -1
         @up_hold_frames += 1
-
         showAllEvoIcons if @up_hold_frames >= 6
       else
         @up_hold_frames = 0
@@ -123,6 +122,7 @@ class DoublePreviewScreen
   end
 
   def hideAllEvoIcons
+    @sprites["evo"].visible=true
     @evo_icons_visible = false
     @sprites.each do |key, sprite|
       sprite.visible = false if key.start_with?("evo_icon_")
@@ -131,6 +131,7 @@ class DoublePreviewScreen
 
 
   def showAllEvoIcons
+    @sprites["evo"].visible=false
     unless @evo_icons_visible
       pbSEPlay("GUI storage show party panel")
       @evo_icons_visible = true
@@ -173,8 +174,6 @@ class DoublePreviewScreen
     else
       @sprite_right = pif_sprite
     end
-    #hasCustom = picturePath.include?("CustomBattlers")
-    #hasCustom = customSpriteExistsBase(body_pokemon,head_pokemon)
     hasCustom = customSpriteExists(body_pokemon,head_pokemon)
 
     @viewport_evo = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -203,37 +202,15 @@ class DoublePreviewScreen
 
   def drawEvolutionIcons(dexNumber, viewport, x, y, window_position)
     current_species = GameData::Species.get(dexNumber)
-    final_evolutions = current_species&.get_family_evolutions_ordered
-
-    evolution_customs = [customSpriteExistsSpecies(current_species.species)]
-    current_species_index = 0
-
-    final_evolutions&.each_with_index do |evolution, i|
-      evoSpecies = evolution[1]
-      echoln get_readable_fusion_name(evoSpecies)
-      hasCustom = customSpriteExistsSpecies(evoSpecies)
-      evolution_customs.push(hasCustom)
-      current_species_index = i if evoSpecies == current_species.species
-    end
-
+    ordered_species = current_species.get_ordered_family_species
+    current_species_index = ordered_species.index(current_species.species) || 0
+    evolution_customs = ordered_species.map { |sp| customSpriteExistsSpecies(sp) }
     return if evolution_customs.empty?
 
-    all_true = evolution_customs.all?
     icon_width = 16
     icon_spacing = 4
     max_per_row = 10
     row_height = icon_width + 4
-
-    # if all_true
-    #   # Draw only the blue dot
-    #   icon_sprite = Sprite.new(viewport)
-    #   icon_sprite.bitmap = AnimatedBitmap.new(ICON_EVO_FULL_CUSTOM).bitmap
-    #   icon_sprite.x = x + icon_spacing
-    #   icon_sprite.y = y
-    #   icon_sprite.z = 10000
-    #   @sprites["evo_icon_#{window_position}_full"] = icon_sprite
-    #   return
-    # end
 
     rows = evolution_customs.each_slice(max_per_row).to_a
 
