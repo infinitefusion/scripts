@@ -273,7 +273,7 @@ module GameData
     ["Lo", "tad"],
     ["Lom", "bre"],
     ["Ludi", "colo"],
-    ["Seed", "dot"],
+    ["See", "dot"],
     ["Nuz", "leaf"],
     ["Shift", "try"],
     ["Tail", "low"],

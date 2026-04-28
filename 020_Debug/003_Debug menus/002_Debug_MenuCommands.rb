@@ -468,7 +468,6 @@ DebugMenuCommands.register("additem", {
       item_list.push([item.id_number, sprintf("%-30s %s", sprintf("%03d: %s", item.id_number, item.real_name), item.id), item.id])
     end
     item = pbChooseListWithFilter(item_list,0,nil,1,0,0,"ADD ITEM",:longest_value)
-    echoln item
     if item
       params = ChooseNumberParams.new
       params.setRange(1, Settings::BAG_MAX_PER_SLOT)

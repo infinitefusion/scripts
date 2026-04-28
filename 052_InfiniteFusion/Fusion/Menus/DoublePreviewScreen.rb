@@ -202,9 +202,38 @@ class DoublePreviewScreen
 
   def drawEvolutionIcons(dexNumber, viewport, x, y, window_position)
     current_species = GameData::Species.get(dexNumber)
-    ordered_species = current_species.get_ordered_family_species
+    if current_species.is_fusion
+      body_num = getBodyID(current_species.id_number)
+      head_num = getHeadID(current_species.id_number, body_num)
+      body_chain = GameData::Species.get(body_num).get_ordered_family_species
+      head_chain = GameData::Species.get(head_num).get_ordered_family_species
+
+      ordered_species = []
+      seen = {}
+      body_chain.each do |body_sp|
+        head_chain.each do |head_sp|
+          body_dex = getDexNumberForSpecies(body_sp)
+          head_dex = getDexNumberForSpecies(head_sp)
+          fused_id = getFusedPokemonIdFromDexNum(body_dex, head_dex)
+          next if seen[fused_id]
+          next unless GameData::Species.get(fused_id)
+          seen[fused_id] = true
+          ordered_species << fused_id
+        end
+      end
+    else
+      ordered_species = current_species.get_ordered_family_species
+    end
     current_species_index = ordered_species.index(current_species.species) || 0
-    evolution_customs = ordered_species.map { |sp| customSpriteExistsSpecies(sp) }
+
+    parsed_species = []
+    evolution_customs = []
+    ordered_species.each do |species|
+      next if parsed_species.include?(species)
+      parsed_species << species
+      evolution_customs << customSpriteExistsSpecies(species)
+    end
+
     return if evolution_customs.empty?
 
     icon_width = 16
@@ -213,16 +242,13 @@ class DoublePreviewScreen
     row_height = icon_width + 4
 
     rows = evolution_customs.each_slice(max_per_row).to_a
-
     rows.each_with_index do |row_customs, row_index|
       start_x = x + icon_spacing
       row_y = y + (row_index * row_height)
-
       row_customs.each_with_index do |has_custom, col_index|
         global_index = (row_index * max_per_row) + col_index
         icon_path = has_custom ? ICON_EVO_HAS_CUSTOM : ICON_EVO_HAS_NO_CUSTOM
         icon_path += "_selected" if global_index == current_species_index
-
         icon_bitmap = AnimatedBitmap.new(icon_path).bitmap
         icon_sprite = Sprite.new(viewport)
         icon_sprite.bitmap = icon_bitmap
@@ -233,6 +259,7 @@ class DoublePreviewScreen
       end
     end
   end
+
 
   def drawFusionInformation(fusedDexNum, level, x = 0)
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
