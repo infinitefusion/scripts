@@ -535,6 +535,44 @@ class OverworldPokemonEvent < Game_Event
     erase
   end
 
+  # def despawn
+  #   $ow_debug_despawn_count ||= 0
+  #   $ow_debug_despawn_count += 1
+  #
+  #   $PokemonTemp.overworld_pokemon_on_map.delete(@id)
+  #   $game_map.events.delete(@id)
+  #
+  #   spriteset = $scene.spritesets[$game_map.map_id]
+  #   if spriteset
+  #     sprite = spriteset.character_sprites.find { |s| s.character == self }
+  #     if sprite
+  #       char_name = self.character_name
+  #       char_hue = self.character_hue
+  #       sprite.dispose
+  #       spriteset.character_sprites.delete(sprite)
+  #       path = 'Graphics/Characters/' + char_name
+  #       key = char_hue == 0 ? path : [path, char_hue]
+  #       bitmap = RPG::Cache.fromCache(key)
+  #       bitmap.dispose if bitmap && !bitmap.disposed?  # decrements refcount via BitmapWrapper#dispose
+  #     end
+  #   else
+  #     echoln "DESPAWN: no spriteset for map #{@map_id}"
+  #   end
+  #   $PokemonTemp.overworld_wild_battle_participants&.delete(self)
+  #
+  #   # Remove from tempEvents so the GC can collect this object and its @pokemon
+  #   if $PokemonTemp.tempEvents && $PokemonTemp.tempEvents[@map_id]
+  #     $PokemonTemp.tempEvents&.each do |map_id, events|
+  #       events.delete(self)
+  #     end
+  #     $PokemonTemp.tempEvents.delete_if { |_, v| v.empty? }
+  #   end
+  #
+  #   @deleted = true
+  #   erase
+  #   sprite.instance_variable_set(:@character, nil)
+  # end
+
   # Additional move types for OW pokemon
   def update_command_new
     super
