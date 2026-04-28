@@ -157,7 +157,6 @@ def pbChooseMoveList(default = nil)
   commands = []
   GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
   return pbChooseListWithFilter(commands,0,nil,1,0,0,"Select a move",:longest_value)
-  #return pbChooseList(commands, default, nil, 1)
 end
 
 def pbChooseMoveListForSpecies(species, defaultMoveID = nil)

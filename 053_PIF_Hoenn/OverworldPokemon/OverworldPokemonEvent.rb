@@ -195,7 +195,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def delete
-    $PokemonTemp.overworld_pokemon_on_map.delete(self)
+    $PokemonTemp.overworld_pokemon_on_map.delete(@id)
     @deleted = true
   end
 
@@ -530,6 +530,8 @@ class OverworldPokemonEvent < Game_Event
 
   def despawn
     $PokemonTemp.overworld_pokemon_on_map.delete(@id)
+    $game_map.events.delete(@id)  # actually remove from map
+    @deleted = true
     erase
   end
 

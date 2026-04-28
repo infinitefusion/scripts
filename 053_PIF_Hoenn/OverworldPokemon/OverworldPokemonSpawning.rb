@@ -150,6 +150,8 @@ def spawn_random_overworld_pokemon_group(wild_pokemon = nil, radius = 10, max_gr
       if can_spawn_pokemon_there(new_position[0], new_position[1], terrain)
         event = spawn_overworld_pokemon(wild_pokemon, new_position, terrain)
         spawned_events << event
+      else
+        echoln "Couldn't spawn pokemon at #{new_position[0]}, #{new_position[1]}"
       end
     rescue
       next
@@ -254,6 +256,11 @@ Events.onMapChange += proc { |_sender, e|
 
 def clearOverworldPokemon
   echoln "Clearing Overworld Pokemon"
+  $PokemonTemp.overworld_pokemon_on_map&.dup&.each do |id|
+    event = $game_map.events[id]
+    next unless event && event.is_a?(OverworldPokemonEvent)
+    event.despawn
+  end
 
   $PokemonTemp.pbClearTempEvents
   $PokemonTemp.overworld_pokemon_on_map = []

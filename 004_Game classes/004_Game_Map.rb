@@ -328,6 +328,7 @@ class Game_Map
   # Just a copy of playerPassable? without the ledges
   def OWPokemonPassable?(x, y, d, self_event = nil)
     return false if x== $game_player.x && y == $game_player.y
+    return false if $game_map.event_at_position(x, y)
     bit = (1 << (d / 2 - 1)) & 0x0f
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
@@ -337,7 +338,6 @@ class Game_Map
       if terrain
         return false if terrain.ledge
         return false if terrain.acroBike
-        return false if $game_map.event_at_position(x, y)
         # Ignore bridge tiles if not on a bridge
         next if terrain.bridge && $PokemonGlobal.bridge == 0
         # Make water tiles passable if player is surfing
@@ -439,6 +439,7 @@ class Game_Map
     end
     return false
   end
+
 
   def get_event_at_position(x, y, excluding_IDs = [])
     for event in self.events.values
