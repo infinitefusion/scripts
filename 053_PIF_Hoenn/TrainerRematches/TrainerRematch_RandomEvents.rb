@@ -117,7 +117,9 @@ def catch_new_team_pokemon(trainer)
   return trainer if !encounter_type
 
   echoln "Catching a pokemon via encounter_type #{encounter_type}"
-  wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+
+  # 3 rolls for favorite type, then normal roll
+  wild_pokemon = select_npc_new_pokemon(encounter_type, trainer.favorite_type)
   if wild_pokemon
     trainer_highest_level = get_trainer_highest_level(trainer)
     species = wild_pokemon[0]
@@ -128,6 +130,18 @@ def catch_new_team_pokemon(trainer)
     trainer.log_catch_event(wild_pokemon[0])
   end
   return trainer
+end
+
+# 3 rolls for favorite type, then normal roll
+def select_npc_new_pokemon(encounter_type, favorite_type)
+  (1..3).each { |i|
+    wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+    species = wild_pokemon[0]
+    if GameData::Species.get(species)&.hasType?(favorite_type)
+      return wild_pokemon
+    end
+  }
+  return $PokemonEncounters.choose_wild_pokemon(encounter_type)
 end
 
 def get_trainer_highest_level(trainer)
