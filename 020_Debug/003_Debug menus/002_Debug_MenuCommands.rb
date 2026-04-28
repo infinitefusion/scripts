@@ -463,20 +463,25 @@ DebugMenuCommands.register("additem", {
   "name"        => _INTL("Add Item"),
   "description" => _INTL("Choose an item and a quantity of it to add to the Bag."),
   "effect"      => proc {
-    pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) { |button, item|
-      if button == Input::USE && item
-        params = ChooseNumberParams.new
-        params.setRange(1, Settings::BAG_MAX_PER_SLOT)
-        params.setInitialValue(1)
-        params.setCancelValue(0)
-        qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
-           GameData::Item.get(item).name_plural), params)
-        if qty > 0
-          $PokemonBag.pbStoreItem(item, qty)
-          pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
-        end
+    item_list = []
+    GameData::Item.each do |item|
+      item_list.push([item.id_number, sprintf("%-30s %s", sprintf("%03d: %s", item.id_number, item.real_name), item.id), item.id])
+    end
+    item = pbChooseListWithFilter(item_list,0,nil,1,0,0,"ADD ITEM",:longest_value)
+    echoln item
+    if item
+      params = ChooseNumberParams.new
+      params.setRange(1, Settings::BAG_MAX_PER_SLOT)
+      params.setInitialValue(1)
+      params.setCancelValue(0)
+      qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
+                                        GameData::Item.get(item).name_plural), params)
+      if qty > 0
+        $PokemonBag.pbStoreItem(item, qty)
+        pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
+        promptRegisterItem(GameData::Item.get(item))
       end
-    }
+    end
   }
 })
 

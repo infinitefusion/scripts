@@ -386,13 +386,25 @@ def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
   return itemID
 end
 
-def pbChooseListWithFilter(commands, default = 0, cancelValue = -1, sortType = 1, window_x = 0, window_y = 0, filter_default_text = "")
+def pbChooseListWithFilter(commands, default = 0, cancelValue = -1, sortType = 1,
+                           window_x = 0, window_y = 0, filter_default_text = "",
+                           width_mode = :filter_text)
   filter_height = 60
+  case width_mode
+  when :longest_value     # Measure the longest display string from commands
+    longest = commands.map { |c|
+      sortType <= 0 ? sprintf("%03d: %s", c[0], c[1]) : c[1]
+    }.max_by(&:length) || ""
+    # Fall back to filter_default_text if commands is empty
+    reference_text = longest.length >= filter_default_text.length ? longest : filter_default_text
+  else # :filter_text (default)
+    reference_text = filter_default_text
+  end
 
   filterwin = Window_UnformattedTextPokemon.newWithSize(
-    filter_default_text, window_x, window_y, Graphics.width / 2, filter_height
+    reference_text, window_x, window_y, Graphics.width / 2, filter_height
   )
-  filterwin.setTextToFit(filter_default_text)
+  filterwin.setTextToFit(reference_text)
   filterwin.z = 99999
 
   cmdwin = pbListWindow([])
@@ -402,6 +414,7 @@ def pbChooseListWithFilter(commands, default = 0, cancelValue = -1, sortType = 1
   cmdwin.height = Graphics.height - window_y - filter_height
   cmdwin.z      = 99999
   cmdwin.active = true
+
 
   Input.text_input = true
   filterText = ""
