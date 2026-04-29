@@ -112,6 +112,69 @@ module SwitchFinder
     echoln "#{unused_switches.length} unused switches found. Exported to unused_switches.txt."
   end
 
+  def self.search_var_anyUse(variable_id)
+    results = []
+
+    mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
+
+    mapinfos.each_key do |map_id|
+      map_filename = sprintf("Data/Map%03d.rxdata", map_id)
+      next unless File.exist?(map_filename)
+
+      map = load_data(map_filename)
+      mapinfo = mapinfos[map_id]
+      map.events.each_value do |event|
+        event.pages.each_with_index do |page, page_index|
+
+          # Check page condition — variable condition uses variable_id and a value threshold
+          if page.condition.variable_valid && page.condition.variable_id == variable_id
+            results.push("Map #{map_id}: #{mapinfo.name}, Event #{event.id} (#{event.x},#{event.y}), Trigger for page #{page_index + 1} (variable condition)")
+          end
+
+          page.list.each_with_index do |command, command_index|
+
+            # Command 122: Control Variables
+            if command.code == 122
+              range_start = command.parameters[0]
+              range_end   = command.parameters[1]
+
+              if range_start <= variable_id && variable_id <= range_end
+                results.push("Map #{map_id}: #{mapinfo.name}, Event #{event.id} (#{event.x},#{event.y}), Command #{command_index + 1}: Control Variables (write)")
+              end
+
+              # Command 111: Conditional Branch — can reference a variable
+            elsif command.code == 111
+              # parameters[0] == 1 means "variable comparison" condition type
+              if command.parameters[0] == 1 && command.parameters[1] == variable_id
+                results.push("Map #{map_id}: #{mapinfo.name}, Event #{event.id} (#{event.x},#{event.y}), Command #{command_index + 1}: Conditional Branch (variable check)")
+              end
+
+              # Commands 355/655: Script calls
+            elsif command.code == 355
+              script_text = command.parameters[0]
+
+              next_index = command_index + 1
+              while page.list[next_index]&.code == 655
+                script_text += page.list[next_index].parameters[0]
+                next_index += 1
+              end
+
+              if script_text.match?(/\$game_variables\[\s*#{variable_id}\s*\]/)
+                results.push("Map #{map_id}: #{mapinfo.name}, Event #{event.id} (#{event.x},#{event.y}), Command #{command_index + 1}: Script Manipulation")
+              end
+            end
+
+          end
+        end
+      end
+    end
+
+    output = "Variable #{variable_id} found:\n" + results.join("\n")
+    echoln output
+    return output
+  end
+
+
 end
 
 # Example usage: Replace 100 with the switch ID you want to search
