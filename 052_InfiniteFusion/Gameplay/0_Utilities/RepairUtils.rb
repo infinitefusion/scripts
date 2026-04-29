@@ -248,5 +248,28 @@ def fixStuff
     if $game_switches[SWITCH_HOENN_BEAT_RIVAL_RT_110]
       $Trainer.install_app(:POKERADAR) unless $Trainer.pokenav.has_app(:POKERADAR)
     end
+
+
+    if $game_variables[1033].is_a?(String)  #graffiti/trick house variable mixup
+      $game_variables[1033] = 0
+    end
   end
+
+
+
+  $PokemonGlobal.sliding=false
+  $game_player.walk_anime=true
+  PokemonSelection.restore
+  $game_system.menu_disabled=false
+  clear_all_images
+  Kernel.initRandomTypeArray
+
+  #fixMissedHMs
+  # todo: make a hoenn version of missed HMs
+
+  $game_switches[SWITCH_CANNOT_CATCH_POKEMON] = false
+  restoreDefaultCharacterSprite
+  Graphics.update
+  Input.update
+  pbUpdateSceneMap
 end
