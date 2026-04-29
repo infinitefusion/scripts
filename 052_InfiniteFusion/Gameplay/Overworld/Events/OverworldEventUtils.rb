@@ -78,7 +78,8 @@ def setEventGraphicsToPokemon(species, eventId, shiny=false)
   return if !event
   shiny_folder= shiny ? "Shiny/" : ""
   path = "Followers/#{shiny_folder}#{species.to_s}"
-  if pbResolveBitmap(path)
+  echoln path
+  if pbResolveBitmap("Graphics/Characters/" +path)
     event.character_name = path
   else
     path =  "Followers/#{shiny_folder}#{species.to_s}_fly"
