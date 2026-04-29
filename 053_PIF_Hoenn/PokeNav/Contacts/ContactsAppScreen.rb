@@ -26,7 +26,6 @@ class ContactsAppScreen
   end
 
   def list_contacts
-    echoln $PokemonGlobal.battledTrainers
     contacts_list_by_location = {}
     $PokemonGlobal.battledTrainers = {} unless $PokemonGlobal.battledTrainers
     $PokemonGlobal.battledTrainers.each do |id, trainer|

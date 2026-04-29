@@ -93,25 +93,31 @@ def generateTrainerRematch(trainer, allow_double = true)
   return updated_trainer, player_won
 end
 
-def showGiftDialog()
-  event = pbMapInterpreter.get_character(0)
-  map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id, map_id)
-  return if trainer.nil?
+def showGiftDialog(trainer=nil, event_id = nil)
+  unless trainer && event_id
+    event = pbMapInterpreter.get_character(0)
+    map_id = $game_map.map_id if map_id.nil?
+    trainer = getRebattledTrainer(event.id, map_id)
+    return if trainer.nil?
+  else
+    event = $game_map.events[event_id]
+  end
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
   message_text = trainer_data.preRematchText_gift
   message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
   showTrainerMessage(event, trainer, message_text)
 end
 
-def showPrerematchDialog()
-  event = pbMapInterpreter.get_character(0)
-  map_id = $game_map.map_id if map_id.nil?
-  trainer = getRebattledTrainer(event.id, map_id)
-  return "" if trainer.nil?
-
+def showPrerematchDialog(trainer=nil, event_id = nil)
+  unless trainer && event_id
+    event = pbMapInterpreter.get_character(0)
+    map_id = $game_map.map_id if map_id.nil?
+    trainer = getRebattledTrainer(event.id, map_id)
+    return "" if trainer.nil?
+  else
+    event = $game_map.events[event_id]
+  end
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
-
   all_previous_random_events = trainer.previous_random_events
 
   if all_previous_random_events

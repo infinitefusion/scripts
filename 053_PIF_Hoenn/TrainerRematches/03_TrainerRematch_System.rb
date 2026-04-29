@@ -23,7 +23,7 @@ def pbTrainerBattle(trainerID, trainerName,endSpeech=nil,
   map_id = $game_map.map_id
   result = original_pbTrainerBattle(trainerID, trainerName, endSpeech,doubleBattle,trainerPartyID,
                                     canLose, outcomeVar,name_override,trainer_type_overide,event_id,map_id)
-  postTrainerBattleActions(trainerID, trainerName,trainerPartyID,event_id,nil, map_id) if Settings::GAME_ID == :IF_HOENN
+  updateRematchableTrainer(trainerID, trainerName, trainerPartyID, event_id, nil, map_id) if Settings::GAME_ID == :IF_HOENN
   return result
 end
 
@@ -73,8 +73,8 @@ def pbMultiTrainerBattle(trainers_array,canLose=false, outcomeVar=1)
                                  trainer_2_id,trainer_2_name,0,nil,
                                  canLose,outcomeVar)
     if Settings::GAME_ID == :IF_HOENN
-      postTrainerBattleActions(trainer_1_id, trainer_1_name,0,trainer_1_event,trainer_2_event)
-      postTrainerBattleActions(trainer_2_id, trainer_2_name,0,trainer_2_event,trainer_1_event)
+      updateRematchableTrainer(trainer_1_id, trainer_1_name, 0, trainer_1_event, trainer_2_event)
+      updateRematchableTrainer(trainer_2_id, trainer_2_name, 0, trainer_2_event, trainer_1_event)
     end
     return result
   when 3
@@ -98,9 +98,9 @@ def pbMultiTrainerBattle(trainers_array,canLose=false, outcomeVar=1)
                                   trainer_3_id,trainer_3_name,0,nil,
                                   canLose,outcomeVar)
     if Settings::GAME_ID == :IF_HOENN
-      postTrainerBattleActions(trainer_1_id, trainer_1_name,0,trainer_1_event)
-      postTrainerBattleActions(trainer_2_id, trainer_2_name,0,trainer_2_event)
-      postTrainerBattleActions(trainer_3_id, trainer_3_name,0,trainer_3_event)
+      updateRematchableTrainer(trainer_1_id, trainer_1_name, 0, trainer_1_event)
+      updateRematchableTrainer(trainer_2_id, trainer_2_name, 0, trainer_2_event)
+      updateRematchableTrainer(trainer_3_id, trainer_3_name, 0, trainer_3_event)
     end
     return result
   end
@@ -108,7 +108,7 @@ end
 
 
 
-def postTrainerBattleActions(trainerID, trainerName,trainerVersion,event_id=nil,linked_event=nil, map_id = nil)
+def updateRematchableTrainer(trainerID, trainerName, trainerVersion, event_id=nil, linked_event=nil, map_id = nil)
   event_id = @event_id unless event_id
   map_id = $game_map.map_id unless map_id
   trainer = registerBattledTrainer(event_id,map_id,trainerID,trainerName,trainerVersion,linked_event)
@@ -167,8 +167,8 @@ def resetTrainerRebattle(event_id, map_id)
   registerBattledTrainer(event_id,map_id,trainerType,trainerName)
 end
 
-def updateRebattledTrainer(event_id,map_id,updated_trainer)
-  key = [event_id,map_id]
+def updateRebattledTrainer(updated_trainer)
+  key = updated_trainer.trainerKey
   updateRebattledTrainerWithKey(key,updated_trainer)
 end
 

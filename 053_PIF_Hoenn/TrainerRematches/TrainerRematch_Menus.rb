@@ -36,7 +36,7 @@ def doPostBattleAction(actionType,trainer, double_allowed=true)
   when :PARTNER
     partnerWithTrainer(event.id,map_id,trainer)
   end
-  updateRebattledTrainer(event.id,map_id,trainer)
+  updateRebattledTrainer(trainer)
 
 end
 
@@ -54,7 +54,7 @@ end
 # [[:SPECIES,level], ... ]
 #
 #def customTrainerBattle(trainerName, trainerType, party_array, default_level=50, endSpeech="", sprite_override=nil,custom_appearance=nil)
-def postBattleActionsMenu(trainer=nil)
+def postBattleActionsMenu(trainer=nil, event_id=nil)
   rematchCommand = _INTL("Rematch")
 
   rematchSingleCommand = _INTL("Rematch (Single)")
@@ -94,12 +94,12 @@ def postBattleActionsMenu(trainer=nil)
 
   options << cancelCommand
   trainer = applyTrainerRandomEvents(trainer) if trainer.nb_rematches >=1
-  showPrerematchDialog
+  showPrerematchDialog(trainer,event_id)
   choice = optionsMenu(options,options.find_index(cancelCommand),options.find_index(cancelCommand))
   case options[choice]
   when rematchCommand
     doPostBattleAction(:BATTLE,trainer)
-    try_give_gift(trainer)
+    try_give_gift(trainer,event_id)
   when viewTeamCommand
     pbFadeOutIn {
       screen = ContactsAppInfoPageScreen.new
@@ -124,7 +124,7 @@ def postBattleActionsMenu(trainer=nil)
   when setFriendshipDebugCommand
     trainer = getRebattledTrainer(event.id,map_id)
     trainer = setTrainerFriendship(trainer)
-    updateRebattledTrainer(event.id,map_id,trainer)
+    updateRebattledTrainer(trainer)
   when printTrainerTeamDebugCommand
     trainer = getRebattledTrainer(event.id,map_id)
     printNPCTrainerCurrentTeam(trainer)
@@ -136,11 +136,11 @@ def postBattleActionsMenu(trainer=nil)
   $PokemonGlobal.nextBattleBack=nil
 end
 
-def try_give_gift(trainer)
+def try_give_gift(trainer,event_id=nil)
   if should_give_item(trainer)
     item = select_gift_item(trainer)
     echoln item
-    showGiftDialog()
+    showGiftDialog(trainer,event_id)
     pbReceiveItem(item)
     return true
   end
@@ -156,7 +156,7 @@ def forceRandomRematchEventOnTrainer(event_type=nil)
   while !trainer.has_pending_action
     trainer = applyTrainerRandomEvents(trainer,event_type)
   end
-  updateRebattledTrainer(event.id,map_id,trainer)
+  updateRebattledTrainer(trainer)
 end
 
 def forceTrainerFriendshipOnTrainer(friendship=0)
@@ -165,5 +165,5 @@ def forceTrainerFriendshipOnTrainer(friendship=0)
   trainer = getRebattledTrainer(event.id,map_id)
   trainer.friendship = friendship
   trainer.increase_friendship(0)
-  updateRebattledTrainer(event.id,map_id,trainer)
+  updateRebattledTrainer(trainer)
 end
