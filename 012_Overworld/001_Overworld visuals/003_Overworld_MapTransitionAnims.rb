@@ -121,7 +121,10 @@ def pbStartOver(gameover=false)
     $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
     $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
     $game_temp.player_new_direction = $PokemonGlobal.pokecenterDirection
-    $scene.transfer_player if $scene.is_a?(Scene_Map)
+    if $scene.is_a?(Scene_Map)
+      $scene.transfer_player
+      $scene.reset_map(false)
+    end
     $game_map.refresh
   else
     if Settings::HOENN

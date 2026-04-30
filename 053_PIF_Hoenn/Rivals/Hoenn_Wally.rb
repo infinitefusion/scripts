@@ -19,9 +19,9 @@ def wally_initialize()
   return battledTrainer
 end
 
-def wally_add_pokemon(pokemon_species, level)
+def wally_add_pokemon(pokemon_species, level, original_trainer = nil)
   trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY]
-  pokemon = Pokemon.new(pokemon_species, level)
+  pokemon = Pokemon.new(pokemon_species, level, original_trainer)
   trainer.currentTeam.unshift(pokemon)
   updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY, trainer)
 end
@@ -63,9 +63,7 @@ def wally_battle()
 end
 
 def wally_remove_pokemon(pokemon_species)
-
   trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY]
-  echoln trainer.currentTeam
   trainer.currentTeam.each { |pokemon|
     if pokemon.species == pokemon_species
       trainer.currentTeam.delete(pokemon)
@@ -89,9 +87,6 @@ def wally_fuse_pokemon(with_fusion_screen = true)
 
   head_pokemon = trainer.currentTeam[head_pokemon_index]
   body_pokemon = trainer.currentTeam[body_pokemon_index]
-
-  echoln head_pokemon.species
-  echoln body_pokemon.species
 
   return if head_pokemon.isFusion? || body_pokemon.isFusion?
   npcTrainerFusionScreenPokemon(head_pokemon.clone, body_pokemon.clone) if with_fusion_screen

@@ -290,7 +290,7 @@ def hoenn_dev_quick_start
     setHoennSwitchesToStarter
     pbFadeOutIn {
       $game_temp.player_new_map_id = MAP_ROUTE_101
-      $game_temp.player_new_x = 15
+      $game_temp.player_new_x = 19
       $game_temp.player_new_y = 19
       $game_temp.player_new_direction = DIRECTION_UP
       $scene.transfer_player(true)

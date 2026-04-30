@@ -106,6 +106,8 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def showEmpty
     Kernel.pbDisplayText(_INTL("No wild Pokémon found nearby."), Graphics.width / 2, Graphics.height / 2, nil, @text_color_base, @text_color_shadow)
+    Kernel.pbDisplayText(_INTL("Stand in tall grass to start scanning."), Graphics.width / 2,( Graphics.height / 2)+32, nil, @text_color_base, @text_color_shadow)
+
   end
 
   def showCurrentScanningTarget
