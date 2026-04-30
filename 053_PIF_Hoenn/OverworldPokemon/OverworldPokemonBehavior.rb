@@ -89,30 +89,47 @@ def trigger_overworld_wild_battle
 
 end
 
-# Called from spawned overworld Pokemon events
-def overworldPokemonBehavior()
+def overworldPokemonCatchOffGuard()
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event && event.is_a?(OverworldPokemonEvent)
-
-  # Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
-  # They don't have any graphics. This just deactivetes their behavior too which makes them
-  # harmless - player won't know they're there... But they are, technically.
-  # This doesn't actually fix the glitch - just makes it invisible.
-  # -
-  # It would be good to make it so that the events only appear in their own map in the first place.
-  return unless @map_id == $game_map.map_id
-  #
-  #
-
-  begin
-    if $game_temp.message_window_showing
-      event.pause_movement
-    else
-      event.update_behavior
-    end
-  rescue
-    return
+  unless event.current_state == :NOTICED_PLAYER
+    setBattleRule("surprise")
+    event.set_noticed_sprite
+    pbSEPlay("jump")
+    event.turn_away_from_player
+    event.jump(0,0)
+    pbWait(8)
+    event.set_roaming_sprite
+    $Trainer.complete_challenge(:encounter_catch_offguard)
   end
+  event.overworldPokemonBattle(true)
+end
+
+# Used to be called from spawned overworld Pokemon events, now handled directly in OverworldPokemonEvent
+# Kept here, empty in case I forgot to change some for the manual overworld Pokemon
+def overworldPokemonBehavior()
+  # event = $MapFactory.getMap(@map_id).events[@event_id]
+  # return unless event && event.is_a?(OverworldPokemonEvent)
+  #
+  # # Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
+  # # They don't have any graphics. This just deactivetes their behavior too which makes them
+  # # harmless - player won't know they're there... But they are, technically.
+  # # This doesn't actually fix the glitch - just makes it invisible.
+  # # -
+  # # It would be good to make it so that the events only appear in their own map in the first place.
+  # return unless @map_id == $game_map.map_id
+  # #
+  # #
+  #
+  # begin
+  #   if $game_temp.message_window_showing
+  #     event.pause_movement
+  #   else
+  #     event.update_behavior
+  #   end
+  # rescue
+  #   return
+  # end
 end
 
 def overworldPokemonDetect(radius = 1)

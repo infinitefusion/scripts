@@ -1304,12 +1304,17 @@ class Game_Character
     @anime_count -= frames_per_pattern
   end
 
+  # def distance_from_player
+  #   dx = (@x - $game_player.x).abs
+  #   dy = (@y - $game_player.y).abs
+  #   return (dx + dy)-1 #-1 because not counting the event's or the player"s current tile
+  # end
   def distance_from_player
+    return Float::INFINITY if self.map_id != $game_map.map_id
     dx = (@x - $game_player.x).abs
     dy = (@y - $game_player.y).abs
-    return (dx + dy)-1 #-1 because not counting the event's or the player"s current tile
+    return (dx + dy) - 1
   end
-
 
 
 end

@@ -67,6 +67,7 @@ class PokeBattle_Battle
   attr_accessor :controlPlayer    # Whether player's Pokémon are AI controlled
   attr_accessor :expGain          # Whether Pokémon can gain Exp/EVs
   attr_accessor :moneyGain        # Whether the player can gain/lose money
+  attr_accessor :caughtOffGuard
   attr_accessor :rules
   attr_accessor :choices          # Choices made by each Pokémon this round
   attr_accessor :megaEvolution    # Battle index of each trainer's Pokémon to Mega Evolve
@@ -143,6 +144,7 @@ class PokeBattle_Battle
     @controlPlayer     = false
     @expGain           = true
     @moneyGain         = true
+    @caughtOffGuard    = false
     @rules             = {}
     @priority          = []
     @priorityTrickRoom = false

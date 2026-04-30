@@ -49,6 +49,12 @@ define_challenge :encounter_3_same_pokemon_at_once,
                  category: :encounter,
                  money_reward: 750
 
+
+define_challenge :encounter_catch_offguard,
+                 description: _INTL("Catch a Pokémon off guard"),
+                 category: :encounter,
+                 money_reward: 200
+
 # define_challenge :wild_pokemon_chase_20_steps,
 #                  description: _INTL("Get a wild Pokémon to chase you for 20 steps"),
 #                  money_reward: 1000

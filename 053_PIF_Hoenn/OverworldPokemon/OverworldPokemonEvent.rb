@@ -9,14 +9,15 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :detection_radius
   attr_accessor :pokemon
   attr_accessor :manual_ow_pokemon
-
+  attr_accessor :current_state
   attr_reader :part_of_pokeradar_chain
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
   DISGUISED_POKEMON = [:DITTO, :ZORUA, :ZOROARK]
-
+  UPDATE_TIME = 4 #Nb. of frames for the update_behavior loop
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
+    #return unless @map_id == $game_map.map_id
     @species = species
     @level = level
     @behavior_roaming = behavior_roaming if behavior_roaming
@@ -86,6 +87,7 @@ class OverworldPokemonEvent < Game_Event
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, @x, @y)
     end
     set_roaming_movement
+    @setup_complete = true
   end
 
   def make_shiny
@@ -206,7 +208,7 @@ class OverworldPokemonEvent < Game_Event
   ####
   # ACTIONS
   # ###
-  def overworldPokemonBattle
+  def overworldPokemonBattle(surprised=false)
     return if lock?
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
@@ -288,7 +290,25 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
+  # def check_action_button_trigger
+  #   return unless Input.trigger?(Input::ACTION)
+  #   echoln "button use!"
+  #   echoln player_near_event?(1)
+  #   return unless player_near_event?(1)
+  #   playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
+  #   setBattleRule("surprise")
+  #   overworldPokemonBattle(true)
+  # end
+
   def update_behavior()
+    # # Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
+    # # They don't have any graphics. This just deactivetes their behavior too which makes them
+    # # harmless - player won't know they're there... But they are, technically.
+    # # This doesn't actually fix the glitch - just makes it invisible.
+    # # -
+    # # It would be good to make it so that the events only appear in their own map in the first place.
+
+    return unless @setup_complete
     return if @opacity == 0
     return if @current_state == :FLEEING
     return if $game_temp.message_window_showing
@@ -459,6 +479,14 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
+  def set_roaming_sprite
+    set_sprite(@roaming_sprite)
+  end
+
+  def set_noticed_sprite
+    set_sprite(@noticed_sprite) if @noticed_sprite
+  end
+
   def set_sprite(sprite_path)
     @character_name = sprite_path
     @need_refresh = true
@@ -588,5 +616,17 @@ class OverworldPokemonEvent < Game_Event
     @current_state = :PAUSED
   end
 
+  def update
+    super
+    if $game_temp.message_window_showing
+      pause_movement unless @current_state == :PAUSED
+    else
+      @behavior_update_counter = (@behavior_update_counter || 0) + 1
+      if @behavior_update_counter >= UPDATE_TIME
+        @behavior_update_counter = 0
+        update_behavior
+      end
+    end
+  end
 end
 

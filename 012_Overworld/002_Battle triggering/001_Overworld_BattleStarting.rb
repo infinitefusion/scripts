@@ -40,6 +40,7 @@ class PokemonTemp
     when "setstyle" then rules["switchStyle"] = false
     when "anims" then rules["battleAnims"] = true
     when "noanims" then rules["battleAnims"] = false
+    when "surprise" then rules["surprise"] = true
     when "terrain"
       terrain_data = GameData::BattleTerrain.try_get(var)
       rules["defaultTerrain"] = (terrain_data) ? terrain_data.id : nil
@@ -95,7 +96,6 @@ def getBattleBackgroundFromMetadata(metadata)
   # if battle bg specified, return that
   battle_bg = metadata.battle_background
   return battle_bg if battle_bg
-
   # if no battle bg specified, dedude from environment
   battle_env = metadata.battle_environment
   case battle_env
@@ -139,6 +139,8 @@ def pbPrepareBattle(battle)
   battle.expGain = battleRules["expGain"] if !battleRules["expGain"].nil?
   # Whether the player gains/loses money at the end of the battle (default: true)
   battle.moneyGain = battleRules["moneyGain"] if !battleRules["moneyGain"].nil?
+  #For wild Pokemon that are caught off guard - skips their first turn
+  battle.caughtOffGuard = battleRules["surprise"] if !battleRules["surprise"].nil?
   # Whether the player is able to switch when an opponent's Pokémon faints
   battle.switchStyle = ($PokemonSystem.battlestyle == 0)
   battle.switchStyle = battleRules["switchStyle"] if !battleRules["switchStyle"].nil?
