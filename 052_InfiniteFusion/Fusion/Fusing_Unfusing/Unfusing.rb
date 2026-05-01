@@ -77,6 +77,8 @@ def unfuseCore(fused_pokemon)
   body_pokemon.exp_gained_with_player += fused_pokemon.exp_gained_since_fused
   body_pokemon.exp +=fused_pokemon.exp_gained_since_fused
 
+  head_pokemon.calc_stats
+  body_pokemon.calc_stats
   # Moves
   fused_pokemon_learned_moved = fused_pokemon.learned_moves
   fused_pokemon_learned_moved = [] unless fused_pokemon_learned_moved
