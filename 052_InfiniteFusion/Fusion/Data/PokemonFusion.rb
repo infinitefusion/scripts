@@ -1063,7 +1063,7 @@ class PokemonFusionScene
 
       @pokemon1.debug_shiny = true if @pokemon1.debug_shiny || @pokemon2.debug_shiny
       @pokemon1.radar_shiny = true if @pokemon1.radar_shiny || @pokemon2.radar_shiny
-
+      @pokemon1.evolve_from_party = false
       setFusionIVs(superSplicer)
       # add to pokedex
       if !$Trainer.pokedex.owned?(newSpecies) && isPlayerPokemon

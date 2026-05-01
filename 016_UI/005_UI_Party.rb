@@ -1174,6 +1174,21 @@ class PokemonPartyScreen
     return ret
   end
 
+  def evolvePokemon(pokemon)
+    evolution_species = pokemon.check_evolution_on_level_up
+    if evolution_species
+      pbFadeOutInWithMusic {
+        evo = PokemonEvolutionScene.new
+        evo.pbStartScreen(pokemon, evolution_species)
+        evo.pbEvolution
+        evo.pbEndScreen
+        pbRefresh
+      }
+    else
+      pbDisplay(_INTL("{1} Pokémon cannot evolve.",pokemon.name))
+      pokemon.evolve_from_party = false
+    end
+  end
 
   def pbPokemonHat(pokemon)
     cmd = 0
@@ -1308,9 +1323,10 @@ class PokemonPartyScreen
       cmdLearnMove = -1
       cmdUnfuse = -1
       cmdFuse = -1
-
+      cmdEvolve = -1
 
       # Build the commands
+      commands[cmdEvolve = commands.length] = _INTL("Evolve!") if pkmn.evolve_from_party && pokemonAllowedToEvolve(pkmn)
       commands[cmdSummary = commands.length] = _INTL("Summary")
       commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
       if !pkmn.egg?
@@ -1402,6 +1418,8 @@ class PokemonPartyScreen
         @scene.pbSummary(pkmnid) {
           @scene.pbSetHelpText((@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
         }
+      elsif cmdEvolve  >= 0 && command == cmdEvolve
+        evolvePokemon(pkmn)
       elsif cmdHat >= 0 && command == cmdHat
         pbPokemonHat(pkmn)
       elsif cmdLearnMove > 0 && command == cmdLearnMove

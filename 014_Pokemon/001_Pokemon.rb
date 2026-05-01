@@ -50,7 +50,7 @@ class Pokemon
   attr_accessor :natural_shiny
   attr_accessor :radar_shiny
 
-
+  attr_accessor :evolve_from_party  #Flag when evolution is cancelled on a pokemon. Won't auto-prompt evolution when it's true, but adds a new option in party menu to evolve.
   #Fusions
   # Copy of the original Pokemon object from before they were fused
   attr_accessor :original_body
@@ -1675,6 +1675,7 @@ class Pokemon
     end
     @ow_coordinates = nil
     @sprite_letter = nil
+    @evolve_from_party = false
   end
 
 

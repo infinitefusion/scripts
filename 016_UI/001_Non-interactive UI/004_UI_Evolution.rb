@@ -575,8 +575,8 @@ class PokemonEvolutionScene
     end while metaplayer1.playing? && metaplayer2.playing?
     pbFlashInOut(canceled,oldstate,oldstate2)
     if canceled
-      pbMessageDisplay(@sprites["msgwindow"],
-         _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
+      pbMessageDisplay(@sprites["msgwindow"], _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
+      pbMessageDisplay(@sprites["msgwindow"], _INTL("The evolution can be prompted again from the party menu.")) { pbUpdate }
       if @pokemon.preEvolved_pif_sprite
         @pokemon.pif_sprite = @pokemon.preEvolved_pif_sprite
         @pokemon.preEvolved_pif_sprite = nil
@@ -585,8 +585,10 @@ class PokemonEvolutionScene
         evolution_pif_sprite = spriteLoader.obtain_pif_sprite(@pokemon.species)
         @pokemon.pif_sprite = evolution_pif_sprite
       end
+      @pokemon.evolve_from_party = true
     else
       pbEvolutionSuccess(reversing)
+      @pokemon.evolve_from_party = false
     end
   end
 

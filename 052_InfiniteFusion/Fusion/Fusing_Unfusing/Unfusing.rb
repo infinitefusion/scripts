@@ -88,6 +88,9 @@ def unfuseCore(fused_pokemon)
     body_pokemon.add_learned_move(move)
   end
 
+  head_pokemon.evolve_from_party = false
+  body_pokemon.evolve_from_party = false
+
   # Pokedex
   $Trainer.pokedex.set_seen(head_pokemon.species)
   $Trainer.pokedex.set_owned(head_pokemon.species)

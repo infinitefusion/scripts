@@ -50,7 +50,7 @@ def evolveRebattledTrainerPokemon(trainer)
   return trainer
 end
 
-def pokemonAllowedToEvolve(pokemon, evolution_species)
+def pokemonAllowedToEvolve(pokemon, evolution_species=nil)
   return false if pokemon.item == :EVERSTONE
   return true
 end
