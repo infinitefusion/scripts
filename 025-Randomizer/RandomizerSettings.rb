@@ -245,7 +245,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                               proc { $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] ? 0 : 1 },
                               proc { |value|
                                 $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS] = value == 0
-                              }, "['Fuse everything' & starters] Include only  Pokémon with a custom sprite."
+                              }, "['Fuse everything' & starters] Include only Pokémon with a custom sprite."
     )
 
     options << EnumOption.new(_INTL("Allow legendaries"), [_INTL("On"), _INTL("Off")],
