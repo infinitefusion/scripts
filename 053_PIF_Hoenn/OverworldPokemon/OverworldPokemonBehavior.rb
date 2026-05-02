@@ -101,6 +101,7 @@ def overworldPokemonCatchOffGuard()
       event.jump(0,0)
       pbWait(8)
       event.set_roaming_sprite
+      $Trainer.stats&.incr_nb_pokemon_surprised
       check_offguard_challenge(event)
     end
   end

@@ -457,7 +457,10 @@ class PokeBattle_Battle
       ##### LOSE, DRAW #####
     when 2, 5
       PBDebug.log("")
-      PBDebug.log("***Player lost***") if @decision == 2
+      if @decision == 2
+        $Trainer.stats&.incr_nb_battles_lost
+        PBDebug.log("***Player lost***")
+      end
       PBDebug.log("***Player drew with opponent***") if @decision == 5
       if @internalBattle
         pbDisplayPaused(_INTL("You have no more Pokémon that can fight!"))

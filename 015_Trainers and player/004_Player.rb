@@ -372,7 +372,7 @@ class Player < Trainer
   end
 
   def stats()
-    @stats = TrainerStatistics.new unless @statistics
+    @stats = TrainerStatistics.new unless @stats
     return @stats
   end
 

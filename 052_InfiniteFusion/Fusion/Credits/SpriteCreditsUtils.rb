@@ -27,6 +27,25 @@ def get_top_artists(nb_names = 100)
              .to_h
 end
 
+def getCCredits
+  hats_authors = extract_author_from_cc_json(Settings::HATS_DATA_PATH,5)
+  clothes_authors = extract_author_from_cc_json(Settings::CLOTHES_DATA_PATH,50)
+  hair_authors = extract_author_from_cc_json(Settings::HAIRSTYLE_DATA_PATH,20)
+  all_authors = (hats_authors + clothes_authors + hair_authors).tally
+  return all_authors
+end
+
+def extract_author_from_cc_json(file_path, sprites_per_submission=1)
+  json_data = File.read(file_path)
+  outfits_data = HTTPLite::JSON.parse(json_data)
+  authors = []
+  outfits_data.each do |data|
+    author = data['author']
+    authors.push(*([author] * sprites_per_submission)) if author && !author.empty?
+  end
+  return authors
+end
+
 def analyzeSpritesList(spritesList, mostPopularCallbackVariable = 1)
   pokemon_map = Hash.new
   for spritename in spritesList
@@ -467,6 +486,23 @@ def format_names_for_game_credits()
   return formatted
 end
 
+def format_character_customization_names_for_game_credits(max_length)
+  spriters_map = getCCredits.sort_by { |_, count| -count }.to_h
+  formatted = ""
+  i = 1
+  echoln spriters_map.keys.length
+  for spriter in spriters_map.keys
+    break if i > max_length
+    formatted << spriter
+    if i % 2 == 0
+      formatted << "\n"
+    else
+      formatted << "<s>"
+    end
+    i += 1
+  end
+  return formatted
+end
 
 def get_spritename_from_path(file_path, includeExtension = false)
   filename_with_extension = File.basename(file_path)
