@@ -118,16 +118,20 @@ class BerryPlantSprite
       maxreplants = GameData::BerryPlant::NUMBER_OF_REPLANTS
       ripestages = 4
       case berryData[7]
-      when :GROWTHMULCH
+      when :STABLEMULCH #berries grow faster
         timeperstage = (timeperstage * 0.75).to_i
         dryingrate = (dryingrate * 1.5).ceil
-      when :DAMPMULCH
+      when :GROWTHMULCH #berries grow much faster
+        timeperstage = (timeperstage * 0.50).to_i
+        dryingrate = (dryingrate * 1.5).ceil
+      when :DAMPMULCH #drying rate is slower
         timeperstage = (timeperstage * 1.25).to_i
         dryingrate = (dryingrate * 0.5).floor
-      when :GOOEYMULCH
-        maxreplants = (maxreplants * 1.5).ceil
-      when :STABLEMULCH
-        ripestages = 6
+      when :GOOEYMULCH  #drying rate is much slower
+        timeperstage = (timeperstage * 1.25).to_i
+        dryingrate = (dryingrate * 0.25).floor
+      #when :RICHMULCH  #Increases yield - implemented in pbBerryPlant
+
       end
 
       #Auto replant mechanics - Disabled
@@ -280,8 +284,11 @@ end
 
 # todo: return whether the player has any mulch items
 def canFertilize?
-  return $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH) || $PokemonBag.pbHasItem?(:GROWTHMULCH)
-  return true
+  return $PokemonBag.pbHasItem?(:GROWTHMULCH) ||
+    $PokemonBag.pbHasItem?(:DAMPMULCH) ||
+    $PokemonBag.pbHasItem?(:GOOEYMULCH) ||
+    $PokemonBag.pbHasItem?(:STABLEMULCH) ||
+    $PokemonBag.pbHasItem?(:RICHMULCH)
 end
 
 def pbBerryPlant
@@ -465,6 +472,7 @@ def pbBerryPlant
     if berryData.length > 6
       # Gen 4 berry yield calculation
       berrycount = [berryvalues.maximum_yield - berryData[6], berryvalues.minimum_yield].max
+      berrycount = (berrycount * 1.5).ceil if berryData[7] == :RICHMULCH
     else
       # Gen 3 berry yield calculation
       if berryData[4] > 0
