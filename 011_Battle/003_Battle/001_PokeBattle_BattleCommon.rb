@@ -228,7 +228,9 @@ module PokeBattle_BattleCommon
       catch_rate /= 10
     end
 
-
+    if @scene&.battle&.caughtOffGuard
+      catch_rate = [catch_rate * 1.5, 255].min
+    end
 
     # First half of the shakes calculation
     a = battler.totalhp

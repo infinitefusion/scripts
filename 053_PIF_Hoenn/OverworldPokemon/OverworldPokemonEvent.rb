@@ -11,6 +11,8 @@ class OverworldPokemonEvent < Game_Event
   attr_accessor :manual_ow_pokemon
   attr_accessor :current_state
   attr_reader :part_of_pokeradar_chain
+  attr_reader :noticed_player_once
+  attr_reader :last_facing_direction
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
@@ -57,7 +59,7 @@ class OverworldPokemonEvent < Game_Event
     @nearby_notice_limit = 4 # calculate_value_from_ref_value(species_data.weight.to_f/10,2,12, 8)# weight is multiplied by 10 in the pokemon data for some reason
     @nearby_notice_limit += 1 * @weather_level_at_spawn if @weather_type_at_spawn == :Storm
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
-
+    @noticed_player_once = false
     @deleted = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
@@ -87,6 +89,7 @@ class OverworldPokemonEvent < Game_Event
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, @x, @y)
     end
     set_roaming_movement
+    @last_facing_direction = @direction
     @setup_complete = true
   end
 
@@ -108,9 +111,9 @@ class OverworldPokemonEvent < Game_Event
     behavior = POKEMON_BEHAVIOR_DATA[species][behavior_type]
     if @terrain == :Water
       behavior = :random_dive if behavior == :random_burrow
-      behavior = :random if behavior == :water_skip
     else
       behavior = :random if behavior == :random_dive
+      behavior = :random if behavior == :water_skip
     end
 
     if species == :WHISMUR && isWearingHat(HAT_TRUMPET)
@@ -312,6 +315,7 @@ class OverworldPokemonEvent < Game_Event
     return if @opacity == 0
     return if @current_state == :FLEEING
     return if $game_temp.message_window_showing
+    @last_facing_direction = @direction
     distance = distance_from_player()
     is_near_player = distance <= @detection_radius
     if distance >= DISTANCE_FOR_DESPAWN
@@ -331,6 +335,7 @@ class OverworldPokemonEvent < Game_Event
           if check_detect_trainer
             playDetectPlayerAnimation
             breakDisguise if @disguised
+            @noticed_player_once = true
             update_state(:NOTICED_PLAYER)
           end
         end
@@ -480,7 +485,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_roaming_sprite
-    set_sprite(@roaming_sprite)
+    set_sprite(@roaming_sprite) if @roaming_sprite
   end
 
   def set_noticed_sprite

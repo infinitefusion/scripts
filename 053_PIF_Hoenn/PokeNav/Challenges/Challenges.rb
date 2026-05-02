@@ -26,6 +26,7 @@ class Player
       @challenges[challenge_id] = challenge
       $Trainer.nb_completed_challenges = 0 unless $Trainer.nb_completed_challenges
       $Trainer.nb_completed_challenges += 1
+      pbSEPlay("challenge_complete")
     end
   end
 

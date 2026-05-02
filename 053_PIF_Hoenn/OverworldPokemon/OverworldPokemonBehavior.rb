@@ -92,17 +92,32 @@ end
 def overworldPokemonCatchOffGuard()
   event = $MapFactory.getMap(@map_id).events[@event_id]
   return unless event && event.is_a?(OverworldPokemonEvent)
-  unless event.current_state == :NOTICED_PLAYER
-    setBattleRule("surprise")
-    event.set_noticed_sprite
-    pbSEPlay("jump")
-    event.turn_away_from_player
-    event.jump(0,0)
-    pbWait(8)
-    event.set_roaming_sprite
-    $Trainer.complete_challenge(:encounter_catch_offguard)
+  unless event.current_state == :NOTICED_PLAYER || event.noticed_player_once
+    if event.last_facing_direction == $game_player.direction
+      setBattleRule("surprise")
+      event.set_noticed_sprite
+      pbSEPlay("jump")
+      event.turn_away_from_player
+      event.jump(0,0)
+      pbWait(8)
+      event.set_roaming_sprite
+      check_offguard_challenge(event)
+    end
   end
   event.overworldPokemonBattle(true)
+end
+
+def check_offguard_challenge(pokemon_event)
+  return unless pokemon_event.is_a?(OverworldPokemonEvent)
+  $Trainer.complete_challenge(:encounter_offguard_any)
+  case pokemon_event.behavior_noticed
+  when :aggressive
+    $Trainer.complete_challenge(:encounter_offguard_aggressive)
+  when :curious
+    $Trainer.complete_challenge(:encounter_offguard_curious)
+  when :skittish, :flee
+    $Trainer.complete_challenge(:encounter_offguard_skittish)
+  end
 end
 
 # Used to be called from spawned overworld Pokemon events, now handled directly in OverworldPokemonEvent

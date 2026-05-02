@@ -50,10 +50,26 @@ define_challenge :encounter_3_same_pokemon_at_once,
                  money_reward: 750
 
 
-define_challenge :encounter_catch_offguard,
+define_challenge :encounter_offguard_any,
                  description: _INTL("Catch a Pokémon off guard"),
                  category: :encounter,
                  money_reward: 200
+
+define_challenge :encounter_offguard_curious,
+                 description: _INTL("Catch a curious Pokémon off guard"),
+                 category: :encounter,
+                 money_reward: 350
+
+define_challenge :encounter_offguard_aggressive,
+                 description: _INTL("Catch an aggressive Pokémon off guard"),
+                 category: :encounter,
+                 money_reward: 500
+
+define_challenge :encounter_offguard_skittish,
+                 description: _INTL("Catch a skittish Pokémon off guard"),
+                 category: :encounter,
+                 money_reward: 500
+
 
 # define_challenge :wild_pokemon_chase_20_steps,
 #                  description: _INTL("Get a wild Pokémon to chase you for 20 steps"),
