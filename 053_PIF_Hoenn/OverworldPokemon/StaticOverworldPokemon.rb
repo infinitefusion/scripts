@@ -92,7 +92,6 @@ class Game_Map
     should_spawn = spawn_chance >= rand(0..100)
     if should_spawn
       species = params[:species]
-      # echoln "spawning a static overworld #{species}"
       min_level = params[:min_level]
       max_level = params[:max_level]
 

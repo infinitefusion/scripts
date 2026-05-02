@@ -35,10 +35,43 @@
 #==============================================================================
 class Scene_Credits
   # Backgrounds to show in credits. Found in Graphics/Titles/ folder
-  BACKGROUNDS_LIST = ["Graphics/Titles/bg_back"]
+  BACKGROUNDS_LIST = [
+    "Graphics/Battlebacks/battlebg/ocean_night",
+    "Graphics/Battlebacks/battlebg/ocean",
+    "Graphics/Battlebacks/battlebg/oceanicmuseum",
+    "Graphics/Battlebacks/battlebg/oceanseaweed_eve",
+    "Graphics/Battlebacks/battlebg/oceanseaweed_night",
+    "Graphics/Battlebacks/battlebg/oceanseaweed",
+    "Graphics/Battlebacks/battlebg/ocean_eve",
+    "Graphics/Battlebacks/battlebg/mauvilletunnel",
+    "Graphics/Battlebacks/battlebg/pond",
+    "Graphics/Battlebacks/battlebg/pond_night",
+    "Graphics/Battlebacks/battlebg/pond_eve",
+    "Graphics/Battlebacks/battlebg/field_night",
+    "Graphics/Battlebacks/battlebg/field",
+    "Graphics/Battlebacks/battlebg/cyclingroad_eve",
+    "Graphics/Battlebacks/battlebg/cyclingroad_night",
+    "Graphics/Battlebacks/battlebg/cyclingroad",
+    "Graphics/Battlebacks/battlebg/cave_eve",
+    "Graphics/Battlebacks/battlebg/cave_night",
+    "Graphics/Battlebacks/battlebg/cave-granite_night",
+    "Graphics/Battlebacks/battlebg/cave-granite",
+    "Graphics/Battlebacks/battlebg/cave",
+    "Graphics/Battlebacks/battlebg/beach_eve",
+    "Graphics/Battlebacks/battlebg/beach_night",
+    "Graphics/Battlebacks/battlebg/beach",
+    "Graphics/Battlebacks/battlebg/field_eve",
+    "Graphics/Battlebacks/battlebg/cave.png",
+    "Graphics/Battlebacks/battlebg/beach_eve.png",
+    "Graphics/Battlebacks/battlebg/beach_night.png",
+    "Graphics/Battlebacks/battlebg/beach.png",
+    "Graphics/Battlebacks/battlebg/field_eve.png"
+  #"Graphics/Titles/bg_back"
+  ]
   BGM = "Credits"
   SCROLL_SPEED = 62 # Pixels per second , ajuster pour fitter avec la musique
   SECONDS_PER_BACKGROUND = 8
+  SECONDS_PER_POKEMON_SPRITE = 6
   TEXT_OUTLINE_COLOR = Color.new(0, 0, 128, 255)
   TEXT_BASE_COLOR = Color.new(255, 255, 255, 255)
   TEXT_SHADOW_COLOR = Color.new(0, 0, 0, 100)
@@ -46,7 +79,7 @@ class Scene_Credits
   TEXT_TITLE_COLOR = Color.new(154, 216, 8)
   TEXT_TITLE_OUTLINE_COLOR = Color.new(0, 100, 0, 255)
 
-  NB_SPRITES_TO_PRELOAD = 15
+  NB_SPRITES_TO_PRELOAD = 25
 
   TOTAL_NB_FRAMES = 4000 # set manually, depends on music length
 
@@ -55,17 +88,21 @@ class Scene_Credits
 
   def main
     endCredits() if $PokemonSystem.on_mobile
-    #-------------------------------
-    # Animated Background Setup
-    #-------------------------------
-    @counter = 0.0 # Counts time elapsed since the background image changed
+
+    @counter = 0.0
     @bg_index = 0
-    @bitmap_height = Graphics.height # For a single credits text bitmap
+    @bitmap_height = Graphics.height
     @trim = Graphics.height / 10
-    # Number of game frames per background frame
     @realOY = -(Graphics.height - @trim)
     @customSpritesList = getSpritesList()
     echoln @customSpritesList
+
+    # Shuffle backgrounds into a queue — won't repeat until exhausted
+    @bg_queue = BACKGROUNDS_LIST.shuffle
+
+    @bg_transitioning = :fade_in
+    @bg_transition_timer = 0.0
+
     #-------------------------------
     # Credits text Setup
     #-------------------------------
@@ -86,10 +123,8 @@ class Scene_Credits
       plugin_credits << "\n"
     end
     credits_version = Settings::KANTO ? CREDIT_KANTO : CREDIT_HOENN
-
     credits_version.gsub!(/\{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE\}/, plugin_credits)
     credits_version.gsub!(/{SPRITER_CREDITS}/, format_names_for_game_credits())
-
     credit_lines = credits_version.split(/\n/)
 
     #-------------------------------
@@ -99,13 +134,18 @@ class Scene_Credits
     viewport.z = 99999
     text_viewport = Viewport.new(0, @trim, Graphics.width, Graphics.height - (@trim * 2))
     text_viewport.z = 99999
+
+    # Single @bg creation — zoom and drift applied immediately
     @bg = IconSprite.new(0, 0)
-    @bg.setBitmap(BACKGROUNDS_LIST[0])
-    @bg.opacity = 100
+    @bg.setBitmap(@bg_queue.shift)   # Pop first image off the queue
+    @bg.opacity = 0
+    setup_bg_zoom_and_drift(@bg)
 
     @pokemon_sprite = IconSprite.new(0, 0)
     @pokemon_sprite.z = @bg.z + 1
-    @pokemon_sprite.setBitmap(BACKGROUNDS_LIST[0])
+    @pokemon_sprite.setBitmap(@bg_queue[0] || BACKGROUNDS_LIST[0])  # placeholder bitmap
+    @pokemon_sprite.opacity = 0
+
     @credit_sprites = []
     @total_height = credit_lines.size * 32
     lines_per_bitmap = @bitmap_height / 32
@@ -159,6 +199,7 @@ class Scene_Credits
       credit_sprite.oy = @realOY - @bitmap_height * i
       @credit_sprites[i] = credit_sprite
     end
+
     #-------------------------------
     # Setup
     #-------------------------------
@@ -187,6 +228,30 @@ class Scene_Credits
     viewport.dispose
     $PokemonGlobal.creditsPlayed = true
     pbBGMPlay(previousBGM)
+  end
+
+  def setup_pokemon_drift
+    # Copy background velocity exactly so pokemon moves with the background
+    @pokemon_drift_vx = @drift_vx
+    @pokemon_drift_vy = @drift_vy
+    @pokemon_drift_x = @pokemon_sprite.x.to_f
+    @pokemon_drift_y = @pokemon_sprite.y.to_f
+  end
+  def setup_bg_zoom_and_drift(sprite)
+    zoom = 1.5
+    sprite.zoom_x = zoom
+    sprite.zoom_y = zoom
+
+    sprite.x = -(Graphics.width / 2)
+    sprite.y = -(Graphics.height / 2) + 180
+
+    speed = 16.0
+    angle = rand * 2 * Math::PI
+    @drift_vx = Math.cos(angle) * speed
+    @drift_vy = Math.sin(angle) * speed
+
+    @drift_x = sprite.x.to_f
+    @drift_y = sprite.y.to_f
   end
 
   # def getSpritesList()
@@ -262,9 +327,66 @@ class Scene_Credits
   def update
     delta = Graphics.delta_s
     @counter += delta
+    @bg_transition_timer += delta
+
+    fade_duration = 0.8   # seconds to fade out or in
+    hold_duration = SECONDS_PER_BACKGROUND - (fade_duration * 2)
+
+    case @bg_transitioning
+    when :fade_in
+      progress = [@bg_transition_timer / fade_duration, 1.0].min
+      @bg.opacity = (progress * 200).to_i  # max opacity 200 for subtle look
+      if @bg_transition_timer >= fade_duration
+        @bg_transitioning = :hold
+        @bg_transition_timer = 0.0
+      end
+
+    when :hold
+      @bg.opacity = 200
+      if @bg_transition_timer >= hold_duration
+        @bg_transitioning = :fade_out
+        @bg_transition_timer = 0.0
+      end
+
+    when :fade_out
+      progress = [@bg_transition_timer / fade_duration, 1.0].min
+      @bg.opacity = (200 * (1.0 - progress)).to_i
+      if @bg_transition_timer >= fade_duration
+        # Refill and reshuffle only once the queue is fully exhausted
+        if @bg_queue.empty?
+          @bg_queue = BACKGROUNDS_LIST.shuffle
+        end
+        @bg.setBitmap(@bg_queue.shift)
+        setup_bg_zoom_and_drift(@bg)
+        @bg_transitioning = :fade_in
+        @bg_transition_timer = 0.0
+      end
+    end
+
+    # Apply drift to background
+    @drift_x += @drift_vx * delta
+    @drift_y += @drift_vy * delta
+    new_bg_x = @drift_x.round
+    new_bg_y = @drift_y.round
+    if @bg.x != new_bg_x || @bg.y != new_bg_y
+      @bg.x = new_bg_x
+      @bg.y = new_bg_y
+    end
+
+    # Apply drift to Pokémon sprite
+    # if @pokemon_drift_vx
+    #   @pokemon_drift_x += @pokemon_drift_vx * delta
+    #   @pokemon_drift_y += @pokemon_drift_vy * delta
+    #   new_pk_x = @pokemon_drift_x.round
+    #   new_pk_y = @pokemon_drift_y.round
+    #   if @pokemon_sprite.x != new_pk_x || @pokemon_sprite.y != new_pk_y
+    #     @pokemon_sprite.x = new_pk_x
+    #     @pokemon_sprite.y = new_pk_y
+    #   end
+    # end
+
+    # --- Pokemon sprite counter init ---
     @sprites_counter = 0 if !@sprites_counter
-    #@background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
-    # # Go to next slide
     @frames_counter = 0 if !@frames_counter
     @frames_counter += 1
 
@@ -272,24 +394,32 @@ class Scene_Credits
     pbBGSStop if @frames_counter > TOTAL_NB_FRAMES
 
     spriteLoader = BattleSpriteLoader.new
-    if @counter >= SECONDS_PER_BACKGROUND && @customSpritesList.length > 0 && !stopShowingSprites
-      @sprites_counter = 0
-      randomSprite = @customSpritesList.sample
-      @customSpritesList.delete(randomSprite)
-      @pokemon_sprite.setBitmapDirectly(spriteLoader.load_random_alt_for_pif_sprite(randomSprite))
-      @pokemon_sprite.x = rand(0..300)
-      @pokemon_sprite.y = rand(0..200)
-      @counter -= SECONDS_PER_BACKGROUND
-      @pokemon_sprite.opacity = 50
-      @fadingIn = true
+
+    # Pokémon Sprite Overlay
+    @pokemon_cycle_timer = 0.0 if !@pokemon_cycle_timer
+    @pokemon_cycle_timer += delta
+    if @pokemon_cycle_timer >= SECONDS_PER_POKEMON_SPRITE
+      @pokemon_cycle_timer -= SECONDS_PER_POKEMON_SPRITE
+      if @customSpritesList.length > 0 && !stopShowingSprites
+        @sprites_counter = 0
+        randomSprite = @customSpritesList.sample
+        @customSpritesList.delete(randomSprite)
+        @pokemon_sprite.setBitmapDirectly(spriteLoader.load_random_alt_for_pif_sprite(randomSprite))
+        @pokemon_sprite.x = rand(0..300)
+        @pokemon_sprite.y = rand(0..200)
+        @pokemon_sprite.opacity = 50
+        @fadingIn = true
+        setup_pokemon_drift
+      end
     end
+
+    # Handle Pokémon Sprite Fading (unchanged)
     if @fadingIn
       if @pokemon_sprite.opacity < FUSION_SPRITES_MAX_OPACITY
         @pokemon_sprite.opacity += 5
       else
         @fadingIn = false
       end
-
     else
       @sprites_counter += 1
       if @sprites_counter >= NB_FRAMES_AT_MAX_OPACITY
@@ -299,6 +429,8 @@ class Scene_Credits
 
     return if cancel?
     return if last?
+
+    # Scroll the text
     @realOY += SCROLL_SPEED * delta
     @credit_sprites.each_with_index { |s, i| s.oy = @realOY - @bitmap_height * i }
   end
