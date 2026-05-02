@@ -98,6 +98,10 @@ Including significant contributions from:
 
 {SPRITER_CREDITS}
 
+<title>Character Customization Graphics
+<title>(Top Contributors)
+{CC_CREDITS}
+
 <title>Other custom graphics:
 Kiwikelly<s>Payapon
 Knucklese<s>UnworthyPie

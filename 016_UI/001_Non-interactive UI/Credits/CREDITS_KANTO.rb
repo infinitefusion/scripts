@@ -65,6 +65,10 @@ Including significant contributions from:
 
 {SPRITER_CREDITS}
 
+Character Customization Graphics
+(Top Contributors)
+{CC_CREDITS}
+
 Other custom graphics:
 Kiwikelly<s>Knuckles
 UnworthyPie<s>Doctor Miawoo

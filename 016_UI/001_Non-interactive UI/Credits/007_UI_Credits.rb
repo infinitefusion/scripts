@@ -125,6 +125,7 @@ class Scene_Credits
     credits_version = Settings::KANTO ? CREDIT_KANTO : CREDIT_HOENN
     credits_version.gsub!(/\{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE\}/, plugin_credits)
     credits_version.gsub!(/{SPRITER_CREDITS}/, format_names_for_game_credits())
+    credits_version.gsub!(/{CC_CREDITS}/, format_character_customization_names_for_game_credits(50))
     credit_lines = credits_version.split(/\n/)
 
     #-------------------------------
