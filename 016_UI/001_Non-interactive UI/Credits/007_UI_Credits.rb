@@ -179,7 +179,7 @@ class Scene_Credits
           outline_color = is_title ? TEXT_TITLE_OUTLINE_COLOR : TEXT_OUTLINE_COLOR
 
           credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos, j * 32 + 8, linewidth, 32, text_to_draw, align)
+          credit_bitmap.draw_text(xpos, j * 32 + 4, linewidth, 32, text_to_draw, align)
           credit_bitmap.font.color = outline_color
           credit_bitmap.draw_text(xpos + 2, j * 32 - 2, linewidth, 32, text_to_draw, align)
           credit_bitmap.draw_text(xpos, j * 32 - 2, linewidth, 32, text_to_draw, align)
