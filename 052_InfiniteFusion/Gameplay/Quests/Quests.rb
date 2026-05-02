@@ -230,6 +230,10 @@ define_quest("aqua_carvanha",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("You were g
 define_quest("aqua_graffiti",:AQUA_QUEST,_INTL("Painting the Town Blue"), _INTL("Team Magma painted their logo on various walls in Slateport City. Cover them up with the Team Aqua logo instead!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_M")
 define_quest("aqua_song",:AQUA_QUEST,_INTL("The Aqua Theme Song"), _INTL("Help compose lyrics to the official Team Aqua theme song!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_F")
 
+#Route 110
+define_quest("route110_bike",:FIELD_QUEST,_INTL("Cycling Road Time Trial"), _INTL("Go through the Cycling Road as fast as possible. You'll be penalized if you hit the walls!"),_INTL("Route 110"),"NPC_Hoenn_Fisherman")
+
+
 #Mauville
 define_quest("mauville_quests_1",:FIELD_QUEST,_INTL("Associate Producer! - Episode 1"), _INTL("You've been hired as an associate producer on a TV show! Complete 2 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")
 define_quest("mauville_quests_2",:FIELD_QUEST,_INTL("Associate Producer! - Episode 2"), _INTL("You've been hired as an associate producer on a TV show! Complete 5 quests to help write the second season of the show."),_INTL("Mauville TV"),"NPC_Hoenn_Collector")

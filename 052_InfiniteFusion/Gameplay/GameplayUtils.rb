@@ -134,3 +134,22 @@ def basicTypeShirts(event_id, nb_owned_for_reward = 5)
   end
   return false
 end
+
+def timeTrialStart
+  $game_temp.time_trial_bumps =0
+  pbSet(VAR_TIME_TRIAL_START,Time.now)
+end
+
+def timeTrialStop
+  currentTime = Time.now
+  startTime = pbGet(VAR_TIME_TRIAL_START)
+  elapsed = (currentTime - startTime).to_f.truncate(3)
+  pbSet(VAR_TIME_TRIAL_SECONDS, elapsed)
+end
+
+def timeTrialApplyBumpsPenalty
+  nb_bumps = $game_temp.time_trial_bumps
+  current_time = pbGet(VAR_TIME_TRIAL_SECONDS)
+  current_time += (nb_bumps*0.5)
+  pbSet(VAR_TIME_TRIAL_SECONDS, current_time.truncate(3))
+end
