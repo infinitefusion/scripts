@@ -60,7 +60,6 @@ class OverworldPokemonEvent < Game_Event
     @nearby_notice_limit += 1 * @weather_level_at_spawn if @weather_type_at_spawn == :Storm
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
     @noticed_player_once = false
-    @deleted = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
     weather = $game_weather.current_weather
@@ -199,19 +198,10 @@ class OverworldPokemonEvent < Game_Event
     return @current_state
   end
 
-  def delete
-    $PokemonTemp.overworld_pokemon_on_map.delete(@id)
-    @deleted = true
-  end
-
-  def deleted?
-    return @deleted
-  end
-
   ####
   # ACTIONS
   # ###
-  def overworldPokemonBattle(surprised=false)
+  def overworldPokemonBattle()
     return if lock?
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
@@ -293,24 +283,7 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  # def check_action_button_trigger
-  #   return unless Input.trigger?(Input::ACTION)
-  #   echoln "button use!"
-  #   echoln player_near_event?(1)
-  #   return unless player_near_event?(1)
-  #   playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
-  #   setBattleRule("surprise")
-  #   overworldPokemonBattle(true)
-  # end
-
   def update_behavior()
-    # # Todo: There's a glitch where static overowrld pokemon also appear on connecting maps.
-    # # They don't have any graphics. This just deactivetes their behavior too which makes them
-    # # harmless - player won't know they're there... But they are, technically.
-    # # This doesn't actually fix the glitch - just makes it invisible.
-    # # -
-    # # It would be good to make it so that the events only appear in their own map in the first place.
-
     return unless @setup_complete
     return if @opacity == 0
     return if @current_state == :FLEEING
@@ -370,7 +343,7 @@ class OverworldPokemonEvent < Game_Event
     else
       @nearby_notice_timer = 0
     end
-    @nearby_notice_timer if should_start
+    @nearby_notice_timer =0 if should_start
     return should_start
   end
 
@@ -562,49 +535,13 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def despawn
-    $PokemonTemp.overworld_pokemon_on_map.delete(@id)
-    $game_map.events.delete(@id)  # actually remove from map
-    @deleted = true
     erase
+    $game_map.events.delete(@id)
+    $PokemonTemp.overworld_pokemon_on_map&.delete(@id)
+    $PokemonTemp.tempEvents&.each { |_, events| events.delete(self) }
+    $PokemonTemp.tempEvents&.delete_if { |_, v| v.empty? }
   end
 
-  # def despawn
-  #   $ow_debug_despawn_count ||= 0
-  #   $ow_debug_despawn_count += 1
-  #
-  #   $PokemonTemp.overworld_pokemon_on_map.delete(@id)
-  #   $game_map.events.delete(@id)
-  #
-  #   spriteset = $scene.spritesets[$game_map.map_id]
-  #   if spriteset
-  #     sprite = spriteset.character_sprites.find { |s| s.character == self }
-  #     if sprite
-  #       char_name = self.character_name
-  #       char_hue = self.character_hue
-  #       sprite.dispose
-  #       spriteset.character_sprites.delete(sprite)
-  #       path = 'Graphics/Characters/' + char_name
-  #       key = char_hue == 0 ? path : [path, char_hue]
-  #       bitmap = RPG::Cache.fromCache(key)
-  #       bitmap.dispose if bitmap && !bitmap.disposed?  # decrements refcount via BitmapWrapper#dispose
-  #     end
-  #   else
-  #     echoln "DESPAWN: no spriteset for map #{@map_id}"
-  #   end
-  #   $PokemonTemp.overworld_wild_battle_participants&.delete(self)
-  #
-  #   # Remove from tempEvents so the GC can collect this object and its @pokemon
-  #   if $PokemonTemp.tempEvents && $PokemonTemp.tempEvents[@map_id]
-  #     $PokemonTemp.tempEvents&.each do |map_id, events|
-  #       events.delete(self)
-  #     end
-  #     $PokemonTemp.tempEvents.delete_if { |_, v| v.empty? }
-  #   end
-  #
-  #   @deleted = true
-  #   erase
-  #   sprite.instance_variable_set(:@character, nil)
-  # end
 
   # Additional move types for OW pokemon
   def update_command_new
@@ -616,7 +553,7 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-  def pause_movement
+  def pause_movementnearby_notice_timer
     @move_type = MOVE_TYPE_FIXED
     @current_state = :PAUSED
   end

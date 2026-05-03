@@ -52,7 +52,7 @@ class Game_Map
 
     if Settings::HOENN && event.name == OVERWORLD_POKEMON_EVENT_NAME
       begin
-        game_event = OverworldPokemonEvent.new(@map_id, event, self)
+        game_event = StaticOverworldPokemonEvent.new(@map_id, event, self)
         setup_overworld_pokemon_from_comments(game_event)
         return game_event if game_event
       rescue

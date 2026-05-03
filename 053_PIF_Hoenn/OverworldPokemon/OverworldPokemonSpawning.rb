@@ -13,6 +13,7 @@
 
 def should_spawn_overworld_pokemon?
   return false unless can_spawn_overworld_pokemon?
+  $PokemonTemp.overworld_pokemon_on_map = [] unless $PokemonTemp.overworld_pokemon_on_map
   return false unless $PokemonGlobal.stepcount % (5 + ($PokemonTemp.overworld_pokemon_on_map.length * 5)) == 0
   return rand(100) > 25 # true
 end
@@ -39,7 +40,7 @@ def create_overworld_pokemon_event(pokemon, position, terrain, behavior_roaming 
 
   species = pokemon[0]
   level = pokemon[1]
-  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, OverworldPokemonEvent) do |event|
+  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, DynamicOverworldPokemonEvent) do |event|
     event.setup_pokemon(species, level, terrain, behavior_roaming, behavior_noticed)
   end
   return unless event
@@ -256,12 +257,11 @@ Events.onMapChange += proc { |_sender, e|
 
 def clearOverworldPokemon
   echoln "Clearing Overworld Pokemon"
-  $PokemonTemp.overworld_pokemon_on_map&.dup&.each do |id|
-    event = $game_map.events[id]
-    next unless event && event.is_a?(OverworldPokemonEvent)
-    event.despawn
+  $game_map.events.clone.each do |id, event|
+    if event.is_a?(DynamicOverworldPokemonEvent)
+      event.despawn
+    end
   end
-
   $PokemonTemp.pbClearTempEvents
   $PokemonTemp.overworld_pokemon_on_map = []
   $PokemonTemp.overworld_wild_battle_triggered = false

@@ -105,7 +105,7 @@ def overworldPokemonCatchOffGuard()
       check_offguard_challenge(event)
     end
   end
-  event.overworldPokemonBattle(true)
+  event.overworldPokemonBattle
 end
 
 def check_offguard_challenge(pokemon_event)
