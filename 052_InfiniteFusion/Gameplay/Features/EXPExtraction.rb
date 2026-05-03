@@ -45,7 +45,7 @@ class ExpExtraction
   def update_text
     Kernel.pbClearNumber()
     Kernel.pbClearText()
-
+    return if @max_value < 1
     Kernel.pbDisplayText(_INTL("Exp to extract:"), 80, 100,)
     Kernel.pbDisplayText("#{@exp_to_extract} / #{@valid_exp}", 120, 130,)
 
