@@ -5,6 +5,10 @@ end
 class ExpExtraction
   attr_accessor :exp_to_extract
   attr_accessor :nb_candies
+
+  attr_reader :valid_exp
+  attr_reader :max_value
+
   BASE_PRICE = 1000
   LOSS_PER_CANDY = 50
   def initialize(pokemon, unit_price)
@@ -14,6 +18,10 @@ class ExpExtraction
     @nb_candies = (@exp_to_extract / 1000).floor
     @full_price = BASE_PRICE + @unit_price * @nb_candies
     @total_exp = pokemon.exp_gained_with_player
+
+    pokemon.exp_gained_with_player = 0 if !pokemon.exp_gained_with_player
+    @valid_exp = [pokemon.exp_gained_with_player,pokemon.exp].min
+    @max_value = @valid_exp / 1000.floor
 
     update_text
 
@@ -39,7 +47,7 @@ class ExpExtraction
     Kernel.pbClearText()
 
     Kernel.pbDisplayText(_INTL("Exp to extract:"), 80, 100,)
-    Kernel.pbDisplayText("#{@exp_to_extract} / #{@total_exp}", 120, 130,)
+    Kernel.pbDisplayText("#{@exp_to_extract} / #{@valid_exp}", 120, 130,)
 
     Kernel.pbDisplayText(_INTL("Price:"), 40, 170,)
     Kernel.pbDisplayText("$#{@full_price}", 80, 200,)
@@ -56,12 +64,9 @@ end
 # The event does a little animation before giving out the candies.
 #
 def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
-  pokemon.exp_gained_with_player = 0 if !pokemon.exp_gained_with_player
-  echoln pokemon.exp_gained_with_player
-  valid_exp = [pokemon.exp_gained_with_player,pokemon.exp].min
-  max_value = valid_exp / 1000.floor
 
-  if max_value < 1
+  expExtraction = ExpExtraction.new(pokemon, unitPrice)
+  if expExtraction.max_value < 1
     pbCallBubDown(2, @event_id)
     pbMessage(_INTL("Oh, I'm sorry, but this Pokémon does not have enough Exp. available for the procedure."))
     pbCallBubDown(2, @event_id)
@@ -69,7 +74,6 @@ def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
     return false
   end
 
-  expExtraction = ExpExtraction.new(pokemon, unitPrice)
   update_proc = proc {
     cmdwindow = $game_temp.choose_number_window
     if cmdwindow
@@ -79,7 +83,7 @@ def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
   }
 
   params = ChooseNumberParams.new
-  params.setRange(0, max_value)
+  params.setRange(0, expExtraction.max_value)
   params.setDefaultValue(1)
   params.setCancelValue(0)
 
