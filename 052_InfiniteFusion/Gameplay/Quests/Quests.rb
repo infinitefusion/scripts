@@ -231,7 +231,7 @@ define_quest("aqua_graffiti",:AQUA_QUEST,_INTL("Painting the Town Blue"), _INTL(
 define_quest("aqua_song",:AQUA_QUEST,_INTL("The Aqua Theme Song"), _INTL("Help compose lyrics to the official Team Aqua theme song!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_F")
 
 #Route 110
-define_quest("route110_bike",:FIELD_QUEST,_INTL("Cycling Road Time Trial"), _INTL("Go through the Cycling Road as fast as possible. You'll be penalized if you hit the walls!"),_INTL("Route 110"),"NPC_Hoenn_Fisherman")
+define_quest("route110_bike",:FIELD_QUEST,_INTL("Cycling Road Time Trial"), _INTL("Go through the Cycling Road as fast as possible. You'll be penalized if you hit the walls!"),_INTL("Route 110"),"NPC_Hoenn_Triathlete_M_bike")
 
 
 #Mauville
