@@ -169,3 +169,46 @@ def initialize_species_blacklist(species)
   $PokemonSystem.sprites_blacklist[species] = black_list
   return black_list
 end
+
+def export_sprites_blacklist
+  export_file_name = "Data/sprites/sprite_preferences.json"
+  return unless $PokemonSystem.sprites_blacklist
+  json =JSON.generate(sanitize_string($PokemonSystem.sprites_blacklist))
+  File.write(export_file_name, json)
+  pbMessage(_INTL("Your sprites settings were exported to #{export_file_name}.",))
+  pbMessage(_INTL("You can share this file with your friends to have them use the same sprites preferences as you."))
+  pbMessage(_INTL("Place this it in their Data/sprites folder and talk to the Update Man NPC to import them in their game.",))
+end
+
+def import_sprites_blacklist
+  export_file_name = "Data/sprites/sprite_preferences.json"
+  if File.exist?(export_file_name)
+    json = File.read(export_file_name)
+    new_settings = JSON.parse(json)
+    if $PokemonSystem.sprites_blacklist && !$PokemonSystem.sprites_blacklist.empty?
+      pbMessage(_INTL("You already have some sprite preferences defined."))
+      pbMessage(_INTL("Would you like to merge your existing settings with the ones you're importing and completely replace them?",-1))
+      cmd_merge = _INTL("Merge")
+      cmd_replace = _INTL("Replace")
+      cmd_cancel = _INTL("Cancel")
+      options = [cmd_merge, cmd_replace, cmd_cancel]
+      choice = optionsMenu(options,-1)
+      case options[choice]
+      when cmd_merge
+        $PokemonSystem.sprites_blacklist = $PokemonSystem.sprites_blacklist.merge(new_settings) do |key, old_arr, new_arr|
+          (old_arr + new_arr).uniq
+        end
+        pbMessage(_INTL("Your sprite settings have been merged! Make sure to save the game."))
+      when cmd_replace
+        $PokemonSystem.sprites_blacklist = new_settings
+        pbMessage(_INTL("Your sprite settings have been replaced! Make sure to save the game."))
+      end
+    end
+  else
+    pbMessage(_INTL("The game couldn't find a \"sprite_preferences.json\" file in the Data/sprites folder."))
+    pbMessage(_INTL("Export the sprites settings from the Update Man NPC and place the file in this folder to import them."))
+  end
+
+
+  #$PokemonSystem.sprites_blacklist = JSON.parse(json)
+end

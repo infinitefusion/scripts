@@ -123,18 +123,17 @@ class SecretBaseExporter
   end
 
   private
-
-  # Recursively replace nils with empty strings (or zero if numeric leaf)
-  def sanitize_string(obj)
-    case obj
-    when Hash
-      obj.transform_values { |v| sanitize_string(v) }
-    when Array
-      obj.map { |v| sanitize_string(v) }
-    when NilClass
-      ""
-    else
-      obj
-    end
+end
+# Recursively replace nils with empty strings (or zero if numeric leaf)
+def sanitize_string(obj)
+  case obj
+  when Hash
+    obj.transform_values { |v| sanitize_string(v) }
+  when Array
+    obj.map { |v| sanitize_string(v) }
+  when NilClass
+    ""
+  else
+    obj
   end
 end
