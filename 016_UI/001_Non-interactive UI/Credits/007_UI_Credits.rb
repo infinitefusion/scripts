@@ -257,7 +257,7 @@ class Scene_Credits
 
   # def getSpritesList()
   #   spritesList = []
-  #   $PokemonGlobal.alt_sprite_substitutions.each_value do |value|
+  #   $PokemonSystem.alt_sprite_substitutions.each_value do |value|
   #     if value.is_a?(PIFSprite)
   #       spritesList << value
   #     end

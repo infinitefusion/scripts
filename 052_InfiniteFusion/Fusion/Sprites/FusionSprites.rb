@@ -236,8 +236,8 @@ end
 #   folder = dex_number.to_s
 #   substitution_id = "{1}", dex_number
 #
-#   if alt_sprites_substitutions_available && $PokemonGlobal.alt_sprite_substitutions.keys.include?(substitution_id)
-#     substitutionPath = $PokemonGlobal.alt_sprite_substitutions[substitution_id]
+#   if alt_sprites_substitutions_available && $PokemonSystem.alt_sprite_substitutions.keys.include?(substitution_id)
+#     substitutionPath = $PokemonSystem.alt_sprite_substitutions[substitution_id]
 #     return substitutionPath if pbResolveBitmap(substitutionPath)
 #   end
 #   random_alt = get_random_alt_letter_for_unfused(dex_number, true) #nil if no main
@@ -261,7 +261,7 @@ end
 # end
 
 def alt_sprites_substitutions_available
-  return $PokemonGlobal && $PokemonGlobal.alt_sprite_substitutions
+  return $PokemonGlobal && $PokemonSystem.alt_sprite_substitutions
 end
 
 def print_stack_trace
@@ -273,8 +273,8 @@ end
 
 # def record_sprite_substitution(substitution_id, sprite_name)
 #   return if !$PokemonGlobal
-#   return if !$PokemonGlobal.alt_sprite_substitutions
-#   $PokemonGlobal.alt_sprite_substitutions[substitution_id] = sprite_name
+#   return if !$PokemonSystem.alt_sprite_substitutions
+#   $PokemonSystem.alt_sprite_substitutions[substitution_id] = sprite_name
 # end
 
 def add_to_autogen_cache(pokemon_id, sprite_name)
@@ -308,8 +308,8 @@ end
 #   dex_num = getSpeciesIdForFusion(head_id, body_id)
 #   substitution_id = dex_num.to_s + form_suffix
 #
-#   if alt_sprites_substitutions_available && $PokemonGlobal.alt_sprite_substitutions.keys.include?(substitution_id)
-#     substitutionPath= $PokemonGlobal.alt_sprite_substitutions[substitution_id]
+#   if alt_sprites_substitutions_available && $PokemonSystem.alt_sprite_substitutions.keys.include?(substitution_id)
+#     substitutionPath= $PokemonSystem.alt_sprite_substitutions[substitution_id]
 #     return substitutionPath if pbResolveBitmap(substitutionPath)
 #   end
 #
@@ -363,9 +363,9 @@ end
 def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
   if $PokemonSystem.random_sprites && $PokemonGlobal
-    $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
+    $PokemonSystem.sprites_blacklist = {} unless $PokemonSystem.sprites_blacklist
     fusion_species = get_fusion_symbol(head_id, body_id)
-    species_blacklist = $PokemonGlobal.sprites_blacklist[fusion_species]
+    species_blacklist = $PokemonSystem.sprites_blacklist[fusion_species]
     if species_blacklist
       alts_list = list_all_sprites_letters(spriteName)
                     .reject { |letter| species_blacklist.include?(letter) }
@@ -389,9 +389,9 @@ def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
 
   if $PokemonSystem.random_sprites
     species = GameData::Species.get(dex_num)&.species
-    if $PokemonGlobal
-      $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
-      species_blacklist = $PokemonGlobal.sprites_blacklist[species]
+    if $PokemonSystem
+      $PokemonSystem.sprites_blacklist = {} unless $PokemonSystem.sprites_blacklist
+      species_blacklist = $PokemonSystem.sprites_blacklist[species]
     end
     if species_blacklist
       letters_list = list_all_sprites_letters(spriteName)

@@ -209,8 +209,8 @@ class PokemonPokedexInfo_Scene
   end
 
   def update_blacklist_icons
-    $PokemonGlobal.sprites_blacklist = {} unless $PokemonGlobal.sprites_blacklist
-    species_blacklist = $PokemonGlobal.sprites_blacklist[@species_id]
+    $PokemonSystem.sprites_blacklist = {} unless $PokemonSystem.sprites_blacklist
+    species_blacklist = $PokemonSystem.sprites_blacklist[@species_id]
     species_blacklist = initialize_species_blacklist(@species_id) unless species_blacklist
 
     # previous sprite
@@ -265,8 +265,8 @@ class PokemonPokedexInfo_Scene
       dex_number = getDexNumberForSpecies(@species)
       species_id = get_substitution_id(dex_number)
       initialize_alt_sprite_substitutions()
-      return if !$PokemonGlobal.alt_sprite_substitutions[species_id]
-      current_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
+      return if !$PokemonSystem.alt_sprite_substitutions[species_id]
+      current_sprite = $PokemonSystem.alt_sprite_substitutions[species_id]
     end
     index = @selected_index
     for alt in altsList
@@ -559,7 +559,7 @@ class PokemonPokedexInfo_Scene
     else
       dex_number = getDexNumberForSpecies(@species)
       species_id = get_substitution_id(dex_number)
-      current_pif_sprite = $PokemonGlobal.alt_sprite_substitutions[species_id]
+      current_pif_sprite = $PokemonSystem.alt_sprite_substitutions[species_id]
       selected_pif_sprite = @available[index]
 
       if current_pif_sprite
@@ -575,8 +575,8 @@ class PokemonPokedexInfo_Scene
   end
 
   def toggle_sprite_blacklist
-    $PokemonGlobal.sprites_blacklist ||= {}
-    species_blacklist = $PokemonGlobal.sprites_blacklist[@species_id]
+    $PokemonSystem.sprites_blacklist ||= {}
+    species_blacklist = $PokemonSystem.sprites_blacklist[@species_id]
     species_blacklist ||= initialize_species_blacklist(@species_id)
 
     selected_letter = @available[@selected_index].alt_letter
@@ -598,7 +598,7 @@ class PokemonPokedexInfo_Scene
       species_blacklist << selected_letter
     end
 
-    $PokemonGlobal.sprites_blacklist[@species_id] = species_blacklist
+    $PokemonSystem.sprites_blacklist[@species_id] = species_blacklist
   end
 
   def select_species_sprite(brief = false)
@@ -627,14 +627,14 @@ class PokemonPokedexInfo_Scene
   def swap_main_sprite
     species_number = dexNum(@species)
     substitution_id = get_substitution_id(species_number)
-    $PokemonGlobal.alt_sprite_substitutions[substitution_id] = @selected_pif_sprite
+    $PokemonSystem.alt_sprite_substitutions[substitution_id] = @selected_pif_sprite
     if @pokemon
       @pokemon.pif_sprite = @selected_pif_sprite
     end
   end
 end
 
-class PokemonGlobalMetadata
+class PokemonSystem
   attr_accessor :alt_sprite_substitutions
   attr_accessor :sprites_blacklist
 

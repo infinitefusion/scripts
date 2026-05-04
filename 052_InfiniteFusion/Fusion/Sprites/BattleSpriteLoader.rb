@@ -31,8 +31,8 @@ class BattleSpriteLoader
     return if !pokemon
     substitution_id = get_sprite_substitution_id_from_dex_number(pokemon.species)
     # echoln substitution_id
-    # echoln $PokemonGlobal.alt_sprite_substitutions
-    pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
+    # echoln $PokemonSystem.alt_sprite_substitutions
+    pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     if !pif_sprite
       pif_sprite = get_pif_sprite_from_species(pokemon.species)
     end
@@ -72,7 +72,7 @@ class BattleSpriteLoader
 
   def registerSpriteSubstitution(pif_sprite)
     substitution_id = get_sprite_substitution_id_from_dex_number(pif_sprite.species)
-    $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite
+    $PokemonSystem.alt_sprite_substitutions[substitution_id] = pif_sprite
   end
 
   def obtain_pif_sprite(species)
@@ -90,7 +90,7 @@ class BattleSpriteLoader
   end
   def obtain_fusion_pif_sprite(head_id,body_id)
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
-    pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
+    pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     #pif_sprite.dump_info if pif_sprite
     if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_fusion_sprite(head_id, body_id)
@@ -100,7 +100,7 @@ class BattleSpriteLoader
         pif_sprite.type = :CUSTOM
       end
       substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
-      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
+      $PokemonSystem.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
     return pif_sprite
   end
@@ -121,10 +121,10 @@ class BattleSpriteLoader
 
   def load_base_sprite(dex_number)
     substitution_id = get_sprite_substitution_id_from_dex_number(dex_number)
-    pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
+    pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_base_sprite(dex_number)
-      $PokemonGlobal.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
+      $PokemonSystem.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
     echoln pif_sprite.local_path
     if pif_sprite.local_path
@@ -190,7 +190,7 @@ class BattleSpriteLoader
 
   def get_pif_sprite_from_species(species)
     substitution_id = get_sprite_substitution_id_from_dex_number(species)
-    pif_sprite = $PokemonGlobal.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
+    pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     return pif_sprite if pif_sprite
     species_data = GameData::Species.get(species)
     if species_data.id_number <= NB_POKEMON #base pokemon

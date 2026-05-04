@@ -166,6 +166,6 @@ def initialize_species_blacklist(species)
       end
     end
   end
-  $PokemonGlobal.sprites_blacklist[species] = black_list
+  $PokemonSystem.sprites_blacklist[species] = black_list
   return black_list
 end

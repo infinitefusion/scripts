@@ -18,7 +18,7 @@ def spriteOptionsMenu
   when cmd_reset_alt_sprites
     confirmed = pbConfirmMessage(_INTL("Reset the chosen alternate sprites set for every Pokémon?"))
     if confirmed
-      $PokemonGlobal.alt_sprite_substitutions=Hash.new
+      $PokemonSystem.alt_sprite_substitutions=Hash.new
       pbMessage(_INTL("Alt sprites substitutions have been reset."))
     end
   when cmd_clear_sprite_cache
