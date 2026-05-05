@@ -38,13 +38,11 @@ def pbReceiveMoney(amount, showMessage=true, msgwindow=nil, goldwindow=nil)
 
     color = amount >= 0 ? "00FF00" : "FF0000"
     sign  = amount >= 0 ? "+" : "-"
-    goldwindow.text = _INTL(
-      "Money:\n<ar>{1}</ar>\n<ar><c3={2}>{3} {4}</c3></ar>",
-      current.to_s_formatted,
-      color,
-      sign,
-      amount.abs.to_s_formatted
-    )
+    goldwindow.text = "Money:\n<ar>$#{current.to_s_formatted}</ar>\n<ar><c3=#{color}>#{sign}$#{amount.abs.to_s_formatted}</c3></ar>"
+    goldwindow.text = "Money:\n<ar>$#{current.to_s_formatted}</ar>\n<ar><c3=#{color}>#{sign}$#{amount.abs.to_s_formatted}</c3></ar>"
+    goldwindow.resizeToFit(goldwindow.text, Graphics.width)
+    goldwindow.width = 160 if goldwindow.width <= 160
+
 
     pbSEPlay("Mart buy item") if (amount >= 0 ? current < targetMoney : current > targetMoney)
     Graphics.update
@@ -57,10 +55,7 @@ def pbReceiveMoney(amount, showMessage=true, msgwindow=nil, goldwindow=nil)
   $Trainer.money = targetMoney
 
   # Final display text
-  goldwindow.text = _INTL(
-    "Money:\n<ar>{1}</ar>",
-    targetMoney.to_s_formatted
-  )
+  goldwindow.text = "Money:\n<ar>$#{targetMoney.to_s_formatted}</ar>"
 
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.width = 160 if goldwindow.width <= 160
