@@ -171,9 +171,13 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def get_energy_for_scan(species)
     encounter = get_encounter(species)
-    rareness = encounter[0]
-
-    energy = (100 - rareness) * 5
+    if @weatherEncounters.include?(species)
+      base_rareness = encounter[0]
+      rareness =calculate_weather_encounter_rareness(encounter,base_rareness)
+    else
+      rareness = encounter[0]
+    end
+    energy = (110 - rareness) * 5
     (energy / 50.0).round * 50
   end
 
@@ -185,6 +189,7 @@ class PokeRadarAppScene < PokeNavAppScene
     if (encounter && encounter[1] == species) || (weather_encounter && weather_encounter[1] == species)
       base_rareness =0
       base_rareness = encounter[0] if encounter
+      base_rareness = weather_encounter[0] if weather_encounter
       if @weatherEncounters.include?(species)
         rareness = calculate_weather_encounter_rareness(weather_encounter,base_rareness)
       else
@@ -212,7 +217,7 @@ class PokeRadarAppScene < PokeNavAppScene
       weather_intensity = 0 if !weather_intensity
       chance_of_weather_encounter = $PokemonEncounters.weather_encounter_chance(weather_intensity)
       weather_rareness = encounter[0]
-      return weather_rareness * (chance_of_weather_encounter.to_f / 100) + base_rareness
+      return weather_rareness * (chance_of_weather_encounter.to_f / 100) * (base_rareness/100)
     end
     return 0
   end
