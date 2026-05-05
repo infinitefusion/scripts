@@ -2,7 +2,7 @@
 EXPORT_EXCEPT_MAP_IDS= [768,722,723,724,720,809,816]
 
 def exportAllMaps
-  for id in 100..109
+  for id in 1..109
     begin
       MapExporter.export(id, [:Events]) if !EXPORT_EXCEPT_MAP_IDS.include?(id)
     rescue

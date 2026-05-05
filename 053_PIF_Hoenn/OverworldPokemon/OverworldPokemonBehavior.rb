@@ -96,6 +96,7 @@ def overworldPokemonCatchOffGuard()
     if event.last_facing_direction == $game_player.direction
       setBattleRule("surprise")
       event.set_noticed_sprite
+      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, event.x, event.y)
       pbSEPlay("jump")
       event.turn_away_from_player
       event.jump(0,0)

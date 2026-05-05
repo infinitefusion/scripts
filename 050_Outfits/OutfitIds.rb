@@ -109,6 +109,8 @@ HAT_BREEDEROUTFIT = "PKMBreeder"
 
 HAT_WAITRESS = "maid"
 
+HAT_PIRATE = "piratehat"
+
 FUSION_HAT = "fusionnerd"
 FUSION_OUTFIT = "fusionnerd"
 
