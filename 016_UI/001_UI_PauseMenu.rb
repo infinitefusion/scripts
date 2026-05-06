@@ -104,7 +104,7 @@ class PokemonPauseMenu
   ICON_OPTIONS = "menuIcons/OPTIONS"
   ICON_DEBUG = "menuIcons/DEBUG"
   ICON_TITLE = "menuIcons/TITLE"
-  ICON_QUIT_SAFARI = "menuIcons/bagPocket3"
+  ICON_QUIT_SAFARI = "menuIcons/SAFARI"
 
   def pbStartPokemonMenu
     if !$Trainer
