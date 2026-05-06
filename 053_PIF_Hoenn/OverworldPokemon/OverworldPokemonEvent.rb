@@ -62,9 +62,11 @@ class OverworldPokemonEvent < Game_Event
     @noticed_player_once = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
-    weather = $game_weather.current_weather
-    @weather_type_at_spawn = weather[0]
-    @weather_level_at_spawn = weather[1]
+    weather = $game_weather.current_weather if $game_weather
+    if weather
+      @weather_type_at_spawn = weather[0]
+      @weather_level_at_spawn = weather[1]
+    end
 
     if DISGUISED_POKEMON.include?(@species) && !@manual_ow_pokemon
       species_data = getRandomPokemonFromRoute(@species, @terrain)
