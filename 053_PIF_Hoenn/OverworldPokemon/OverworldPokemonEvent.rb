@@ -17,6 +17,7 @@ class OverworldPokemonEvent < Game_Event
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
   DISGUISED_POKEMON = [:DITTO, :ZORUA, :ZOROARK]
+  CASTFORM_FORMS = [:CASTFORM, :CASTFORM_SUNNY, :CASTFORM_RAINY, :CASTFORM_SNOWY]
   UPDATE_TIME = 4 #Nb. of frames for the update_behavior loop
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     #return unless @map_id == $game_map.map_id
@@ -62,7 +63,7 @@ class OverworldPokemonEvent < Game_Event
     @noticed_player_once = false
     @manual_ow_pokemon = false
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
-    weather = $game_weather.current_weather if $game_weather
+    weather = $game_weather.get_current_map_weather if $game_weather
     if weather
       @weather_type_at_spawn = weather[0]
       @weather_level_at_spawn = weather[1]
@@ -71,6 +72,9 @@ class OverworldPokemonEvent < Game_Event
     if DISGUISED_POKEMON.include?(@species) && !@manual_ow_pokemon
       species_data = getRandomPokemonFromRoute(@species, @terrain)
       @disguised = true
+    end
+    if CASTFORM_FORMS.include?(@species)
+      species_data = setCastformToCurrentWeather
     end
 
     initialize_sprite(@terrain, species_data)
@@ -106,6 +110,21 @@ class OverworldPokemonEvent < Game_Event
       return @species == pokeradar_species
     end
     return false
+  end
+
+  def setCastformToCurrentWeather
+    case @weather_type_at_spawn
+    when :Rain, :Storm, :HeavyRain
+      @species =:CASTFORM_RAINY
+    when :Sunny, :HarshSun, :Sandstorm
+      @species = :CASTFORM_SUNNY
+    when :Wind, :StrongWinds, :Snow, :Blizzard
+      @species = :CASTFORM_SNOWY
+    else
+      @species = :CASTFORM
+    end
+    @pokemon = Pokemon.new(@species, @level)
+    return GameData::Species.get(@species)
   end
 
   def get_behavior_for_species(species, behavior_type)

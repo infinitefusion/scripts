@@ -78,6 +78,11 @@ class GameWeather
     @current_weather[map_id] = [weather_type,intensity]
   end
 
+  def get_current_map_weather
+    map_id = $game_map.map_id
+    return @current_weather[map_id]
+  end
+
   def get_map_weather_type(map_id)
     if !@current_weather[map_id]
       @current_weather[map_id] = [:None,0]
