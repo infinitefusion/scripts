@@ -564,7 +564,7 @@ def useRocketUniform()
   if isWearingTeamRocketOutfit()
     if (Kernel.pbConfirmMessage(_INTL("Remove the Team Rocket uniform?")))
       if ($Trainer.last_worn_outfit == CLOTHES_TEAM_ROCKET_MALE || $Trainer.last_worn_outfit == CLOTHES_TEAM_ROCKET_FEMALE) && $Trainer.last_worn_hat == HAT_TEAM_ROCKET
-        $Trainer.last_worn_outfit = getDefaultClothes(getPlayerGender)
+        $Trainer.last_worn_outfit = getDefaultClothes(getPlayerGenderId)
       end
       playOutfitChangeAnimation()
       putOnClothes($Trainer.last_worn_outfit, true)

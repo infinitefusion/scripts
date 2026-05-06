@@ -341,6 +341,11 @@ class PokeBattle_SafariZone
     @ballCount     = 0
     @caughtOffGuard    = false
     @turn_count = 0
+
+  end
+
+  def balls_thrown
+    return 30-@ballCount
   end
 
   def defaultWeather=(value); @weather = value; end
