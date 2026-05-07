@@ -65,7 +65,12 @@ class Scene_Credits
     "Graphics/Battlebacks/battlebg/beach_eve.png",
     "Graphics/Battlebacks/battlebg/beach_night.png",
     "Graphics/Battlebacks/battlebg/beach.png",
-    "Graphics/Battlebacks/battlebg/field_eve.png"
+    "Graphics/Battlebacks/battlebg/field_eve.png",
+    "Graphics/Battlebacks/battlebg/mangrove.png",
+    "Graphics/Battlebacks/battlebg/beach.png",
+    "Graphics/Battlebacks/battlebg/beach.png",
+
+
   #"Graphics/Titles/bg_back"
   ]
   BGM = "Credits"

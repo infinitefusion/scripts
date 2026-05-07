@@ -57,12 +57,11 @@ Gordogamr<s>Realthree
 Chardub<s>
 
 <title>Battle Backgrounds:
-.realthree<s>piponus
-cynder_<s>hero.drawing<s>
-koalagators<s>aplastic
-quote.lass<s>revellr
+.realthree<s>koalagators
+piponus<s>aplastic
+cynder_<s>chansondoree
+kiwikelly<s>revellr
 slowforest<s>takopus
-chansondoree<s>
 
 <title>QA Testing (Demo 1)
 adonis9410<s>casinosluck
