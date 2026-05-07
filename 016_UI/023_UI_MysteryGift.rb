@@ -283,7 +283,7 @@ def downloadMysteryGifts(url,sprites, viewport, trainer)
   if nil_or_empty?(string)
     pbMessageDisplay(sprites["msgwindow"],_INTL("No new gift was found."))
   else
-    online=pbMysteryGiftReadFromJson(string,trainer)
+    online=pbMysteryGiftReadFromJson(string,trainer) rescue []
     pending=[]
     for gift in online
       notgot=true
@@ -404,7 +404,7 @@ def pbMysteryGiftExportToJson(gift_data)
 end
 
 def pbMysteryGiftReadFromJson(json_string,trainer)
-  json_data = JSON.parse(json_string)
+  json_data = JSON.parse(json_string) rescue {}
   mystery_gifts = []
   importer = SecretBaseImporter.new
   #echoln(json_data)
@@ -511,6 +511,9 @@ def pbReceiveMysteryGift(id)
     end
     if pbAddPokemonSilent(gift[2])
       pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!",$Trainer.name,gift[2].name))
+      if $Trainer.party.length>=6
+        pbMessage(_INTL("It was transferred to the PC."))
+      end
       $Trainer.mystery_gifts[index]=[id]
       return true
     end

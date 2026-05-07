@@ -101,6 +101,7 @@ class SecretBaseExporter
       hat_x: pokemon.hat_x,
       hat_y: pokemon.hat_y,
       steps_to_hatch: pokemon.steps_to_hatch,
+      alt_sprite: pokemon.pif_sprite&.alt_letter,
       evs: {
         hp: pokemon.ev[:HP] || 0,
         atk: pokemon.ev[:ATTACK] || 0,

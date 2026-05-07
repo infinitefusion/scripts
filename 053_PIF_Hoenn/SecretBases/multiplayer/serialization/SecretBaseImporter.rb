@@ -90,8 +90,6 @@ class SecretBaseImporter
   end
 
   def import_pokemon_from_json(poke_json)
-
-    echoln poke_json
     pokemon = Pokemon.new(poke_json[:species], poke_json[:level])
     pokemon.name     = poke_json[:name]
     pokemon.item     = poke_json[:item]
@@ -103,7 +101,13 @@ class SecretBaseImporter
     pokemon.hat_y = poke_json[:hat_y]
     pokemon.steps_to_hatch = poke_json[:steps_to_hatch] || 0
     pokemon.poke_ball = poke_json[:ball]
-
+    if poke_json[:alt_sprite] && poke_json[:alt_sprite] != ""
+      if pokemon.isFusion?
+        pokemon.pif_sprite = PIFSprite.new(:CUSTOM, pokemon.get_head_num,pokemon.get_body_num,poke_json[:alt_sprite])
+      else
+        pokemon.pif_sprite = PIFSprite.new(:BASE, pokemon.id_number,nil,poke_json[:alt_sprite])
+      end
+    end
     moves = poke_json[:moves]
     pokemon_moves = []
     moves.each do |move_id|

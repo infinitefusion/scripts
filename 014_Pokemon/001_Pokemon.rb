@@ -142,7 +142,24 @@ class Pokemon
 
   def export_to_json
     exporter = SecretBaseExporter.new
-    json = exporter.export_fused_pokemon_hash(self)
+    hash = exporter.export_fused_pokemon_hash(self)
+
+    def deep_stringify(obj)
+      case obj
+      when Hash
+        obj.transform_keys(&:to_s).transform_values { |v| deep_stringify(v) }
+      when Array
+        obj.map { |v| deep_stringify(v) }
+      when Symbol
+        obj.to_s
+      when Pokemon::Owner
+        obj.name
+      else
+        obj
+      end
+    end
+
+    json = JSON.generate(deep_stringify(hash))
     Input.clipboard = json
     pbMessage(_INTL("The Pokémon's data was copied to the clipboard."))
   end
@@ -285,15 +302,27 @@ class Pokemon
   end
 
   def get_body_species
-    return @name unless isFusion?
+    return @species unless isFusion?
     body_species = GameData::Species.get(@species)&.get_body_species
     return GameData::Species.get(body_species)
   end
 
   def get_head_species
-    return @name unless isFusion?
+    return @species unless isFusion?
     head_species = GameData::Species.get(@species)&.get_head_species
     return GameData::Species.get(head_species)
+  end
+
+  def get_body_num
+    return species_data.id_number unless isFusion?
+    body_species = GameData::Species.get(@species)&.get_body_species
+    return body_species.id_number
+  end
+
+  def get_head_num
+    return GameData::Species.get(@species).id_number unless isFusion?
+    head_species = GameData::Species.get(@species)&.get_head_species
+    return head_species.id_number
   end
 
   def hasBodyOf?(check_species)
