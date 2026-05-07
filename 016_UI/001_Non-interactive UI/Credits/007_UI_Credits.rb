@@ -35,7 +35,7 @@
 #==============================================================================
 class Scene_Credits
   # Backgrounds to show in credits. Found in Graphics/Titles/ folder
-  BACKGROUNDS_LIST = [
+  BACKGROUNDS_LIST_HOENN = [
     "Graphics/Battlebacks/battlebg/ocean_night",
     "Graphics/Battlebacks/battlebg/ocean",
     "Graphics/Battlebacks/battlebg/oceanicmuseum",
@@ -73,8 +73,12 @@ class Scene_Credits
 
   #"Graphics/Titles/bg_back"
   ]
+  BACKGROUNDS_LIST_KANTO = [""]
+
   BGM = "Credits"
-  SCROLL_SPEED = 62 # Pixels per second , ajuster pour fitter avec la musique
+  KANTO_SCROLL_SPEED = 70 # Pixels per second , ajuster pour fitter avec la musique
+  HOENN_SCROLL_SPEED = 52
+
   SECONDS_PER_BACKGROUND = 8
   SECONDS_PER_POKEMON_SPRITE = 6
   TEXT_OUTLINE_COLOR = Color.new(0, 0, 128, 255)
@@ -100,10 +104,14 @@ class Scene_Credits
     @trim = Graphics.height / 10
     @realOY = -(Graphics.height - @trim)
     @customSpritesList = getSpritesList()
-    echoln @customSpritesList
-
-    # Shuffle backgrounds into a queue — won't repeat until exhausted
-    @bg_queue = BACKGROUNDS_LIST.shuffle
+    if Settings::KANTO
+      @scroll_speed = KANTO_SCROLL_SPEED
+      @bg_list = BACKGROUNDS_LIST_KANTO
+    else
+      @scroll_speed = HOENN_SCROLL_SPEED
+      @bg_list = BACKGROUNDS_LIST_HOENN
+    end
+    @bg_queue = @bg_list.shuffle
 
     @bg_transitioning = :fade_in
     @bg_transition_timer = 0.0
@@ -149,7 +157,7 @@ class Scene_Credits
 
     @pokemon_sprite = IconSprite.new(0, 0)
     @pokemon_sprite.z = @bg.z + 1
-    @pokemon_sprite.setBitmap(@bg_queue[0] || BACKGROUNDS_LIST[0])  # placeholder bitmap
+    @pokemon_sprite.setBitmap(@bg_queue[0] || @bg_list[0])  # placeholder bitmap
     @pokemon_sprite.opacity = 0
 
     @credit_sprites = []
@@ -360,7 +368,7 @@ class Scene_Credits
       if @bg_transition_timer >= fade_duration
         # Refill and reshuffle only once the queue is fully exhausted
         if @bg_queue.empty?
-          @bg_queue = BACKGROUNDS_LIST.shuffle
+          @bg_queue = @bg_list.shuffle
         end
         @bg.setBitmap(@bg_queue.shift)
         setup_bg_zoom_and_drift(@bg)
@@ -437,7 +445,7 @@ class Scene_Credits
     return if last?
 
     # Scroll the text
-    @realOY += SCROLL_SPEED * delta
+    @realOY += @scroll_speed * delta
     @credit_sprites.each_with_index { |s, i| s.oy = @realOY - @bitmap_height * i }
   end
 end
