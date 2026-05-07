@@ -80,7 +80,11 @@ class Game_Player < Game_Character
           if $game_switches[SWITCH_RACE_BIKE]
             self.move_speed = Input.press?(Input::ACTION) ? 5 : 5.6
           else
-            self.move_speed = Input.press?(Input::ACTION) ? 5 : 5.3333333333333
+            if Settings::KANTO
+              self.move_speed = 5
+            else
+              self.move_speed = Input.press?(Input::ACTION) ? 5 : 5.3333333333333
+            end
           end
         end
       elsif pbCanRun? || $PokemonGlobal.surfing
