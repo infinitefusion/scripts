@@ -235,7 +235,6 @@ def pbDayCareGenerateEgg
   end
 
   babyspecies = determineDayCareEggSpecies(father,mother)
-  echoln babyspecies
 
   # Determine the egg's species
   babyspecies = GameData::Species.get(babyspecies).get_baby_species(true, mother.item_id, father.item_id)
@@ -433,7 +432,7 @@ def pbDayCareGenerateEgg
     $Trainer.party[$Trainer.party.length] = egg
   else
     $PokemonStorage.pbStoreCaught(egg)
-    Kernel.pbMessage(_INTL("The egg was transfered to the PC."))
+    Kernel.pbMessage(_INTL("The egg was transferred to the PC."))
   end
 end
 

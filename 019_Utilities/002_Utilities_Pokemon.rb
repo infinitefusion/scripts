@@ -168,7 +168,7 @@ def pbGenerateEgg(pkmn, obtain_text = "")
     $Trainer.party[$Trainer.party.length] = pkmn
   else
     $PokemonStorage.pbStoreCaught(pkmn)
-    Kernel.pbMessage(_INTL("The egg was transfered to the PC."))
+    Kernel.pbMessage(_INTL("The egg was transferred to the PC."))
   end
   return true
 end

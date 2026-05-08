@@ -345,8 +345,6 @@ module GameData
         body_entry = @body_pokemon.real_pokedex_entry.gsub(@body_pokemon.real_name, @real_name)
         head_entry = @head_pokemon.real_pokedex_entry.gsub(@head_pokemon.real_name, @real_name)
       end
-      echoln body_entry
-      echoln head_entry
       combined_entry = split_and_combine_text(body_entry, head_entry, ".")
       combined_entry += "." unless combined_entry.end_with?(".")
       return combined_entry

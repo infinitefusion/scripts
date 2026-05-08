@@ -228,7 +228,7 @@ class OverworldPokemonEvent < Game_Event
     return if instance_variable_get(:@_triggered)
     return if $PokemonTemp.overworld_wild_battle_triggered
     instance_variable_set(:@_triggered, true)
-    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) if @current_state == :NOTICED_PLAYER #notice animation already plays instead if the state is roaming
+    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) #unless @current_state == :NOTICED_PLAYER #notice animation already plays instead if the state is roaming
     turn_toward_player
     playCry(@species)
     @pokemon.ow_coordinates = [@x, @y]
