@@ -106,12 +106,14 @@ class PokemonEggHatch_Scene
     pbMEPlay("Evolution Success")
     @pokemon.name = nil
     pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
-    if pbConfirmMessage(
+    if $PokemonSystem.prompt_nicknames
+      if pbConfirmMessage(
         _INTL("Would you like to nickname the newly hatched {1}?", @pokemon.name)) { update }
-      nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", @pokemon.name),
-                                  0, Pokemon::MAX_NAME_SIZE, "", @pokemon, true)
-      @pokemon.name = nickname
-      @nicknamed = true
+        nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", @pokemon.name),
+                                      0, Pokemon::MAX_NAME_SIZE, "", @pokemon, true)
+        @pokemon.name = nickname
+        @nicknamed = true
+      end
     end
 
     if !$Trainer.pokedex.owned?(@pokemon.species)

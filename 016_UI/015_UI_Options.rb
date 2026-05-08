@@ -29,6 +29,7 @@ class PokemonSystem
   attr_accessor :overworld_encounters
   attr_accessor :encountered_music
   attr_accessor :random_sprites
+  attr_accessor :prompt_nicknames
 
   attr_accessor :no_reviving
   attr_accessor :no_healing_items_battles
@@ -64,7 +65,7 @@ class PokemonSystem
     @no_healing_items_battles = false
     @no_pokemon_center = false
     @random_sprites = true
-
+    @prompt_nicknames = true
   end
 end
 
