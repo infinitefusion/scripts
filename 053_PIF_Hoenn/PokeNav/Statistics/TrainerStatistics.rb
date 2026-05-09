@@ -8,6 +8,8 @@ class TrainerStatistics
   attr_accessor :pokemon_contests_won_category
   attr_accessor :pokemon_contests_won_rank
   attr_accessor :pokemon_contests_won_category_rank
+
+  attr_accessor :berries_planted
   def initialize
     @pokecenter_heals = 0
     @nb_trades = 0
@@ -16,6 +18,7 @@ class TrainerStatistics
 
     @nb_pokemon_defeated = 0
     @nb_pokemon_surprised = 0
+    @berries_planted = 0
     initializeContestStats
   end
 

@@ -358,6 +358,8 @@ def pbBerryPlant
                   $PokemonBag.pbDeleteItem(berry, 1)
                   pbMessage(_INTL("The {1} was planted in the soft, earthy soil.",
                                   GameData::Item.get(berry).name))
+                  $Trainer.stats.berries_planted = 0 unless $Trainer.stats.berries_planted
+                  $Trainer.stats.berries_planted +=1
                 end
               end
               interp.setVariable(berryData)

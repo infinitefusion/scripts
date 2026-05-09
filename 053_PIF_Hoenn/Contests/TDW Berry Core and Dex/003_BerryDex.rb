@@ -3,12 +3,12 @@
 #=============================================================================== 
 
 def pbToggleBerryDex(set = nil)
-    $player.initialize_berrydex if !$player.berrydex
-    $player.has_berrydex = set.nil? ? !$player.has_berrydex : set
+    $Trainer.initialize_berrydex if !$Trainer.berrydex
+    #$Trainer.has_berrydex = set.nil? ? !$Trainer.has_berrydex : set
 end
 
 def pbBerryDex
-    return if !pbCanViewBerryDex?
+    $Trainer.initialize_berrydex unless $Trainer.berrydex
     pbFadeOutIn {
         scene = PokemonBerrydex_Scene.new
         screen = PokemonBerrydexScreen.new(scene)
@@ -17,20 +17,20 @@ def pbBerryDex
 end
 
 def pbRegisterBerry(berry)
-    return $player.berrydex.register(berry)
+    return $Trainer.berrydex.register(berry)
 end
 
 def pbBerryRegistered?(berry)
-    return $player.berrydex.registered?(berry)
+    return $Trainer.berrydex.registered?(berry)
 end
 
 def pbBerryDexCount
-    return 0 if !$player.has_berrydex
-    return $player.berrydex.count
+    return $Trainer.berrydex.count
 end
 
 def pbCanViewBerryDex?
-    return $player.has_berrydex && pbBerryDexCount >= 1 && (Settings::ACCESS_BERRYDEX_SWITCH_ID <= 0 || $game_switches[Settings::ACCESS_BERRYDEX_SWITCH_ID])
+    echoln pbBerryDexCount
+    return pbBerryDexCount >= 1
 end
 
 def pbChooseBerry(var = 0)
@@ -60,7 +60,7 @@ class Player < Trainer
 
     def initialize_berrydex
         @berrydex       = Berrydex.new
-        @has_berrydex   = false
+        @has_berrydex   = true
     end
 
     def berrydex
@@ -82,7 +82,6 @@ class Player < Trainer
         end
 
         def register(berry)
-            return false if !$player.has_berrydex
             data = GameData::BerryData.try_get(berry)
             return false if !data
             return false if @registered[berry]
@@ -91,6 +90,7 @@ class Player < Trainer
         end
 
         def registered?(berry)
+            return false if berry.is_a?(Integer)
             berry = berry.id if !berry.is_a?(Symbol)
             return @registered[berry]
         end
@@ -155,8 +155,8 @@ end
 #     "description" => _INTL("Toggle possession of the Berrydex"),
 #     "effect"      => proc {
 #         pbToggleBerryDex
-#         pbMessage(_INTL("Gave Berrydex.")) if $player.has_berrydex
-#         pbMessage(_INTL("Lost Berrydex.")) if !$player.has_berrydex
+#         pbMessage(_INTL("Gave Berrydex.")) if $Trainer.has_berrydex
+#         pbMessage(_INTL("Lost Berrydex.")) if !$Trainer.has_berrydex
 #     }
 # })
 

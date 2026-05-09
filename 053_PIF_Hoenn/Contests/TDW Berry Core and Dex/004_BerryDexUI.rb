@@ -90,19 +90,24 @@ class PokemonBerrydex_Scene
         addBackgroundPlane(@sprites, "background", "Berrydex/bg_list", @viewport)
         @sprites["berrydex"] = Window_Berrydex.new(206, 30, 276, 364, @viewport)
         @sprites["itemicon"] = BerrydexItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
-        @sprites["itemicon"].setOffset(PictureOrigin::CENTER)
+        @sprites["itemicon"].setOffset(PictureOrigin::Center)
         @sprites["itemicon"].item = nil
         @sprites["itemicon"].x = 112
         @sprites["itemicon"].y = 196
         @sprites["unknownicon"] = IconSprite.new(48, Graphics.height - 48, @viewport)
         @sprites["unknownicon"].setBitmap("Graphics/Pictures/Berrydex/unknown")
-        @sprites["unknownicon"].ox = @sprites["unknownicon"].width / 2
-        @sprites["unknownicon"].oy = @sprites["unknownicon"].height / 2
+        @sprites["unknownicon"].ox = 24
+        @sprites["unknownicon"].oy = 24
         @sprites["unknownicon"].x = 112
         @sprites["unknownicon"].y = 196
         @sprites["unknownicon"].visible = false
         @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
         pbSetSystemFont(@sprites["overlay"].bitmap)
+
+        unless $PokemonGlobal.berrydexIndex
+            $PokemonGlobal.berrydexIndex = []
+            $PokemonGlobal.berrydexIndex[0] = 0
+        end
         pbRefreshDexList($PokemonGlobal.berrydexIndex[0])
         pbDeactivateWindows(@sprites)
         pbFadeInAndShow(@sprites)
@@ -159,15 +164,15 @@ class PokemonBerrydex_Scene
       iconberry = @sprites["berrydex"].berry
       iconberry = nil if !pbBerryRegistered?(iconberry)
       # Write various bits of text
-      dexname = _INTL("Berrydex")
+      dexname = _INTL("BerryDex")
       textpos = [
-        [dexname, Graphics.width / 2, 10, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+        [dexname, Graphics.width / 2, -4, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
       ]
       textpos.push([GameData::Item.get(iconberry).name, 112, 58, 2, base, shadow]) if iconberry
-      textpos.push([_INTL("Gathered:"), 42, 314, 0, base, shadow])
-      textpos.push([pbBerryDexCount.to_s, 182, 314, 1, base, shadow])
-      textpos.push([_INTL("Planted:"), 42, 346, 0, base, shadow])
-      textpos.push([$stats.berries_planted.to_s, 182, 346, 1, base, shadow])
+      textpos.push([_INTL("Gathered:"), 42, 300, 0, base, shadow])
+      textpos.push([pbBerryDexCount.to_s, 182, 300, 1, base, shadow])
+      textpos.push([_INTL("Planted:"), 42, 332, 0, base, shadow])
+      textpos.push([$Trainer.stats.berries_planted.to_s, 182, 332, 1, base, shadow])
       # Draw all text
       pbDrawTextPositions(overlay, textpos)
       # Set Pokémon sprite
@@ -266,7 +271,7 @@ class BerrydexInfo_Scene
         @sprites = {}
         @sprites["background"] = IconSprite.new(0, 0, @viewport)
         @sprites["itemicon"] = BerrydexItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
-        @sprites["itemicon"].setOffset(PictureOrigin::CENTER)
+        @sprites["itemicon"].setOffset(PictureOrigin::Center)
         @sprites["itemicon"].item = nil
         @sprites["itemicon"].x = 144
         @sprites["itemicon"].y = 134
@@ -632,27 +637,27 @@ class BerrydexItemIconSprite < Sprite
         return (self.bitmap && !self.bitmap.disposed?) ? self.bitmap.height : 0
     end
   
-    def setOffset(offset = PictureOrigin::CENTER)
+    def setOffset(offset = PictureOrigin::Center)
         @offset = offset
         changeOrigin
     end
   
     def changeOrigin
-        @offset = PictureOrigin::CENTER if !@offset
+        @offset = PictureOrigin::Center if !@offset
         case @offset
-        when PictureOrigin::TOP_LEFT, PictureOrigin::TOP, PictureOrigin::TOP_RIGHT
+        when PictureOrigin::TopLeft, PictureOrigin::Top, PictureOrigin::TopRight
             self.oy = 0
-        when PictureOrigin::LEFT, PictureOrigin::CENTER, PictureOrigin::RIGHT
+        when PictureOrigin::Left, PictureOrigin::Center, PictureOrigin::Right
             self.oy = self.height / 2
-        when PictureOrigin::BOTTOM_LEFT, PictureOrigin::BOTTOM, PictureOrigin::BOTTOM_RIGHT
+        when PictureOrigin::BottomLeft, PictureOrigin::Bottom, PictureOrigin::BottomRight
             self.oy = self.height
         end
         case @offset
-        when PictureOrigin::TOP_LEFT, PictureOrigin::LEFT, PictureOrigin::BOTTOM_LEFT
+        when PictureOrigin::TopLeft, PictureOrigin::Left, PictureOrigin::BottomLeft
             self.ox = 0
-        when PictureOrigin::TOP, PictureOrigin::CENTER, PictureOrigin::BOTTOM
+        when PictureOrigin::Top, PictureOrigin::Center, PictureOrigin::Bottom
             self.ox = self.width / 2
-        when PictureOrigin::TOP_RIGHT, PictureOrigin::RIGHT, PictureOrigin::BOTTOM_RIGHT
+        when PictureOrigin::TopRight, PictureOrigin::Right, PictureOrigin::BottomRight
             self.ox = self.width
         end
     end

@@ -28,6 +28,7 @@ class Pokenav
     :POKECHALLENGE => _INTL("PokéChallenge"), #Obtained at Slateport fan club
     :BOXLINK => _INTL("Box Link"),
     :FUSIONQUIZ => _INTL("Guess that Fusion!"),
+    :BERRYDEX => _INTL("BerryDex"),
 
     #To implement
     # Statistics  (shows you a bunch of statstics. nb of times you fused, nb of steps taken, etc.)
@@ -107,6 +108,8 @@ class PokemonPokegearScreen
         openBoxLinkApp
       elsif chosen == :FUSIONQUIZ
         openGuessThatFusionApp
+      elsif chosen == :BERRYDEX
+        pbBerryDex
         # elsif cmdPhone>=0 && cmd==cmdPhone
         #   pbFadeOutIn {
         #     PokemonPhoneScene.new.start
