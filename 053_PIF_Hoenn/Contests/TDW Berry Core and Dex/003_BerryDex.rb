@@ -107,7 +107,7 @@ end
 
 class PokemonBag
     alias tdw_berry_dex_bag_add pbStoreItem
-    def add(item, qty = 1)
+    def pbStoreItem(item, qty = 1)
         ret = tdw_berry_dex_bag_add(item, qty)
         item = item.id if !item.is_a?(Symbol)
         pbRegisterBerry(item) if ret && GameData::BerryData.try_get(item)

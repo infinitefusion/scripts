@@ -168,11 +168,11 @@ class PokemonBerrydex_Scene
       textpos = [
         [dexname, Graphics.width / 2, -4, 2, Color.new(248, 248, 248), Color.new(0, 0, 0)]
       ]
-      textpos.push([GameData::Item.get(iconberry).name, 112, 58, 2, base, shadow]) if iconberry
-      textpos.push([_INTL("Gathered:"), 42, 300, 0, base, shadow])
-      textpos.push([pbBerryDexCount.to_s, 182, 300, 1, base, shadow])
-      textpos.push([_INTL("Planted:"), 42, 332, 0, base, shadow])
-      textpos.push([$Trainer.stats.berries_planted.to_s, 182, 332, 1, base, shadow])
+      textpos.push([GameData::Item.get(iconberry).name, 112, 46, 2, base, shadow]) if iconberry
+      textpos.push([_INTL("Gathered:"), 42, 302, 0, base, shadow])
+      textpos.push([pbBerryDexCount.to_s, 182, 302, 1, base, shadow])
+      textpos.push([_INTL("Planted:"), 42, 334, 0, base, shadow])
+      textpos.push([$Trainer.stats.berries_planted.to_s, 182, 334, 1, base, shadow])
       # Draw all text
       pbDrawTextPositions(overlay, textpos)
       # Set Pokémon sprite
@@ -281,11 +281,11 @@ class BerrydexInfo_Scene
         @sprites["berry_plant_dirt"].visible = false
         @sprites["berry_plant"] = IconSprite.new(112, 108, @viewport)
         @sprites["berry_plant"].visible = false
-        if PluginManager.installed?("TDW Berry Planting Improvements","1.2") && pbBerryPreferredWeatherEnabled?
-            @sprites["weather_box"] = IconSprite.new(12, 268, @viewport)
-            @sprites["weather_box"].setBitmap(_INTL("Graphics/Pictures/Berrydex/preferred_weather_box"))
-            @sprites["weather_box"].visible = false
-        end
+        # if PluginManager.installed?("TDW Berry Planting Improvements","1.2") && pbBerryPreferredWeatherEnabled?
+        #     @sprites["weather_box"] = IconSprite.new(12, 268, @viewport)
+        #     @sprites["weather_box"].setBitmap(_INTL("Graphics/Pictures/Berrydex/preferred_weather_box"))
+        #     @sprites["weather_box"].visible = false
+        # end
         @sprites["uparrow"] = AnimatedSprite.new("Graphics/Pictures/uparrow", 8, 28, 40, 2, @viewport)
         @sprites["uparrow"].x = 242
         @sprites["uparrow"].y = 268
@@ -363,20 +363,20 @@ class BerrydexInfo_Scene
         end
         textpos = [
             [_INTL("{1}{2} {3}", indexText, " ", berry_item.name),
-            50, 48, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+            50, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
         ]
-        textpos.push([_INTL("Size"), 64, 200, 0, base, shadow])
-        textpos.push([_INTL("Firm"), 64, 232, 0, base, shadow])
+        textpos.push([_INTL("Size"), 64, 188, 0, base, shadow])
+        textpos.push([_INTL("Firm"), 64, 220, 0, base, shadow])
 
         size = berry_data.size
         if System.user_language[3..4] == "US"   # If the user is in the United States
             inches = (size / 2.54).round(1)
-            textpos.push([_ISPRINTF("{1:.1f}\"", inches), 210, 200, 1, base, shadow])
+            textpos.push([_ISPRINTF("{1:.1f}\"", inches), 210, 188, 1, base, shadow])
         else
-            textpos.push([_ISPRINTF("{1:.1f} cm", size), 220, 200, 1, base, shadow])
+            textpos.push([_ISPRINTF("{1:.1f} cm", size), 220, 188, 1, base, shadow])
         end
         firmness = berry_data.firmness
-        textpos.push([firmness, 244, 232, 1, base, shadow])
+        textpos.push([firmness, 244, 220, 1, base, shadow])
         max_flavor = berry_data.flavor.values.max
         berry_data.flavor.each { |key, value|
             if value >= max_flavor
@@ -395,6 +395,9 @@ class BerrydexInfo_Scene
     end
  
     def drawPagePlant
+        plant_sprite_width= 128
+        plant_sprite_height = 256
+
         @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Berrydex/bg_plant"))
         overlay = @sprites["overlay"].bitmap
         base   = Color.new(88, 88, 80)
@@ -418,34 +421,34 @@ class BerrydexInfo_Scene
         end
         textpos = [
             [_INTL("{1}{2} {3}", indexText, " ", berry_item.name),
-            50, 48, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
+            50, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
         ]
 
         filename = sprintf("berrytree_%s", berry_item.id.to_s)
         if pbResolveBitmap("Graphics/Characters/" + filename)
             @sprites["berry_plant"].setBitmap("Graphics/Characters/" + filename)
             @sprites["berry_plant"].src_rect.x = 0
-            @sprites["berry_plant"].src_rect.y = @sprites["berry_plant"].height*3/4
-            @sprites["berry_plant"].src_rect.width = @sprites["berry_plant"].width/4
-            @sprites["berry_plant"].src_rect.height = @sprites["berry_plant"].height/4
+            @sprites["berry_plant"].src_rect.y = plant_sprite_height*3/4
+            @sprites["berry_plant"].src_rect.width = plant_sprite_width/4#@sprites["berry_plant"].width/4
+            @sprites["berry_plant"].src_rect.height = plant_sprite_height/4#@sprites["berry_plant"].height/4
             @sprites["berry_plant"].zoom_x = @sprites["berry_plant"].zoom_y = 2
             @sprites["berry_plant"].visible = true
         else
             @sprites["berry_plant"].visible = false
         end
 
-        textpos.push([_INTL("Growth Time"), 286, 150, 0, base, shadow])
-        textpos.push([_INTL("Harvest"), 286, 184, 0, base, shadow])
-        textpos.push([_INTL("Dry Rate"), 286, 218, 0, base, shadow])
+        textpos.push([_INTL("Growth Time"), 286, 138, 0, base, shadow])
+        textpos.push([_INTL("Harvest"), 286, 172, 0, base, shadow])
+        textpos.push([_INTL("Dry Rate"), 286, 206, 0, base, shadow])
 
         time = plant_data.hours_per_stage * 4
-        textpos.push([_ISPRINTF("{1:d} hrs", time), 498, 150, 1, base, shadow])
+        textpos.push([_ISPRINTF("{1:d} hrs", time), 498, 138, 1, base, shadow])
 
-        harvest = plant_data.yield
-        textpos.push([_ISPRINTF("{1:d} - {2:d}", harvest[0], harvest[1]), 498, 184, 1, base, shadow])
+        harvest = [plant_data.minimum_yield,plant_data.maximum_yield]
+        textpos.push([_ISPRINTF("{1:d} - {2:d}", harvest[0], harvest[1]), 498, 172, 1, base, shadow])
 
         dry = pbGetDryRateName(plant_data.drying_per_hour)
-        textpos.push([dry, 498, 218, 1, base, shadow])
+        textpos.push([dry, 498, 206, 1, base, shadow])
 
         if @sprites["weather_box"]
             weather = berry_data.preferred_weather
