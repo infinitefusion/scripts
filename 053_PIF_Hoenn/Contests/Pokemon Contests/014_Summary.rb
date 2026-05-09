@@ -10,13 +10,10 @@
 
 
 class PokemonSummary_Scene
-	#Compatibility checks
-	BWSUMMARY = PluginManager.installed?("BW Summary Screen")
-
 	alias tdw_contests_summary_start_scene pbStartScene
-	def pbStartScene(party, partyindex, inbattle = false)
+	def pbStartScene(party, partyindex, inbattle = false, is_player = true)
 		@contestpage = false
-		tdw_contests_summary_start_scene(party, partyindex, inbattle)
+		tdw_contests_summary_start_scene(party, partyindex, inbattle, is_player)
 	end
 
 	alias tdw_contests_summary_page_three drawPageThree
@@ -25,18 +22,9 @@ class PokemonSummary_Scene
 			tdw_contests_summary_page_three
 		else
 			simple = PokeblockSettings::SIMPLIFIED_BERRY_BLENDING
-			noSheen = PokeblockSettings::DONT_USE_SHEEN
 			bargraph = (PluginManager.installed?("Better Bitmaps") ? PokeblockSettings::STATS_BAR_GRAPH : true)
-			if BWSUMMARY
-				if SUMMARY_B2W2_STYLE
-					@sprites["menuoverlay"].setBitmap("Graphics/Pictures/Summary/bg_3_contest_b2w2")
-				else
-					@sprites["menuoverlay"].setBitmap("Graphics/Pictures/Summary/bg_3_contest_bw")
-				end
-			else
-				@sprites["background"].setBitmap(sprintf("Graphics/Pictures/Summary/bg_3_contest")) 
-			end
-			pbCreateConditionBars(simple,noSheen,bargraph)
+			@sprites["background"].setBitmap(sprintf("Graphics/Pictures/Summary/bg_3_contest"))
+			pbCreateConditionBars(simple,bargraph)
 		end
 	end
 	
@@ -46,49 +34,30 @@ class PokemonSummary_Scene
 			tdw_contests_summary_page_four
 		else
 			overlay = @sprites["overlay"].bitmap
-			if BWSUMMARY
-				moveBase   = Color.new(255, 255, 255)
-				moveShadow = Color.new(123, 123, 123)
-				ppBase   = [moveBase,                # More than 1/2 of total PP
-						  Color.new(255, 214, 0),    # 1/2 of total PP or less
-						  Color.new(255, 115, 0),   # 1/4 of total PP or less
-						  Color.new(255, 8, 72)]    # Zero PP
-				ppShadow = [moveShadow,             # More than 1/2 of total PP
-						  Color.new(123, 99, 0),   # 1/2 of total PP or less
-						  Color.new(115, 57, 0),   # 1/4 of total PP or less
-						  Color.new(123, 8, 49)]   # Zero PP
-			else
-				moveBase   = Color.new(64, 64, 64)
-				moveShadow = Color.new(176, 176, 176)
-				ppBase   = [moveBase,                # More than 1/2 of total PP
-							Color.new(248, 192, 0),    # 1/2 of total PP or less
-							Color.new(248, 136, 32),   # 1/4 of total PP or less
-							Color.new(248, 72, 72)]    # Zero PP
-				ppShadow = [moveShadow,             # More than 1/2 of total PP
-							Color.new(144, 104, 0),   # 1/2 of total PP or less
-							Color.new(144, 72, 24),   # 1/4 of total PP or less
-							Color.new(136, 48, 48)]   # Zero PP
-			end
+			moveBase   = Color.new(64, 64, 64)
+			moveShadow = Color.new(176, 176, 176)
+			ppBase   = [moveBase,                # More than 1/2 of total PP
+						Color.new(248, 192, 0),    # 1/2 of total PP or less
+						Color.new(248, 136, 32),   # 1/4 of total PP or less
+						Color.new(248, 72, 72)]    # Zero PP
+			ppShadow = [moveShadow,             # More than 1/2 of total PP
+						Color.new(144, 104, 0),   # 1/2 of total PP or less
+						Color.new(144, 72, 24),   # 1/4 of total PP or less
+						Color.new(136, 48, 48)]   # Zero PP
 			@sprites["pokemon"].visible  = true
 			@sprites["pokeicon"].visible = false
 			@sprites["itemicon"].visible = true
 			textpos  = []
 			imagepos = []
 			# Write move names, types and PP amounts for each known move
-			if BWSUMMARY
-				xPos = 32
-				yPos = 76
-				yAdj = 12
-			else
-				xPos = 248
-				yPos = 104
-				yAdj = 0
-			end
+			xPos = 248
+			yPos = 92
+			yAdj = 0
 			Pokemon::MAX_MOVES.times do |i|
 			  move = @pokemon.moves[i]
 			  if move
 				type_number = GameData::Move.get(move.id).contest_type_position
-				imagepos.push(["Graphics/Pictures/Contest/contesttype", xPos, yPos + yAdj - 4, 0, type_number * 28, 64, 28])
+				imagepos.push(["Graphics/Pictures/Contest/contesttype", xPos, yPos + yAdj +8, 0, type_number * 28, 64, 28])
 				textpos.push([move.name, xPos+68, yPos + yAdj, 0, moveBase, moveShadow])
 				if move.total_pp > 0
 				  textpos.push([_INTL("PP"), xPos+94, yPos + yAdj + 32, 0, moveBase, moveShadow])
@@ -117,79 +86,37 @@ class PokemonSummary_Scene
 	def drawPageFourContestSelecting(move_to_learn)
 		overlay = @sprites["overlay"].bitmap
 		overlay.clear
-		if BWSUMMARY
-			base   = Color.new(255, 255, 255)
-			shadow = Color.new(123, 123, 123)
-			moveBase   = Color.new(255, 255, 255)
-			moveShadow = Color.new(123, 123, 123)
-			ppBase   = [moveBase,                # More than 1/2 of total PP
-					  Color.new(255, 214, 0),    # 1/2 of total PP or less
-					  Color.new(255, 115, 0),   # 1/4 of total PP or less
-					  Color.new(255, 8, 74)]    # Zero PP
-			ppShadow = [moveShadow,             # More than 1/2 of total PP
-					  Color.new(123, 99, 0),   # 1/2 of total PP or less
-					  Color.new(115, 57, 0),   # 1/4 of total PP or less
-					  Color.new(123, 8, 49)]   # Zero PP
-		else
-			base   = Color.new(248, 248, 248)
-			shadow = Color.new(104, 104, 104)
-			moveBase   = Color.new(64, 64, 64)
-			moveShadow = Color.new(176, 176, 176)
-			ppBase   = [moveBase,                # More than 1/2 of total PP
-						Color.new(248, 192, 0),    # 1/2 of total PP or less
-						Color.new(248, 136, 32),   # 1/4 of total PP or less
-						Color.new(248, 72, 72)]    # Zero PP
-			ppShadow = [moveShadow,             # More than 1/2 of total PP
-						Color.new(144, 104, 0),   # 1/2 of total PP or less
-						Color.new(144, 72, 24),   # 1/4 of total PP or less
-						Color.new(136, 48, 48)]   # Zero PP
-		end
+
+		base   = Color.new(248, 248, 248)
+		shadow = Color.new(104, 104, 104)
+		moveBase   = Color.new(64, 64, 64)
+		moveShadow = Color.new(176, 176, 176)
+		ppBase   = [moveBase,                # More than 1/2 of total PP
+					Color.new(248, 192, 0),    # 1/2 of total PP or less
+					Color.new(248, 136, 32),   # 1/4 of total PP or less
+					Color.new(248, 72, 72)]    # Zero PP
+		ppShadow = [moveShadow,             # More than 1/2 of total PP
+					Color.new(144, 104, 0),   # 1/2 of total PP or less
+					Color.new(144, 72, 24),   # 1/4 of total PP or less
+					Color.new(136, 48, 48)]   # Zero PP
+
 		# Set background image
 		if move_to_learn
 		  @sprites["background"].setBitmap("Graphics/Pictures/Summary/bg_learnmove")
 		else
-		  if BWSUMMARY
-		    if SUMMARY_B2W2_STYLE
-			  @sprites["menuoverlay"].setBitmap("Graphics/Pictures/Summary/bg_movedetail_B2W2")
-			else
-			  @sprites["menuoverlay"].setBitmap("Graphics/Pictures/Summary/bg_movedetail")
-			end
-		  else
 			@sprites["background"].setBitmap("Graphics/Pictures/Summary/bg_movedetail")
-		  end
 		end
 		# Write various bits of text
-		if BWSUMMARY
-			if move_to_learn || SUMMARY_B2W2_STYLE
-				textpos = [
-				  [_INTL("APPEAL"), 20, 128, 0, base, shadow],
-				  [_INTL("JAMMING"), 20, 160, 0, base, shadow]
-				]
-			else
-				textpos = [
-				  [_INTL("MOVES"), 26, 14, 0, base, shadow],
-				  [_INTL("APPEAL"), 20, 128, 0, base, shadow],
-				  [_INTL("JAMMING"), 20, 160, 0, base, shadow]
-				]
-			end
-		else
-			textpos = [
-			  [_INTL("MOVES"), 26, 22, 0, base, shadow],
-			  [_INTL("APPEAL"), 20, 128, 0, base, shadow],
-			  [_INTL("JAMMING"), 20, 160, 0, base, shadow]
-			]
-		end
+		textpos = [
+			[_INTL("MOVES"), 26, 10, 0, base, shadow],
+			[_INTL("APPEAL"), 20, 116, 0, base, shadow],
+			[_INTL("JAMMING"), 20, 148, 0, base, shadow]
+		]
 		imagepos = []
 		# Write move names, types and PP amounts for each known move
-		if BWSUMMARY
-			xPos = 260
-			yPos = 92
-			yAdj = 12
-		else
-			xPos = 248
-			yPos = 104
-			yAdj = 0
-		end
+		xPos = 248
+		yPos = 104
+		yAdj = -12
 		yPos -= 76 if move_to_learn
 		limit = (move_to_learn) ? Pokemon::MAX_MOVES + 1 : Pokemon::MAX_MOVES
 		limit.times do |i|
@@ -200,7 +127,7 @@ class PokemonSummary_Scene
 		  end
 		  if move
 			type_number = GameData::Move.get(move.id).contest_type_position
-			imagepos.push(["Graphics/Pictures/Contest/contesttype", xPos, yPos + yAdj - 4, 0, type_number * 28, 64, 28])
+			imagepos.push(["Graphics/Pictures/Contest/contesttype", xPos, yPos + yAdj + 8, 0, type_number * 28, 64, 28])
 			textpos.push([move.name, xPos + 68, yPos + yAdj, 0, moveBase, moveShadow])
 			if move.total_pp > 0
 			  textpos.push([_INTL("PP"), xPos + 94, yPos + yAdj + 32, 0, moveBase, moveShadow])
@@ -225,7 +152,7 @@ class PokemonSummary_Scene
 		pbDrawImagePositions(overlay, imagepos)
 		# Draw Pokémon's type icon(s)
 		@pokemon.types.each_with_index do |type, i|
-		  type_number = GameData::Type.get(type).icon_position
+			type_number = GameData::Type.get(type).id_number
 		  type_rect = Rect.new(0, type_number * 28, 64, 28)
 		  type_x = (@pokemon.types.length == 1) ? 130 : 96 + (70 * i)
 		  overlay.blt(type_x, 78, @typebitmap.bitmap, type_rect)
@@ -285,7 +212,7 @@ class PokemonSummary_Scene
 			  pbPlayDecisionSE
 			  dorefresh = pbOptions
 			end
-		  elsif Input.trigger?(Input::SPECIAL) 
+		  elsif Input.trigger?(Input::SPECIAL)
 			if @page == 3 && $game_switches[ContestSettings::CONTEST_INFO_IN_SUMMARY_SWITCH]
 			  @contestpage = !@contestpage
 			  pbPlayDecisionSE
@@ -410,7 +337,7 @@ class PokemonSummary_Scene
 			@sprites["movesel"].index = selmove
 			pbPlayCursorSE
 			drawSelectedMove(nil, @pokemon.moves[selmove])
-		  elsif Input.trigger?(Input::SPECIAL) 
+		  elsif Input.trigger?(Input::SPECIAL)
 			if @page == 3 && $game_switches[ContestSettings::CONTEST_INFO_IN_SUMMARY_SWITCH]
 			  @contestpage = !@contestpage
 			  pbPlayDecisionSE
@@ -460,7 +387,7 @@ class PokemonSummary_Scene
 			@sprites["movesel"].index = selmove
 			selected_move = (selmove == Pokemon::MAX_MOVES) ? new_move : @pokemon.moves[selmove]
 			drawSelectedMove(new_move, selected_move)
-		  elsif Input.trigger?(Input::SPECIAL) 
+		  elsif Input.trigger?(Input::SPECIAL)
 			if $game_switches[ContestSettings::CONTEST_INFO_IN_SUMMARY_SWITCH]
 			  @contestpage = !@contestpage
 			  pbPlayDecisionSE
@@ -480,20 +407,18 @@ class PokemonSummary_Scene
 				@sprites["#{arr[i]} bar"]&.dispose
 			}
 	end
-	
-	def pbCreateConditionBars(simple,noSheen,bargraph)
+
+	def pbCreateConditionBars(simple,bargraph)
 		pkmn = @pokemon
-		arr = ["Cool", "Beauty", "Cute", "Smart", "Tough", "Sheen"]
-		fea = [pkmn.cool, pkmn.beauty, pkmn.cute, pkmn.smart, pkmn.tough, pkmn.sheen]
+		arr = ["Cool", "Beauty", "Cute", "Smart", "Tough"]
+		fea = [pkmn.cool, pkmn.beauty, pkmn.cute, pkmn.smart, pkmn.tough]
 		imagepos = []
 		xBase = 236
 		xBaseAdj = 0
-		xBaseAdj = -228 if BWSUMMARY
 		xBase += xBaseAdj
-		yBase = ((simple || noSheen) ? 126 : 104)
+		yBase = (simple ? 114 : 104)
 		if bargraph
-			6.times { |i|
-				next if (simple || noSheen) && i == 5
+			5.times { |i|
 				overlay = @sprites["overlay"].bitmap
 				pbSetSmallFont(overlay)
 				textpos = []
@@ -503,58 +428,42 @@ class PokemonSummary_Scene
 				@sprites["#{arr[i]} bar"].src_rect.width = fea[i]
 				@sprites["#{arr[i]} bar"].x = xBase + 4
 				@sprites["#{arr[i]} bar"].y = yBase + 48 * i
-				@sprites["#{arr[i]} bar"].z=5
-				string = i < 5 ? ContestFunctions.getCategoryNameShort(i) : _INTL("Sheen")
+				@sprites["#{arr[i]} bar"].z = 5
+				string = _INTL(arr[i])
 				string_width = overlay.text_size(string).width
-				textpos.push([string, xBase, yBase - 18 + 48 * i, 0, Color.new(96, 96, 112), Color.new(240, 248, 248)])
+				textpos.push([string, xBase, yBase - 30 + 48 * i, 0, Color.new(96, 96, 112), Color.new(240, 248, 248)])
 				pbDrawTextPositions(overlay, textpos)
 				pbSetSystemFont(overlay)
-				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/Bar_bg",xBase,yBase + 48 * i])
-				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/max", xBase+string_width+4, @sprites["#{arr[i]} bar"].y-20]) if fea[i] >=255
+				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/Bar_bg", xBase, yBase + 48 * i])
+				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/max", xBase + string_width + 4, @sprites["#{arr[i]} bar"].y - 20]) if fea[i] >= 255
 			}
-		else				
-			pentagon_outline_color = Color.new(165,83,147)
+		else
+			pentagon_outline_color = Color.new(165, 83, 147)
 			pentagon_back_color = Color.white
-			pentagon_stat_color = Color.new(71,226,191)
+			pentagon_stat_color = Color.new(71, 226, 191)
 			graphX = xBase + 130
-			graphY = ((simple || noSheen) ? 120 : 104) + 110
+			graphY = (simple ? 120 : 104) + 110
 			@sprites["statsgraphbase"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-			pbDrawStatsPentagonBase(@sprites["statsgraphbase"],graphX,graphY,77,pentagon_outline_color,pentagon_back_color)
+			pbDrawStatsPentagonBase(@sprites["statsgraphbase"], graphX, graphY, 77, pentagon_outline_color, pentagon_back_color)
 			@sprites["statsgraph"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
 			@sprites["statsgraph"].opacity = 180
-			pbDrawStatsPentagon(@sprites["statsgraph"],[fea[0],fea[1],fea[2],fea[3],fea[4]],graphX,graphY,77,pentagon_stat_color)
-			xPos = [334,436,398,270,232]
-			yPos = [100,159,284,284,159]
+			pbDrawStatsPentagon(@sprites["statsgraph"], [fea[0], fea[1], fea[2], fea[3], fea[4]], graphX, graphY, 77, pentagon_stat_color)
+			xPos = [334, 436, 398, 270, 232]
+			yPos = [100, 159, 284, 284, 159]
 			5.times { |i|
 				x = xPos[i]
 				x += xBaseAdj
-				y = yPos[i] 
-				y += ((simple || noSheen) ? 16 : 0)
+				y = yPos[i]
+				y += (simple ? 16 : 0)
 				imagepos.push(["Graphics/Pictures/Contest/contesttype", x, y, 0, i * 28, 64, 28])
 				if fea[i] >= 255
-					x = [400,420,464,336,298][i]
+					x = [400, 420, 464, 336, 298][i]
 					x += xBaseAdj
-					y = [118,176,302,302,176][i]
-					y -= ((simple || noSheen) ? 0 : 16)
+					y = [118, 176, 302, 302, 176][i]
+					y -= (simple ? 0 : 16)
 					imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/max", x, y])
 				end
 			}
-			if !(simple || noSheen)	
-				barBitmap = AnimatedBitmap.new("Graphics/Pictures/Pokeblock/UI Pokeblock/Bar_Sheen")
-				@sprites["Sheen bar"] = Sprite.new(@viewport)
-				@sprites["Sheen bar"].bitmap = barBitmap.bitmap
-				@sprites["Sheen bar"].src_rect.width = fea[5]
-				@sprites["Sheen bar"].x = xBase + 4
-				@sprites["Sheen bar"].y = yBase + 48 * 5
-				@sprites["Sheen bar"].z=5
-				pbSetSmallFont(@sprites["overlay"].bitmap)
-				string_width = @sprites["overlay"].bitmap.text_size("Sheen").width
-				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/Bar_bg",xBase,yBase + 48 * 5])
-				imagepos.push(["Graphics/Pictures/Pokeblock/UI Pokeblock/max", xBase+string_width+4, @sprites["Sheen bar"].y-20]) if fea[5] >=255
-				textpos=[[_INTL("Sheen"), xBase, yBase - 18 + 48 * 5, 0, Color.new(96, 96, 112), Color.new(240, 248, 248)]]
-				pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
-				pbSetSystemFont(@sprites["overlay"].bitmap)
-			end
 		end
 		pbDrawImagePositions(@sprites["overlay"].bitmap, imagepos)
 	end
@@ -577,7 +486,7 @@ class MoveRelearner_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     @pokemon.types.each_with_index do |type, i|
-      type_number = GameData::Type.get(type).icon_position
+			type_number = GameData::Type.get(move.type).id_number
       type_rect = Rect.new(0, type_number * 28, 64, 28)
       type_x = (@pokemon.types.length == 1) ? 400 : 366 + (70 * i)
       overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
@@ -586,12 +495,12 @@ class MoveRelearner_Scene
       [_INTL("Teach which move?"), 16, 14, 0, Color.new(88, 88, 80), Color.new(168, 184, 184)]
     ]
     imagepos = []
-    yPos = 88
+    yPos = 64
     VISIBLEMOVES.times do |i|
       moveobject = @moves[@sprites["commands"].top_item + i]
       if moveobject
         moveData = GameData::Move.get(moveobject)
-        type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
+        type_number = GameData::Type.get(moveData.display_type(@pokemon)).id_number
         contest_type_number = GameData::ContestType.get(moveData.contest_type).icon_index
 		if @contestinfo
 			imagepos.push(["Graphics/Pictures/Contest/contesttype", 12, yPos - 4, 0, contest_type_number * 28, 64, 28])
@@ -616,8 +525,8 @@ class MoveRelearner_Scene
 	if @contestinfo
 		hearts = !selMoveData.contest_can_be_used? ? 0 : selMoveData.contest_hearts
 		jam = !selMoveData.contest_can_be_used? ? 0 : selMoveData.contest_jam
-		textpos.push([_INTL("APPEAL"), 272, 120, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-		textpos.push([_INTL("JAMMING"), 272, 152, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+		textpos.push([_INTL("APPEAL"), 272, 108, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
+		textpos.push([_INTL("JAMMING"), 272, 140, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
 	else
 		basedamage = selMoveData.display_damage(@pokemon)
 		category = selMoveData.display_category(@pokemon)
@@ -632,8 +541,8 @@ class MoveRelearner_Scene
 	end
     pbDrawTextPositions(overlay, textpos)
 	if @contestinfo
-		imagepos.push(["Graphics/Pictures/Contest/move_heart#{hearts}", 436, 116]) if hearts > 0
-		imagepos.push(["Graphics/Pictures/Contest/move_negaheart#{jam}", 436, 148]) if jam > 0
+		imagepos.push(["Graphics/Pictures/Contest/move_heart#{hearts}", 436, 104]) if hearts > 0
+		imagepos.push(["Graphics/Pictures/Contest/move_negaheart#{jam}", 436, 132]) if jam > 0
 	else
 		imagepos.push(["Graphics/Pictures/category", 436, 116, 0, category * 28, 64, 28])
 	end
@@ -667,7 +576,7 @@ class MoveRelearner_Scene
           return nil
         elsif Input.trigger?(Input::USE)
           return @moves[@sprites["commands"].index]
-		elsif Input.trigger?(Input::SPECIAL) 
+		elsif Input.trigger?(Input::SPECIAL)
 			if $game_switches[ContestSettings::CONTEST_INFO_IN_SUMMARY_SWITCH]
 			  @contestinfo = !@contestinfo
 			  pbPlayDecisionSE

@@ -30,7 +30,7 @@ module ContestSettings
 	# Set to the Switch ID that will be used to control whether or not contest info
 	# can be viewed in a Pokemon's Summary. Default is 80.
 	#--------------------------------------------------------------------------------
-	CONTEST_INFO_IN_SUMMARY_SWITCH 		= 80
+	CONTEST_INFO_IN_SUMMARY_SWITCH 		= 1996
 	
 	#--------------------------------------------------------------------------------
 	# When true, an ORAS style applause meter will be used. Otherwise, the classic

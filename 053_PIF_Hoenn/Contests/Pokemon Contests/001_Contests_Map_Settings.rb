@@ -35,7 +35,7 @@ module ContestSettings
 	#						2=down,4=left,6=right,8=up
 	# By default, it's [DEFAULT_LOBBY_MAP_ID, 1, 2, 2]
 	#--------------------------------------------------------------------------------
-	DEFAULT_RETURN_COORDINATES 	= [DEFAULT_LOBBY_MAP_ID, 12, 34, DIRECTION_UP] # [Lobby Map ID, x, y, facing direction] directions: 2=down,4=left,6=right,8=up
+	DEFAULT_RETURN_COORDINATES 	= [DEFAULT_LOBBY_MAP_ID, 11, 34, DIRECTION_UP] # [Lobby Map ID, x, y, facing direction] directions: 2=down,4=left,6=right,8=up
 
 	#--------------------------------------------------------------------------------
 	# Define the return coordinates for each contest based on rank and category.
@@ -89,10 +89,10 @@ module ContestSettings
 	#		  keep this as 9
 	#--------------------------------------------------------------------------------
 	ROOM_MAP_COORDINATES = [ 
-		[[110,21,11],nil,nil,nil,nil], # Normal: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,21,11],nil,nil,nil,nil], # Super: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,21,11],nil,nil,nil,nil], # Hyper: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,21,11],nil,nil,nil,nil] # Master: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,13,11],nil,nil,nil,nil], # Normal: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,13,11],nil,nil,nil,nil], # Super: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,13,11],nil,nil,nil,nil], # Hyper: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,13,11],nil,nil,nil,nil] # Master: Cool(default), Beauty, Cute, Smart, Tough
 	]
 	
 end

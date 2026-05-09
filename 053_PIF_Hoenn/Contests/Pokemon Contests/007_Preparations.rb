@@ -159,8 +159,6 @@ module ContestFunctions
 	def bringPlayerToContestHall(guideEvent)
 		map = $game_map.map_id
 		doors = $game_map.get_events_with_name("ContestDoor")
-		echoln guideEvent
-		echoln guideEvent.id
 		# Front Desk Guide
 		pbMoveRoute(guideEvent,[PBMoveRoute::Left,
 			PBMoveRoute::Left,PBMoveRoute::TurnDown])

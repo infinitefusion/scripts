@@ -519,12 +519,6 @@ class BerrydexInfo_Scene
                     dorefresh = true
                 when 2   # Plant
                     dorefresh = true
-        #           when 3   # Forms
-        #             if @available.length > 1
-        #               pbPlayDecisionSE
-        #               pbChooseForm
-        #               dorefresh = true
-        #             end
                 end 
             elsif Input.trigger?(Input::UP)
                 oldindex = @index

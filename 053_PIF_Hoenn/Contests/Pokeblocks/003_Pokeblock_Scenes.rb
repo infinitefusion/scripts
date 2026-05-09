@@ -393,7 +393,7 @@ class PokeblockCondition_Scene
 		pbCreateConditionBars
 		@sprites["background"] = IconSprite.new(0, 0, @viewport)
 		@sprites["pokemon"] = PokemonSprite.new(@viewport)
-		@sprites["pokemon"].setOffset(PictureOrigin::CENTER)
+		@sprites["pokemon"].setOffset(PictureOrigin::Center)
 		@sprites["pokemon"].x = 104
 		@sprites["pokemon"].y = 206
 		@sprites["pokemon"].setPokemonBitmap(@party[@index])
@@ -528,14 +528,7 @@ class PokeblockCondition_Scene
 			elsif statTotal >= 256 then fVal = 6
 			end #8
 		end
-		affection = pkmn.affection_level
-		aff = 0
-		case affection
-		when 2..3 then aff = 1
-		when 4 then aff = 2
-		when 5 then aff = 4
-		end
-		return fVal + aff
+		return fVal
 	end
 
 	def pbEndScene
@@ -786,7 +779,7 @@ class PokeblockEat_Scene
 		@sprites["background"].setBitmap(sprintf("Graphics/Pictures/Pokeblock/UI Pokeblock/eat_scene"))
 		#Pokemon
 		@sprites["pokemon"] = PokemonSprite.new(@viewport)
-		@sprites["pokemon"].setOffset(PictureOrigin::CENTER)
+		@sprites["pokemon"].setOffset(PictureOrigin::Center)
 		# @sprites["pokemon"].x = 104
 		# @sprites["pokemon"].y = 206
 		@sprites["pokemon"].setPokemonBitmap(@pokemon)

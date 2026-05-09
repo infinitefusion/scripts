@@ -29,6 +29,7 @@ class Player
 	end
 	
 	def hasPokeblocks?
+		@pokeblocks = [] if !@pokeblocks
 		return @pokeblocks.length > 0
 	end
 	
