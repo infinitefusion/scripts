@@ -295,6 +295,58 @@ module Compiler
     Graphics.update
   end
 
+  def compile_contest_moves
+    path = "PBS/movesx_contest.txt"
+    schema = GameData::Move::CONTEST_SCHEMA
+    move_contest_descriptions = []
+    move_contest_hash = nil
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 500 == 0
+      idx += 1
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [move_id]
+        # Add previous move's data to records
+        contestMovesMerge(move_contest_hash) if move_contest_hash
+        move_id = $~[1].to_sym
+        move_contest_hash = {:id => move_id }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !move_contest_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        property_value = $~[2]
+        if property_name == "ContestFunctionCode" && property_value.to_i_threedigit.to_s == property_value
+          Console.echo_warn _INTL("#{move_contest_hash[:id]} has an old integer function code (#{property_value}). It will be cleared if written to movesx_contest.txt.")
+        end
+        line_schema = schema[property_name]
+        next if !line_schema
+        next if property_name == "Name" #|| property_value.empty?
+        property_value = pbGetCsvRecord(property_value, line_no, line_schema)
+        # Record XXX=YYY setting
+        move_contest_hash[line_schema[0]] = property_value
+        move_contest_descriptions.push(move_contest_hash[:contest_description]) if property_name == "ContestDescription"
+      end
+    }
+    # Add last move's data to records
+    contestMovesMerge(move_contest_hash) if move_contest_hash
+    GameData::Move.save
+    MessageTypes.setMessagesAsHash(MessageTypes::MoveContestDescriptions, move_contest_descriptions)
+    #process_pbs_file_message_end
+  end
+
+  def contestMovesMerge(hash)
+    #GameData::Move.get(move_contest_hash[:id]).merge!(move_contest_hash) if move_contest_hash
+    original = GameData::Move.get(hash[:id])
+    original.contest_type = hash[:contest_type]
+    original.contest_hearts = hash[:contest_hearts]
+    original.contest_jam = hash[:contest_jam]
+    original.contest_function_code = hash[:contest_function_code]
+    original.contest_flags = hash[:contest_flags]
+    original.contest_flags = [original.contest_flags] if !original.contest_flags.is_a?(Array)
+    original.contest_description = hash[:contest_description]
+  end
+
   #=============================================================================
   # Compile item data
   #=============================================================================
@@ -369,6 +421,97 @@ module Compiler
     # Save all data
     GameData::BerryPlant.save
     Graphics.update
+  end
+
+  def compile_berry_data(path = "PBS/berry_data.txt")
+    GameData::BerryData::DATA.clear
+    schema = GameData::BerryData::SCHEMA
+    dex_descriptions = []
+    dex_firmness = []
+    item_hash = nil
+    old_format = nil
+    # Read each line of berry_data.txt at a time and compile it into a berry
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 250 == 0
+      idx += 1
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [item_id]
+        old_format = false if old_format.nil?
+        if old_format
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        # Add previous berry plant's data to records
+        GameData::BerryData.register(item_hash) if item_hash
+        # Parse item ID
+        item_id = $~[1].to_sym
+        if GameData::BerryData.exists?(item_id)
+          raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
+        end
+        # Construct item hash
+        item_hash = {
+          :id => item_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        old_format = true if old_format.nil?
+        if !item_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        item_hash[line_schema[0]] = property_value
+        if property_name == "Flavor"
+          item_hash[line_schema[0]] = {"Spicy" => property_value[0], "Dry" => property_value[1],
+                                       "Sweet" => property_value[2], "Bitter" => property_value[3], "Sour" => property_value[4],}
+        end
+        dex_descriptions.push(item_hash[:description]) if property_name == "Description"
+        dex_firmness.push(item_hash[:firmness]) if property_name == "Firmness"
+      end
+    }
+    # Add last berry plant's data to records
+    GameData::BerryData.register(item_hash) if item_hash
+    # Save all data
+    GameData::BerryData.save
+    MessageTypes.setMessagesAsHash(MessageTypes::BerryDexDescriptions, dex_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::BerryDexFirmness, dex_firmness)
+  end
+
+  def compile_berry_dexes(path = "PBS/berry_dexes.txt")
+    dex_lists = []
+    section = nil
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      Graphics.update if line_no % 200 == 0
+      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
+        section = $~[1].to_i
+        if dex_lists[section]
+          raise _INTL("Dex list number {1} is defined at least twice.\r\n{2}", section, FileLineData.linereport)
+        end
+        dex_lists[section] = []
+      else
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport) if !section
+        berry_list = line.split(",")
+        berry_list.each do |berry|
+          next if !berry || berry.empty?
+          s = GameData::BerryData.try_get(berry)
+          raise _INTL("Undefined berry constant name: {1}\r\nMake sure the berry is defined in PBS/berry_data.txt.\r\n{2}", berry, FileLineData.linereport) if !s
+          dex_lists[section].push(s)
+        end
+      end
+    }
+    # Check for duplicates
+    dex_lists.each_with_index do |list, index|
+      unique_list = list.uniq
+      next if list == unique_list
+      list.each_with_index do |s, i|
+        next if unique_list[i] == s
+        raise _INTL("Berrydex list number {1} has berry {2} listed twice.\r\n{3}", index, s, FileLineData.linereport)
+      end
+    end
+    # Save all data
+    save_data(dex_lists, "Data/berry_dexes.dat")
   end
 
   #=============================================================================

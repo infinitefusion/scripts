@@ -449,6 +449,14 @@ class Game_Map
     return nil
   end
 
+  def get_events_with_name(name)
+    events_with_name = []
+    for event in self.events.values
+      events_with_name << event if event.name.downcase == name.downcase
+    end
+    return events_with_name
+  end
+
   def display_x=(value)
     return if @display_x == value
     @display_x = value

@@ -137,6 +137,15 @@ UltimoSpriter<s>WesleyFG
 
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
 
+<title>Pokémon Contests script
+wrigty12<s>bo4p5687
+Marin<s>mej71
+Maruno<s>FL
+JV<s>Umbreon/Hansiec
+Radical Raptr<s>FL
+Luka S.J.<s>TastyRedTomato
+Chardub
+
 <title>"Pokémon Essentials" was created by:
 Flameguru
 Poccil (Peter O.)

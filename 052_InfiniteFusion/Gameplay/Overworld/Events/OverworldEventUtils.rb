@@ -671,3 +671,8 @@ def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
   end
 end
 
+def getRandomWonderTradeNames(number=1)
+  names= RandTrainerNames_female + RandTrainerNames_male
+  return names.sample(number)
+end
+

@@ -1,6 +1,13 @@
 class TrainerStatistics
   attr_accessor :pokecenter_heals
-
+  attr_accessor :pokemon_contests_participated_total
+  attr_accessor :pokemon_contests_participated_category
+  attr_accessor :pokemon_contests_participated_rank
+  attr_accessor :pokemon_contests_participated_category_rank
+  attr_accessor :pokemon_contests_won_total
+  attr_accessor :pokemon_contests_won_category
+  attr_accessor :pokemon_contests_won_rank
+  attr_accessor :pokemon_contests_won_category_rank
   def initialize
     @pokecenter_heals = 0
     @nb_trades = 0
@@ -9,8 +16,23 @@ class TrainerStatistics
 
     @nb_pokemon_defeated = 0
     @nb_pokemon_surprised = 0
+    initializeContestStats
   end
 
+  def initializeContestStats
+    @pokemon_contests_participated_total    ||= 0
+    @pokemon_contests_participated_category  ||= [0,0,0,0,0]
+    @pokemon_contests_participated_rank     ||= [0,0,0,0]
+    @pokemon_contests_participated_category_rank ||= [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    @pokemon_contests_won_total       ||= 0
+    @pokemon_contests_won_category      ||= [0,0,0,0,0]
+    @pokemon_contests_won_rank        ||= [0,0,0,0]
+    @pokemon_contests_won_category_rank   ||= [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+  end
+
+  def contest_stats_initialized?
+    !@pokemon_contests_participated_total.nil?
+  end
   def incr_nb_pokemon_surprised
     @nb_pokemon_surprised = 1 unless @nb_pokemon_surprised
     @nb_pokemon_surprised += 1

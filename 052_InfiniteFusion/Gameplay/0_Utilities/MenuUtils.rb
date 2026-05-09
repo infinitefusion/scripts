@@ -379,6 +379,7 @@ end
 def pbColor(color)
   # Mix your own colors: http://www.rapidtables.com/web/color/RGB_Color.htm
   return Color.new(0, 0, 0) if color == :BLACK
+  return Color.new(255, 255, 255) if color == :WHITE
   return Color.new(255, 115, 115) if color == :LIGHTRED
   return Color.new(245, 11, 11) if color == :RED
   return Color.new(164, 3, 3) if color == :DARKRED
