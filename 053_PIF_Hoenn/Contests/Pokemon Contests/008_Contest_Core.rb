@@ -3,14 +3,35 @@
 #====================================================================================
 
 class PokemonContest
+	attr_accessor :contestTrainers
+	attr_accessor :contestTrainerAppearances
 
 	def initEvents
 		@mcEvent = $game_map.get_events_with_name("MC")[0]
 		@judgeEvent = $game_map.get_events_with_name("Judge")[0]
 		@contestTrainers = $game_map.get_events_with_name("ContestTrainer")
+		@contestTrainerAppearances = initializeContestTrainerAppearances
 		@crowdNPCs = $game_map.get_events_with_name("Crowd")
 	end
-#====================================================================================
+	def initializeContestTrainerAppearances
+		appearances = []
+		@contestTrainers.each do |event|
+			echoln event.name
+			appearance = get_random_contest_trainer_appearance
+			sprite = get_spritecharacter_for_event(event.id)
+			sprite.setSpriteToAppearance(appearance)
+			appearances.push(appearance)
+		end
+		return appearances
+	end
+	def get_random_contest_trainer_appearance
+		appearance= get_random_appearance
+		#todo: Replace the hat & clothes by random hats/clothes of the correct contest category in higher ranks
+		return appearance
+	end
+
+
+	#====================================================================================
 #  Introduction Round
 #====================================================================================	
 	def pbIntroductionRound
@@ -118,26 +139,58 @@ class PokemonContest
 		pbWait(5)
 		viewport.dispose
 	end
-	
-	def showPokemonIntro(trainer,pokemon,map,position,vp)
+
+	def showPokemonIntro(trainer, pokemon, map, position, vp)
 		trainerName = trainer.name
 		pokemonName = pokemon.name
 		sprite = PokemonSprite.new(vp)
 		sprite.setPokemonBitmap(pokemon)
 		sprite.visible = false
+
+		appearance = @contestTrainerAppearances[position - 1]
+		if position < 4 #NPC
+			trainer_bitmap = generate_front_trainer_sprite_bitmap_from_appearance(appearance)
+		else #player
+			trainer_bitmap = generate_front_trainer_sprite_bitmap
+		end
+		trainer_bitmap.scale_bitmap(2)
+
 		pokemon.play_cry
 		if sprite.bitmap
-			iconWindow = PictureWindow.new(sprite.bitmap)
-			iconWindow.x = (Graphics.width - iconWindow.width) / 2
-			iconWindow.y = (Graphics.height - 96 - iconWindow.height)/2
-			pbMessage(_INTL("<ac>Entry Number {1}\n{2} & {3}</ac>",position,trainerName,pokemonName))
-			showCrowdHearts(pokemon,map)
+			poke_bmp    = sprite.bitmap
+			train_bmp   = trainer_bitmap.bitmap
+			padding     = 8
+			combined_width  = train_bmp.width + padding + poke_bmp.width
+			combined_height = [train_bmp.height, poke_bmp.height].max
+			combined_bitmap = Bitmap.new(combined_width, combined_height)
+
+			#Trainer sprite
+			trainer_x = 200
+			trainer_y = combined_height - train_bmp.height
+			combined_bitmap.blt(trainer_x, trainer_y, train_bmp, train_bmp.rect)
+
+			#Pokemon sprite
+			pokemon_x = (combined_width - poke_bmp.width) / 2 - 24
+			pokemon_y = combined_height - poke_bmp.height
+			combined_bitmap.blt(pokemon_x, pokemon_y, poke_bmp, poke_bmp.rect)
+
+			iconWindow = PictureWindow.new(combined_bitmap)
+			iconWindow.x = (Graphics.width  - iconWindow.width)  / 2
+			iconWindow.y = (Graphics.height - 96 - iconWindow.height) / 2
+			iconWindow.z = 100
+
+			pbMessage(_INTL("<ac>Entry Number {1}\n{2} & {3}</ac>", position, pokemonName, trainerName))
+
 			iconWindow.dispose
+			combined_bitmap.dispose
+			showCrowdHearts(pokemon, map)
 		else
-			pbMessage(_INTL("{1} & {2}",trainerName,pokemonName))
-			showCrowdHearts(pokemon,map)
+			pbMessage(_INTL("{1} & {2}", trainerName, pokemonName))
+			showCrowdHearts(pokemon, map)
 		end
+
 		sprite.dispose
+		trainer_bitmap.dispose
 	end
 	
 	def showCrowdHearts(pokemon,map)
@@ -147,7 +200,7 @@ class PokemonContest
 			[201,184,167,150,134,117,100,84],
 			[251,237,223,209,195,181,167,153]
 		][@rank]
-		val = [pokemon.cool, pokemon.beauty, pokemon.cute, pokemon.smart, pokemon.tough][@category]
+		val = [pokemon.beauty, pokemon.cool, pokemon.cute, pokemon.smart, pokemon.tough][@category]
 		hearts = 0
 		if ContestSettings::USE_SHEEN_FOR_INTRODUCTION_ROUND && !(PokeblockSettings::SIMPLIFIED_BERRY_BLENDING || PokeblockSettings::DONT_USE_SHEEN)
 			val = (val/2).round

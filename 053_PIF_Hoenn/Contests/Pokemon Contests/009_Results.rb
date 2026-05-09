@@ -143,7 +143,7 @@ class PokemonContestResults_Scene
 		position = @contest.winningPosition
 		trainerName = @contest.winningTrainer.name
 		pokemonName = @contest.winningPokemon.name
-		pbDisplay(_INTL("Entry Number {1}: {2} & {3}! Congratulations!",position,trainerName,pokemonName))
+		pbDisplay(_INTL("Entry Number {1}: {2} & {3}! Congratulations!",position,pokemonName,trainerName))
 	end
 	
 	def pbEndScene

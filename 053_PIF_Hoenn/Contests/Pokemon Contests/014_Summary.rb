@@ -12,7 +12,8 @@
 class PokemonSummary_Scene
 	alias tdw_contests_summary_start_scene pbStartScene
 	def pbStartScene(party, partyindex, inbattle = false, is_player = true)
-		@contestpage = false
+		@contestpage = $game_map.map_id == ContestSettings::DEFAULT_LOBBY_MAP_ID
+		echoln @contestpage
 		tdw_contests_summary_start_scene(party, partyindex, inbattle, is_player)
 	end
 
@@ -482,81 +483,7 @@ class MoveRelearner_Scene
 	tdw_contests_relearner_start_scene(pokemon, moves)
   end
 
-  def pbDrawMoveList
-    overlay = @sprites["overlay"].bitmap
-    overlay.clear
-    @pokemon.types.each_with_index do |type, i|
-			type_number = GameData::Type.get(move.type).id_number
-      type_rect = Rect.new(0, type_number * 28, 64, 28)
-      type_x = (@pokemon.types.length == 1) ? 400 : 366 + (70 * i)
-      overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
-    end
-    textpos = [
-      [_INTL("Teach which move?"), 16, 14, 0, Color.new(88, 88, 80), Color.new(168, 184, 184)]
-    ]
-    imagepos = []
-    yPos = 64
-    VISIBLEMOVES.times do |i|
-      moveobject = @moves[@sprites["commands"].top_item + i]
-      if moveobject
-        moveData = GameData::Move.get(moveobject)
-        type_number = GameData::Type.get(moveData.display_type(@pokemon)).id_number
-        contest_type_number = GameData::ContestType.get(moveData.contest_type).icon_index
-		if @contestinfo
-			imagepos.push(["Graphics/Pictures/Contest/contesttype", 12, yPos - 4, 0, contest_type_number * 28, 64, 28])
-		else
-			imagepos.push(["Graphics/Pictures/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
-		end
-        textpos.push([moveData.name, 80, yPos, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-        textpos.push([_INTL("PP"), 112, yPos + 32, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-        if moveData.total_pp > 0
-          textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, 1,
-                        Color.new(64, 64, 64), Color.new(176, 176, 176)])
-        else
-          textpos.push(["--", 230, yPos + 32, 1, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-        end
-      end
-      yPos += 64
-    end
-    imagepos.push(["Graphics/Pictures/reminderSel",
-                   0, 78 + ((@sprites["commands"].index - @sprites["commands"].top_item) * 64),
-                   0, 0, 258, 72])
-    selMoveData = GameData::Move.get(@moves[@sprites["commands"].index])
-	if @contestinfo
-		hearts = !selMoveData.contest_can_be_used? ? 0 : selMoveData.contest_hearts
-		jam = !selMoveData.contest_can_be_used? ? 0 : selMoveData.contest_jam
-		textpos.push([_INTL("APPEAL"), 272, 108, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-		textpos.push([_INTL("JAMMING"), 272, 140, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-	else
-		basedamage = selMoveData.display_damage(@pokemon)
-		category = selMoveData.display_category(@pokemon)
-		accuracy = selMoveData.display_accuracy(@pokemon)
-		textpos.push([_INTL("CATEGORY"), 272, 120, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-		textpos.push([_INTL("POWER"), 272, 152, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-		textpos.push([basedamage <= 1 ? basedamage == 1 ? "???" : "---" : sprintf("%d", basedamage),
-					  468, 152, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-		textpos.push([_INTL("ACCURACY"), 272, 184, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)])
-		textpos.push([accuracy == 0 ? "---" : "#{accuracy}%",
-					  468, 184, 2, Color.new(64, 64, 64), Color.new(176, 176, 176)])
-	end
-    pbDrawTextPositions(overlay, textpos)
-	if @contestinfo
-		imagepos.push(["Graphics/Pictures/Contest/move_heart#{hearts}", 436, 104]) if hearts > 0
-		imagepos.push(["Graphics/Pictures/Contest/move_negaheart#{jam}", 436, 132]) if jam > 0
-	else
-		imagepos.push(["Graphics/Pictures/category", 436, 116, 0, category * 28, 64, 28])
-	end
-    if @sprites["commands"].index < @moves.length - 1
-      imagepos.push(["Graphics/Pictures/reminderButtons", 48, 350, 0, 0, 76, 32])
-    end
-    if @sprites["commands"].index > 0
-      imagepos.push(["Graphics/Pictures/reminderButtons", 134, 350, 76, 0, 76, 32])
-    end
-    pbDrawImagePositions(overlay, imagepos)
-	description = (@contestinfo ? selMoveData.contest_description : selMoveData.description)
-    drawTextEx(overlay, 272, 216, 230, 5, description,
-               Color.new(64, 64, 64), Color.new(176, 176, 176))
-  end
+
 
   # Processes the scene
   def pbChooseMove

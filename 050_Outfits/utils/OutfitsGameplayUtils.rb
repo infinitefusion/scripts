@@ -445,8 +445,9 @@ def randomizePlayerOutfit()
   hair_color = [1,2,3,4].sample
   $Trainer.skin_tone = [1,2,3,4,5,6].sample
   $Trainer.hair = getFullHairId(hair_id,hair_color)
-
 end
+
+
 
 def select_hat()
   hats_list = $Trainer.unlocked_hats

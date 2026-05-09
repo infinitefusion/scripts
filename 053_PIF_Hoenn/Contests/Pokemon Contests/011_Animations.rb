@@ -7,6 +7,39 @@
 #====================================================================================	
 class PokemonContestTalent_Scene
 	def pbDisplayPokemon(position)
+		echoln @contest.roundOrder
+
+		# Always dispose and recreate, since round order may have changed
+		if @sprites["trainersprite#{position}"]
+			@sprites["trainersprite#{position}"].dispose
+			@sprites.delete("trainersprite#{position}")
+		end
+
+		pokemon = @contest.roundOrder[position - 1]
+		if pokemon == @contest.pokemonOne
+			original_index = 0
+		elsif pokemon == @contest.pokemonTwo
+			original_index = 1
+		elsif pokemon == @contest.pokemonThree
+			original_index = 2
+		else
+			original_index = nil
+		end
+
+		if original_index
+			appearance = @contest.contestTrainerAppearances[original_index]
+			bitmap = generate_front_trainer_sprite_bitmap_from_appearance(appearance)
+		else
+			bitmap = generate_front_trainer_sprite_bitmap
+		end
+
+		@sprites["trainersprite#{position}"] = IconSprite.new(0, 0, @viewport)
+		@sprites["trainersprite#{position}"].setBitmapDirectly(bitmap)
+		@sprites["trainersprite#{position}"].x = -140
+		@sprites["trainersprite#{position}"].y = 24
+		@sprites["trainersprite#{position}"].mirror = true
+		@sprites["trainersprite#{position}"].z = 50
+
 		@sprites["pokemonsprite#{position}"] = PokemonSprite.new(@viewport)
 		@sprites["pokemonsprite#{position}"].setPokemonBitmap(@contest.roundOrder[position-1], true)
 		@sprites["pokemonsprite#{position}"].setOffset
@@ -18,6 +51,7 @@ class PokemonContestTalent_Scene
 		@sprites["pokemonsprite#{position}"].y = yPos
 		10.times {
 			@sprites["pokemonsprite#{position}"].x -= 20
+			@sprites["trainersprite#{position}"].x += 10
 			Graphics.update
 			Input.update
 			pbUpdateSpriteHash(@sprites)
@@ -27,6 +61,7 @@ class PokemonContestTalent_Scene
 	def pbDismissPokemon(position)
 		10.times {
 			@sprites["pokemonsprite#{position}"].x += 20
+			@sprites["trainersprite#{position}"].x -= 10
 			Graphics.update
 			Input.update
 			pbUpdateSpriteHash(@sprites)

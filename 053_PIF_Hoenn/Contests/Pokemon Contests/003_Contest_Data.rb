@@ -156,6 +156,7 @@ class PokemonContest
 		end
 		#random default trainer
 		trainerInfo = ContestSettings::DEFAULT_TRAINERS[position].sample
+		trainerName = getRandomWonderTradeNames(1)[0]
 		cat_val = (ContestSettings::DEFAULT_PKMN_STAT_RANDOM ? 10 + rand(ContestSettings::DEFAULT_PKMN_STAT_VALUE[@rank]-10) :
 			ContestSettings::DEFAULT_PKMN_STAT_VALUE[@rank])
 		sheen_val = (ContestSettings::DEFAULT_PKMN_SHEEN_RANDOM ? 10 + rand(ContestSettings::DEFAULT_PKMN_SHEEN_VALUE[@rank]-10) :
@@ -182,7 +183,7 @@ class PokemonContest
 			:id  				=> ("Trainer"+(position+1).to_s).to_sym,
 			:contest_category 	=> ContestFunctions.getCategoryNameShort(@category),
 			:contest_rank 		=> ContestFunctions.getRankNameShort(@rank),
-			:name 				=> trainerInfo[0],
+			:name 				=> trainerName,
 			:character_sprite 	=> trainerInfo[1],
 			:trainer_sprite 	=> trainerInfo[2],
 			:pokemon_species 	=> species,

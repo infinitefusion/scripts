@@ -9,7 +9,10 @@ def pbPokemonContest(rank: nil, category: nil, pokemon: nil)
 	receptionistEvent = $game_map.get_events_with_name("Receptionist").first
 	pbPrepPokemonContest(rank, category, pokemon, receptionistEvent)
 	return if !$PokemonGlobal.pokemonContest
+	ContestFunctions.bringPlayerToContestHall(receptionistEvent)
 	pbCurrentPokemonContest.initEvents
+	pbScrollMap(8, 2, 4)
+	pbScrollMap(4, 3, 4)
 	pbCurrentPokemonContest.pbIntroductionRound
 	pbCurrentPokemonContest.pbTalentRound
 	pbCurrentPokemonContest.pbResults
@@ -130,9 +133,8 @@ def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist
 	pbCallBubDown(2,event_id)
 	pbMessage(_INTL("Okay, your {1} will be entered in this Contest.", $Trainer.party[pokemon].name))
 	pbCallBubDown(2,event_id)
-	pbMessage(_INTL("{1} is Entry Number 4. The Contest will begin shortly.", $Trainer.party[pokemon].name))	
+	pbMessage(_INTL("{1} is Entry Number 4. The Contest will begin shortly.", $Trainer.party[pokemon].name))
 	pbCurrentPokemonContest.set(rank, category, pokemon, ContestFunctions.getHallMapInfo(rank, category), ContestFunctions.getReturnMapInfo(rank, category))
-	ContestFunctions.bringPlayerToContestHall(receptionist_event)
 	return true
 end
 
@@ -184,10 +186,10 @@ module ContestFunctions
 		pbWaitForCharacterMove($game_player)
 		hallInfo = pbCurrentPokemonContest.hallMapInfo
 		self.transfer(*hallInfo,8)
-		pbScrollMap(8, 2, 4)
-		pbScrollMap(4, 3, 4)
+		$scene.reset_map(true)
 	end
-	
+
+
 	def bringPlayerToLobby
 		returnInfo = pbCurrentPokemonContest.returnMapInfo
 		self.transfer(*returnInfo)
@@ -297,51 +299,62 @@ def pbContestCatShortName(int,spaceAfter=false)
 	return ContestFunctions.getCategoryNameShort(int,spaceAfter)
 end
 
-class ContestTrainerSprite
-	def initialize(event, map, _viewport)
-		@event     = event
-		@id		   = event.id
-		@map       = map
-		@disposed  = false
-		@event.character_name = ""
-		set_event_graphic   # Set the event's graphic
-	end
+# class ContestTrainerSprite
+# 	def initialize(event, map, _viewport)
+# 		@event     = event
+# 		@id		   = event.id
+# 		@map       = map
+# 		@disposed  = false
+# 		@event.character_name = ""
+# 		set_event_graphic   # Set the event's graphic
+# 	end
+#
+# 	def dispose
+# 		@event    = nil
+# 		@map      = nil
+# 		@disposed = true
+# 	end
+#
+# 	def disposed?
+# 		@disposed
+# 	end
+#
+# 	def set_event_graphic
+# 		if @id == @contestTrainers[0].id
+# 			@event.character_name = pbCurrentPokemonContest.trainerOne.character_sprite
+# 		elsif @id == @contestTrainers[1].id
+# 			@event.character_name = pbCurrentPokemonContest.trainerTwo.character_sprite
+# 		elsif @id == @contestTrainers[2].id
+# 			@event.character_name = pbCurrentPokemonContest.trainerThree.character_sprite
+# 		end
+# 	end
+#
+# 	def randomize_contest_trainer_appearance(event_id)
+# 		sprite = get_spritecharacter_for_event(event_id)
+# 		appearance= get_random_appearance
+#
+# 		#todo: Replace the hat & clothes by random hats/clothes of the correct contest category in higher ranks
+#
+# 		sprite.setSpriteToAppearance(appearance)
+# 		echoln "set appearance for #{event_id}"
+# 	end
+#
+# 	def update
+# 		set_event_graphic
+# 	end
+# end
 
-	def dispose
-		@event    = nil
-		@map      = nil
-		@disposed = true
-	end
-
-	def disposed?
-		@disposed
-	end
-
-	def set_event_graphic
-		if @id == @contestTrainers[0].id
-			@event.character_name = pbCurrentPokemonContest.trainerOne.character_sprite
-		elsif @id == @contestTrainers[1].id
-			@event.character_name = pbCurrentPokemonContest.trainerTwo.character_sprite
-		elsif @id == @contestTrainers[2].id
-			@event.character_name = pbCurrentPokemonContest.trainerThree.character_sprite
-		end
-	end
-
-	def update
-		set_event_graphic
-	end
-end
-
-
-Events.onSpritesetCreate += proc { |_sender,e|
-	proc { |spriteset, viewport|
-		map = spriteset.map
-		map.events.each do |event|
-			next if !event[1].name[/contesttrainer/i]
-			spriteset.addUserSprite(ContestTrainerSprite.new(event[1], map, viewport))
-		end
-	}
-}
+#
+# Events.onSpritesetCreate += proc { |_sender,e|
+# 	proc { |spriteset, viewport|
+# 		map = spriteset.map
+# 		map.events.each do |event|
+# 			next if !event[1].name[/contesttrainer/i]
+# 			echoln "on spritesetcreate"
+# 			spriteset.addUserSprite(ContestTrainerSprite.new(event[1], map, viewport))
+# 		end
+# 	}
+# }
 
 
 # EventHandlers.add(:on_new_spriteset_map, :add_contest_trainer_graphics,
