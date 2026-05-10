@@ -408,17 +408,25 @@ def generate_appearance_from_name(name)
 
 end
 
-def get_random_appearance()
+def get_random_appearance(include_hat2=true, hat_dye_chance=30, clothes_dye_chance=30,hair_dye_chance=30)
   hat = $PokemonGlobal.hats_data.keys.sample
-  hat2 = $PokemonGlobal.hats_data.keys.sample
-  hat2 = nil if(rand(3)==0)
+  if include_hat2
+    hat2 = $PokemonGlobal.hats_data.keys.sample
+    hat2 = nil if(rand(3)==0)
+  end
 
   clothes = $PokemonGlobal.clothes_data.keys.sample
-  hat_color = rand(2)==0 ? rand(255) : 0
-  hat2_color = rand(2)==0 ? rand(255) : 0
+  if rand(100) <= hat_dye_chance
+    hat_color = rand(2)==0 ? rand(255) : 0
+    hat2_color = rand(2)==0 ? rand(255) : 0
+  end
+  if rand(100) <= clothes_dye_chance
+    clothes_color = rand(2)==0 ? rand(255) : 0
+  end
 
-  clothes_color = rand(2)==0 ? rand(255) : 0
-  hair_color =  rand(2)==0 ? rand(255) : 0
+  if rand(100) <= hair_dye_chance
+    hair_color =  rand(2)==0 ? rand(255) : 0
+  end
 
   hair_id = $PokemonGlobal.hairstyles_data.keys.sample
   hair_color = [1,2,3,4].sample
@@ -427,6 +435,28 @@ def get_random_appearance()
 
   return TrainerAppearance.new(skin_tone,hat,clothes, hair,
                                hair_color, clothes_color, hat_color,hat2)
+end
+
+def get_random_hat_contest(contest_condition,max_attempts=20)
+  current_attempt = 0
+  while current_attempt < max_attempts
+    hat_id = $PokemonGlobal.hats_data.keys.sample
+    hat = $PokemonGlobal.hats_data[hat_id]
+    return hat.id if (hat.contest_condition.include?(contest_condition.downcase))
+    current_attempt += 1
+  end
+  return hat.id
+end
+
+def get_random_clothes_contest(contest_condition,max_attempts=20)
+  current_attempt = 0
+  while current_attempt < max_attempts
+    clothes_id = $PokemonGlobal.clothes_data.keys.sample
+    clothes = $PokemonGlobal.clothes_data[clothes_id]
+    return clothes.id if (clothes.contest_condition.include?(contest_condition.downcase))
+    current_attempt += 1
+  end
+  return clothes.id
 end
 
 def randomizePlayerOutfit()

@@ -7,8 +7,6 @@
 #====================================================================================	
 class PokemonContestTalent_Scene
 	def pbDisplayPokemon(position)
-		echoln @contest.roundOrder
-
 		# Always dispose and recreate, since round order may have changed
 		if @sprites["trainersprite#{position}"]
 			@sprites["trainersprite#{position}"].dispose

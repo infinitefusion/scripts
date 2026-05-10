@@ -9,6 +9,7 @@ class Outfit
   attr_accessor :is_in_regional_set
   attr_accessor :is_in_city_exclusive_set
 
+  attr_accessor :contest_condition
 
 
 
@@ -26,7 +27,7 @@ class Outfit
     CITY_OUTFIT_TAGS.any? { |city| tags.include?(city) }
   end
 
-  def initialize(id, name, description = '',price=0, tags = [], store_locations = [])
+  def initialize(id, name, description = '',price=0, tags = [], store_locations = [], contest_conditions = [])
     @id = id
     @name = name
     @description = description
@@ -36,6 +37,7 @@ class Outfit
     @is_in_regional_set = check_if_regional_set(tags)
     @is_in_city_exclusive_set = check_if_city_set(tags)
     @store_location = store_locations
+    @contest_condition = contest_conditions
   end
 
   def trainer_sprite_path()

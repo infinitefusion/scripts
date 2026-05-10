@@ -15,8 +15,8 @@ class PokemonContest
 	end
 	def initializeContestTrainerAppearances
 		appearances = []
+		update_global_outfit_lists
 		@contestTrainers.each do |event|
-			echoln event.name
 			appearance = get_random_contest_trainer_appearance
 			sprite = get_spritecharacter_for_event(event.id)
 			sprite.setSpriteToAppearance(appearance)
@@ -24,11 +24,15 @@ class PokemonContest
 		end
 		return appearances
 	end
+
+	CONTEST_CONDITIONS = ["beautiful","cool","cute","clever","tough"]
 	def get_random_contest_trainer_appearance
-		appearance= get_random_appearance
-		#todo: Replace the hat & clothes by random hats/clothes of the correct contest category in higher ranks
+		appearance= get_random_appearance(false,20,10,30)
+		appearance.hat = get_random_hat_contest(CONTEST_CONDITIONS[@category])
+		appearance.clothes = get_random_clothes_contest(CONTEST_CONDITIONS[@category])
 		return appearance
 	end
+
 
 
 	#====================================================================================
@@ -188,11 +192,44 @@ class PokemonContest
 			pbMessage(_INTL("{1} & {2}", trainerName, pokemonName))
 			showCrowdHearts(pokemon, map)
 		end
-
 		sprite.dispose
 		trainer_bitmap.dispose
+		unless pokemon.hat.nil?
+			current_category_name = CONTEST_CONDITIONS[@category]
+			pokemon_hat_categories = get_hat_contest_tags(pokemon.hat)
+
+			if pokemon_hat_categories.include?(current_category_name)
+				pbCallBub(1, @crowdNPCs.sample.id)
+				pbMessage(_INTL("Oh! It's wearing a {1} hat!", current_category_name))
+
+				trainer_hat_categories    = get_hat_contest_tags($Trainer.hat)
+				trainer_hat2_categories   = get_hat_contest_tags($Trainer.hat2)
+				trainer_clothes_categories = get_clothes_contest_tags($Trainer.clothes)
+
+				hat_match     = trainer_hat_categories.include?(current_category_name) ||
+					trainer_hat2_categories.include?(current_category_name)
+				clothes_match = trainer_clothes_categories.include?(current_category_name)
+
+				bonus = 40
+				if hat_match && clothes_match
+					pbCallBub(1, @crowdNPCs.sample.id)
+					pbMessage(_INTL("It matches its Trainer's outfit wonderfully!"))
+					bonus += 80
+				elsif hat_match
+					pbCallBub(1, @crowdNPCs.sample.id)
+					pbMessage(_INTL("It matches its Trainer's!"))
+					bonus += 40
+				elsif clothes_match
+					pbCallBub(1, @crowdNPCs.sample.id)
+					pbMessage(_INTL("It goes well with its Trainer's clothes!"))
+					bonus += 40
+				end
+
+				pokemon.contestVariables["Intro Score"] += bonus
+			end
+		end
 	end
-	
+
 	def showCrowdHearts(pokemon,map)
 		req = [ #Min requirement for each heart values, [8,7,6,5,4,3,2,1]
 			[81,71,61,51,41,31,21,11],
@@ -351,7 +388,6 @@ class PokemonContestTalent_Scene
 			
 			pbHideApplauseMeter
 			4.times { |i|
-				echoln @currentPosition
 				@currentPosition=i+1
 				pbDisplayPokemon(@currentPosition)
 				pbWait(20)

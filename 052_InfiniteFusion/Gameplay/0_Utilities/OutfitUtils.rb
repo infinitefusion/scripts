@@ -187,6 +187,16 @@ def purchaseWindowAnimation(price, msgwindow,goldwindow)
   goldwindow.dispose
 end
 
+def get_hat_contest_tags(hat_id)
+  hat = $PokemonGlobal.hats_data[hat_id]
+  return hat&.contest_condition
+end
+
+def get_clothes_contest_tags(clothes_id)
+  clothes = $PokemonGlobal.clothes_data[clothes_id]
+  return clothes&.contest_condition
+end
+
 def isWearingTeamAquaOutfit()
   return false if !$game_switches[SWITCH_JOINED_TEAM_AQUA]
   return isWearingClothes(CLOTHES_TEAM_AQUA_F) || isWearingClothes(CLOTHES_TEAM_AQUA_M)

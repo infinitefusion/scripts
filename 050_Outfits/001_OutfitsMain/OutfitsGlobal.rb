@@ -24,6 +24,7 @@ def update_global_hats_list()
     pokemonTags.each do |tag|
       tags << "pokemon-#{tag.downcase}"
     end
+    contest_conditions = data['contestcondition'] ? data['contestcondition'].split(',').map(&:strip) : []
 
     hat = Hat.new(
       data['id'],
@@ -31,7 +32,8 @@ def update_global_hats_list()
       data['description'],
       data['price'],
       tags,
-      storeLocations
+      storeLocations,
+      contest_conditions
     )
     $PokemonGlobal.hats_data[hat.id] = hat
   end
@@ -88,13 +90,15 @@ def update_global_clothes_list()
     pokemonTags.each do |tag|
       tags << "pokemon-#{tag.downcase}"
     end
+    contest_conditions = data['contestcondition'] ? data['contestcondition'].split(',').map(&:strip) : []
     outfit = Clothes.new(
       data['id'],
       data['name'],
       data['description'],
       data['price'],
       tags,
-      storeLocations
+      storeLocations,
+      contest_conditions
     )
     $PokemonGlobal.clothes_data[outfit.id] = outfit
   end
