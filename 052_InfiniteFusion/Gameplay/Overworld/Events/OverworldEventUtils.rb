@@ -676,3 +676,7 @@ def getRandomWonderTradeNames(number=1)
   return names.sample(number)
 end
 
+def getRandomUnisexName
+  return RandTrainerNames_unisex.sample
+end
+

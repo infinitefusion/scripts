@@ -156,7 +156,7 @@ class PokemonContest
 		end
 		#random default trainer
 		trainerInfo = ContestSettings::DEFAULT_TRAINERS[position].sample
-		trainerName = getRandomWonderTradeNames(1)[0]
+		trainerName = getRandomUnisexName
 		cat_val = (ContestSettings::DEFAULT_PKMN_STAT_RANDOM ? 10 + rand(ContestSettings::DEFAULT_PKMN_STAT_VALUE[@rank]-10) :
 			ContestSettings::DEFAULT_PKMN_STAT_VALUE[@rank])
 		sheen_val = (ContestSettings::DEFAULT_PKMN_SHEEN_RANDOM ? 10 + rand(ContestSettings::DEFAULT_PKMN_SHEEN_VALUE[@rank]-10) :

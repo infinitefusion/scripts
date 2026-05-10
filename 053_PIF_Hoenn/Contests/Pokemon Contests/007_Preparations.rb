@@ -47,7 +47,7 @@ def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist
 		rankName = ContestFunctions.getRankName(rank,true)
 		catName = ContestFunctions.getCategoryName(category,true)
 		pbCallBubDown(2,event_id)
-		pbMessage(_INTL("We're currently accepting registrations for {1}{2}Pokémon Contests.",rankName,catName))
+		pbMessage(_INTL("We're currently accepting registrations for \\C[1]{1}{2}\\C[0]Pokémon Contests.",rankName,catName))
 		pbCallBubDown(2,event_id)
 		choice = pbMessage(_INTL("Would you like to enter your Pokémon in a {1}{2}Contest?",rankName,catName),cmds,-1)	
 	else

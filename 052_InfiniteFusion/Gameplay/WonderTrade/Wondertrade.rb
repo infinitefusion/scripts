@@ -115,7 +115,7 @@ def pbWonderTrade(lvl, except = [], except2 = [], premiumWonderTrade = true)
         end
       end
     end
-    randTrainerNames = RandTrainerNames_male + RandTrainerNames_female + RandTrainerNames_others
+    randTrainerNames = RandTrainerNames_male + RandTrainerNames_female + RandTrainerNames_others + RandTrainerNames_unisex
     #tname = randTrainerNames[rand(randTrainerNames.size)] # Randomizes Trainer Names
     pname = RandPokeNick[rand(RandPokeNick.size)] # Randomizes Pokemon Nicknames
 
