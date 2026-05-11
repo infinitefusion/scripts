@@ -51,6 +51,7 @@ class PokemonContest
 		pbWaitForCharacterMove(@mcEvent)
 		rankName = ContestFunctions.getRankName(rank,true)
 		catName = ContestFunctions.getCategoryName(category,true)
+		pbScrollMap(DIRECTION_UP, 2, 4)
 		pbCallBub(2,mcEventId)
 		pbMessage(_INTL("Hello! We're just getting started with a {1}{2}Pokémon Contest.",rankName,catName))
 		pbCallBub(2,mcEventId)
@@ -101,8 +102,8 @@ class PokemonContest
 			PBMoveRoute::Right,PBMoveRoute::Down,PBMoveRoute::TurnUp
 		])
 		pbWaitForCharacterMove(trainerThreeEvent)
-		pbScrollMap(2, 2, 4)
-		pbScrollMap(6, 3, 4)
+		pbScrollMap(DIRECTION_DOWN, 2, 4)
+		pbScrollMap(DIRECTION_RIGHT, 3, 4)
 		pbMoveRoute($game_player,[
 			PBMoveRoute::Up,PBMoveRoute::Left,PBMoveRoute::Left,
 			PBMoveRoute::Left,PBMoveRoute::TurnUp
@@ -117,8 +118,8 @@ class PokemonContest
 			PBMoveRoute::Down,PBMoveRoute::TurnUp
 		])
 		pbWaitForCharacterMove($game_player)
-		pbScrollMap(4, 3, 4)
-		pbScrollMap(8, 2, 4)
+		pbScrollMap(DIRECTION_LEFT, 3, 4)
+		pbScrollMap(DIRECTION_UP, 2, 4)
 		#MC
 		pbCallBub(2,mcEventId)
 		pbMessage(_INTL("We've just seen the four Pokémon contestants."))

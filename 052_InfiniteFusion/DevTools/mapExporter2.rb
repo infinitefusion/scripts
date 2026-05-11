@@ -2,21 +2,25 @@
 EXPORT_EXCEPT_MAP_IDS= [768,722,723,724,720,809,816]
 
 def exportAllMaps
-  for id in 1..109
+  (1..800).each do |id|
+    next if EXPORT_EXCEPT_MAP_IDS.include?(id)
+    next if !pbRgssExists?("Data/Map%03d.rxdata" % id)
     begin
-      MapExporter.export(id, [:Events]) if !EXPORT_EXCEPT_MAP_IDS.include?(id)
-    rescue
-      echo "error in " +(id.to_s) +"\n"
+      MapExporter.export(id, [:Events])
+    rescue => e
+      echo "error in #{id}: #{e.message}\n"
     end
   end
 end
 
 def exportSpecificMaps(maps_to_export)
-  for id in maps_to_export
+  maps_to_export.each do |id|
+    next if !pbRgssExists?("Data/Map%03d.rxdata" % id)
     begin
       MapExporter.export(id, [:Events])
-    rescue
-      echo "error in " +(id.to_s) +"\n"
+    rescue => e
+      echo "error in #{id}: #{e.message}\n"
+      next
     end
   end
 end
@@ -34,7 +38,7 @@ module MapExporter
     begin
       @@map = $MapFactory.getMapForExport(map_id)
     rescue
-      error("Map #{map_id} (#{map_name}) could not be loaded.")
+      echoln "Map #{map_id} (#{map_name}) could not be loaded."
     end
     @@bitmap = Bitmap.new(@@map.width * Game_Map::TILE_HEIGHT, @@map.height * Game_Map::TILE_WIDTH)
     @@helper = TileDrawingHelper.fromTileset($data_tilesets[@@map.tileset_id])
@@ -506,8 +510,7 @@ module MapExporter
 
   def error(message)
     emessage = "Map Exporter EX Error:\n\n" + message
-    print(_INTL(emessage))
-    exit!
+    echoln emessage
   end
 end
 
