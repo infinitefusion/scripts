@@ -90,9 +90,9 @@ module ContestSettings
 	#--------------------------------------------------------------------------------
 	ROOM_MAP_COORDINATES = [ 
 		[[110,13,21],nil,nil,nil,nil], # Normal: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,13,21],nil,nil,nil,nil], # Super: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,13,21],nil,nil,nil,nil], # Hyper: Cool(default), Beauty, Cute, Smart, Tough
-		[[110,13,21],nil,nil,nil,nil] # Master: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,38,21],nil,nil,nil,nil], # Super: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,63,21],nil,nil,nil,nil], # Hyper: Cool(default), Beauty, Cute, Smart, Tough
+		[[110,48,44],nil,nil,nil,nil] # Master: Cool(default), Beauty, Cute, Smart, Tough
 	]
 	
 end

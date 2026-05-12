@@ -6,13 +6,16 @@ class PokemonContest
 	attr_accessor :contestTrainers
 	attr_accessor :contestTrainerAppearances
 
-	def initEvents
-		@mcEvent = $game_map.get_events_with_name("MC")[0]
-		@judgeEvent = $game_map.get_events_with_name("Judge")[0]
-		@contestTrainers = $game_map.get_events_with_name("ContestTrainer")
+	RANK_POSITION_OFFSETS = [[0,0],[25,0],[50,0],[25,22]]
+
+	def initEvents(rank)
+		@mcEvent = $game_map.get_events_with_name("MC_#{rank}")[0]
+		@judgeEvent = $game_map.get_events_with_name("Judge_#{rank}")[0]
+		@contestTrainers = $game_map.get_events_with_name("ContestTrainer_#{rank}")
 		@contestTrainerAppearances = initializeContestTrainerAppearances
-		@crowdNPCs = $game_map.get_events_with_name("Crowd")
+		@crowdNPCs = $game_map.get_events_with_name("Crowd_#{rank}")
 	end
+
 	def initializeContestTrainerAppearances
 		appearances = []
 		update_global_outfit_lists

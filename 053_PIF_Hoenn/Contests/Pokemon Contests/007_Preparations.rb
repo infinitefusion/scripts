@@ -10,12 +10,12 @@ def pbPokemonContest(rank: nil, category: nil, pokemon: nil)
 	pbPrepPokemonContest(rank, category, pokemon, receptionistEvent)
 	return if !$PokemonGlobal.pokemonContest
 	ContestFunctions.bringPlayerToContestHall(receptionistEvent)
-	pbCurrentPokemonContest.initEvents
+	pbCurrentPokemonContest.initEvents(rank)
 	pbScrollMap(8, 2, 4)
 	pbScrollMap(4, 3, 4)
 	pbCurrentPokemonContest.pbIntroductionRound
-	pbCurrentPokemonContest.pbTalentRound
-	pbCurrentPokemonContest.pbResults
+	# pbCurrentPokemonContest.pbTalentRound
+	# pbCurrentPokemonContest.pbResults
 	pbEndPokemonContest
 end
 
@@ -64,6 +64,8 @@ def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist
 		pbCallBubDown(2,event_id)
 		return pbMessage(_INTL("We hope you will participate another time.")) if cat < 0 || cat == 5
 		category = cat
+		pbSet(VAR_CONTEST_CATEGORY,category)
+		echoln pbGet(VAR_CONTEST_CATEGORY)
 	end
 	#Choose Rank
 	if !rank
@@ -224,7 +226,9 @@ module ContestFunctions
 	
 	def getHallMapInfo(rank, category)
 		get = ContestSettings::ROOM_MAP_COORDINATES[rank][category]
+		echoln get
 		get = ContestSettings::ROOM_MAP_COORDINATES[rank][0] if !get
+		echoln get
 		return get
 	end
 	
