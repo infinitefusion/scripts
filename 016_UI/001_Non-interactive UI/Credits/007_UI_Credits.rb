@@ -69,6 +69,9 @@ class Scene_Credits
     "Graphics/Battlebacks/battlebg/mangrove.png",
     "Graphics/Battlebacks/battlebg/beach.png",
     "Graphics/Battlebacks/battlebg/beach.png",
+    "Graphics/Battlebacks/battlebg/mountain.png",
+    "Graphics/Battlebacks/battlebg/mountain_eve.png",
+    "Graphics/Battlebacks/battlebg/mountain_night.png",
 
 
   #"Graphics/Titles/bg_back"

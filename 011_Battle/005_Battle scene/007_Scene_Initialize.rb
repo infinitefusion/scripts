@@ -115,11 +115,11 @@ class PokeBattle_Scene
     when :BACKGROUND then
       base_path = "Graphics/Battlebacks/battlebg/"
     when :ENEMYBASE then
-      base_path = "Graphics/Battlebacks/enemybase/"
+      base_path = "Graphics/Battlebacks/base/"
     when :PLAYERBASE then
-      base_path = "Graphics/Battlebacks/playerbase/"
+      base_path = "Graphics/Battlebacks/base/"
     when :MESSAGE then
-      base_path = "Graphics/Battlebacks/"
+      base_path = "Graphics/Battlebacks/message/"
     end
     return base_path
   end
@@ -128,6 +128,8 @@ class PokeBattle_Scene
     time = getBackdropTimeSuffix()
     base_path = getBackdropBasePath(backdrop_type)
     default_name = base_path + filename
+    echoln default_name
+
     time_adjusted_name = "#{base_path}#{filename}_#{time}"
     if pbResolveBitmap(time_adjusted_name)
       return time_adjusted_name
@@ -146,6 +148,13 @@ class PokeBattle_Scene
       baseX, baseY = PokeBattle_SceneConstants.pbBattlerPosition(side)
       base = pbAddSprite("base_#{side}", baseX, baseY,
                          (side == 0) ? playerBase : enemyBase, @viewport)
+      player_side = side == 0
+      if player_side
+        base.zoom_x = 1.5
+        base.zoom_y = 1.5
+         base.x -= 50
+         base.y+= 70
+      end
       base.z = 1
       if base.bitmap
         base.ox = base.bitmap.width / 2
@@ -175,7 +184,7 @@ class PokeBattle_Scene
     enemyBase =getBackdropSpriteFullPath(battlebase_name, :ENEMYBASE)
     messageBG =getBackdropSpriteFullPath(simplified_name, :MESSAGE)
     if !pbResolveBitmap(messageBG)
-      messageBG = "Graphics/Battlebacks/default_message"
+      messageBG = "Graphics/Battlebacks/message/default_message"
     end
     apply_backdrop_graphics(battleBG,playerBase,enemyBase,messageBG)
   end

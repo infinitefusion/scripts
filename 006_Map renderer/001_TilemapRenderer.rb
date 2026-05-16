@@ -192,6 +192,12 @@ class TilemapRenderer
       2660 => "flowers_red[10]",
       2668 => "flowers_grey[10]",
       2676 => "flowers_white[10]",
+    },
+    31 => { #Underwater
+            1096 => "kelp_top[20]",
+            1104 => "kelp_middle[20]",
+            1112 => "kelp_bottom[20]",
+
     }
   }
 

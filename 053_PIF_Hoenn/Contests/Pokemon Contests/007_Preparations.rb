@@ -14,8 +14,8 @@ def pbPokemonContest(rank: nil, category: nil, pokemon: nil)
 	pbScrollMap(8, 2, 4)
 	pbScrollMap(4, 3, 4)
 	pbCurrentPokemonContest.pbIntroductionRound
-	# pbCurrentPokemonContest.pbTalentRound
-	# pbCurrentPokemonContest.pbResults
+	pbCurrentPokemonContest.pbTalentRound
+	pbCurrentPokemonContest.pbResults
 	pbEndPokemonContest
 end
 
@@ -24,6 +24,7 @@ end
 #====================================================================================
 def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist_event = nil)
 	event_id = receptionist_event.id
+	echoln event_id
 	if $Trainer.party.size <=0
 		pbCallBubDown(2,event_id)
 		pbMessage(_INTL("Oh, you don't have any Pokémon!"))
