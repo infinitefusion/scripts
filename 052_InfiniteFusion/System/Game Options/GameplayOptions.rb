@@ -61,7 +61,7 @@ class GameplayOptionsScene < PokemonOption_Scene
       )
     end
 
-    if $game_switches && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE]) # beat the league
+    if $game_switches && (Settings::KANTO && ($game_switches[SWITCH_NEW_GAME_PLUS] || $game_switches[SWITCH_BEAT_THE_LEAGUE])) || Settings::HOENN # beat the league
       options <<
         EnumOption.new(_INTL("Battle type"), [_INTL("1v1"), _INTL("2v2"), _INTL("3v3")],
                        proc { $PokemonSystem.battle_type },
