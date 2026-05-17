@@ -46,6 +46,7 @@ class PokemonStorageScene
     @partyTabBackButton = nil
     @command = command
     addBackgroundPlane(@sprites, "background", "Storage/bg", @bgviewport)
+    checkOpenTransferBox(@storage.currentBox)
     @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport,true,@screen.filterProc)
     # echoln @screen.filterProc
     # if @screen.filterProc
@@ -84,7 +85,6 @@ class PokemonStorageScene
       pbUpdateOverlay(@selection, @storage.party)
       pbSetMosaic(@selection)
     end
-    checkOpenTransferBox(@storage.currentBox)
     pbSEPlay("PC access") if animate
     pbFadeInAndShow(@sprites) if animate
   end

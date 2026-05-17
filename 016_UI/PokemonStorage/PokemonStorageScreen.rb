@@ -52,14 +52,14 @@ class PokemonStorageScreen
       selected = @scene.pbSelectBox(@storage.party)
       if selected == nil
         if pbHeldPokemon
-          pbDisplay(_INTL(56 - "You're holding a Pokémon!"))
+          pbDisplay(_INTL("You're holding a Pokémon!"))
           next
         end
         next if pbConfirm(_INTL("Continue Box operations?"))
         break
       elsif selected[0] == -3 # Close box
         if pbHeldPokemon
-          pbDisplay(_INTL("63 - You're holding a Pokémon!"))
+          pbDisplay(_INTL("You're holding a Pokémon!"))
           next
         end
         if pbConfirm(_INTL("Exit from the Box?"))
