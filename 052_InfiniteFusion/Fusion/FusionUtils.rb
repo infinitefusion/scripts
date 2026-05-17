@@ -364,7 +364,8 @@ def getDexNumberForSpecies(species)
   elsif species.is_a?(GameData::Species)
     return species.id_number
   else
-    dexNum = species
+    dexNum = GameData::Species.get(species).id_number
+    # dexNum = species | For Kin Island, this was trying to convert a string to an int. Beginning of this function checks for int already
   end
   return dexNum
 end
