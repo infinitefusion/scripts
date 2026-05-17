@@ -394,9 +394,9 @@ class RegionalStorage
     getCurrentStorage.pbStoreCaught(pkmn)
   end
 
-  def pbDelete(box,index)
-    getCurrentStorage.pbDelete(pkmn)
-  end
+  # def pbDelete(box,index)
+  #   getCurrentStorage.pbDelete(pkmn)
+  # end
 end
 
 

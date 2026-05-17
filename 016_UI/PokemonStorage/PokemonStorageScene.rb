@@ -5,6 +5,7 @@ class PokemonStorageScene
   attr_reader :quickswap
   attr_accessor :sprites
   attr_accessor :choseFromParty
+  attr_reader :inTransferBox
 
   def initialize
     @command = 1
@@ -46,7 +47,6 @@ class PokemonStorageScene
     @command = command
     addBackgroundPlane(@sprites, "background", "Storage/bg", @bgviewport)
     @sprites["box"] = PokemonBoxSprite.new(@storage, @storage.currentBox, @boxviewport,true,@screen.filterProc)
-
     # echoln @screen.filterProc
     # if @screen.filterProc
     #   @sprites["box"].setFilterProc(@screen.filterProc)
@@ -274,7 +274,6 @@ class PokemonStorageScene
     end
     return selection
   end
-
   def pbSelectBoxInternal(_party)
     selection = @selection
     pbSetArrow(@sprites["arrow"], selection)
@@ -522,8 +521,8 @@ class PokemonStorageScene
   end
 
   def checkOpenTransferBox(newbox)
-    isTransferBox = @storage[newbox].is_a?(StorageTransferBox)
-    if isTransferBox
+    @inTransferBox = @storage[newbox].is_a?(StorageTransferBox)
+    if @inTransferBox
       checkTransferBoxTutorial(newbox)
       if @storage[newbox].can_use_transfer_box?
         @storage[newbox].loadTransferBoxPokemon

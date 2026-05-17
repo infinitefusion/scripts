@@ -54,7 +54,7 @@ class StorageTransferBox < PokemonBox
   end
 
   def []=(i,value)
-    return unless value.is_a?(Pokemon)
+    return unless value.nil? || value.is_a?(Pokemon)
     return if check_is_duplicate(value)
     @pokemon[i] = value
     if can_use_transfer_box?
@@ -99,7 +99,7 @@ class StorageTransferBox < PokemonBox
       Marshal.dump(@pokemon, f)
     end
     echoln "Transfer box saved to #{path}"
-    $game_temp.must_save_now=true
+    Game.save
   rescue => e
     echoln "Failed to save transfer box: #{e}"
   end

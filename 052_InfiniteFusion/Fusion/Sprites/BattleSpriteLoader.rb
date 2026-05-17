@@ -126,7 +126,6 @@ class BattleSpriteLoader
       pif_sprite = select_new_pif_base_sprite(dex_number)
       $PokemonSystem.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
-    echoln pif_sprite.local_path
     if pif_sprite.local_path
       return AnimatedBitmap.new(pif_sprite.local_path)
     end
