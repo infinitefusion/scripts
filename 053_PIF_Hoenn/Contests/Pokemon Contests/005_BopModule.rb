@@ -7,6 +7,7 @@
 #====================================================================================
 
 def pbWaitForCharacterMove(event)
+  return unless event
 	while event.move_route_forcing
 		pbWait(1)
 	end

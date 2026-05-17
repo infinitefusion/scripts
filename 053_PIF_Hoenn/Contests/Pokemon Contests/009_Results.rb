@@ -8,24 +8,20 @@
 class PokemonContest
 
 	def pbResults
-		map = $game_map.map_id
-		mcEvent = $game_map.get_events_with_name("MC")[0]
-		judgeEvent = $game_map.get_events_with_name("Judge")[0]
-
-		pbMoveRoute(mcEvent,[PBMoveRoute::Right,PBMoveRoute::Right,PBMoveRoute::TurnDown])
-		pbMoveRoute(judgeEvent,[PBMoveRoute::Left,PBMoveRoute::Left,PBMoveRoute::TurnDown])
-		pbWaitForCharacterMove(judgeEvent)
-		pbCallBubDown(2,mcEvent.id)
+		pbMoveRoute(@mcEvent,[PBMoveRoute::Right,PBMoveRoute::Right,PBMoveRoute::TurnDown])
+		pbMoveRoute(@judgeEvent,[PBMoveRoute::Left,PBMoveRoute::Left,PBMoveRoute::TurnDown])
+		pbWaitForCharacterMove(@judgeEvent)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("That's it for the Talent Round!"))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("Thank you all for a most wonderful display of quality appeals!"))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("This concludes all judging! Thank you for your fine efforts!"))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("Now, all that remains is the pulse-pounding proclamation of the winner."))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("The Judge looks ready to make the announcement!"))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("We will now declare the winner!"))
 		
 		#27 hearts is max counted for Talent
@@ -43,9 +39,9 @@ class PokemonContest
 		}
 		pbBGMPlay(ContestSettings::BGM_CONTEST_WON_FILE)
 		pbWait(15)
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("{1} & {2}, congratulations!",@winningTrainer.name,@winningPokemon.name))
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("Please come up and accept your prize!"))
 		if @winningTrainer == @trainerOne
 			event = @contestTrainers[0]
@@ -67,19 +63,19 @@ class PokemonContest
 			pbWaitForCharacterMove($game_player)
 		end
 		ribbon = GameData::Ribbon.get(ContestSettings::CONTEST_RIBBONS[@category][@rank])
-		pbCallBubDown(2,mcEvent.id)
+		pbCallBubDown(2,@mcEvent.id)
 		pbMessage(_INTL("We confer on you the {1} as your prize!", ribbon.name)) if !@playerWin
 		$Trainer.stats.initializeContestStats unless $Trainer.stats.contest_stats_initialized?
 		if @playerWin
 			if @playerPokemon.hasRibbon?(ribbon)
-				pbCallBubDown(2,mcEvent.id)
+				pbCallBubDown(2,@mcEvent.id)
 				pbMessage(_INTL("As {1} already has the \\c[1]{2}\\c[0], we offer a complimentary prize!", @playerPokemon.name, ribbon.name))
 				pbReceiveItem(GameData::Item.get(ContestSettings::CONTEST_OTHER_PRIZE[@category][@rank]))
 			else
-				pbCallBubDown(2,mcEvent.id)
+				pbCallBubDown(2,@mcEvent.id)
 				pbMessage(_INTL("We confer on you the {1} as your prize!", ribbon.name))
 				@playerPokemon.giveRibbon(ribbon)
-				pbCallBubDown(2,mcEvent.id)
+				pbCallBubDown(2,@mcEvent.id)
 				pbMessage(_INTL("\\me[{1}]{2} received the \\c[1]{3}\\c[0]!\\wtnp[30]", "Item get", @playerPokemon.name, ribbon.name))	
 			end
 			$Trainer.stats.pokemon_contests_won_total += 1
