@@ -87,6 +87,12 @@ class GameplayOptionsScene < PokemonOption_Scene
                               }, _INTL("Pick how you want speed-up to be enabled")
     )
 
+    options << SliderOption.new(_INTL("Speed-up speed"), 1, 10, 1,
+                                proc { $PokemonSystem.speedup_speed },
+                                proc { |value|
+                                  $PokemonSystem.speedup_speed = value
+                                }, _INTL("Sets by how much to speed up the game when holding the speed up button (Default: 3x)"))
+
 
     options << EnumOption.new(_INTL("Prompt Nicknames"), [_INTL("On"), _INTL("Off")],
                               proc { $PokemonSystem.prompt_nicknames ? 0 : 1 },

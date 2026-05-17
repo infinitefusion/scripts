@@ -182,6 +182,7 @@ class PokemonStorageScene
   end
 
   def pbSetCursorMode(value)
+    return unless @sprites["arrow"]
     @cursormode = value
     @sprites["arrow"].cursormode = value
     if @screen.multiSelectRange

@@ -121,7 +121,7 @@ class PokemonStorageScreen
     commands[cmdWithdraw = commands.length] = (selected[0] == -1) ? _INTL("Store") : _INTL("Withdraw")
     commands[cmdItem = commands.length] = _INTL("Item") if !isTransferBox
 
-    commands[cmdRelease = commands.length] = _INTL("Release") if !isTransferBox
+    commands[cmdRelease = commands.length] = _INTL("Release")
     commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
     commands[cmdCancel = commands.length] = _INTL("Cancel")
     command = pbShowCommands(helptext, commands)

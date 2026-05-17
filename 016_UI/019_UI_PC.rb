@@ -250,8 +250,6 @@ def checkPorygonEncounter
 end
 
 def pbPokeCenterPC
-  echoln caller
-
   pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
   checkPorygonEncounter()
   command = 0

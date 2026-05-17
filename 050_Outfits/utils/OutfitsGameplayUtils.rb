@@ -7,7 +7,6 @@ def obtainNewClothes(outfit_id)
 end
 
 def obtainHat(outfit_id,secondary=false)
-  echoln "obtained new hat: " + outfit_id
   outfit = get_hat_by_id(outfit_id)
   if !outfit
     pbMessage(_INTL("The hat {1} is invalid.", outfit_id))
@@ -396,10 +395,6 @@ def generate_appearance_from_name(name)
   hair=getFullHairId(hair_base,hair_number)
   hair_color = convert_letter_to_number(seed[8],max_dye_color)
   hair_color = 0 if convert_letter_to_number(seed[9]) % 2 == 0 #1/2 chance of no dyed hair
-
-  echoln hair_color
-  echoln clothes_color
-  echoln hat_color
 
   skin_tone = [1,2,3,4,5,6][convert_letter_to_number(seed[10],5)]
   return TrainerAppearance.new(skin_tone,hat,clothes, hair,
