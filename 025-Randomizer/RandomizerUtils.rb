@@ -151,6 +151,10 @@ def get_gym_types_array
   return gym_types
 end
 
+# @deprecated Still used in some pif1 events
+def setTextToLeaderType(variable)
+  set_current_gym_type_name(nil,false,variable)
+end
 def set_current_gym_type_name(gym_index = nil, capitalize=false, variable = VAR_CURRENT_GYM_TYPE_NAME)
   unless gym_index
     gym_index = pbGet(VAR_CURRENT_GYM_TYPE)
