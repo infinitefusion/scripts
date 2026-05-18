@@ -3,6 +3,7 @@
 #==============================================================================
 class QuestMapPopup
   attr_reader :quests
+  attr_reader :panel_active
 
   PANEL_WIDTH  = 220
   PANEL_HEIGHT = 320
@@ -32,6 +33,7 @@ class QuestMapPopup
 
   def run
     set_selected(true)
+    refresh
     loop do
       Graphics.update
       Input.update
@@ -131,9 +133,6 @@ class QuestMapPopup
     @sprites[arrow_filename].z = @sprites["panel"].z+1
   end
 
-
-
-
   def refresh
     text_bmp = @sprites["text"].bitmap
     text_bmp.clear
@@ -147,9 +146,8 @@ class QuestMapPopup
 
       if qi < @quests.size
         quest    = @quests[qi]
-        selected = (qi == @index)
+        selected = (qi == @index) && @panel_active
 
-        # Swap background image instead of drawing fill_rects
         bg_path = selected \
                     ? "Graphics/Pictures/map/quests_row_selected"
                     : "Graphics/Pictures/map/quests_row_unselected"
@@ -220,13 +218,14 @@ class QuestMapPopup
     end
   end
   def set_selected(selected)
+    @panel_active = selected
     target = selected ? OPACITY_SELECTED : OPACITY_UNSELECTED
     @sprites["panel"]&.opacity = target
     @sprites["text"]&.opacity  = target
     MAX_VISIBLE.times do |j|
-      @sprites["rowbg#{j}"].opacity = target
-      @sprites["row#{j}"].opacity   = target
-      @sprites["icon#{j}"].opacity  = target
+      @sprites["rowbg#{j}"]&.opacity = target
+      @sprites["row#{j}"]&.opacity   = target
+      @sprites["icon#{j}"]&.opacity  = target
     end
     @sprites["uparrow"]&.visible  = true
     @sprites["downarrow"]&.visible = true

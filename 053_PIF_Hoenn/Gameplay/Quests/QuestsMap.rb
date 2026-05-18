@@ -48,9 +48,8 @@ class QuestMap < BetterRegionMap
     return unless @popup
     quest = @popup.run
     if quest
-      @sprites.visible = false
-      @window.visible = false
       Questlog.new(open_quest: quest)
+      Graphics.update
     end
   end
 
@@ -66,7 +65,7 @@ class QuestMap < BetterRegionMap
     return false
   end
   def should_exit_cancel?
-    return false if @popup
+    return false if @popup #&& @popup&.panel_active
     return Input.trigger?(Input::B)
   end
 

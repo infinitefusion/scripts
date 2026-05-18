@@ -150,22 +150,14 @@ class Questlog
     initialize_data
     initialize_modes
     initialize_viewport
-    create_sprites
-    animate_intro
 
     if open_quest
-      # Find which mode contains this quest
-      mode_index = @modes.index { |m| m.filter_quests($Trainer.quests).include?(open_quest) }
-      if mode_index
-        @current_mode = @modes[mode_index]
-        @filtered_quests = @current_mode.filter_quests($Trainer.quests)
-        @quest_list_menu_index = @filtered_quests.index(open_quest) || 0
-        @box = @quest_list_menu_index.clamp(0, MAX_VISIBLE_QUESTS - 1)
-        show_quest_detail
-        @scene = SCENE_DETAIL
-      end
+      create_sprites(false)
+      setup_open_quest(open_quest)
+    else
+      create_sprites(false)
+      animate_intro
     end
-
     main_loop
     cleanup
   end
@@ -175,6 +167,27 @@ class Questlog
   ##---------------------------------------------------------------------------
   ##  Initialization
   ##---------------------------------------------------------------------------
+
+  def setup_open_quest(quest)
+    @skip_menu = true
+
+    # Find which mode contains this quest
+    @current_mode = @modes.find { |mode| mode.filter_quests($Trainer.quests).include?(quest) }
+
+    # Fall back to first mode if not found (e.g. completed quests shown via direct open)
+    @current_mode ||= @modes.first
+
+    @filtered_quests = @current_mode.filter_quests($Trainer.quests)
+    @quest_list_menu_index = @filtered_quests.index(quest) || 0
+    @box = 0
+
+    # Jump straight to detail view
+    @scene = SCENE_DETAIL
+    create_detail_background
+    create_character_sprite("char", quest, 62, 130)
+    draw_quest_details(quest)
+    animate_detail_in
+  end
 
   def initialize_data
     $Trainer.quests = [] if $Trainer.quests.nil?
@@ -209,14 +222,14 @@ class Questlog
 
   def initialize_viewport
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 100002
     @sprites = {}
   end
 
-  def create_sprites
+  def create_sprites(main_page = true)
     create_main_bitmap
     create_background
-    create_mode_buttons
+    create_mode_buttons if main_page
     draw_main_text
   end
 
@@ -297,7 +310,6 @@ class Questlog
       Input.update
 
       break if handle_input
-
       @frame = 0 if @frame == 18
     end
   end
@@ -307,9 +319,9 @@ class Questlog
     when SCENE_MAIN
       return handle_main_input
     when SCENE_LIST
-      handle_list_input
+      return handle_list_input
     when SCENE_DETAIL
-      handle_detail_input
+      return handle_detail_input
     end
     return false
   end
@@ -367,10 +379,10 @@ class Questlog
 
   def handle_detail_input
     if Input.trigger?(Input::B)
-      show_quest_list(@modes.index(@current_mode))
+      return true
     end
-
     animate_character if [6, 12, 18].include?(@frame)
+    return false
   end
 
   ##---------------------------------------------------------------------------
@@ -811,7 +823,9 @@ class Questlog
   def animate_detail_in
     10.times do |i|
       Graphics.update
+      @sprites["bg0"].opacity += FADE_SPEED
       @sprites["main"].opacity += FADE_SPEED
+      @sprites["bg1"].opacity += FADE_SPEED if @sprites["bg1"]
       @sprites["char"].opacity += FADE_SPEED if i > 1
     end
   end
@@ -851,7 +865,8 @@ class Questlog
     ANIMATION_FRAMES.times do |i|
       Graphics.update
       @sprites["bg0"].opacity -= FADE_SPEED if @sprites["bg0"] && i > 3
-
+      @sprites["bg1"].opacity -= FADE_SPEED if @sprites["bg1"] && i > 3
+      @sprites["pager"].opacity -= FADE_SPEED if @sprites["pager"] && i > 3
       @modes.size.times do |j|
         @sprites["btn#{j}"].opacity -= FADE_SPEED if @sprites["btn#{j}"]
       end
