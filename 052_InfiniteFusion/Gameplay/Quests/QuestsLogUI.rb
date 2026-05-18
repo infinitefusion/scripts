@@ -139,6 +139,7 @@ end
 ##=============================================================================
 
 class Questlog
+  attr_reader :switch_to_map
   # Scene constants
   SCENE_MAIN = 0
   SCENE_LIST = 1
@@ -340,7 +341,7 @@ class Questlog
   end
 
   def handle_main_input
-    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
       @switch_to_map = true
       pbSEPlay("GUI storage show party panel")
       $Trainer.pokenav.last_opened_quest_mode = :MAP
@@ -368,7 +369,7 @@ class Questlog
 
 
   def handle_list_input
-    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
       @switch_to_map = true
       return true
     end
@@ -401,7 +402,7 @@ class Questlog
 
 
   def handle_detail_input
-    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
       @switch_to_map = true
       return true
     end

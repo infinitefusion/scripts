@@ -98,7 +98,8 @@ class QuestMap < BetterRegionMap
       hide_popup
       @sprites.visible = false
       @window.visible = false
-      Questlog.new(from_map: true)
+      ql = Questlog.new(from_map: true)
+      return unless ql&.switch_to_map
       @sprites.visible = true
       @window.visible = true
       @viewport.visible = true

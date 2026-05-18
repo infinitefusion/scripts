@@ -611,6 +611,7 @@ class BetterRegionMap
     #implemented in child classes
   end
   def update(update_gfx = true)
+    return if @sprites.disposed?
     on_update
     @sprites["arrowLeft"]&.visible = @window.x < 0 && been_to_johto()
     @sprites["arrowRight"]&.visible = @window.x > -1 * (@window["map"].bmp.width - 480)
@@ -642,20 +643,20 @@ class BetterRegionMap
     if @i % 2 == 0
       case @i % 32
       when 0...8
-        @sprites["arrowLeft"].x -= 1
-        @sprites["arrowRight"].x += 1
-        @sprites["arrowUp"].y -= 1
-        @sprites["arrowDown"].y += 1
+        @sprites["arrowLeft"]&.x -= 1
+        @sprites["arrowRight"]&.x += 1
+        @sprites["arrowUp"]&.y -= 1
+        @sprites["arrowDown"]&.y += 1
       when 8...24
-        @sprites["arrowLeft"].x += 1
-        @sprites["arrowRight"].x -= 1
-        @sprites["arrowUp"].y += 1
-        @sprites["arrowDown"].y -= 1
+        @sprites["arrowLeft"]&.x += 1
+        @sprites["arrowRight"]&.x -= 1
+        @sprites["arrowUp"]&.y += 1
+        @sprites["arrowDown"]&.y -= 1
       when 24...32
-        @sprites["arrowLeft"].x -= 1
-        @sprites["arrowRight"].x += 1
-        @sprites["arrowUp"].y -= 1
-        @sprites["arrowDown"].y += 1
+        @sprites["arrowLeft"]&.x -= 1
+        @sprites["arrowRight"]&.x += 1
+        @sprites["arrowUp"]&.y -= 1
+        @sprites["arrowDown"]&.y += 1
       end
     end
 
