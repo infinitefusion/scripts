@@ -451,10 +451,11 @@ def spawn_pokeradar_pokemon(species, level)
 
   spawned_events = nil
   radius = 4
-
+  max_radius = 8
   max_attempts.times do |current_attempt|
-    echoln "attempt #{current_attempt}/#{max_attempts}"
     radius += 1 if current_attempt > 0 && current_attempt % 10 == 0
+    radius += (current_attempt / 10).floor
+    radius = [radius, max_radius].min
     spawned_events = spawn_ow_pokemon(species, level, 1, radius)
     break if spawned_events&.length.to_i > 0
   end
