@@ -12,6 +12,8 @@ class Pokenav
   attr_accessor :last_opened_challenges #date
   attr_accessor :darkMode
   attr_accessor :viewed_trainers
+  attr_accessor :last_opened_quest_mode
+
 
   AVAILABLE_APPS = {
     # Starting apps
@@ -47,6 +49,7 @@ class Pokenav
     @last_opened_challenges = nil
     @viewed_trainers = []
     @exiting = false
+    @last_opened_quest_mode = :MAP
   end
 
   def install_app(app_id)
@@ -82,7 +85,8 @@ class PokemonPokegearScreen
       if cmd < 0
         break
       elsif chosen == :MAP
-        pbShowMap(-1, false)
+        pbWeatherMap
+        # pbShowMap(-1, false)
       elsif chosen == :JUKEBOX
           pbFadeOutIn {
             scene = PokemonJukebox_Scene.new

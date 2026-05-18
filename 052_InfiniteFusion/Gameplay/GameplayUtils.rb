@@ -153,3 +153,14 @@ def timeTrialApplyBumpsPenalty
   current_time += (nb_bumps*0.5)
   pbSet(VAR_TIME_TRIAL_SECONDS, current_time.truncate(3))
 end
+
+def get_current_town_map_location
+  map_data = pbLoadTownMapData
+  all_maps = map_data[0][2]
+  map_id_position= find_position_for_map(all_maps, $game_map.map_id)
+  if map_id_position
+    return $game_map.map_id
+  else
+    return $Trainer.last_visited_town_map_location
+  end
+end

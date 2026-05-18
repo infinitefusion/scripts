@@ -5,7 +5,7 @@ class QuestMapPopup
   attr_reader :quests
   attr_reader :panel_active
 
-  PANEL_WIDTH  = 220
+  PANEL_WIDTH  = 260 #220
   PANEL_HEIGHT = 320
   ITEM_HEIGHT  = 52
   MAX_VISIBLE  = 5
@@ -13,7 +13,7 @@ class QuestMapPopup
 
   OPACITY_SELECTED = 255
   OPACITY_UNSELECTED=200
-  def initialize(quests, on_left, viewport, location_name = _INTL("Unknown"))
+  def initialize(quests, on_left, viewport, location_name = _INTL("Unknown Location"))
     @quests   = quests.sort_by { |q| q.type == :MAIN_QUEST ? 0 : 1 }
     @on_left  = on_left
     @viewport = viewport

@@ -14,6 +14,9 @@ class QuestMap < BetterRegionMap
     super(nil, true, false, false, nil, nil, false)
   end
 
+  def after_init_graphics
+    @window["player"].visible=false
+  end
   def initialize_quests_locations
     $Trainer.quests.each do |quest|
       next if quest.completed
@@ -70,7 +73,6 @@ class QuestMap < BetterRegionMap
       @mapvp.visible = true
       @mapoverlayvp.visible = true
       Graphics.update
-      # Re-show popup and immediately activate it
       x, y = $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1]
       on_hover(x, y)
       @popup&.set_selected(true)
@@ -115,6 +117,8 @@ class QuestMap < BetterRegionMap
 
   def on_update
     if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+      pbSEPlay("GUI storage show party panel")
+      $Trainer.pokenav.last_opened_quest_mode = :LIST
       @switch_to_questlog = true
     end
   end
@@ -144,13 +148,13 @@ class QuestMap < BetterRegionMap
 
     nb_quests_text = ""
     if nb_quests_at_position > 1
-      nb_quests_text = _INTL("{1} accepted quests", nb_quests_at_position)
+      nb_quests_text = _INTL("{1} quests in progress", nb_quests_at_position)
     elsif nb_quests_at_position > 0
-      nb_quests_text = _INTL("{1} accepted quests", nb_quests_at_position)
+      nb_quests_text = _INTL("{1} quest in progress", nb_quests_at_position)
     end
     @sprites["txt"].draw([
-                           [pbGetMessage(MessageTypes::RegionNames, @region), 16, 0, 0,
-                            Color.new(255, 255, 255), Color.new(0, 0, 0)],
+                           [_INTL("Quest Log"), 24, -8, 0,  Color.new(255, 255, 255), Color.new(0, 0, 0)],
+                           [_INTL("L/R : LIST"), 360, -8, 0,  Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [text, 16, 344, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [nb_quests_text, 496, 344, 1, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                          ], true)

@@ -15,7 +15,7 @@ class Quest
   attr_accessor :type
   attr_accessor :location_map_id
 
-  def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false)
+  def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false, map_id=nil)
     self.id = id
     self.name = name
     self.desc = desc
@@ -25,10 +25,11 @@ class Quest
     self.color = pbColor(color)
     self.time = time
     self.completed = completed
+    self.location_map_id = map_id
   end
 end
 
-def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite)
+def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite,map_id=nil)
   case quest_type
   when :MAIN_QUEST
     text_color = MainQuestColor
@@ -42,7 +43,7 @@ def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location
   when :ROCKET_QUEST
     text_color = TRQuestColor
   end
-  new_quest = Quest.new(quest_id, quest_name, quest_description, npc_sprite, quest_location, quest_location, text_color)
+  new_quest = Quest.new(quest_id, quest_name, quest_description, npc_sprite, quest_location, text_color,Time.now,false,map_id)
   new_quest.type= quest_type
   QUESTS[quest_id] = new_quest
 end
@@ -162,20 +163,22 @@ QUESTS = {
 # ################
 
 ## MAIN QUESTS
-define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the first Pokémon Gym in Rustboro City."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne")
-define_quest("main_gym_2",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the second Pokémon Gym in Dewford Town."),_INTL("Dewford Town"),"NPC_Hoenn_Leader_Brawly")
-define_quest("main_gym_3",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the third Pokémon Gym in Mauville City."),_INTL("Mauville City"),"NPC_Hoenn_Leader_Wattson")
-define_quest("main_gym_4",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fourth Pokémon Gym in Lavaridge Town."),_INTL("Lavaridge Town"),"NPC_Hoenn_Leader_Flannery")
-define_quest("main_gym_5",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fifth Pokémon Gym in Petalburg Town."),_INTL("Petalburg Town"),"NPC_Hoenn_Leader_Norman")
-define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the sixth Pokémon Gym in Fortree City."),_INTL("Fortree City"),"NPC_Hoenn_Leader_Winona")
-define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the seventh Pokémon Gym in Mossdeep City."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza")
-define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the final Pokémon Gym in Sootopolis City."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace")
+define_quest("main_dad",:MAIN_QUEST,_INTL("Visit Dad!"), _INTL("Go visit your Dad at hist Gym in Petalburg Town!"),_INTL("Petalburg City"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
 
-define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan")
+define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the first Pokémon Gym in Rustboro City."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne",MAP_RUSTBORO)
+define_quest("main_gym_2",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the second Pokémon Gym in Dewford Town."),_INTL("Dewford Town"),"NPC_Hoenn_Leader_Brawly",MAP_DEWFORD)
+define_quest("main_gym_3",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the third Pokémon Gym in Mauville City."),_INTL("Mauville City"),"NPC_Hoenn_Leader_Wattson",MAP_MAUVILLE)
+define_quest("main_gym_4",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fourth Pokémon Gym in Lavaridge Town."),_INTL("Lavaridge Town"),"NPC_Hoenn_Leader_Flannery",MAP_LAVARIDGE)
+define_quest("main_gym_5",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fifth Pokémon Gym in Petalburg Town."),_INTL("Petalburg Town"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
+define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the sixth Pokémon Gym in Fortree City."),_INTL("Fortree City"),"NPC_Hoenn_Leader_Winona",MAP_FORTREE)
+define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the seventh Pokémon Gym in Mossdeep City."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza",MAP_MOSSDEEP)
+define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the final Pokémon Gym in Sootopolis City."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace",MAP_SOOTOPOLIS)
+
+define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan",MAP_LEAGUE)
 
 define_quest("main_stolen_parts",:MAIN_QUEST,_INTL("Stolen Package"), _INTL("Recover a package stolen by Team Magma!"),_INTL("Rustboro City"),"NPC_Hoenn_MrStone")
-define_quest("main_steven_letter",:MAIN_QUEST,_INTL("Steven's Letter"), _INTL("Deliver a letter from the Devon Corp. president to Steven in Granite Cave. "),_INTL("Granite Cave"),"NPC_Hoenn_MrStone")
-define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL("Deliver the Devon Parts to the Shipyard in Slateport City."),_INTL("Slateport City"),"NPC_Hoenn_MrStone")
+define_quest("main_steven_letter",:MAIN_QUEST,_INTL("Steven's Letter"), _INTL("Deliver a letter from the Devon Corp. president to Steven in Granite Cave. "),_INTL("Granite Cave"),"NPC_Hoenn_MrStone",MAP_DEWFORD)
+define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL("Deliver the Devon Parts to the Shipyard in Slateport City."),_INTL("Slateport City"),"NPC_Hoenn_MrStone",MAP_SLATEPORT)
 
 #SIDE QUESTS
 define_quest("template",:FIELD_QUEST,_INTL("Template Quest"), _INTL("Don't forget to change the quest ID if you copy paste this!"),_INTL("Unknown"),"000")
@@ -214,8 +217,8 @@ define_quest("rustboro_fusion",:FIELD_QUEST,_INTL("Wild Fusion Study"), _INTL("H
 define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
 
 #Slateport
-define_quest("slateport_team_aqua",:FIELD_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie")
-define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie")
+define_quest("slateport_team_aqua",:FIELD_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
+define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie",MAP_MAGMA_CAMP)
 
 
 # Route 109

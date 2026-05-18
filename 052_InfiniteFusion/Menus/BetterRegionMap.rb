@@ -231,7 +231,7 @@ class BetterRegionMap
     @sprites["arrowDown"].bmp("Graphics/Pictures/mapArrowDown")
     @sprites["arrowDown"].center_origins
     @sprites["arrowDown"].xyz = Graphics.width / 2, Graphics.height - 24
-
+    after_init_graphics
     update_text
     @dirs = []
     @mdirs = []
@@ -247,6 +247,9 @@ class BetterRegionMap
     main
   end
 
+  def after_init_graphics
+
+  end
   def on_hover(x, y)
   end
 
@@ -621,7 +624,7 @@ class BetterRegionMap
 
     intensity = (Graphics.frame_count % 40) * 12
     intensity = 480 - intensity if intensity > 240
-    @window["areahighlight"].opacity = intensity
+    @window["areahighlight"]&.opacity = intensity
 
     @i += 1
     if @i % CursorAnimateDelay == 0
@@ -758,7 +761,7 @@ class BetterRegionMap
       e[0] == $PokemonGlobal.regionMapSel[0] &&
         e[1] == $PokemonGlobal.regionMapSel[1]
     end
-    name = _INTL("Unknown")
+    name = _INTL("Unknown Location")
     name = location[2] if location
     return name
   end

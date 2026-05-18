@@ -9,7 +9,11 @@
 
 def pbQuestlog
   ensure_quests_repaired
-  Questlog.new
+  if $Trainer.pokenav&.last_opened_quest_mode == :LIST || Settings::KANTO
+    Questlog.new
+  else
+    showQuestMap
+  end
 end
 
 def ensure_quests_repaired
@@ -260,7 +264,6 @@ class Questlog
     default_button_path = "Graphics/Pictures/eqi/quest_button"
     @modes.size.times do |i|
       @sprites["btn#{i}"] = IconSprite.new(0, 0, @viewport)
-      echoln @modes[i]
       button_path = @modes[i].button_path
       if button_path
         @sprites["btn#{i}"].setBitmap(button_path)
@@ -276,10 +279,14 @@ class Questlog
   end
 
   def draw_main_text
-    pbDrawOutlineText(@main, 0, 2, 512, 384, "Quest Log",
+    pbDrawOutlineText(@main, -160, 8, 512, 384, _INTL("Quest Log"),
+                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    pbDrawOutlineText(@main, 160, 8, 512, 384, _INTL("L/R : MAP"),
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
 
-    # Draw button labels and quest counts
+
+
+      # Draw button labels and quest counts
     @modes.each_with_index do |mode, i|
       quest_count = mode.filter_quests($Trainer.quests).size
       y_pos = 142 + (56 * i)
@@ -333,8 +340,10 @@ class Questlog
   end
 
   def handle_main_input
-    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN
       @switch_to_map = true
+      pbSEPlay("GUI storage show party panel")
+      $Trainer.pokenav.last_opened_quest_mode = :MAP
       return true
     end
     return true if Input.trigger?(Input::B)
@@ -880,20 +889,23 @@ class Questlog
   ##---------------------------------------------------------------------------
 
   def cleanup
-    ANIMATION_FRAMES.times do |i|
-      Graphics.update
-      @sprites["bg0"].opacity -= FADE_SPEED if @sprites["bg0"] && i > 3
-      @sprites["bg1"].opacity -= FADE_SPEED if @sprites["bg1"] && i > 3
-      @sprites["pager"].opacity -= FADE_SPEED if @sprites["pager"] && i > 3
-      @modes.size.times do |j|
-        @sprites["btn#{j}"].opacity -= FADE_SPEED if @sprites["btn#{j}"]
+    if @switch_to_map
+      showBlk(1)  # instant black
+    else
+      ANIMATION_FRAMES.times do |i|
+        Graphics.update
+        @sprites["bg0"].opacity -= FADE_SPEED if @sprites["bg0"] && i > 3
+        @sprites["bg1"].opacity -= FADE_SPEED if @sprites["bg1"] && i > 3
+        @sprites["pager"].opacity -= FADE_SPEED if @sprites["pager"] && i > 3
+        @modes.size.times do |j|
+          @sprites["btn#{j}"].opacity -= FADE_SPEED if @sprites["btn#{j}"]
+        end
+
+        @sprites["main"].opacity -= FADE_SPEED if @sprites["main"]
+        @sprites["char"].opacity -= 40 if @sprites["char"]
+        @sprites["char2"].opacity -= 40 if @sprites["char2"]
       end
-
-      @sprites["main"].opacity -= FADE_SPEED if @sprites["main"]
-      @sprites["char"].opacity -= 40 if @sprites["char"]
-      @sprites["char2"].opacity -= 40 if @sprites["char2"]
     end
-
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     pbWait(1)
