@@ -146,7 +146,9 @@ class Questlog
   ANIMATION_FRAMES = 12
   CHAR_ANIMATION_INTERVAL = 6
 
-  def initialize(open_quest: nil)
+  def initialize(open_quest: nil, from_map: false)
+    @from_map = from_map
+    @switch_to_map = false
     initialize_data
     initialize_modes
     initialize_viewport
@@ -160,6 +162,10 @@ class Questlog
     end
     main_loop
     cleanup
+
+    if @switch_to_map
+      showQuestMap
+    end
   end
 
   private
@@ -229,7 +235,7 @@ class Questlog
   def create_sprites(main_page = true)
     create_main_bitmap
     create_background
-    create_mode_buttons if main_page
+    create_mode_buttons #if main_page
     draw_main_text
   end
 
@@ -286,14 +292,14 @@ class Questlog
   def animate_intro
     ANIMATION_FRAMES.times do |i|
       Graphics.update
-      @sprites["bg0"].opacity += FADE_SPEED if i < 8
+      @sprites["bg0"]&.opacity += FADE_SPEED if i < 8
 
       # Fade in all mode buttons
       @modes.size.times do |j|
-        @sprites["btn#{j}"].opacity += FADE_SPEED if i > 3
+        @sprites["btn#{j}"]&.opacity += FADE_SPEED if i > 3
       end
 
-      @sprites["main"].opacity += 64 if i > 7
+      @sprites["main"]&.opacity += 64 if i > 7
     end
   end
 
@@ -327,6 +333,10 @@ class Questlog
   end
 
   def handle_main_input
+    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+      @switch_to_map = true
+      return true
+    end
     return true if Input.trigger?(Input::B)
 
     if Input.trigger?(Input::C)
@@ -349,6 +359,10 @@ class Questlog
 
 
   def handle_list_input
+    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+      @switch_to_map = true
+      return true
+    end
     if Input.trigger?(Input::B)
       return_to_main
     elsif Input.trigger?(Input::C)
@@ -356,8 +370,8 @@ class Questlog
     else
       handle_scroll_input
     end
-
     animate_arrows
+    return false
   end
 
   def handle_scroll_input
@@ -378,6 +392,10 @@ class Questlog
 
 
   def handle_detail_input
+    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+      @switch_to_map = true
+      return true
+    end
     if Input.trigger?(Input::B)
       return true
     end

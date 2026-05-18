@@ -609,10 +609,10 @@ class BetterRegionMap
   end
   def update(update_gfx = true)
     on_update
-    @sprites["arrowLeft"].visible = @window.x < 0 && been_to_johto()
-    @sprites["arrowRight"].visible = @window.x > -1 * (@window["map"].bmp.width - 480)
-    @sprites["arrowUp"].visible = @window.y < 0
-    @sprites["arrowDown"].visible = @window.y > -1 * (@window["map"].bmp.height - 320) && been_to_sevii()
+    @sprites["arrowLeft"]&.visible = @window.x < 0 && been_to_johto()
+    @sprites["arrowRight"]&.visible = @window.x > -1 * (@window["map"].bmp.width - 480)
+    @sprites["arrowUp"]&.visible = @window.y < 0
+    @sprites["arrowDown"]&.visible = @window.y > -1 * (@window["map"].bmp.height - 320) && been_to_sevii()
 
     if update_gfx
       Graphics.update
@@ -797,7 +797,6 @@ class BetterRegionMap
   end
 
   def dispose
-    echoln caller
     Kernel.pbClearText
     showBlk { update(false) }
     @sprites.dispose

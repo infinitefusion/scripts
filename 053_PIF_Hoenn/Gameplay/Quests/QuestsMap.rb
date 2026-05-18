@@ -48,8 +48,22 @@ class QuestMap < BetterRegionMap
     return unless @popup
     quest = @popup.run
     if quest
-      Questlog.new(open_quest: quest)
+      @popup = nil
+      @sprites.visible = false
+      @window.visible = false
+      Questlog.new(open_quest: quest, from_map: true)
+      @sprites.visible = true
+      @window.visible = true
+      @viewport.visible = true
+      @viewport2.visible = true
+      @mapvp.visible = true
+      @mapoverlayvp.visible = true
       Graphics.update
+      # Re-show popup and immediately activate it
+      x, y = $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1]
+      on_hover(x, y)
+      @popup&.set_selected(true)
+      @popup&.refresh
     end
   end
 
@@ -64,9 +78,34 @@ class QuestMap < BetterRegionMap
   def should_exit_confirm?
     return false
   end
+
+  def on_exit_main
+    if @switch_to_questlog
+      @switch_to_questlog = false
+      hide_popup
+      @sprites.visible = false
+      @window.visible = false
+      Questlog.new(from_map: true)
+      @sprites.visible = true
+      @window.visible = true
+      @viewport.visible = true
+      @viewport2.visible = true
+      @mapvp.visible = true
+      @mapoverlayvp.visible = true
+      main
+    end
+  end
+
   def should_exit_cancel?
-    return false if @popup #&& @popup&.panel_active
+    return true if @switch_to_questlog
+    return false if @popup
     return Input.trigger?(Input::B)
+  end
+
+  def on_update
+    if Input.trigger?(Input::L) || Input.trigger?(Input::R)
+      @switch_to_questlog = true
+    end
   end
 
   def hide_popup
