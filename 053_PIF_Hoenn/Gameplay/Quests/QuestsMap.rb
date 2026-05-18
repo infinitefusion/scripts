@@ -4,7 +4,8 @@ def showQuestMap
 end
 
 class QuestMap < BetterRegionMap
-  QUEST_ICON_PATH = "Graphics/Pictures/map/quest_icon"
+  QUEST_SIDE_ICON_PATH = "Graphics/Pictures/map/quest_icon"
+  QUEST_MAIN_ICON_PATH = "Graphics/Pictures/map/quest_icon_main"
 
   def initialize
     @quests = {}
@@ -30,8 +31,18 @@ class QuestMap < BetterRegionMap
 
   def add_map_icons
     initialize_quests_locations
+    icon_path = QUEST_SIDE_ICON_PATH
     @quests.each_key do |position|
-      add_map_icon_at_position(position, position, QUEST_ICON_PATH)
+      quests_list = @quests[position]
+      quests_list.each do |quest|
+        if quest.type == :MAIN_QUEST
+          icon_path = QUEST_MAIN_ICON_PATH
+          break
+        else
+          icon_path = QUEST_SIDE_ICON_PATH
+        end
+      end
+      add_map_icon_at_position(position, position, icon_path)
     end
   end
 

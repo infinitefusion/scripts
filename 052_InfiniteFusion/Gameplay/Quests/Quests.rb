@@ -163,6 +163,14 @@ QUESTS = {
 
 ## MAIN QUESTS
 define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the first Pokémon Gym in Rustboro City."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne")
+define_quest("main_gym_2",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the second Pokémon Gym in Dewford Town."),_INTL("Dewford Town"),"NPC_Hoenn_Leader_Brawly")
+define_quest("main_gym_3",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the third Pokémon Gym in Mauville City."),_INTL("Mauville City"),"NPC_Hoenn_Leader_Wattson")
+define_quest("main_gym_4",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fourth Pokémon Gym in Lavaridge Town."),_INTL("Lavaridge Town"),"NPC_Hoenn_Leader_Flannery")
+define_quest("main_gym_5",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fifth Pokémon Gym in Petalburg Town."),_INTL("Petalburg Town"),"NPC_Hoenn_Leader_Norman")
+define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the sixth Pokémon Gym in Fortree City."),_INTL("Fortree City"),"NPC_Hoenn_Leader_Winona")
+define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the seventh Pokémon Gym in Mossdeep City."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza")
+define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the final Pokémon Gym in Sootopolis City."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace")
+
 define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan")
 
 define_quest("main_stolen_parts",:MAIN_QUEST,_INTL("Stolen Package"), _INTL("Recover a package stolen by Team Magma!"),_INTL("Rustboro City"),"NPC_Hoenn_MrStone")

@@ -122,3 +122,15 @@ KANTO_OUTDOOR_MAPS = [
   469, # Pokemon Tower
 
 ]
+
+
+
+MAP_RUSTBORO = 47
+MAP_DEWFORD = 51
+MAP_MAUVILLE = 73
+MAP_LAVARIDGE = 994   #todo: Temp
+MAP_PETALBURG = 7
+MAP_FORTREE = 992  #todo: Temp
+MAP_MOSSDEEP = 990  #todo: Temp
+MAP_SOOTOPOLIS = 989  #todo: Temp
+MAP_LEAGUE = 988  #todo: Temp

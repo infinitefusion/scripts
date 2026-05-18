@@ -15,11 +15,11 @@ class PokeBattle_Trainer
 end
 
 # Shortcuts for events
-def pbQuest(id)
-  pbAcceptNewQuest(id)
+def pbQuest(id,show_description=true,map_id=nil)
+  pbAcceptNewQuest(id,20,show_description,map_id)
 end
 
-def pbAcceptNewQuest(id, bubblePosition = 20, show_description = true)
+def pbAcceptNewQuest(id, bubblePosition = 20, show_description = true, map_id = nil)
   return if isQuestAlreadyAccepted?(id)
   $game_variables[96] += 1 # nb. quests accepted
   $game_variables[97] += 1 # nb. quests active
@@ -39,7 +39,7 @@ def pbAcceptNewQuest(id, bubblePosition = 20, show_description = true)
   character_sprite = get_spritecharacter_for_event(@event_id)
   character_sprite.removeQuestIcon if character_sprite
 
-  pbAddQuest(id)
+  pbAddQuest(id, map_id)
 end
 
 def showNewMainQuestMessage(title, description, show_description)
@@ -122,10 +122,14 @@ end
 
 
 
-def pbAddQuest(id)
+def pbAddQuest(id, map_id = nil)
   $Trainer.quests = [] if $Trainer.quests.class == NilClass
   quest = QUESTS[id]
-  quest.location_map_id = $Trainer.last_visited_town_map_location
+  if map_id
+    quest.location_map_id = map_id
+  else
+    quest.location_map_id = $Trainer.last_visited_town_map_location
+  end
   $Trainer.quests << quest if quest
 end
 

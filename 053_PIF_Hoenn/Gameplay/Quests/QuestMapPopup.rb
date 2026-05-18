@@ -14,7 +14,7 @@ class QuestMapPopup
   OPACITY_SELECTED = 255
   OPACITY_UNSELECTED=200
   def initialize(quests, on_left, viewport, location_name = _INTL("Unknown"))
-    @quests   = quests
+    @quests   = quests.sort_by { |q| q.type == :MAIN_QUEST ? 0 : 1 }
     @on_left  = on_left
     @viewport = viewport
     @index    = 0
@@ -147,10 +147,14 @@ class QuestMapPopup
       if qi < @quests.size
         quest    = @quests[qi]
         selected = (qi == @index) && @panel_active
-
+        if quest.type == :MAIN_QUEST
+          bg_path = "Graphics/Pictures/map/quests_row_main"
+        else
+          bg_path = "Graphics/Pictures/map/quests_row"
+        end
         bg_path = selected \
-                    ? "Graphics/Pictures/map/quests_row_selected"
-                    : "Graphics/Pictures/map/quests_row_unselected"
+                    ? "#{bg_path}_selected"
+                    : "#{bg_path}_unselected"
         @sprites["rowbg#{i}"].setBitmap(bg_path)
         @sprites["rowbg#{i}"].visible = true
 
