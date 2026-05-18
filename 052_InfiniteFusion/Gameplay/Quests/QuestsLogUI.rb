@@ -146,12 +146,26 @@ class Questlog
   ANIMATION_FRAMES = 12
   CHAR_ANIMATION_INTERVAL = 6
 
-  def initialize
+  def initialize(open_quest: nil)
     initialize_data
     initialize_modes
     initialize_viewport
     create_sprites
     animate_intro
+
+    if open_quest
+      # Find which mode contains this quest
+      mode_index = @modes.index { |m| m.filter_quests($Trainer.quests).include?(open_quest) }
+      if mode_index
+        @current_mode = @modes[mode_index]
+        @filtered_quests = @current_mode.filter_quests($Trainer.quests)
+        @quest_list_menu_index = @filtered_quests.index(open_quest) || 0
+        @box = @quest_list_menu_index.clamp(0, MAX_VISIBLE_QUESTS - 1)
+        show_quest_detail
+        @scene = SCENE_DETAIL
+      end
+    end
+
     main_loop
     cleanup
   end
@@ -738,18 +752,18 @@ class Questlog
   def fade_to_detail
     8.times do
       Graphics.update
-      @sprites["up"].opacity -= FADE_SPEED
-      @sprites["down"].opacity -= FADE_SPEED
-      @sprites["main"].opacity -= FADE_SPEED
-      @sprites["bg1"].opacity += FADE_SPEED if @sprites["bg1"]
-      @sprites["pager"].opacity = 0 if @sprites["pager"]
-      @sprites["char"].opacity -= FADE_SPEED if @sprites["char"]
+      @sprites["up"]&.opacity -= FADE_SPEED
+      @sprites["down"]&.opacity -= FADE_SPEED
+      @sprites["main"]&.opacity -= FADE_SPEED
+      @sprites["bg1"]&.opacity += FADE_SPEED if @sprites["bg1"]
+      @sprites["pager"]&.opacity = 0 if @sprites["pager"]
+      @sprites["char"]&.opacity -= FADE_SPEED if @sprites["char"]
 
       fade_quest_list_sprites
     end
 
-    @sprites["up"].dispose
-    @sprites["down"].dispose
+    @sprites["up"]&.dispose
+    @sprites["down"]&.dispose
   end
 
   def fade_quest_list_sprites

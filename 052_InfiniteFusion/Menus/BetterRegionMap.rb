@@ -203,10 +203,10 @@ class BetterRegionMap
     if !$PokemonGlobal.regionMapSel
       $PokemonGlobal.regionMapSel = [0, 0]
     end
-    if @species != nil && minxy[0] != nil && maxxy[1] != nil
-      $PokemonGlobal.regionMapSel[0] = ((minxy[0] + maxxy[0]) / 2).round
-      $PokemonGlobal.regionMapSel[1] = ((minxy[1] + maxxy[1]) / 2).round
-    end
+    # if @species != nil && minxy[0] != nil && maxxy[1] != nil
+    #   $PokemonGlobal.regionMapSel[0] = ((minxy[0] + maxxy[0]) / 2).round
+    #   $PokemonGlobal.regionMapSel[1] = ((minxy[1] + maxxy[1]) / 2).round
+    # end
 
     @sprites["cursor"].z = 11
 
@@ -245,6 +245,12 @@ class BetterRegionMap
 
     hideBlk { update(false) }
     main
+  end
+
+  def on_hover(x, y)
+  end
+
+  def on_click(x, y)
   end
 
   #Fly icons, or whatever else in override
@@ -566,7 +572,8 @@ class BetterRegionMap
         x, y = $PokemonGlobal.regionMapSel
         if @spots && @spots[[x, y]]
           @flydata = @spots[[x, y]]
-          break
+          on_click(x, y)
+          break if should_exit_confirm?
         else
           stickToPositions = findNearbyHealingSpot(x, y)
           if stickToPositions
@@ -580,12 +587,28 @@ class BetterRegionMap
           end
         end
       end
-      break if Input.trigger?(Input::B)
+      break if should_exit_cancel?
     end
+    on_exit_main
     dispose
   end
 
+  def should_exit_confirm?
+    return true
+  end
+
+  def should_exit_cancel?
+    return Input.trigger?(Input::B)
+  end
+  def on_update
+    #implemented in child classes
+  end
+
+  def on_exit_main
+    #implemented in child classes
+  end
   def update(update_gfx = true)
+    on_update
     @sprites["arrowLeft"].visible = @window.x < 0 && been_to_johto()
     @sprites["arrowRight"].visible = @window.x > -1 * (@window["map"].bmp.width - 480)
     @sprites["arrowUp"].visible = @window.y < 0
@@ -730,6 +753,15 @@ class BetterRegionMap
     end
   end
 
+  def get_current_location_name
+    location = @data[2].find do |e|
+      e[0] == $PokemonGlobal.regionMapSel[0] &&
+        e[1] == $PokemonGlobal.regionMapSel[1]
+    end
+    name = _INTL("Unknown")
+    name = location[2] if location
+    return name
+  end
   def print_current_position()
     echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
@@ -761,9 +793,11 @@ class BetterRegionMap
                            [text, 16, 354, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [poi, 496, 354, 1, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                          ], true)
+    on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
   def dispose
+    echoln caller
     Kernel.pbClearText
     showBlk { update(false) }
     @sprites.dispose
