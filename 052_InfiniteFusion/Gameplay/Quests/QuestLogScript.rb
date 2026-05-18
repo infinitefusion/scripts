@@ -125,6 +125,7 @@ end
 def pbAddQuest(id)
   $Trainer.quests = [] if $Trainer.quests.class == NilClass
   quest = QUESTS[id]
+  quest.location_map_id = $Trainer.last_visited_town_map_location
   $Trainer.quests << quest if quest
 end
 

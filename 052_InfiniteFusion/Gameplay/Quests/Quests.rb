@@ -13,6 +13,7 @@ class Quest
   attr_accessor :time
   attr_accessor :completed
   attr_accessor :type
+  attr_accessor :location_map_id
 
   def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false)
     self.id = id

@@ -111,7 +111,6 @@ class BetterRegionMap
       else
         mapFilename = "map_hoenn"
       end
-      echoln mapFilename
     end
     # @window["map"].bmp("Graphics/Pictures/#{@data[1]}")
     @window["map"].bmp("Graphics/Pictures/map/#{mapFilename}")
@@ -238,7 +237,19 @@ class BetterRegionMap
     @mdirs = []
     @i = 0
 
-    if can_fly
+    add_map_icons
+    initial_position = player_coordinates
+    initial_position = [0,0] unless initial_position
+    init_cursor_position(initial_position[0], initial_position[1])
+    center_window()
+
+    hideBlk { update(false) }
+    main
+  end
+
+  #Fly icons, or whatever else in override
+  def add_map_icons
+    if @can_fly
       @spots = {}
       n = 0
       for x in 0...(@window["map"].bmp.width / TileWidth)
@@ -254,7 +265,7 @@ class BetterRegionMap
       if $Trainer.secretBase
         secretGameBaseMapId = $Trainer.secretBase.outside_map_id
         secretBaseCoordinates = $Trainer.secretBase.outside_entrance_position
-        secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
+        secret_base_town_map_coordinates = getTownMapFlyCoordinates(secretGameBaseMapId)
         secret_base_town_map_coordinates = [1, 1] if !secret_base_town_map_coordinates || secret_base_town_map_coordinates.empty?
         healspot = [secretGameBaseMapId, secretBaseCoordinates[0], secretBaseCoordinates[1]]
         add_fly_location(healspot, secret_base_town_map_coordinates, "secretBase_")
@@ -262,13 +273,6 @@ class BetterRegionMap
     end
 
     draw_all_weather if @show_weather && $game_weather
-    initial_position = player_coordinates
-    initial_position = [0,0] unless initial_position
-    init_cursor_position(initial_position[0], initial_position[1])
-    center_window()
-
-    hideBlk { update(false) }
-    main
   end
 
   def getPlayerPosition
@@ -290,18 +294,24 @@ class BetterRegionMap
 
 
   def add_fly_location(healspot, position, n)
-    @window["point#{n}"] = Sprite.new(@mapvp)
     if n.to_s.include?("secretBase")
-      @window["point#{n}"].bmp("Graphics/Pictures/map/mapFly_base")
+      icon_path ="Graphics/Pictures/map/mapFly_base"
     else
-      @window["point#{n}"].bmp("Graphics/Pictures/map/mapFly")
+      icon_path ="Graphics/Pictures/map/mapFly"
     end
-    @window["point#{n}"].src_rect.width = @window["point#{n}"].bmp.height
-    @window["point#{n}"].x = TileWidth * position[0] + (TileWidth / 2)
-    @window["point#{n}"].y = TileHeight * position[1] + (TileHeight / 2)
-    @window["point#{n}"].oy = @window["point#{n}"].bmp.height / 2.0
-    @window["point#{n}"].ox = @window["point#{n}"].oy
+    add_map_icon_at_position(n,position,icon_path)
     @spots[position] = healspot
+  end
+
+
+  def add_map_icon_at_position(id, position, icon_path)
+    @window["point#{id}"] = Sprite.new(@mapvp)
+    @window["point#{id}"].bmp(icon_path)
+    @window["point#{id}"].src_rect.width = @window["point#{id}"].bmp.height
+    @window["point#{id}"].x = TileWidth * position[0] + (TileWidth / 2)
+    @window["point#{id}"].y = TileHeight * position[1] + (TileHeight / 2)
+    @window["point#{id}"].oy = @window["point#{id}"].bmp.height / 2.0
+    @window["point#{id}"].ox = @window["point#{id}"].oy
   end
 
   def calculate_initial_position(player)
@@ -467,7 +477,7 @@ class BetterRegionMap
     return healspot && $PokemonGlobal.visitedMaps[healspot[0]]
   end
 
-  def getTownMapCoordinates(map_id)
+  def getTownMapFlyCoordinates(map_id)
     return nil if !@data[2]
     for location_data in @data[2]
       map_x = location_data[0]
@@ -477,6 +487,7 @@ class BetterRegionMap
     end
     return nil
   end
+
 
   # Returns an array like [mapId,x,y]
   # data[2] is an array of arrays containing the lines in townmap.txt
@@ -737,7 +748,7 @@ class BetterRegionMap
     update_weather_text(location) if @show_weather && $game_weather
     if $Trainer.secretBase
       secretGameBaseMapId = $Trainer.secretBase.outside_map_id
-      secret_base_town_map_coordinates = getTownMapCoordinates(secretGameBaseMapId)
+      secret_base_town_map_coordinates = getTownMapFlyCoordinates(secretGameBaseMapId)
       if location && secret_base_town_map_coordinates
         if secret_base_town_map_coordinates[0] == location[0] && secret_base_town_map_coordinates[1] == location[1]
           poi = "Secret Base"
