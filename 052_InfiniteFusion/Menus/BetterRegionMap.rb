@@ -251,14 +251,16 @@ class BetterRegionMap
   def after_init_graphics
 
   end
+
   def on_hover(x, y)
   end
 
   def on_click(x, y)
   end
 
+  def on_start_moving
+  end
   def on_stop_moving
-
   end
 
   #Fly icons, or whatever else in override
@@ -572,7 +574,7 @@ class BetterRegionMap
         end
       end
       if Input.repeat?(Input::X)
-        # print_current_position()
+        print_current_position()
         new_weather_cycle if DEBUG_WEATHER && frame % 12 == 0
         frame += 1
       end
@@ -592,8 +594,12 @@ class BetterRegionMap
           end
         end
       end
+      if !was_moving && moving?
+        on_start_moving
+      end
       if was_moving && !moving?
         on_stop_moving
+        @position_before_moving =[$PokemonGlobal.regionMapSel[0],$PokemonGlobal.regionMapSel[1]]
       end
       break if should_exit_cancel?
     end

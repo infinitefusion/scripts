@@ -11,12 +11,15 @@ class QuestMap < BetterRegionMap
     @quests = {}
     @spots = {}
     @popup = nil
+    @snapping = false
+    @previous_position = [0, 0]
     super(nil, true, false, false, nil, nil, false)
   end
 
   def after_init_graphics
-    @window["player"].visible=false
+    @window["player"].visible = false
   end
+
   def initialize_quests_locations
     $Trainer.quests.each do |quest|
       next if quest.completed
@@ -28,7 +31,7 @@ class QuestMap < BetterRegionMap
       quests_at_location = [] if quests_at_location.nil?
       quests_at_location << quest
       @quests[position] = quests_at_location
-      @spots[position]= quests_at_location  #Unused, but the map checks positions in there to see if it should snap to a new location
+      @spots[position] = quests_at_location # Unused, but the map checks positions in there to see if it should snap to a new location
     end
   end
 
@@ -52,22 +55,34 @@ class QuestMap < BetterRegionMap
   def on_hover(x, y)
     quests_at_pos = @quests[[x, y]]
     if quests_at_pos && !quests_at_pos.empty?
-      show_popup(quests_at_pos, x)
-      snap_to_position(x,y)
+      snap_to_position(x, y)
+      show_popup(quests_at_pos)
     else
       hide_popup
     end
   end
 
+  def on_start_moving
+  end
+
   def on_stop_moving
-    echoln "stopped moving"
+    return if @snapping
     x = $PokemonGlobal.regionMapSel[0]
     y = $PokemonGlobal.regionMapSel[1]
-    nearby_quest = find_quest_near_coordinates(x, y,2)
+    if @quests.has_key?([x, y])
+      on_hover(x, y)
+      return
+    end
+
+    nearby_quest = find_quest_near_coordinates(x, y, 2)
     if nearby_quest
+      @snapping = true
       new_x, new_y = nearby_quest
-      snap_to_position(new_x,new_y)
-      on_hover(new_x,new_y)
+      if [new_x, new_y] != @position_before_moving
+        snap_to_position(new_x, new_y)
+        on_hover(new_x, new_y)
+      end
+      @snapping = false
     end
   end
 
@@ -110,12 +125,13 @@ class QuestMap < BetterRegionMap
     end
   end
 
-  def show_popup(quests, map_x)
+  def show_popup(quests)
     location_name = get_current_location_name
     return if @popup && @popup.quests == quests
     hide_popup
     on_right_half = @sprites["cursor"].x > (Graphics.width / 2)
     @popup = QuestMapPopup.new(quests, on_right_half, @viewport2, location_name)
+    pbWait(4)
   end
 
   def should_exit_confirm?
@@ -171,8 +187,8 @@ class QuestMap < BetterRegionMap
       nb_quests_text = _INTL("{1} quest in progress", nb_quests_at_position)
     end
     @sprites["txt"].draw([
-                           [_INTL("Quest Log"), 24, -8, 0,  Color.new(255, 255, 255), Color.new(0, 0, 0)],
-                           [_INTL("L/R : LIST"), 360, -8, 0,  Color.new(255, 255, 255), Color.new(0, 0, 0)],
+                           [_INTL("Quest Log"), 24, -8, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
+                           [_INTL("L/R : LIST"), 360, -8, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [text, 16, 344, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [nb_quests_text, 496, 344, 1, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                          ], true)
