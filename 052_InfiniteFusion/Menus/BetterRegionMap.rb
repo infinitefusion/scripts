@@ -1,6 +1,7 @@
 #==============================================================================#
 #                              Better Region Map                               #
-#                       By Marin, with edits by Boonzeet                       #
+#                       Originally by Marin, with edits by Boonzeet            #
+#                       Adapted for Infinite Fusion by chardub
 #==============================================================================#
 #   This region map is smoother and allows you to use region maps larger than  #
 #                                   480x320.                                   #
@@ -254,6 +255,10 @@ class BetterRegionMap
   end
 
   def on_click(x, y)
+  end
+
+  def on_stop_moving
+
   end
 
   #Fly icons, or whatever else in override
@@ -520,8 +525,9 @@ class BetterRegionMap
   def main
     frame = 0
     loop do
+      was_moving = moving?
       update
-      if Input.press?(Input::RIGHT) && ![4, 6].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
+      if Input.press?(Input::RIGHT) && ![DIRECTION_LEFT, DIRECTION_RIGHT].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
         if @sprites["cursor"].x < 480
           $PokemonGlobal.regionMapSel[0] += 1
           @sx = @sprites["cursor"].x
@@ -532,7 +538,7 @@ class BetterRegionMap
           @mdirs << DIRECTION_RIGHT
         end
       end
-      if Input.press?(Input::LEFT) && ![4, 6].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
+      if Input.press?(Input::LEFT) && ![DIRECTION_LEFT, DIRECTION_RIGHT].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
         if @sprites["cursor"].x > 16
           $PokemonGlobal.regionMapSel[0] -= 1
           @sx = @sprites["cursor"].x
@@ -554,7 +560,7 @@ class BetterRegionMap
           @mdirs << DIRECTION_DOWN
         end
       end
-      if Input.press?(Input::UP) && ![2, 8].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
+      if Input.press?(Input::UP) && ![DIRECTION_DOWN, DIRECTION_UP].any? { |e| @dirs.include?(e) || @mdirs.include?(e) }
         if @sprites["cursor"].y > 32
           $PokemonGlobal.regionMapSel[1] -= 1
           @sy = @sprites["cursor"].y
@@ -578,22 +584,33 @@ class BetterRegionMap
           on_click(x, y)
           break if should_exit_confirm?
         else
-          stickToPositions = findNearbyHealingSpot(x, y)
+          stickToPositions = findNearbyHealingSpot(x, y)  #snap in place
           if stickToPositions
-            @sy = @sprites["cursor"].y
-            @sx = @sprites["cursor"].x
-            @my = @window.y
-            @mx = @window.x
-            move_cursor_to(stickToPositions[0], stickToPositions[1])
+            snap_to_position(stickToPositions[0], stickToPositions[1])
             update_text
             # synchronize_cursor  # Force sync
           end
         end
       end
+      if was_moving && !moving?
+        on_stop_moving
+      end
       break if should_exit_cancel?
     end
     on_exit_main
     dispose
+  end
+
+  def snap_to_position(x, y)
+    @dirs.clear
+    @mdirs.clear
+    @hor_count = 0
+    @ver_count = 0
+    @sy = @sprites["cursor"].y
+    @sx = @sprites["cursor"].x
+    @my = @window.y
+    @mx = @window.x
+    move_cursor_to(x, y)
   end
 
   def should_exit_confirm?
@@ -610,6 +627,11 @@ class BetterRegionMap
   def on_exit_main
     #implemented in child classes
   end
+
+  def moving?
+    !@dirs.empty? || !@mdirs.empty?
+  end
+
   def update(update_gfx = true)
     return if @sprites.disposed?
     on_update
@@ -659,104 +681,107 @@ class BetterRegionMap
         @sprites["arrowDown"]&.y += 1
       end
     end
-
     # Cursor movement
     if @dirs.include?(DIRECTION_RIGHT)
-      @hor_count ||= 0
-      @hor_count += 1
-      update_text if @hor_count == (CursorMoveSpeed / 2.0).round
-      @sprites["cursor"].x = @sx + (TileWidth / CursorMoveSpeed.to_f) * @hor_count
-      if @hor_count == CursorMoveSpeed
-        @dirs.delete(6)
-        @hor_count = nil
-        @sx = nil
-      end
-      # print_current_position()
+      move_cursor(DIRECTION_RIGHT)
     end
     if @dirs.include?(DIRECTION_LEFT)
-      @hor_count ||= 0
-      @hor_count += 1
-      update_text if @hor_count == (CursorMoveSpeed / 2.0).round
-      @sprites["cursor"].x = @sx - (TileWidth / CursorMoveSpeed.to_f) * @hor_count
-      if @hor_count == CursorMoveSpeed
-        @dirs.delete(4)
-        @hor_count = nil
-        @sx = nil
-      end
-      # print_current_position()
+      move_cursor(DIRECTION_LEFT)
     end
     if @dirs.include?(DIRECTION_UP)
-      @ver_count ||= 0
-      @ver_count += 1
-      update_text if @ver_count == (CursorMoveSpeed / 2.0).round
-      @sprites["cursor"].y = @sy - (TileHeight / CursorMoveSpeed.to_f) * @ver_count
-      if @ver_count == CursorMoveSpeed
-        @dirs.delete(8)
-        @ver_count = nil
-        @sy = nil
-      end
-      # print_current_position()
+      move_cursor(DIRECTION_UP)
     end
     if @dirs.include?(DIRECTION_DOWN)
-      @ver_count ||= 0
-      @ver_count += 1
-      update_text if @ver_count == (CursorMoveSpeed / 2.0).round
-      @sprites["cursor"].y = @sy + (TileHeight / CursorMoveSpeed.to_f) * @ver_count
-      if @ver_count == CursorMoveSpeed
-        @dirs.delete(2)
-        @ver_count = nil
-        @sy = nil
-      end
-      # print_current_position()
+      move_cursor(DIRECTION_DOWN)
     end
 
     # Map movement
     if @mdirs.include?(DIRECTION_RIGHT)
-      @hor_count ||= 0
-      @hor_count += 1
-      update_text if @hor_count == (CursorMoveSpeed / 2.0).round
-      @window.x = @mx - (TileWidth / CursorMoveSpeed.to_f) * @hor_count
-      if @hor_count == CursorMoveSpeed
-        @mdirs.delete(6)
-        @hor_count = nil
-        @mx = nil
-      end
+      move_map(DIRECTION_RIGHT)
     end
     if @mdirs.include?(DIRECTION_LEFT)
+      move_map(DIRECTION_LEFT)
+    end
+    if @mdirs.include?(DIRECTION_UP)
+      move_map(DIRECTION_UP)
+    end
+    if @mdirs.include?(DIRECTION_DOWN)
+      move_map(DIRECTION_DOWN)
+    end
+
+    if @hor_count == (CursorMoveSpeed / 2.0).round || @ver_count == (CursorMoveSpeed / 2.0).round
+      current_x = $PokemonGlobal.regionMapSel[0]
+      current_y = $PokemonGlobal.regionMapSel[1]
+      location = find_location_at_position(current_x,current_y)
+      update_text_at_location(location)
+      if location
+        on_hover(current_x,current_y)
+      end
+    end
+  end
+
+  def get_directions_offsets(direction)
+    case direction
+    when DIRECTION_RIGHT
+      return [1,0]
+    when DIRECTION_LEFT
+      return [-1,0]
+    end
+  end
+
+  def move_cursor(dir)
+    case dir
+    when DIRECTION_RIGHT, DIRECTION_LEFT
       @hor_count ||= 0
       @hor_count += 1
-      update_text if @hor_count == (CursorMoveSpeed / 2.0).round
-      @window.x = @mx + (TileWidth / CursorMoveSpeed.to_f) * @hor_count
+      @sprites["cursor"].x = @sx + (dir == DIRECTION_RIGHT ? 1 : -1) * (TileWidth / CursorMoveSpeed.to_f) * @hor_count
       if @hor_count == CursorMoveSpeed
-        @mdirs.delete(4)
+        @dirs.delete(dir)
+        @hor_count = nil
+        @sx = nil
+      end
+    when DIRECTION_UP, DIRECTION_DOWN
+      @ver_count ||= 0
+      @ver_count += 1
+      @sprites["cursor"].y = @sy + (dir == DIRECTION_DOWN ? 1 : -1) * (TileHeight / CursorMoveSpeed.to_f) * @ver_count
+      if @ver_count == CursorMoveSpeed
+        @dirs.delete(dir)
+        @ver_count = nil
+        @sy = nil
+      end
+    end
+  end
+
+  def move_map(dir)
+    case dir
+    when DIRECTION_RIGHT, DIRECTION_LEFT
+      @hor_count ||= 0
+      @hor_count += 1
+      @window.x = @mx + (dir == DIRECTION_LEFT ? 1 : -1) * (TileWidth / CursorMoveSpeed.to_f) * @hor_count
+      if @hor_count == CursorMoveSpeed
+        @mdirs.delete(dir)
         @hor_count = nil
         @mx = nil
       end
-    end
-    if @mdirs.include?(DIRECTION_UP)
+    when DIRECTION_UP, DIRECTION_DOWN
       @ver_count ||= 0
       @ver_count += 1
-      update_text if @ver_count == (CursorMoveSpeed / 2.0).round
-      @window.y = @my + (TileHeight / CursorMoveSpeed.to_f) * @ver_count
+      @window.y = @my + (dir == DIRECTION_UP ? 1 : -1) * (TileHeight / CursorMoveSpeed.to_f) * @ver_count
       if @ver_count == CursorMoveSpeed
-        @mdirs.delete(8)
-        @ver_count = nil
-        @my = nil
-      end
-    end
-    if @mdirs.include?(DIRECTION_DOWN)
-      @ver_count ||= 0
-      @ver_count += 1
-      update_text if @ver_count == (CursorMoveSpeed / 2.0).round
-      @window.y = @my - (TileHeight / CursorMoveSpeed.to_f) * @ver_count
-      if @ver_count == CursorMoveSpeed
-        @mdirs.delete(2)
+        @mdirs.delete(dir)
         @ver_count = nil
         @my = nil
       end
     end
   end
 
+  def find_location_at_position(x,y)
+    location = @data[2].find do |e|
+      e[0] == x &&
+        e[1] == y
+    end
+    return location
+  end
   def get_current_location_name
     location = @data[2].find do |e|
       e[0] == $PokemonGlobal.regionMapSel[0] &&
@@ -770,12 +795,14 @@ class BetterRegionMap
     echoln _INTL("({1}, {2})", $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
-  def update_text
-    location = @data[2].find do |e|
-      e[0] == $PokemonGlobal.regionMapSel[0] &&
-        e[1] == $PokemonGlobal.regionMapSel[1]
-    end
 
+  def update_text
+    x = $PokemonGlobal.regionMapSel[0]
+    y = $PokemonGlobal.regionMapSel[1]
+    location = find_location_at_position(x,y)
+    update_text_at_location(location)
+  end
+  def update_text_at_location(location)
     text = ""
     text = location[2] if location
     poi = ""
@@ -797,7 +824,7 @@ class BetterRegionMap
                            [text, 16, 354, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [poi, 496, 354, 1, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                          ], true)
-    on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
+    #on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1]) if location
   end
 
   def dispose

@@ -87,8 +87,6 @@ def isQuestAlreadyAccepted?(id)
 end
 
 def finishQuest(id, silent = false)
-  echoln "on est pas callé, right?"
-
   $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
   $Trainer.quest_points += 1

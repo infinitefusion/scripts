@@ -259,6 +259,8 @@ def fixStuff
 
   $PokemonGlobal.sliding=false
   $game_player.walk_anime=true
+  $game_player.direction_fix=false
+
   PokemonSelection.restore
   $game_system.menu_disabled=false
   clear_all_images

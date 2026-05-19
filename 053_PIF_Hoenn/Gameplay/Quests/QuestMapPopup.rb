@@ -205,21 +205,28 @@ class QuestMapPopup
   end
 
   def animate_in
-    12.times do |i|
-      Graphics.update
-      alpha_step = FADE_SPEED
-      if i < 8
-        @sprites["panel"].opacity = [@sprites["panel"].opacity + alpha_step, OPACITY_UNSELECTED].min
-      end
-      if i > 2
-        @sprites["text"].opacity = [@sprites["text"].opacity + alpha_step, OPACITY_UNSELECTED].min
-        MAX_VISIBLE.times do |j|
-          @sprites["rowbg#{j}"].opacity = [@sprites["rowbg#{j}"].opacity + alpha_step, OPACITY_UNSELECTED].min
-          @sprites["row#{j}"].opacity   = [@sprites["row#{j}"].opacity   + alpha_step, OPACITY_UNSELECTED].min
-          @sprites["icon#{j}"].opacity  = [@sprites["icon#{j}"].opacity  + alpha_step, OPACITY_UNSELECTED].min
-        end
-      end
+    @sprites["panel"].opacity = OPACITY_UNSELECTED
+    MAX_VISIBLE.times do |j|
+      @sprites["rowbg#{j}"].opacity = OPACITY_UNSELECTED
+      @sprites["row#{j}"].opacity   = OPACITY_UNSELECTED
+      @sprites["icon#{j}"].opacity  = OPACITY_UNSELECTED
     end
+
+    # 12.times do |i|
+    #   Graphics.update
+    #   alpha_step = FADE_SPEED
+    #   if i < 8
+    #     @sprites["panel"].opacity = [@sprites["panel"].opacity + alpha_step, OPACITY_UNSELECTED].min
+    #   end
+    #   if i > 2
+    #     @sprites["text"].opacity = [@sprites["text"].opacity + alpha_step, OPACITY_UNSELECTED].min
+    #     MAX_VISIBLE.times do |j|
+    #       @sprites["rowbg#{j}"].opacity = [@sprites["rowbg#{j}"].opacity + alpha_step, OPACITY_UNSELECTED].min
+    #       @sprites["row#{j}"].opacity   = [@sprites["row#{j}"].opacity   + alpha_step, OPACITY_UNSELECTED].min
+    #       @sprites["icon#{j}"].opacity  = [@sprites["icon#{j}"].opacity  + alpha_step, OPACITY_UNSELECTED].min
+    #     end
+    #   end
+    # end
   end
   def set_selected(selected)
     @panel_active = selected

@@ -164,15 +164,16 @@ QUESTS = {
 
 ## MAIN QUESTS
 define_quest("main_dad",:MAIN_QUEST,_INTL("Visit Dad!"), _INTL("Go visit your Dad at hist Gym in Petalburg Town!"),_INTL("Petalburg City"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
+define_quest("main_wally",:MAIN_QUEST,_INTL("Catching Tutoring"), _INTL("Catch a wild Pokémon for Wally."),_INTL("Petalburg City"),"NPC_Hoenn_Wally",MAP_PETALBURG)
 
-define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the first Pokémon Gym in Rustboro City."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne",MAP_RUSTBORO)
-define_quest("main_gym_2",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the second Pokémon Gym in Dewford Town."),_INTL("Dewford Town"),"NPC_Hoenn_Leader_Brawly",MAP_DEWFORD)
-define_quest("main_gym_3",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the third Pokémon Gym in Mauville City."),_INTL("Mauville City"),"NPC_Hoenn_Leader_Wattson",MAP_MAUVILLE)
-define_quest("main_gym_4",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fourth Pokémon Gym in Lavaridge Town."),_INTL("Lavaridge Town"),"NPC_Hoenn_Leader_Flannery",MAP_LAVARIDGE)
-define_quest("main_gym_5",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the fifth Pokémon Gym in Petalburg Town."),_INTL("Petalburg Town"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
-define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the sixth Pokémon Gym in Fortree City."),_INTL("Fortree City"),"NPC_Hoenn_Leader_Winona",MAP_FORTREE)
-define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the seventh Pokémon Gym in Mossdeep City."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza",MAP_MOSSDEEP)
-define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge the final Pokémon Gym in Sootopolis City."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace",MAP_SOOTOPOLIS)
+define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Roxanne in Rustboro City to obtain your first Gym Badge."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne",MAP_RUSTBORO)
+define_quest("main_gym_2",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Brawly in Dewford Town to obtain your second Gym Badge."),_INTL("Dewford Town"),"NPC_Hoenn_Leader_Brawly",MAP_DEWFORD)
+define_quest("main_gym_3",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Wattson in Mauville City to obtain your third Gym Badge."),_INTL("Mauville City"),"NPC_Hoenn_Leader_Wattson",MAP_MAUVILLE)
+define_quest("main_gym_4",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Flannery in Lavaridge Town to obtain your fourth Gym Badge."),_INTL("Lavaridge Town"),"NPC_Hoenn_Leader_Flannery",MAP_LAVARIDGE)
+define_quest("main_gym_5",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Norman in Petalburg City to obtain your fifth Gym Badge."),_INTL("Petalburg Town"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
+define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Winona in Fortree City to obtain your sixth Gym Badge."),_INTL("Fortree City"),"NPC_Hoenn_Leader_Winona",MAP_FORTREE)
+define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Tate & Liza in Mossdeep City to obtain your seventh Gym Badge."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza",MAP_MOSSDEEP)
+define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Wallace in Sootopolis City to obtain your final Gym Badge."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace",MAP_SOOTOPOLIS)
 
 define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan",MAP_LEAGUE)
 

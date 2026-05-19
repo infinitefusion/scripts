@@ -53,9 +53,39 @@ class QuestMap < BetterRegionMap
     quests_at_pos = @quests[[x, y]]
     if quests_at_pos && !quests_at_pos.empty?
       show_popup(quests_at_pos, x)
+      snap_to_position(x,y)
     else
       hide_popup
     end
+  end
+
+  def on_stop_moving
+    echoln "stopped moving"
+    x = $PokemonGlobal.regionMapSel[0]
+    y = $PokemonGlobal.regionMapSel[1]
+    nearby_quest = find_quest_near_coordinates(x, y,2)
+    if nearby_quest
+      new_x, new_y = nearby_quest
+      snap_to_position(new_x,new_y)
+      on_hover(new_x,new_y)
+    end
+  end
+
+  def find_quest_near_coordinates(current_x, current_y, radius)
+    closest = nil
+    min_distance = Float::INFINITY
+    for new_x in current_x - radius..current_x + radius
+      for new_y in current_y - radius..current_y + radius
+        if @quests.has_key?([new_x, new_y])
+          distance = Math.sqrt((new_x - current_x) ** 2 + (new_y - current_y) ** 2)
+          if distance < min_distance
+            min_distance = distance
+            closest = [new_x, new_y]
+          end
+        end
+      end
+    end
+    return closest
   end
 
   def on_click(x, y)
@@ -136,14 +166,11 @@ class QuestMap < BetterRegionMap
     super
   end
 
-  def update_text
+  def update_text_at_location(location)
     current_position = [$PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1]]
     quests_at_location = @quests[current_position]
     nb_quests_at_position = 0
     nb_quests_at_position = @quests[current_position].length if quests_at_location
-    location = @data[2].find do |e|
-      e[0] == $PokemonGlobal.regionMapSel[0] && e[1] == $PokemonGlobal.regionMapSel[1]
-    end
     text = ""
     text = location[2] if location
 
