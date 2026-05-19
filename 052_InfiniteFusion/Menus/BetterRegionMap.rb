@@ -622,6 +622,7 @@ class BetterRegionMap
   end
 
   def snap_to_position(x, y)
+    return unless @sprites["cursor"]
     @dirs.clear
     @mdirs.clear
     @hor_count = 0
