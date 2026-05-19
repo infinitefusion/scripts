@@ -103,7 +103,7 @@ class PokemonEggHatch_Scene
     @pokemon.play_cry
     updateScene(frames)
     pbBGMStop()
-    pbMEPlay("Evolution Success")
+    pbMEPlay("evolution_success")
     @pokemon.name = nil
     pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
     if $PokemonSystem.prompt_nicknames

@@ -68,6 +68,31 @@ class PokemonBag
     @pockets[@lastpocket] = sorted
   end
 
+  def sort_pocket_by_tm_number()
+    current_pocket = @pockets[@lastpocket]
+
+    sorted = current_pocket.sort_by do |item|
+      item_name = item[0].to_s
+      match = item_name.match(/\A([A-Z]+)(\d+)/)
+
+      if match
+        prefix    = match[1]        # "HM" or "TM"
+        tm_number = match[2].to_i   # 24
+        group_priority = (prefix == "HM") ? 1 : 2
+        if @descending_sort
+          [group_priority, -tm_number, item_name]
+        else
+          [group_priority, tm_number, item_name]
+        end
+      else
+        [3, 0, item_name]
+      end
+    end
+
+    @descending_sort = !@descending_sort
+    @pockets[@lastpocket] = sorted
+  end
+
   def sort_pocket_by_last_used()
   end
 
