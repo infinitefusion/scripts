@@ -126,14 +126,8 @@ class QuestMap < BetterRegionMap
     @reopen_map = false
     if @switch_to_questlog
       @switch_to_questlog = false
-      hide_popup
-      @sprites.visible = false
-      @window.visible = false
-      ql = Questlog.new(from_map: true)
-      @reopen_map = !!ql&.switch_to_map
-      return
+      @reopen_map = true
     end
-    @reopen_map = false
   end
 
   def should_exit_cancel?

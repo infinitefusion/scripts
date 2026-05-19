@@ -9,10 +9,16 @@
 
 def pbQuestlog
   ensure_quests_repaired
-  if $Trainer.pokenav&.last_opened_quest_mode == :LIST || Settings::KANTO
-    Questlog.new
-  else
-    showQuestMap
+  loop do
+    if $Trainer.pokenav.last_opened_quest_mode == :LIST || Settings::KANTO
+      ql = Questlog.new
+      break unless ql.switch_to_map
+      $Trainer.pokenav.last_opened_quest_mode = :MAP
+    else
+      qm = showQuestMap
+      break unless qm&.reopen_map
+      $Trainer.pokenav.last_opened_quest_mode = :LIST
+    end
   end
 end
 
@@ -167,10 +173,6 @@ class Questlog
     end
     main_loop
     cleanup
-
-    if @switch_to_map
-      showQuestMap
-    end
   end
 
   private
