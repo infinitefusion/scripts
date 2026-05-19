@@ -100,18 +100,22 @@ class PokemonBag
       item_data = GameData::Item.get(item_id)
 
       type_name = "zzzz"  # so that it goes at the end
+      move_power = 0
+
       if item_data.is_machine?
         move = GameData::Move.get(item_data.move)
         move_type = move.type
+        move_power = move.base_damage || 0
         type_name = GameData::Type.get(move_type).real_name
       end
+
       if @descending_sort
         is_machine = item_data.is_machine? ? 0 : 1
         inverted_chars = type_name.chars.map { |c| -c.ord }
-        [is_machine, inverted_chars, item_id.to_s]
+        [is_machine, inverted_chars, move_power, item_id.to_s]
       else
         is_machine = item_data.is_machine? ? 0 : 1
-        [is_machine, type_name, item_id.to_s]
+        [is_machine, type_name, move_power, item_id.to_s]
       end
     end
 
