@@ -93,6 +93,32 @@ class PokemonBag
     @pockets[@lastpocket] = sorted
   end
 
+  def sort_pocket_by_move_type()
+    current_pocket = @pockets[@lastpocket]
+    sorted = current_pocket.sort_by do |item|
+      item_id = item.is_a?(Array) ? item[0] : item
+      item_data = GameData::Item.get(item_id)
+
+      type_name = "zzzz"  # so that it goes at the end
+      if item_data.is_machine?
+        move = GameData::Move.get(item_data.move)
+        move_type = move.type
+        type_name = GameData::Type.get(move_type).real_name
+      end
+      if @descending_sort
+        is_machine = item_data.is_machine? ? 0 : 1
+        inverted_chars = type_name.chars.map { |c| -c.ord }
+        [is_machine, inverted_chars, item_id.to_s]
+      else
+        is_machine = item_data.is_machine? ? 0 : 1
+        [is_machine, type_name, item_id.to_s]
+      end
+    end
+
+    @descending_sort = !@descending_sort
+    @pockets[@lastpocket] = sorted
+  end
+
   def sort_pocket_by_last_used()
   end
 
