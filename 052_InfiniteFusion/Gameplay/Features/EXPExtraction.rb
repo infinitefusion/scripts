@@ -70,7 +70,7 @@ def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
     pbCallBubDown(2, @event_id)
     pbMessage(_INTL("Oh, I'm sorry, but this Pokémon does not have enough Exp. available for the procedure."))
     pbCallBubDown(2, @event_id)
-    pbMessage(_INTL("Keep in mind that only the exp. that was obtained with a trainer can be safely extracted. Any exp. it gained as a wild Pokémon is no good!"))
+    pbMessage(_INTL("Keep in mind that only the Exp. that was obtained with a Trainer can be safely extracted. Any Exp. it gained as a wild Pokémon is no good!"))
     return false
   end
 

@@ -164,3 +164,4 @@ def get_current_town_map_location
     return $Trainer.last_visited_town_map_location
   end
 end
+

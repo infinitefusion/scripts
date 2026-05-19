@@ -330,7 +330,3 @@ def inputColorCode(codeVariable)
   return ColorCodeDoor.new(codeVariable).inputColorCode
 end
 
-
-
-
-

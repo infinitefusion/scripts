@@ -16,7 +16,7 @@ QUEST_REWARDS = Settings::KANTO ? [
   QuestReward.new(2, :AMULETCOIN, 1, _INTL("This doubles the money you get in Pokémon battles. Maybe it'll help finance the show!")),
   QuestReward.new(5, :INCUBATOR, 1, _INTL("The note that came with it said that it allows you to hatch an egg instantly!")),
   QuestReward.new(10, :ITEMFINDER, 1, _INTL("There's a note with it. If there's a hidden item anywhere near you, that little thing will react to tell you.")),
-  QuestReward.new(15, :INCUBATOR, 3, _INTL("Looks like they sent even more of these incubators for hatching eggs. There must be a high-profile Pokémon breeder that's a fan of the show!")),
+  QuestReward.new(15, :INCUBATOR, 3, _INTL("Looks like they sent even more of these incubators for hatching Eggs. There must be a high-profile Pokémon breeder that's a fan of the show!")),
   QuestReward.new(20, :SLEEPINGBAG, 1, _INTL("There's a note with it. This deluxe sleeping bag will allow you to sleep anywhere you want. It's so comfortable that you can sleep in it for hours!")),
   QuestReward.new(25, :LINKINGCORD, 1, _INTL("Apparently, this strange cable triggers the evolution of Pokémon that typically evolve via trade. I know you'll put it to good use!")),
   QuestReward.new(50, :MISTSTONE, 1, _INTL("This rare stone can evolve any Pokémon, regardless of their level or evolution method. Use it wisely!"), true),
