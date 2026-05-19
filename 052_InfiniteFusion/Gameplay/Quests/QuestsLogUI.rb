@@ -10,14 +10,14 @@
 def pbQuestlog
   ensure_quests_repaired
   loop do
-    if $Trainer.pokenav.last_opened_quest_mode == :LIST || Settings::KANTO
+    if $Trainer&.pokenav&.last_opened_quest_mode == :LIST || Settings::KANTO
       ql = Questlog.new
       break unless ql.switch_to_map
-      $Trainer.pokenav.last_opened_quest_mode = :MAP
+      $Trainer&.pokenav&.last_opened_quest_mode = :MAP
     else
       qm = showQuestMap
       break unless qm&.reopen_map
-      $Trainer.pokenav.last_opened_quest_mode = :LIST
+      $Trainer&.pokenav&.last_opened_quest_mode = :LIST
     end
   end
 end
@@ -222,11 +222,10 @@ class Questlog
 
   def initialize_modes
     # Register all available modes here
-    @modes = [
-      MainQuestMode.new,
-      SideQuestMode.new,
-      CompletedQuestMode.new,
-    ]
+    @modes = []
+    @modes << MainQuestMode.new if Settings::HOENN
+    @modes << SideQuestMode.new
+    @modes << CompletedQuestMode.new
 
     # You can dynamically add location-based modes:
     # @modes << LocationQuestMode.new("Cerulean City")
@@ -284,9 +283,10 @@ class Questlog
   def draw_main_text
     pbDrawOutlineText(@main, -160, 8, 512, 384, _INTL("Quest Log"),
                       Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-    pbDrawOutlineText(@main, 160, 8, 512, 384, _INTL("L/R : MAP"),
-                      Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
-
+    if can_switch_mode?
+      pbDrawOutlineText(@main, 160, 8, 512, 384, _INTL("L/R : MAP"),
+                        Color.new(255, 255, 255), Color.new(0, 0, 0), 1)
+    end
 
 
       # Draw button labels and quest counts
@@ -346,7 +346,7 @@ class Questlog
     if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && can_switch_mode?
       @switch_to_map = true
       pbSEPlay("GUI storage show party panel")
-      $Trainer.pokenav.last_opened_quest_mode = :MAP
+      $Trainer&.pokenav&.last_opened_quest_mode = :MAP
       return true
     end
     return true if Input.trigger?(Input::B)
