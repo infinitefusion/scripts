@@ -341,7 +341,7 @@ class Questlog
   end
 
   def handle_main_input
-    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && can_switch_mode?
       @switch_to_map = true
       pbSEPlay("GUI storage show party panel")
       $Trainer.pokenav.last_opened_quest_mode = :MAP
@@ -367,9 +367,12 @@ class Questlog
     false
   end
 
+  def can_switch_mode?
+    return Settings::HOENN && (@scene != SCENE_DETAIL)
+  end
 
   def handle_list_input
-    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
+    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && can_switch_mode?
       @switch_to_map = true
       return true
     end
@@ -402,10 +405,6 @@ class Questlog
 
 
   def handle_detail_input
-    if (Input.trigger?(Input::L) || Input.trigger?(Input::R)) && Settings::HOENN && !@from_map
-      @switch_to_map = true
-      return true
-    end
     if Input.trigger?(Input::B)
       return true
     end

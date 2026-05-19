@@ -1,9 +1,9 @@
 def showQuestMap
-  scene = QuestMap.new
-  return scene.flydata
+  QuestMap.new
 end
 
 class QuestMap < BetterRegionMap
+  attr_reader :reopen_map
   QUEST_SIDE_ICON_PATH = "Graphics/Pictures/map/quest_icon"
   QUEST_MAIN_ICON_PATH = "Graphics/Pictures/map/quest_icon_main"
 
@@ -105,7 +105,7 @@ class QuestMap < BetterRegionMap
       Graphics.update
       x, y = $PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1]
       on_hover(x, y)
-      @popup&.set_selected(true)
+      #@popup&.set_selected(true)
       @popup&.refresh
     end
   end
@@ -123,26 +123,22 @@ class QuestMap < BetterRegionMap
   end
 
   def on_exit_main
+    @reopen_map = false
     if @switch_to_questlog
       @switch_to_questlog = false
       hide_popup
       @sprites.visible = false
       @window.visible = false
       ql = Questlog.new(from_map: true)
-      return unless ql&.switch_to_map
-      @sprites.visible = true
-      @window.visible = true
-      @viewport.visible = true
-      @viewport2.visible = true
-      @mapvp.visible = true
-      @mapoverlayvp.visible = true
-      main
+      @reopen_map = !!ql&.switch_to_map
+      return
     end
+    @reopen_map = false
   end
 
   def should_exit_cancel?
     return true if @switch_to_questlog
-    return false if @popup
+    return false if @popup && @popup.panel_active
     return Input.trigger?(Input::B)
   end
 

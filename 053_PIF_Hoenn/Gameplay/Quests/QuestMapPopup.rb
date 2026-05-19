@@ -40,9 +40,10 @@ class QuestMapPopup
       animate_arrows
 
       if Input.trigger?(Input::B)
-        set_selected(false)
         animate_out
         dispose
+        set_selected(false)
+        Input.update
         return nil
       end
 

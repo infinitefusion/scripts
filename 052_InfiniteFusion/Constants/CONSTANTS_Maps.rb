@@ -136,6 +136,7 @@ MAP_FORTREE = 992  #todo: Temp
 MAP_MOSSDEEP = 990  #todo: Temp
 MAP_SOOTOPOLIS = 989  #todo: Temp
 MAP_LEAGUE = 988  #todo: Temp
+MAP_EVERGRANDE = 988  #todo: Temp
 
 MAP_MAGMA_CAMP = 11
 MAP_AQUA_CAMP = 39
