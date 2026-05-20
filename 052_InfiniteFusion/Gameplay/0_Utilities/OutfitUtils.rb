@@ -126,13 +126,13 @@ def purchaseDyeKitMenu(hats_kit_price = 0, clothes_kit_price = 0)
     return
   end
   pbCallBub(2, @event_id)
-  pbMessage(_INTL("Welcome! Are you interested in dyeing your outfits different colours?"))
+  pbMessage(_INTL("Welcome! Are you interested in dyeing your outfits different colors?"))
 
   pbCallBub(2, @event_id)
   pbMessage(_INTL("I make handy \\C[1]Dye Kits\\C[0] from my Smeargle's paint that can be used to dye your outfits any color you want!"))
 
   pbCallBub(2, @event_id)
-  pbMessage(_INTL("What's more is that it's reusable so you can go completely wild with it if you want! Are you interested?"))
+  pbMessage(_INTL("What's more is that it's reusable, so you can go completely wild with it if you want! Are you interested?"))
 
   msgwindow = pbCreateMessageWindow(nil)
   pbMessageDisplay(msgwindow, _INTL("Which dye kit would you like to purchase?"))

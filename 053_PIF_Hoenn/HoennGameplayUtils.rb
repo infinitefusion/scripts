@@ -277,7 +277,7 @@ def mauville_info_desk
     pbCallBubDown(2, @event_id)
     pbMessage(_INTL("The Gym Leader in Mauville City is \\C[1]Wattson\\C[0]. He specializes in Electric-type Pokémon."))
     pbCallBub(2, @event_id)
-    pbMessage(_INTL("His Gym is located in the North-West part of the city. You can find it by exiting straight ahead and following the road, then turning left at the Pokémon Center."))
+    pbMessage(_INTL("His Gym is located in the northwest part of the city. You can find it by exiting straight ahead and following the road, then turning left at the Pokémon Center."))
   when cmd_tunnels
     pbCallBub(2, @event_id)
     pbMessage(_INTL("Mauville has an interconnected network of tunnels to make it easy to get around the city. You're in them right now!"))
@@ -295,7 +295,7 @@ def mauville_info_desk
     pbMessage(_INTL("To get to it, just exit the tunnel straight ahead and follow the road, then turn right at the Pokémon Center. You can't miss it!"))
   when cmd_mart
     pbCallBub(2, @event_id)
-    pbMessage(_INTL("The Mauville Pokémart sells a variety of items for trainers. One of their top-selling items is the Cell Battery!"))
+    pbMessage(_INTL("The Mauville Poké Mart sells a variety of items for Trainers. One of their top-selling items is the Cell Battery!"))
     pbCallBub(2, @event_id)
     pbMessage(_INTL("It's located right outside the tunnel, straight ahead."))
   when cmd_clothes

@@ -73,7 +73,7 @@ class PokemonTrainerCard_Scene
         end
       end
     else
-      pbMessage("You can purchase new Trainer Card backgrounds at PokéMarts!")
+      pbMessage("You can purchase new Trainer Card backgrounds at Poké Marts!")
     end
   end
 

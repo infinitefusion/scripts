@@ -50,12 +50,12 @@ end
 
 QUESTS = {
     #Pokemart
-    "pokemart_johto" => Quest.new("pokemart_johto", _INTL("Johto Pokémon"), _INTL("A traveler in the PokéMart wants you to show him a Pokémon native to the Johto region."), "traveler_johto", _INTL("Cerulean City"), HotelQuestColor),
-    "pokemart_hoenn" => Quest.new("pokemart_hoenn", _INTL("Hoenn Pokémon"), _INTL("A traveler in the PokéMart you to show him a Pokémon native to the Hoenn region."), "traveler_hoenn", _INTL("Vermillion City"), HotelQuestColor),
+    "pokemart_johto" => Quest.new("pokemart_johto", _INTL("Johto Pokémon"), _INTL("A traveler in the Poké Mart wants you to show him a Pokémon native to the Johto region."), "traveler_johto", _INTL("Cerulean City"), HotelQuestColor),
+    "pokemart_hoenn" => Quest.new("pokemart_hoenn", _INTL("Hoenn Pokémon"), _INTL("A traveler in the Poké Mart you to show him a Pokémon native to the Hoenn region."), "traveler_hoenn", _INTL("Vermillion City"), HotelQuestColor),
     "pokemart_sinnoh" => Quest.new("pokemart_sinnoh", _INTL("Sinnoh Pokémon"), _INTL("A traveler in the Department Center wants you to show him a Pokémon native to the Sinnoh region."), "traveler_sinnoh", _INTL("Celadon City"), HotelQuestColor),
-    "pokemart_unova" => Quest.new( "pokemart_unova", _INTL("Unova Pokémon"), _INTL("A traveler in the PokéMart wants you to show him a Pokémon native to the Unova region."), "traveler_unova", _INTL("Fuchsia City"), HotelQuestColor),
-    "pokemart_kalos" => Quest.new("pokemart_kalos", _INTL("Kalos Pokémon"), _INTL("A traveler in the PokéMart wants you to show him a Pokémon native to the Kalos region."), "traveler_kalos", _INTL("Saffron City"), HotelQuestColor),
-    "pokemart_alola" => Quest.new("pokemart_alola", _INTL("Alola Pokémon"), _INTL("A traveler in the PokéMart wants you to show him a Pokémon native to the Alola region."), "traveler_alola", _INTL("Cinnabar Island"), HotelQuestColor),
+    "pokemart_unova" => Quest.new( "pokemart_unova", _INTL("Unova Pokémon"), _INTL("A traveler in the Poké Mart wants you to show him a Pokémon native to the Unova region."), "traveler_unova", _INTL("Fuchsia City"), HotelQuestColor),
+    "pokemart_kalos" => Quest.new("pokemart_kalos", _INTL("Kalos Pokémon"), _INTL("A traveler in the Poké Mart wants you to show him a Pokémon native to the Kalos region."), "traveler_kalos", _INTL("Saffron City"), HotelQuestColor),
+    "pokemart_alola" => Quest.new("pokemart_alola", _INTL("Alola Pokémon"), _INTL("A traveler in the Poké Mart wants you to show him a Pokémon native to the Alola region."), "traveler_alola", _INTL("Cinnabar Island"), HotelQuestColor),
 
 
     #Pewter hotel
@@ -63,7 +63,7 @@ QUESTS = {
     "pewter_2" =>Quest.new("pewter_2", _INTL("Lost Medicine"), _INTL("A youngster in Pewter City needs your help to find a lost Revive. He lost it by sitting on a bench somewhere in Pewter City."), "BW (19)", _INTL("Pewter City"), HotelQuestColor),
     "pewter_3" =>Quest.new("pewter_3", _INTL("Bug Evolution "), _INTL("A Bug Catcher in Pewter City wants you to show him a fully-evolved Bug Pokémon."), "BWBugCatcher_male", _INTL("Pewter City"), HotelQuestColor),
     "pewter_field_1" => Quest.new("pewter_field_1", _INTL("Nectar garden"), _INTL("An old man wants you to bring differently colored flowers for the city's garden."),  "BW (039)", _INTL("Pewter City"), FieldQuestColor),
-    "pewter_field_2" => Quest.new("pewter_field_2", _INTL("I Choose You!"), _INTL("A Pikachu in the PokéMart has lost its official Pokémon League Hat. Find one and give it to the Pikachu!"),  "YOUNGSTER_LeagueHat", _INTL("Pewter City"), FieldQuestColor),
+    "pewter_field_2" => Quest.new("pewter_field_2", _INTL("I Choose You!"), _INTL("A Pikachu in the Poké Mart has lost its official Pokémon League Hat. Find one and give it to the Pikachu!"),  "YOUNGSTER_LeagueHat", _INTL("Pewter City"), FieldQuestColor),
     "pewter_field_3" => Quest.new("pewter_field_3", _INTL("Prehistoric Amber!"), _INTL("Meetup with a scientist in Viridian Forest to look for prehistoric amber."),  "BW (82)", _INTL("Pewter City"), FieldQuestColor),
 
     #Cerulean hotel
