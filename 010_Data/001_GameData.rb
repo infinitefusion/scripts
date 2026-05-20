@@ -28,6 +28,7 @@ module GameData
     # @param other [Symbol, self, String, Integer]
     # @return [self]
     def get(other)
+      echoln other
       validate other => [Symbol, self, String, Integer]
 
       return other if other.is_a?(self)
@@ -55,7 +56,7 @@ module GameData
 
       if !self::DATA.has_key?(other)
         if self == GameData::Item
-          return nil
+          return self::get(:UNKNOWN)
         else
           return self::get(:PIKACHU)
         end
