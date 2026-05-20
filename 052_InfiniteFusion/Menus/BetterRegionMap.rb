@@ -272,6 +272,7 @@ class BetterRegionMap
       new_x, new_y = nearby_fly_spot
       if [new_x, new_y] != @position_before_moving
         snap_to_position(new_x, new_y)
+        update_text
         on_hover(new_x, new_y)
       end
       @snapping = false

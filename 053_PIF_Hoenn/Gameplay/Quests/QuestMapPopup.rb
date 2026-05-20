@@ -4,6 +4,7 @@
 class QuestMapPopup
   attr_reader :quests
   attr_reader :panel_active
+  attr_reader :disposed
 
   PANEL_WIDTH  = 260 #220
   PANEL_HEIGHT = 320
@@ -244,6 +245,7 @@ class QuestMapPopup
   end
 
   def animate_out
+    @disposed = true
     @sprites["uparrow"]&.visible  = false
     @sprites["downarrow"]&.visible = false
     8.times do

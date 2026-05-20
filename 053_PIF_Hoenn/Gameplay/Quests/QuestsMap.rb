@@ -13,7 +13,7 @@ class QuestMap < BetterRegionMap
     @popup = nil
     @snapping = false
     @previous_position = [0, 0]
-    super(nil, true, false, false, nil, nil, false)
+    super(nil, false, false, false, nil, nil, false)
   end
 
   def after_init_graphics
@@ -54,7 +54,7 @@ class QuestMap < BetterRegionMap
   end
 
   def on_hover(x, y)
-    echoln quests_at_pos
+    quests_at_pos = @quests[[x, y]]
     if quests_at_pos && !quests_at_pos.empty?
       snap_to_position(x, y)
       show_popup(quests_at_pos)
@@ -127,8 +127,9 @@ class QuestMap < BetterRegionMap
   end
 
   def show_popup(quests)
+    return if @popup&.quests == quests #popup already active
+    return if @popup && @popup.panel_active
     location_name = get_current_location_name
-    return if @popup && @popup.quests == quests
     hide_popup
     on_right_half = @sprites["cursor"].x > (Graphics.width / 2)
     @popup = QuestMapPopup.new(quests, on_right_half, @viewport2, location_name)
@@ -193,7 +194,6 @@ class QuestMap < BetterRegionMap
                            [text, 16, 344, 0, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                            [nb_quests_text, 496, 344, 1, Color.new(255, 255, 255), Color.new(0, 0, 0)],
                          ], true)
-    on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
   def open_quest_detail(quest)

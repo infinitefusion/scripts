@@ -163,7 +163,7 @@ QUESTS = {
 # ################
 
 ## MAIN QUESTS
-define_quest("main_dad",:MAIN_QUEST,_INTL("Visit Dad!"), _INTL("Go visit your Dad at hist Gym in Petalburg Town!"),_INTL("Petalburg City"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
+define_quest("main_dad",:MAIN_QUEST,_INTL("Visit Dad!"), _INTL("Go visit your Dad at his Gym in Petalburg Town!"),_INTL("Petalburg City"),"NPC_Hoenn_Leader_Norman",MAP_PETALBURG)
 define_quest("main_wally",:MAIN_QUEST,_INTL("Catching Tutoring"), _INTL("Catch a wild Pokémon for Wally."),_INTL("Petalburg City"),"NPC_Hoenn_Wally",MAP_PETALBURG)
 
 define_quest("main_gym_1",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Roxanne in Rustboro City to obtain your first Gym Badge."),_INTL("Rustboro City"),"NPC_Hoenn_Leader_Roxanne",MAP_RUSTBORO)
