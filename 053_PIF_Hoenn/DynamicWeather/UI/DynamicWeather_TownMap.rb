@@ -13,7 +13,6 @@ class BetterRegionMap
     weather_intensity = weather_at_location[1]
 
     weather_name = ""
-    echoln weather_intensity
     adjective = weather_intensity_adjective(weather_intensity,weather_type,)
     case weather_type
     when :Sandstorm
@@ -45,6 +44,9 @@ class BetterRegionMap
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Storm
       weather_name = _INTL("#{adjective} thunderstorm")
+      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
+    when :Ash
+      weather_name = _INTL("Volcanic Ash")
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     end
     if weather_name && intensity_text
@@ -89,6 +91,10 @@ class BetterRegionMap
     when :Rain
       value = 2 * i
       return _INTL("#{value} mm/h")
+
+    when :Ash
+      value = (0.5 * i).round(1)
+      return _INTL("#{value} cm/h")
 
     when :Fog
       value = 1100 - i * 100
@@ -214,6 +220,8 @@ def get_weather_icon(weather_type, intensity)
     icon_name = "mapStrongWinds"
   when :HarshSun
     icon_name = "mapHarshSun"
+  when :Ash
+    icon_name = "mapAsh"
   else
     icon_name = nil
   end
@@ -223,7 +231,7 @@ end
 def get_full_weather_icon_name(weather_type, intensity)
   return nil if !weather_type
   return nil if !intensity
-  same_intensity_weather_types = [:Sandstorm, :Snow, :StrongWinds, :HeavyRain, :HarshSun]
+  same_intensity_weather_types = [:Sandstorm, :Snow, :StrongWinds, :HeavyRain, :HarshSun, :Ash]
 
   base_weather_icon_name = get_weather_icon(weather_type, intensity)
   icon_name = base_weather_icon_name
