@@ -44,10 +44,20 @@ class PokemonBag
     end
   end
 
-  def sort_pocket_alphabetically()
+  def sort_tm_pocket_alphabetically()
+
+  end
+
+  def sort_tm_alphabetically()
     current_pocket = @pockets[@lastpocket]
     sorted = current_pocket.sort_by do |item|
-      GameData::Item.get(item[0]).name
+      item_data = GameData::Item.get(item[0])
+      if item_data.is_machine?
+        name= GameData::Move.get(item_data.move).real_name
+      else
+        name = item_data.name
+      end
+      next name
     end
     sorted.reverse! if @descending_sort
 

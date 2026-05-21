@@ -564,7 +564,7 @@ class PokemonBagScreen
         cmd_type =  _INTL("By move type")
         cmd_cancel =  _INTL("Cancel")
 
-        commands << cmd_alphabet unless @bag.lastpocket == POCKET_TM
+        commands << cmd_alphabet
         commands << cmd_quantity unless @bag.lastpocket == POCKET_TM || @bag.lastpocket == POCKET_KEY
         commands << cmd_number if @bag.lastpocket == POCKET_TM
         commands << cmd_type if @bag.lastpocket == POCKET_TM
@@ -573,7 +573,11 @@ class PokemonBagScreen
         case commands[command]
           ### Cancel ###
         when cmd_alphabet
-          @bag.sort_pocket_alphabetically()
+          if @bag.lastpocket == POCKET_TM
+            @bag.sort_tm_alphabetically()
+          else
+            @bag.sort_pocket_alphabetically()
+          end
         when cmd_quantity
           @bag.sort_pocket_by_quantity()
         when cmd_number
