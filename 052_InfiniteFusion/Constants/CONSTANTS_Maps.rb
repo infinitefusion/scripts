@@ -137,6 +137,22 @@ MAP_MOSSDEEP = 990  #todo: Temp
 MAP_SOOTOPOLIS = 989  #todo: Temp
 MAP_LEAGUE = 988  #todo: Temp
 MAP_EVERGRANDE = 988  #todo: Temp
+MAP_FALLARBOR = 993  #todo: Temp
+
+MAP_PACIFIDLOG = 951 #todo: Temp
 
 MAP_MAGMA_CAMP = 11
 MAP_AQUA_CAMP = 39
+
+MAP_MT_CHIMNEY = 983
+MAP_DESERT = 555 #todo: Temp
+MAP_SHOAL_CAVE = 444 #todo: Temp
+MAP_MT_PYRE = 964 #todo: Temp
+MAP_METEOR_FALLS = 985 #todo: Temp
+
+MAP_ROUTE_113 = 973 #todo: Temp
+
+MAP_ROUTE_119 = 967 #todo: Temp
+MAP_ROUTE_120 = 966 #todo: Temp
+
+MAP_ROUTE_121 = 965 #todo: Temp
