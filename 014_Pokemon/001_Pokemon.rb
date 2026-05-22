@@ -868,11 +868,21 @@ class Pokemon
 
   # @return [GameData::Item, nil] an Item object corresponding to this Pokémon's item
   def item
-    return GameData::Item.try_get(@item)
+    if @item && GameData::Item.exists?(@item)
+      return GameData::Item.try_get(@item)
+    else
+      return GameData::Item.try_get(:UNKNOWN)
+    end
+    return nil
   end
 
   def item_id
-    return @item
+    return nil unless @item
+    if GameData::Item.exists?(@item)
+      return @item
+    else
+      return :UNKNOWN
+    end
   end
 
   # Gives an item to this Pokémon to hold.
