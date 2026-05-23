@@ -603,14 +603,14 @@ DebugMenuCommands.register("quickhatch", {
 DebugMenuCommands.register("fillboxes", {
   "parent"      => "pokemonmenu",
   "name"        => _INTL("Fill Storage Boxes"),
-  "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
+  "description" => _INTL("Add one Pokémon of each species to storage."),
   "effect"      => proc {
     added = 0
     box_qty = $PokemonStorage.maxPokemon(0)
     completed = true
-    for num in 1..NB_POKEMON
+    for num in 1..501#NB_POKEMON
       pokemon = getPokemon(num)
-      pbAddPokemonSilent(pokemon,50)
+      pbAddPokemonSilent(pokemon,5)
     end
 
 

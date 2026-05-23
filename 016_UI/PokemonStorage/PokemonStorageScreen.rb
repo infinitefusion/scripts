@@ -446,7 +446,7 @@ class PokemonStorageScreen
   def pbHold(selected)
     box = selected[0]
     index = selected[1]
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       pokemon = $PokemonStorage[*selected]
       return if @storage[box].check_is_duplicate(pokemon)
       unless verifyTransferBoxAutosave
@@ -462,7 +462,7 @@ class PokemonStorageScreen
     @heldpkmn = @storage[box, index]
     @storage.pbDelete(box, index)
     @scene.pbRefresh
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       @saveWhenPlaceDown = true
     end
   end
@@ -470,7 +470,7 @@ class PokemonStorageScreen
   def pbPlace(selected)
     box = selected[0]
     index = selected[1]
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       if @heldpkmn.owner.name == "RENTAL"
         pbMessage(_INTL("This Pokémon cannot be transferred."))
         return
@@ -520,7 +520,7 @@ class PokemonStorageScreen
       raise _INTL("Position {1},{2} is empty...", box, index)
     end
 
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       if @heldpkmn.owner.name == "RENTAL"
         pbMessage(_INTL("This Pokémon cannot be transferred."))
         return
