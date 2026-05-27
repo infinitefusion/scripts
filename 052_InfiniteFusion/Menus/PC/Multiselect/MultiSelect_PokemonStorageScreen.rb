@@ -203,7 +203,7 @@ class PokemonStorageScreen
   # --- Screen-side game-rule methods (validate, commit, then animate) ---
   # Validate & pick up a selection of multiple Pokémon (logical)
   def pbHoldMulti(box, selected_index)
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       pbPlayBuzzerSE
       return
     end
@@ -256,7 +256,7 @@ class PokemonStorageScreen
   # Commit them to storage and animate the placement.
   def pbPlaceMulti(box, selected_index)
     return if @multiheldpkmn.nil? || @multiheldpkmn.empty?
-    if @scene.inTransferBox
+    if @scene.inTransferBox && box != -1
       pbPlayBuzzerSE
       return
     end
