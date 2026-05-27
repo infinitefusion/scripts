@@ -470,7 +470,8 @@ class PokemonStorageScreen
   def pbPlace(selected)
     box = selected[0]
     index = selected[1]
-    if @scene.inTransferBox
+
+    if @scene.inTransferBox && @storage[box].can_use_transfer_box?
       if @heldpkmn.owner.name == "RENTAL"
         pbMessage(_INTL("This Pokémon cannot be transferred."))
         return

@@ -28,7 +28,6 @@ module GameData
     # @param other [Symbol, self, String, Integer]
     # @return [self]
     def get(other)
-      echoln other
       validate other => [Symbol, self, String, Integer]
 
       return other if other.is_a?(self)
