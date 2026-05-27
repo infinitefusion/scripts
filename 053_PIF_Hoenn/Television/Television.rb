@@ -90,7 +90,7 @@ end
 
 #pbMessage(_INTL("\"\""))
 def berryContestTVNews
-  pbMessage(_INTL("\"...I'm currently standing in front of the Berry-growing contest in Petalburg Town. We've interviewed {1}, a local trainer to get their thoughts on the contest!\"",$Trainer.name))
+  pbMessage(_INTL("\"...I'm currently standing in front of the Berry-growing contest in Petalburg Town. We've interviewed {1}, a local Trainer to get their thoughts on the contest!\"",$Trainer.name))
 
   second_part = "."
   case $game_variables[VAR_REPORTER_Q1]
@@ -118,7 +118,7 @@ def berryContestTVNews
     when 2
       second_part = _INTL("They didn't seem too interested in the contest when I asked them, but they still came back to participate again.")
     end
-    pbMessage(_INTL("\"{1} is a returning participant to the contest. {2}\"",$Trainer.name,second_part))
+    pbMessage(_INTL("\"{1} is a returning participant to the contest{2}\"",$Trainer.name,second_part))
     pbMessage(_INTL("\"According to them, the secret trick to growing Berries is to {1}... Who would've thought!'\"",$game_variables[VAR_REPORTER_Q3].downcase))
 
   when 2 #First time in contest? Not participating

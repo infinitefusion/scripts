@@ -32,7 +32,7 @@ class PokeblockCase_Scene
 		@sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
 		@sprites["overlay"].z=1000
 		pbSetSystemFont(@sprites["overlay"].bitmap)
-		pbDrawTextPositions(@sprites["overlay"].bitmap,[["Pokéblock Case",115,28,2,BASE_COLOR,SHADOW_COLOR]])
+		pbDrawTextPositions(@sprites["overlay"].bitmap,[["Pokéblock Case",115,16,2,BASE_COLOR,SHADOW_COLOR]])
 		@sprites["blocktext"] = Window_UnformattedTextPokemon.newWithSize(
 		  "", 72, 272, Graphics.width - 72 - 24, 128, @viewport
 		)
@@ -113,8 +113,8 @@ class PokeblockCase_Scene
 		arr2 = ["Spicy", "Dry", "Sweet", "Bitter", "Sour"]
 		5.times { |i|	
 			x = i < 3 ? 8 : 104
-			y = 18 + (i % 3) * 32
-			imagepos.push(["Graphics/Pictures/Pokeblock/Blocks/"+arr[i],x,y]) if block.flavor[i] > 0 if block 
+			y = 2 + (i % 3) * 32
+			imagepos.push(["Graphics/Pictures/Pokeblock/Blocks/"+arr[i],x,y+12]) if block.flavor[i] > 0 if block
 			textpos.push([arr2[i],x+20,y-2,0,BASE_COLOR,SHADOW_COLOR])
 		}
 		x = 110
@@ -126,7 +126,7 @@ class PokeblockCase_Scene
 		
 		item = @sprites["blockicon"].bitmap
 		item.clear
-		imagepos.push(["Graphics/Pictures/Pokeblock/Blocks/Block_"+GameData::PokeblockColor.get(block.color).name+(block.plus ? "_Plus" : ""),0,0]) if block 
+		imagepos.push(["Graphics/Pictures/Pokeblock/Blocks/Block_"+GameData::PokeblockColor.get(block.color).name+(block.plus ? "_Plus" : ""),0,0]) if block
 		pbDrawImagePositions(item,imagepos)
 	end
 
@@ -671,17 +671,17 @@ class PokeblockCondition_Scene
 		  imagepos.push([sprintf("Graphics/Pictures/shiny"), 2, 134])
 		end
 		textpos = [
-		  [_INTL("CONDITION"), 26, 22, 0, BASE_COLOR, SHADOW_COLOR],
-		  [pkmn.name, 46, 68, 0, BASE_COLOR, SHADOW_COLOR],
-		  [pkmn.level.to_s, 46, 98, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
-		  [_INTL("Nature"), 16, 324, 0, BASE_COLOR, SHADOW_COLOR],
-		  [pkmn.nature.name, 16, 358, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)]
+		  [_INTL("CONDITION"), 26, 10, 0, BASE_COLOR, SHADOW_COLOR],
+		  [pkmn.name, 46, 52, 0, BASE_COLOR, SHADOW_COLOR],
+		  [pkmn.level.to_s, 46, 86, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)],
+		  [_INTL("Nature"), 16, 308, 0, BASE_COLOR, SHADOW_COLOR],
+		  [pkmn.nature.name, 16, 342, 0, Color.new(64, 64, 64), Color.new(176, 176, 176)]
 		]	
 		# Write the gender symbol
 		if pkmn.male?
-		  textpos.push([_INTL("♂"), 178, 68, 0, Color.new(24, 112, 216), Color.new(136, 168, 208)])
+		  textpos.push([_INTL("♂"), 178, 52, 0, Color.new(24, 112, 216), Color.new(136, 168, 208)])
 		elsif pkmn.female?
-		  textpos.push([_INTL("♀"), 178, 68, 0, Color.new(248, 56, 32), Color.new(224, 152, 144)])
+		  textpos.push([_INTL("♀"), 178, 52, 0, Color.new(248, 56, 32), Color.new(224, 152, 144)])
 		end	
 		pbDrawImagePositions(overlay, imagepos)
 		pbDrawTextPositions(overlay, textpos)
