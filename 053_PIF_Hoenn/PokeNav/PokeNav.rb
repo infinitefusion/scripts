@@ -29,7 +29,7 @@ class Pokenav
     :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
     :POKECHALLENGE => _INTL("PokéChallenge"), #Obtained at Slateport fan club
     :BOXLINK => _INTL("Box Link"),
-    :FUSIONQUIZ => _INTL("Guess that Fusion!"),
+    :FUSIONQUIZ => _INTL("Who's That Fusion?"),
     :BERRYDEX => _INTL("BerryDex"),
 
     #To implement

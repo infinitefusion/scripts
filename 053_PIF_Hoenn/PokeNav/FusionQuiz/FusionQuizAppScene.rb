@@ -39,7 +39,7 @@ class FusionQuizAppScene < PokeNavAppScene
   end
 
   def header_name
-    return _INTL("Guess that Fusion!")
+    return _INTL("Who's That Fusion!")
   end
 
   def header_path
