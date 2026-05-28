@@ -44,7 +44,6 @@ class TrainerStatistics
   def incr_nb_pokemon_defeated
     @nb_pokemon_defeated = 1 unless @nb_pokemon_defeated
     @nb_pokemon_defeated += 1
-    echoln @nb_pokemon_defeated
   end
   def incr_nb_trades
     @nb_trades = 1 unless @nb_trades

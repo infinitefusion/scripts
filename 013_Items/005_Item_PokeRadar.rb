@@ -343,7 +343,11 @@ Events.onWildBattleEnd += proc { |_sender, e|
   level = e[1]
   decision = e[2]
   if $PokemonTemp.pokeradar && (decision == 1 || decision == 4) # Defeated/caught
-    pokeradar_species = $PokemonTemp.pokeradar[0]
+    if Settings::HOENN
+      pokeradar_species = $PokemonTemp.pokeradar[0]
+    else
+      pokeradar_species = species
+    end
     if species == pokeradar_species
       $PokemonTemp.pokeradar[0] = species
       $PokemonTemp.pokeradar[1] = level
