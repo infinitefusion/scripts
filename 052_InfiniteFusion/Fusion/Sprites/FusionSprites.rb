@@ -118,8 +118,9 @@ module GameData
       end
       # todo: integrate triples to pif_sprite system - handled separately for now
       if pokemon.isTripleFusion?
+        spriteloader = BattleSpriteLoader.new
         dex_number = getDexNumberForSpecies(pokemon.id_number)
-        sprite = spriteLoader.load_triple_fusion_sprite(dex_number)
+        sprite = spriteloader.load_triple_fusion_sprite(dex_number)
         if pokemon.shiny?
           sprite.shiftAllColors(dex_number, pokemon.body_shiny, pokemon.head_shiny)
         end

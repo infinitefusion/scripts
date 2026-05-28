@@ -254,9 +254,6 @@ module GameData
 
     def self.play_triple_fusion_cry(species_id, volume, pitch)
       fusion_components = get_triple_fusion_components(species_id)
-
-      echoln fusion_components
-      echoln species_id
       for id in fusion_components
         cry_filename = self.check_cry_file(id,nil)
         pbSEPlay(cry_filename,volume-10) rescue nil

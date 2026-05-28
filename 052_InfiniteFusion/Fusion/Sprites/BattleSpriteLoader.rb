@@ -4,7 +4,7 @@ class BattleSpriteLoader
   end
 
   def load_pif_sprite_directly(pif_sprite)
-    if pif_sprite.local_path && pbResolveBitmap(pif_sprite.local_path)
+    if pif_sprite&.local_path && pbResolveBitmap(pif_sprite.local_path)
       return AnimatedBitmap.new(pif_sprite.local_path)
     end
     extractor = get_sprite_extractor_instance(pif_sprite.type)
@@ -78,7 +78,7 @@ class BattleSpriteLoader
   def obtain_pif_sprite(species)
     species_data = GameData::Species.get(species)
     if species_data.is_triple_fusion
-      #todo
+      pif_sprite = select_new_pif_triple_sprite(species_data.id_number)
     elsif species_data.is_fusion
       head= species_data.get_head_species
       body = species_data.get_body_species
@@ -199,6 +199,15 @@ class BattleSpriteLoader
     end
   end
 
+
+  def select_new_pif_triple_sprite(dex_number)
+    sprite= PIFSprite.new(:TRIPLE, dex_number, nil, "")
+    sprite.local_path = getSpecialSpriteName(dex_number)
+    echoln sprite.local_path
+    return sprite
+  end
+
+
   #
   # Flow:
   # #   if none found in cache, look for custom sprite in custom spritesheet (download if can't find spritesheet or new spritepack released)
@@ -277,7 +286,7 @@ class BattleSpriteLoader
     when Settings::ZAPMOLCUNO_NB + 20 #birdBoss Left
       return sprintf(base_path +"invisible")
     when Settings::ZAPMOLCUNO_NB + 21 #birdBoss middle
-      return sprintf(base_path + "144.145.146")
+      return sprintf(base_path + "BIRDBOSS")
     when Settings::ZAPMOLCUNO_NB + 22 #birdBoss right
       return sprintf(base_path +"invisible")
     when Settings::ZAPMOLCUNO_NB + 23 #sinnohboss left
