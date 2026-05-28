@@ -192,9 +192,6 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
-
-    echoln @species
-
     @gender, @form = $Trainer.pokedex.last_form_seen(@species)
 
     if @sprites["selectedSprite"]
@@ -208,7 +205,7 @@ class PokemonPokedexInfo_Scene
     end
 
     if @pokemon && @pokemon.pif_sprite
-      @spritesLoader = BattleSpriteLoader.new unless @spritesLoaderﬂ
+      @spritesLoader = BattleSpriteLoader.new unless @spritesLoader
       animated = @spritesLoader.load_pif_sprite_directly(@pokemon.pif_sprite)
       @displayed_pif_sprite = @pokemon.pif_sprite
       @sprites["infosprite"].setAnimatedBitmap(animated)
