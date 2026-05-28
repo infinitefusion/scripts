@@ -51,12 +51,6 @@ def setupStartingOutfit()
   default_hair_male = getDefaultHair(GENDER_MALE)
   default_hair_female = getDefaultHair(GENDER_FEMALE)
 
-  $Trainer.hat = nil
-  if Settings::KANTO
-    $Trainer.clothes = STARTING_OUTFIT
-  end
-
-
   unlock_easter_egg_hats()
   gender = pbGet(VAR_TRAINER_GENDER)
   if gender == GENDER_FEMALE
@@ -74,6 +68,11 @@ def setupStartingOutfit()
   $Trainer.unlock_hair(default_hair_male, true)
   $Trainer.unlock_hair(default_hair_female, true)
   $Trainer.unlock_clothes(STARTING_OUTFIT, true)
+
+  $Trainer.hat = nil
+  if Settings::KANTO
+    $Trainer.clothes = STARTING_OUTFIT
+  end
 end
 
 def give_date_specific_hats()

@@ -42,8 +42,6 @@ def list_available_outfits(directory, versions = [], unlocked = [], prefix_filte
   else
     outfits = list_all_numeric_folders(directory)
   end
-  # #echoln outfits
-  # return outfits  #todo: remove this return for unlockable outfits
   available_outfits = []
   for outfit in outfits
     if !unlocked || unlocked.include?(outfit)
