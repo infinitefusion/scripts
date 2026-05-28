@@ -1,7 +1,10 @@
 
-FieldQuestColor = :PURPLE
+FieldQuestColor = :WHITE
 LegendaryQuestColor = :GOLD
 TRQuestColor = :DARKRED
+
+MagmaQuestColor = :DARKRED
+AquaQuestColor = :LIGHTPURPLE
 
 QuestBranchMain = _INTL("Main Quests")
 

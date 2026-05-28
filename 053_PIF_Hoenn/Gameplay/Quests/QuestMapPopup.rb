@@ -162,7 +162,7 @@ class QuestMapPopup
 
         # Quest name text (no background drawing needed here anymore)
         pbDrawOutlineText(row_bmp, 44, 8, row_bmp.width - 44, row_bmp.height,
-                          quest.name, quest.color, Color.new(0, 0, 0))
+                          quest.name, quest.default_color, Color.new(0, 0, 0))
 
         # Character icon
         icon = @sprites["icon#{i}"]

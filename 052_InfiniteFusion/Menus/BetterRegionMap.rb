@@ -307,6 +307,7 @@ class BetterRegionMap
     draw_all_weather if @show_weather && $game_weather
   end
 
+
   def getPlayerPosition
     all_maps = @mapdata[0][2]
     return [0, 0] unless all_maps

@@ -406,6 +406,7 @@ def pbColor(color)
   return Color.new(7, 3, 114) if color == :SUPERDARKBLUE
   return Color.new(63, 6, 121) if color == :DARKPURPLE
   return Color.new(113, 16, 209) if color == :PURPLE
+  return Color.new(130, 50, 200) if color == :LIGHTPURPLE
   return Color.new(219, 183, 37) if color == :ORANGE
   return Color.new(255, 255, 255, 0) if color == :INVISIBLE
   return MessageConfig::LIGHT_TEXT_MAIN_COLOR if color == :LIGHT_TEXT_MAIN_COLOR

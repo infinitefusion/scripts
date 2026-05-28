@@ -671,7 +671,7 @@ class Questlog
     y_pos = get_cell_y_position(index)
     pbDrawOutlineText(@main, 11, y_pos, 512, 384,
                       quest.name,
-                      quest.color,
+                      quest.default_color,
                       Color.new(0, 0, 0),
                       1)
   end

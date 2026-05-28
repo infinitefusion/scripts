@@ -6,6 +6,10 @@ class QuestMap < BetterRegionMap
   attr_reader :reopen_map
   QUEST_SIDE_ICON_PATH = "Graphics/Pictures/map/quest_icon"
   QUEST_MAIN_ICON_PATH = "Graphics/Pictures/map/quest_icon_main"
+  QUEST_AQUA_ICON_PATH = "Graphics/Pictures/map/quest_icon_aqua"
+  QUEST_MAGMA_ICON_PATH = "Graphics/Pictures/map/quest_icon_magma"
+  QUEST_ROCKET_ICON_PATH = "Graphics/Pictures/map/quest_icon_rocket"
+  QUEST_COMPLETED_ICON_PATH = "Graphics/Pictures/map/quest_icon_completed"
 
   def initialize
     @quests = {}
@@ -13,6 +17,8 @@ class QuestMap < BetterRegionMap
     @popup = nil
     @snapping = false
     @previous_position = [0, 0]
+    @show_completed=false
+    @show_in_progress =true
     super(nil, false, false, false, nil, nil, false)
   end
 
@@ -21,12 +27,18 @@ class QuestMap < BetterRegionMap
     on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
   end
 
-  def initialize_quests_locations
+  def initialize_quests_locations(show_in_progress, show_completed)
     $Trainer.quests.each do |quest|
-      next if quest.completed
+      next if quest.completed && !show_completed
+      next if !quest.completed && !show_in_progress
+
       position = [0, 0] # default
       if quest.location_map_id
         position = getTownMapFlyCoordinates(quest.location_map_id)
+      else
+        if DEFAULT_QUEST_MAP_LOCATIONS.include?(quest.id)
+          position = getTownMapFlyCoordinates(DEFAULT_QUEST_MAP_LOCATIONS[quest.id])
+        end
       end
       quests_at_location = @quests[position]
       quests_at_location = [] if quests_at_location.nil?
@@ -37,18 +49,38 @@ class QuestMap < BetterRegionMap
   end
 
   def add_map_icons
-    initialize_quests_locations
-    icon_path = QUEST_SIDE_ICON_PATH
+    initialize_quests_locations(true, false)
     @quests.each_key do |position|
       quests_list = @quests[position]
+
+      if quests_list.all?(&:completed)
+        add_map_icon_at_position(position, position, QUEST_COMPLETED_ICON_PATH)
+        next
+      end
+
+      icon_path = QUEST_SIDE_ICON_PATH
+      has_rocket = false
+      has_magma  = false
+      has_aqua   = false
+
       quests_list.each do |quest|
-        if quest.type == :MAIN_QUEST
+        case quest.type
+        when :MAIN_QUEST
           icon_path = QUEST_MAIN_ICON_PATH
           break
-        else
-          icon_path = QUEST_SIDE_ICON_PATH
+        when :ROCKET_QUEST then has_rocket = true
+        when :MAGMA_QUEST  then has_magma  = true
+        when :AQUA_QUEST   then has_aqua   = true
         end
       end
+
+      unless icon_path == QUEST_MAIN_ICON_PATH
+        if    has_rocket then icon_path = QUEST_ROCKET_ICON_PATH
+        elsif has_magma  then icon_path = QUEST_MAGMA_ICON_PATH
+        elsif has_aqua   then icon_path = QUEST_AQUA_ICON_PATH
+        end
+      end
+
       add_map_icon_at_position(position, position, icon_path)
     end
   end
@@ -162,6 +194,7 @@ class QuestMap < BetterRegionMap
     end
   end
 
+
   def hide_popup
     return unless @popup
     @popup.animate_out
@@ -201,3 +234,86 @@ class QuestMap < BetterRegionMap
     Questlog.new(open_quest: quest)
   end
 end
+
+
+#For quests recorded before QuestMap existed, so that they don't show up at [0,0]
+DEFAULT_QUEST_MAP_LOCATIONS = {
+
+  # Main quests
+  "main_dad"        => MAP_PETALBURG,
+  "main_wally"      => MAP_PETALBURG,
+
+  "main_gym_1"      => MAP_RUSTBORO,
+  "main_gym_2"      => MAP_DEWFORD,
+  "main_gym_3"      => MAP_MAUVILLE,
+  "main_gym_4"      => MAP_LAVARIDGE,
+  "main_gym_5"      => MAP_PETALBURG,
+  "main_gym_6"      => MAP_FORTREE,
+  "main_gym_7"      => MAP_MOSSDEEP,
+  "main_gym_8"      => MAP_SOOTOPOLIS,
+
+  "main_league"     => MAP_LEAGUE,
+
+  "main_stolen_parts"   => MAP_RUSTBORO,
+  "main_steven_letter"  => MAP_DEWFORD,
+  "main_devon_parts"    => MAP_SLATEPORT,
+
+  "slateport_team_aqua" => MAP_AQUA_CAMP,
+  "slateport_team_magma"=> MAP_MAGMA_CAMP,
+
+  "evergrande_trumpet"  => MAP_EVERGRANDE,
+
+  "route_102_rematch"     => MAP_ROUTE_102,
+  "route104_rivalWeather" => MAP_ROUTE_104,
+  "route104_oricorio"     => MAP_ROUTE_104,
+  "route104_oricorio_forms" => MAP_ROUTE_104,
+  "route104_allergic"     => MAP_ROUTE_104,
+  "route109_tanning"      => MAP_ROUTE_109,
+  "route109_seahouse"     => MAP_ROUTE_109,
+  "route109_beachball"    => MAP_ROUTE_109,
+  "route110_bike"         => MAP_ROUTE_110,
+  "route111_winstrate"    => MAP_ROUTE_111,
+  "route115_secretBase"   => MAP_ROUTE_115,
+  "route116_glasses"      => MAP_ROUTE_116,
+
+  # Town/City quests
+  "petalburg_berry"       => MAP_PETALBURG,
+  "rustboro_whismur"      => MAP_RUSTBORO,
+  "rustboro_shiny"        => MAP_RUSTBORO,
+  "rustboro_trash"        => MAP_RUSTBORO,
+  "rustboro_fusion"       => MAP_RUSTBORO,
+  "dewford_fishing"       => MAP_DEWFORD,
+  "mauville_quests_1"     => MAP_MAUVILLE,
+  "mauville_quests_2"     => MAP_MAUVILLE,
+  "mauville_quests_3"     => MAP_MAUVILLE,
+  "mauville_quests_4"     => MAP_MAUVILLE,
+  "mauville_quests_5"     => MAP_MAUVILLE,
+  "mauville_quests_6"     => MAP_MAUVILLE,
+  "mauville_quests_7"     => MAP_MAUVILLE,
+  "verdanturf_shroomish"  => MAP_VERDANTURF,
+  "verdanturf_nurse"      => MAP_VERDANTURF,
+
+  # Dungeon/Area quests
+  "petalburgwoods_spores" => MAP_PETALBURG_WOODS,
+  "rusturf_trumpet"       => MAP_RUSTURF_TUNNEL,
+
+  # Team Magma quests
+  "magma_camp_attack"     => MAP_MAGMA_CAMP,
+  "magma_slugma_eggs"     => MAP_MAGMA_CAMP,
+  "magma_help_grunts"     => MAP_MAGMA_CAMP,
+  "magma_numel"           => MAP_MAGMA_CAMP,
+  "magma_graffiti"        => MAP_MAGMA_CAMP,
+  "magma_song"            => MAP_MAGMA_CAMP,
+
+  # Team Aqua quests
+  "aqua_camp_attack"      => MAP_AQUA_CAMP,
+  "aqua_wailmer_eggs"     => MAP_AQUA_CAMP,
+  "aqua_help_grunts"      => MAP_AQUA_CAMP,
+  "aqua_carvanha"         => MAP_AQUA_CAMP,
+  "aqua_graffiti"         => MAP_AQUA_CAMP,
+  "aqua_song"             => MAP_AQUA_CAMP,
+
+  # Mauville team quests
+  "mauville_magma"        => MAP_MAUVILLE,
+  "mauville_aqua"         => MAP_MAUVILLE,
+}

@@ -29,20 +29,33 @@ class Quest
   end
 end
 
-def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite,map_id=nil)
+def default_color
+  return pbColor(get_quest_color(@type))
+end
+
+def get_quest_color(quest_type)
   case quest_type
   when :MAIN_QUEST
-    text_color = MainQuestColor
-
+    return MainQuestColor
   when :HOTEL_QUEST
-    text_color = HotelQuestColor
+    return HotelQuestColor
   when :FIELD_QUEST
-    text_color = FieldQuestColor
+    return FieldQuestColor
   when :LEGENDARY_QUEST
-    text_color = LegendaryQuestColor
+    return LegendaryQuestColor
   when :ROCKET_QUEST
-    text_color = TRQuestColor
+    return TRQuestColor
+  when :MAGMA_QUEST
+    return MagmaQuestColor
+  when :AQUA_QUEST
+    return AquaQuestColor
+  else
+    return :WHITE
   end
+end
+
+def define_quest(quest_id,quest_type,quest_name,quest_description,quest_location,npc_sprite,map_id=nil)
+  text_color = get_quest_color(quest_type)
   new_quest = Quest.new(quest_id, quest_name, quest_description, npc_sprite, quest_location, text_color,Time.now,false,map_id)
   new_quest.type= quest_type
   QUESTS[quest_id] = new_quest
@@ -218,8 +231,8 @@ define_quest("rustboro_fusion",:FIELD_QUEST,_INTL("Wild Fusion Study"), _INTL("H
 define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
 
 #Slateport
-define_quest("slateport_team_aqua",:FIELD_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
-define_quest("slateport_team_magma",:FIELD_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie",MAP_MAGMA_CAMP)
+define_quest("slateport_team_aqua",:AQUA_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
+define_quest("slateport_team_magma",:MAGMA_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie",MAP_MAGMA_CAMP)
 
 
 # Route 109
