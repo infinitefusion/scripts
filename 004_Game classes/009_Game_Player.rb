@@ -48,6 +48,7 @@ class Game_Player < Game_Character
       unless $PokemonGlobal.acroBike
         if $PokemonGlobal.bike_trick && $game_player.pbFacingTerrainTag.acroBike
           bikeOnFence
+          pbWait(4)
         end
       end
       if can_move_in_direction?(dir)

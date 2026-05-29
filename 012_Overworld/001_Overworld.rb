@@ -740,7 +740,6 @@ def bikeOnFence()
     $game_player.through = true
     $game_player.jump_forward
     $game_player.through = false
-    #return pbJumpToward(1, true)
     $PokemonGlobal.acroBike = true
     return true
   end
