@@ -70,30 +70,63 @@ class Game_Player < Game_Character
 
   def update_command
     self.move_speed = 0.5 if $game_switches[SWITCH_SUPER_SLOW_SPEED]
+
     if $game_player.pbTerrainTag.ice
-      self.move_speed = 4     # Sliding on ice
-    elsif !moving? && !@move_route_forcing && $PokemonGlobal
+      reset_bike_speed
+      self.move_speed = 4
+    elsif !@move_route_forcing && $PokemonGlobal
       if $PokemonGlobal.bicycle
-        if $game_player.pbTerrainTag.must_walk
-          self.move_speed = 3
-        else
-          if $game_switches[SWITCH_RACE_BIKE]
-            self.move_speed = Input.press?(Input::ACTION) ? 5 : 5.6
-          else
-            if Settings::KANTO
-              self.move_speed = 5
-            else
-              self.move_speed = Input.press?(Input::ACTION) ? 5 : 5.3333333333333
-            end
-          end
-        end
+        self.move_speed = current_bicycle_speed
       elsif pbCanRun? || $PokemonGlobal.surfing
-        self.move_speed = 4   # Running, surfing
+        reset_bike_speed
+        self.move_speed = 4
       else
-        self.move_speed = 3   # Walking, diving
+        reset_bike_speed
+        self.move_speed = 3
       end
     end
+
     super
+  end
+
+  def current_bicycle_speed
+    if $game_player.pbTerrainTag.must_walk
+      reset_bike_speed
+      return 3
+    end
+
+    if $game_switches[SWITCH_RACE_BIKE]
+      reset_bike_speed
+      return Input.press?(Input::ACTION) ? 5 : 5.6
+    end
+
+    if Settings::KANTO
+      reset_bike_speed
+      return 5
+    end
+
+    # Settings::HOENN — accelerating bike
+    mach_max_speed = 5.333
+    mach_starting_speed = 4.2
+    mach_acceleration = 0.05
+    acro_speed = 5.0
+
+    if Input.press?(Input::ACTION)
+      @bike_speed = acro_speed
+      @bike_idle_frames = 0
+    elsif moving?
+      @bike_speed = [(@bike_speed || mach_starting_speed) + mach_acceleration, mach_max_speed].min
+      @bike_idle_frames = 0
+    else
+      @bike_idle_frames = (@bike_idle_frames || 0) + 1
+      @bike_speed = mach_starting_speed if @bike_idle_frames > 3
+    end
+    @bike_was_moving = moving?
+    return @bike_speed || mach_starting_speed
+  end
+
+  def reset_bike_speed
+    @bike_speed = nil
   end
 
   def update_pattern
