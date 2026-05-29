@@ -45,6 +45,11 @@ class Game_Player < Game_Character
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
       return if hopOffFence
+      unless $PokemonGlobal.acroBike
+        if $PokemonGlobal.bike_trick && $game_player.pbFacingTerrainTag.acroBike
+          bikeOnFence
+        end
+      end
       if can_move_in_direction?(dir)
         x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
         y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0

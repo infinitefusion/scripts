@@ -1,5 +1,6 @@
 class Sprite_Player < Sprite_Character
-  ACRO_BIKE_POSITION_OFFSET = 16
+  ACRO_BIKE_RAMP_POSITION_OFFSET = 16
+  ACRO_BIKE_TRICK_POSITION_OFFSET = 4
 
   def initialize(viewport, character = nil)
     super
@@ -13,7 +14,7 @@ class Sprite_Player < Sprite_Character
     @hat = Sprite_Hat.new(self, hatFilename, @character_name, @viewport, 3)
     @hat2 = Sprite_Hat.new(self, hatFilename, @character_name, @viewport, 2)
     @hair = Sprite_Hair.new(self, hairFilename, @character_name, @viewport)
-    @bicycle = Sprite_Bicycle.new(self, @character_name, @viewport)
+    @bicycle = Sprite_Bicycle.new(self,"", @character_name, @viewport)
 
     @previous_skinTone = 0
 
@@ -82,7 +83,9 @@ class Sprite_Player < Sprite_Character
     hairFilename = getOverworldHairFilename($Trainer.hair)
     hatFilename = getOverworldHatFilename($Trainer.hat)
     hat2Filename = getOverworldHatFilename($Trainer.hat2)
-    bicycleFilename = biking? ? getOverworldBicycleFilename : ""
+
+
+    bicycleFilename = get_bicycle_filename
 
     hair_color_shift = $Trainer.hair_color
     hat_color_shift = $Trainer.hat_color
@@ -112,10 +115,24 @@ class Sprite_Player < Sprite_Character
     return baseBitmap
   end
 
+  def get_bicycle_filename
+    if biking?
+      bicycleFilename = getOverworldBicycleFilename
+    else
+      bicycleFilename = ""
+    end
+    return bicycleFilename
+  end
+
   # When the player needs to be positioned differently relative to its normal position
   def apply_global_player_offsets
-    if $PokemonGlobal.acroBike
-      self.y -= ACRO_BIKE_POSITION_OFFSET
+    if $PokemonGlobal.bicycle
+      if $PokemonGlobal.acroBike
+        self.y -= ACRO_BIKE_RAMP_POSITION_OFFSET
+      end
+      if $PokemonGlobal.bike_trick
+        self.y -= ACRO_BIKE_TRICK_POSITION_OFFSET
+      end
     end
   end
 

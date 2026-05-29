@@ -114,13 +114,16 @@ class Game_Player < Game_Character
     if Input.press?(Input::ACTION)
       @bike_speed = acro_speed
       @bike_idle_frames = 0
+      $PokemonGlobal.bike_trick = true
     elsif moving?
       @bike_speed = [(@bike_speed || mach_starting_speed) + mach_acceleration, mach_max_speed].min
       @bike_idle_frames = 0
     else
       @bike_idle_frames = (@bike_idle_frames || 0) + 1
       @bike_speed = mach_starting_speed if @bike_idle_frames > 3
+      $PokemonGlobal.bike_trick = false
     end
+    @bike_speed = acro_speed if $game_player.floating
     @bike_was_moving = moving?
     return @bike_speed || mach_starting_speed
   end

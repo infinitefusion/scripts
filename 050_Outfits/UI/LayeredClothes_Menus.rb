@@ -92,7 +92,6 @@ def select_bike_color
   end
   $game_switches[SWITCH_SELECTING_CLOTHES]=false
   $game_map.update
-  echoln ret
   return ret
 end
 

@@ -733,6 +733,8 @@ def sitOnChair()
 end
 
 def bikeOnFence()
+  return unless $PokemonGlobal.bicycle
+  return unless $game_player.pbFacingTerrainTag.acroBike
   if $game_player.pbFacingTerrainTag.acroBike
     pbSEPlay("Player jump")
     $game_player.through = true

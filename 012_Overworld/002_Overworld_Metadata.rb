@@ -5,6 +5,8 @@
 class PokemonGlobalMetadata
   # Movement
   attr_accessor :bicycle
+  attr_accessor :bike_trick
+
   attr_accessor :surfing
   attr_accessor :diving
   attr_accessor :sliding
@@ -65,6 +67,7 @@ class PokemonGlobalMetadata
   def initialize
     # Movement
     @bicycle              = false
+    @bike_trick           = false
     @surfing              = false
     @diving               = false
     @sliding              = false
