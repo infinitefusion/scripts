@@ -95,8 +95,7 @@ class Sprite_Player < Sprite_Character
     hat2_color_shift = 0 if !hat2_color_shift
 
     clothes_color_shift = 0 if !clothes_color_shift
-    #bicycle_color_shift = $Trainer.bicycle_color || 0
-    bicycle_color_shift = 0
+    bicycle_color_shift = $Trainer.bike_color || 0
 
     @hair.update(@character_name, hairFilename, hair_color_shift) if @hair
     @hat.update(@character_name, hatFilename, hat_color_shift) if @hat

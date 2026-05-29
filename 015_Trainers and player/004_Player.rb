@@ -23,6 +23,8 @@ class Player < Trainer
   attr_accessor :unlocked_hairstyles
   attr_accessor :unlocked_card_backgrounds
 
+  attr_accessor :bike_color
+
   attr_accessor :dyed_hats
   attr_accessor :dyed_clothes
 
@@ -101,6 +103,11 @@ class Player < Trainer
   def money=(value)
     validate value => Integer
     @money = value.clamp(0, Settings::MAX_MONEY)
+  end
+
+  def bike_color
+    @bike_color = 0 unless @bike_color
+    return @bike_color
   end
 
   def last_worn_outfit
@@ -388,6 +395,7 @@ class Player < Trainer
     @hair                  = 0
     @clothes               = 0
     @hair_color            = 0
+    @bike_color            = 0
     @skin_tone             = 0
     @badges                = [false] * 8
     @money                 = Settings::INITIAL_MONEY

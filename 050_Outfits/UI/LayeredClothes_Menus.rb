@@ -56,6 +56,46 @@ def swapToNextHairVersion()
   $Trainer.hair = getFullHairId(hair_style,newVersion)
 end
 
+
+def select_bike_color
+  original_color = $Trainer.bike_color
+  $game_switches[SWITCH_SELECTING_CLOTHES]=true
+  $game_map.update
+  commands = ["Shift up", "Shift down", "Default", "Confirm", "Never Mind"]
+  previous_input = 0
+
+  while true
+    choice = pbShowCommands(nil, commands, commands.length, previous_input)
+    previous_input = choice
+    case choice
+    when 0 #NEXT
+      pbSEPlay("GUI storage pick up", 80, 100)
+      shiftBikeColor(10)
+      ret = true
+    when 1 #PREVIOUS
+      pbSEPlay("GUI storage pick up", 80, 100)
+      shiftBikeColor(-10)
+      ret = true
+    when 2 #Reset
+      pbSEPlay("GUI storage put down", 80, 100)
+      $Trainer.bike_color = 0
+      refreshPlayerOutfit
+      ret = original_color != 0
+    when 3 #Confirm
+      break
+    else
+      pbSEPlay("GUI storage put down", 80, 100)
+      $Trainer.bike_color = original_color
+      ret = false
+      break
+    end
+  end
+  $game_switches[SWITCH_SELECTING_CLOTHES]=false
+  $game_map.update
+  echoln ret
+  return ret
+end
+
 def selectHairColor
   original_color = $Trainer.hair_color
   original_hair = $Trainer.hair

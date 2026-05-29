@@ -89,6 +89,13 @@ def shiftHairColor(incr)
   refreshPlayerOutfit()
 end
 
+def shiftBikeColor(incr)
+  $Trainer.bike_color = 0 if !$Trainer.bike_color
+  $Trainer.bike_color += incr
+  echoln "Bike color: #{$Trainer.bike_color}"
+  refreshPlayerOutfit()
+end
+
 def pbLoadOutfitBitmap(outfitFileName)
   begin
     outfitBitmap = RPG::Cache.load_bitmap("", outfitFileName)
