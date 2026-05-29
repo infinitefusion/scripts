@@ -1130,7 +1130,7 @@ HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
 })
 
 HiddenMoveHandlers::CanUseMove.add(:MAGNETRISE, proc { |move, pkmn, showmsg|
-  next true
+  next true unless $PokemonGlobal.surfing
 })
 HiddenMoveHandlers::UseMove.add(:MAGNETRISE, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
