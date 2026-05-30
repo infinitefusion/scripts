@@ -36,6 +36,7 @@ class QuestMapPopup
     set_selected(true)
     refresh
     loop do
+      break if @disposed
       Graphics.update
       Input.update
       animate_arrows
@@ -136,6 +137,7 @@ class QuestMapPopup
   end
 
   def refresh
+    return unless @sprites["text"]
     text_bmp = @sprites["text"].bitmap
     text_bmp.clear
     pbDrawOutlineText(text_bmp, 0, 6, PANEL_WIDTH, 32, _INTL("{1} Quests", @location_name),
