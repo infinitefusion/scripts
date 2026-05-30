@@ -24,7 +24,11 @@ class QuestMap < BetterRegionMap
 
   def after_init_graphics
     @window["player"].visible = false
-    on_hover($PokemonGlobal.regionMapSel[0], $PokemonGlobal.regionMapSel[1])
+  end
+
+  def init_cursor_position(x, y)
+    super(x, y)
+    on_hover(*getPlayerPosition)
   end
 
   def initialize_quests_locations(show_in_progress, show_completed)
@@ -86,6 +90,7 @@ class QuestMap < BetterRegionMap
   end
 
   def on_hover(x, y)
+    echoln "on hover"
     quests_at_pos = @quests[[x, y]]
     if quests_at_pos && !quests_at_pos.empty?
       snap_to_position(x, y)
@@ -159,6 +164,7 @@ class QuestMap < BetterRegionMap
   end
 
   def show_popup(quests)
+    return unless @sprites["cursor"]
     return if @popup&.quests == quests #popup already active
     return if @popup && @popup.panel_active
     location_name = get_current_location_name
