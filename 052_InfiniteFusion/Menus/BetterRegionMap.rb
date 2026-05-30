@@ -128,11 +128,11 @@ class BetterRegionMap
     #   end
     # end
     @window["player"] = Sprite.new(@mapoverlayvp)
+    player_coordinates = getPlayerPosition
     if @show_player
       if map_metadata
         player = map_metadata.town_map_position
       end
-      player_coordinates = getPlayerPosition
       # if true # player && player[0] == @region  #only use 1 region
       $PokemonGlobal.regionMapSel = [0, 0]
       gender = $Trainer.gender.to_digits(3)
@@ -737,9 +737,7 @@ class BetterRegionMap
       current_y = $PokemonGlobal.regionMapSel[1]
       location = find_location_at_position(current_x,current_y)
       update_text_at_location(location)
-      if location
-        on_hover(current_x,current_y)
-      end
+      on_hover(current_x,current_y)
     end
   end
 
