@@ -457,6 +457,7 @@ def pbDismountBike
   return if !$PokemonGlobal.bicycle
   $PokemonGlobal.bicycle = false
   $PokemonGlobal.acroBike = false
+  $game_player.bike_hops = false
   pbUpdateVehicle
   $game_map.autoplayAsCue
 end
