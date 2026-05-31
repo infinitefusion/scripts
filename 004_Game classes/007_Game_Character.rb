@@ -1017,6 +1017,7 @@ class Game_Character
   end
 
   def jump(x_plus, y_plus)
+    @jump_in_place = (x_plus == 0 && y_plus == 0)
     if x_plus != 0 || y_plus != 0
       if x_plus.abs > y_plus.abs
         (x_plus < 0) ? turn_left : turn_right
@@ -1043,7 +1044,9 @@ class Game_Character
     if self.is_a?(Game_Player)
       $PokemonTemp.dependentEvents.pbMoveDependentEvents
     end
-    triggerLeaveTile
+    if x_plus != 0 || y_plus != 0
+      triggerLeaveTile
+    end
   end
 
   def jumpForward
@@ -1253,7 +1256,10 @@ class Game_Character
     end
     # End of a step, so perform events that happen at this time
     if !jumping? && !moving?
-      Events.onStepTakenFieldMovement.trigger(self, self)
+      unless @jump_in_place
+        Events.onStepTakenFieldMovement.trigger(self, self)
+      end
+      @jump_in_place = false
       calculate_bush_depth
       @stopped_this_frame = true
     elsif !@moved_last_frame || @stopped_last_frame # Started a new step

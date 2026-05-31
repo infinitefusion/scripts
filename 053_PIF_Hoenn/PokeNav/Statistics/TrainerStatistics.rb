@@ -66,6 +66,5 @@ class TrainerStatistics
   def incr_nb_bike_hops
     @nb_bike_hops = 1 unless @nb_bike_hops
     @nb_bike_hops += 1
-    echoln @nb_bike_hops
   end
 end
