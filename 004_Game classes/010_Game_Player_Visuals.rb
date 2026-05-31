@@ -114,20 +114,51 @@ class Game_Player < Game_Character
     if Input.press?(Input::ACTION)
       @bike_speed = acro_speed
       @bike_idle_frames = 0
+      check_bunny_hops
       $PokemonGlobal.bike_trick = true
     elsif moving?
       @bike_speed = [(@bike_speed || mach_starting_speed) + mach_acceleration, mach_max_speed].min
       @bike_idle_frames = 0
+      stop_bunny_hops
     else
       @bike_idle_frames = (@bike_idle_frames || 0) + 1
       @bike_speed = mach_starting_speed if @bike_idle_frames > 3
       $PokemonGlobal.bike_trick = false
+      stop_bunny_hops
     end
     @bike_speed = acro_speed if $game_player.floating
     @bike_was_moving = moving?
     return @bike_speed || mach_starting_speed
   end
 
+  def check_bunny_hops
+    @bike_hops_timer = 0 unless @bike_hops_timer
+    if @bike_hops_unlocked
+      if Input.press?(Input::ACTION)
+        $game_player.bike_hops = true
+      else
+        @bike_hops_unlocked = false
+        $game_player.bike_hops = false
+      end
+    else
+      if moving?
+        @bike_hops_timer = 0
+        $game_player.bike_hops = false
+      else
+        @bike_hops_timer += 1
+        if @bike_hops_timer >= 16
+          @bike_hops_unlocked = true
+          $game_player.bike_hops = true
+        end
+      end
+    end
+  end
+
+  def stop_bunny_hops
+    @bike_hops_timer = 0
+    @bike_hops_unlocked = false
+    $game_player.bike_hops = false
+  end
   def reset_bike_speed
     @bike_speed = nil
   end

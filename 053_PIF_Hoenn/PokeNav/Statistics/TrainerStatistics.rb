@@ -10,6 +10,8 @@ class TrainerStatistics
   attr_accessor :pokemon_contests_won_category_rank
 
   attr_accessor :berries_planted
+  attr_accessor :nb_bike_hops
+
   def initialize
     @pokecenter_heals = 0
     @nb_trades = 0
@@ -19,6 +21,7 @@ class TrainerStatistics
     @nb_pokemon_defeated = 0
     @nb_pokemon_surprised = 0
     @berries_planted = 0
+    @nb_bike_hops = 0
     initializeContestStats
   end
 
@@ -58,5 +61,11 @@ class TrainerStatistics
   def incr_nb_battles_lost
     @nb_battles_lost = 1 unless @nb_battles_lost
     @nb_battles_lost += 1
+  end
+
+  def incr_nb_bike_hops
+    @nb_bike_hops = 1 unless @nb_bike_hops
+    @nb_bike_hops += 1
+    echoln @nb_bike_hops
   end
 end
