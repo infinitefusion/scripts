@@ -20,13 +20,13 @@ class Game_Player < Game_Character
         turn_generic(dir)
         if can_move_in_direction?(@direction, true) && !event_at_destination?(dir)
           jumpForward
+          $Trainer.stats.incr_nb_bike_hops_steps
         else
           jump(0, 0)
         end
       else
         jump(0, 0)
       end
-      $Trainer.stats.incr_nb_bike_hops
     end
   end
 
