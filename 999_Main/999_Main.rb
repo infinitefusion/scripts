@@ -144,11 +144,17 @@ def showLoadingScreen
   else
     selected_loading_screen = "Graphics/titles/default_loading_screen"
   end
+  logo_path = "Graphics/titles/no_ai_logo"
   picture = Sprite.new(@viewport)
      picture.bitmap = pbBitmap(selected_loading_screen)
      picture.visible=true
-     Graphics.update
+
+  logo = Sprite.new(@viewport)
+    logo.bitmap = pbBitmap(logo_path)
+    logo.visible=true
+  Graphics.update
      picture.dispose
+  logo.dispose
 end
 
 
