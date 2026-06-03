@@ -499,7 +499,7 @@ class PokemonLoadScreen
 
       if Settings::HOENN && new_game_plus && !Settings::FEEDBACK_FORM_URL.empty?
         cmd_links[commands.length] = Settings::FEEDBACK_FORM_URL
-        commands[commands.length] = _INTL("Demo Feedback Form")
+        commands[commands.length] = _INTL("Game Feedback Form")
       end
 
       Settings::MAIN_MENU_LINKS.each do |key, value|
