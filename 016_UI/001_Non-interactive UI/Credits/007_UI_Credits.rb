@@ -59,6 +59,7 @@ class Scene_Credits
     "Graphics/Battlebacks/battlebg/cave",
     "Graphics/Battlebacks/battlebg/beach_eve",
     "Graphics/Battlebacks/battlebg/beach_night",
+    "Graphics/Battlebacks/battlebg/beachspecial_night",
     "Graphics/Battlebacks/battlebg/beach",
     "Graphics/Battlebacks/battlebg/field_eve",
     "Graphics/Battlebacks/battlebg/cave.png",

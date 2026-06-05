@@ -56,7 +56,10 @@ Milchik<s>Payapon
 Gordogamr<s>Realthree
 Chardub<s>
 
-<title>Battle Backgrounds:
+<title>Battle Backgrounds Coordination:
+.realthree<s>piponus
+
+<title>Battle Backgrounds Art:
 .realthree<s>koalagators
 piponus<s>aplastic
 cynder_<s>chansondoree
@@ -87,6 +90,8 @@ knilk<s>lordjoostmeister
 quackquackattack<s>.realthree
 eiskitsune<s>wildheartrazorfangs
 ziggaway<s>
+
+Pokédex entries were submitted by the community
 
 <title>Custom Sprites
 All of the custom fused Pokémon sprites 
