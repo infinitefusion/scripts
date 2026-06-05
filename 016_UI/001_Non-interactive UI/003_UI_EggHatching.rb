@@ -207,7 +207,7 @@ def pbHatch(pokemon)
   pokemon.name           = nil
   pokemon.owner          = Pokemon::Owner.new_from_trainer($Trainer)
   pokemon.happiness      = 120
-  pokemon.timeEggHatched = pbGetTimeNow
+  pokemon.timeEggHatched = Time.new.to_i
   pokemon.obtain_method  = 1   # hatched from egg
   pokemon.hatched_map    = $game_map.map_id
   if player_on_hidden_ability_map
