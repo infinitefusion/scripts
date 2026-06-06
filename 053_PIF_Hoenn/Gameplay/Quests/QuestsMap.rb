@@ -90,7 +90,6 @@ class QuestMap < BetterRegionMap
   end
 
   def on_hover(x, y)
-    echoln "on hover"
     quests_at_pos = @quests[[x, y]]
     if quests_at_pos && !quests_at_pos.empty?
       snap_to_position(x, y)

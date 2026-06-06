@@ -63,7 +63,7 @@ def getTVTrendMessages()
 
   pbMessage(_INTL("It's the trend-watcher network channel!"))
   pbMessage(_INTL("\"Everybody's talking about it, #{current_phrase} has been all the rage all around the region!\""))
-  pbMessage(_INTL("\"Nobody knows where it's started, but #{current_phrase} is all that the younger people are talking about these days\""))
+  pbMessage(_INTL("\"Nobody knows where it's started, but #{current_phrase} is all that the younger people are talking about these days.\""))
   case rand(3)
   when 0
     pbMessage(_INTL("\"Where can someone get their hands on #{adverb} #{current_phrase}? We'll continue our investigation to find out!'\""))
