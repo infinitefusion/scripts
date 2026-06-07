@@ -94,13 +94,14 @@ class Game_Map
       species = params[:species]
       min_level = params[:min_level]
       max_level = params[:max_level]
-
+      terrain = params[:terrain] || :Land
+      echoln terrain
       level = choose_level(min_level, max_level)
       behavior_roaming = params[:behavior_roaming]
       behavior_noticed = params[:behavior_noticed]
 
       always_on_top = event.always_on_top
-      event.setup_pokemon(species, level, :Land, behavior_roaming, behavior_noticed)
+      event.setup_pokemon(species, level, terrain, behavior_roaming, behavior_noticed)
       event.set_swimming if params[:swimming]
       event.set_shiny if params[:shiny]
       event.always_on_top = always_on_top
@@ -130,6 +131,8 @@ class Game_Map
         # Matches behavior_noticed = :random (any ruby symbol)
       elsif line =~ /behavior_noticed\s*=\s*:(\w+)/
         result[:behavior_noticed] = $1.to_sym
+      elsif line =~ /terrain\s*=\s*:(\w+)/
+        result[:terrain] = $1.to_sym
       elsif line =~ /spawn_chance\s*=\s*(\d+)/
         result[:spawn_chance] = $1.to_i
       elsif line =~ /swimming/
