@@ -14,7 +14,7 @@ class Game_Player < Game_Character
 
     unless pbMapInterpreterRunning? || $game_temp.message_window_showing ||
       $PokemonTemp.miniupdate || $game_temp.in_menu
-      pbSEPlay("jump")
+      pbSEPlay("jump",40)
       dir = Input.dir4
       if dir > 0
         turn_generic(dir)
