@@ -71,9 +71,13 @@ class Scene_Credits
     "Graphics/Battlebacks/battlebg/beach.png",
     "Graphics/Battlebacks/battlebg/beach.png",
     "Graphics/Battlebacks/battlebg/mountain.png",
-    # "Graphics/Battlebacks/battlebg/mountain_eve.png",
+    "Graphics/Battlebacks/battlebg/mountain_eve.png",
     "Graphics/Battlebacks/battlebg/mountain_night.png",
-
+    "Graphics/Battlebacks/battlebg/forest.png",
+    "Graphics/Battlebacks/battlebg/forest_night.png",
+    "Graphics/Battlebacks/battlebg/forest_eve.png",
+    "Graphics/Battlebacks/battlebg/gym_2.png",
+    "Graphics/Battlebacks/battlebg/gym_3.png",
 
   #"Graphics/Titles/bg_back"
   ]
