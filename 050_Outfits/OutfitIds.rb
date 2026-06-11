@@ -98,6 +98,7 @@ HAT_TREVENANT = "trevenantforestkingcrown"
 HAT_CHEF = "cheftoque"
 HAT_CLOWN = "clownnose"
 HAT_WHITE_HAND = "whitehand"
+HAT_COFFEE = "cupofcoffee"
 
 HAT_BREEDER_1 = "breedervisor"
 HAT_BREEDER_2 = "breederbandana"
