@@ -8,6 +8,7 @@ class Game_Player < Game_Character
   end
 
   def check_bike_hopping
+    return
     return unless $PokemonGlobal.bicycle
     return unless @bike_hops
     return if jumping?

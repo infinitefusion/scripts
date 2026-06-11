@@ -1,6 +1,7 @@
 def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = false)
   return false if !pokemon_id
   skip_randomize = true if $game_switches[SWITCH_CHOOSING_STARTER] # when choosing starters
+  skip_randomize = true if $game_switches[SWITCH_DONT_RANDOMIZE]
   if pbBoxesFull?
     pbMessage(_INTL("There's no more room for Pokémon!\1"))
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
