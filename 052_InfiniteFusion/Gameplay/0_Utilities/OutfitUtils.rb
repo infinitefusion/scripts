@@ -96,6 +96,18 @@ def give_date_specific_hats()
   end
 end
 
+
+def check_obtain_hat_after_battle(species)
+  hat_chance = 1
+  if rand(1..100) <= hat_chance
+    hat = getHatForPokemon(species)
+    if hat
+      obtainHat(hat)
+    end
+  end
+end
+
+
 def qmarkMaskCheck()
   if $Trainer.seen_qmarks_sprite
     unless hasHat?(HAT_QMARKS)

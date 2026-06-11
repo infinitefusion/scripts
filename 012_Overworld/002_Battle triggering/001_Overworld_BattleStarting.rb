@@ -944,6 +944,14 @@ Events.onEndBattle += proc { |_sender, e|
   end
 }
 
+Events.onWildBattleEnd += proc { |_sender, e|
+  species = e[0]
+  result = e[2]
+  if result == 1
+    check_obtain_hat_after_battle(species)
+  end
+}
+
 def pbEvolutionCheck(currentLevels, scene = nil)
   for i in 0...currentLevels.length
     pkmn = $Trainer.party[i]

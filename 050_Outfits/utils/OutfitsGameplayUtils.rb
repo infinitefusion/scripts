@@ -240,6 +240,21 @@ def hasHat?(outfit_id)
   return $Trainer.unlocked_hats.include?(outfit_id)
 end
 
+def getHatForPokemon(pokemonSpecies)
+  possible_hats = []
+  body_pokemon_id = get_body_species_from_symbol(pokemonSpecies).to_s.downcase
+  head_pokemon_id = get_head_species_from_symbol(pokemonSpecies).to_s.downcase
+  body_pokemon_tag = "pokemon-#{body_pokemon_id}"
+  head_pokemon_tag = "pokemon-#{head_pokemon_id}"
+  possible_hats += search_hats([body_pokemon_tag])
+  possible_hats += search_hats([head_pokemon_tag])
+  possible_hats = filter_hats_only_not_owned(possible_hats)
+  unless possible_hats.empty?()
+    return possible_hats.sample
+  end
+  return nil
+end
+
 def getOutfitForPokemon(pokemonSpecies)
   possible_clothes = []
   possible_hats = []
