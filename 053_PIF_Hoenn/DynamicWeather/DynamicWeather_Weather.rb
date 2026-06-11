@@ -42,7 +42,7 @@ class GameWeather
 
   COLD_MAPS = [MAP_SHOAL_CAVE] # Rain is snow on that map (shoal cave)
   SNOW_LIMITS = [MAP_ROUTE_121,MAP_PACIFIDLOG] #Snow turns to rain if it reaches these maps
-  SOOT_LIMITS = [MAP_ROUTE_113,MAP_FALLARBOR]  #Can't let it propagate too much because then the grass would have to be covered in soot in those maps too....
+  SOOT_LIMITS = [MAP_ROUTE_113,MAP_FALLARBOR, MAP_ROUTE_111]  #Can't let it propagate too much because then the grass would have to be covered in soot in those maps too....
 
   SANDSTORM_MAPS = [MAP_DESERT] # Always sandstorm, doesn't spread
   NO_WIND_MAPS = [MAP_SOOTOPOLIS]

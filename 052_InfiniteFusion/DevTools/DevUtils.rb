@@ -33,7 +33,10 @@ module SwitchFinder
 
     # Iterate over each map
     mapinfos.each_key do |map_id|
-      map = load_data(sprintf("Data/Map%03d.rxdata", map_id))
+
+      map_path = $RPGVX ? sprintf("Data/Map%03d.rvdata", map_id) : sprintf("Data/Map%03d.rxdata", map_id)
+      next unless File.exist?(map_path)
+      map = load_data(map_path)
       mapinfo = mapinfos[map_id]
       # Iterate over each event in the map
       map.events.each_value do |event|
