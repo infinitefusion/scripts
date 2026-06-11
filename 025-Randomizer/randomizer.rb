@@ -336,7 +336,6 @@ end
 def getRandomizedTo(species)
   return species if !$PokemonGlobal.psuedoBSTHash
   return $PokemonGlobal.psuedoBSTHash[dexNum(species)]
-  # code here
 end
 
 def tryRandomizeGiftPokemon(pokemon, dontRandomize = false)
