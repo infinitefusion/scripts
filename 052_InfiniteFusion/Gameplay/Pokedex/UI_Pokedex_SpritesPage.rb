@@ -427,13 +427,14 @@ class PokemonPokedexInfo_Scene
     # sprite_path = selected_bitmap.path
     # isBaseSprite = isBaseSpritePath(@available[@selected_index])
     @displayed_pif_sprite=  @selected_pif_sprite
-    is_generated = @selected_pif_sprite.type == :AUTOGEN
-    spritename = @selected_pif_sprite.to_filename()
+    is_generated = @selected_pif_sprite&.type == :AUTOGEN
+    spritename = @selected_pif_sprite&.to_filename()
     showSpriteCredits(spritename, is_generated)
     update_selected
   end
 
   def showSpriteCredits(filename, generated_sprite = false)
+    return unless filename
     @creditsOverlay.dispose
 
     spritename = File.basename(filename, '.*')
