@@ -48,9 +48,9 @@ TYPE_EXPERTS_APPEARANCES = {
   :TYPE_EXPERT_FAIRY => TrainerAppearance.new(6, "mikufairy", "mikufairyf", "5_mikufairy", 0, 0, 0), # OK
 
   # Hoenn designers
-  :ADVENTURER_KANTO => TrainerAppearance.new(5, "ash", "leaf", "2_mistyRBY", 210, 0, 0),
-  :ADVENTURER_JOHTO => TrainerAppearance.new(5, "kris", "kris", "1_lyra", 0, 0, 0),
-  :ADVENTURER_SINNOH => TrainerAppearance.new(5, "dawnDPP", "leaf", "2_dawn", 210, 0, 0),
+  :ADVENTURER_KANTO => TrainerAppearance.new(3,"ash","leaf","4_boxbraids",0,0,0),
+  :ADVENTURER_JOHTO => TrainerAppearance.new(5,"gold","kris","3_lass",50,0,0),
+  :ADVENTURER_SINNOH => TrainerAppearance.new(6,"lucasDPP","longshirtskirt","1_hime",0,0,0) ,
   :ADVENTURER_UNOVA => TrainerAppearance.new(5, "hilbert", "red", "1_nhair", 0, 0, 0),
   :ADVENTURER_KALOS => TrainerAppearance.new(5, "serena", "Ramos", "2_naveen", 0, 0, 0),
   :ADVENTURER_ALOLA => TrainerAppearance.new(5, "seleneUSUM", "leaf", "2_mistyRBY", 0, 0, 0),
