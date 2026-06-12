@@ -492,6 +492,10 @@ class PokemonPokedexInfo_Scene
     @selecting_sprites = true
     updateBlackListInstructionIcons
     update_blacklist_icons if @selecting_blacklist
+    if @available.size <= 0
+      pbPlayBuzzerSE
+      return
+    end
     loop do
       Graphics.update
       Input.update
@@ -554,6 +558,7 @@ class PokemonPokedexInfo_Scene
     end
     if @pokemon && @pokemon.pif_sprite && $PokemonSystem.random_sprites
       selected_pif_sprite = @available[index]
+      return false unless selected_pif_sprite
       same_alt = selected_pif_sprite.alt_letter == @pokemon.pif_sprite.alt_letter
       same_species = selected_pif_sprite.species == @pokemon.pif_sprite.species
       return same_alt && same_species
