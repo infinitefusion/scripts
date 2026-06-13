@@ -2287,7 +2287,7 @@ def changeOricorioFormFromItem(pokemon, form_name, new_form)
     Kernel.isPartPokemon(pokemon, :ORICORIO_2) ||
     Kernel.isPartPokemon(pokemon, :ORICORIO_3) ||
     Kernel.isPartPokemon(pokemon, :ORICORIO_4))
-    scene.pbDisplay(_INTL("It had no effect."))
+    pbMessage(_INTL("It had no effect."))
     return false
   end
   if changeOricorioForm(pokemon, new_form)
