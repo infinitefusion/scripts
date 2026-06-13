@@ -904,7 +904,12 @@ class PokemonSummary_Scene
   end
 
   def drawPageFive
-    return if !$Trainer.has_pokedex
+    if !$Trainer.has_pokedex
+      pbPlayBuzzerSE
+      drawPageFour
+      @page -= 1
+      return
+    end
     $Trainer.pokedex.register_last_seen(@pokemon)
     pbFadeOutIn {
       scene = PokemonPokedexInfo_Scene.new
