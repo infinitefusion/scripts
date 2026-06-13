@@ -46,15 +46,15 @@ With contributions and tools by:
 Kiwikelly, Greystorm, Sapphire_chuu
 
 <title>Trainer Teams and dialogs:
-.Realthree<s>Chardub
-Funkytomate<s>Kiwikelly
-Pory<s>Shiro0170
-Gordogamr<s>Theheroicorange
+.realthree<s>chardub
+funkytomate<s>kiwikelly
+pory<s>shiro0170
+gordogamr<s>theheroicorange
 
 <title>Overworld Pokémon Sprites:
-Milchik<s>Payapon
-Gordogamr<s>Realthree
-Chardub<s>
+milchik<s>.payapon
+gordogamr<s>.realthree
+chardub<s>
 
 <title>Battle Backgrounds Coordination:
 .realthree<s>piponus
