@@ -250,7 +250,7 @@ Events.onStepTaken += proc { |sender, e|
   end
 }
 
-Events.onMapChange += proc { |_sender, e|
+Events.onMapChanging += proc { |_sender, e|
   next unless Settings::HOENN
   clearOverworldPokemon
 }
