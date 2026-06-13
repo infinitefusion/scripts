@@ -122,6 +122,9 @@ def removeExp(pokemon, exp_to_remove)
   if pokemon.exp_gained_since_fused && pokemon.exp_gained_with_player > 0
     pokemon.exp_gained_since_fused -= exp_to_remove
     if pokemon.exp_gained_since_fused < 0
+      pokemon.exp_when_fused_head = 0 unless pokemon.exp_when_fused_head
+      pokemon.exp_when_fused_body = 0 unless pokemon.exp_when_fused_body
+
       difference = pokemon.exp_gained_since_fused.abs
       pokemon.exp_gained_since_fused = 0
       pokemon.exp_when_fused_head -= difference / 2
