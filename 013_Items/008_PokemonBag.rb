@@ -44,11 +44,8 @@ class PokemonBag
     end
   end
 
-  def sort_tm_pocket_alphabetically()
 
-  end
-
-  def sort_tm_alphabetically()
+  def sort_pocket_alphabetically()
     current_pocket = @pockets[@lastpocket]
     sorted = current_pocket.sort_by do |item|
       item_data = GameData::Item.get(item[0])

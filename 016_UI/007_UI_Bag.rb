@@ -573,11 +573,7 @@ class PokemonBagScreen
         case commands[command]
           ### Cancel ###
         when cmd_alphabet
-          if @bag.lastpocket == POCKET_TM
-            @bag.sort_tm_alphabetically()
-          else
             @bag.sort_pocket_alphabetically()
-          end
         when cmd_quantity
           @bag.sort_pocket_by_quantity()
         when cmd_number
