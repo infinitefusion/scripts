@@ -228,7 +228,7 @@ def generateWildEncounter(encounter_type)
   return unless encounter
   if isFusedEncounter()
     encounter_fusedWith = getRegularEncounter(encounter_type)
-    if encounter[0] != encounter_fusedWith[0]
+    if encounter_fusedWith && (encounter[0] != encounter_fusedWith[0])
       encounter[0] = getFusionSpeciesSymbol(encounter[0], encounter_fusedWith[0])
     end
   end
