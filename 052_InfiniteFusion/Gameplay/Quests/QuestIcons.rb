@@ -1,6 +1,7 @@
 def setDialogIconOff(eventId=nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
+  return unless event
   event.setDialogIconManualOffValue(true)
   event.setTradeIconManualOffValue(true)
   event.setTutorIconManualOffValue(true)
@@ -9,6 +10,7 @@ end
 def setDialogIconOn(eventId=nil)
   eventId = @event_id if !eventId
   event = $game_map.events[eventId]
+  return unless event
   event.setDialogIconManualOffValue(false)
   event.setTradeIconManualOffValue(false)
   event.setTutorIconManualOffValue(false)
