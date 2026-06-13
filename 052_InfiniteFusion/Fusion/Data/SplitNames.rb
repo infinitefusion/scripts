@@ -423,7 +423,7 @@ module GameData
     ["Cher", "rubi"],
     ["Cherri", "rim"],
     ["Shell", "los"],
-    ["Gastro", "trodon"],
+    ["Gas", "trodon"],
     ["Ambi", "pom"],
     ["Drifl", "loon"],
     ["Drifb", "blim"],
