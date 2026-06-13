@@ -136,6 +136,7 @@ end
 def select_npc_new_pokemon(encounter_type, favorite_type)
   (1..3).each { |i|
     wild_pokemon = $PokemonEncounters.choose_wild_pokemon(encounter_type)
+    next unless wild_pokemon
     species = wild_pokemon[0]
     if GameData::Species.get(species)&.hasType?(favorite_type)
       return wild_pokemon
