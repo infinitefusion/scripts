@@ -280,7 +280,7 @@ def sit_on_chair
       passable = $game_map.passable?($game_player.x, $game_player.y, direction)
       dest_x = $game_player.x + (direction == 6 ? 1 : direction == 4 ? -1 : 0)
       dest_y = $game_player.y + (direction == 2 ? 1 : direction == 8 ? -1 : 0)
-      if passable# && !$game_map.event_at_position(dest_x, dest_y)
+      if passable #&& !$game_map.event_at_position(dest_x, dest_y)  #todo Meant to make it so that you can't get stuck, but also prevents from interacting with
         $game_player.turn_generic(direction)
         $game_player.jump_forward
         break
