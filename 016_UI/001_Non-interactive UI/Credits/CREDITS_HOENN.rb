@@ -92,13 +92,15 @@ eiskitsune<s>wildheartrazorfangs
 ziggaway<s>
 
 Pokédex entries were submitted by the community
+The individual credits are displayed in-game
 
 <title>Custom Sprites
 All of the custom fused Pokémon sprites 
 were made by various members of the
 Pokémon Infinite Fusion Discord
+The individual credits are displayed in-game
 
-Including significant contributions from:
+It includes significant contributions from:
 
 {SPRITER_CREDITS}
 

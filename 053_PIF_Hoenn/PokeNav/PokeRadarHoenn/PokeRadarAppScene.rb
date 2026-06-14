@@ -462,7 +462,7 @@ def spawn_pokeradar_pokemon(species, level)
 
   if spawned_events&.length.to_i > 0
     event = spawned_events[0]
-    grass = $PokemonTemp.pokeradar[3]
+    grass = $PokemonTemp&.pokeradar[3]
 
     if grass[3] == 2
       pbSEPlay("shiny", 60)
