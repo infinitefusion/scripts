@@ -286,7 +286,7 @@ def sit_on_chair
         break
       else
         $game_player.turn_generic(direction)
-        $game_player.turn_180
+        #$game_player.turn_180
       end
     end
     pbWait(8)
