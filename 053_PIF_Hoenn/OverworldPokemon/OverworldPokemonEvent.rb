@@ -345,6 +345,7 @@ class OverworldPokemonEvent < Game_Event
   # Automatically starts a battle if the player is 1 tile away from the Pokemon.
   # If the player is behind or to the side of the pokemon, there is a slight delay
   def should_start_battle?
+    return false unless $PokemonTemp.overworld_wild_battle_participants
     should_start = false
     if player_near_event?(1)
       return true if $PokemonTemp.overworld_wild_battle_participants.length >= 1 # Notice immediately if a pokemon is already attacking so that double battles are more likely
