@@ -1345,7 +1345,7 @@ class Pokemon
       _INTL("Evolve body!"),
       _INTL("Don't evolve")
     ]
-    choice = pbMessage(_INTL('Both halves of {1} are ready to evolve!', self.name), choices, 0)
+    choice = pbMessage(_INTL('\\f[{2}]Both halves of {1} are ready to evolve!', self.name,self.id_number), choices, 0)
     # if choice == 0  #EVOLVE BOTH
     #   newspecies = getFusionSpecies(body_evolution,head_evolution)
     if choice == 0 #EVOLVE HEAD
