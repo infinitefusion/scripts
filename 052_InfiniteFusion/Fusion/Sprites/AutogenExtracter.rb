@@ -34,8 +34,7 @@ class AutogenExtracter < PIFSpriteExtracter
 
   def getSpritesheetPathFromId(head_id)
     filename = head_id.to_s + ".png"
-    return "#{DATA_PATH}#{DATA_SUFFIX}#{filename.unpack1('H*')}#{SHEET_EXT}"
-    #return "#{SPRITESHEET_FOLDER_PATH}#{filename}"
+    return "#{SPRITESHEET_FOLDER_PATH}#{filename}"
   end
 
   def get_resize_scale
