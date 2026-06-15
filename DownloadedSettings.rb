@@ -5,7 +5,7 @@ module Settings
   SHINY_POKEMON_CHANCE = 16
   SNOW_DAY = false
 
-  STARTUP_MESSAGES = ""
+  STARTUP_MESSAGES = "Pokémon Infinite Fusion 2 is now available! Download it from the game's Discord!"
   MAIN_MENU_LINKS = {
     "Discord" => "https://discord.com/invite/infinitefusion",
     "Wiki" => "https://infinitefusion.fandom.com/",

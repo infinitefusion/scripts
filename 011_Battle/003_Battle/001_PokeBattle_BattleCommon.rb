@@ -256,7 +256,7 @@ module PokeBattle_BattleCommon
     # Critical capture check
     if isOnLastBall
       c = x * 6 / 12
-      if c > 0 && pbRandom(256) < c
+      if c > 0 && pbRandom(256) < c || pkmn.shiny?
         @criticalCapture = true
         return 4
       end
