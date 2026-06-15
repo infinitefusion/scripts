@@ -121,7 +121,16 @@ end
 
 #Never add more than 1, it would just be a copy
 def addPokemonStorageTransferBox()
-  $PokemonStorage.boxes << StorageTransferBox.new
+  already_has = false
+  $PokemonStorage.boxes.each do|box|
+    already_has = true if box.is_a?(StorageTransferBox)
+  end
+
+  unless already_has
+    $PokemonStorage.boxes << StorageTransferBox.new
+  else
+    echoln "Player already has transfer box - not adding"
+  end
 end
 
 def verifyTransferBoxAutosave()
