@@ -446,9 +446,13 @@ class PokemonLoadScreen
       pbMessage(_INTL("Version {1} is now available! Please use the game's installer to download the newest version. Check the Discord for more information.", newer_version))
     end
 
-    if Settings::STARTUP_MESSAGES != ""
-      pbMessage(_INTL(Settings::STARTUP_MESSAGES))
+    if Settings::STARTUP_MESSAGES_KANTO != "" && Settings::KANTO
+      pbMessage(_INTL(Settings::STARTUP_MESSAGES_KANTO))
     end
+    if Settings::STARTUP_MESSAGES_HOENN != "" && Settings::HOENN
+      pbMessage(_INTL(Settings::STARTUP_MESSAGES_HOENN))
+    end
+
     if ($game_temp.unimportedSprites && $game_temp.unimportedSprites.size > 0)
       handleReplaceExistingSprites()
     end

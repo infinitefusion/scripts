@@ -87,6 +87,8 @@ module Settings
   SECRETBASE_DOWNLOAD_URL = "https://secretbase-download.pkmninfinitefusion.workers.dev"
 
   STARTUP_MESSAGES = ""
+  STARTUP_MESSAGES_KANTO = ""
+  STARTUP_MESSAGES_HOENN = ""
 
   LEVEL_CAPS_KANTO = [12, 22, 26, 35, 38, 45, 51, 54, 62, 62, 63, 64, 64, 65, 67, 68]
   LEVEL_CAPS_HOENN = [15, 19, 26, 99, 99, 99, 99, 99]

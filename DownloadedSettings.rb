@@ -6,6 +6,8 @@ module Settings
   SNOW_DAY = false
 
   STARTUP_MESSAGES = "Pokémon Infinite Fusion 2 is now available! Download it from the game's Discord!"
+  STARTUP_MESSAGES_KANTO = "Pokémon Infinite Fusion 2 is now available! Download it from the game's Discord!"
+  STARTUP_MESSAGES_HOENN = "Pokémon Infinite Fusion 2 is now available! Download it from the game's Discord!"
   MAIN_MENU_LINKS = {
     "Discord" => "https://discord.com/invite/infinitefusion",
     "Wiki" => "https://infinitefusion.fandom.com/",
