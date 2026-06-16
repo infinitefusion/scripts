@@ -1,4 +1,4 @@
-#todo:
+# todo:
 # - Jumping (Spoink)
 # - Dancing (turns around in a circle) - Oricorio, Spinda
 # Curious walks up to the trainer and then look at them at a distance of 1 tile instead of running into them
@@ -6,6 +6,11 @@
 OW_BEHAVIOR_MOVE_ROUTES = {
   :roaming => {
     :look_around => [
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
+    :look_around_player => [# Used for Pokeradar, looks towards the player more often
+      RPG::MoveCommand.new(PBMoveRoute::TurnTowardPlayer),
       RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
       RPG::MoveCommand.new(PBMoveRoute::End)
     ],
@@ -87,7 +92,6 @@ OW_BEHAVIOR_MOVE_ROUTES = {
       RPG::MoveCommand.new(PBMoveRoute::End)
 
     ],
-
 
     :charge => [
       RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [3]),
