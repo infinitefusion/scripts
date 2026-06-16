@@ -470,6 +470,7 @@ def spawn_pokeradar_pokemon(species, level)
       event.make_shiny
     end
 
+    #todo: MAYBE increase the move frequency past a certain chain number (50?) to make it more difficult
     event.behavior_roaming    = :look_around_player
     event.behavior_noticed    = event.pokemon.shiny? ? :curious : :flee
     event.turn_away_from_player
