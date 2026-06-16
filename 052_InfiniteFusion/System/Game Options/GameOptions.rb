@@ -15,7 +15,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
         @system_menu = true
         openSystemMenu()
       },
-      _INTL("<icon=#{ICON_AUDIO}> Volume, UI, Autosave, etc.")
+      "<icon=#{ICON_AUDIO}> " + _INTL("Volume, UI, Autosave, etc.")
     )
 
     if $game_switches
@@ -25,7 +25,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
           @gameplay_menu = true
           openGameplayMenu()
         },
-        _INTL("<icon=#{ICON_GAMEPLAY}> Difficulty, movement, etc.")
+        "<icon=#{ICON_GAMEPLAY}> " + _INTL("Difficulty, movement, etc.")
       )
 
       options << ButtonOption.new(
@@ -34,7 +34,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
           @sprites_menu = true
           openSpritesMenu()
         },
-        _INTL("<icon=#{ICON_VISUALS}> Sprites, Pokédex entries, etc.")
+        "<icon=#{ICON_VISUALS}> " + _INTL("Sprites, Pokédex entries, etc.")
       )
 
       options << ButtonOption.new(
@@ -43,7 +43,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
           @challenge_menu = true
           openChallengeMenu()
         },
-        _INTL("<icon=#{ICON_CHALLENGE}> Set optional self-imposed challenges.")
+        "<icon=#{ICON_CHALLENGE}> " + _INTL("Set optional self-imposed challenges.")
       )
 
       # if $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE]
@@ -53,7 +53,7 @@ class PokemonGameOption_Scene < PokemonOption_Scene
       #       @randomizer_menu = true
       #       openRandomizerMenu()
       #     },
-      #     _INTL("<icon=#{ICON_RANDOMIZER}> Set how to randomize the game.")
+      #     "<icon=#{ICON_RANDOMIZER}> " + _INTL("Set how to randomize the game.")
       #   )
       # end
     end
