@@ -241,9 +241,9 @@ def updateRivalTeamForThirdBattle()
 
   team = []
 
-  team << Pokemon.new(other_pokemon[0], 19, rival_trainer.trainerName)
-  team << Pokemon.new(other_pokemon[1], 20, rival_trainer.trainerName)
-  team << Pokemon.new(contains_starter[0], 22, rival_trainer.trainerName)
+  team << Pokemon.new(other_pokemon[0], 22, rival_trainer.trainerName)
+  team << Pokemon.new(other_pokemon[1], 22, rival_trainer.trainerName)
+  team << Pokemon.new(contains_starter[0], 24, rival_trainer.trainerName)
 
   rival_trainer.currentTeam = team
 
