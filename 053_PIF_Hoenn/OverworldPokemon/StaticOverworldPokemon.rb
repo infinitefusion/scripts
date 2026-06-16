@@ -95,13 +95,14 @@ class Game_Map
       min_level = params[:min_level]
       max_level = params[:max_level]
       terrain = params[:terrain] || :Land
-      echoln terrain
       level = choose_level(min_level, max_level)
+      ability = params[:ability]
       behavior_roaming = params[:behavior_roaming]
       behavior_noticed = params[:behavior_noticed]
 
       always_on_top = event.always_on_top
       event.setup_pokemon(species, level, terrain, behavior_roaming, behavior_noticed)
+      event.pokemon.ability= ability if ability
       event.set_swimming if params[:swimming]
       event.set_shiny if params[:shiny]
       event.always_on_top = always_on_top
@@ -141,6 +142,8 @@ class Game_Map
         result[:flying] = true
       elsif line =~ /shiny/
         result[:shiny] = true
+      elsif line =~ /ability\s*=\s*:(\w+)/
+        result[:ability] = $1.to_sym
       elsif line =~ /switch\s*=\s*(\d+)/ # A switch that will be turned on after the pokemon is battled
         result[:post_battle_switch] = $1.to_i
       end
