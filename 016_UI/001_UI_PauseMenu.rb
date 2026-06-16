@@ -128,13 +128,13 @@ class PokemonPauseMenu
     cmdQuit = -1
     cmdEndGame = -1
     if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
-      commands[cmdPokedex = commands.length] = _INTL("  <icon=#{ICON_POKEDEX}>  Pokédex")
+      commands[cmdPokedex = commands.length] = "  <icon=#{ICON_POKEDEX}>  " + _INTL("Pokédex")
     end
-    commands[cmdPokemon = commands.length] = _INTL("  <icon=#{ICON_POKEMON}>  Pokémon") if $Trainer.party_count > 0
-    commands[cmdBag = commands.length] = _INTL("  <icon=#{ICON_BAG}>  Bag") if !pbInBugContest?
-    commands[cmdPokegear = commands.length] = _INTL("  <icon=#{ICON_POKENAV}>  PokéNav") if $Trainer.has_pokegear
-    commands[cmdTrainer = commands.length] = _INTL("  <icon=#{ICON_PLAYER}>  {1}",$Trainer.name)
-    commands[cmdOutfit = commands.length] = _INTL("  <icon=#{ICON_OUTFIT}>  Outfit") if $Trainer.can_change_outfit
+    commands[cmdPokemon = commands.length] = "  <icon=#{ICON_POKEMON}>  " + _INTL("Pokémon") if $Trainer.party_count > 0
+    commands[cmdBag = commands.length] = "  <icon=#{ICON_BAG}>  " + _INTL("Bag") if !pbInBugContest?
+    commands[cmdPokegear = commands.length] = "  <icon=#{ICON_POKENAV}>  " + _INTL("PokéNav") if $Trainer.has_pokegear
+    commands[cmdTrainer = commands.length] = "  <icon=#{ICON_PLAYER}>  " + _INTL("{1}", $Trainer.name)
+    commands[cmdOutfit = commands.length] = "  <icon=#{ICON_OUTFIT}>  " + _INTL("Outfit") if $Trainer.can_change_outfit
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
         @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
@@ -142,7 +142,7 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
                                 pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
-      commands[cmdQuit = commands.length] = _INTL("  <icon=#{ICON_QUIT_SAFARI}>  Quit")
+      commands[cmdQuit = commands.length] = "  <icon=#{ICON_QUIT_SAFARI}>  " + _INTL("Quit")
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
@@ -154,11 +154,11 @@ class PokemonPauseMenu
       end
       commands[cmdQuit = commands.length] = _INTL("Quit Contest")
     else
-      commands[cmdSave = commands.length] = _INTL("  <icon=#{ICON_SAVE}>  Save") if $game_system && !$game_system.save_disabled
+      commands[cmdSave = commands.length] = "  <icon=#{ICON_SAVE}>  " + _INTL("Save") if $game_system && !$game_system.save_disabled
     end
-    commands[cmdOption = commands.length] = _INTL("  <icon=#{ICON_OPTIONS}>  Options")
-    commands[cmdDebug = commands.length] = _INTL("  <icon=#{ICON_DEBUG}>  Debug") if $DEBUG
-    commands[cmdEndGame = commands.length] = _INTL("  <icon=#{ICON_TITLE}>  Title")
+    commands[cmdOption = commands.length] = "  <icon=#{ICON_OPTIONS}>  " + _INTL("Options")
+    commands[cmdDebug = commands.length] = "  <icon=#{ICON_DEBUG}>  " + _INTL("Debug") if $DEBUG
+    commands[cmdEndGame = commands.length] = "  <icon=#{ICON_TITLE}>  " + _INTL("Title")
     loop do
       command = @scene.pbShowCommands(commands)
       if cmdPokedex >= 0 && command == cmdPokedex
