@@ -119,6 +119,10 @@ module MessageConfig
     return MessageConfig.pbTryFonts(FONT_NAME)
   end
 
+  def self.pbResetSystemFontName
+    @@systemFont = nil
+  end
+
   def self.pbDefaultSmallFontName
     return MessageConfig.pbTryFonts(SMALL_FONT_NAME)
   end

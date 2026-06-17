@@ -569,6 +569,7 @@ class PokemonLoadScreen
         when cmd_language
           @scene.pbEndScene
           $PokemonSystem.language = pbChooseLanguage
+          MessageConfig.pbResetSystemFontName
           pbLoadMessages('Data/' + Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1])
           if show_continue
             @save_data[:pokemon_system] = $PokemonSystem
@@ -917,7 +918,10 @@ module Game
     # Set language (and choose language if there is no save file)
     if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1])
+
+      available_languages = Settings::LANGUAGES[Settings::GAME_ID]
+      $PokemonSystem.language = 0 if $PokemonSystem.language > available_languages.length-1
+      pbLoadMessages('Data/' + available_languages[$PokemonSystem.language][1])
     end
   end
 
