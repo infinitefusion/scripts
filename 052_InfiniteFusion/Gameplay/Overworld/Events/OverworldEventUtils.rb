@@ -69,7 +69,8 @@ end
 # 1: wood
 def sign(message, type = 0)
   signId = "sign_#{type}"
-  formatted_message = "\\sign[#{signId}]#{message}"
+  translated = MessageTypes.getFromMapHash($game_map.map_id, message)
+  formatted_message = "\\sign[#{signId}]#{translated}"
   pbMessage(formatted_message)
 end
 

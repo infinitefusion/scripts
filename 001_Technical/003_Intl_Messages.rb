@@ -1,6 +1,6 @@
 def pbAddScriptTexts(items, script)
   script.force_encoding(Encoding::UTF_8)
-  script.scan(/(?:_I)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
+  script.scan(/(?:_I|sign)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
     string = s[0]
     string.gsub!(/\\\"/, "\"")
     string.gsub!(/\\\\/, "\\")
@@ -35,17 +35,13 @@ def pbSetTextMessages
       scr = Zlib::Inflate.inflate(script[2])
       pbAddRgssScriptTexts(texts, scr)
     end
-    # If Scripts.rxdata only has 1 section, scripts have been extracted. Get
-    # script texts from .rb files in Data/Scripts
-    if $RGSS_SCRIPTS.length == 1
-      Dir.all("Data/Scripts").each do |script_file|
-        if System.uptime - t >= 5
-          t += 5
-          Graphics.update
-        end
-        File.open(script_file, "rb") do |f|
-          pbAddRgssScriptTexts(texts, f.read)
-        end
+    Dir.all("Data/Scripts").each do |script_file|
+      if System.uptime - t >= 5
+        t += 5
+        Graphics.update
+      end
+      File.open(script_file, "rb") do |f|
+        pbAddRgssScriptTexts(texts, f.read)
       end
     end
     # Must add messages because this code is used by both game system and Editor

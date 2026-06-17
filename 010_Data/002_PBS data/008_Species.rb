@@ -192,26 +192,23 @@ module GameData
     end
     # @return [String] the translated name of this species
     def name
-      return @real_name
-      #return pbGetMessage(MessageTypes::Species, @id_number)
+      ret = MessageTypes.get(MessageTypes::Species, @id_number)
+      return (ret && !ret.empty?) ? ret : @real_name
     end
 
-    # @return [String] the translated name of this form of this species
     def form_name
-      return @real_form_name
-      #return pbGetMessage(MessageTypes::FormNames, @id_number)
+      ret = MessageTypes.get(MessageTypes::FormNames, @id_number)
+      return (ret && !ret.empty?) ? ret : @real_form_name
     end
 
-    # @return [String] the translated Pokédex category of this species
     def category
-      return @real_category
-      #return pbGetMessage(MessageTypes::Kinds, @id_number)
+      ret = MessageTypes.get(MessageTypes::Kinds, @id_number)
+      return (ret && !ret.empty?) ? ret : @real_category
     end
 
-    # @return [String] the translated Pokédex entry of this species
     def pokedex_entry
-      return @real_pokedex_entry
-      #return pbGetMessage(MessageTypes::Entries, @id_number)
+      ret = MessageTypes.get(MessageTypes::Entries, @id_number)
+      return (ret && !ret.empty?) ? ret : @real_pokedex_entry
     end
 
     def is_fusion
