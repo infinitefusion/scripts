@@ -2,7 +2,7 @@ class Scene_Credits
   CREDIT_HOENN = <<_END_
 
 <title>Pokémon Infinite Fusion 2: Hoenn
-<title>DEMO 1
+<title>PART 1
 By Chardub (Frogzilla)
 
 <title>Game design
@@ -66,7 +66,7 @@ cynder_<s>chansondoree
 kiwikelly<s>revellr
 slowforest<s>takopus
 
-<title>QA Testing (Demo 1)
+<title>QA Testing (Part 1)
 adonis9410<s>casinosluck
 firesword2562<s>divinelunaria
 sapphire_chuu<s>vampvixen
