@@ -577,11 +577,17 @@ module Settings
   # An array of available languages in the game, and their corresponding message
   # file in the Data folder. Edit only if you have 2 or more languages to choose
   # from.
-  LANGUAGES = [
-    ["English", "english.dat"],
-    ["Français", "french.dat"],
-    ["中文", "chinese.dat"]
-  ]
+  LANGUAGES = {
+    :IF_KANTO => [
+      ["English", "english.dat"],
+      ["Français", "french.dat"],
+    ],
+    :IF_HOENN => [
+      ["English", "english.dat"],
+      ["Español", "spanish.dat"],
+      ["中文", "chinese.dat"]
+    ]
+  }
 
   # Experimental
   REMOTE_BATTLES_CONTROL = false

@@ -14,6 +14,8 @@ module MessageConfig
   NARROW_FONT_NAME        = "Power Green Narrow"
   NARROW_FONT_SIZE        = 29
 
+  FONT_NAME_CHINESE       = "FusionPixelMonoPatched"
+
   BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
   BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
 
@@ -110,6 +112,10 @@ module MessageConfig
   #-----------------------------------------------------------------------------
 
   def self.pbDefaultSystemFontName
+    current_language = Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1]
+    if current_language == "chinese.dat"
+      return MessageConfig.pbTryFonts(FONT_NAME_CHINESE)
+    end
     return MessageConfig.pbTryFonts(FONT_NAME)
   end
 

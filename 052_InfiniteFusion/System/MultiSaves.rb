@@ -496,8 +496,7 @@ class PokemonLoadScreen
         commands[cmd_new_game_plus = commands.length] = _INTL('New Game +')
       end
       commands[cmd_options = commands.length] = _INTL('Options')
-      commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES.length >= 2 && Settings::KANTO
-
+      commands[cmd_language = commands.length] = _INTL('Language') if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
 
       cmd_links = {}
 
@@ -570,7 +569,7 @@ class PokemonLoadScreen
         when cmd_language
           @scene.pbEndScene
           $PokemonSystem.language = pbChooseLanguage
-          pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+          pbLoadMessages('Data/' + Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1])
           if show_continue
             @save_data[:pokemon_system] = $PokemonSystem
             File.open(SaveData.get_full_path(@selected_file), 'wb') { |file| Marshal.dump(@save_data, file) }
@@ -916,9 +915,9 @@ module Game
     # Set resize factor
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
     # Set language (and choose language if there is no save file)
-    if Settings::LANGUAGES.length >= 2 && Settings::KANTO
+    if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+      pbLoadMessages('Data/' + Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1])
     end
   end
 

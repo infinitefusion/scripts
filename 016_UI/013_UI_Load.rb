@@ -317,7 +317,7 @@ class PokemonLoadScreen
       commands[cmd_new_game_plus = commands.length]  = _INTL('New Game +')
     end
     commands[cmd_options = commands.length]   = _INTL('System Options')
-    commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
+    commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
     commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
     commands[cmd_quit = commands.length]      = _INTL('Quit Game')
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
@@ -355,7 +355,7 @@ class PokemonLoadScreen
       when cmd_language
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
+        pbLoadMessages('Data/' + Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1])
         if show_continue
           @save_data[:pokemon_system] = $PokemonSystem
           File.open(SaveData::FILE_PATH, 'wb') { |file| Marshal.dump(@save_data, file) }
