@@ -244,6 +244,20 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
         x+=charwidth
       end
       lastword[1]=0
+    elsif !explicitBreaksOnly && x+2>widthDst && lastword[1]==0 &&
+          characters.length > 0 && characters[-1][0] != "\n"
+      havenl=true
+      break_index = characters.length - 1
+      characters.insert(break_index,["\n",0,y*lineheight+yDst,0,lineheight,
+         false,false,false,colorclone,nil,false,false,"",8,position])
+      y+=1
+      x=0
+      for i in break_index+1...characters.length
+        characters[i][2]+=lineheight
+        charwidth=characters[i][3]-2
+        characters[i][1]=x
+        x+=charwidth
+      end
     end
     position+=1
   end
@@ -741,6 +755,24 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
         x+=charwidth
       end
       lastword[1]=0
+    elsif !explicitBreaksOnly && x+2>widthDst && lastword[1]==0 &&
+          characters.length > 0 && characters[-1][0] != "\n"
+      havenl=true
+      break_index = characters.length - 1
+      characters.insert(break_index,["\n",0,y*lineheight+yDst,0,lineheight,false,
+         false,false,defaultcolors[0],defaultcolors[1],false,false,"",8,position,
+         nil])
+      charactersInternal.insert(break_index,[alignment,y,0])
+      y+=1
+      x=0
+      for i in break_index+1...characters.length
+        characters[i][2]+=lineheight
+        charactersInternal[i][1]+=1
+        extraspace=(charactersInternal[i][4]) ? charactersInternal[i][4] : 0
+        charwidth=characters[i][3]-extraspace
+        characters[i][1]=x+charactersInternal[i][2]
+        x+=charwidth
+      end
     end
     position+=1 if !graphic
   end
@@ -984,6 +1016,19 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
             x=0
             y+=32
           end
+        end
+        if textwidth>width && word.scan(/\s/).empty?
+          word.scan(/./m).each do |char|
+            charwidth=bitmap.text_size(char).width
+            if x>0 && x+charwidth>width
+              x=0
+              y+=32
+            end
+            ret.push([char,x,y,charwidth,32,color])
+            x+=charwidth
+            dims[0]=x if dims && dims[0]<x
+          end
+          next
         end
         ret.push([word,x,y,textwidth,32,color])
         x+=textwidth
