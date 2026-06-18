@@ -341,7 +341,10 @@ def pbGetBasicMapNameFromId(id)
 end
 
 def pbGetMapNameFromId(id)
-  map = pbGetBasicMapNameFromId(id)
+  map = pbGetMessage(MessageTypes::MapNames, id)
+  if nil_or_empty?(map)
+    map = pbGetBasicMapNameFromId(id)
+  end
   map.gsub!(/\\PN/, $Trainer.name) if $Trainer
   return map
 end
