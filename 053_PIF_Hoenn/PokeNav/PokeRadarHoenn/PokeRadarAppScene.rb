@@ -324,7 +324,7 @@ class PokeRadarAppScene < PokeNavAppScene
     return unless @unseenPokemon.any?
     Kernel.pbClearText()
     showHeaderInfo
-    pbMessage(_INTL('You need to encounter the Pokémon before you can scan for it.'))
+    pbMessage(_INTL("You need to encounter the Pokémon before you can scan for it."))
     hover_unseen
   end
 
