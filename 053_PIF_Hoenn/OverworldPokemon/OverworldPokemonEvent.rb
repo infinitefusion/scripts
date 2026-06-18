@@ -13,6 +13,7 @@ class OverworldPokemonEvent < Game_Event
   attr_reader :part_of_pokeradar_chain
   attr_reader :noticed_player_once
   attr_reader :last_facing_direction
+
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
@@ -21,6 +22,7 @@ class OverworldPokemonEvent < Game_Event
   UPDATE_TIME = 4 #Nb. of frames for the update_behavior loop
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     #return unless @map_id == $game_map.map_id
+    echoln behavior_roaming
     @species = species
     @level = level
     @behavior_roaming = behavior_roaming if behavior_roaming
@@ -96,6 +98,8 @@ class OverworldPokemonEvent < Game_Event
     set_roaming_movement
     @last_facing_direction = @direction
     @setup_complete = true
+
+    echoln @behavior_roaming
   end
 
   def make_shiny
