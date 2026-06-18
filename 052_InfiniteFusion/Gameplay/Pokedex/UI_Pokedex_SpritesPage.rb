@@ -5,6 +5,10 @@
 # It would be good to separate the logic into 2 different pages based on the same one instead of doing everything
 # in this one
 
+class PokemonGlobalMetadata
+  attr_accessor :seen_sprites_tutorial
+end
+
 class PokemonPokedexInfo_Scene
   Y_POSITION_SMALL = 40 # 90
   Y_POSITION_BIG = 60
@@ -28,6 +32,18 @@ class PokemonPokedexInfo_Scene
     # alts_list= pbGetAvailableAlts
     @selected_index = 0 if !@selected_index
     update_displayed
+  end
+
+  def checkSpritesPageTutorial
+    return unless $PokemonSystem.random_sprites
+    return unless @selecting_blacklist
+    return if $PokemonGlobal.seen_sprites_tutorial
+    pbMessage(_INTL("Pokémon are assigned a random sprite when you encounter them in the wild."))
+    pbMessage(_INTL("This page allows you to select the sprites that can appear for each Pokémon."))
+    unless @pokemon
+      pbMessage(_INTL("To change one of your caught Pokémon's sprite, you need to open its Pokédex entry from the the Pokémon's Summary page."))
+    end
+    $PokemonGlobal.seen_sprites_tutorial = true
   end
 
   def init_selected_bg
@@ -489,6 +505,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbChooseAlt(brief = false)
+    checkSpritesPageTutorial
     @selecting_sprites = true
     updateBlackListInstructionIcons
     update_blacklist_icons if @selecting_blacklist

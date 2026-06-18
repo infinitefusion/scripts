@@ -73,6 +73,7 @@ class PokemonPokedexInfo_Scene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
+
   def initializeSpritesPageGraphics()
     @sprites["leftarrow"] = AnimatedSprite.new("Graphics/Pictures/leftarrow", 8, 40, 28, 2, @viewport)
     @sprites["leftarrow"].x = 20
