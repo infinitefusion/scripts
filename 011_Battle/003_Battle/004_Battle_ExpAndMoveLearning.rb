@@ -248,9 +248,6 @@ class PokeBattle_Battle
         @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
                          oldSpAtk, oldSpDef, oldSpeed)
       end
-
-      echoln "256"
-
       # Learn all moves learned at this level
       moveList = pkmn.getMoveList
       moveList.each { |m| pbLearnMove(idxParty, m[1]) if m[0] == curLevel }
