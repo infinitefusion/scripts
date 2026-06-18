@@ -359,7 +359,7 @@ class PokeBattle_Battle
     return 0 unless Settings::HOENN
     return 0 unless trainerBattle?
 
-    cosmetics_money = (calculateMoneyGain / 4).floor
+    cosmetics_money = (calculateMoneyGain / 2).floor
     $Trainer.cosmetics_money = 0 unless $Trainer.cosmetics_money
     pbPlayer.cosmetics_money += cosmetics_money
     if !@moneyGain && cosmetics_money > 0 # message displayed in pbGainMoney if player wins money

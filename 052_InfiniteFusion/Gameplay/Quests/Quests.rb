@@ -231,8 +231,8 @@ define_quest("rustboro_fusion",:FIELD_QUEST,_INTL("Wild Fusion Study"), _INTL("H
 define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
 
 #Slateport
-define_quest("slateport_team_aqua",:AQUA_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
-define_quest("slateport_team_magma",:MAGMA_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie",MAP_MAGMA_CAMP)
+define_quest("slateport_team_aqua",:AQUA_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach if you so choose."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
+define_quest("slateport_team_magma",:MAGMA_QUEST,_INTL("Join Team Magma!"), _INTL("Maxie invited you to join Team Magma. Go meet them at their camp, North of Slateport if you so choose."),_INTL("Slateport City"),"NPC_Hoenn_Magma_Maxie",MAP_MAGMA_CAMP)
 
 
 # Route 109
