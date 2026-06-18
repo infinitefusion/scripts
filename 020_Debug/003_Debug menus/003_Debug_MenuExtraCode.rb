@@ -11,7 +11,7 @@ def pbWarpToMapId
   params = ChooseNumberParams.new
   params.setRange(1,999) #pbMapTree().length)
   params.setDefaultValue($game_map.map_id)
-  map_id = pbMessageChooseNumber("map id?",params)
+  map_id = pbMessageChooseNumber(_INTL("map id?"),params)
   return [map_id,0,0]
 end
 
