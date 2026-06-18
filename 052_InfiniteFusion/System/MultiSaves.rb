@@ -496,7 +496,7 @@ class PokemonLoadScreen
         commands[cmd_new_game_plus = commands.length] = _INTL("New Game +")
       end
       commands[cmd_options = commands.length] = _INTL("Options")
-      commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
+      commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES.length >= 2
 
       cmd_links = {}
 
