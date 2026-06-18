@@ -178,8 +178,8 @@ def determineDayCareEggSpecies(maleParent, femaleParent)
 
   maleParentSpecies = []
   if maleParent.isFusion?
-    maleParentSpecies << male_species.body_pokemon
-    maleParentSpecies << male_species.head_pokemon
+    maleParentSpecies << male_species.body_pokemon.species
+    maleParentSpecies << male_species.head_pokemon.species
   else
     maleParentSpecies << male_species.species
   end
