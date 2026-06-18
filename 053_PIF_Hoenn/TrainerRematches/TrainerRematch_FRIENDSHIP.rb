@@ -21,7 +21,7 @@ class BattledTrainer
     LADY:           [15, 30, 60],
     PAINTER:        [8, 22, 40],
     POKEMANIAC:     [18, 35, 70],
-    POKEMONBREEDER: [8, 18, 35],
+    POKEMONBREEDER_F: [8, 18, 35],
     PROFESSOR:      [10, 30, 60],
     ROCKER:         [15, 35, 70],
     RUINMANIAC:     [15, 35, 65],

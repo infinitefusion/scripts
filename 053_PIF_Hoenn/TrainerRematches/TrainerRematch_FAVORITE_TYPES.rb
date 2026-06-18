@@ -20,7 +20,7 @@ class BattledTrainer
       LADY:           [:FAIRY, :NORMAL],
       PAINTER:        [:NORMAL, :PSYCHIC, :GRASS],
       POKEMANIAC:     [:DRAGON, :GROUND],
-      POKEMONBREEDER: [:NORMAL, :GRASS],
+      POKEMONBREEDER_F: [:NORMAL, :GRASS],
       PROFESSOR:      [:NORMAL, :PSYCHIC],
       ROCKER:         [:ELECTRIC, :FIRE],
       RUINMANIAC:     [:GROUND, :ROCK, :PSYCHIC],
