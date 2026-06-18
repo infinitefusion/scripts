@@ -158,7 +158,7 @@ class PokeBattle_Battle
       if $PokemonSystem.level_caps==1 #Level caps enabled
         exp = 0
       else
-        exp *= 0.6.floor  #Pokémon still gain less exp when over level cap, even if level caps option is disabled
+        exp = (exp *= 0.6).floor  #Pokémon still gain less exp when over level cap, even if level caps option is disabled
       end
     end
 
