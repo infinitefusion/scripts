@@ -8,6 +8,7 @@ class ExpExtraction
 
   attr_reader :valid_exp
   attr_reader :max_value
+  attr_reader :full_price
 
   BASE_PRICE = 1000
   LOSS_PER_CANDY = 50
@@ -102,12 +103,18 @@ def extractExpFromPokemon(pokemon, unitPrice, nbCandiesVariable = 1)
     return false
   end
 
+  if $Trainer.money < expExtraction.full_price
+    pbCallBubDown(2, @event_id)
+    pbMessage(_INTL("Oh, I'm sorry, but you don't have enough money to afford the procedure. You might want to try a smaller extraction."))
+    return false
+  end
 
   pbCallBubDown(2, @event_id)
   if pbConfirmMessage(_INTL("Your {1} will go from \\C[1]Level {2}\\C[0] to \\C[1]Level {3}\\C[0] after all the Exp. Candies are extracted. Do you still want to continue?", pokemon.name, pokemon.level, new_level))
     exp_to_extract = expExtraction.exp_to_extract + ExpExtraction::LOSS_PER_CANDY*expExtraction.nb_candies
     removeExp(pokemon, exp_to_extract)
     pbSet(nbCandiesVariable, nb_candies)
+    $Trainer.money -= expExtraction.full_price
   else
     return false
   end

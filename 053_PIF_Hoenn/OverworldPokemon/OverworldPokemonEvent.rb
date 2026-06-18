@@ -97,8 +97,6 @@ class OverworldPokemonEvent < Game_Event
     set_roaming_movement
     @last_facing_direction = @direction
     @setup_complete = true
-
-    echoln @behavior_roaming
   end
 
   def make_shiny

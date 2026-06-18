@@ -56,6 +56,7 @@ class PokedexUtils
       body_id = getBodyID(dex_number)
       head_id = getHeadID(dex_number,body_id)
       available_alts = getFusionSpriteAlts(head_id,body_id)
+      echoln available_alts
       available_alts = [] if !available_alts
       local_alts = getLocalFusionSpriteAlts(head_id,body_id)
     else
