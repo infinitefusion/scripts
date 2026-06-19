@@ -129,23 +129,29 @@ def obtainUnfusedPokemonParty(head_pokemon, body_pokemon, partyPosition)
         $Trainer.party.delete_at(partyPosition)
         pbAddPokemon(head_pokemon)
       else
-        storeUnfusedPokemon(partyPosition,head_pokemon,body_pokemon)
+        $Trainer.party[partyPosition] = head_pokemon
+        $PokemonStorage.pbStoreCaught(body_pokemon)
       end
     elsif choice == 1 #body
-      $Trainer.remove_pokemon_at_index(partyPosition)
       if isOnPinkanIsland()
         $Trainer.party.delete_at(partyPosition)
         pbAddPokemon(body_pokemon)
       else
-        storeUnfusedPokemon(partyPosition,body_pokemon,head_pokemon)
+        $Trainer.party[partyPosition] = body_pokemon
+        $PokemonStorage.pbStoreCaught(head_pokemon)
       end
     else
       return false
     end
   else
-    storeUnfusedPokemon(partyPosition,head_pokemon,body_pokemon)
+    storeUnfusedPokemonInPlace(partyPosition,head_pokemon,body_pokemon)
   end
   return true
+end
+
+def storeUnfusedPokemonInPlace(fusedPokemonPartyPosition, pokemonKeptInParty, pokemonSentToPC)
+  $Trainer.party[fusedPokemonPartyPosition] = pokemonKeptInParty
+  pbAddPokemonSilent(pokemonSentToPC)
 end
 
 def storeUnfusedPokemon(fusedPokemonPartyPosition, pokemonKeptInParty,pokemonSentToPC)
