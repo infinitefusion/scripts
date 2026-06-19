@@ -49,7 +49,7 @@ def getCurrentLevelCap()
   current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
   current_max_level *= Settings::EASY_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_EASY] && Settings::HOENN
 
-  return current_max_level.floor || 100
+  return current_max_level&.floor || 100
 end
 
 def pokemonExceedsLevelCap(pokemon)
