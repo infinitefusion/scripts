@@ -68,7 +68,7 @@ class ColorCodeDoor
 
       break if Input.trigger?(Input::B)
     end
-    return nil  # cancelled
+    return @current_code.join  # cancelled
   ensure
     dispose
   end
