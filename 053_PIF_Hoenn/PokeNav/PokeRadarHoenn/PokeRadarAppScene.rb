@@ -464,7 +464,7 @@ def spawn_pokeradar_pokemon(species, level)
     event = spawned_events[0]
     grass = $PokemonTemp&.pokeradar[3]
 
-    if grass[3] == 2
+    if grass && grass[3] == 2
       pbSEPlay("shiny", 60)
       playAnimation(Settings::SPARKLE_SHORT_ANIMATION_ID, event.x, event.y)
       event.make_shiny
