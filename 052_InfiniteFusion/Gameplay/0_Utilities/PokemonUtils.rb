@@ -166,7 +166,7 @@ def isKalosPokemon(species)
     [327, 328, 329, 339, 371, 372, 417, 418,
      425, 426, 438, 439, 440, 441, 444, 445, 446,
      456, 461, 462, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487,
-     489, 490, 491, 492, 500,
+     489, 490, 491, 492, 500, 571, 572,
 
     ]
   return list.include?(dexNum) || list.include?(head_dex) || list.include?(body_dex)
@@ -185,6 +185,7 @@ def isUnovaPokemon(species)
       415, 416, 419, 420,
       422, 423, 424, 434, 345,
       466, 467, 494, 493,
+      566, 567, 568, 569,570,
     ]
   return list.include?(dexNum) || list.include?(head_dex) || list.include?(body_dex)
 end
@@ -200,7 +201,7 @@ def isSinnohPokemon(species)
      295, 296, 297, 298, 299, 305, 306, 307, 308, 315, 316, 317,
      318, 319, 320, 321, 322, 323, 324, 326, 332, 343, 344, 345,
      346, 347, 352, 353, 354, 358, 383, 384, 388, 389, 400, 402,
-     403, 429, 468]
+     403, 429, 468, 573, 574, 575, 576]
 
   return list.include?(dexNum) || list.include?(head_dex) || list.include?(body_dex)
 end
