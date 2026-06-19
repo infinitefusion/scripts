@@ -695,6 +695,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
     trainer.currentTeam.each { |pokemon|
       break if party.length >= 6
       if pokemon.is_a?(Pokemon)
+        pokemon.heal
         party << pokemon
       elsif pokemon.is_a?(Symbol)
         party << Pokemon.new(pokemon, default_level, trainer)
