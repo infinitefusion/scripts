@@ -113,6 +113,7 @@ module Settings
 
   DISCORD_URL = "https://discord.com/invite/infinitefusion"
   WIKI_URL = "https://infinitefusion.fandom.com/"
+  FAQ_URL = "https://hackmd.io/@PIF-Staff/PIF-Hoenn-FAQ"
 
   AI_ENTRIES_URL = "https://ai-entries.pkmninfinitefusion.workers.dev/"
   AI_ENTRIES_RATE_MAX_NB_REQUESTS = 10 # Nb. requests allowed in each time window
