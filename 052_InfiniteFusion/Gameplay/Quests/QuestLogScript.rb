@@ -519,10 +519,11 @@ def showQuestStatistics(eventId, includeRocketQuests = false)
   pbMessage(_INTL("In-progress: \\C[1]{1}", quests_in_progress.length))
 end
 
-def get_completed_quests(includeRocketQuests = false)
+def get_completed_quests(includeRocketQuests = false, includeMainQuests = false)
   quests_completed = []
   $Trainer.quests = [] if !$Trainer.quests
   for quest in $Trainer.quests
+    next if quest.type == :MAIN_QUEST && !includeMainQuests
     next if quest.npc == QuestBranchRocket && !includeRocketQuests
     quests_completed << quest if quest.completed
   end

@@ -67,4 +67,8 @@ class TrainerStatistics
     @bike_hops_distance = 1 unless @bike_hops_distance
     @bike_hops_distance += 1
   end
+
+  def nb_fusions
+    return $game_variables[VAR_STAT_NB_FUSIONS]
+  end
 end

@@ -203,6 +203,7 @@ end
 def updateRivalTeamForThirdBattle()
   updateRivalTeamForSecondBattle unless $game_switches[SWITCH_RIVAL_BATTLE_2]
   rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
+  rival_trainer.friendship_level = 2
   rival_starter = rival_trainer.currentTeam[0]
   starter_species = rival_starter.species
 
@@ -301,6 +302,7 @@ def initializeRivalBattledTrainer
   trainer_appearance = $Trainer.rival_appearance
   rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
+  rivalBattledTrainer.friendship_level = 1
   team = []
   team << Pokemon.new(get_hoenn_rival_starter, 5, trainer_name)
   rivalBattledTrainer.currentTeam = team
