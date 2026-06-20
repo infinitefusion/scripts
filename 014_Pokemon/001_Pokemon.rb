@@ -1692,7 +1692,7 @@ class Pokemon
     @timeReceived = Time.new.to_i
     @timeEggHatched = nil
     @fused = nil
-    @personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+    @personalID = generate_personal_id
     @hp = 1
     @totalhp = 1
     @spriteform_body = nil
@@ -1717,6 +1717,10 @@ class Pokemon
     @ow_coordinates = nil
     @sprite_letter = nil
     @evolve_from_party = false
+  end
+
+  def generate_personal_id
+    return rand(2 ** 16) | rand(2 ** 16) << 16
   end
 
 

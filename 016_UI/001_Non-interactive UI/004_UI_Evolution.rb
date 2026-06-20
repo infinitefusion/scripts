@@ -669,9 +669,11 @@ class PokemonEvolutionScene
     new_pkmn.markings  = 0
     new_pkmn.poke_ball = :POKEBALL
     new_pkmn.item      = nil
+    new_pkmn.personalID = new_pkmn.generate_personal_id
     new_pkmn.clearAllRibbons
     new_pkmn.calc_stats
     new_pkmn.heal
+
     # Add duplicate Pokémon to party
     $Trainer.party.push(new_pkmn)
     # See and own duplicate Pokémon
