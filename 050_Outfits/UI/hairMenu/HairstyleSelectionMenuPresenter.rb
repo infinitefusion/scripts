@@ -2,16 +2,16 @@ class HairstyleSelectionMenuPresenter
   attr_accessor :options
   attr_reader :current_index
 
-  OPTION_STYLE = _INTL("Hairstyle")
-  OPTION_BASE_COLOR = _INTL("Base color")
-  OPTION_DYE = _INTL("Dye")
+  OPTION_STYLE = "Hairstyle"
+  OPTION_BASE_COLOR = "Base color"
+  OPTION_DYE = "Dye"
 
-  HAIR_COLOR_NAMES = [_INTL("Blonde"), _INTL("Light Brown"), _INTL("Dark Brown"), _INTL("Black")]
+  HAIR_COLOR_NAMES = ["Blonde", _"Light Brown", "Dark Brown", "Black"]
   HAIR_COLOR_IDS = [1, 2, 3, 4]
 
   #ids for displayed text sprites
   STYLE_TEXT_ID = "style"
-  BASECOLOR_TEXT_ID = "baseCplor"
+  BASECOLOR_TEXT_ID = "baseColor"
   DYE_TEXT_ID = "dye"
 
   def initialize(view)
