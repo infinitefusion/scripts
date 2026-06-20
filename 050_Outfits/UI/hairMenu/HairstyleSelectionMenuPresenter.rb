@@ -6,7 +6,7 @@ class HairstyleSelectionMenuPresenter
   OPTION_BASE_COLOR = "Base color"
   OPTION_DYE = "Dye"
 
-  HAIR_COLOR_NAMES = ["Blonde", _"Light Brown", "Dark Brown", "Black"]
+  HAIR_COLOR_NAMES = ["Blonde","Light Brown", "Dark Brown", "Black"]
   HAIR_COLOR_IDS = [1, 2, 3, 4]
 
   #ids for displayed text sprites
