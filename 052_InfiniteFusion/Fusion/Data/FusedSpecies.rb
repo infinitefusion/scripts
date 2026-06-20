@@ -268,8 +268,9 @@ module GameData
       body_nat_dex = GameData::NAT_DEX_MAPPING[@body_pokemon.id_number] ? GameData::NAT_DEX_MAPPING[@body_pokemon.id_number] : @body_pokemon.id_number
       head_nat_dex = GameData::NAT_DEX_MAPPING[@head_pokemon.id_number] ? GameData::NAT_DEX_MAPPING[@head_pokemon.id_number] : @head_pokemon.id_number
       begin
-        prefix = GameData::SPLIT_NAMES[head_nat_dex][0]
-        suffix = GameData::SPLIT_NAMES[body_nat_dex][1]
+        split_names = get_split_names
+        prefix = split_names[head_nat_dex][0]
+        suffix = split_names[body_nat_dex][1]
         if prefix[-1] == suffix[0]
           prefix = prefix[0..-2]
         end
@@ -280,6 +281,16 @@ module GameData
         print("species with error: " + @species.to_s)
       end
 
+    end
+
+    def get_split_names
+      case getCurrentLanguage
+      when :ENGLISH
+        return GameData::SPLIT_NAMES
+      when :CHINESE
+        return GameData::SPLIT_NAMES_CHINESE
+      end
+      return GameData::SPLIT_NAMES
     end
 
     def calculate_evolutions()
