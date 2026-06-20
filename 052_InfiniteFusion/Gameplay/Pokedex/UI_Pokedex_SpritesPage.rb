@@ -634,8 +634,8 @@ class PokemonPokedexInfo_Scene
           pbMessage(_INTL("This sprite is already the displayed sprite"))
         end
       else
-        message = _INTL('Would you like to use this sprite instead of the current sprite?')
-        message = _INTL('Would you like to use this sprite instead of the current sprite for the entire species?') unless @pokemon
+        message = _INTL("Would you like to use this sprite instead of the current sprite?")
+        message = _INTL("Would you like to use this sprite instead of the current sprite for the entire species?") unless @pokemon
         if pbConfirmMessage(message)
           swap_main_sprite()
           return true
