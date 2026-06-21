@@ -587,7 +587,7 @@ module Settings
       ["English", "english.dat"],
       # ["Français", "french.dat"],
       #["Español", "spanish.dat"],
-      #["中文", "chinese.dat"]
+      ["中文", "chinese.dat"]
     ]
   }
 

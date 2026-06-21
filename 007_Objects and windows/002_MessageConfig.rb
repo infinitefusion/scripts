@@ -440,12 +440,20 @@ end
 
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
+  if getCurrentLanguage == :CHINESE
+    pbSetSystemFont(bitmap)
+    return
+  end
   bitmap.font.name = MessageConfig.pbGetSmallFontName
   bitmap.font.size = MessageConfig::SMALL_FONT_SIZE
 end
 
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
+  if getCurrentLanguage == :CHINESE
+    pbSetSystemFont(bitmap)
+    return
+  end
   bitmap.font.name = MessageConfig.pbGetNarrowFontName
   bitmap.font.size = MessageConfig::NARROW_FONT_SIZE
 end
