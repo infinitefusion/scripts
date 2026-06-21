@@ -115,7 +115,7 @@ class PokemonDuel
         end
       end
       @special[1] = true if action == 3
-      pbMessage(_INTL("{1}: {2}", opponent.name, speeches[action * 3 + rand(3)]))
+      pbMessage("#{opponent.name}: #{speeches[action * 3 + rand(3)]}")
       list = [
         _INTL("DEFEND"),
         _INTL("PRECISE ATTACK"),
