@@ -801,7 +801,7 @@ class PokemonFusionScene
     # this will use the sprite that is set when we call obtain_fusion_pif_sprite, and apply the shiny effect
     @sprites["rsprite2"].bitmap = spriteloader.load_pif_sprite_directly(@fusion_pif_sprite).bitmap
 
-    splicer_bitmap = _INTL("Graphics/Items/{1}", splicerItem)
+    splicer_bitmap = "Graphics/Items/#{splicerItem}"
     @sprites["dnasplicer"].setBitmap(splicer_bitmap)
 
     # rsprite1 : left pokemon
