@@ -40,7 +40,7 @@ class PokemonSave_Scene
     mapname=$game_map.name
     textColor = ["0070F8,78B8E8","E82010,F8A8B8","0070F8,78B8E8"][$Trainer.gender]
     locationColor = "209808,90F090"   # green
-    loctext=_INTL("<ac><c3={1}>{2}</c3></ac>",locationColor,mapname)
+    loctext="<ac><c3=#{locationColor}>#{mapname}</c3></ac>"
     loctext+=_INTL("Player<r><c3={1}>{2}</c3><br>",textColor,$Trainer.name)
     if hour>0
       loctext+=_INTL("Time<r><c3={1}>{2}h {3}m</c3><br>",textColor,hour,min)
