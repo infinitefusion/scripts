@@ -190,7 +190,7 @@ def promptKeepOrRelease(pokemon)
   pickedOption = false
   while !pickedOption
     command = pbMessage(_INTL("\\ts[]Your team is full!"),
-                        [_INTL("Release a party member"), _INTL("Release this #{pokemon.name}"),], 2)
+                        [_INTL("Release a party member"), _INTL("Release this {1}",pokemon.name),], 2)
     case command
     when 0 # SWAP
       if swapReleaseCaughtPokemon(pokemon)
