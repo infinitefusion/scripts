@@ -158,7 +158,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       [_INTL("Power"), 20, start_y + (gap_height * 2), 0, label_base_color, label_shadow_color],
       ["#{damage}", 148, start_y + (gap_height * 2), 0, value_base_color, value_shadow_color],
       [_INTL("Accuracy"), 20, start_y + (gap_height * 3), 0, label_base_color, label_shadow_color],
-      ["#{accuracy}%", accuracy), 148, start_y + (gap_height * 3), 0, value_base_color, value_shadow_color],
+      ["#{accuracy}%", 148, start_y + (gap_height * 3), 0, value_base_color, value_shadow_color],
       [_INTL("PP"), 20, start_y + (gap_height * 4), 0, label_base_color, label_shadow_color],
       ["#{pp}", 148, start_y + (gap_height * 4), 0, value_base_color, value_shadow_color]
     ]
