@@ -36,7 +36,7 @@ class UIntProperty
     params = ChooseNumberParams.new
     params.setMaxDigits(@maxdigits)
     params.setDefaultValue(oldsetting || 0)
-    return pbMessageChooseNumber(_INTL("Set the value for {1} (0-{2}).",settingname, @maxvalue),params)
+    return pbMessageChooseNumber(_INTL("Set the value for {1}.",settingname),params)
   end
 
   def defaultValue
