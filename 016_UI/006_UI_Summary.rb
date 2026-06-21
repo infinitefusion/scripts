@@ -570,7 +570,7 @@ class PokemonSummary_Scene
       date = @pokemon.timeReceived.day
       month = pbGetMonthName(@pokemon.timeReceived.mon)
       year = @pokemon.timeReceived.year
-      memo += _INTL("{1} {2}, {3}\n", date, month, year)
+      memo += "<#{date} #{month}, #{year}\n"
     end
     # Write map name egg was received on
     mapname = pbGetMapNameFromId(@pokemon.obtain_map)
