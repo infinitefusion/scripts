@@ -228,8 +228,8 @@ ItemHandlers::UseOnPokemon.add(:INCUBATOR, proc { |item, pokemon, scene|
       next false
     else
       scene.pbDisplay(_INTL("Incubating..."))
-      scene.pbDisplay(_INTL("..."))
-      scene.pbDisplay(_INTL("..."))
+      scene.pbDisplay("...")
+      scene.pbDisplay("...")
       scene.pbDisplay(_INTL("Your egg is ready to hatch!"))
       pokemon.eggsteps = 1
       next true
