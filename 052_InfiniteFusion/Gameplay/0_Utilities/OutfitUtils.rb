@@ -11,9 +11,9 @@ end
 
 def getPlayerDefaultName(gender)
   if gender == GENDER_MALE
-    return Settings::GAME_ID == :IF_HOENN ? "Brendan" : "Red"
+    return Settings::GAME_ID == :IF_HOENN ? pbGetMessageFromHash(MessageTypes::TrainerNames, "Brendan") : _INTL("Red")
   else
-    return Settings::GAME_ID == :IF_HOENN ? "May" : "Green"
+    return Settings::GAME_ID == :IF_HOENN ? pbGetMessageFromHash(MessageTypes::TrainerNames, "May") : _INTL("Green")
   end
 end
 
