@@ -464,7 +464,7 @@ class HallOfFame_Scene
   def writeGameMode(overlay, x, y, gameMode = nil, difficulty = nil)
     gameMode = getCurrentGameMode() if !gameMode
     difficulty = getDifficulty() if !difficulty
-    pbDrawTextPositions(overlay, [["#{gameMode} (#{difficulty})", x, y, 2, BASECOLOR, SHADOWCOLOR]])
+    pbDrawTextPositions(overlay, [[_INTL("{1} ({2})", gameMode, difficulty), x, y, 2, BASECOLOR, SHADOWCOLOR]])
   end
 
   def pbAnimationLoop
