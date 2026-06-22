@@ -270,6 +270,7 @@ def fixStuff
   # todo: make a hoenn version of missed HMs
 
   $game_switches[SWITCH_CANNOT_CATCH_POKEMON] = false
+  $game_switches[SWITCH_AQUA_CAMP] = false
   restoreDefaultCharacterSprite
   Graphics.update
   Input.update
