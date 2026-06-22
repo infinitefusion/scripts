@@ -189,6 +189,16 @@ def getDayOfTheWeek()
   return UnrealTime::WEEK_DAYS[day_of_week]
 end
 
+def getDayOfTheWeekName(day = getDayOfTheWeek())
+  return _INTL("Monday") if day == :MONDAY
+  return _INTL("Tuesday") if day == :TUESDAY
+  return _INTL("Wednesday") if day == :WEDNESDAY
+  return _INTL("Thursday") if day == :THURSDAY
+  return _INTL("Friday") if day == :FRIDAY
+  return _INTL("Saturday") if day == :SATURDAY
+  return _INTL("Sunday")
+end
+
 def isDayOfTheWeek(day)
   return day == getDayOfTheWeek()
 end
