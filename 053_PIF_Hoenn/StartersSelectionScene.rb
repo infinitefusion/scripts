@@ -186,8 +186,8 @@ class StartersSelectionScene
     @pokemon_name_overlay.dispose if @pokemon_name_overlay
     @pokemon_category_overlay.dispose if @pokemon_category_overlay
 
-    pokemon_name = "#{@shown_starter_species.real_name}"
-    pokemon_category = "#{@shown_starter_species.real_category} Pokémon"
+    pokemon_name = "#{@shown_starter_species.name}"
+    pokemon_category = _INTL("{1} Pokémon", @shown_starter_species.category)
 
     title_position_y = TEXT_POSITION_Y
     subtitle_position_y = TEXT_POSITION_Y + 30
@@ -203,11 +203,11 @@ class StartersSelectionScene
     @pokemon_name_overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
     @pokemon_category_overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
 
+    pbSetSystemFont(@pokemon_name_overlay)
     @pokemon_name_overlay.font.size = 50
-    @pokemon_name_overlay.font.name = MessageConfig.pbGetSmallFontName
 
+    pbSetSystemFont(@pokemon_category_overlay)
     @pokemon_category_overlay.font.size = 36
-    @pokemon_category_overlay.font.name = MessageConfig.pbGetSmallFontName
 
     pbDrawTextPositions(@pokemon_name_overlay, [[pokemon_name, (Graphics.width / 2) + text_x_offset, title_position_y, 2, title_base_color, title_shadow_color]])
     pbDrawTextPositions(@pokemon_category_overlay, [[pokemon_category, (Graphics.width / 2) + text_x_offset, subtitle_position_y, 2, label_base_color, label_shadow_color]])
