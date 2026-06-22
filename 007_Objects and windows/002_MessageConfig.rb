@@ -137,11 +137,13 @@ module MessageConfig
   end
 
   def self.pbGetSmallFontName
+    return MessageConfig.pbGetSystemFontName if getCurrentLanguage == :CHINESE
     @@smallFont = pbDefaultSmallFontName if !@@smallFont
     return @@smallFont
   end
 
   def self.pbGetNarrowFontName
+    return MessageConfig.pbGetSystemFontName if getCurrentLanguage == :CHINESE
     @@narrowFont = pbDefaultNarrowFontName if !@@narrowFont
     return @@narrowFont
   end

@@ -186,8 +186,8 @@ class StartersSelectionScene
     @pokemon_name_overlay.dispose if @pokemon_name_overlay
     @pokemon_category_overlay.dispose if @pokemon_category_overlay
 
-    pokemon_name = "#{@shown_starter_species.real_name}"
-    pokemon_category = "#{@shown_starter_species.real_category} Pokémon"
+    pokemon_name = "#{@shown_starter_species.name}"
+    pokemon_category = _INTL("{1} Pokémon", @shown_starter_species.category)
 
     title_position_y = TEXT_POSITION_Y
     subtitle_position_y = TEXT_POSITION_Y + 30
