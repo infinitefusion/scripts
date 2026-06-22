@@ -43,9 +43,13 @@ end
 
 BATTLED_TRAINER_RIVAL_KEY = "rival"
 
+def get_hoenn_character_name(name)
+  return pbGetMessageFromHash(MessageTypes::TrainerNames, name)
+end
+
 def get_rival_name
-  rival_name = _INTL("Brendan") if isPlayerFemale
-  rival_name = _INTL("May") if isPlayerMale
+  rival_name = get_hoenn_character_name("Brendan") if isPlayerFemale
+  rival_name = get_hoenn_character_name("May") if isPlayerMale
   return rival_name
 end
 
