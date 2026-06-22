@@ -17,6 +17,7 @@ class LocationWindow
 
   #Everything between parentheses gets ignored
   def format_location_name(name)
+    name = _INTL(name.to_s)
     formatted = name.split(" (")
     return formatted[0]
   end
