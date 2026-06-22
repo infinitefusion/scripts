@@ -103,7 +103,7 @@ def showGiftDialog(trainer=nil, event_id = nil)
     event = $game_map.events[event_id]
   end
   trainer_data = GameData::Trainer.try_get(trainer.trainerType, trainer.trainerName, 0)
-  message_text = trainer_data.preRematchText_gift
+  message_text = trainer_data.preRematch_text_gift
   message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
   showTrainerMessage(event, trainer, message_text)
 end
@@ -125,17 +125,17 @@ def showPrerematchDialog(trainer=nil, event_id = nil)
 
     if previous_random_event
       event_message_map = {
-        CATCH: trainer_data.preRematchText_caught,
-        EVOLVE: trainer_data.preRematchText_evolved,
-        FUSE: trainer_data.preRematchText_fused,
-        UNFUSE: trainer_data.preRematchText_unfused,
-        REVERSE: trainer_data.preRematchText_reversed,
-        GIFT: trainer_data.preRematchText_gift
+        CATCH: trainer_data.preRematch_text_caught,
+        EVOLVE: trainer_data.preRematch_text_evolved,
+        FUSE: trainer_data.preRematch_text_fused,
+        UNFUSE: trainer_data.preRematch_text_unfused,
+        REVERSE: trainer_data.preRematch_text_reversed,
+        GIFT: trainer_data.preRematch_text_gift
       }
 
-      message_text = event_message_map[previous_random_event.eventType] || trainer_data.preRematchText
+      message_text = event_message_map[previous_random_event.eventType] || trainer_data.preRematch_text_default
     else
-      message_text = trainer_data.preRematchText
+      message_text = trainer_data.preRematch_text_default
     end
   end
   message_text = message_text.gsub("<PLAYER_NAME>", $Trainer.name)
@@ -150,7 +150,7 @@ def showPrerematchDialog(trainer=nil, event_id = nil)
     message_text = message_text.gsub("<REVERSED_POKEMON>", getSpeciesRealName(previous_random_event.reversed_pokemon).to_s)
     message_text = message_text.gsub("<UNFUSED_POKEMON>", getSpeciesRealName(previous_random_event.unfused_pokemon).to_s)
   else
-    message_text = trainer_data.preRematchText
+    message_text = trainer_data.preRematch_text_default
   end
   showTrainerMessage(event, trainer, message_text)
 end
