@@ -30,7 +30,7 @@ end
 
 def displayPreBattleText(trainer_data)
   if trainer_data.battleText && !trainer_data.battleText.empty? && @event_id
-    messages = trainer_data.battleText.split("<br>")
+    messages = trainer_data.battle_text.split("<br>")
 
     messages.each do |msg|
       msg = msg.gsub("<PLAYER_NAME>", $Trainer.name)

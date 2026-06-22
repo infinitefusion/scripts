@@ -809,7 +809,7 @@ class BetterRegionMap
         e[1] == $PokemonGlobal.regionMapSel[1]
     end
     name = _INTL("Unknown Location")
-    name = location[2] if location
+    name = pbGetMessageFromHash(MessageTypes::PlaceNames, location[2]) if location
     return name
   end
   def print_current_position()
@@ -825,9 +825,9 @@ class BetterRegionMap
   end
   def update_text_at_location(location)
     text = ""
-    text = location[2] if location
+    text = pbGetMessageFromHash(MessageTypes::PlaceNames, location[2]) if location
     poi = ""
-    poi = location[3] if location && location[3]
+    poi = pbGetMessageFromHash(MessageTypes::PlaceDescriptions, location[3]) if location && location[3]
 
     update_weather_text(location) if @show_weather && $game_weather
     if $Trainer.secretBase
@@ -835,7 +835,7 @@ class BetterRegionMap
       secret_base_town_map_coordinates = getTownMapFlyCoordinates(secretGameBaseMapId)
       if location && secret_base_town_map_coordinates
         if secret_base_town_map_coordinates[0] == location[0] && secret_base_town_map_coordinates[1] == location[1]
-          poi = "Secret Base"
+          poi = _INTL("Secret Base")
         end
       end
     end

@@ -414,7 +414,7 @@ Events.onMapSceneChange += proc { |_sender, e|
       nosignpost = true if $game_map.name == oldmapname
     end
     nosignpost = true if $game_switches[SWITCH_AQUA_CAMP]  #Camp is split between 2 maps. Don't want the window when in.
-    scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
+    scene.spriteset.addUserSprite(LocationWindow.new(pbGetMapNameFromId($game_map.map_id))) if !nosignpost
     scene.spriteset.addUserSprite(WeatherIcon.new) if !nosignpost
   end
   # Force cycling/walking
@@ -958,7 +958,7 @@ def pbItemBall(item, quantity = 1, item_name = "", canRandom = true)
   pocket = item.pocket
   move = item.move
   if $PokemonBag.pbStoreItem(item, quantity) # If item can be picked up
-    meName = (item.is_key_item?) ? _INTL("Key item get") : _INTL("Item get")
+    meName = (item.is_key_item?) ? "Key item get" : "Item get"
     text_color = item.is_key_item? ? "\\c[3]" : "\\c[1]"
 
     if item == :LEFTOVERS
@@ -1021,7 +1021,7 @@ def pbReceiveItem(item, quantity = 1, item_name = "", music = nil, canRandom = t
   itemname = (quantity > 1) ? item.name_plural : item.name
   pocket = item.pocket
   move = item.move
-  meName = (item.is_key_item?) ? _INTL("Key item get") : _INTL("Item get")
+  meName = (item.is_key_item?) ? "Key item get" : "Item get"
   text_color = item.is_key_item? ? "\\c[3]" : "\\c[1]"
   if item == :LEFTOVERS || item == :MUSHROOMSPORES
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]", meName, itemname))

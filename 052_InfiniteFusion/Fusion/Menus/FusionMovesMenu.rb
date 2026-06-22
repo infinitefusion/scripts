@@ -101,7 +101,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
 
   def pbStartScene(inloadscreen = false)
     super
-    @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
+    @typebitmap = AnimatedBitmap.new("Graphics/Pictures/types")
     @sprites["overlay"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["overlay"].z = 9999
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -156,11 +156,11 @@ class FusionMovesOptionsScene < PokemonOption_Scene
       [_INTL("Type"), 20, start_y, 0, label_base_color, label_shadow_color],
       [_INTL("Category"), 20, start_y + (gap_height * 1), 0, label_base_color, label_shadow_color],
       [_INTL("Power"), 20, start_y + (gap_height * 2), 0, label_base_color, label_shadow_color],
-      [_INTL("{1}", damage), 148, start_y + (gap_height * 2), 0, value_base_color, value_shadow_color],
+      ["#{damage}", 148, start_y + (gap_height * 2), 0, value_base_color, value_shadow_color],
       [_INTL("Accuracy"), 20, start_y + (gap_height * 3), 0, label_base_color, label_shadow_color],
-      [_INTL("{1}%", accuracy), 148, start_y + (gap_height * 3), 0, value_base_color, value_shadow_color],
+      ["#{accuracy}%", 148, start_y + (gap_height * 3), 0, value_base_color, value_shadow_color],
       [_INTL("PP"), 20, start_y + (gap_height * 4), 0, label_base_color, label_shadow_color],
-      [_INTL("{1}", pp), 148, start_y + (gap_height * 4), 0, value_base_color, value_shadow_color]
+      ["#{pp}", 148, start_y + (gap_height * 4), 0, value_base_color, value_shadow_color]
     ]
 
     imagepos = []

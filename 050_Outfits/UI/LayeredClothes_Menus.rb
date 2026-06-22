@@ -61,7 +61,7 @@ def select_bike_color
   original_color = $Trainer.bike_color
   $game_switches[SWITCH_SELECTING_CLOTHES]=true
   $game_map.update
-  commands = ["Shift up", "Shift down", "Default", "Confirm", "Never Mind"]
+  commands = [_INTL("Shift up"), _INTL("Shift down"), _INTL("Default"), _INTL("Confirm"), _INTL("Never Mind")]
   previous_input = 0
 
   while true

@@ -203,8 +203,8 @@ class Scene_Map
   end
 
   def showLocationWindow
-    dayOfWeek = getDayOfTheWeek().to_s
-    location_window_text = $game_map.name
+    dayOfWeek = getDayOfTheWeekName()
+    location_window_text = pbGetMapNameFromId($game_map.map_id)
     location_window_text += "\n"+ pbGetTimeNow.strftime(_INTL("%I:%M %p"))# unless $game_switches[SWITCH_TIME_PAUSED]
     location_window_text += "\n"+ dayOfWeek
     $scene.spriteset.addUserSprite(LocationWindow.new(location_window_text))

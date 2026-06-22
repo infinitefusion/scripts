@@ -187,7 +187,7 @@ class HatsMartAdapter < OutfitsMartAdapter
   def getSpecialItemCaption(specialType)
     case specialType
     when :REMOVE_HAT
-      return "Remove hat"
+      return _INTL("Remove hat")
     end
     return nil
   end
@@ -215,7 +215,7 @@ class HatsMartAdapter < OutfitsMartAdapter
   end
   def getSpecialItemDescription(specialType)
     hair_situation = isBald?() ? "bald head" : "fabulous hair"
-    return "Go without a hat and show off your #{hair_situation}!"
+    return _INTL("Go without a hat and show off your {}!",hair_situation)
   end
 
   def doSpecialItemAction(specialType, item = nil)

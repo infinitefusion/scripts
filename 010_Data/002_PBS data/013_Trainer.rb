@@ -176,6 +176,10 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::BeginSpeech, @preRematchText_reversed)
     end
 
+    def preRematch_text_gift
+      return pbGetMessageFromHash(MessageTypes::BeginSpeech, @preRematchText_gift)
+    end
+
     def replace_species_with_placeholder(species)
       case species
       when Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES

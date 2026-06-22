@@ -701,7 +701,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
         party << Pokemon.new(pokemon, default_level, trainer)
       end
     }
-    loseDialog = trainer_data&.loseText_rematch ? trainer_data.loseText_rematch : "..."
+    loseDialog = trainer_data ? trainer_data.rematch_lose_text : "..."
 
     npc_trainer = NPCTrainer.new(trainer.trainerName, trainer.trainerType, nil, trainer.custom_appearance)
     npc_trainer.lose_text = loseDialog

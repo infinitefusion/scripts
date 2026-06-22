@@ -244,8 +244,8 @@ class FusionQuiz
   def question_answer_followup_dialog(answered_correctly, correct_answer, points_awarded_if_win, other_chance_later = false)
     if !other_chance_later
       pbMessage(_INTL("And the correct answer was...\\wtnp[10]"))
-      pbMessage("...\\wtnp[10]")
-      pbMessage("#{correct_answer}!")
+      pbMessage(_INTL("...\\wtnp[10]"))
+      pbMessage(_INTL("{1}!", correct_answer))
     end
 
     if answered_correctly

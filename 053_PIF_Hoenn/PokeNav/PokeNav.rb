@@ -17,20 +17,20 @@ class Pokenav
 
   AVAILABLE_APPS = {
     # Starting apps
-    :QUESTS => _INTL("Quests"),
-    :MAP => _INTL("Town Map"),
-    :DAYNIGHT => _INTL("Toggle Dark/Light"),
-    :REARRANGE => _INTL("Rearrange"),
+    :QUESTS => "Quests",
+    :MAP => "Town Map",
+    :DAYNIGHT => "Toggle Dark/Light",
+    :REARRANGE => "Rearrange",
 
     # Unlockable apps
-    :CONTACTS => _INTL("Trainers"), # obtained after rematch quest TODO
-    :JUKEBOX => _INTL("Jukebox"), # obtained at devon corp
-    :WEATHER => _INTL("Weather Map"), # obtained at TV Mauville
-    :POKERADAR => _INTL("PokéRadar"), # given by the rival somewhere?
-    :POKECHALLENGE => _INTL("PokéChallenge"), #Obtained at Slateport fan club
-    :BOXLINK => _INTL("Box Link"),
-    :FUSIONQUIZ => _INTL("Who's That Fusion?"),
-    :BERRYDEX => _INTL("BerryDex"),
+    :CONTACTS => "Trainers", # obtained after rematch quest TODO
+    :JUKEBOX => "Jukebox", # obtained at devon corp
+    :WEATHER => "Weather Map", # obtained at TV Mauville
+    :POKERADAR => "PokéRadar", # given by the rival somewhere?
+    :POKECHALLENGE => "PokéChallenge", #Obtained at Slateport fan club
+    :BOXLINK => "Box Link",
+    :FUSIONQUIZ => "Who's That Fusion?",
+    :BERRYDEX => "BerryDex",
 
     #To implement
     # Statistics  (shows you a bunch of statstics. nb of times you fused, nb of steps taken, etc.)
@@ -44,6 +44,10 @@ class Pokenav
     # Daycare app that tells you the status of your eggs
   }
 
+  def self.app_name(app_id)
+    return _INTL(AVAILABLE_APPS[app_id] || app_id.to_s)
+  end
+
   def initialize
     @installed_apps = [:MAP, :QUESTS, :DAYNIGHT, :REARRANGE]
     @last_opened_challenges = nil
@@ -55,7 +59,7 @@ class Pokenav
   def install_app(app_id)
     return unless Pokenav::AVAILABLE_APPS.keys.include?(app_id)
     @installed_apps << app_id unless @installed_apps.include?(app_id)
-    app_name = AVAILABLE_APPS[app_id]
+    app_name = Pokenav.app_name(app_id)
     pbMEPlay("match_call")
     pbMessage(_INTL("The \\C[3]{1} App\\C[0] was installed in the PokéNav!", app_name))
   end
@@ -70,7 +74,7 @@ class PokemonPokegearScreen
   def update_commands
     commands = []
     $Trainer.pokenav.installed_apps.each do |app|
-      commands << [app.to_s, Pokenav::AVAILABLE_APPS[app]]
+      commands << [app.to_s, Pokenav.app_name(app)]
     end
     return commands
   end
