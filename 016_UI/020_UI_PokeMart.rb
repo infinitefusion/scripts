@@ -706,7 +706,7 @@ class PokemonMartScreen
           end
         end
         if extra_item
-          item_name = GameData::Item.get(extra_item).real_name
+          item_name = GameData::Item.get(extra_item).name
           if @adapter.addItem(GameData::Item.get(extra_item))
             pbDisplayPaused(_INTL("I'll throw in a {1}, too.", item_name))
           end
