@@ -353,8 +353,8 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
   if clefairy_event_id
     event = $game_map.events[clefairy_event_id]
   end
-  possible_elements = ["Left!", "Up!", "Right!", "Down!"]
-  pbMessage("Listen up and remember this!")
+  possible_elements = [_INTL("Left!"), _INTL("Up!"), _INTL("Right!"), _INTL("Down!")]
+  pbMessage(_INTL("Listen up and remember this!"))
   sequence = []
   message = ""
   (0...length).each { |i|
@@ -367,7 +367,7 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
   message += "\\wtnp[40]"
   pbWait(8)
   pbMessage(message)
-  pbMessage("Get ready... Press the buttons!\\wtnp[20]")
+  pbMessage(_INTL("Get ready... Press the buttons!\\wtnp[20]"))
 
   player_input = []
   loop do
@@ -400,7 +400,7 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
   if player_input == sequence
     pbSEPlay("GUI naming confirm", 80, 100)
     pbMEPlay("clefairy_correct",100)
-    pbMessage("Correct!\\wtnp[40]")
+    pbMessage(_INTL("Correct!\\wtnp[40]"))
 
     12.times do
       event.turn_left_90 if event
@@ -409,7 +409,7 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
     return true
   else
     pbSEPlay("GUI sel buzzer", 80, 100)
-    pbMessage("Incorrect!\\wtnp[40]")
+    pbMessage(_INTL("Incorrect!\\wtnp[40]"))
     return false
   end
 end
