@@ -690,7 +690,7 @@ class PokemonStorageScene
       box = @storage[i]
       if box
         next if box.is_a?(StorageTransferBox)
-        commands.push("#{box.name} (#{box.nitems}/#{box.length})")
+        commands.push(_INTL("{1} ({2}/{3})", box.name, box.nitems, box.length))
         boxIndices.push(i)
       end
     end
