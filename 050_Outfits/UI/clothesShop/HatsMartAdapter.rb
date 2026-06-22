@@ -210,7 +210,7 @@ class HatsMartAdapter < OutfitsMartAdapter
 
   def getSpecialItemDescription(specialType)
     hair_situation = !$Trainer.hair || getSimplifiedHairIdFromFullID($Trainer.hair) == HAIR_BALD ? "bald head" : "fabulous hair"
-    return _INTL("Go without a hat and show off your {1}!")
+    return _INTL("Go without a hat and show off your {1}!", hair_situation)
   end
 
   def doSpecialItemAction(specialType, item = nil)
