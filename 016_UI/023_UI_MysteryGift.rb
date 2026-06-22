@@ -6,8 +6,8 @@
 # You should change it to your file's url once you upload it.
 #===============================================================================
 module MysteryGift
-  URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/MysteryGiftPublic.json"
-  PRIVATE_URL = "https://raw.githubusercontent.com/infinitefusion/pif-downloadables/refs/heads/master/MysteryGiftsPrivate/"
+  URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftPublic.json"
+  PRIVATE_URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftsPrivate/"
 end
 
 #===============================================================================
