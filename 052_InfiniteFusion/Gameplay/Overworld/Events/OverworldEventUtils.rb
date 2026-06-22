@@ -323,7 +323,7 @@ end
 def check_beach_seashell
   pbMessage(_INTL("{1} flipped the seashell over...", $Trainer.name))
   pearl_chance = 2
-  heartscale_chance = 5
+  heartscale_chance = 20
   pokemon_chance = 40
   roll = rand(1..100)
   if roll <= pearl_chance
