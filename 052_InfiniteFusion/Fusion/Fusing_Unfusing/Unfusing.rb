@@ -165,6 +165,12 @@ def pokemonCanBeUnfused(pokemon, scene)
     scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
     return false
   end
+
+  if pokemon.egg?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    return false
+  end
+
   if pokemon.owner.name == "RENTAL"
     scene.pbDisplay(_INTL("You cannot unfuse a rental pokémon!"))
     return false
