@@ -29,8 +29,8 @@ class Outfit
 
   def initialize(id, name, description = '',price=0, tags = [], store_locations = [], contest_conditions = [])
     @id = id
-    @name = name
-    @description = description
+    @name = _INTL(name)
+    @description = _INTL(description)
     @tags = tags
     @price = price
 
