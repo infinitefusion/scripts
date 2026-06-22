@@ -317,7 +317,7 @@ class PokemonPokedexInfo_Scene
       textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])
     end
 
-    sprite_author = "Japeal"
+    sprite_author = "Japeal (Generated)"
     unless @displayed_pif_sprite.type == :AUTOGEN
       echoln @displayed_pif_sprite&.to_filename
       sprite_author = getSpriteCredits(@displayed_pif_sprite&.to_filename(false))

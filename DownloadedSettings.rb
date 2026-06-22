@@ -61,6 +61,9 @@ module Settings
   #Spritepack
   NEWEST_SPRITEPACK_MONTH = 5
   NEWEST_SPRITEPACK_YEAR = 2026
+end
 
-
+module MysteryGift
+  URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftPublic.json"
+  PRIVATE_URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftsPrivate/"
 end
