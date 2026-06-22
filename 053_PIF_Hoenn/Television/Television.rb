@@ -136,5 +136,5 @@ def berryContestTVNews
     pbMessage(_INTL("\"I asked them to sum up the contest in one word and they said \"{1}\", without any hesitation! That really says it all, doesn't it?''\"",$game_variables[VAR_REPORTER_Q3]))
   end
   pbWait(10)
-  pbMessage("\"This was Gabby, reporting live from Petalburg Town. We'll see you again on our next broadcast!\"")
+  pbMessage(_INTL("\"This was Gabby, reporting live from Petalburg Town. We'll see you again on our next broadcast!\""))
 end
