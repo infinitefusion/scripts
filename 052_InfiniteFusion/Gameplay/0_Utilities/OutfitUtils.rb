@@ -25,7 +25,7 @@ def getDefaultClothes(gender)
   end
 end
 
-def getDefaultHat(gender)
+def getDefaultHat(gender=getPlayerGenderId())
   if gender == GENDER_MALE
     return Settings::GAME_ID == :IF_HOENN ? HAT_BRENDAN : DEFAULT_OUTFIT_MALE
   else
