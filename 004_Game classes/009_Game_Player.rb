@@ -445,6 +445,7 @@ end
 
 def pbMountBike
   return if $PokemonGlobal.bicycle
+  pbSEPlay("bike")
   $PokemonGlobal.bicycle = true
   pbUpdateVehicle
   bike_bgm = GameData::Metadata.get.bicycle_BGM
