@@ -2,14 +2,6 @@
 # Mystery Gift system
 # By Maruno
 #===============================================================================
-# This url is the location of an example Mystery Gift file.
-# You should change it to your file's url once you upload it.
-#===============================================================================
-module MysteryGift
-  URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftPublic.json"
-  PRIVATE_URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftsPrivate/"
-end
-
 #===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
 #===============================================================================

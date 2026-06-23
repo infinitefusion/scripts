@@ -587,7 +587,7 @@ module Settings
       ["English", "english.dat"],
       # ["Français", "french.dat"],
       #["Español", "spanish.dat"],
-      ["中文", "chinese.dat"]
+      #["中文", "chinese.dat"]
     ]
   }
 
@@ -686,8 +686,14 @@ module Settings
 
 end
 
+module MysteryGift
+  URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftPublic.json"
+  PRIVATE_URL = "https://download.infinitefusion.net/mystery_gift/MysteryGiftsPrivate/"
+end
+
 # DO NOT EDIT THESE!
 module Essentials
   VERSION = "19.1.dev"
   ERROR_TEXT = ""
 end
+
