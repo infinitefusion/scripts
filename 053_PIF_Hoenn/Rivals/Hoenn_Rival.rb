@@ -208,7 +208,11 @@ def updateRivalTeamForThirdBattle()
   updateRivalTeamForSecondBattle unless $game_switches[SWITCH_RIVAL_BATTLE_2]
   rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
   rival_trainer.friendship_level = 2
-  rival_starter = rival_trainer.currentTeam[1]
+  if rival_trainer.currentTeam.length >= 2 #Intended
+    rival_starter = rival_trainer.currentTeam[1]
+  else  #For compatibility with older version
+    rival_starter = rival_trainer.currentTeam[0]
+  end
   starter_species = rival_starter.species
 
   rival_starter.level = 20
