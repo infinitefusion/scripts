@@ -92,7 +92,9 @@ end
 def finishQuest(id, silent = false)
   $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
   return if pbCompletedQuest?(id)
-  $Trainer.quest_points += 1
+  unless is_main_quest?(id)
+    $Trainer.quest_points += 1
+  end
   if is_main_quest?(id)
     pbMEPlay("Register phone") if !silent
     quest_name = QUESTS[id].name
