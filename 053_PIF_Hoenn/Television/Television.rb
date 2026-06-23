@@ -80,9 +80,6 @@ end
 def pbTVNews()
   if $game_switches[SWITCH_REPORTER_AT_PETALBURG]
     pbMessage(_INTL("It's showing the local news. There's a berry-growing contest going on in Petalburg Town!"))
-    if $game_switches[SWITCH_REPORTER_PETALBURG_INTERVIEWED]
-      berryContestTVNews
-    end
   else
     return pbMessage(_INTL("It's a rerun of PokéChef Deluxe. Nothing important on the news right now."))
   end

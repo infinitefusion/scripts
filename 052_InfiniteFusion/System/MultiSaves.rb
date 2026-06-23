@@ -891,8 +891,7 @@ module Game
 
       if Settings::HOENN
         $Trainer.pokenav = Pokenav.new
-        $Trainer.pokenav.installed_apps = ngp_trainer.pokenav.installed_apps
-        echoln $Trainer.pokenav.installed_apps
+        $Trainer.pokenav.installed_apps = ngp_trainer.pokenav&.installed_apps
       end
     end
     $Trainer.new_game_plus_unlocked = ngp_unlocked
