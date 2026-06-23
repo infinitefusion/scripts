@@ -48,6 +48,12 @@ class Game_Event < Game_Character
       _orig_start
     end
 
+  alias eventQuestIcon_refresh refresh
+  def refresh
+    eventQuestIcon_refresh
+    addQuestMarkersToSprite
+  end
+
   def setDialogIconManualOffValue(value)
     @dialog_icon_manual_off=value
     @show_dialog_icon = !@dialog_icon_manual_off
@@ -165,10 +171,22 @@ class Sprite_Character
   end
 
   def updateGameEvent
-    removeQuestIcon if !@character.show_dialog_icon &&
+    if !@character.show_dialog_icon &&
       !@character.show_quest_icon &&
       !@character.show_trade_icon &&
       !@character.show_tutor_icon
+      removeQuestIcon
+    elsif !@questIcon
+      if @character.show_dialog_icon
+        addQuestMarkerToSprite(:DIALOG_ICON)
+      elsif @character.show_quest_icon
+        addQuestMarkerToSprite(:QUEST_ICON)
+      elsif @character.show_trade_icon
+        addQuestMarkerToSprite(:TRADE_ICON)
+      elsif @character.show_tutor_icon
+        addQuestMarkerToSprite(:TUTOR_ICON)
+      end
+    end
     positionQuestIndicator if @questIcon
   end
 
