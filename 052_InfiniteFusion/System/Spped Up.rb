@@ -1,4 +1,3 @@
-
 #==============================================================================#
 #                         Better Fast-forward Mode                             #
 #                                   v1.0                                       #
@@ -28,8 +27,7 @@ PluginManager.register({
                        })
 
 # When the user clicks F, it'll pick the next number in this array.
-SPEEDUP_STAGES = [1,2,3]
-
+SPEEDUP_STAGES = [1, 2, 3]
 
 def pbAllowSpeedup
   $CanToggle = true
@@ -64,12 +62,22 @@ module Graphics
     else
       speedStage = 1
       if Input.press?(Input::X) && $CanToggle
-        $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed==0
-        speedStage=$PokemonSystem.speedup_speed+1
+        speedStage = self.get_speedup_speed + 1
       end
     end
     return unless $frame % speedStage == 0
     fast_forward_update
     $frame = 0
+  end
+
+  def self.get_speedup_speed
+    $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed == 0
+    $PokemonSystem.speedup_speed_battles = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed_battles || $PokemonSystem.speedup_speed_battles == 0
+
+    if $game_temp.in_battle
+      return $PokemonSystem.speedup_speed_battles
+    else
+      return $PokemonSystem.speedup_speed
+    end
   end
 end

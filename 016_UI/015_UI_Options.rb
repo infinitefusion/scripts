@@ -20,6 +20,7 @@ class PokemonSystem
   attr_accessor :download_sprites
   attr_accessor :speedup
   attr_accessor :speedup_speed
+  attr_accessor :speedup_speed_battles
   attr_accessor :max_nb_sprites_download
   attr_accessor :on_mobile
   attr_accessor :type_icons
@@ -53,6 +54,7 @@ class PokemonSystem
     @battle_type = 0
     @speedup = 0 # 0= hold, 1=toggle
     @speedup_speed = 3 # for hold only
+    @speedup_speed_battles = 3 # for hold only
     @download_sprites = 0
     @max_nb_sprites_download = 5
     @on_mobile = false
