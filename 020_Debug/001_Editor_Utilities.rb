@@ -134,7 +134,7 @@ def pbChooseSpeciesTextList(default = nil)
   commands = []
   for i in 1..NB_POKEMON-4
     species = GameData::Species.get(i)
-    commands.push([species.id_number, species.real_name, species.id])
+    commands.push([species.id_number, species.name, species.id])
   end
   return pbChooseList(commands, default, nil, -1)
 end
@@ -143,7 +143,7 @@ end
 def pbChooseSpeciesFormList(default = nil)
   commands = []
   GameData::Species.each do |s|
-    name = (s.form == 0) ? s.real_name : sprintf("%s_%d", s.real_name, s.form)
+    name = (s.form == 0) ? s.real_name : sprintf("%s_%d", s.name, s.form)
     commands.push([s.id_number, name, s.id])
   end
   return pbChooseList(commands, default, nil, -1)

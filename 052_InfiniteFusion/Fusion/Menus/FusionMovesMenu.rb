@@ -264,7 +264,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
         # Header row — show pokemon info panel
         draw_pokemon_info
         species = col == 0 ? @head_species : @body_species
-        @sprites["textbox"].text = _INTL("\nSelect all moves from {1}", GameData::Species.get(species).real_name)
+        @sprites["textbox"].text = _INTL("\nSelect all moves from {1}", GameData::Species.get(species).name)
         return
       end
 
@@ -337,8 +337,8 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     )
 
     move_options = @move_slots.map do |slot|
-      left_name = slot[0] ? GameData::Move.get(slot[0].id).real_name : "-"
-      right_name = slot[1] ? GameData::Move.get(slot[1].id).real_name : "-"
+      left_name = slot[0] ? GameData::Move.get(slot[0].id).name : "-"
+      right_name = slot[1] ? GameData::Move.get(slot[1].id).name : "-"
       EnumOption.new(
         "",
         [left_name, right_name],
@@ -581,5 +581,4 @@ class Window_PokemonOptionFusionMoves < Window_PokemonOption
       refresh
     end
   end
-
 end

@@ -116,7 +116,7 @@ class PokeRadarAppScene < PokeNavAppScene
     bmp = load_bitmap(icon_path, false)
     button = PokenavButton.new(scanningPokemon, bmp)
     button.refresh
-    species_name = GameData::Species.get(scanningPokemon).real_name
+    species_name = GameData::Species.get(scanningPokemon).name
     Kernel.pbDisplayText(_INTL("Currently scanning for {1}.", species_name), Graphics.width / 2, 200, 500000, @text_color_base, @text_color_shadow)
     Kernel.pbDisplayText(_INTL("Current chain: {1}.", $PokemonTemp.pokeradar[2]), Graphics.width / 2, 230, 500000, @text_color_base, @text_color_shadow)
     return [button]
@@ -295,7 +295,7 @@ class PokeRadarAppScene < PokeNavAppScene
         max_level = encounter[3]
         level = rand(min_level..max_level)
         pbWait(16)
-        pbMessage(_INTL("Scanning for {1}...\\wtnp[5]", GameData::Species.get(species).real_name))
+        pbMessage(_INTL("Scanning for {1}...\\wtnp[5]", GameData::Species.get(species).name))
         possible_tiles = getTerrainTilesNearPlayer(getTerrainType, 3)
         position = possible_tiles.sample
         if position
@@ -330,7 +330,7 @@ class PokeRadarAppScene < PokeNavAppScene
 
   def hover_seen(species)
     displayTextElements
-    pokemon_name = GameData::Species.get(species).real_name
+    pokemon_name = GameData::Species.get(species).name
     Kernel.pbDisplayText(pokemon_name, Graphics.width / 2, INFO_TEXT_Y, 99999, @text_color_base, @text_color_shadow)
     Kernel.pbDisplayText(get_rarity_flavor_text(species), Graphics.width / 2, INFO_TEXT_Y + 30, 99999, @text_color_base, @text_color_shadow)
     Kernel.pbDisplayText(_INTL("Battery for scan: {1}", get_energy_for_scan(species)), Graphics.width / 2, INFO_TEXT_Y + 60, 99999, @text_color_base, @text_color_shadow)
