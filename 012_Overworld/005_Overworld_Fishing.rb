@@ -42,7 +42,7 @@ def pbFishingEnd
 end
 
 
-def getFishingItems(type=:OCEAN)
+def getFishingItems(terrain=nil)
   if Settings::KANTO
     return [
             :OLDBOOT,
@@ -54,12 +54,13 @@ def getFishingItems(type=:OCEAN)
     ]
   elsif  Settings::HOENN
     items = [:SEAWEED, :SEAWEED, :SEAWEED]
-    if type == :OCEAN
+    if terrain.id == :StillWater  #Freshwater
+      items << :WATERGEM
+    else                           #Ocean
       items << :DEEPSEATOOTH
       items << :DEEPSEASCALE
-    elsif type == :STILLWATER
-      items << :WATERGEM
     end
+    echoln items
     return items
   end
   return []
@@ -99,7 +100,8 @@ def pbFishing(hasEncounter,rodType=1)
       if itemChance<=0
         #ITEM
         # todo: detect if fishing in ocean or stillwater
-        items = getFishingItems(:OCEAN)
+        terrain = $game_player.pbFacingTerrainTag
+        items = getFishingItems(terrain)
         hats = [
           HAT_SLOWKING_SHELL,HAT_TENTACRUEL
         ]
