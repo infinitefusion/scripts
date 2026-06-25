@@ -118,24 +118,23 @@ class BattledTrainer
 
 
     #story / bosses
-    LEADER_Roxanne:    [20, 200, 200],
-    LEADER_Brawly:    [20, 200, 200],
-    LEADER_Wattson:    [20, 200, 200],
-    LEADER_Flannery:    [20, 200, 200],
-    LEADER_Norman:    [5, 200, 200],
-    LEADER_Winona:    [20, 200, 200],
-    LEADER_Tate:    [20, 200, 200],
-    LEADER_Liza:    [20, 200, 200],
-    LEADER_Wallace:    [20, 200, 200],
-    LEADER_Juan:    [20, 200, 200],
-    ELITEFOUR_Sidney:    [30, 200, 200],
-    ELITEFOUR_Phoebe:    [30, 200, 200],
-    ELITEFOUR_Glacia:    [30, 200, 200],
-    ELITEFOUR_Drake:    [30, 200, 200],
-    CHAMPION_Steven:    [50, 200, 200],
+    LEADER_Roxanne:    [20, 40, 200],
+    LEADER_Brawly:    [20, 40, 200],
+    LEADER_Wattson:    [20, 40, 200],
+    LEADER_Flannery:    [20, 40, 200],
+    LEADER_Norman:    [5, 40, 200],
+    LEADER_Winona:    [20, 40, 200],
+    LEADER_Tate:    [20, 40, 200],
+    LEADER_Liza:    [20, 40, 200],
+    LEADER_Wallace:    [20, 40, 200],
+    LEADER_Juan:    [20, 40, 200],
+    ELITEFOUR_Sidney:    [30, 60, 200],
+    ELITEFOUR_Phoebe:    [30, 60, 200],
+    ELITEFOUR_Glacia:    [30, 60, 200],
+    ELITEFOUR_Drake:    [30, 60, 200],
+    CHAMPION_Steven:    [50, 70, 200],
     TEAM_AQUA_BOSS:     [60, 200, 200],
     TEAM_MAGMA_BOSS:    [60, 200, 200]
-
   }
 
 end
