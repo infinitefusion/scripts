@@ -320,10 +320,11 @@ end
 def rivalRematch(loseDialog)
   trainer = getRebattledTrainerFromKey(BATTLED_TRAINER_RIVAL_KEY)
   updated_trainer = healRebattledTrainerPokemon(trainer)
+  $PokemonTemp.battleRules["moneyGain"] = false
   player_won = hoennRivalBattle(loseDialog)
   checkTrainerRematchChallenges()
   # trainer
-  updated_trainer = makeRebattledTrainerTeamGainExp(trainer, player_won)
+  updated_trainer = makeRebattledTrainerTeamGainExp(updated_trainer, player_won)
   updated_trainer = healRebattledTrainerPokemon(updated_trainer)
   updated_trainer.set_pending_action(false)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
