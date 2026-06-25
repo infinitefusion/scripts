@@ -218,7 +218,7 @@ class QuestMap < BetterRegionMap
     nb_quests_at_position = 0
     nb_quests_at_position = @quests[current_position].length if quests_at_location
     text = ""
-    text = location[2] if location
+    text = pbGetMessageFromHash(MessageTypes::PlaceNames, location[2]) if location
 
     nb_quests_text = ""
     if nb_quests_at_position > 1
