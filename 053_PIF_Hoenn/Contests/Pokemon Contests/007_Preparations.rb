@@ -59,7 +59,13 @@ def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist
 	return pbMessage(_INTL("We hope you will participate another time.")) if choice < 0 || choice == 1
 	#Choose Category
 	if !category
-		cmds_c = [_INTL("#{pbContestCatName(0)} Contest"), _INTL("#{pbContestCatName(1)} Contest"), _INTL("#{pbContestCatName(2)} Contest"), _INTL("#{pbContestCatName(3)} Contest"), _INTL("#{pbContestCatName(4)} Contest"), _INTL("Exit")]
+		cmds_c = [_INTL("{1} Contest",pbContestCatName(0)),
+							_INTL("{1} Contest",pbContestCatName(1)),
+							_INTL("{1} Contest", pbContestCatName(2)),
+							_INTL("{1} Contest", pbContestCatName(3)),
+							_INTL("{1} Contest",pbContestCatName(4)),
+							_INTL("Exit")]
+
 		pbCallBubDown(2,event_id)
 		cat = pbMessage(_INTL("Which Contest would you like to enter?"), cmds_c, -1)
 		pbCallBubDown(2,event_id)
