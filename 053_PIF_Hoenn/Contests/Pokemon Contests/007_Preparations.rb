@@ -72,7 +72,6 @@ def pbPrepPokemonContest(rank = nil, category = nil, pokemon = nil, receptionist
 		return pbMessage(_INTL("We hope you will participate another time.")) if cat < 0 || cat == 5
 		category = cat
 		pbSet(VAR_CONTEST_CATEGORY,category)
-		echoln pbGet(VAR_CONTEST_CATEGORY)
 	end
 	#Choose Rank
 	if !rank
