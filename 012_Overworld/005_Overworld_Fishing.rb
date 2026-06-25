@@ -42,7 +42,7 @@ def pbFishingEnd
 end
 
 
-def getFishingItems
+def getFishingItems(type=:OCEAN)
   if Settings::KANTO
     return [
             :OLDBOOT,
@@ -53,12 +53,14 @@ def getFishingItems
             :WATERGEM
     ]
   elsif  Settings::HOENN
-    return [
-            :SEAWEED,
-            :SEAWEED,
-            :SEAWEED,
-            :WATERGEM,
-    ]
+    items = [:SEAWEED, :SEAWEED, :SEAWEED]
+    if type == :OCEAN
+      items << :DEEPSEATOOTH
+      items << :DEEPSEASCALE
+    elsif type == :STILLWATER
+      items << :WATERGEM
+    end
+    return items
   end
   return []
 end
@@ -96,7 +98,8 @@ def pbFishing(hasEncounter,rodType=1)
       itemChance = rand((rodType)*5)
       if itemChance<=0
         #ITEM
-        items = getFishingItems
+        # todo: detect if fishing in ocean or stillwater
+        items = getFishingItems(:OCEAN)
         hats = [
           HAT_SLOWKING_SHELL,HAT_TENTACRUEL
         ]
