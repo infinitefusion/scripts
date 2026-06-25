@@ -287,6 +287,8 @@ module GameData
       case getCurrentLanguage
       when :ENGLISH
         return GameData::SPLIT_NAMES
+      when :FRENCH
+        return GameData::SPLIT_NAMES_FRENCH
       when :CHINESE
         return GameData::SPLIT_NAMES_CHINESE
       end

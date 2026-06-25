@@ -3,10 +3,26 @@ class FusionQuizAppScreen
     @scene = scene
   end
 
+  POINTS_TO_UNLOCK_MODES = {
+    :regular_3_rounds => 0,
+    :regular_5_rounds => 2000,
+    :regular_10_rounds => 4000,
+    :advanced_3_rounds => 5000,
+    :advanced_5_rounds => 12000,
+    :advanced_10_rounds => 16000,
+  }
+
   def pbStartScreen(main_menu_scene, screen)
     @main_menu_scene = main_menu_scene
     @screen = screen
-
+    #Possible modes:
+    # :regular_3_rounds
+    # :regular_5_rounds
+    # :regular_10_rounds
+    # :advanced_3_rounds
+    # :advanced_5_rounds
+    # :advanced_10_rounds
+    $Trainer&.pokenav&.fusion_quiz_unlocked_modes = [:regular_3_rounds] unless $Trainer&.pokenav&.fusion_quiz_unlocked_modes
     loop do
       btn_play  = FusionQuizMenuButton.new("play",  nil, "Play")
       btn_score = FusionQuizMenuButton.new("score", nil, "Score")
@@ -37,7 +53,7 @@ class FusionQuizAppScreen
     high_score = pbGet(VAR_STAT_FUSION_QUIZ_HIGHEST_SCORE)
     @scene.difficulty = difficulty
     if difficulty
-      nb_rounds = prompt_nb_rounds
+      nb_rounds = prompt_nb_rounds(difficulty)
       if nb_rounds > 0
         @scene.playing = true
         @scene.updateBackground
@@ -58,39 +74,103 @@ class FusionQuizAppScreen
             pbMEPlay("Level Up")
             pbMessage(_INTL("You beat your previous high score!", score))
           end
+          unlock_new_modes(score)
         end
       end
     end
   end
 
+  def get_mode_name(mode_id)
+    case mode_id
+    when :regular_3_rounds
+      return _INTL("Regular (3 Rounds)")
+    when :regular_5_rounds
+      return _INTL("Regular (5 Rounds)")
+    when :regular_10_rounds
+      return _INTL("Regular (10 Rounds)")
+    when :advanced_3_rounds
+      return _INTL("Advanced (3 Rounds)")
+    when :advanced_5_rounds
+      return _INTL("Advanced (5 Rounds)")
+    when :advanced_10_rounds
+      return _INTL("Advanced (10 Rounds)")
+    end
+  end
+
+  def unlock_new_modes(score)
+    POINTS_TO_UNLOCK_MODES.keys.each do |mode_id|
+      points_to_unlock = POINTS_TO_UNLOCK_MODES[mode_id]
+      next if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(mode_id)
+      if score >= points_to_unlock
+        $Trainer&.pokenav&.fusion_quiz_unlocked_modes = [:regular_3_rounds] unless $Trainer&.pokenav&.fusion_quiz_unlocked_modes
+        $Trainer&.pokenav&.fusion_quiz_unlocked_modes << mode_id
+        pbSEPlay("itemlevel", 80)
+        pbMessage(_INTL("Unlocked a new difficulty: \\C[3]{1}",get_mode_name(mode_id)))
+      end
+    end
+
+  end
+
   def prompt_difficulty
+    advanced_difficulties = [:advanced_3_rounds, :advanced_5_rounds, :advanced_10_rounds]
+    echoln $Trainer&.pokenav&.fusion_quiz_unlocked_modes
+    cmd_regular = _INTL("Regular")
+    cmd_advanced = _INTL("Advanced")
+    cmd_cancel = _INTL("Cancel")
+    options = []
+    options << cmd_regular
+    options << cmd_advanced if ($Trainer&.pokenav&.fusion_quiz_unlocked_modes & advanced_difficulties)&.any?
+    options << cmd_cancel
     choice = pbMessage(
       _INTL("Choose a difficulty:"),
-      [_INTL("Regular"), _INTL("Advanced"), _INTL("Cancel")],3
+      options,3
     )
-    echoln choice
-    case choice
-    when 0
+
+    case options[choice]
+    when cmd_regular
       return :REGULAR
-    when 1
+    when cmd_advanced
       return :ADVANCED
     else
       return nil
     end
   end
 
-  def prompt_nb_rounds
+  def prompt_nb_rounds(difficulty)
+    options = []
+
+    cmd_3_rounds = _INTL("3 Rounds")
+    cmd_5_rounds = _INTL("5 Rounds")
+    cmd_10_rounds = _INTL("10 Rounds")
+    cmd_cancel = _INTL("Cancel")
+
+    case difficulty
+    when :ADVANCED
+      options << cmd_3_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:advanced_3_rounds)
+      options << cmd_5_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:advanced_5_rounds)
+      options << cmd_10_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:advanced_10_rounds)
+    when :REGULAR
+      options << cmd_3_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:regular_3_rounds)
+      options << cmd_5_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:regular_5_rounds)
+      options << cmd_10_rounds if $Trainer&.pokenav&.fusion_quiz_unlocked_modes&.include?(:regular_10_rounds)
+    end
+    options << cmd_cancel
     choice = pbMessage(
       _INTL("Choose the number of rounds:"),
-      [_INTL("3 Rounds"),
-       _INTL("5 Rounds"),
-       _INTL("10 Rounds"),
-       _INTL("Cancel")
-      ],4
+      options,4
     )
-    echoln choice
-    possible_rounds = [3,5,10,0]
-    return possible_rounds[choice]
+
+    case options[choice]
+    when cmd_3_rounds
+      nb_rounds = 3
+    when cmd_5_rounds
+      nb_rounds = 5
+    when cmd_10_rounds
+      nb_rounds = 10
+    else
+      nb_rounds = 0
+    end
+    return nb_rounds
   end
 
   def show_high_score

@@ -14,6 +14,8 @@ class Pokenav
   attr_accessor :viewed_trainers
   attr_accessor :last_opened_quest_mode
 
+  attr_accessor :fusion_quiz_unlocked_modes
+
 
   AVAILABLE_APPS = {
     # Starting apps
