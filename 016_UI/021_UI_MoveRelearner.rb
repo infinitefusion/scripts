@@ -186,6 +186,7 @@ class MoveRelearnerScreen
     pkmn.learned_moves.each do |move|
       move_id = move.is_a?(Symbol) ? move : move.id
       next if pkmn.hasMove?(move_id)
+      next unless pkmn.compatible_with_move?(move_id)
       moves.push(move_id) if !moves.include?(move_id)
     end
 
