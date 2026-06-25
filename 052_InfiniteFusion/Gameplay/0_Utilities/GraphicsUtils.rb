@@ -43,17 +43,16 @@ def addShinyStarsToGraphicsArray(imageArray, xPos, yPos, shinyBody, shinyHead, d
 end
 
 def pbBitmap(path)
-  if !pbResolveBitmap(path).nil?
-    bmp = RPG::Cache.load_bitmap_path(path)
-    bmp.storedPath = path
+  resolved_path = pbResolveBitmap(path)
+  if !resolved_path.nil?
+    bmp = RPG::Cache.load_bitmap_path(resolved_path)
+    bmp.storedPath = resolved_path
   else
     p "Image located at '#{path}' was not found!" if $DEBUG
     bmp = Bitmap.new(1, 1)
   end
   return bmp
 end
-
-
 
 # if need to play animation from event route
 def playAnimation(animationId, x = nil, y = nil)
