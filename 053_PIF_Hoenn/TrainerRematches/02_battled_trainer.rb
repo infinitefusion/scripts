@@ -1,28 +1,28 @@
 class BattledTrainer
-  DELAY_BETWEEN_NPC_TRADES = 180 #In seconds (3 minutes)
+  DELAY_BETWEEN_NPC_TRADES = 180 # In seconds (3 minutes)
   MAX_FRIENDSHIP = 100
 
   attr_accessor :trainerType
   attr_accessor :trainerName
   attr_accessor :trainerKey
 
-  attr_accessor :currentTeam  #list of Pokemon. The game selects in this list for trade offers. They can increase levels & involve as you rebattle them.
+  attr_accessor :currentTeam # list of Pokemon. The game selects in this list for trade offers. They can increase levels & involve as you rebattle them.
 
-  #trainers will randomly find items and add them to this list. When they have the :ITEM status, they will
+  # trainers will randomly find items and add them to this list. When they have the :ITEM status, they will
   # give one of them at random.
-  #Items equipped to the Pokemon traded by the player will end up in that list.
+  # Items equipped to the Pokemon traded by the player will end up in that list.
   #
   # If there is an evolution that the trainer can use on one of their Pokemon in that list, they will
   # instead use it to evolve their Pokemon.
   #
-  #DNA Splicers/reversers can be used on their Pokemon if they have at least 2 unfused/1 fused
+  # DNA Splicers/reversers can be used on their Pokemon if they have at least 2 unfused/1 fused
   #
-  #Healing items that are in that list can be used by the trainer in rematches
+  # Healing items that are in that list can be used by the trainer in rematches
   #
   attr_accessor :foundItems
   attr_accessor :nb_rematches
 
-  #What the trainer currently wants to do
+  # What the trainer currently wants to do
   # :IDLE -> Nothing. Normal postbattle dialogue
   # Should prompt the player to register the trainer in their phone.
   # Or maybe done automatically at the end of the battle?
@@ -37,20 +37,21 @@ class BattledTrainer
   attr_accessor :previous_trade_timestamp
 
   attr_accessor :favorite_type
-  attr_accessor :favorite_pokemon #Used for generating trade offers. Should be set from trainer.txt (todo)
-  #If empty, then trade offers ask for a Pokemon of a type depending on the trainer's class
+  attr_accessor :favorite_pokemon # Used for generating trade offers. Should be set from trainer.txt (todo)
+  # If empty, then trade offers ask for a Pokemon of a type depending on the trainer's class
 
   attr_accessor :previous_random_events
   attr_accessor :has_pending_action
   attr_accessor :custom_appearance
 
-  attr_accessor :friendship #increases the more you interact with them, unlocks more interact options
+  attr_accessor :friendship # increases the more you interact with them, unlocks more interact options
   attr_accessor :friendship_level
 
   attr_accessor :overworld_sprite
 
   attr_reader :favorite
-  def initialize(trainerType,trainerName,trainerVersion,trainerKey)
+
+  def initialize(trainerType, trainerName, trainerVersion, trainerKey)
     @trainerKey = trainerKey
     @trainerType = trainerType
     @trainerName = trainerName
@@ -59,9 +60,9 @@ class BattledTrainer
     @nb_rematches = 0
     @currentStatus = :IDLE
     @previous_status = :IDLE
-    @previous_trade_timestamp = Time.now-DELAY_BETWEEN_NPC_TRADES
-    @previous_random_events =[]
-    @has_pending_action=false
+    @previous_trade_timestamp = Time.now - DELAY_BETWEEN_NPC_TRADES
+    @previous_random_events = []
+    @has_pending_action = false
     @favorite_type = pick_favorite_type(trainerType)
     @friendship = 0
     @friendship_level = 0
@@ -73,6 +74,7 @@ class BattledTrainer
   def id
     return @trainerKey
   end
+
   def location
     if @location.nil?
       return _INTL("Unknown location")
@@ -80,7 +82,7 @@ class BattledTrainer
     return @location
   end
 
-  #For double trainer classes like twins, etc. Adds an additional double rematch option.
+  # For double trainer classes like twins, etc. Adds an additional double rematch option.
   def setLinkedTrainer(linked_trainer_event)
     return if @linked_event
     @linked_event = linked_trainer_event
@@ -97,18 +99,21 @@ class BattledTrainer
   def setFavorite(value)
     @favorite = value
   end
+
   def getLinkedTrainer()
-    trainer = getRebattledTrainer(@linked_event,$game_map.map_id)
+    trainer = getRebattledTrainer(@linked_event, $game_map.map_id)
     return trainer if trainer
     return nil
   end
+
   def friendship_level
-    @friendship_level =0 if !@friendship_level
+    @friendship_level = 0 if !@friendship_level
     return @friendship_level
   end
+
   def increase_friendship(amount)
-    @friendship=0 if !@friendship
-    @friendship_level=0 if !@friendship_level
+    @friendship = 0 if !@friendship
+    @friendship_level = 0 if !@friendship_level
     gain = amount / ((@friendship + 1) ** 0.4)
     @friendship += gain
     @friendship = MAX_FRIENDSHIP if @friendship > MAX_FRIENDSHIP
@@ -120,19 +125,61 @@ class BattledTrainer
       @friendship_level += 1
 
       trainerClassName = GameData::TrainerType.get(@trainerType).real_name
-      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!",trainerClassName,@trainerName))
+      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!", trainerClassName, @trainerName))
       case @friendship_level
       when 1
         pbMessage(_INTL("You can now trade with each other!"))
       when 2
         pbMessage(_INTL("They will now give you items after rematches from time to time!"))
-        $Trainer.nb_npc_friends =0 unless $Trainer.nb_npc_friends
-        $Trainer.nb_npc_friends+=1  #odds of shiny pokemon increases slightly the more NPCs at matx friendship you have
-      # when 3
-      #   #pbMessage(_INTL("You can now partner up with them!"))
-       end
+        $Trainer.nb_npc_friends = 0 unless $Trainer.nb_npc_friends
+        $Trainer.nb_npc_friends += 1 # odds of shiny pokemon increases slightly the more NPCs at matx friendship you have
+      when 3
+        tryGiftTrainerClothes(@trainerType)
+        # pbMessage(_INTL("You can now partner up with them!"))
+      end
       echoln "#{@trainerName}'s friendship level increased to #{@friendship_level}!"
     end
+  end
+
+  def tryGiftTrainerClothes(trainerType)
+    event = pbMapInterpreter.get_character(0)
+    case trainerType
+    when :BUGCATCHER
+      if !hasClothes?(CLOTHES_BUG_CATCHER_RSE)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Oh, you really like bugs too, right? Well, I have something for you!"))
+        obtainClothes(CLOTHES_BUG_CATCHER_RSE)
+      elsif !hasClothes?(CLOTHES_BUG_CATCHER_ORAS)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Hey! You know, if you're looking to catch more bugs, you should try putting this on!"))
+        obtainClothes(CLOTHES_BUG_CATCHER_ORAS)
+        obtainHat(HAT_BUG_CATCHER_ORAS)
+      end
+    when :FISHERMAN
+      if !hasClothes?(CLOTHES_FISHERMAN_ORAS)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Ho ho! You've been hanging around while I fish for so long, you're practically an angler yourself. It's time you dressed like one!"))
+        obtainClothes(CLOTHES_FISHERMAN_ORAS)
+        obtainHat(HAT_FISHERMAN_ORAS)
+      end
+    when :YOUNGSTER
+      if !hasClothes?(CLOTHES_YOUNGSTER_RSE)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("All these rematches are so fun! Here, you should dress like me!"))
+        obtainClothes(CLOTHES_YOUNGSTER_RSE)
+      elsif !hasClothes?(CLOTHES_YOUNGSTER_ORAS)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("I give clothes to all of my friends! Here you go!"))
+        obtainClothes(CLOTHES_YOUNGSTER_ORAS)
+      end
+    when :LADY
+      if !hasClothes?(CLOTHES_LADY)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Oh my goodness, look at your clothes! This simply won't do. Here, I bought this for you!"))
+        obtainClothes(CLOTHES_LADY)
+      end
+    end
+
   end
 
   def set_custom_appearance(trainer_appearance)
@@ -148,7 +195,7 @@ class BattledTrainer
   end
 
   def set_pending_action(value)
-    @has_pending_action=value
+    @has_pending_action = value
   end
 
   def log_evolution_event(unevolved_pokemon_species, evolved_pokemon_species)
@@ -164,9 +211,9 @@ class BattledTrainer
   def log_fusion_event(body_pokemon_species, head_pokemon_species, fused_pokemon_species)
     echoln "NPC trainer #{@trainerName} fused #{body_pokemon_species} and #{head_pokemon_species}!"
     event = BattledTrainerRandomEvent.new(:FUSE)
-    event.fusion_body_pokemon =body_pokemon_species
-    event.fusion_head_pokemon =head_pokemon_species
-    event.fusion_fused_pokemon =fused_pokemon_species
+    event.fusion_body_pokemon = body_pokemon_species
+    event.fusion_head_pokemon = head_pokemon_species
+    event.fusion_fused_pokemon = fused_pokemon_species
     @previous_random_events = [] unless @previous_random_events
     @previous_random_events << event
   end
@@ -196,20 +243,19 @@ class BattledTrainer
     event = BattledTrainerRandomEvent.new(:CATCH)
     event.caught_pokemon = new_pokemon_species
     @previous_random_events = [] unless @previous_random_events
-    @previous_random_events <<  event
+    @previous_random_events << event
   end
-
 
   def clear_previous_random_events()
     @previous_random_events = []
   end
 
-  def loadOriginalTrainer(trainerVersion=0)
-    return pbLoadTrainer(@trainerType,@trainerName,trainerVersion)
+  def loadOriginalTrainer(trainerVersion = 0)
+    return pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
   end
 
-  def loadOriginalTrainerTeam(trainerVersion=0)
-    original_trainer = pbLoadTrainer(@trainerType,@trainerName,trainerVersion)
+  def loadOriginalTrainerTeam(trainerVersion = 0)
+    original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
 
     return if !original_trainer
     echoln "Loading Trainer #{@trainerType}"
@@ -218,10 +264,10 @@ class BattledTrainer
       echoln "PartyMember: #{partyMember}"
       if partyMember.is_a?(Pokemon)
         current_party << partyMember
-      elsif partyMember.is_a?(Array)  #normally always gonna be this
+      elsif partyMember.is_a?(Array) # normally always gonna be this
         pokemon_species = partyMember[0]
         pokemon_level = partyMember[1]
-        current_party << Pokemon.new(pokemon_species,pokemon_level, original_trainer.name)
+        current_party << Pokemon.new(pokemon_species, pokemon_level, original_trainer.name)
       else
         echoln "Could not add Pokemon #{partyMember} to rematchable trainer's party."
       end

@@ -47,12 +47,27 @@ CLOTHES_VETERAN = "VeteranM"
 
 CLOTHES_NURSE = "nursejoy"
 
+CLOTHES_BUG_CATCHER_RSE = "BugCatcherRSE"
+
+CLOTHES_BUG_CATCHER_ORAS = "BugCatcherORAS"
+HAT_BUG_CATCHER_ORAS = "BugCatcherORAS"
+
+CLOTHES_FISHERMAN_ORAS = "FishermanORAS"
+HAT_FISHERMAN_ORAS = "FishermanORAS"
+
+CLOTHES_YOUNGSTER_RSE = "YoungsterRSE"
+CLOTHES_YOUNGSTER_ORAS = "youngsterORAS"
+CLOTHES_LADY = "lady"
+
+
 # Hats
 HAT_TEAM_ROCKET = "rocketcap"
 HAT_POSTMAN = "postman"
 HAT_PIDGEY_NEST = "pidgey"
 HAT_SWABLU_NEST = "swablu"
 HAT_ZIGZAGOON_NEST = "zigzaghat"
+HAT_RALTS_NEST = "ralts"
+HAT_RALTS_SHINY_NEST = "raltsshiny"
 
 HAT_PIKACHUM_NEST = "pikhatchum"
 HAT_PIKACHUF_NEST = "pikhatchuf"
