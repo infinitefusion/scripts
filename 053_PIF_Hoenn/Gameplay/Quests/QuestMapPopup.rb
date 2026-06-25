@@ -103,6 +103,7 @@ class QuestMapPopup
 
       # Text/icon overlay bitmap
       s = BitmapSprite.new(PANEL_WIDTH - 12, ITEM_HEIGHT - 4, @viewport)
+      pbSetSystemFont(s.bitmap)
       s.x = panel_x + 6
       s.y = (Graphics.height - PANEL_HEIGHT) / 2 + 36 + i * ITEM_HEIGHT
       s.z = 110003
