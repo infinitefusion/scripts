@@ -188,7 +188,7 @@ define_quest("main_gym_6",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL
 define_quest("main_gym_7",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Tate & Liza in Mossdeep City to obtain your seventh Gym Badge."),_INTL("Mossdeep City"),"NPC_Hoenn_Leader_TateLiza",MAP_MOSSDEEP)
 define_quest("main_gym_8",:MAIN_QUEST,_INTL("The Pokémon Gym Challenge"), _INTL("Challenge Wallace in Sootopolis City to obtain your final Gym Badge."),_INTL("Sootopolis City"),"NPC_Hoenn_Leader_Wallace",MAP_SOOTOPOLIS)
 
-define_quest("main_league",:MAIN_QUEST,_INTL("The Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan",MAP_LEAGUE)
+define_quest("main_league",:MAIN_QUEST,_INTL("Pokémon League Challenge"), _INTL("Collect all 8 Gym Badges and take part in the Pokémon League!"),_INTL("Hoenn"),"NPC_Hoenn_GymMan",MAP_LEAGUE)
 
 define_quest("main_stolen_parts",:MAIN_QUEST,_INTL("Stolen Package"), _INTL("Recover a package stolen by Team Magma!"),_INTL("Rustboro City"),"NPC_Hoenn_MrStone")
 define_quest("main_steven_letter",:MAIN_QUEST,_INTL("Steven's Letter"), _INTL("Deliver a letter from the Devon Corp. president to Steven in Granite Cave. "),_INTL("Granite Cave"),"NPC_Hoenn_MrStone",MAP_DEWFORD)
