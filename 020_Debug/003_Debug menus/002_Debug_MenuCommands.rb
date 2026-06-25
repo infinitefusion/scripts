@@ -1015,25 +1015,25 @@ DebugMenuCommands.register("mysterygift", {
   }
 })
 #
-# DebugMenuCommands.register("extracttext", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Extract Text"),
-#   "description" => _INTL("Extract all text in the game to a single file for translating."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbExtractText
-#   }
-# })
-#
-# DebugMenuCommands.register("compiletext", {
-#   "parent"      => "othermenu",
-#   "name"        => _INTL("Compile Text"),
-#   "description" => _INTL("Import text and converts it into a language file."),
-#   "always_show" => true,
-#   "effect"      => proc {
-#     pbCompileTextUI
-#   }
-# })
+DebugMenuCommands.register("extracttext", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Extract Text"),
+  "description" => _INTL("Extract all text in the game to a single file for translating."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbExtractText
+  }
+})
+
+DebugMenuCommands.register("compiletext", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Compile Text"),
+  "description" => _INTL("Import text and converts it into a language file."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbCompileTextUI
+  }
+})
 #
 #
 # DebugMenuCommands.register("renamesprites", {

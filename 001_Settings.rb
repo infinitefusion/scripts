@@ -585,7 +585,7 @@ module Settings
     ],
     :IF_HOENN => [
       ["English", "english.dat"],
-      # ["Français", "french.dat"],
+      ["Français", "french.dat"],
       #["Español", "spanish.dat"],
       #["中文", "chinese.dat"]
     ]
