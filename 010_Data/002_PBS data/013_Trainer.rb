@@ -33,6 +33,8 @@ module GameData
       "Form" => [:form, "u"],
       "Name" => [:name, "s"],
       "Moves" => [:moves, "*e", :Move],
+      "MovesHard" => [:moves_hard, "*e", :Move],
+      "MovesEasy" => [:moves_easy, "*e", :Move],
       "Ability" => [:ability, "s"],
       "AbilityIndex" => [:ability_index, "u"],
       "Item" => [:item, "e", :Item],
@@ -407,7 +409,11 @@ module GameData
         else
           pkmn.item = pkmn_data[:item]
         end
-        if pkmn_data[:moves] && pkmn_data[:moves].length > 0 && original_species == species
+        if pkmn_data[:moves_hard] && pkmn_data[:moves_hard].length > 0 && $game_switches[SWITCH_GAME_DIFFICULTY_HARD] && original_species == species
+          pkmn_data[:moves_hard].each { |move| pkmn.learn_move(move) }
+        elsif pkmn_data[:moves_easy] && pkmn_data[:moves_easy].length > 0 && $game_switches[SWITCH_GAME_DIFFICULTY_EASY] && original_species == species
+            pkmn_data[:moves_easy].each { |move| pkmn.learn_move(move) }
+        elsif pkmn_data[:moves] && pkmn_data[:moves].length > 0 && original_species == species
           pkmn_data[:moves].each { |move| pkmn.learn_move(move) }
         else
           pkmn.reset_moves

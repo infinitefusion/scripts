@@ -67,6 +67,8 @@ class Pokemon
 
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
+  attr_accessor :moves_hard
+  attr_accessor :moves_easy
 
   # @return [Array<Symbol>] All the move (ids) ever learned by this Pokémon
   attr_reader :learned_moves
