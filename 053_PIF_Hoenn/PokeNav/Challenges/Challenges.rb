@@ -123,15 +123,15 @@ class PlayerChallenge
   end
 
   def description
-    _INTL(@template.description)
+    return _INTL(@template.description)
   end
 
   def category
-    _INTL(@template.category)
+    return _INTL(@template.category)
   end
 
   def money_reward
-    _INTL(@template.money_reward)
+    return _INTL(@template.money_reward)
   end
 end
 
