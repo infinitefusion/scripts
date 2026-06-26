@@ -182,6 +182,7 @@ def mainFunctionDebug
     rescue
       echo "failed to sort custom battlers"
     end
+    MessageConfig.pbResetSystemFontName
     $scene = pbCallTitle
     $scene.main until $scene.nil?
     Graphics.transition(20)
