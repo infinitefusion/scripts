@@ -441,7 +441,7 @@ class HallOfFame_Scene
       pokemon_number = pbGet(VAR_SINGLE_POKEMON_MODE)
       if pokemon_number.is_a?(Integer) && pokemon_number > 0
         pokemon = GameData::Species.get(pokemon_number)
-        gameMode = _INTL("{1} mode",pokemon.real_name)
+        gameMode = _INTL("{1} mode",pokemon.name)
       else
         gameMode = _INTL("Debug mode")
       end
