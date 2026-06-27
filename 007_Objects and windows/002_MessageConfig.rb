@@ -14,7 +14,9 @@ module MessageConfig
   NARROW_FONT_NAME        = "Power Green Narrow"
   NARROW_FONT_SIZE        = 29
 
-  FONT_NAME_CHINESE       = "FusionPixelMonoPatched"
+  FONT_NAME_CHINESE       = "Fusion Pixel 12px Mono zh_hans"
+
+  CHINESE_FONT_SIZE       = 27
 
   BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
   BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
@@ -436,8 +438,13 @@ end
 #===============================================================================
 # Sets a bitmap's font to the system font.
 def pbSetSystemFont(bitmap)
-  bitmap.font.name = MessageConfig.pbGetSystemFontName
-  bitmap.font.size = MessageConfig::FONT_SIZE
+  if getCurrentLanguage == :CHINESE
+    bitmap.font.name  = MessageConfig::FONT_NAME_CHINESE
+    bitmap.font.size  = MessageConfig::CHINESE_FONT_SIZE
+  else
+    bitmap.font.name  = MessageConfig.pbGetSystemFontName
+    bitmap.font.size  = MessageConfig::FONT_SIZE
+  end
 end
 
 # Sets a bitmap's font to the system small font.

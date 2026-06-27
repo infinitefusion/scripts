@@ -138,7 +138,7 @@ class FusionMovesOptionsScene < PokemonOption_Scene
     value_base_color = Color.new(248, 248, 248)
     value_shadow_color = Color.new(104, 104, 104)
 
-    @sprites["title"].text = _INTL("{1}", move.real_name)
+    @sprites["title"].text = _INTL("{1}", move.name)
 
     damage = move.base_damage == 0 ? "-" : move.base_damage.to_s
     accuracy = move.accuracy == 0 ? "100" : move.accuracy.to_s
@@ -315,13 +315,13 @@ class FusionMovesOptionsScene < PokemonOption_Scene
   def getMoveName(move)
     return " - " if !@sprites["option"] && !move
     move = @poke1.moves[@sprites["option"].index] if !move
-    return GameData::Move.get(move.id).real_name
+    return GameData::Move.get(move.id).name
   end
 
   def getMoveDescription(move)
     return " - " if !@sprites["option"] && !move
     move = @poke1.moves[@sprites["option"].index] if !move
-    return GameData::Move.get(move.id).real_description
+    return GameData::Move.get(move.id).description
   end
 
   def pbGetOptions(inloadscreen = false)

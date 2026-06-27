@@ -135,8 +135,9 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     Kernel.pbClearText
     showHeaderName
 
-    trainerClassName = GameData::TrainerType.get(@trainer.trainerType).real_name
-    trainer_name = "#{trainerClassName} #{@trainer.trainerName}"
+    trainerClassName = GameData::TrainerType.get(@trainer.trainerType).name
+    trainerName = MessageTypes.getFromHash(MessageTypes::TrainerNames, @trainer.trainerName) || @trainer.trainerName
+    trainer_name = _INTL("{1} {2}", trainerClassName, trainerName)
     level_sum = 0
     if @trainer.currentTeam.size > 0
       @trainer.currentTeam.each do |pokemon|
@@ -153,7 +154,7 @@ class ContactsAppInfoPageScene < PokeNavAppScene
     elsif @trainer.id == BATTLED_TRAINER_WALLY_KEY
       favorite_type = _INTL("Unknown")
     else
-      favorite_type = (GameData::Type.try_get(@trainer.favorite_type)&.real_name) || _INTL("Unknown")
+      favorite_type = (GameData::Type.try_get(@trainer.favorite_type)&.name) || _INTL("Unknown")
     end
 
     Kernel.pbDisplayText(trainer_name, TITLE_TEXT_X, TITLE_TEXT_Y, 999999, @text_color_base, @text_color_shadow)
@@ -180,20 +181,20 @@ class ContactsAppInfoPageScene < PokeNavAppScene
         case action.eventType
         when :CATCH
           action_text = _INTL("Recently caught a {1}.",
-                              GameData::Species.get(action.caught_pokemon).real_name)
+                              GameData::Species.get(action.caught_pokemon).name)
         when :EVOLVE
           action_text = _INTL("Recently evolved their {1}.",
-                              GameData::Species.get(action.evolved_pokemon).real_name)
+                              GameData::Species.get(action.evolved_pokemon).name)
         when :FUSE
           action_text = _INTL("Recently fused their {1} and {2}\.",
-                              GameData::Species.get(action.fusion_head_pokemon).real_name,
-                              GameData::Species.get(action.fusion_body_pokemon).real_name)
+                              GameData::Species.get(action.fusion_head_pokemon).name,
+                              GameData::Species.get(action.fusion_body_pokemon).name)
         when :UNFUSE
           action_text = _INTL("Recently unfused their {1}.",
-                              GameData::Species.get(action.unfused_pokemon).real_name)
+                              GameData::Species.get(action.unfused_pokemon).name)
         when :REVERSE
           action_text = _INTL("Recently reversed their {1}.",
-                              GameData::Species.get(action.reversed_pokemon).real_name)
+                              GameData::Species.get(action.reversed_pokemon).name)
         end
       end
     end

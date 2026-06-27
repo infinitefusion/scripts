@@ -165,7 +165,7 @@ def set_current_gym_type_name(gym_index = nil, capitalize=false, variable = VAR_
   end
   gym_types = get_gym_types_array
   current_type_id = gym_types[gym_index]
-  type_name = GameData::Type.get(current_type_id).real_name
+  type_name = GameData::Type.get(current_type_id).name
   type_name = type_name.downcase unless capitalize
   pbSet(variable, type_name)
 end

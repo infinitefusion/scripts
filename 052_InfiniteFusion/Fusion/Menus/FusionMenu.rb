@@ -37,15 +37,15 @@ class FusionSelectOptionsScene < PokemonOption_Scene
 
 
   def getAbilityName(ability)
-    return GameData::Ability.get(ability.id).real_name
+    return GameData::Ability.get(ability.id).name
   end
 
   def getAbilityDescription(ability)
-    return GameData::Ability.get(ability.id).real_description
+    return GameData::Ability.get(ability.id).description
   end
 
   def getNatureName(nature)
-    return GameData::Nature.get(nature.id).real_name
+    return GameData::Nature.get(nature.id).name
   end
 
   def getNatureDescription(nature)
