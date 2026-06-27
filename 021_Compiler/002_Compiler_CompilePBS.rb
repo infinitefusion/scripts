@@ -1541,6 +1541,7 @@ module Compiler
     trainer_preRematchText_unfused = []
     trainer_preRematchText_reversed = []
     trainer_preRematchText_gift = []
+    trainer_infoText = []
     trainer_battleText = []
 
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts_rematch)
@@ -1553,8 +1554,7 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_reversed)
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_preRematchText_gift)
 
-    MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech, trainer_infoText)
-
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerInfoText, trainer_infoText)
     Graphics.update
   end
 

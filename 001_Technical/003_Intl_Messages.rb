@@ -201,6 +201,7 @@ def pbAddTrainerTextMessages
   names      = []
   loseTexts  = []
   speeches   = []
+  infoTexts   = []
   GameData::Trainer.each do |trainer|
     names.push(trainer.real_name)
 
@@ -216,10 +217,13 @@ def pbAddTrainerTextMessages
     speeches.push(trainer.preRematchText_unfused) if trainer.preRematchText_unfused
     speeches.push(trainer.preRematchText_reversed) if trainer.preRematchText_reversed
     speeches.push(trainer.preRematchText_gift) if trainer.preRematchText_gift
+
+    infoTexts.push(trainer.infoText) if trainer.infoText
   end
   MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames, names)
   MessageTypes.addMessagesAsHash(MessageTypes::TrainerLoseText, loseTexts)
   MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech, speeches)
+  MessageTypes.addMessagesAsHash(MessageTypes::TrainerInfoText, infoTexts)
 end
 
 def pbEachIntlSection(file)
@@ -652,6 +656,7 @@ module MessageTypes
   ScriptTexts = 24
   RibbonNames = 25
   RibbonDescriptions = 26
+  TrainerInfoText = 27
   @@messages = Messages.new
   @@messagesFallback = Messages.new("Data/messages.dat", true)
 
