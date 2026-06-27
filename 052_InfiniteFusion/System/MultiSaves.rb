@@ -249,11 +249,26 @@ end
 #
 #===============================================================================
 class PokemonLoad_Scene
+
+
   def pbChoose(commands, continue_idx)
     @sprites["cmdwindow"].commands = commands
+    @language_option_selected = false unless defined?(@language_option_selected)
     loop do
       Graphics.update
       Input.update
+
+      if @language_option_selected
+        result = pbUpdateLanguageOption(continue_idx, commands)
+        return result if result
+        next
+      end
+
+      if @sprites["cmdwindow"].index == continue_idx && Input.trigger?(Input::UP) && @show_language_option
+        pbPlayCursorSE
+        pbEnterLanguageOption(continue_idx)
+        next
+      end
       pbUpdate
       if Input.trigger?(Input::USE)
         return @sprites["cmdwindow"].index
@@ -271,6 +286,53 @@ class PokemonLoad_Scene
       end
     end
   end
+
+  # Called when the player presses UP while on Continue, to enter language-icon mode.
+  def pbEnterLanguageOption(continue_idx)
+    @language_option_selected = true
+    @sprites["cmdwindow"].active = false
+    @sprites["leftarrow"].visible = false
+    @sprites["rightarrow"].visible = false
+    @sprites["panel#{continue_idx}"].selected = false if @sprites["panel#{continue_idx}"]
+    @sprites["panel#{continue_idx}"].pbRefresh if @sprites["panel#{continue_idx}"]
+    pbUpdate
+  end
+
+  # Handles input while language-icon mode is active.
+  # Returns -4 if the player confirmed (caller should return this from pbChoose).
+  # Returns nil otherwise (caller should just `next` the loop).
+  def pbUpdateLanguageOption(continue_idx, commands)
+    @sprites["langicon"].bitmap = Bitmap.new(ICON_LANGUAGE_SELECTED) rescue nil
+
+    if Input.trigger?(Input::DOWN)
+      pbPlayCursorSE
+      @language_option_selected = false
+      @sprites["langicon"].bitmap = Bitmap.new(ICON_LANGUAGE) rescue nil
+      @sprites["cmdwindow"].active = true
+      @sprites["panel#{continue_idx}"].selected = true if @sprites["panel#{continue_idx}"]
+      @sprites["panel#{continue_idx}"].pbRefresh if @sprites["panel#{continue_idx}"]
+      return nil
+    elsif Input.trigger?(Input::UP)
+      pbPlayCursorSE
+      @language_option_selected = false
+      @sprites["langicon"].bitmap = Bitmap.new(ICON_LANGUAGE) rescue nil
+      last_index = commands.length - 1
+      oldi = @sprites["cmdwindow"].index
+      @sprites["cmdwindow"].index = last_index
+      @sprites["cmdwindow"].active = true
+      pbSelectPanel(oldi, last_index)
+      return nil
+    elsif Input.trigger?(Input::USE)
+      @language_option_selected = false
+      return -4
+    end
+
+    pbUpdate
+    return nil
+  end
+
+  ICON_LANGUAGE = "Graphics/Icons/mainMenu/LANGUAGE"
+  ICON_LANGUAGE_SELECTED = "Graphics/Icons/mainMenu/LANGUAGE_sel"
 
   def pbStartScene(commands, show_continue, trainer, frame_count, map_id)
 
@@ -305,6 +367,16 @@ class PokemonLoad_Scene
     @sprites["cmdwindow"] = Window_CommandPokemon.new([])
     @sprites["cmdwindow"].viewport = @viewport
     @sprites["cmdwindow"].visible = false
+
+
+    @show_language_option =  Settings::LANGUAGES[Settings::GAME_ID].length >= 2
+    @language_option_selected= false
+    if @show_language_option
+      @sprites["langicon"] = Sprite.new(@viewport)
+      @sprites["langicon"].bitmap = Bitmap.new(ICON_LANGUAGE)
+      @sprites["langicon"].x=12
+      @sprites["langicon"].y = 4
+    end
   end
 
 end
@@ -481,13 +553,14 @@ class PokemonLoadScreen
       cmd_debug = -1
       cmd_savefile = -1
       cmd_quit = -1
+      cmd_lang_icon = -4
       show_continue = !@save_data.empty?
       new_game_plus = show_continue && (@save_data[:player].new_game_plus_unlocked || $DEBUG)
 
       if show_continue
         commands[cmd_continue = commands.length] = "#{@selected_file}"
         #if @save_data[:player].mystery_gift_unlocked
-        commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift") # Honestly I have no idea how to make Mystery Gift work well with this.
+        commands[cmd_mystery_gift = commands.length] = _INTL("Mystery Gift")
         #end
       end
 
@@ -496,7 +569,7 @@ class PokemonLoadScreen
         commands[cmd_new_game_plus = commands.length] = _INTL("New Game +")
       end
       commands[cmd_options = commands.length] = _INTL("Options")
-      commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
+      #commands[cmd_language = commands.length] = _INTL("Language") if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
 
       cmd_links = {}
 
@@ -566,7 +639,7 @@ class PokemonLoadScreen
             screen = PokemonOptionScreen.new(scene)
             screen.pbStartScreen(true)
           end
-        when cmd_language
+        when cmd_lang_icon
           @scene.pbEndScene
           $PokemonSystem.language = pbChooseLanguage
           MessageConfig.pbResetSystemFontName

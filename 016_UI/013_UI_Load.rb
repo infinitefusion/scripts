@@ -133,35 +133,42 @@ class PokemonLoad_Scene
     addBackgroundOrColoredPlane(@sprites,"background","loadbg",Color.new(248,248,248),@viewport)
   end
 
+  def pbSelectPanel(oldi, newi)
+    return if oldi == newi
+    @sprites["panel#{oldi}"].selected = false if @sprites["panel#{oldi}"]
+    @sprites["panel#{oldi}"].pbRefresh if @sprites["panel#{oldi}"]
+    @sprites["panel#{newi}"].selected = true if @sprites["panel#{newi}"]
+    @sprites["panel#{newi}"].pbRefresh if @sprites["panel#{newi}"]
+    while @sprites["panel#{newi}"].y > Graphics.height - 40*2
+      for i in 0...@commands.length
+        @sprites["panel#{i}"].y -= 24*2
+      end
+      for i in 0...6
+        break if !@sprites["party#{i}"]
+        @sprites["party#{i}"].y -= 24*2
+      end
+      @sprites["player"].y -= 24*2 if @sprites["player"]
+    end
+    while @sprites["panel#{newi}"].y < 16*2
+      for i in 0...@commands.length
+        @sprites["panel#{i}"].y += 24*2
+      end
+      for i in 0...6
+        break if !@sprites["party#{i}"]
+        @sprites["party#{i}"].y += 24*2
+      end
+      @sprites["player"].y += 24*2 if @sprites["player"]
+    end
+  end
+
+
   def pbUpdate
     oldi = @sprites["cmdwindow"].index rescue 0
     pbUpdateSpriteHash(@sprites)
     newi = @sprites["cmdwindow"].index rescue 0
-    if oldi!=newi
-      @sprites["panel#{oldi}"].selected = false
-      @sprites["panel#{oldi}"].pbRefresh
-      @sprites["panel#{newi}"].selected = true
-      @sprites["panel#{newi}"].pbRefresh
-      while @sprites["panel#{newi}"].y>Graphics.height-40*2
-        for i in 0...@commands.length
-          @sprites["panel#{i}"].y -= 24*2
-        end
-        for i in 0...6
-          break if !@sprites["party#{i}"]
-          @sprites["party#{i}"].y -= 24*2
-        end
-        @sprites["player"].y -= 24*2 if @sprites["player"]
-      end
-      while @sprites["panel#{newi}"].y<16*2
-        for i in 0...@commands.length
-          @sprites["panel#{i}"].y += 24*2
-        end
-        for i in 0...6
-          break if !@sprites["party#{i}"]
-          @sprites["party#{i}"].y += 24*2
-        end
-        @sprites["player"].y += 24*2 if @sprites["player"]
-      end
+    pbSelectPanel(oldi, newi)
+    if @sprites["langicon"] && @sprites["panel0"]
+      @sprites["langicon"].visible = (@sprites["panel0"].y == 16 * 2)
     end
   end
 
@@ -318,7 +325,7 @@ class PokemonLoadScreen
     end
     commands[cmd_options = commands.length]   = _INTL("System Options")
     commands[cmd_language = commands.length]  = _INTL("Language") if Settings::LANGUAGES[Settings::GAME_ID].length >= 2
-    commands[cmd_debug = commands.length]     = _INTL("Debug") if $DEBUG
+    #commands[cmd_debug = commands.length]     = _INTL("Debug") if $DEBUG
     commands[cmd_quit = commands.length]      = _INTL("Quit Game")
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
     @scene.pbStartScene(commands, show_continue, @save_data[:player],
