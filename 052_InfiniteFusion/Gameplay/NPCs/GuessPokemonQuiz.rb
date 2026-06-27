@@ -61,9 +61,9 @@ class FusionQuiz
       rounds_left = nb_rounds - i
       if rounds_left > 0
         pbMessage(_INTL("That's it for round {1}. You've cumulated {2} points so far.\\wtnp[20]", i, @score))
-        prompt_next_round = pbMessage(_INTL("Are you ready to move on to the next round?", i), ["Yes", "No"])
+        prompt_next_round = pbMessage(_INTL("Are you ready to move on to the next round?", i), [_INTL("Yes"), _INTL("No")])
         if prompt_next_round != 0
-          prompt_quit = pbMessage(_INTL("You still have {1} rounds to go. You'll only keep your points if you finish all {2} rounds. Do you really want to quit now?", rounds_left, nb_rounds), ["Yes", "No"])
+          prompt_quit = pbMessage(_INTL("You still have {1} rounds to go. You'll only keep your points if you finish all {2} rounds. Do you really want to quit now?", rounds_left, nb_rounds), [_INTL("Yes"), _INTL("No")])
           if prompt_quit
             @abandonned = true
             break
@@ -159,21 +159,21 @@ class FusionQuiz
       show_fusion_picture(false)
       pbMessage(_INTL("Okay, now's your chance to make up for the points you missed!\\wtnp[15]"))
       if !correct_answers[0] #1st question redemption
-        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), "Which Pokémon is this fusion's body?", @body_id, @body_choices, false, :BODY)
+        new_question(calculate_points_awarded(base_points_q1_redemption, round_multiplier), _INTL("Which Pokémon is this fusion's body?"), @body_id, @body_choices, false, :BODY)
         if !correct_answers[1]
           pbMessage(_INTL("Next question!\\wtnp[10]"))
         end
       end
 
       if !correct_answers[1] #2nd question redemption
-        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), "Which Pokémon is this fusion's head?", @head_id, @head_choices, false, :HEAD)
+        new_question(calculate_points_awarded(base_points_q2_redemption, round_multiplier), _INTL("Which Pokémon is this fusion's head?"), @head_id, @head_choices, false, :HEAD)
       end
     else
       pbSEPlay("Applause", 80)
       pbMessage(_INTL("Wow! A perfect round! You get {1} more points!\\wtnp[15]", perfect_round_points))
       pbMessage(_INTL("Let's see what this Pokémon looked like...\\wtnp[20]"))
       show_fusion_picture(false)
-      fusion_name= GameData::Species.get(fusionOf(@head_id,@body_id)).real_name
+      fusion_name= GameData::Species.get(fusionOf(@head_id,@body_id)).name
       pbMessage(_INTL("It's... \\C[1]{1}\\C[0]!",fusion_name))
 
     end
@@ -195,7 +195,7 @@ class FusionQuiz
 
   def new_question(points_value, question, answer_id, choices, other_chance_later,question_type)
     points_value = points_value.to_i
-    answer_name = getPokemon(answer_id).real_name
+    answer_name = getPokemon(answer_id).name
     answered_correctly = give_answer(question, answer_id, choices,question_type)
     award_points(points_value) if answered_correctly
     question_answer_followup_dialog(answered_correctly, answer_name, points_value, other_chance_later)
@@ -307,7 +307,7 @@ class FusionQuiz
 
   def give_answer(prompt_message, answer_id, choices,question_type=:BODY)
     question_answered = false
-    answer_pokemon_name = getPokemon(answer_id).real_name
+    answer_pokemon_name = getPokemon(answer_id).name
 
     echoln choices
     choices = generate_new_choices(answer_id,question_type)
@@ -374,7 +374,7 @@ class FusionQuiz
     commands = []
     choices.each do |dex_num, i|
       species = getPokemon(dex_num)
-      commands.push(species.real_name)
+      commands.push(species.name)
     end
     if question_type == :BODY
       @body_choices = commands
@@ -388,7 +388,7 @@ class FusionQuiz
     commands = []
     for dex_num in 1..NB_POKEMON-4
       species = getPokemon(dex_num)
-      commands.push([dex_num - 1, species.real_name, species.real_name])
+      commands.push([dex_num - 1, species.name, species.name])
     end
     pbMessage(prompt_message)
     return pbChooseListWithFilter(commands, 0, nil, 1,0,42,_INTL("Type with your keyboard"))
