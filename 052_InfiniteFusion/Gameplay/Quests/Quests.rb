@@ -15,6 +15,18 @@ class Quest
   attr_accessor :type
   attr_accessor :location_map_id
 
+  def name
+    return _INTL(@name)
+  end
+
+  def desc
+    return _INTL(@desc)
+  end
+
+  def location
+    return _INTL(@location)
+  end
+
   def initialize(id, name, desc, sprite, location, color = :WHITE, time = Time.now, completed = false, map_id=nil)
     self.id = id
     self.name = name
