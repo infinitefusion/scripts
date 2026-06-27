@@ -19,7 +19,7 @@ class BetterRegionMap
       weather_name = _INTL("Sandstorm")
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Snow
-      weather_name = _INTL("#{adjective} snow")
+      weather_name = _INTL("{1} snow", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :StrongWinds,
       weather_name = _INTL("Heavy Winds")
@@ -31,19 +31,19 @@ class BetterRegionMap
       weather_name = _INTL("Drought")
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Sunny
-      weather_name = _INTL("#{adjective} sunshine")
+      weather_name = _INTL("{1} sunshine", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Rain
-      weather_name = _INTL("#{adjective} rain")
+      weather_name = _INTL("{1} rain", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Fog
-      weather_name = _INTL("#{adjective} fog")
+      weather_name = _INTL("{1} fog", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Wind
-      weather_name = _INTL("#{adjective} wind")
+      weather_name = _INTL("{1} wind", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Storm
-      weather_name = _INTL("#{adjective} thunderstorm")
+      weather_name = _INTL("{1} thunderstorm", adjective)
       intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
     when :Ash
       weather_name = _INTL("Volcanic Ash")
@@ -62,51 +62,51 @@ class BetterRegionMap
     case weather_type
     when :Sandstorm
       value = 8 * i + 15
-      return _INTL("#{value} km/h")
+      return _INTL("{1} km/h", value)
 
     when :Snow
       value = (0.5 * i).round(1)
-      return _INTL("#{value} cm/h")
+      return _INTL("{1} cm/h", value)
 
     when :StrongWinds
       value = 10 * i + 40
-      return _INTL("#{value} km/h")
+      return _INTL("{1} km/h", value)
 
     when :HeavyRain
       value = 5 * i + 5
-      return _INTL("#{value} mm/h")
+      return _INTL("{1} mm/h", value)
 
     when :HarshSun
       value = 34 + (i * 1.4).round
       value -= 10 if GameWeather::COLD_MAPS.include?(map_id)
       value -= 10 if Settings::SNOW_DAY
-      return _INTL("#{value} °C")
+      return _INTL("{1} °C", value)
 
     when :Sunny
       value = 21 + (i * 1.4).round
       value -= 10 if GameWeather::COLD_MAPS.include?(map_id)
       value -= 10 if Settings::SNOW_DAY
-      return _INTL("#{value} °C")
+      return _INTL("{1} °C", value)
 
     when :Rain
       value = 2 * i
-      return _INTL("#{value} mm/h")
+      return _INTL("{1} mm/h", value)
 
     when :Ash
       value = (0.5 * i).round(1)
-      return _INTL("#{value} cm/h")
+      return _INTL("{1} cm/h", value)
 
     when :Fog
       value = 1100 - i * 100
-      return _INTL("#{value}m visibility")
+      return _INTL("{1} m visibility", value)
 
     when :Wind
       value = 7 * i + 8
-      return _INTL("#{value} km/h")
+      return _INTL("{1} km/h", value)
 
     when :Storm
       value = 2 * i
-      return _INTL("#{value} mm/h")
+      return _INTL("{1} mm/h", value)
     else
       return ""
     end

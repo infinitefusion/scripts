@@ -42,7 +42,7 @@ class PokemonStorageScreen
             @scene.pbUpdateSelectionRect(0, 0)
             next
           else
-            pbDisplay(_INTL("45 You're holding a Pokémon!"))
+            pbDisplay(_INTL("You're holding a Pokémon!"))
             next
           end
         end

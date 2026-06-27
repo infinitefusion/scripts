@@ -24,9 +24,9 @@ class FusionQuizAppScreen
     # :advanced_10_rounds
     $Trainer&.pokenav&.fusion_quiz_unlocked_modes = [:regular_3_rounds] unless $Trainer&.pokenav&.fusion_quiz_unlocked_modes
     loop do
-      btn_play  = FusionQuizMenuButton.new("play",  nil, "Play")
-      btn_score = FusionQuizMenuButton.new("score", nil, "Score")
-      btn_close = FusionQuizMenuButton.new("exit",  nil, "Exit")
+      btn_play  = FusionQuizMenuButton.new("play",  nil, _INTL("Play"))
+      btn_score = FusionQuizMenuButton.new("score", nil, _INTL("Score"))
+      btn_close = FusionQuizMenuButton.new("exit",  nil, _INTL("Exit"))
 
       @scene.pbStartScene([btn_play, btn_score, btn_close])
       @scene.pbScene
