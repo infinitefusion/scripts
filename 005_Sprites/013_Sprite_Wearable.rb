@@ -113,12 +113,10 @@ class Sprite_Wearable < RPG::Sprite
   end
 
   def update(action, filename, color)
-
     @sprite.opacity = @player_sprite.opacity if @wearableBitmap
     @sprite.opacity = 0 if $game_player.hasGraphicsOverride?
     if filename != @filename || color != @color
       if pbResolveBitmap(filename)
-        # echoln pbResolveBitmap(filename)
         @wearableBitmap = AnimatedBitmap.new(filename, color)
         @sprite.bitmap = @wearableBitmap.bitmap
       else
@@ -128,7 +126,6 @@ class Sprite_Wearable < RPG::Sprite
       @color = color
       @filename = filename
     end
-    animate(action)
   end
 
   def adjust_layer()

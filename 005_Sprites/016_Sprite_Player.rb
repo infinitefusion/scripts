@@ -59,10 +59,6 @@ class Sprite_Player < Sprite_Character
       @current_bitmap = generateClothedBitmap
     end
     @previous_action = @character_name
-    @hair.animate(@character_name) if @hair
-    @hat.animate(@character_name) if @hat
-    @hat2.animate(@character_name) if @hat2
-    @bicycle.animate(@character_name) if @bicycle
     return @current_bitmap
   end
 
@@ -139,6 +135,11 @@ class Sprite_Player < Sprite_Character
   def update
     super
     apply_global_player_offsets
+
+    @hair.animate(@character_name) if @hair
+    @hat.animate(@character_name) if @hat
+    @hat2.animate(@character_name) if @hat2
+    @bicycle.animate(@character_name) if @bicycle
 
     if $game_map.scrolling?
       @hat.adjustPositionForScreenScrolling if @hat
