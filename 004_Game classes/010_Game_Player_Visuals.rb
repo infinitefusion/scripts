@@ -112,6 +112,7 @@ class Game_Player < Game_Character
     acro_speed = 5.0
 
     if Input.press?(Input::ACTION)
+      bikeOnFence unless $PokemonGlobal.bike_trick
       @bike_speed = acro_speed
       @bike_idle_frames = 0
       check_bunny_hops
