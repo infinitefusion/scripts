@@ -8,11 +8,13 @@ class Game_Player < Game_Character
   end
 
   def check_bike_hopping
-    return
     return unless $PokemonGlobal.bicycle
     return unless @bike_hops
     return if jumping?
-
+    unless $game_map.valid?(@x, @y)
+      $game_player.stop_bunny_hops
+      return
+    end
     unless pbMapInterpreterRunning? || $game_temp.message_window_showing ||
       $PokemonTemp.miniupdate || $game_temp.in_menu
       pbSEPlay("jump",40)
