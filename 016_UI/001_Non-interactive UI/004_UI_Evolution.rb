@@ -670,6 +670,7 @@ class PokemonEvolutionScene
     new_pkmn.poke_ball = :POKEBALL
     new_pkmn.item      = nil
     new_pkmn.personalID = new_pkmn.generate_personal_id
+    new_pkmn.pif_sprite = nil
     new_pkmn.clearAllRibbons
     new_pkmn.calc_stats
     new_pkmn.heal
