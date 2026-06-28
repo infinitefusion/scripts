@@ -447,11 +447,15 @@ def pbMysteryGiftReadFromJson(json_string,trainer)
   json_data = JSON.parse(json_string) rescue {}
   mystery_gifts = []
   importer = SecretBaseImporter.new
-  #echoln(json_data)
 
   json_data.each do |key, value|
     id = key.to_s
     gift_data = json_data[key]
+
+    minimum_version = gift_data[:minimum_version] || nil
+    if minimum_version && !is_higher_version(Settings::GAME_VERSION_NUMBER, minimum_version)
+      next
+    end
 
     trainer_id = gift_data[:trainerId] || nil
     if trainer_id
