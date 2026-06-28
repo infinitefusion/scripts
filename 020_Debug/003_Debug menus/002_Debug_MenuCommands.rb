@@ -1007,11 +1007,11 @@ DebugMenuCommands.register("othermenu", {
 
 DebugMenuCommands.register("mysterygift", {
   "parent"      => "othermenu",
-  "name"        => _INTL("Manage Mystery Gifts"),
-  "description" => _INTL("Edit and enable/disable Mystery Gifts."),
+  "name"        => _INTL("Test Mystery Gift"),
+  "description" => _INTL("Place the Mystery Gift JSON in the game's folder (top level)"),
   "always_show" => true,
   "effect"      => proc {
-    pbManageMysteryGifts
+    testMysteryGift
   }
 })
 #

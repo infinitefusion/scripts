@@ -114,6 +114,7 @@ end
 # Debug option for managing gifts in the Master file and exporting them to a
 # file to be uploaded.
 #===============================================================================
+
 def pbManageMysteryGifts
   if !safeExists?("MysteryGiftMaster.txt")
     pbMessage(_INTL("There are no Mystery Gifts defined."))
@@ -266,6 +267,53 @@ def pbDownloadMysteryGift(trainer)
     pbDisposeSpriteHash(sprites)
     viewport.dispose
   end
+end
+
+#From debug menu - for event organizers
+#From debug menu - for event organizers
+def testMysteryGift
+  mystery_gifts = scanLocalMysteryGifts
+  pending=[]
+  for gift in mystery_gifts
+    pending.push(gift)
+  end
+  if pending.length==0
+    pbMessage(_INTL("No testable gift was found. Make sure that your Json doesn't have any formatting errors. You can use any online json validator to make sure!"))
+    return
+  end
+  loop do
+    commands=[]
+    for gift in pending; commands.push(gift[3]); end
+    commands.push(_INTL("Cancel"))
+    command=pbMessage(_INTL("Choose the gift you want to receive.\\wtnp[0]"),commands,-1)
+    break if command==-1 || command==commands.length-1
+    gift=pending[command]
+    $Trainer.mystery_gifts.push(gift)
+    pbReceiveMysteryGift(gift[0])
+    pending[command]=nil; pending.compact!
+    break if pending.length==0
+  end
+end
+
+def scanLocalMysteryGifts
+  skipped_filenames = ["configuration.json", "mkxp.json"]
+  mystery_gifts = []
+  Dir.glob("*.json").each do |filename|
+    next if skipped_filenames.include?(filename)
+    begin
+    next if !safeExists?(filename)
+    string = File.open(filename, "rb") { |f| f.read } rescue nil
+    next if nil_or_empty?(string)
+    gifts = pbMysteryGiftReadFromJson(string, $Trainer) rescue []
+    mystery_gifts.concat(gifts) if gifts.is_a?(Array)
+    rescue Exception => ex
+      pbMessage("There was an error when parsing #{filename}. #{ex.message}")
+      pbMessage("The stacktrace will be copied to your clipboard.")
+      clipboard_content = "#{filename}\n[#{ex.class}] #{ex.message}\n\n#{ex.backtrace.join("\n")}"
+      Input.clipboard = clipboard_content
+    end
+  end
+  return mystery_gifts
 end
 
 
