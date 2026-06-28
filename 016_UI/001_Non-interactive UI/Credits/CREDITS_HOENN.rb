@@ -122,10 +122,10 @@ PokemonInfiniteFusionFR Discord
 Coordinated by anthonygourmand
 
 <title>Chinese Translation
-阿省呦 (Sheng)
+Leon (Leonnovation)
 白崎时绘 (Shiroe)
-小鱼转晴 (Xplorelight)
-Coordinated by Leon (leonnovation)
+阿省呦 (Sheng)
+小鱼转晴 (XploreLight)
 
 The following free resources were also used 
 with their respective authors' consent:
