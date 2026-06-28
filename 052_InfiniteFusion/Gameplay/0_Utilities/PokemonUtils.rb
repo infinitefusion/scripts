@@ -397,3 +397,12 @@ def delete_party_pokemon_multi(indexes=[],safe=true)
     end
   end
 end
+
+def format_pokemon_names(species_list=[])
+  names_list = []
+  species_list.each do |species|
+    species_data = GameData::Species.get(species)
+    names_list << species_data.name
+  end
+  return names_list.join(", ")
+end
