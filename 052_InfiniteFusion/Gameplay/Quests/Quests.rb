@@ -213,7 +213,7 @@ define_quest("template",:FIELD_QUEST,_INTL("Template Quest"), _INTL("Don't forge
 define_quest("route_102_rematch",:FIELD_QUEST,_INTL("Trainer Rematches"), _INTL("A lass you battled wants to switch up her team and rematch you!"),_INTL("Route 102"),"NPC_Hoenn_Lass")
 
 #Petalburg Town
-define_quest("petalburg_berry",:FIELD_QUEST,_INTL("Berry Contest"), _INTL("Take part in the berry-growing contest in Petalburg Town!"),_INTL("Route 102"),"NPC_Hoenn_Breeder_F")
+define_quest("petalburg_berry",:FIELD_QUEST,_INTL("Berry Contest"), _INTL("Take part in the berry-growing contest in Petalburg Town!"),_INTL("Petalburg Town"),"NPC_Hoenn_Breeder_F")
 
 
     #Route 116
@@ -255,7 +255,7 @@ define_quest("route109_beachball",:FIELD_QUEST,_INTL("Find a New Beach Ball!"), 
 #Team Magma - Route 103
 define_quest("magma_camp_attack",:MAGMA_QUEST,_INTL("Under Attack!"), _INTL("Defend the Team Magma Camp against Team Aqua!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
 define_quest("magma_slugma_eggs",:MAGMA_QUEST,_INTL("Egg Hunt!"), _INTL("Collect Slugma Eggs with Tabitha."),_INTL("Cliffside Sanctuary"),"NPC_Hoenn_Magma_Exec_M")
-define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
+define_quest("magma_help_grunts",:MAGMA_QUEST,_INTL("Grunt Work!"), _INTL("Help 3 grunts in the Team Magma Camp, then report back to Tabitha!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Exec_M")
 define_quest("magma_numel",:MAGMA_QUEST,_INTL("Anti-Water Training!"), _INTL("Fuse Numel to make it resistant Water-type attacks."),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_M")
 define_quest("magma_graffiti",:MAGMA_QUEST,_INTL("Painting the Town Red"), _INTL("Team Aqua painted their logo on various walls in Slateport City. Cover them up with the Team Magma logo instead!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_F")
 define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Help compose lyrics to the official Team Magma theme song!"),_INTL("Magma Camp"),"NPC_Hoenn_Magma_Grunt_F")
@@ -263,8 +263,8 @@ define_quest("magma_song",:MAGMA_QUEST,_INTL("The Magma Theme Song"), _INTL("Hel
 #Team Aqua - Route 108
 define_quest("aqua_camp_attack",:AQUA_QUEST,_INTL("Under Attack!"), _INTL("Defend the Team Aqua Camp against Team Magma!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_F")
 define_quest("aqua_wailmer_eggs",:AQUA_QUEST,_INTL("Egg Hunt!"), _INTL("Collect Wailmer Eggs for Shelly."),_INTL("Route 108"),"NPC_Hoenn_Aqua_Exec_F")
-define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_F")
-define_quest("aqua_carvanha",:AQUA_QUEST,_INTL("Grunt work!"), _INTL("You were given two Zubats and a Geodude. Fuse all three of them into Water-type Pokémon."),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_F")
+define_quest("aqua_help_grunts",:AQUA_QUEST,_INTL("Grunt Work!"), _INTL("Help 3 grunts in the Team Aqua Camp, then report back to Shelly!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Exec_F")
+define_quest("aqua_carvanha",:AQUA_QUEST,_INTL("Just Add Water!"), _INTL("You were given two Zubats and a Geodude. Fuse all three of them into Water-type Pokémon."),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_F")
 define_quest("aqua_graffiti",:AQUA_QUEST,_INTL("Painting the Town Blue"), _INTL("Team Magma painted their logo on various walls in Slateport City. Cover them up with the Team Aqua logo instead!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_M")
 define_quest("aqua_song",:AQUA_QUEST,_INTL("The Aqua Theme Song"), _INTL("Help compose lyrics to the official Team Aqua theme song!"),_INTL("Aqua Camp"),"NPC_Hoenn_Aqua_Grunt_F")
 
@@ -293,4 +293,4 @@ define_quest("verdanturf_nurse",:FIELD_QUEST,_INTL("The Bored Nurse"), _INTL("Th
 
 #Rusturf Tunnel
 define_quest("rusturf_trumpet",:FIELD_QUEST,_INTL("Uproar in B Flat"), _INTL("A trumpet player is cornered in Rusturf Tunnel. Find a way to help him!"),_INTL("Rusturf Tunnel"),"NPC_Hoenn_trumpet_playing")
-define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _INTL("Find the 4 Trumpet Brothers and join the Trumpet Festival in Evergrande City"),_INTL("Evergrande City"),"NPC_Hoenn_trumpet_playing",MAP_EVERGRANDE)
+define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _INTL("Find the 4 Trumpet Brothers and join the Trumpet Festival in Evergrande City."),_INTL("Evergrande City"),"NPC_Hoenn_trumpet_playing",MAP_EVERGRANDE)

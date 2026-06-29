@@ -17,13 +17,15 @@ class OverworldPokemonEvent < Game_Event
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
-  DISGUISED_POKEMON = [:DITTO, :ZORUA, :ZOROARK]
+  DISGUISED_POKEMON = [:DITTO, :MEW, :ZORUA, :ZOROARK]
   CASTFORM_FORMS = [:CASTFORM, :CASTFORM_SUNNY, :CASTFORM_RAINY, :CASTFORM_SNOWY]
   UPDATE_TIME = 4 #Nb. of frames for the update_behavior loop
+
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     #return unless @map_id == $game_map.map_id
     @species = species
     @level = level
+    roll_for_special_encounters
     @behavior_roaming = behavior_roaming if behavior_roaming
     @behavior_noticed = behavior_noticed if behavior_noticed
 
@@ -32,7 +34,7 @@ class OverworldPokemonEvent < Game_Event
     @disguised = false
     species_data = GameData::Species.get(@species)
 
-    @pokemon = Pokemon.new(species, level)
+    @pokemon = Pokemon.new(@species, @level)
     @behavior_species = getBehaviorSpecies(species_data)
 
     unless behavior_roaming
@@ -97,6 +99,14 @@ class OverworldPokemonEvent < Game_Event
     set_roaming_movement
     @last_facing_direction = @direction
     @setup_complete = true
+  end
+
+  def roll_for_special_encounters
+    #Mew encounter
+    if rand(1) < Settings::MEW_OW_ENCOUNTER_CHANCE
+        @species = :MEW
+        @level = 7
+    end
   end
 
   def make_shiny
