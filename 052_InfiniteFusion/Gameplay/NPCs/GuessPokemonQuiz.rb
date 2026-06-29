@@ -308,9 +308,7 @@ class FusionQuiz
   def give_answer(prompt_message, answer_id, choices,question_type=:BODY)
     question_answered = false
     answer_pokemon_name = getPokemon(answer_id).name
-
-    echoln choices
-    choices = generate_new_choices(answer_id,question_type)
+    choices = generate_new_choices(answer_id,question_type) unless choices
     while !question_answered
       if @difficulty == :ADVANCED
         player_answer = prompt_pick_answer_advanced(prompt_message, answer_id)
