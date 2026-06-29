@@ -8,7 +8,7 @@ def build_aqua_song(event_id1, event_id2)
   segment1 = build_aqua_song_pt1(event_id1, event_id2, chorus)
   build_aqua_song_pt2(event_id1, event_id2)
   add_aqua_song_segment(chorus)
-  #add_aqua_song_segment(segment1)
+  # add_aqua_song_segment(segment1)
   build_aqua_song_pt3(event_id1, event_id2)
 
 end
@@ -161,7 +161,7 @@ end
 
 def sing_aqua_song
   pbMEPlay("aqua_theme_song")
-  pbWait(160) #Wait for intro
+  pbWait(160) # Wait for intro
   lyrics = pbGet(VAR_AQUA_SONG)
   lyrics = [] unless lyrics.is_a?(Array)
   for line in lyrics
@@ -190,7 +190,7 @@ def build_magma_song(event_id1, event_id2)
   segment1 = build_magma_song_pt1(event_id1, event_id2, chorus)
   build_magma_song_pt2(event_id1, event_id2)
   add_magma_song_segment(chorus)
-  #add_magma_song_segment(segment1)
+  # add_magma_song_segment(segment1)
   build_magma_song_pt3(event_id1, event_id2)
 
 end
@@ -363,7 +363,8 @@ end
 
 ################################
 def aquaCarvanhaQuestValidPokemon?(pokemon)
-  valid_species = isPartPokemon(pokemon, :ZUBAT) || isPartPokemon(pokemon, :GEODUDE)
+  valid_species = isPartPokemon(pokemon, :ZUBAT) || isPartPokemon(pokemon, :GOLBAT) || isPartPokemon(pokemon, :CROBAT) ||
+    isPartPokemon(pokemon, :GEODUDE) || isPartPokemon(pokemon, :GRAVELER) || isPartPokemon(pokemon, :GOLEM)
   is_water_type = pokemon.hasType?(:WATER)
   echoln "#{pokemon.species}: valid species: #{valid_species}, waterType: #{is_water_type}"
   return valid_species && is_water_type
@@ -377,8 +378,8 @@ def aquaCarvanhaPostValidation()
   target_nb_zubat = 2
   target_nb_geodude = 1
   $Trainer.party.each do |pokemon|
-    nb_zubat += 1 if isPartPokemon(pokemon, :ZUBAT)
-    nb_geodude += 1 if isPartPokemon(pokemon, :GEODUDE)
+    nb_zubat += 1 if isPartPokemon(pokemon, :ZUBAT) || isPartPokemon(pokemon, :GOLBAT) || isPartPokemon(pokemon, :CROBAT)
+    nb_geodude += 1 if isPartPokemon(pokemon, :GEODUDE) || isPartPokemon(pokemon, :GRAVELER) || isPartPokemon(pokemon, :GOLEM)
   end
   return nb_zubat == target_nb_zubat && nb_geodude == target_nb_geodude
 end
