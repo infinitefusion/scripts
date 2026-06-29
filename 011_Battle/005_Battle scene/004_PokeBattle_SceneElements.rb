@@ -666,7 +666,7 @@ class PokemonBattlerSprite < RPG::Sprite
       when 3 then @spriteYExtra = -2
       else @spriteYExtra = 0
       end
-    elsif !$PokemonSystem.nobattlemovement
+    elsif !($PokemonSystem.nobattlemovement || Settings::KANTO)
       idle_period = Graphics.frame_rate * 4
       amplitude = 2
       phase_offset = (@index * idle_period * 0.7 / (2 * Math::PI)).round  # frame offset instead of radian offset

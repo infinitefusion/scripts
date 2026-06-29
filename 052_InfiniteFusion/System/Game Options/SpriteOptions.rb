@@ -96,13 +96,15 @@ class SpriteOptionsScene < PokemonOption_Scene
                               _INTL("Display move animations in battles")
     )
 
-    options << EnumOption.new(_INTL("Battle Movement"), [_INTL("On"), _INTL("Off")],
-                              proc { $PokemonSystem.nobattlemovement ? 1 : 0 },
-                              proc { |value| $PokemonSystem.nobattlemovement = value == 1 },
-                              [_INTL("Sprites move up and down slightly during battles."),
-                               _INTL("Sprites are completely static during battles.")
-                              ]
-    )
+    if Settings::HOENN
+      options << EnumOption.new(_INTL("Battle Movement"), [_INTL("On"), _INTL("Off")],
+                                proc { $PokemonSystem.nobattlemovement ? 1 : 0 },
+                                proc { |value| $PokemonSystem.nobattlemovement = value == 1 },
+                                [_INTL("Sprites move up and down slightly during battles."),
+                                 _INTL("Sprites are completely static during battles.")
+                                ]
+      )
+    end
 
     return options
   end
