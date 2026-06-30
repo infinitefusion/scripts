@@ -237,6 +237,7 @@ def hasClothes?(outfit_id)
 end
 
 def hasHat?(outfit_id)
+  $Trainer.unlocked_hats = [] unless $Trainer.unlocked_hats
   return $Trainer.unlocked_hats.include?(outfit_id)
 end
 
