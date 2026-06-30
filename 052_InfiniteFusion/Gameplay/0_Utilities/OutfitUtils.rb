@@ -55,13 +55,13 @@ def setupStartingOutfit()
   gender = pbGet(VAR_TRAINER_GENDER)
   if gender == GENDER_FEMALE
     $Trainer.unlock_clothes(default_clothes_female, true)
-    $Trainer.unlock_hat(default_hat_female, true)
+    $Trainer.unlock_hat(default_hat_female, true) unless Settings::HOENN
     $Trainer.hair = "3_" + default_hair_female if !$Trainer.hair # when migrating old savefiles
     $Trainer.clothes = default_clothes_female
 
   elsif gender == GENDER_MALE
     $Trainer.unlock_clothes(default_clothes_male, true)
-    $Trainer.unlock_hat(default_hat_male, true)
+    $Trainer.unlock_hat(default_hat_male, true) unless Settings::HOENN
     $Trainer.hair = ("3_" + default_hair_male) if !$Trainer.hair # when migrating old savefiles
     $Trainer.clothes = default_clothes_male
   end
