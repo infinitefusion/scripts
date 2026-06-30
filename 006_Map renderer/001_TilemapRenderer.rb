@@ -665,7 +665,7 @@ class TilemapRenderer
     base_overrides = EXTRA_AUTOTILES[tileset_id] || {}
     return base_overrides unless $game_weather
     wind_overrides = WIND_TREE_AUTOTILES[tileset_id] || {}
-    if $game_weather.map_current_weather_type(map_id) == :Wind && WIND_TREE_AUTOTILES[tileset_id]
+    if $game_weather.map_current_weather_type(map_id) == :Wind || $game_weather.map_current_weather_type(map_id) == :Storm && WIND_TREE_AUTOTILES[tileset_id]
       return base_overrides.merge(wind_overrides)
     end
     return base_overrides
