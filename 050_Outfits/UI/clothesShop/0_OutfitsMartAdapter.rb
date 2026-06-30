@@ -114,6 +114,7 @@ class OutfitsMartAdapter < PokemonMartAdapter
   end
 
   def isItemInRegionalSet(item)
+    return false if Settings::HOENN
     return item.is_in_regional_set
   end
 
