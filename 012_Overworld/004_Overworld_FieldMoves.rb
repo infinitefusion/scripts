@@ -1103,7 +1103,11 @@ HiddenMoveHandlers::UseMove.add(:RAINDANCE, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Rain, 1)
+  if isWeatherWind?()
+    changeCurrentWeather(:Storm, 1)
+  else
+    changeCurrentWeather(:Rain, 1)
+  end
   next true
 })
 
@@ -1125,7 +1129,22 @@ HiddenMoveHandlers::UseMove.add(:WHIRLWIND, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  changeCurrentWeather(:Wind, 1)
+  if isWeatherRain?()
+    changeCurrentWeather(:Storm, 1)
+  else
+    changeCurrentWeather(:Wind, 1)
+  end
+  next true
+})
+
+HiddenMoveHandlers::CanUseMove.add(:THUNDER, proc { |move, pkmn, showmsg|
+  next true if Settings::GAME_ID == :IF_HOENN
+})
+HiddenMoveHandlers::UseMove.add(:THUNDER, proc { |move, pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
+  end
+  changeCurrentWeather(:Storm, 1)
   next true
 })
 
@@ -1137,7 +1156,7 @@ HiddenMoveHandlers::UseMove.add(:MAGNETRISE, proc { |move, pokemon|
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
   if $game_player.floating
-    $game_player.floating=false
+    $game_player.floating = false
     $game_player.walk_anime = true
   else
     $game_player.walk_anime = false
@@ -1164,7 +1183,7 @@ HiddenMoveHandlers::UseMove.add(:DEFOG, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
-  current_weather =$game_weather.map_current_weather_type($game_map.map_id)
+  current_weather = $game_weather.map_current_weather_type($game_map.map_id)
   if current_weather == :Fog
     changeCurrentWeather(:None, 1)
     pbMessage(_INTL("The fog cleared out!"))
