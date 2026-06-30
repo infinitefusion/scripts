@@ -258,7 +258,7 @@ def pbDownloadMysteryGift(trainer)
   when cmd_online
     downloadMysteryGifts(MysteryGift::URL,sprites, viewport, trainer)
   when cmd_code
-    code = pbEnterText(_INTL("Enter code to redeem"),1,10)
+    code = pbEnterText(_INTL("Enter code to redeem"),1,20)
     url = MysteryGift::PRIVATE_URL + code + ".json"
     downloadMysteryGifts(url,sprites, viewport, trainer)
   when cmd_cancel
