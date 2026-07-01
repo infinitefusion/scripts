@@ -103,7 +103,7 @@ class OverworldPokemonEvent < Game_Event
 
   def roll_for_special_encounters
     #Mew encounter
-    if rand(1) < Settings::MEW_OW_ENCOUNTER_CHANCE
+    if rand(10000) < Settings::MEW_OW_ENCOUNTER_CHANCE
         @species = :MEW
         @level = 7
     end
