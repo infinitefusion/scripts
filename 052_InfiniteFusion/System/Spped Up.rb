@@ -70,6 +70,27 @@ module Graphics
     $frame = 0
   end
 
+  #TODO: For compatibility with set controls screen
+  # def self.update
+  #   if $CanToggle && Input.trigger?(Input::AUX3)
+  #     $GameSpeed += 1
+  #     $GameSpeed = 0 if $GameSpeed >= SPEEDUP_STAGES.size
+  #   end
+  #   $frame += 1
+  #   if $PokemonSystem && $PokemonSystem.speedup == 1
+  #     speedStage = SPEEDUP_STAGES[$GameSpeed]
+  #   else
+  #     speedStage = 1
+  #     if Input.press?(Input::AUX3) && $CanToggle
+  #       speedStage = self.get_speedup_speed + 1
+  #     end
+  #   end
+  #   return unless $frame % speedStage == 0
+  #   fast_forward_update
+  #   $frame = 0
+  # end
+
+
   def self.get_speedup_speed
     $PokemonSystem.speedup_speed = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed || $PokemonSystem.speedup_speed == 0
     $PokemonSystem.speedup_speed_battles = Settings::DEFAULT_SPEED_UP_SPEED if !$PokemonSystem.speedup_speed_battles || $PokemonSystem.speedup_speed_battles == 0
