@@ -375,7 +375,7 @@ class GameWeather
   end
 
   def roll_for_weather_increase(type)
-    return false if !can_weather_decrease(type)
+    return false if !can_weather_increase(type)
     return rand(100) <= CHANCES_OF_INTENSITY_INCREASE
   end
 
