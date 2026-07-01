@@ -37,7 +37,9 @@ end
 
 def getCurrentLanguage
   return :ENGLISH unless $PokemonSystem&.language
-  case Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1]
+  lang_entry = Settings::LANGUAGES[Settings::GAME_ID]&.[]($PokemonSystem.language)
+  return :ENGLISH unless lang_entry
+  case lang_entry[1]
   when "english.dat"
     return :ENGLISH
   when "french.dat"

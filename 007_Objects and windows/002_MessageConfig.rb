@@ -114,8 +114,8 @@ module MessageConfig
   #-----------------------------------------------------------------------------
 
   def self.pbDefaultSystemFontName
-    current_language = Settings::LANGUAGES[Settings::GAME_ID][$PokemonSystem.language][1]
-    if current_language == "chinese.dat"
+    current_language = getCurrentLanguage
+    if current_language == :CHINESE
       return MessageConfig.pbTryFonts(FONT_NAME_CHINESE)
     end
     return MessageConfig.pbTryFonts(FONT_NAME)
