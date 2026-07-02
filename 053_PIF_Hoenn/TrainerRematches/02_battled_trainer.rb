@@ -195,11 +195,17 @@ class BattledTrainer
         obtainClothes(CLOTHES_SAILOR)
         obtainHat(HAT_SAILOR)
       end
-    when :PSYCHIC_M, :PSYCHIC_F
-      if !hasClothes?(CLOTHES_PSYSHAMAN)
+    when :PSYCHIC_M
+      if !hasClothes?(CLOTHES_PSYSHAMAN_M)
         pbCallBub(2, event.id)
         pbMessage(_INTL("Don't say anything... I know you want this."))
-        obtainClothes(CLOTHES_PSYSHAMAN)
+        obtainClothes(CLOTHES_PSYSHAMAN_M)
+      end
+    when :PSYCHIC_F
+      if !hasClothes?(CLOTHES_PSYSHAMAN_F)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Don't say anything... I know you want this."))
+        obtainClothes(CLOTHES_PSYSHAMAN_F)
       end
     when :POKEFAN_M, :POKEFAN_F
           possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK]

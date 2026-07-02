@@ -60,7 +60,9 @@ CLOTHES_YOUNGSTER_ORAS = "youngsterORAS"
 CLOTHES_YOUNGSTER_HGSS = "YoungsterHGSS"
 
 CLOTHES_LADY = "lady"
-CLOTHES_PSYSHAMAN = "psyshaman"
+CLOTHES_PSYSHAMAN_M = "psyshaman"
+CLOTHES_PSYSHAMAN_F = "psyshamanf"
+
 
 CLOTHES_SWIMMING_M = "BlackSwimTrunks"
 CLOTHES_SAILOR = "WingullOutfit"
