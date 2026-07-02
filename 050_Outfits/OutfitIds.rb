@@ -57,9 +57,14 @@ HAT_FISHERMAN_ORAS = "FishermanORAS"
 
 CLOTHES_YOUNGSTER_RSE = "YoungsterRSE"
 CLOTHES_YOUNGSTER_ORAS = "youngsterORAS"
+CLOTHES_YOUNGSTER_HGSS = "YoungsterHGSS"
+
 CLOTHES_LADY = "lady"
+CLOTHES_PSYSHAMAN = "psyshaman"
 
-
+CLOTHES_SWIMMING_M = "BlackSwimTrunks"
+CLOTHES_SAILOR = "WingullOutfit"
+HAT_SAILOR = "WingullOutfit"
 # Hats
 HAT_TEAM_ROCKET = "rocketcap"
 HAT_POSTMAN = "postman"
@@ -86,6 +91,12 @@ HAT_EEVEE_EARS = "eeveeears"
 HAT_PARASHROOM = "parashroom"
 HAT_AERODACTYL = "aerodactylSkull"
 HAT_TYRUNT = "tyruntmask"
+
+HAT_POOCHYENA_MASK = "PoochyenaHead"
+HAT_LOTAD_MASK = "LotadHead"
+HAT_ZIGZAGOON_MASK = "ZigzagoonHead"
+HAT_WURMPLE_MASK = "WurmpleHead"
+
 
 HAT_DUSKULL_MASK = "duskullmask"
 HAT_SLEEPMASK = "sleepmask"

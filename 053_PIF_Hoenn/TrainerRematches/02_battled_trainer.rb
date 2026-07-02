@@ -171,6 +171,10 @@ class BattledTrainer
         pbCallBub(2, event.id)
         pbMessage(_INTL("I give clothes to all of my friends! Here you go!"))
         obtainClothes(CLOTHES_YOUNGSTER_ORAS)
+      elsif !hasClothes?(CLOTHES_YOUNGSTER_HGSS)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("You moved here from Johto, right? My friend from Johto wears clothes like these!"))
+        obtainClothes(CLOTHES_YOUNGSTER_HGSS)
       end
     when :LADY
       if !hasClothes?(CLOTHES_LADY)
@@ -178,6 +182,33 @@ class BattledTrainer
         pbMessage(_INTL("Oh my goodness, look at your clothes! This simply won't do. Here, I bought this for you!"))
         obtainClothes(CLOTHES_LADY)
       end
+    when :TUBER_M, :TUBER_F   #Todo: Change for Swimmer Male when it's in the game!
+      if !hasClothes?(CLOTHES_SWIMMING_M)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("The beach is so fun! Oh! Wear this before you go swimming in the water!"))
+        obtainClothes(CLOTHES_SWIMMING_M)
+      end
+    when :SAILOR   #Todo: Change for Swimmer Male when it's in the game!
+      if !hasClothes?(CLOTHES_SAILOR)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Sailor! You're a good battler, but you need to wear something this if you want to conquer the sea!"))
+        obtainClothes(CLOTHES_SAILOR)
+        obtainHat(HAT_SAILOR)
+      end
+    when :PSYCHIC_M, :PSYCHIC_F
+      if !hasClothes?(CLOTHES_PSYSHAMAN)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("Don't say anything... I know you want this."))
+        obtainClothes(CLOTHES_PSYSHAMAN)
+      end
+    when :POKEFAN_M, :POKEFAN_F
+          possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK]
+          unobtained_masks = possible_masks.reject { |hatID| hasHat?(hatID) }
+          unless unobtained_masks.empty?
+            pbCallBub(2, event.id)
+            pbMessage(_INTL("\\PN, you're a true Poké Fan like me! Here's a fun mask for you or your Pokémon!"))
+            obtainHat(unobtained_masks.sample)
+          end
     end
 
   end
