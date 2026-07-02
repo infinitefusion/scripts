@@ -44,11 +44,30 @@
 #   end
 # }
 
+class PokemonSystem
+  attr_accessor :current_game_version
+end
+
 def onLoadExistingGame()
   migrateOldSavesToCharacterCustomization()
   clear_all_images()
   loadDateSpecificChanges()
+  checkGameVersionUpdate()
   $PokemonSystem.overworld_encounters = false if Settings::KANTO
+end
+
+def checkGameVersionUpdate
+  if $PokemonSystem.current_game_version != Settings::GAME_VERSION_NUMBER
+    echoln "invalidating cache!"
+    invalidate_sprite_cache
+    $PokemonSystem.current_game_version = Settings::GAME_VERSION_NUMBER
+  end
+end
+
+def invalidate_sprite_cache
+  spritesLoader = BattleSpriteLoader.new
+  spritesLoader.clear_sprites_cache(:CUSTOM)
+  spritesLoader.clear_sprites_cache(:BASE)
 end
 
 def loadDateSpecificChanges()
