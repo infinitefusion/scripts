@@ -3,7 +3,7 @@
 ################
 
 def build_aqua_song(event_id1, event_id2)
-  chorus = _INTL("Oh! \\wt[10]Hey!\\wt[10\\wt[10] Aqua!\\wt[10] We're Team Aqua!")
+  chorus = _INTL("Oh! \\wt[10]Hey!\\wt[10]\\wt[10] Aqua!\\wt[10] We're Team Aqua!")
   add_aqua_song_segment(chorus)
   segment1 = build_aqua_song_pt1(event_id1, event_id2, chorus)
   build_aqua_song_pt2(event_id1, event_id2)
