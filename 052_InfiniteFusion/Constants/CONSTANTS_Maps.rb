@@ -154,7 +154,7 @@ MAP_ROUTE_113 = 973 #todo: Temp
 MAP_ROUTE_119 = 967 #todo: Temp
 MAP_ROUTE_120 = 966 #todo: Temp
 MAP_ROUTE_121 = 965 #todo: Temp
-
+MAP_ROUTE_124 = 962 #todo: Temp
 # Dungeons/Areas
 MAP_PETALBURG_WOODS = 30
 MAP_RUSTURF_TUNNEL = 0

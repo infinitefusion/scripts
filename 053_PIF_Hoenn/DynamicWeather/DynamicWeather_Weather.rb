@@ -40,7 +40,7 @@ class GameWeather
   BASE_CHANCES_OF_WEATHER_MOVE = 10
   DEBUG_PROPAGATION = false
 
-  COLD_MAPS = [MAP_SHOAL_CAVE] # Rain is snow on that map (shoal cave)
+  COLD_MAPS = [MAP_SHOAL_CAVE, MAP_MOSSDEEP, MAP_ROUTE_124] # Rain is snow on that map (shoal cave)
   SNOW_LIMITS = [MAP_ROUTE_121,MAP_PACIFIDLOG] #Snow turns to rain if it reaches these maps
   SOOT_LIMITS = [MAP_ROUTE_113,MAP_FALLARBOR, MAP_ROUTE_111]  #Can't let it propagate too much because then the grass would have to be covered in soot in those maps too....
 
@@ -236,7 +236,6 @@ class GameWeather
     if COLD_MAPS.include?(map_id) || Settings::SNOW_DAY
       type = :Snow if type == :Rain
       type = :Blizzard if type == :Storm
-      type = :None if type == :Sunny
     end
     if SNOW_LIMITS.include?(map_id)
       type = :Wind if type == :Ash

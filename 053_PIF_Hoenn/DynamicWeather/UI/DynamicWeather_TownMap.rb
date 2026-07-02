@@ -12,49 +12,109 @@ class BetterRegionMap
     weather_type = weather_at_location[0]
     weather_intensity = weather_at_location[1]
 
-    weather_name = ""
-    adjective = weather_intensity_adjective(weather_intensity,weather_type,)
-    case weather_type
-    when :Sandstorm
-      weather_name = _INTL("Sandstorm")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Snow
-      weather_name = _INTL("{1} snow", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :StrongWinds,
-      weather_name = _INTL("Heavy Winds")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :HeavyRain,
-      weather_name = _INTL("Heavy Rain")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :HarshSun
-      weather_name = _INTL("Drought")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Sunny
-      weather_name = _INTL("{1} sunshine", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Rain
-      weather_name = _INTL("{1} rain", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Fog
-      weather_name = _INTL("{1} fog", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Wind
-      weather_name = _INTL("{1} wind", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Storm
-      weather_name = _INTL("{1} thunderstorm", adjective)
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    when :Ash
-      weather_name = _INTL("Volcanic Ash")
-      intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
-    end
-    if weather_name && intensity_text
+    weather_caption = get_weather_caption(weather_type,weather_intensity)
+    intensity_text = get_weather_intensity_text(weather_type,weather_intensity,selected_map)
+
+    if weather_caption && intensity_text
       Kernel.pbClearText
-      Kernel.pbDisplayText(weather_name, 400,25,9999999, pbColor(:LIGHT_TEXT_MAIN_COLOR), pbColor(:LIGHT_TEXT_SHADOW_COLOR))
+      Kernel.pbDisplayText(weather_caption, 400,25,9999999, pbColor(:LIGHT_TEXT_MAIN_COLOR), pbColor(:LIGHT_TEXT_SHADOW_COLOR))
       Kernel.pbDisplayText(intensity_text, 400,50,9999999,pbColor(:LIGHT_TEXT_MAIN_COLOR), pbColor(:LIGHT_TEXT_SHADOW_COLOR))
     end
     echoln selected_map
+  end
+
+
+    #Captions need to be enumerated like this to allow for proper translations
+  def get_weather_caption(weather_type, intensity)
+
+    case weather_type
+    when :Sandstorm
+        return _INTL("Sandstorm")
+    when :Snow
+      case intensity
+      when -1..2
+        return _INTL("Light Snow")
+      when 3..4
+        return _INTL("Heavy Snow")
+      when 7..8
+        return _INTL("Snowstorm")
+      else # 9–10
+        return _INTL("Blizzard")
+      end
+    when :StrongWinds
+        return _INTL("Heavy Winds")
+    when :HeavyRain
+      return _INTL("Heavy Rain")
+    when :HarshSun
+        return _INTL("Drought")
+    when :Sunny
+      case intensity
+      when -1..2
+        return _INTL("Mild sunshine")
+      when 3..4
+        return _INTL("Warm sunshine")
+      when 5..6
+        return _INTL("Bright sunshine")
+      when 7..8
+        return _INTL("Hot sunshine")
+      else # 9–10
+        return _INTL("Scorching sun")
+      end
+    when :Rain
+      case intensity
+      when -1..2
+        return _INTL("Light rain")
+      when 3..4
+        return _INTL("Moderate rain")
+      when 5..6
+        return _INTL("Heavy rain")
+      when 7..8
+        return _INTL("Severe rain")
+      else # 9–10
+        return _INTL("Extreme rain")
+      end
+    when :Fog
+      case intensity
+      when -1..2
+        return _INTL("Thin fog")
+      when 3..4
+        return _INTL("Moderate fog")
+      when 5..6
+        return _INTL("Thick fog")
+      when 7..8
+        return _INTL("Dense fog")
+      else # 9–10
+        return _INTL("Very dense fog")
+      end
+    when :Wind
+      case intensity
+      when -1..2
+        return _INTL("Light wind")
+      when 3..4
+        return _INTL("Moderate wind")
+      when 5..6
+        return _INTL("Strong wind")
+      when 7..8
+        return _INTL("High wind")
+      else # 9–10
+        return _INTL("Extreme wind")
+      end
+    when :Storm
+      case intensity
+      when -1..2
+        return _INTL("Light thunderstorm")
+      when 3..4
+        return _INTL("Moderate thunderstorm")
+      when 5..6
+        return _INTL("Heavy thunderstorm")
+      when 7..8
+        return _INTL("Severe thunderstorm")
+      else # 9–10
+        return _INTL("Extreme thunderstorm")
+      end
+    when :Ash
+      return _INTL("Volcanic Ash")
+    end
   end
 
   def get_weather_intensity_text(weather_type, weather_intensity,map_id)
