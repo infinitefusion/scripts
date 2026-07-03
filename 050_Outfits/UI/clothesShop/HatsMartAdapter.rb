@@ -215,7 +215,7 @@ class HatsMartAdapter < OutfitsMartAdapter
   end
   def getSpecialItemDescription(specialType)
     hair_situation = isBald?() ? "bald head" : "fabulous hair"
-    return _INTL("Go without a hat and show off your {}!",hair_situation)
+    return _INTL("Go without a hat and show off your {1}!",hair_situation)
   end
 
   def doSpecialItemAction(specialType, item = nil)
