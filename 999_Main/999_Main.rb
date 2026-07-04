@@ -18,8 +18,8 @@ def handleReplaceExistingSprites()
   commands << _INTL("Replace all the old sprites with the new ones")
   #commands << "Import all the new sprites as alts"
 
-  messageSingular = "While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game."
-  messagePlural = "While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game."
+  messageSingular = _INTL("While importing custom sprites, the game has detected that {1} new custom sprite already has a version that exist in the game.")
+  messagePlural = _INTL("While importing custom sprites, the game has detected that {1} new custom sprites already have versions that exist in the game.")
 
   messageText = spritesToReplaceList.size==1 ? messageSingular : messagePlural
   message = _INTL(messageText,spritesToReplaceList.length.to_s)
