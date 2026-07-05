@@ -282,11 +282,7 @@ class FightMenuDisplay < BattleMenuBase
       @infoOverlay = BitmapSprite.new(Graphics.width,Graphics.height-self.y,viewport)
       @infoOverlay.x = self.x
       @infoOverlay.y = self.y
-      if getCurrentLanguage == :CHINESE
-        pbSetSmallFont(@infoOverlay.bitmap)
-      else
-        pbSetNarrowFont(@infoOverlay.bitmap)
-      end
+      pbSetNarrowFont(@infoOverlay.bitmap)
       addSprite("infoOverlay",@infoOverlay)
       # Create type icon
       @typeIcon = SpriteWrapper.new(viewport)
