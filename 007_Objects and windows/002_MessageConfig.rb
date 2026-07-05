@@ -15,11 +15,8 @@ module MessageConfig
   NARROW_FONT_SIZE        = 29
 
   FONT_NAME_CHINESE        = "Fusion Poke Pixel Normal zh_hans"
-  FONT_SIZE_CHINESE        = 29
   SMALL_FONT_NAME_CHINESE  = "Fusion Poke Pixel Small zh_hans"
-  SMALL_FONT_SIZE_CHINESE  = 25
   NARROW_FONT_NAME_CHINESE = "Fusion Poke Pixel Narrow zh_hans"
-  NARROW_FONT_SIZE_CHINESE = 29
 
   BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
   BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
@@ -449,7 +446,7 @@ end
 def pbSetSystemFont(bitmap)
   if getCurrentLanguage == :CHINESE
     bitmap.font.name  = MessageConfig::FONT_NAME_CHINESE
-    bitmap.font.size  = MessageConfig::FONT_SIZE_CHINESE
+    bitmap.font.size  = MessageConfig::FONT_SIZE
   else
     bitmap.font.name  = MessageConfig.pbGetSystemFontName
     bitmap.font.size  = MessageConfig::FONT_SIZE
@@ -460,7 +457,7 @@ end
 def pbSetSmallFont(bitmap)
   if getCurrentLanguage == :CHINESE
     bitmap.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
-    bitmap.font.size = MessageConfig::SMALL_FONT_SIZE_CHINESE
+    bitmap.font.size = MessageConfig::SMALL_FONT_SIZE
     return
   end
   bitmap.font.name = MessageConfig.pbGetSmallFontName
@@ -471,7 +468,7 @@ end
 def pbSetNarrowFont(bitmap)
   if getCurrentLanguage == :CHINESE
     bitmap.font.name = MessageConfig::NARROW_FONT_NAME_CHINESE
-    bitmap.font.size = MessageConfig::NARROW_FONT_SIZE_CHINESE
+    bitmap.font.size = MessageConfig::NARROW_FONT_SIZE
     return
   end
   bitmap.font.name = MessageConfig.pbGetNarrowFontName
