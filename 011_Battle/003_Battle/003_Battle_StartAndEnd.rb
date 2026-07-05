@@ -288,9 +288,10 @@ class PokeBattle_Battle
     when :Hail then pbDisplay(_INTL("Hail is falling."))
     when :HarshSun then pbDisplay(_INTL("The sunlight is extremely harsh."))
     when :HeavyRain then pbDisplay(_INTL("It is raining heavily."))
-    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    #when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
     when :ShadowSky then pbDisplay(_INTL("The sky is shadowy."))
     end
+    pbApplyBattleStartWeatherEffects
     # Terrain announcement
     terrain_data = GameData::BattleTerrain.try_get(@field.terrain)
     pbCommonAnimation(terrain_data.animation) if terrain_data
@@ -308,6 +309,18 @@ class PokeBattle_Battle
     pbOnActiveAll
     # Main battle loop
     pbBattleLoop
+  end
+
+  def pbApplyBattleStartWeatherEffects
+    if @field.weather == :StrongWinds
+      wind_side = [0,1].sample
+      @sides[wind_side].effects[PBEffects::Tailwind] = 4
+      if wind_side == 0
+        pbDisplay(_INTL("The wind is blowing from your side."))
+      else
+        pbDisplay(_INTL("The wind is blowing from the opponent's side."))
+      end
+    end
   end
 
   #=============================================================================
