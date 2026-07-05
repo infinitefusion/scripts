@@ -14,12 +14,12 @@ module MessageConfig
   NARROW_FONT_NAME        = "Power Green Narrow"
   NARROW_FONT_SIZE        = 29
 
-  FONT_NAME_CHINESE        = "Fusion Pixel 12px Mono zh_hans"
-  FONT_SIZE_CHINESE        = 27
-  SMALL_FONT_NAME_CHINESE  = "Fusion Pixel 10px Mono zh_hans"
-  SMALL_FONT_SIZE_CHINESE  = 23
-  NARROW_FONT_NAME_CHINESE = "Fusion Pixel 12px Mono zh_hans" #For now, use the same font as FONT_NAME_CHINESE. Still looking for a more suitable Narrow Font.
-  NARROW_FONT_SIZE_CHINESE = 27
+  FONT_NAME_CHINESE        = "Fusion Poke Pixel Normal zh_hans"
+  FONT_SIZE_CHINESE        = 29
+  SMALL_FONT_NAME_CHINESE  = "Fusion Poke Pixel Small zh_hans"
+  SMALL_FONT_SIZE_CHINESE  = 25
+  NARROW_FONT_NAME_CHINESE = "Fusion Poke Pixel Narrow zh_hans"
+  NARROW_FONT_SIZE_CHINESE = 29
 
   BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
   BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
