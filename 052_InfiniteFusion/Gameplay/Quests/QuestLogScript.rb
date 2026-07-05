@@ -60,7 +60,7 @@ def showEvilTeamMissionMessage(team, title, description, show_description)
   titleColor = team == :MAGMA ? 2 : 1
   textColor = team == :MAGMA ? 2 : 1
 
-  team = team == :MAGMA ? "MAGMA" : "AQUA"
+  team = team == :MAGMA ? _INTL("MAGMA") : _INTL("AQUA")
 
   pbMEPlay("rocketQuest", 80, 110)
 
