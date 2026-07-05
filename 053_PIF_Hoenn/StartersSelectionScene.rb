@@ -205,8 +205,8 @@ class StartersSelectionScene
     @pokemon_category_overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
 
     if is_chinese
-      @pokemon_name_overlay.font.name = MessageConfig::FONT_NAME_CHINESE
-      @pokemon_name_overlay.font.size = 27
+      @pokemon_name_overlay.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
+      @pokemon_name_overlay.font.size = 37
     else
       @pokemon_name_overlay.font.name = MessageConfig.pbGetSmallFontName
       @pokemon_name_overlay.font.size = 50
@@ -214,7 +214,7 @@ class StartersSelectionScene
 
     if is_chinese
       @pokemon_category_overlay.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
-      @pokemon_category_overlay.font.size = 23
+      @pokemon_category_overlay.font.size = 25
     else
       @pokemon_category_overlay.font.name = MessageConfig.pbGetSmallFontName
       @pokemon_category_overlay.font.size = 36
