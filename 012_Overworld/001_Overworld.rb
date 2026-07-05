@@ -654,6 +654,8 @@ module PBMoveRoute
   Script = 45 # 1 param
   PlayAnimation = 46 # 1 param
   FlyForward = 47 # 1 param
+  SetFloatingOn = 48
+  SetFloatingOff = 49
 
   ScriptAsync = 101 # 1 param
 end

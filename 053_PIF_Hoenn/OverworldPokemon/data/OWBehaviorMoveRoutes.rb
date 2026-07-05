@@ -133,6 +133,28 @@ OW_BEHAVIOR_MOVE_ROUTES = {
       RPG::MoveCommand.new(PBMoveRoute::End)
     ],
 
+
+    #WIND
+    :blown_away => [
+      RPG::MoveCommand.new(PBMoveRoute::ThroughOn),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeFreq, [6]),
+      RPG::MoveCommand.new(PBMoveRoute::ChangeSpeed, 3),
+
+      RPG::MoveCommand.new(PBMoveRoute::SetFloatingOn),
+      RPG::MoveCommand.new(PBMoveRoute::DirectionFixOn),
+      RPG::MoveCommand.new(PBMoveRoute::Left),
+      RPG::MoveCommand.new(PBMoveRoute::DirectionFixOff),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::LowerLeft),
+      RPG::MoveCommand.new(PBMoveRoute::DirectionFixOn),
+      RPG::MoveCommand.new(PBMoveRoute::Left),
+      RPG::MoveCommand.new(PBMoveRoute::DirectionFixOff),
+      RPG::MoveCommand.new(PBMoveRoute::TurnRandom),
+      RPG::MoveCommand.new(PBMoveRoute::UpperLeft),
+
+      RPG::MoveCommand.new(PBMoveRoute::End)
+    ],
+
   },
 
   :noticed => {

@@ -19,16 +19,15 @@ class OverworldPokemonEvent < Game_Event
 
   DISGUISED_POKEMON = [:DITTO, :MEW, :ZORUA, :ZOROARK]
   CASTFORM_FORMS = [:CASTFORM, :CASTFORM_SUNNY, :CASTFORM_RAINY, :CASTFORM_SNOWY]
-  UPDATE_TIME = 4 #Nb. of frames for the update_behavior loop
+  UPDATE_TIME = 4 # Nb. of frames for the update_behavior loop
 
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
-    #return unless @map_id == $game_map.map_id
+    # return unless @map_id == $game_map.map_id
     @species = species
     @level = level
     roll_for_special_encounters
     @behavior_roaming = behavior_roaming if behavior_roaming
     @behavior_noticed = behavior_noticed if behavior_noticed
-
 
     @terrain = terrain
     @disguised = false
@@ -85,7 +84,7 @@ class OverworldPokemonEvent < Game_Event
     @is_flying = @character_name == @flying_sprite
     @is_swimming = false
     @step_anime = @is_flying
-    @forced_z = 300 if @is_flying && $PokemonGlobal.boat#@always_on_top = @is_flying
+    @forced_z = 300 if @is_flying && $PokemonGlobal.boat #@always_on_top = @is_flying
     @part_of_pokeradar_chain = is_pokeradar_chain
     if @terrain == :Water
       set_swimming
@@ -102,10 +101,10 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def roll_for_special_encounters
-    #Mew encounter
+    # Mew encounter
     if rand(10000) < Settings::MEW_OW_ENCOUNTER_CHANCE
-        @species = :MEW
-        @level = 7
+      @species = :MEW
+      @level = 7
     end
   end
 
@@ -115,6 +114,7 @@ class OverworldPokemonEvent < Game_Event
     species_data = GameData::Species.get(@species)
     initialize_sprite(@terrain, species_data)
   end
+
   def is_pokeradar_chain
     if $PokemonTemp.pokeradar
       pokeradar_species = $PokemonTemp.pokeradar[0]
@@ -126,7 +126,7 @@ class OverworldPokemonEvent < Game_Event
   def setCastformToCurrentWeather
     case @weather_type_at_spawn
     when :Rain, :Storm, :HeavyRain
-      @species =:CASTFORM_RAINY
+      @species = :CASTFORM_RAINY
     when :Sunny, :HarshSun, :Sandstorm
       @species = :CASTFORM_SUNNY
     when :Wind, :StrongWinds, :Snow, :Blizzard
@@ -207,7 +207,6 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
-
   def initialize_water_sprite
     if @flying_sprite
       @character_name = @flying_sprite
@@ -239,7 +238,7 @@ class OverworldPokemonEvent < Game_Event
     return if instance_variable_get(:@_triggered)
     return if $PokemonTemp.overworld_wild_battle_triggered
     instance_variable_set(:@_triggered, true)
-    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) #unless @current_state == :NOTICED_PLAYER #notice animation already plays instead if the state is roaming
+    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y) # unless @current_state == :NOTICED_PLAYER #notice animation already plays instead if the state is roaming
     turn_toward_player
     playCry(@species)
     @pokemon.ow_coordinates = [@x, @y]
@@ -376,7 +375,7 @@ class OverworldPokemonEvent < Game_Event
     else
       @nearby_notice_timer = 0
     end
-    @nearby_notice_timer =0 if should_start
+    @nearby_notice_timer = 0 if should_start
     return should_start
   end
 
@@ -511,7 +510,7 @@ class OverworldPokemonEvent < Game_Event
       return
     end
 
-    effective_behavior = @behavior_noticed || @behavior_roaming  #fallback on @behavior_roaming if no @behavior_noticed
+    effective_behavior = @behavior_noticed || @behavior_roaming # fallback on @behavior_roaming if no @behavior_noticed
 
     case effective_behavior
     when :random
@@ -555,8 +554,28 @@ class OverworldPokemonEvent < Game_Event
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][@behavior_roaming])
     end
     self.move_frequency = 3
+    check_weather_roaming_behavior
     @move_speed = @roaming_move_speed
     @step_anime = false unless @is_flying || @is_swimming
+  end
+
+  def check_weather_roaming_behavior
+    if @weather_type_at_spawn == :Wind || @weather_type_at_spawn == :Storm
+      wind_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_wind_roaming]
+      if wind_behavior
+        set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][wind_behavior])
+      end
+    elsif @weather_type_at_spawn == :Rain || @weather_type_at_spawn == :Storm
+      rain_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_rain_roaming]
+      if rain_behavior
+        set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][rain_behavior])
+      end
+    elsif @weather_type_at_spawn == :Sunny
+      sun_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_sunny_roaming]
+      if sun_behavior
+        set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][sun_behavior])
+      end
+    end
   end
 
   def set_custom_move_route(move_list, repeating = true)
@@ -574,7 +593,6 @@ class OverworldPokemonEvent < Game_Event
     $PokemonTemp.tempEvents&.each { |_, events| events.delete(self) }
     $PokemonTemp.tempEvents&.delete_if { |_, v| v.empty? }
   end
-
 
   # Additional move types for OW pokemon
   def update_command_new
