@@ -1253,7 +1253,7 @@ def pbDrawTextPositions(bitmap,textpos)
     x = i[1]
     chinese_offset = 0
     if getCurrentLanguage == :CHINESE
-      chinese_offset = -3
+      chinese_offset = -2
     end
     y = i[2] + 6 + chinese_offset
     if i[3]==true || i[3]==1   # right align
