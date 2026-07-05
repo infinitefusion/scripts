@@ -1251,11 +1251,7 @@ def pbDrawTextPositions(bitmap,textpos)
     textsize = bitmap.text_size(i[0])
 
     x = i[1]
-    chinese_offset = 0
-    if getCurrentLanguage == :CHINESE
-      chinese_offset = -2
-    end
-    y = i[2] + 6 + chinese_offset
+    y = i[2] + 6
     if i[3]==true || i[3]==1   # right align
       x -= textsize.width
     elsif i[3]==2 # centered
