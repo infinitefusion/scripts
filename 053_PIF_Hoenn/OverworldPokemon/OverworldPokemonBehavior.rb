@@ -72,6 +72,14 @@ def trigger_overworld_wild_battle
     pb1v3WildBattleSpecific(battler1, battler2, battler3)
   when 1
     battler = $PokemonTemp.overworld_wild_battle_participants[0].pokemon
+    if isWeatherWind?()
+      event_x = $PokemonTemp.overworld_wild_battle_participants[0].x
+      if event_x && event_x > $game_player.x
+        $PokemonTemp.recordBattleRule("windside", 1)  #event to the right of player. Tailwind for event
+      elsif event_x && event_x < $game_player.x
+        $PokemonTemp.recordBattleRule("windside", 0) #player to the right of event. Tailwind for player
+      end
+    end
     pbWildBattleSpecific(battler)
   else
     # shouldn"t happen

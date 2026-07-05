@@ -314,6 +314,8 @@ class PokeBattle_Battle
   def pbApplyBattleStartWeatherEffects
     if @field.weather == :StrongWinds
       wind_side = [0,1].sample
+      echoln @wind_side
+      wind_side = @wind_side.to_i if @wind_side
       @sides[wind_side].effects[PBEffects::Tailwind] = 4
       if wind_side == 0
         pbDisplay(_INTL("The wind is blowing from your side."))
