@@ -55,6 +55,8 @@ class PokemonTemp
     when "outcome", "outcomevar" then rules["outcomeVar"] = var
     when "nopartner" then rules["noPartner"] = true
     when "favoredmoves" then rules["favoredMoves"] = var
+    when "windside" then rules["windSide"] = var
+
     else
       raise _INTL("Battle rule \"{1}\" does not exist.", rule)
     end
@@ -150,6 +152,8 @@ def pbPrepareBattle(battle)
   # Terrain
   battle.defaultTerrain = battleRules["defaultTerrain"] if !battleRules["defaultTerrain"].nil?
   battle.favored_moves = battleRules["favoredMoves"] if !battleRules["favoredMoves"].nil?
+  battle.wind_side = battleRules["windSide"] if !battleRules["windSide"].nil?
+
   # Weather
   if battleRules["defaultWeather"].nil?
     case GameData::Weather.get($game_screen.weather_type).category

@@ -673,6 +673,10 @@ class Game_Character
           playAnimation(command.parameters[0],@x,@y)
         when PBMoveRoute::FlyForward then
           fly_forward
+        when PBMoveRoute::SetFloatingOn then
+          @floating = true
+        when PBMoveRoute::SetFloatingOff then
+          @floating = false
         end
         @move_route_index += 1
       end

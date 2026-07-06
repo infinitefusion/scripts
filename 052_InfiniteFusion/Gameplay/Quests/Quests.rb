@@ -240,7 +240,7 @@ define_quest("rustboro_trash",:FIELD_QUEST,_INTL("Clean Up the Beach!"), _INTL("
 define_quest("rustboro_fusion",:FIELD_QUEST,_INTL("Wild Fusion Study"), _INTL("Help a scientist gather data by getting wild Pokémon to fuse before a battle 3 different times."),_INTL("Rustboro City"),"NPC_scientist_m")
 
 #Dewford
-define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp in Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
+define_quest("dewford_fishing",:FIELD_QUEST,_INTL("The Angler's Rite of Passage"), _INTL("It's tradition to fish a Skrelp near Dewford Town as a rite of passage. Find one and show it to the fisherman!"),_INTL("Dewford Town"),"NPC_Hoenn_Fisherman")
 
 #Slateport
 define_quest("slateport_team_aqua",:AQUA_QUEST,_INTL("Join Team Aqua!"), _INTL("Archie invited you to join Team Aqua. Go meet them at their camp on Slateport Beach if you so choose."),_INTL("Slateport City"),"NPC_Hoenn_Aqua_Archie",MAP_AQUA_CAMP)
