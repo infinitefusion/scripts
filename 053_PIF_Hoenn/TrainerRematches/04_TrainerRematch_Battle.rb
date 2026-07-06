@@ -50,6 +50,17 @@ def evolveRebattledTrainerPokemon(trainer)
   return trainer
 end
 
+def update_items(trainer)
+  return unless $PokemonTemp.battle_npc_used_items
+  $PokemonTemp.battle_npc_used_items.each do |item|
+    if trainer.inventory.include?(item)
+      trainer.inventory.delete(item)
+    end
+  end
+  return trainer
+  $PokemonTemp.battle_npc_used_items=nil
+end
+
 def pokemonAllowedToEvolve(pokemon, evolution_species=nil)
   return false if pokemon.item == :EVERSTONE
   return true
@@ -78,6 +89,7 @@ def generateTrainerRematch(trainer, allow_double = true)
   updated_trainer = makeRebattledTrainerTeamGainExp(trainer, player_won)
   updated_trainer = healRebattledTrainerPokemon(updated_trainer)
   updated_trainer.set_pending_action(false)
+  updated_trainer.update_items(updated_trainer)
   updated_trainer = evolveRebattledTrainerPokemon(updated_trainer)
   trainer.increase_friendship(5)
   trainer.nb_rematches +=1

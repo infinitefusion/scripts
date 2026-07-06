@@ -65,14 +65,20 @@ TRAINER_REMATCH_SPECIFIC_GIFTS = {
   :AROMALADY => [[:PINKNECTAR, :REDNECTAR, :YELLOWNECTAR, :BLUENECTAR], [:LEAFSTONE]],
 }
 
+def should_find_item(trainer)
+  base_rate = 30 # percent
+  return rand(100) < base_rate
+end
+
 def should_give_item(trainer)
   return false unless trainer.friendship_level >= 2
+  return false if trainer.inventory.empty?
   base_rate = 30 # percent
   item_chances = base_rate + (trainer.friendship / 10).floor
   return rand(100) < item_chances
 end
 
-def select_gift_item(trainer)
+def find_random_trainer_item(trainer)
   rare_item_chances = 5 + (trainer.friendship / 5).floor
   chance_trainer_class_item = 40
 
@@ -80,6 +86,7 @@ def select_gift_item(trainer)
   typed_items = TRAINER_REMATCH_GIFTS[trainer.favorite_type]
 
   items_list = typed_items
+  items_list += trainer.inventory
   if TRAINER_REMATCH_SPECIFIC_GIFTS.has_key?(trainer.trainerType) && rand(100) < chance_trainer_class_item
     items_list = TRAINER_REMATCH_GIFTS[trainer.trainerType] if TRAINER_REMATCH_GIFTS[trainer.trainerType]
   end
@@ -89,4 +96,9 @@ def select_gift_item(trainer)
     items = items_list[0] + TRAINER_REMATCH_GIFTS[:ANY]
     return items.sample
   end
+end
+
+def select_gift_item(trainer)
+  return nil unless trainer.inventory
+  return trainer.inventory.sample
 end

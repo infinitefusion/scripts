@@ -308,7 +308,7 @@ def checkInputDirection
 end
 
 def getOnBoat
-  set_player_graphics("boat_briney")
+  set_player_graphics("boat_briney_peeko")
   $PokemonTemp.prevent_ow_battles = true
   $PokemonGlobal.boat = true
 end

@@ -12,6 +12,7 @@ class PokemonTemp
   attr_accessor :encounterTriggered
   attr_accessor :encounterType
   attr_accessor :evolutionLevels
+  attr_accessor :battle_npc_used_items
 
   def battleRules
     @battleRules = {} if !@battleRules
@@ -551,6 +552,7 @@ def pbTrainerBattleCore(*args)
     pbMessage(_INTL("SKIPPING BATTLE...")) if $DEBUG
     pbMessage(_INTL("AFTER WINNING...")) if $DEBUG && $Trainer.able_pokemon_count > 0
     pbSet(outcomeVar, ($Trainer.able_pokemon_count == 0) ? 0 : 1) # Treat it as undecided/a win
+    $PokemonTemp.battle_npc_used_items = []
     $PokemonTemp.clearBattleRules
     $PokemonGlobal.nextBattleBGM = nil
     $PokemonGlobal.nextBattleME = nil
@@ -709,7 +711,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
 
     npc_trainer = NPCTrainer.new(trainer.trainerName, trainer.trainerType, nil, trainer.custom_appearance)
     npc_trainer.lose_text = loseDialog
-    npc_trainer.items = trainer.foundItems
+    npc_trainer.items = trainer.inventory
     npc_trainer.party = party
     Events.onTrainerPartyLoad.trigger(nil, npc_trainer)
     battle_trainers << npc_trainer

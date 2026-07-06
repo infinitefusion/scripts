@@ -19,7 +19,7 @@ class BattledTrainer
   #
   # Healing items that are in that list can be used by the trainer in rematches
   #
-  attr_accessor :foundItems
+  attr_accessor :inventory
   attr_accessor :nb_rematches
 
   # What the trainer currently wants to do
@@ -55,8 +55,9 @@ class BattledTrainer
     @trainerKey = trainerKey
     @trainerType = trainerType
     @trainerName = trainerName
-    @currentTeam = loadOriginalTrainerTeam(trainerVersion)
-    @foundItems = []
+    original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
+    @currentTeam = loadOriginalTrainerTeam(trainerVersion , original_trainer)
+    @inventory = original_trainer.items || []
     @nb_rematches = 0
     @currentStatus = :IDLE
     @previous_status = :IDLE
@@ -291,8 +292,8 @@ class BattledTrainer
     return pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
   end
 
-  def loadOriginalTrainerTeam(trainerVersion = 0)
-    original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
+  def loadOriginalTrainerTeam(original_trainer, trainerVersion = 0)
+    original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion) unless original_trainer
 
     return if !original_trainer
     echoln "Loading Trainer #{@trainerType}"

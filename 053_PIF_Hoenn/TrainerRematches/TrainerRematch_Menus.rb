@@ -99,7 +99,10 @@ def postBattleActionsMenu(trainer=nil, event_id=nil)
   case options[choice]
   when rematchCommand
     doPostBattleAction(:BATTLE,trainer)
+    trainer.inventory = [] unless trainer.inventory
+    try_find_item(trainer)
     try_give_gift(trainer,event_id)
+    echoln trainer.inventory
   when viewTeamCommand
     pbFadeOutIn {
       screen = ContactsAppInfoPageScreen.new
@@ -136,10 +139,22 @@ def postBattleActionsMenu(trainer=nil, event_id=nil)
   $PokemonGlobal.nextBattleBack=nil
 end
 
+def try_find_item(trainer)
+  if should_find_item(trainer)
+    item = find_random_trainer_item(trainer)
+    trainer.inventory = [] unless trainer.inventory
+    trainer.inventory << item
+    updateRebattledTrainer(trainer)
+  end
+end
 def try_give_gift(trainer,event_id=nil)
   if should_give_item(trainer)
     item = select_gift_item(trainer)
-    echoln item
+    return unless item
+    if trainer.inventory.include?(item)
+      trainer.inventory.delete(item)
+      updateRebattledTrainer(trainer)
+    end
     showGiftDialog(trainer,event_id)
     pbReceiveItem(item)
     return true
