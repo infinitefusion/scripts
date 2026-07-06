@@ -748,7 +748,7 @@ module Compiler
           # Rewrite penultimate page
           list.clear
           push_move_route_and_wait(list,0,[   # Move Route for door opening
-             PBMoveRoute::PlaySE,RPG::AudioFile.new("Door enter"),PBMoveRoute::Wait,2,
+             PBMoveRoute::PlaySE,RPG::AudioFile.new("Entering Door"),PBMoveRoute::Wait,2,
              PBMoveRoute::TurnLeft,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnUp,PBMoveRoute::Wait,2])
