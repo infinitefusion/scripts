@@ -125,6 +125,7 @@ Coordinated by anthonygourmand
 翻译、UI：Leon     (Leonnovation)
 技术支持：白崎时绘  (Shiroe)
 文本参考：阿省呦    (Sheng)
+标题图像：未蓝啊    (Weilan)
 字体支持：狼人小林  (FusionPixel)
 其他支持：小鱼转晴  (XploreLight)
 
