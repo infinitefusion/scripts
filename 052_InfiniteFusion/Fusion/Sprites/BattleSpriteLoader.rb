@@ -240,6 +240,8 @@ class BattleSpriteLoader
   #todo refactor by using get_triple_fusion_components()
   def getSpecialSpriteName(dexNum)
     base_path = "Graphics/Battlers/special/"
+    echoln dexNum
+    echoln Settings::ZAPMOLCUNO_NB + 31
     case dexNum
     when Settings::ZAPMOLCUNO_NB
       return sprintf(base_path + "144.145.146")
@@ -308,6 +310,12 @@ class BattleSpriteLoader
       return sprintf(base_path + "480.483.486")
     when Settings::ZAPMOLCUNO_NB + 30
       return sprintf(base_path + "481.484.487")
+    when Settings::ZAPMOLCUNO_NB + 31 #TELEMAUV
+      return sprintf(base_path + "000")
+    when Settings::ZAPMOLCUNO_NB + 32 #Minior/Solrock/Lunatone (meteor)
+      return sprintf(base_path + "498.544.545")
+    when Settings::ZAPMOLCUNO_NB + 33 #Minior/Solrock/Lunatone (core)
+      return sprintf(base_path + "499.544.545")
     else
       return sprintf(base_path + "000")
     end
