@@ -56,7 +56,7 @@ class BattledTrainer
     @trainerType = trainerType
     @trainerName = trainerName
     original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
-    @currentTeam = loadOriginalTrainerTeam(trainerVersion , original_trainer)
+    @currentTeam = loadOriginalTrainerTeam(trainerVersion, original_trainer)
     @inventory = original_trainer.items || []
     @nb_rematches = 0
     @currentStatus = :IDLE
@@ -112,6 +112,27 @@ class BattledTrainer
     return @friendship_level
   end
 
+  def list_battle_items
+    @inventory = [] unless @inventory
+    battle_items = []
+    @inventory.each do |item_id|
+      item = GameData::Item.get(item_id)
+      can_use_in_battle = item.has_battle_use? && !item.is_poke_ball?
+      battle_items << item_id if can_use_in_battle
+    end
+    return battle_items
+  end
+
+  def list_evolution_items
+    @inventory = [] unless @inventory
+    evo_items = []
+    @inventory.each do |item_id|
+      item = GameData::Item.get(item_id)
+      evo_items << item_id if item.is_evolution_stone?
+    end
+    return evo_items
+  end
+
   def increase_friendship(amount)
     @friendship = 0 if !@friendship
     @friendship_level = 0 if !@friendship_level
@@ -139,6 +160,51 @@ class BattledTrainer
         # pbMessage(_INTL("You can now partner up with them!"))
       end
       echoln "#{@trainerName}'s friendship level increased to #{@friendship_level}!"
+    end
+  end
+
+  def process_party_pokemon_held_items
+    store_held_item_chance = 25
+    store_evolution_item_chance = 70
+    store_battle_item_chance = 80
+    chance_to_give_item = 60
+
+    @currentTeam.each do |pokemon|
+      next unless pokemon.item
+      next if pokemon.item.id == :EVERSTONE
+      held_item = pokemon.item
+      is_holdable_item = HELD_ITEMS.include?(held_item.id)
+      next if is_holdable_item
+
+      is_evolution_item = held_item.is_evolution_stone?
+      is_battle_item = held_item.has_battle_use?
+
+      chance_to_store = store_held_item_chance
+      chance_to_store = store_evolution_item_chance if is_evolution_item
+      chance_to_store = store_battle_item_chance if is_battle_item
+      if rand(100) <= chance_to_store
+        @inventory << held_item.id
+        pokemon.item = nil
+      end
+    end
+
+    @inventory.each do |item|
+      echoln item
+      is_holdable_item = HELD_ITEMS.include?(item)
+      if is_holdable_item && rand(100) <= chance_to_give_item
+        party_pokemon_without_items = []
+        # give to random party member
+        party_index = 0
+        @currentTeam.each do |pokemon|
+          party_pokemon_without_items << party_index unless pokemon.item
+          party_index+=1
+        end
+        unless party_pokemon_without_items.empty?
+          chosen_pokemon_index= party_pokemon_without_items.sample
+          @currentTeam[chosen_pokemon_index].item = item
+          echoln "#{@trainerType} #{@trainerName} gave a #{item} to #{@currentTeam[chosen_pokemon_index].name}"
+        end
+      end
     end
   end
 
@@ -183,13 +249,13 @@ class BattledTrainer
         pbMessage(_INTL("Oh my goodness, look at your clothes! This simply won't do. Here, I bought this for you!"))
         obtainClothes(CLOTHES_LADY)
       end
-    when :TUBER_M, :TUBER_F   #Todo: Change for Swimmer Male when it's in the game!
+    when :TUBER_M, :TUBER_F # Todo: Change for Swimmer Male when it's in the game!
       if !hasClothes?(CLOTHES_SWIMMING_M)
         pbCallBub(2, event.id)
         pbMessage(_INTL("The beach is so fun! Oh! Wear this before you go swimming in the water!"))
         obtainClothes(CLOTHES_SWIMMING_M)
       end
-    when :SAILOR   #Todo: Change for Swimmer Male when it's in the game!
+    when :SAILOR # Todo: Change for Swimmer Male when it's in the game!
       if !hasClothes?(CLOTHES_SAILOR)
         pbCallBub(2, event.id)
         pbMessage(_INTL("Sailor! You're a good battler, but you need to wear something this if you want to conquer the sea!"))
@@ -209,13 +275,13 @@ class BattledTrainer
         obtainClothes(CLOTHES_PSYSHAMAN_F)
       end
     when :POKEFAN_M, :POKEFAN_F
-          possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK]
-          unobtained_masks = possible_masks.reject { |hatID| hasHat?(hatID) }
-          unless unobtained_masks.empty?
-            pbCallBub(2, event.id)
-            pbMessage(_INTL("\\PN, you're a true Poké Fan like me! Here's a fun mask for you or your Pokémon!"))
-            obtainHat(unobtained_masks.sample)
-          end
+      possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK]
+      unobtained_masks = possible_masks.reject { |hatID| hasHat?(hatID) }
+      unless unobtained_masks.empty?
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("\\PN, you're a true Poké Fan like me! Here's a fun mask for you or your Pokémon!"))
+        obtainHat(unobtained_masks.sample)
+      end
     end
 
   end
@@ -292,7 +358,7 @@ class BattledTrainer
     return pbLoadTrainer(@trainerType, @trainerName, trainerVersion)
   end
 
-  def loadOriginalTrainerTeam(original_trainer, trainerVersion = 0)
+  def loadOriginalTrainerTeam(trainerVersion = 0, original_trainer=nil)
     original_trainer = pbLoadTrainer(@trainerType, @trainerName, trainerVersion) unless original_trainer
 
     return if !original_trainer

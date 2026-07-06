@@ -711,7 +711,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
 
     npc_trainer = NPCTrainer.new(trainer.trainerName, trainer.trainerType, nil, trainer.custom_appearance)
     npc_trainer.lose_text = loseDialog
-    npc_trainer.items = trainer.inventory
+    npc_trainer.items = trainer.list_battle_items
     npc_trainer.party = party
     Events.onTrainerPartyLoad.trigger(nil, npc_trainer)
     battle_trainers << npc_trainer

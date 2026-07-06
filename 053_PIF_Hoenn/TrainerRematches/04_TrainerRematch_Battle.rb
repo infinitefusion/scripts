@@ -38,6 +38,15 @@ def evolveRebattledTrainerPokemon(trainer)
   updated_team = []
   for pokemon in trainer.currentTeam
     evolution_species = pokemon.check_evolution_on_level_up(false)
+    unless evolution_species  #Level up evolution has priority over stone evolution
+      trainer.list_evolution_items.each do |evolution_item|
+        evolution_species = pokemon.check_evolution_on_use_item(evolution_item)
+        if evolution_species
+          trainer.inventory.delete(evolution_item)
+        end
+      end
+    end
+
     if evolution_species && pokemonAllowedToEvolve(pokemon, evolution_species)
       trainer.log_evolution_event(pokemon.species, evolution_species)
       trainer.set_pending_action(true)

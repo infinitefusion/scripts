@@ -185,7 +185,9 @@ def unfuse_random_team_pokemon(trainer)
   head_pokemon = get_head_id_from_symbol(pokemon_to_unfuse.species)
 
   level = calculateUnfuseLevelOldMethod(pokemon_to_unfuse,false)
-
+  if pokemon_to_unfuse.item
+    trainer.inventory << pokemon_to_unfuse.item.id
+  end
   trainer.currentTeam.delete(pokemon_to_unfuse)
   original_trainer =pbLoadTrainer(trainer.trainerType,trainer.trainerName,0)
   trainer.currentTeam.push(Pokemon.new(body_pokemon,level,original_trainer))

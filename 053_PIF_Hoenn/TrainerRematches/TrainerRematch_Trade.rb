@@ -231,8 +231,10 @@ def generateTrainerTradeOffer(trainer)
       trainer.increase_friendship(10) if  GameData::Type.exists?(trainer.favorite_type) && offered_pokemon.hasType?(trainer.favorite_type)
       updated_party.delete(offered_pokemon)
       updated_party << chosen_pokemon.clone
+
       trainer.previous_trade_timestamp = Time.now
       trainer.increase_friendship(20)
+      trainer.process_party_pokemon_held_items
       return trainer
     end
   end
