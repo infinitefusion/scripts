@@ -156,10 +156,13 @@ class BattledTrainer
         $Trainer.nb_npc_friends = 0 unless $Trainer.nb_npc_friends
         $Trainer.nb_npc_friends += 1 # odds of shiny pokemon increases slightly the more NPCs at matx friendship you have
       when 3
-        tryGiftTrainerClothes(@trainerType)
         # pbMessage(_INTL("You can now partner up with them!"))
       end
       echoln "#{@trainerName}'s friendship level increased to #{@friendship_level}!"
+    end
+    if @friendship_level >= 3 && !@gave_clothes
+      tryGiftTrainerClothes(@trainerType)
+      @gave_clothes = true
     end
   end
 
