@@ -255,7 +255,6 @@ def pbAddOutfitTextMessages
       texts << entry["name"] if entry["name"]
       texts << entry["description"] if entry["description"]
     end
-    p texts.size
   end
 
   MessageTypes.addMessagesAsHash(MessageTypes::OutfitTexts, texts)
