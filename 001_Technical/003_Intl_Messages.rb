@@ -191,6 +191,7 @@ def pbSetTextMessages
       end
     end
     pbAddTrainerTextMessages
+    pbAddOutfitTextMessages
   rescue Hangup
   end
   Graphics.update
@@ -224,6 +225,40 @@ def pbAddTrainerTextMessages
   MessageTypes.addMessagesAsHash(MessageTypes::TrainerLoseText, loseTexts)
   MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech, speeches)
   MessageTypes.addMessagesAsHash(MessageTypes::TrainerInfoText, infoTexts)
+end
+
+def pbCollectOutfitTexts(obj, texts)
+  case obj
+  when Hash
+    texts << obj["name"] if obj["name"].is_a?(String)
+    texts << obj["description"] if obj["description"].is_a?(String)
+    obj.each_value { |v| pbCollectOutfitTexts(v, texts) }
+  when Array
+    obj.each { |v| pbCollectOutfitTexts(v, texts) }
+  end
+end
+
+def pbAddOutfitTextMessages
+  texts = []
+
+  files = [
+    Settings::CLOTHES_DATA_PATH,
+    Settings::HAIRSTYLE_DATA_PATH,
+    Settings::HATS_DATA_PATH
+  ]
+
+  files.each do |file|
+    json_data = File.read(file)
+    data = HTTPLite::JSON.parse(json_data)
+
+    data.each do |entry|
+      texts << entry["name"] if entry["name"]
+      texts << entry["description"] if entry["description"]
+    end
+    p texts.size
+  end
+
+  MessageTypes.addMessagesAsHash(MessageTypes::OutfitTexts, texts)
 end
 
 def pbEachIntlSection(file)
@@ -657,6 +692,7 @@ module MessageTypes
   RibbonNames = 25
   RibbonDescriptions = 26
   TrainerInfoText = 27
+  OutfitTexts = 28
   @@messages = Messages.new
   @@messagesFallback = Messages.new("Data/messages.dat", true)
 
@@ -761,6 +797,10 @@ end
 
 # Replaces first argument with a localized version and formats the other
 # parameters by replacing {1}, {2}, etc. with those placeholders.
+def _OUTFIT(str)
+  return MessageTypes.getFromHash(MessageTypes::OutfitTexts, str)
+end
+
 def _INTL(*arg)
   begin
     string = MessageTypes.getFromHash(MessageTypes::ScriptTexts, arg[0])
