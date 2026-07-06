@@ -316,6 +316,8 @@ class BattleSpriteLoader
       return sprintf(base_path + "498.544.545")
     when Settings::ZAPMOLCUNO_NB + 33 #Minior/Solrock/Lunatone (core)
       return sprintf(base_path + "499.544.545")
+    when Settings::ZAPMOLCUNO_NB + 34 #Stunfisk, bruxish, luvdisc
+      return sprintf(base_path + "420.469.501")
     else
       return sprintf(base_path + "000")
     end
