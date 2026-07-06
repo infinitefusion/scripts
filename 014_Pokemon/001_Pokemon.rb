@@ -1532,6 +1532,18 @@ class Pokemon
           changeFormSpecies(:MINIOR_C, :MINIOR_M)
         end
       end
+
+      if @species == :TRIPLE_CELESTIAL_M
+        if @hp <= (@totalhp / 2)
+          changeFormSpecies(:TRIPLE_CELESTIAL_M, :TRIPLE_CELESTIAL_C)
+        end
+      end
+      if @species == :TRIPLE_CELESTIAL_C
+        if @hp > (@totalhp / 2)
+          changeFormSpecies(:TRIPLE_CELESTIAL_C, :TRIPLE_CELESTIAL_M)
+        end
+      end
+
     end
   end
 
