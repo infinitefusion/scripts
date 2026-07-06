@@ -42,7 +42,8 @@ def evolveRebattledTrainerPokemon(trainer)
       trainer.list_evolution_items.each do |evolution_item|
         evolution_species = pokemon.check_evolution_on_use_item(evolution_item)
         if evolution_species
-          trainer.inventory.delete(evolution_item)
+          index = trainer.inventory.index(evolution_item)
+          trainer.inventory.delete_at(index) if index
         end
       end
     end
@@ -63,7 +64,8 @@ def update_items(trainer)
   return unless $PokemonTemp.battle_npc_used_items
   $PokemonTemp.battle_npc_used_items.each do |item|
     if trainer.inventory.include?(item)
-      trainer.inventory.delete(item)
+      index = trainer.inventory.index(item)
+      trainer.inventory.delete_at(index) if index
     end
   end
   return trainer

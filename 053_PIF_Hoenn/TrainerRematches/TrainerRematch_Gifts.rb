@@ -88,7 +88,8 @@ def find_random_trainer_item(trainer)
   typed_items = TRAINER_REMATCH_GIFTS[trainer.favorite_type]
 
   items_list = typed_items
-  items_list += trainer.inventory
+  items_list[0] += trainer.inventory
+
   if TRAINER_REMATCH_SPECIFIC_GIFTS.has_key?(trainer.trainerType) && rand(100) < chance_trainer_class_item
     items_list = TRAINER_REMATCH_GIFTS[trainer.trainerType] if TRAINER_REMATCH_GIFTS[trainer.trainerType]
   end

@@ -166,30 +166,35 @@ class BattledTrainer
   def process_party_pokemon_held_items
     store_held_item_chance = 25
     store_evolution_item_chance = 70
-    store_battle_item_chance = 80
+    store_usable_item_chance = 80
+
     chance_to_give_item = 60
 
+    #Move pokemon held items to inventory
     @currentTeam.each do |pokemon|
       next unless pokemon.item
       next if pokemon.item.id == :EVERSTONE
       held_item = pokemon.item
       is_holdable_item = HELD_ITEMS.include?(held_item.id)
-      next if is_holdable_item
+      echoln "#{held_item} #{is_holdable_item}"
+      next if is_holdable_item && rand(100) >= store_held_item_chancex
 
       is_evolution_item = held_item.is_evolution_stone?
       is_battle_item = held_item.has_battle_use?
 
       chance_to_store = store_held_item_chance
       chance_to_store = store_evolution_item_chance if is_evolution_item
-      chance_to_store = store_battle_item_chance if is_battle_item
+      chance_to_store = store_usable_item_chance if is_battle_item
       if rand(100) <= chance_to_store
         @inventory << held_item.id
+        echoln "#{@trainerType} #{@trainerName} took the #{pokemon.item} from #{pokemon.name}"
         pokemon.item = nil
       end
     end
 
+    #give inventory items to pokemon
+    items_to_delete = []
     @inventory.each do |item|
-      echoln item
       is_holdable_item = HELD_ITEMS.include?(item)
       if is_holdable_item && rand(100) <= chance_to_give_item
         party_pokemon_without_items = []
@@ -199,12 +204,19 @@ class BattledTrainer
           party_pokemon_without_items << party_index unless pokemon.item
           party_index+=1
         end
+
         unless party_pokemon_without_items.empty?
           chosen_pokemon_index= party_pokemon_without_items.sample
           @currentTeam[chosen_pokemon_index].item = item
           echoln "#{@trainerType} #{@trainerName} gave a #{item} to #{@currentTeam[chosen_pokemon_index].name}"
+          items_to_delete << item
         end
       end
+    end
+
+    items_to_delete.each do |item|
+      index = @inventory.index(item)
+      @inventory.delete_at(index) if index
     end
   end
 

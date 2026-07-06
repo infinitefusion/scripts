@@ -885,6 +885,21 @@ DebugMenuCommands.register("randomid", {
   }
 })
 
+# DebugMenuCommands.register("setid", {
+#   "parent"      => "playermenu",
+#   "name"        => _INTL("Set Player ID"),
+#   "description" => _INTL("Set a new ID for the player."),
+#   "effect"      => proc {
+#     params = ChooseNumberParams.new
+#     params.setRange(1, 9999999999)
+#     params.setInitialValue($Trainer.id)
+#     params.setCancelValue($Trainer.id)
+#     id = pbMessageChooseNumber(_INTL("Set the trainer ID."), params)
+#     $Trainer.id = id.to_i
+#   }
+# })
+
+
 #===============================================================================
 # Information editors
 #===============================================================================
