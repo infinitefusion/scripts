@@ -28,8 +28,8 @@ def update_global_hats_list()
 
     hat = Hat.new(
       data['id'],
-      _OUTFIT(data['name']),
-      _OUTFIT(data['description']),
+      _OUTFIT_INTL(data['name']),
+      _OUTFIT_INTL(data['description']),
       data['price'],
       tags,
       storeLocations,
@@ -57,8 +57,8 @@ def update_global_hairstyles_list()
 
     hair = Hairstyle.new(
       data['id'],
-      _OUTFIT(data['name']),
-      _OUTFIT(data['description']),
+      _OUTFIT_INTL(data['name']),
+      _OUTFIT_INTL(data['description']),
       data['price'],
       tags,
       storeLocations
@@ -93,8 +93,8 @@ def update_global_clothes_list()
     contest_conditions = data['contestcondition'] ? data['contestcondition'].split(',').map(&:strip) : []
     outfit = Clothes.new(
       data['id'],
-      _OUTFIT(data['name']),
-      _OUTFIT(data['description']),
+      _OUTFIT_INTL(data['name']),
+      _OUTFIT_INTL(data['description']),
       data['price'],
       tags,
       storeLocations,

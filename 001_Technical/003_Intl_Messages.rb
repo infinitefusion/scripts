@@ -796,7 +796,7 @@ end
 
 # Replaces first argument with a localized version and formats the other
 # parameters by replacing {1}, {2}, etc. with those placeholders.
-def _OUTFIT(str)
+def _OUTFIT_INTL(str)
   return MessageTypes.getFromHash(MessageTypes::OutfitTexts, str)
 end
 
