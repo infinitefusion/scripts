@@ -14,9 +14,9 @@ module MessageConfig
   NARROW_FONT_NAME        = "Power Green Narrow"
   NARROW_FONT_SIZE        = 29
 
-  FONT_NAME_CHINESE       = "Fusion Pixel 12px Mono zh_hans"
-
-  CHINESE_FONT_SIZE       = 27
+  FONT_NAME_CHINESE        = "Fusion Poke Pixel Normal zh_hans"
+  SMALL_FONT_NAME_CHINESE  = "Fusion Poke Pixel Small zh_hans"
+  NARROW_FONT_NAME_CHINESE = "Fusion Poke Pixel Narrow zh_hans"
 
   BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
   BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
@@ -126,10 +126,18 @@ module MessageConfig
   end
 
   def self.pbDefaultSmallFontName
+    current_language = getCurrentLanguage
+    if current_language == :CHINESE
+      return MessageConfig.pbTryFonts(SMALL_FONT_NAME_CHINESE)
+    end
     return MessageConfig.pbTryFonts(SMALL_FONT_NAME)
   end
 
   def self.pbDefaultNarrowFontName
+    current_language = getCurrentLanguage
+    if current_language == :CHINESE
+      return MessageConfig.pbTryFonts(NARROW_FONT_NAME_CHINESE)
+    end
     return MessageConfig.pbTryFonts(NARROW_FONT_NAME)
   end
 
@@ -139,13 +147,11 @@ module MessageConfig
   end
 
   def self.pbGetSmallFontName
-    return MessageConfig.pbGetSystemFontName if getCurrentLanguage == :CHINESE
     @@smallFont = pbDefaultSmallFontName if !@@smallFont
     return @@smallFont
   end
 
   def self.pbGetNarrowFontName
-    return MessageConfig.pbGetSystemFontName if getCurrentLanguage == :CHINESE
     @@narrowFont = pbDefaultNarrowFontName if !@@narrowFont
     return @@narrowFont
   end
@@ -440,7 +446,7 @@ end
 def pbSetSystemFont(bitmap)
   if getCurrentLanguage == :CHINESE
     bitmap.font.name  = MessageConfig::FONT_NAME_CHINESE
-    bitmap.font.size  = MessageConfig::CHINESE_FONT_SIZE
+    bitmap.font.size  = MessageConfig::FONT_SIZE
   else
     bitmap.font.name  = MessageConfig.pbGetSystemFontName
     bitmap.font.size  = MessageConfig::FONT_SIZE
@@ -450,7 +456,8 @@ end
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
   if getCurrentLanguage == :CHINESE
-    pbSetSystemFont(bitmap)
+    bitmap.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
+    bitmap.font.size = MessageConfig::SMALL_FONT_SIZE
     return
   end
   bitmap.font.name = MessageConfig.pbGetSmallFontName
@@ -460,7 +467,8 @@ end
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
   if getCurrentLanguage == :CHINESE
-    pbSetSystemFont(bitmap)
+    bitmap.font.name = MessageConfig::NARROW_FONT_NAME_CHINESE
+    bitmap.font.size = MessageConfig::NARROW_FONT_SIZE
     return
   end
   bitmap.font.name = MessageConfig.pbGetNarrowFontName

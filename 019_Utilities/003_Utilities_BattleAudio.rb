@@ -17,7 +17,7 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
     music = GameData::Metadata.get.wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
-  ret = pbStringToAudioFile("Battle wild") if !ret
+  ret = pbStringToAudioFile("battle_wild") if !ret
   return ret
 end
 
@@ -86,7 +86,7 @@ def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array o
       ret = pbStringToAudioFile(music)
     end
   end
-  ret = pbStringToAudioFile("Battle trainer") if !ret
+  ret = pbStringToAudioFile("battle_trainer") if !ret
   return ret
 end
 
@@ -107,7 +107,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
     music = GameData::Metadata.get.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
-  ret = pbStringToAudioFile("Battle trainer") if !ret
+  ret = pbStringToAudioFile("battle_trainer") if !ret
   return ret
 end
 

@@ -183,6 +183,7 @@ class StartersSelectionScene
   end
 
   def updateText
+    is_chinese = (getCurrentLanguage == :CHINESE)
     @pokemon_name_overlay.dispose if @pokemon_name_overlay
     @pokemon_category_overlay.dispose if @pokemon_category_overlay
 
@@ -203,11 +204,21 @@ class StartersSelectionScene
     @pokemon_name_overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
     @pokemon_category_overlay = BitmapSprite.new(Graphics.width, Graphics.height, @viewport).bitmap
 
-    @pokemon_name_overlay.font.size = 50
-    @pokemon_name_overlay.font.name = MessageConfig.pbGetSmallFontName
+    if is_chinese
+      @pokemon_name_overlay.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
+      @pokemon_name_overlay.font.size = 37
+    else
+      @pokemon_name_overlay.font.name = MessageConfig.pbGetSmallFontName
+      @pokemon_name_overlay.font.size = 50
+    end
 
-    @pokemon_category_overlay.font.size = 36
-    @pokemon_category_overlay.font.name = MessageConfig.pbGetSmallFontName
+    if is_chinese
+      @pokemon_category_overlay.font.name = MessageConfig::SMALL_FONT_NAME_CHINESE
+      @pokemon_category_overlay.font.size = 25
+    else
+      @pokemon_category_overlay.font.name = MessageConfig.pbGetSmallFontName
+      @pokemon_category_overlay.font.size = 36
+    end
 
     pbDrawTextPositions(@pokemon_name_overlay, [[pokemon_name, (Graphics.width / 2) + text_x_offset, title_position_y, 2, title_base_color, title_shadow_color]])
     pbDrawTextPositions(@pokemon_category_overlay, [[pokemon_category, (Graphics.width / 2) + text_x_offset, subtitle_position_y, 2, label_base_color, label_shadow_color]])
