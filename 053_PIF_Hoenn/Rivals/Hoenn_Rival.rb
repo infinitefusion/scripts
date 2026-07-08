@@ -306,7 +306,7 @@ end
 
 def initializeRivalBattledTrainer
   trainer_type = :RIVAL1
-  trainer_name = pbGet(VAR_RIVAL_NAME)
+  trainer_name = isPlayerMale ? "May" : "Brendan"
   trainer_appearance = $Trainer.rival_appearance
   rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
