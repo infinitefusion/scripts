@@ -76,7 +76,7 @@ class PokemonPokegearScreen
 
   def update_commands
     commands = []
-    $Trainer.pokenav.installed_apps.each do |app|
+    $Trainer.pokenav&.installed_apps.each do |app|
       commands << [app.to_s, Pokenav.app_name(app)]
     end
     return commands

@@ -53,7 +53,7 @@ TYPE_EXPERTS_APPEARANCES = {
   :ADVENTURER_SINNOH => TrainerAppearance.new(6,"lucasDPP","longshirtskirt","1_hime",0,0,0) ,
   :ADVENTURER_UNOVA => TrainerAppearance.new(5, "hilbert", "red", "1_nhair", 0, 0, 0),
   :ADVENTURER_KALOS => TrainerAppearance.new(5, "serena", "Ramos", "2_naveen", 0, 0, 0),
-  :ADVENTURER_ALOLA => TrainerAppearance.new(5, "seleneUSUM", "leaf", "2_mistyRBY", 0, 0, 0),
+  :ADVENTURER_ALOLA => TrainerAppearance.new(4,"seleneUSUM","chimingdress","4_cheryl",0,0,0),
 
 }
 
