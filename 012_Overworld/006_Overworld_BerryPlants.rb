@@ -447,8 +447,7 @@ def pbBerryPlant
     # end
   when 1 # X planted
     berry_name = GameData::Item.get(berry).name
-    preposition = ["A","E","I","O","U"].include?(berry_name[0]) ? "An" : "A"
-    pbMessage(_INTL("{1} {2} was planted here.", preposition, berry_name))
+    pbMessage(_INTL("The {1} was planted here.", berry_name))
   when 2 # X sprouted
     pbMessage(_INTL("The {1} has sprouted.", GameData::Item.get(berry).name))
     unless hasHat?(HAT_SPROUT)
