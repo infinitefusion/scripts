@@ -378,7 +378,7 @@ class PokeBattle_Battle
     $Trainer.cosmetics_money = 0 unless $Trainer.cosmetics_money
     pbPlayer.cosmetics_money += cosmetics_money
     if !@moneyGain && cosmetics_money > 0 # message displayed in pbGainMoney if player wins money
-      pbDisplayPaused(_INTL("You got some {1} for winning!", COSMETIC_CURRENCY_NAME))
+      pbDisplayPaused(_INTL("You got some {1} for winning!", cosmetic_currency_name))
     end
     return cosmetics_money
   end
@@ -395,7 +395,7 @@ class PokeBattle_Battle
 
       if moneyGained > 0
         if cosmetics_money > 0
-          pbDisplayPaused(_INTL("You got ${1} and some {2} for winning!", moneyGained.to_s_formatted, COSMETIC_CURRENCY_NAME))
+          pbDisplayPaused(_INTL("You got ${1} and some {2} for winning!", moneyGained.to_s_formatted, cosmetic_currency_name))
         else
           pbDisplayPaused(_INTL("You got ${1} for winning!", moneyGained.to_s_formatted))
         end
