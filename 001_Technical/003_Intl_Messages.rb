@@ -1,6 +1,6 @@
 def pbAddScriptTexts(items, script)
   script.force_encoding(Encoding::UTF_8)
-  script.scan(/(?:_I|sign)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
+  script.scan(/(?:_INTL|_I|sign)\s*\(\s*\"((?:[^\\\"]*\\\"?)*[^\"]*)\"/) do |s|
     string = s[0]
     string.gsub!(/\\\"/, "\"")
     string.gsub!(/\\\\/, "\\")
