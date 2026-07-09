@@ -48,6 +48,7 @@ class BattledTrainer
   attr_accessor :friendship_level
 
   attr_accessor :overworld_sprite
+  attr_accessor :location_map_id
 
   attr_reader :favorite
 
