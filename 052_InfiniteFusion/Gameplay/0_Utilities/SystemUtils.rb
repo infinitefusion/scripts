@@ -125,6 +125,6 @@ end
 
 def transferBoxDisclaimer(event)
   unless Settings::TRANSFER_BOX_DISCLAIMER_MESSAGE.empty?
-    pbMessage(_INTL(Settings::TRANSFER_BOX_DISCLAIMER_MESSAGE))
+    pbMessage(_INTL("\\C[2]The Transfer Box is not yet available in Infinite Fusion 1, it is planned for a future update. It can still be used to transfer Pokémon between Hoenn savefiles in the meantime."))
   end
 end
