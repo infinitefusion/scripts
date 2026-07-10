@@ -62,15 +62,15 @@ def getTVTrendMessages()
   end
 
   pbMessage(_INTL("It's the trend-watcher network channel!"))
-  pbMessage(_INTL("\"Everybody's talking about it, #{current_phrase} has been all the rage all around the region!\""))
-  pbMessage(_INTL("\"Nobody knows where it's started, but #{current_phrase} is all that the younger people are talking about these days.\""))
+  pbMessage(_INTL("\"Everybody's talking about it, {1} has been all the rage all around the region!\"", current_phrase))
+  pbMessage(_INTL("\"Nobody knows where it's started, but {1} is all that the younger people are talking about these days.\"", current_phrase))
   case rand(3)
   when 0
-    pbMessage(_INTL("\"Where can someone get their hands on #{adverb} #{current_phrase}? We'll continue our investigation to find out!'\""))
+    pbMessage(_INTL("\"Where can someone get their hands on {1} {2}? We'll continue our investigation to find out!'\"", adverb, current_phrase))
   when 1
-    pbMessage(_INTL("\"Experts say that #{current_phrase} may just be the next big thing! Stay tuned for updates!\""))
+    pbMessage(_INTL("\"Experts say that {1} may just be the next big thing! Stay tuned for updates!\"", current_phrase))
   when 2
-    pbMessage(_INTL("\"Some say that #{current_phrase} just a fad, but others seem to think it's here to stay! Stay tuned for updates!\""))
+    pbMessage(_INTL("\"Some say that {1} just a fad, but others seem to think it's here to stay! Stay tuned for updates!\"", current_phrase))
   end
 end
 
