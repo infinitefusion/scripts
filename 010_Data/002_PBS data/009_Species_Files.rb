@@ -226,7 +226,8 @@ module GameData
 
     def self.play_cry_from_species(species, form = 0, volume = 90, pitch = 100)
       dex_num = getDexNumberForSpecies(species)
-      return if !dex_num
+      return unless dex_num
+      return unless dex_num.is_a?(Integer)
       return play_triple_fusion_cry(species, volume, pitch) if dex_num > Settings::ZAPMOLCUNO_NB
       if dex_num > NB_POKEMON
         body_number = getBodyID(dex_num)

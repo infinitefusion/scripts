@@ -361,8 +361,8 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
   trainers_data = getTrainersDataMode.list_all
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
-    echoln "------"
-    echoln "Processing [#{trainer.id}#] {trainer.trainer_type} ##{trainer.real_name}"
+    #echoln "------"
+    #echoln "Processing [#{trainer.id}#] {trainer.trainer_type} ##{trainer.real_name}"
     i = 0
     new_party = []
     for poke in trainer.pokemon
@@ -406,9 +406,9 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   randomTrainersHash = Hash.new
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
-  Kernel.pbMessage(_INTL("Parsing custom sprites folder..."))
+  Kernel.pbMessage(_INTL("Parsing custom sprites folder...\\wtnp[20]"))
   customsList = getCustomSpeciesList(true, true)
-  Kernel.pbMessage(_INTL("{1} sprites found. Shuffling...", customsList.length.to_s))
+  Kernel.pbMessage(_INTL("{1} sprites found. Shuffling...\\wtnp[20]", customsList.length.to_s))
 
   if customsList.length == 0
     Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information."))

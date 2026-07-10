@@ -192,6 +192,10 @@ class PokemonEncounters
   # taking into account Repels and ability effects.
   def allow_encounter?(enc_data, repel_active = false)
     return false if !enc_data
+    if $PokemonTemp.pokeradar
+      return pbPokeRadarOnShakingGrass
+    end
+
     # Repel
     if repel_active && !pbPokeRadarOnShakingGrass
       first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon

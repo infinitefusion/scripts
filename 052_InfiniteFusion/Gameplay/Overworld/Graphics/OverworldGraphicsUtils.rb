@@ -57,3 +57,9 @@ def setFog(intensity)
   echoln starting_intensity
   $scene.spriteset.fade_in_fog(starting_intensity,intensity)
 end
+
+def show_starter(species, pokemonName)
+  pif_sprite = BattleSpriteLoader.new.get_pif_sprite_from_species(species)
+  showPokemonInPokeballWithMessage(pif_sprite, _INTL("This Poké Ball contains {1}",pokemonName))
+  return pif_sprite
+end
