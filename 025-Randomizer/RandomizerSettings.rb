@@ -207,6 +207,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
     super
   end
 
+  #TODO: Move the randomizer settings to $PokemonGlobal instead of living in game switches
   def pbGetOptions(inloadscreen = false)
     options = []
     if !$game_switches[SWITCH_DURING_INTRO]
@@ -258,6 +259,17 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                                 _INTL("Only legendaries can be randomized into legendaries")
                               ]
     )
+
+    if Settings::HOENN
+      options << EnumOption.new(_INTL("Egg Groups"), [_INTL("On"), _INTL("Off")],
+                                proc { $game_switches[SWITCH_RANDOM_WILD_EGG_GROUP] ? 0 : 1 },
+                                proc { |value|
+                                  $game_switches[SWITCH_RANDOM_WILD_EGG_GROUP] = value == 0
+                                },
+                                _INTL("Limit to the same egg groups for randomization that feels more natural.")
+
+      )
+    end
 
     options << EnumOption.new(_INTL("Starters"), [_INTL("1st Stage"), _INTL("Any"), _INTL("Off")],
                               proc {

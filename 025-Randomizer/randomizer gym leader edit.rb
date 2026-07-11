@@ -140,6 +140,14 @@ def legendaryOk(oldspecies,newspecies,includeLegendaries)
 
 end
 
+def egg_group_ok(oldSpecies_id,newSpecies_id)
+  oldSpecies = GameData::Species.get(oldSpecies_id)
+  newSpecies = GameData::Species.get(newSpecies_id)
+  oldEggGroups = oldSpecies.egg_groups
+  newEggGroups = newSpecies.egg_groups
+  return oldEggGroups.any? { |g| newEggGroups.include?(g) }
+end
+
 def bstNotOk(newspecies, oldPokemonSpecies, bst_range = 50)
   newBST = calcBaseStatsSum(newspecies)
   originalBST = calcBaseStatsSum(oldPokemonSpecies)
@@ -281,36 +289,42 @@ def Kernel.pbRandomizeTM()
   end
 end
 
-def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries=true)
-
+def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, maxDexNumber = PBSpecies.maxValue, includeLegendaries=true, same_egg_group=false)
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
 
   if $game_switches[SWITCH_LEGENDARY_MODE]
-    new_species= convert_species_to_legendary(oldSpecies)
-    newspecies_dex = dexNum(new_species)
-    return newspecies_dex
+    new_species = convert_species_to_legendary(oldSpecies)
+    return dexNum(new_species)
   end
 
   newspecies_dex = rand(maxDexNumber - 1) + 1
   i = 0
-  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
-    newspecies_dex = rand(maxDexNumber - 1) + 1
-    i += 1
-    if i % 10 == 0
-      bst_range += 5
+  validated = false
+  until validated
+    is_valid = true
+    is_valid = false if bstNotOk(newspecies_dex, oldSpecies_dex, bst_range)
+    is_valid = false unless legendaryOk(oldSpecies_dex, newspecies_dex, includeLegendaries)
+    is_valid = false if same_egg_group && !egg_group_ok(oldSpecies_dex, newspecies_dex)
+
+    validated = is_valid
+
+    unless validated
+      newspecies_dex = rand(maxDexNumber - 1) + 1
+      i += 1
+      bst_range += 5 if i % 10 == 0
     end
+    break if i > 200
   end
+
   return newspecies_dex
 end
 
-def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false,includeLegendaries=true)
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRivalPlaceholder = false, includeLegendaries = true, same_egg_group = false)
   if $game_switches[SWITCH_LEGENDARY_MODE]
-    new_species= convert_species_to_legendary(oldSpecies)
-
-    echoln "CHOSEN  #{get_readable_fusion_name(oldSpecies)} -> #{get_readable_fusion_name(new_species)}"
-
+    new_species = convert_species_to_legendary(oldSpecies)
+    #echoln "CHOSEN  #{get_readable_fusion_name(oldSpecies)} -> #{get_readable_fusion_name(new_species)}"
     newspecies_dex = dexNum(new_species)
     return newspecies_dex
   end
@@ -318,18 +332,29 @@ def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRiv
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
-  i = rand(customSpeciesList.length - 1) + 1
-  n = 0
-  newspecies_dex = customSpeciesList[i]
 
-  while bstNotOk(newspecies_dex, oldSpecies_dex, bst_range) || !(legendaryOk(oldSpecies_dex,newspecies_dex,includeLegendaries))
-    i = rand(customSpeciesList.length - 1) #+1
-    newspecies_dex = customSpeciesList[i]
-    n += 1
-    if n % 10 == 0
-      bst_range += 5
+  i = rand(customSpeciesList.length - 1) + 1
+  newspecies_dex = customSpeciesList[i]
+  n = 0
+  validated = false
+  until validated
+    is_valid = true
+    is_valid = false if bstNotOk(newspecies_dex, oldSpecies_dex, bst_range)
+    is_valid = false unless legendaryOk(oldSpecies_dex, newspecies_dex, includeLegendaries)
+    is_valid = false if same_egg_group && !egg_group_ok(oldSpecies_dex, newspecies_dex)
+
+    validated = is_valid
+
+    unless validated
+      i = rand(customSpeciesList.length - 1)
+      newspecies_dex = customSpeciesList[i]
+      n += 1
+      bst_range += 5 if n % 10 == 0
     end
+
+    break if n > 200 # safety valve in case no valid candidate exists in the list
   end
+
   return newspecies_dex
 end
 

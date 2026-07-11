@@ -34,14 +34,15 @@ end
 
 #input: [[60, :TENTACOOL,5,40, [30, :GOLDEEN, 5, 35], etc.]]
 def randomizePokemonList(encountersList,bstRange=50,maxSpecies=NB_POKEMON,customOnly=false,customsList=[])
+  same_egg_group = $game_switches[SWITCH_RANDOM_WILD_EGG_GROUP]
   includeLegendaries = $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES]
   newList=[]
   for encounter in encountersList
     oldPokemon = encounter[1]
     if customOnly
-      newPokemon = getNewCustomSpecies(oldPokemon,customsList,bstRange,false,includeLegendaries)
+      newPokemon = getNewCustomSpecies(oldPokemon,customsList,bstRange,false,includeLegendaries, same_egg_group)
     else
-      newPokemon = getNewSpecies(oldPokemon,bstRange,false,maxSpecies,includeLegendaries)
+      newPokemon = getNewSpecies(oldPokemon,bstRange,false,maxSpecies,includeLegendaries, same_egg_group)
     end
     newEntry =[]
     newEntry << encounter[0]
