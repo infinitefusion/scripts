@@ -308,7 +308,7 @@ def useSleepingBag()
   time = pbGetTimeNow.strftime("%I:%M %p")
   newDay = getDayOfTheWeek()
   if newDay != oldDay
-    Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, newDay.downcase.capitalize))
+    Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, getDayOfTheWeekName(newDay)))
   else
     Kernel.pbMessage(_INTL("The current time is now {1}.", time))
   end
@@ -344,7 +344,7 @@ def useFieldSleepingBag()
     time = pbGetTimeNow.strftime("%I:%M %p")
     newDay = getDayOfTheWeek()
     if newDay != oldDay
-      Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, newDay.downcase.capitalize))
+      Kernel.pbMessage(_INTL("The current time is now {1} on {2}.", time, getDayOfTheWeekName(newDay)))
     else
       Kernel.pbMessage(_INTL("The current time is now {1}.", time))
     end
