@@ -145,7 +145,12 @@ class CharacterSelectMenuPresenter
   end
 
   def updateDisplayedName(current_index)
-    @view.displayText(NAME_TEXT_ID, @name, current_index)
+    display_name = @name
+    if @rival
+      translated = pbGetMessageFromHash(MessageTypes::TrainerNames, @name)
+      display_name = translated if translated && translated != @name
+    end
+    @view.displayText(NAME_TEXT_ID, display_name, current_index)
   end
 
   def applyAllSelectedValues
