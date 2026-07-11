@@ -212,6 +212,17 @@ module Settings
   FIRE_STARTERS = [:CHARMANDER, :CYNDAQUIL, :TORCHIC, :CHIMCHAR, :FENNEKIN]
   WATER_STARTERS = [:SQUIRTLE, :TOTODILE, :MUDKIP, :PIPLUP, :FROAKIE]
 
+  ALTERING_CAVE_ENCOUNTERS =
+    {
+    :MONDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :HOUNDOUR],
+    :TUESDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :SCRAGGY],
+    :WEDNESDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :PINECO],
+    :THURSDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :MAREEP],
+    :FRIDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :TEDDIURSA],
+    :SATURDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :AIPOM],
+    :SUNDAY => [:ZUBAT, :ZUBAT, :ZUBAT, :WOOBAT, :SMEARGLE],
+  }
+
   #=============================================================================
 
   # The amount of money the player starts the game with.
