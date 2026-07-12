@@ -431,7 +431,7 @@ end
 
 def pbDisplayCosmeticsMoneyWindow(msgwindow,x=nil,y=nil)
   moneyString = pbGetCosmeticsMoneyString()
-  goldwindow = Window_AdvancedTextPokemon.new(_INTL("{2}:\n<ar>{1}</ar>", moneyString, cosmetic_currency_name))
+  goldwindow = Window_AdvancedTextPokemon.new(_INTL("{2}:\n<ar>{1}</ar>", moneyString, get_cosmetic_currency_name))
   goldwindow.setSkin("Graphics/Windowskins/goldskin")
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.width = 160 if goldwindow.width <= 160
