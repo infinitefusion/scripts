@@ -47,14 +47,20 @@ def get_hoenn_character_name(name)
   return pbGetMessageFromHash(MessageTypes::TrainerNames, name)
 end
 
-def get_rival_name
+def get_default_rival_name
   rival_name = get_hoenn_character_name("Brendan") if isPlayerFemale
   rival_name = get_hoenn_character_name("May") if isPlayerMale
   return rival_name
 end
 
+def get_system_rival_name
+  rival_name = "Brendan" if isPlayerFemale
+  rival_name = "May" if isPlayerMale
+  return rival_name
+end
+
 def init_rival_name
-  rival_name = get_rival_name
+  rival_name = get_default_rival_name
   @name = rival_name
   return rival_name
 end
@@ -308,8 +314,9 @@ def initializeRivalBattledTrainer
   trainer_type = :RIVAL1
   trainer_name = pbGet(VAR_RIVAL_NAME)
   trainer_appearance = $Trainer.rival_appearance
-  rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
+  rivalBattledTrainer = BattledTrainer.new(trainer_type, get_system_rival_name, 0, BATTLED_TRAINER_RIVAL_KEY)
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
+  rivalBattledTrainer.trainerName = trainer_name
   rivalBattledTrainer.friendship_level = 1
   team = []
   team << Pokemon.new(get_hoenn_rival_starter, 5, trainer_name)
