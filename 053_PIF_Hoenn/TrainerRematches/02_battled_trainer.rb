@@ -48,6 +48,7 @@ class BattledTrainer
   attr_accessor :friendship_level
 
   attr_accessor :overworld_sprite
+  attr_accessor :location_map_id
 
   attr_reader :favorite
 
@@ -146,8 +147,9 @@ class BattledTrainer
     while @friendship_level < thresholds.length && @friendship >= thresholds[@friendship_level]
       @friendship_level += 1
 
-      trainerClassName = GameData::TrainerType.get(@trainerType).real_name
-      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!", trainerClassName, @trainerName))
+      trainerClassName = GameData::TrainerType.get(@trainerType).name
+      trainerName = pbGetMessageFromHash(MessageTypes::TrainerNames, @trainerName)
+      pbMessage(_INTL("\\C[3]Friendship increased with {1} {2}!", trainerClassName, trainerName))
       case @friendship_level
       when 1
         pbMessage(_INTL("You can now trade with each other!"))

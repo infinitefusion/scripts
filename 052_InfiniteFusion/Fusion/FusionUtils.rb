@@ -440,7 +440,7 @@ end
 def getSpeciesRealName(species_symbol)
   return nil if !species_symbol
   species = GameData::Species.get(species_symbol)
-  return species.real_name
+  return species.name
 end
 
 def playerHasFusedPokemonInTeam()

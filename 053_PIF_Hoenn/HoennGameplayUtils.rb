@@ -234,7 +234,7 @@ def convertHeartScalesToCoins
     pbSEPlay("MiningRevealItem")
     pbWait(4)
     pbCallBubDown(2, @event_id)
-    pbMessage(_INTL("Here you go! I converted your Heart Scales into {1} \\C[1]{2}\\C[0]!", nb_coins, COSMETIC_CURRENCY_NAME))
+    pbMessage(_INTL("Here you go! I converted your Heart Scales into {1} \\C[1]{2}\\C[0]!", nb_coins, cosmetic_currency_name))
     pbReceiveCosmeticsMoney(nb_coins)
     pbCallBubDown(2, @event_id)
     pbMessage(_INTL("Come back whenever you find more Heart Scales to convert!"))

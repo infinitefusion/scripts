@@ -58,7 +58,7 @@ def player_on_hidden_ability_map
 end
 
 def getCurrentHiddenAbilityMapName
-  return getMapName(pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
+  return pbGetMessage(MessageTypes::MapNames, pbGet(VAR_CURRENT_HIDDEN_MAP)).to_s
 end
 
 def getMapName(id)

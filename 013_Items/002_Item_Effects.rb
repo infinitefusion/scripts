@@ -122,7 +122,7 @@ Events.onStepTaken += proc {
       isIncense = $game_switches[SWITCH_USED_AN_INCENSE]
       $game_switches[SWITCH_FORCE_ALL_WILD_FUSIONS] = false
       $game_switches[SWITCH_USED_AN_INCENSE] = false
-      itemName = isIncense ? "incense" : "repellent"
+      itemName = isIncense ? _INTL("incense") : _INTL("repellent")
       if $PokemonBag.pbHasItem?(:REPEL) ||
         $PokemonBag.pbHasItem?(:SUPERREPEL) ||
         $PokemonBag.pbHasItem?(:MAXREPEL) ||
