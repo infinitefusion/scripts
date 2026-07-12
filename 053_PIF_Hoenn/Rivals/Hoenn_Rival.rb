@@ -43,12 +43,20 @@ end
 
 BATTLED_TRAINER_RIVAL_KEY = "rival"
 
+def get_hoenn_character_name(name)
+  return pbGetMessageFromHash(MessageTypes::TrainerNames, name)
+end
+
 def get_rival_name
-  return isPlayerFemale ? "Brendan" : "May"
+  rival_name = get_hoenn_character_name("Brendan") if isPlayerFemale
+  rival_name = get_hoenn_character_name("May") if isPlayerMale
+  return rival_name
 end
 
 def init_rival_name
-  return get_rival_name
+  rival_name = get_rival_name
+  @name = rival_name
+  return rival_name
 end
 
 def set_rival_hat(hat)
@@ -299,11 +307,8 @@ end
 def initializeRivalBattledTrainer
   trainer_type = :RIVAL1
   trainer_name = pbGet(VAR_RIVAL_NAME)
-  load_name = trainer_name
-  load_name = isPlayerMale ? "May" : "Brendan" unless pbLoadTrainer(:RIVAL1, load_name, 0)
   trainer_appearance = $Trainer.rival_appearance
-  rivalBattledTrainer = BattledTrainer.new(trainer_type, load_name, 0, BATTLED_TRAINER_RIVAL_KEY)
-  rivalBattledTrainer.trainerName = trainer_name
+  rivalBattledTrainer = BattledTrainer.new(trainer_type, trainer_name, 0, BATTLED_TRAINER_RIVAL_KEY)
   rivalBattledTrainer.set_custom_appearance(trainer_appearance)
   rivalBattledTrainer.friendship_level = 1
   team = []
