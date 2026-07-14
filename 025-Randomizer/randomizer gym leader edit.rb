@@ -143,8 +143,8 @@ end
 def egg_group_ok(oldSpecies_id,newSpecies_id)
   oldSpecies = GameData::Species.get(oldSpecies_id)
   newSpecies = GameData::Species.get(newSpecies_id)
-  oldEggGroups = oldSpecies.egg_groups
-  newEggGroups = newSpecies.egg_groups
+  oldEggGroups = Array(oldSpecies.egg_groups)
+  newEggGroups = Array(newSpecies.egg_groups)
   return oldEggGroups.any? { |g| newEggGroups.include?(g) }
 end
 
@@ -309,7 +309,6 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
     is_valid = false if same_egg_group && !egg_group_ok(oldSpecies_dex, newspecies_dex)
 
     validated = is_valid
-
     unless validated
       newspecies_dex = rand(maxDexNumber - 1) + 1
       i += 1
@@ -354,7 +353,6 @@ def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range = 50, ignoreRiv
 
     break if n > 200 # safety valve in case no valid candidate exists in the list
   end
-
   return newspecies_dex
 end
 
@@ -384,27 +382,43 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
 
 
   trainers_data = getTrainersDataMode.list_all
+  total = trainers_data.size
+  i = 0
+  progress_bar = ShuffleProgressBar.new(_INTL("Shuffling Trainers..."))
   trainers_data.each do |key, value|
     trainer = trainers_data[key]
     #echoln "------"
     #echoln "Processing [#{trainer.id}#] {trainer.trainer_type} ##{trainer.real_name}"
-    i = 0
     new_party = []
+    same_egg_group = $game_switches[SWITCH_RANDOM_TRAINERS]
+    #echoln "--------#{key}-------"
+
     for poke in trainer.pokemon
       old_poke = GameData::Species.get(poke[:species]).id_number
-      new_poke = customsOnly ? getNewCustomSpecies(old_poke, customsList, bst_range) : getNewSpecies(old_poke, bst_range)
+      new_poke = customsOnly ? getNewCustomSpecies(old_poke, customsList, bst_range,false,true,same_egg_group) : getNewSpecies(old_poke, bst_range,false,PBSpecies.maxValue,true,same_egg_group)
       new_party << new_poke
+      #echoln "#{get_readable_fusion_name(getSpecies(old_poke).species)} -> #{get_readable_fusion_name(getSpecies(new_poke).species)}"
     end
     randomTrainersHash[trainer.id] = new_party
     playShuffleSE(i)
     i += 1
-    if i % 2 == 0
-      n = (i.to_f / trainers.length) * 100
-      Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}%\\^", sprintf('%.2f', n), PBSpecies.maxValue))
-    end
+    update_progress_bar(progress_bar, i, total)
+    # if i % 2 == 0
+    #   n = (i.to_f / trainers_data.size) * 100
+    #   percent_str = sprintf('%.2f%%', n)   # -> "42.00%" as a plain string, already resolved
+    #   Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling trainers...\\n {1}\\^", percent_str))
+    # end
   end
+  progress_bar.dispose
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
 end
+
+def update_progress_bar(progress_bar, nb_processed, nb_to_process)
+  return if !progress_bar || progress_bar.disposed?
+  progress_bar.progress = nb_processed.to_f / nb_to_process
+  progress_bar.update
+end
+
 
 # def Kernel.pbShuffleTrainers(bst_range = 50)
 #   randomTrainersHash = Hash.new

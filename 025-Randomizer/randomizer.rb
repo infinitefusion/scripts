@@ -43,9 +43,10 @@ end
 def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
   bst_hash = Hash.new
   msg = ""
+  progress_bar = ShuffleProgressBar.new(_INTL("Shuffling wild Pokémon...")) if show_progress
 
   for i in 1..NB_POKEMON
-    show_shuffle_progress(i) if show_progress
+    show_shuffle_progress(progress_bar, i, NB_POKEMON) if progress_bar
     baseStats = getBaseStatsFormattedForRandomizer(i)
     statsTotal = getStatsTotal(baseStats)
 
@@ -58,7 +59,7 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
     same_egg_group = $game_switches[SWITCH_RANDOM_WILD_EGG_GROUP]
     current_species_data = GameData::Species.get(i)
     current_species = current_species_data.id
-    current_egg_groups = current_species_data.egg_groups
+    current_egg_groups = Array(current_species_data.egg_groups)
 
     j = 0
     loop do
@@ -68,7 +69,8 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
       random_poke_bst = getStatsTotal(getBaseStatsFormattedForRandomizer(random_poke))
 
       if same_egg_group
-        egg_group_ok = random_poke_species_data.egg_groups.any? { |g| current_egg_groups.include?(g) }
+        random_poke_egg_groups = Array(random_poke_species_data.egg_groups)
+        egg_group_ok = random_poke_egg_groups.any? { |g| current_egg_groups.include?(g) }
       else
         egg_group_ok = true
       end
@@ -88,6 +90,7 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
       end
     end
   end
+  progress_bar.dispose if progress_bar
   Input.clipboard = msg if $DEBUG
   return bst_hash
 end
@@ -101,11 +104,14 @@ def is_legendary(dex_num,printInfo=false)
   return is_legendary
 end
 
-def show_shuffle_progress(i)
-  if i % 2 == 0
-    n = (i.to_f / NB_POKEMON) * 100
-    Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^", sprintf('%.2f', n), NB_POKEMON))
-  end
+def show_shuffle_progress(progress_bar, nb_processed, nb_to_process)
+  return if !progress_bar || progress_bar.disposed?
+  progress_bar.progress = nb_processed.to_f / nb_to_process
+  progress_bar.update
+  # if i % 2 == 0
+  #   n = (i.to_f / NB_POKEMON) * 100
+  #   Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^", sprintf('%.2f', n), NB_POKEMON))
+  # end
 end
 
 ##############
@@ -124,7 +130,7 @@ def Kernel.pbShuffleDex(range = 50, type = 0)
   if !pokemon_list #when not enough custom sprites
     pokemon_list = get_pokemon_list(should_include_fusions)
   end
-  $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list, range, should_include_fusions)
+  $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list, range, true)
 end
 
 def itemCanBeRandomized(item)

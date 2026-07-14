@@ -166,6 +166,17 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
                               _INTL("Use only Pokémon that have custom sprites in trainer teams")
     )
 
+    if Settings::HOENN
+      options << EnumOption.new(_INTL("Egg Groups"), [_INTL("On"), _INTL("Off")],
+                                proc { $game_switches[SWITCH_RANDOM_TRAINER_EGG_GROUP] ? 0 : 1 },
+                                proc { |value|
+                                  $game_switches[SWITCH_RANDOM_TRAINER_EGG_GROUP] = value == 0
+                                },
+                                _INTL("Limit to the same egg groups for randomization that feels more natural.")
+
+      )
+    end
+
     # options << EnumOption.new("Allow legendaries", ["On", "Off"],
     #                           proc { $game_switches[SWITCH_RANDOM_TRAINER_LEGENDARIES] ? 0 : 1 },
     #                           proc { |value|
@@ -409,6 +420,17 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
                                 $game_switches[SWITCH_RANDOM_GYM_PERSIST_TEAMS] = !$game_switches[SWITCH_GYM_RANDOM_EACH_BATTLE]
                               }, _INTL("Gym trainers and leaders have a new team each try instead of keeping the same one")
     )
+
+    # if Settings::HOENN
+    #   options << EnumOption.new(_INTL("Egg Groups"), [_INTL("On"), _INTL("Off")],
+    #                             proc { $game_switches[SWITCH_RANDOM_GYM_EGG_GROUP] ? 0 : 1 },
+    #                             proc { |value|
+    #                               $game_switches[SWITCH_RANDOM_GYM_EGG_GROUP] = value == 0
+    #                             },
+    #                             _INTL("Limit to the same egg groups for randomization that feels more natural.")
+    #
+    #   )
+    end
 
     return options
   end

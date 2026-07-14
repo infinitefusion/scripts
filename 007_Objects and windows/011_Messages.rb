@@ -948,6 +948,7 @@ def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd =
 end
 
 def pbMessageNoSound(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd = 0, &block)
+  echoln message
   ret = 0
   msgwindow = pbCreateMessageWindow(nil, skin)
   if commands
