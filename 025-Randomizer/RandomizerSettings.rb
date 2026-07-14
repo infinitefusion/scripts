@@ -430,7 +430,7 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
     #                             _INTL("Limit to the same egg groups for randomization that feels more natural.")
     #
     #   )
-    end
+    #end
 
     return options
   end
