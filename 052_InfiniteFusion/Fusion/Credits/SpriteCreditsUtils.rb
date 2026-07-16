@@ -13,12 +13,14 @@ def map_sprites_by_artist
   return creditsMap
 end
 
+SPRITER_CREDITS_BLACKLIST = ["Game Freak", "Anonymous"]
 def get_top_artists(nb_names = 100)
   filename = Settings::CREDITS_FILE_PATH
   name_counts = Hash.new(0)
 
   File.readlines(filename).each do |line|
     name = line.strip.split(',')[1]
+    next if name.nil? || SPRITER_CREDITS_BLACKLIST.include?(name)
     name_counts[name] += 1
   end
 
