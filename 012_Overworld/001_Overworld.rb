@@ -138,6 +138,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
     if event == $game_player && GameData::Item.exists?(:SOOTSACK)
       $Trainer.soot += 1 if $PokemonBag.pbHasItem?(:SOOTSACK)
     end
+    map.erase_tile(thistile[1], thistile[2], i)
     #    map.data[thistile[1], thistile[2], i] = 0
     #    $scene.createSingleSpriteset(map.map_id)
     break
