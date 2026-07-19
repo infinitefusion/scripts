@@ -291,8 +291,10 @@ class BattledTrainer
         pbMessage(_INTL("Don't say anything... I know you want this."))
         obtainClothes(CLOTHES_PSYSHAMAN_F)
       end
+
     when :POKEFAN_M, :POKEFAN_F
-      possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK]
+      possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK,
+                        HAT_SEEDOT_MASK, HAT_TAILLOW_MASK, HAT_TREECKO_MASK, HAT_MUDKIP_MASK]
       unobtained_masks = possible_masks.reject { |hatID| hasHat?(hatID) }
       unless unobtained_masks.empty?
         pbCallBub(2, event.id)

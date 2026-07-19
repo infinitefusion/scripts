@@ -100,6 +100,10 @@ HAT_POOCHYENA_MASK = "PoochyenaHead"
 HAT_LOTAD_MASK = "LotadHead"
 HAT_ZIGZAGOON_MASK = "ZigzagoonHead"
 HAT_WURMPLE_MASK = "WurmpleHead"
+HAT_SEEDOT_MASK = "SeedotHead"
+HAT_TAILLOW_MASK = "TaillowHead"
+HAT_TREECKO_MASK = "TreeckoHead"
+HAT_MUDKIP_MASK = "MudkipHead"
 
 
 HAT_PARTY_1 = "partywurmple"
