@@ -336,3 +336,16 @@ def count_soot()
   return count
 end
 
+def obtainBirthdayHat(celebration_id)
+  current_year = Time.now.year
+  birthday_id = "#{celebration_id}_#{current_year}".to_sym
+  $Trainer.birthdays_celebrated = [] unless $Trainer.birthdays_celebrated
+  return if $Trainer.birthdays_celebrated.include?(birthday_id)
+  possible_hats = [HAT_PARTY_1, HAT_PARTY_2, HAT_PARTY_3, HAT_PARTY_4, HAT_PARTY_5, HAT_PARTY_6, HAT_PARTY_7]
+  possible_hats = possible_hats.reject { |hatID| hasHat?(hatID) }
+  unless possible_hats.empty?
+    obtainHat(possible_hats.sample)
+    $Trainer.birthdays_celebrated << birthday_id
+  end
+end
+

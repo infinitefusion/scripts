@@ -63,6 +63,8 @@ CLOTHES_LADY = "lady"
 CLOTHES_PSYSHAMAN_M = "psyshaman"
 CLOTHES_PSYSHAMAN_F = "psyshamanf"
 
+CLOTHES_ZUBAT_KID = "zubatkidcostume"
+HAT_ZUBAT_KID = "zubatkidmask"
 
 CLOTHES_SWIMMING_M = "BlackSwimTrunks"
 CLOTHES_SAILOR = "WingullOutfit"
@@ -99,6 +101,14 @@ HAT_LOTAD_MASK = "LotadHead"
 HAT_ZIGZAGOON_MASK = "ZigzagoonHead"
 HAT_WURMPLE_MASK = "WurmpleHead"
 
+
+HAT_PARTY_1 = "partywurmple"
+HAT_PARTY_2 = "partygostripes"
+HAT_PARTY_3 = "partygopolka"
+HAT_PARTY_4 = "partyhatennaspots"
+HAT_PARTY_5 = "partysmashstars"
+HAT_PARTY_6 = "partyanimestripes"
+HAT_PARTY_7 = "partyanimespots"
 
 HAT_DUSKULL_MASK = "duskullmask"
 HAT_SLEEPMASK = "sleepmask"
