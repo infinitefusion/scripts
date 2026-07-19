@@ -321,3 +321,18 @@ def inputColorCode(codeVariable)
   return ColorCodeDoor.new(codeVariable).inputColorCode
 end
 
+def count_soot()
+  map = $MapFactory.getMap($game_map.map_id)
+  count = 0
+  for x in 0...map.data.xsize
+    for y in 0...map.data.ysize
+      for i in 0...map.data.zsize
+        tile_id = map.data[x, y, i]
+        next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
+        count+=1
+      end
+    end
+  end
+  return count
+end
+

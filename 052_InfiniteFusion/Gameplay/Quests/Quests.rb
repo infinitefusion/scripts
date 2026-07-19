@@ -284,7 +284,7 @@ define_quest("mauville_quests_7",:FIELD_QUEST,_INTL("Associate Producer! - Episo
 define_quest("mauville_magma",:MAGMA_QUEST,_INTL("The Element of Surprise!"), _INTL("Catch a Tynamo in the waters near New Mauville to catch Team Aqua by surprise."),_INTL("Mauville City"),"NPC_Hoenn_Magma_Grunt_M")
 define_quest("mauville_aqua",:AQUA_QUEST,_INTL("The Element of Surprise!"), _INTL("Catch a Tynamo in the waters near New Mauville to catch Team Magma by surprise."),_INTL("Mauville City"),"NPC_Hoenn_Aqua_Grunt_M")
 
-#Route 111
+#Route 111 (South)
 define_quest("route111_winstrate",:FIELD_QUEST,_INTL("The Winstrate Family"), _INTL("Defeat all 4 members of the Winstrate family in back-to-back battles."),_INTL("Route 111"),"NPC_Hoenn_Pokefan_M")
 
 #Verdanturf
@@ -294,3 +294,8 @@ define_quest("verdanturf_nurse",:FIELD_QUEST,_INTL("The Bored Nurse"), _INTL("Th
 #Rusturf Tunnel
 define_quest("rusturf_trumpet",:FIELD_QUEST,_INTL("Uproar in B Flat"), _INTL("A trumpet player is cornered in Rusturf Tunnel. Find a way to help him!"),_INTL("Rusturf Tunnel"),"NPC_Hoenn_trumpet_playing")
 define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _INTL("Find the 4 Trumpet Brothers and join the Trumpet Festival in Evergrande City."),_INTL("Evergrande City"),"NPC_Hoenn_trumpet_playing",MAP_EVERGRANDE)
+
+#Route 112
+#Route 111 (North)
+#Route 113
+define_quest("route113_sootgrass",:FIELD_QUEST,_INTL("Clear Out the Soot!"), _INTL("Get rid of the soot on every single patch of grass on Route 113."),_INTL("Route 113"),"NPC_oldman3")
