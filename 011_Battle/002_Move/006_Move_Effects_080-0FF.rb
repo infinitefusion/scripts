@@ -3534,6 +3534,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
     @willFail = true if user.item.is_berry? && !user.canConsumeBerry?
     return if @willFail
     return if user.item.is_mega_stone?
+    return if user.item.is_berry? 
     flingableItem = false
     @flingPowers.each do |_power, items|
       next if !items.include?(user.item_id)
