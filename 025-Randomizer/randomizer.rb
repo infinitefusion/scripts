@@ -117,7 +117,10 @@ end
 ##############
 # randomizer shuffle
 # ##############
-def Kernel.pbShuffleDex(range = 50, type = 0)
+def Kernel.pbShuffleDex(range = nil, type = nil, force_reshuffle=true)
+  range = 50 unless range
+  type = 0 unless type
+  return if $PokemonGlobal.psuedoBSTHash && !force_reshuffle
   $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
 
   #type 0: BST
