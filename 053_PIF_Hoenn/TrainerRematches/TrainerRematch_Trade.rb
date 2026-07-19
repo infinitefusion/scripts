@@ -210,7 +210,8 @@ def generateTrainerTradeOffer(trainer)
                     trainerClassName, trainerName, wanted_types_string))
     pbChoosePokemon(1, 2,
                     proc { |pokemon|
-                      pokemon.hasOneOfTheseTypes?(wanted_types)
+                      pokemon.hasOneOfTheseTypes?(wanted_types) &&
+                      !pokemon.egg?
                     })
   end
   chosen_index = pbGet(1)
