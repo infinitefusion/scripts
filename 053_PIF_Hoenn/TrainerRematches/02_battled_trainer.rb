@@ -174,7 +174,7 @@ class BattledTrainer
     store_usable_item_chance = 80
 
     chance_to_give_item = 60
-
+    @inventory = [] unless @inventory
     #Move pokemon held items to inventory
     @currentTeam.each do |pokemon|
       next unless pokemon.item

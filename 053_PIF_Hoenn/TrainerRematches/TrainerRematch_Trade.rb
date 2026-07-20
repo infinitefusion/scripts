@@ -228,7 +228,7 @@ def generateTrainerTradeOffer(trainer)
     showPokemonInPokeballWithMessage(pif_sprite, message)
 
     if pbConfirmMessage(_INTL("Trade away {1} for {2} {3}'s {4}?", chosen_pokemon.name, trainerClassName, trainerName, offered_pokemon.name))
-      pbStartTrade(chosen_index, offered_pokemon, offered_pokemon.name, trainerName, 0)
+      pbStartTrade(chosen_index, offered_pokemon, offered_pokemon.name, trainer.trainerName, 0)
       updated_party = trainer.currentTeam
       trainer.increase_friendship(10) if  GameData::Type.exists?(trainer.favorite_type) && offered_pokemon.hasType?(trainer.favorite_type)
       updated_party.delete(offered_pokemon)
