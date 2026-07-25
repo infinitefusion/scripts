@@ -360,3 +360,25 @@ GameData::TerrainTag.register({
                                 :id_number => 34,
                                 :acroBike => true,
                               })
+
+GameData::TerrainTag.register({
+                                :id => :CutGrass,
+                                :id_number => 35,
+                                :shows_grass_rustle => true,
+                                :land_wild_encounters => true,
+                                :battle_environment => :Grass
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :TallGrassTop,
+                                :id_number => 36,
+                              })
+GameData::TerrainTag.register({
+                                :id => :TallGrassMiddle,
+                                :id_number => 37,
+                                :deep_bush => true,
+                                :land_wild_encounters => true,
+                                :double_wild_encounters => true,
+                                :battle_environment => :TallGrass,
+                                :must_walk => true
+                              })

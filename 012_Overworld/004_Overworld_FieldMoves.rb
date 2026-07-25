@@ -214,6 +214,13 @@ HiddenMoveHandlers::CanUseMove.add(:CUT, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, showmsg)
   facingEvent = $game_player.pbFacingEvent
   if !facingEvent || !facingEvent.name[/cuttree/i]
+    currentTile = $game_player.getTerrainTag
+    facingTile = $game_player.pbFacingTerrainTag
+    cuttable_environments = [:Grass]
+    currentTile.battle_environment
+    if cuttable_environments.include?(facingTile.battle_environment) || cuttable_environments.include?(currentTile.battle_environment)
+      next true
+    end
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -227,9 +234,96 @@ HiddenMoveHandlers::UseMove.add(:CUT, proc { |move, pokemon|
   facingEvent = $game_player.pbFacingEvent
   if facingEvent
     pbSmashEvent(facingEvent)
+  else
+    currentTile = $game_player.getTerrainTag
+    facingTile = $game_player.pbFacingTerrainTag
+    cuttable_environments = [:Grass]
+    if cuttable_environments.include?(facingTile.battle_environment) || cuttable_environments.include?(currentTile.battle_environment)
+      cutTallGrass
+      next true
+    end
   end
   next true
 })
+
+def cutTallGrass
+  return unless Settings::HOENN
+  #3*2 rectangle in front of the player (including under the player)
+  # - - -
+  # x x -
+  # o x -
+  # x x -
+  # - - -
+  tiles_to_cut = [[$game_map, $game_player.x, $game_player.y]]
+  case $game_player.direction
+  when DIRECTION_RIGHT
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y-1]
+
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y-1]
+
+    tiles_to_cut << [$game_map, $game_player.x+2, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x+2, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x+2, $game_player.y-1]
+
+  when DIRECTION_LEFT
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y-1]
+
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y-1]
+
+    tiles_to_cut << [$game_map, $game_player.x-2, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x-2, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x-2, $game_player.y-1]
+  when DIRECTION_UP
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y-1]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y-1]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y-1]
+
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y-2]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y-2]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y-2]
+  when DIRECTION_DOWN
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y+1]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y+1]
+
+    tiles_to_cut << [$game_map, $game_player.x, $game_player.y+2]
+    tiles_to_cut << [$game_map, $game_player.x+1, $game_player.y+2]
+    tiles_to_cut << [$game_map, $game_player.x-1, $game_player.y+2]
+  end
+
+  map = $MapFactory.getMap($game_map.map_id)
+
+  erased_tiles = []
+  for tile in tiles_to_cut
+    for map_layer in [2, 1, 0]
+      tile_id = map.data[tile[1], tile[2], map_layer]
+      cut_tile_id = tile_id -8
+      next if tile_id == nil
+      tile_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id])
+      next unless tile_tag.battle_environment == :Grass
+      map.erase_tile(tile[1], tile[2], map_layer)
+      unless tile_tag.id == :CutGrass
+        map.set_tile(tile[1], tile[2], map_layer,cut_tile_id)
+      end
+      erased_tiles << tile
+    end
+  end
+  unless erased_tiles.empty?
+    pbSEPlay("Cut", 80)
+    $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID, $game_player.x, $game_player.y, false, 1)
+  end
+
+end
 
 def pbSmashEvent(event)
   return if !event
@@ -1173,10 +1267,9 @@ HiddenMoveHandlers::UseMove.add(:SPLASH, proc { |move, pokemon|
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
   pbSEPlay("jump", 80, 100)
-  $game_player.jump(0,0)
+  $game_player.jump(0, 0)
   next true
 })
-
 
 HiddenMoveHandlers::CanUseMove.add(:MIST, proc { |move, pkmn, showmsg|
   next true if Settings::GAME_ID == :IF_HOENN

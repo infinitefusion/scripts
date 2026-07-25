@@ -299,3 +299,6 @@ define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _
 #Route 111 (North)
 #Route 113
 define_quest("route113_sootgrass",:FIELD_QUEST,_INTL("Clear Out the Soot!"), _INTL("Get rid of the soot on every single patch of grass on Route 113."),_INTL("Route 113"),"NPC_oldman3")
+
+#Fallarbor Town
+define_quest("fallarbor_berries",:FIELD_QUEST,_INTL("Fireproof Berries"), _INTL("Fallarbor Town residents cannot grow crops because of a Slugma infestation. Find fire-resistant berries for them to grow."),_INTL("Fallarbor Town"),"NPC_oldman3")
