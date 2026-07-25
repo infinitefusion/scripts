@@ -205,3 +205,50 @@ def pokedex_check
   return missing
 end
 
+def replace_water_autotile(target_base_id = 240)
+  map = $MapFactory.getMap($game_map.map_id)
+  tiles_per_autotile = TilemapRenderer::TILES_PER_AUTOTILE rescue 48
+
+  for x in 0..map.width - 1
+    for y in 0..map.height - 1
+      for z in [2, 1, 0]
+        tile_id = map.data[x, y, z]
+        next unless tile_id && tile_id > 0
+
+        terrain_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id]) if map.terrain_tags
+        if terrain_tag && terrain_tag.can_surf
+          shape_index = tile_id % tiles_per_autotile
+          new_tile_id = target_base_id + shape_index
+          if map.data[x, y, z] != new_tile_id
+            echoln "(#{x},#{y},#{z}): #{tile_id} -> #{new_tile_id}"
+            map.set_tile(x, y, z, new_tile_id)
+          end
+        end
+      end
+    end
+  end
+end
+
+
+
+# map = $MapFactory.getMap($game_map.map_id)
+#
+# erased_tiles = []
+# for tile in tiles_to_cut
+#   for map_layer in [2, 1, 0]
+#     tile_id = map.data[tile[1], tile[2], map_layer]
+#     cut_tile_id = tile_id -8
+#     next if tile_id == nil
+#     tile_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id])
+#     next unless tile_tag.battle_environment == :Grass
+#     map.erase_tile(tile[1], tile[2], map_layer)
+#     unless tile_tag.id == :CutGrass
+#       map.set_tile(tile[1], tile[2], map_layer,cut_tile_id)
+#     end
+#     erased_tiles << tile
+#   end
+# end
+# unless erased_tiles.empty?
+#   pbSEPlay("Cut", 80)
+#   $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID, $game_player.x, $game_player.y, false, 1)
+# end

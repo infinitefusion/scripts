@@ -130,10 +130,7 @@ end
 Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0] # Get the event affected by field movement
   thistile = $MapFactory.getRealTilePos(event.map.map_id, event.x, event.y)
-
-  cut_grass_id =1009
-
-    map = $MapFactory.getMap(thistile[0])
+  map = $MapFactory.getMap(thistile[0])
   for i in [2, 1, 0]
     tile_id = map.data[thistile[1], thistile[2], i]
     next if tile_id == nil
@@ -143,7 +140,6 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
     end
     playAnimation(SOOT_DUST_ANIMATION,event.x, event.y)
     map.erase_tile(thistile[1], thistile[2], i)
-    map.set_tile(thistile[1], thistile[2], i, cut_grass_id)
     #    map.data[thistile[1], thistile[2], i] = 0
     #    $scene.createSingleSpriteset(map.map_id)
     break
