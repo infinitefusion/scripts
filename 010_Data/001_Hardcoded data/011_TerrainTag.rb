@@ -286,7 +286,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt1,
+                                :id => :Grass_alt1, #CLOVERS
                                 :id_number => 24,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -294,7 +294,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt2,
+                                :id => :Grass_alt2, #DRY GRASS
                                 :id_number => 25,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -302,7 +302,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt3,
+                                :id => :Grass_alt3, #FLOWERS
                                 :id_number => 26,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -364,9 +364,6 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :CutGrass,
                                 :id_number => 35,
-                                :shows_grass_rustle => true,
-                                :land_wild_encounters => true,
-                                :battle_environment => :Grass
                               })
 
 GameData::TerrainTag.register({

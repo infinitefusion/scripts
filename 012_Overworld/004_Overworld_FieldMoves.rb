@@ -311,10 +311,7 @@ def cutTallGrass
       next if tile_id == nil
       tile_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id])
       next unless tile_tag.battle_environment == :Grass
-      map.erase_tile(tile[1], tile[2], map_layer)
-      unless tile_tag.id == :CutGrass
-        map.set_tile(tile[1], tile[2], map_layer,cut_tile_id)
-      end
+      map.set_tile(tile[1], tile[2], map_layer,cut_tile_id)
       erased_tiles << tile
     end
   end

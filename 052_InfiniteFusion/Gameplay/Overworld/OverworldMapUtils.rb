@@ -111,3 +111,4 @@ def showLocation(map_name=nil)
     scene.spriteset.addUserSprite(LocationWindow.new(map_name))
   end
 end
+
