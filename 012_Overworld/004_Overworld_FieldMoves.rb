@@ -1042,6 +1042,13 @@ Events.onAction += proc { |_sender, _e|
   pbSurf
 }
 
+#Waterfall
+Events.onAction += proc { |_sender, _e|
+  next unless $PokemonGlobal.surfing
+  next unless $game_player.pbFacingTerrainTag.waterfall
+  pbWaterfall
+}
+
 # Flowers
 Events.onAction += proc { |_sender, _e|
   next if !$game_player.pbFacingTerrainTag.flower
@@ -1417,12 +1424,7 @@ end
 #   end
 # }
 
-def isFacingTempWaterfall()
-  return if !$game_temp.temp_waterfall
-  player_coordinates = [$game_player.x, $game_player.y]
-  echoln $game_temp.temp_waterfall.include?(player_coordinates)
-  return $game_temp.temp_waterfall.include?(player_coordinates)
-end
+
 
 HiddenMoveHandlers::CanUseMove.add(:WATERFALL, proc { |move, pkmn, showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, showmsg)
