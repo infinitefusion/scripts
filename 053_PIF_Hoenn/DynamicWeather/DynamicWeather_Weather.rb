@@ -48,7 +48,9 @@ class GameWeather
   NO_WIND_MAPS = [MAP_SOOTOPOLIS]
   NO_RAIN_MAPS = [MAP_MT_CHIMNEY,MAP_DESERT]
 
-  FREQUENT_WEATHER = [MAP_ROUTE_113,MAP_ROUTE_120]  #More likely to spawn a new weather
+  #Maps where it's likely to spawn a new weather. Value is the number of weather re-rolls.
+  FREQUENT_WEATHER = {MAP_ROUTE_113=> 3,
+                      MAP_ROUTE_120 => 2}
   WINDY_MAPS = [MAP_MT_CHIMNEY,MAP_MT_PYRE] #More likely to be windy
   RAINY_MAPS = [MAP_ROUTE_113,MAP_ROUTE_119,MAP_ROUTE_120] #More likely to be raining,
   # 113 is in there because rain turns into soot there
@@ -155,7 +157,10 @@ class GameWeather
   def try_spawn_new_weather(map_id,map_weather_type,spawn_chance=nil)
     return if map_weather_type != :None
     spawn_chance = CHANCE_OF_NEW_WEATHER unless spawn_chance
-    spawn_chance*=2 if FREQUENT_WEATHER.include?(map_id)
+    if FREQUENT_WEATHER.include?(map_id)
+      nb_rerolls =FREQUENT_WEATHER[map_id]
+      spawn_chance*=nb_rerolls
+    end
     new_weather = select_new_weather_spawn(spawn_chance, map_id)
     @current_weather[map_id] = adjust_weather_for_map(new_weather,map_id)
   end

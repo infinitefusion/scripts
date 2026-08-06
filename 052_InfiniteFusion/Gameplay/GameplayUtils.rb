@@ -230,6 +230,39 @@ def replace_water_autotile(target_base_id = 240)
 end
 
 
+#checks each of the events passed as ID to see if a berry of a specific type has been planted
+# @return
+# -1 : Berry not found
+# 0 : Berry found, not grown
+# 1 : Berry found, fully grown
+def check_event_for_berries(wanted_berry_type, variable_result,variable_quantity, events_list = [])
+  quantity_found = 0
+  found_berry= false
+  found_full_grown = false
+  events_list.each do |event_id|
+    berry_data = $PokemonGlobal.eventvars[[$game_map.map_id, event_id]]
+    if berry_data
+      berry_type = berry_data[1]
+      growth_stage= berry_data[0]
+      if berry_type == wanted_berry_type
+        found_berry = true
+        quantity_found+=1
+        if growth_stage == 5
+          found_full_grown = true
+        end
+      end
+    end
+  end
+  pbSet(variable_quantity, quantity_found)
+  if found_full_grown
+    pbSet(variable_result, 1) if found_full_grown
+  elsif found_berry
+    pbSet(variable_result, 0) if found_berry
+  else
+    pbSet(variable_result, -1)
+  end
+  return found_berry
+end
 
 # map = $MapFactory.getMap($game_map.map_id)
 #
