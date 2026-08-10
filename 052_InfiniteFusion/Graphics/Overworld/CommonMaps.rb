@@ -30,7 +30,7 @@ COMMON_MAPS_HOENN =
     },
     :CONTEST_HALL => {
       id: 110,
-      position: [11, 37]
+      position: [11, 47]
     }
   }
 

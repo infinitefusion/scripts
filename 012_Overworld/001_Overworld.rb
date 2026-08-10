@@ -725,7 +725,6 @@ def pbLedge(_xOffset, _yOffset)
 end
 
 def sitOnChair()
-
   if $game_player.pbFacingTerrainTag.chair
     if $PokemonGlobal.bicycle
       bump_into_object

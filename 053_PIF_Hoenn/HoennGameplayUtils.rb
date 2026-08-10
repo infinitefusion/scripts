@@ -321,14 +321,19 @@ def inputColorCode(codeVariable)
   return ColorCodeDoor.new(codeVariable).inputColorCode
 end
 
+
 def count_soot()
+  return count_tile(:SootGrass)
+end
+def count_tile(terrain_tag)
   map = $MapFactory.getMap($game_map.map_id)
   count = 0
   for x in 0...map.data.xsize
     for y in 0...map.data.ysize
       for i in 0...map.data.zsize
         tile_id = map.data[x, y, i]
-        next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
+        next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != terrain_tag
+        #echoln [x,y]
         count+=1
       end
     end
@@ -336,20 +341,6 @@ def count_soot()
   return count
 end
 
-def clear_soot
-  map = $MapFactory.getMap($game_map.map_id)
-  count = 0
-  for x in 0...map.data.xsize
-    for y in 0...map.data.ysize
-      for i in 0...map.data.zsize
-        tile_id = map.data[x, y, i]
-        next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-        map.erase_tile(x, y, i)
-      end
-    end
-  end
-  return count
-end
 
 def obtainBirthdayHat(celebration_id)
   current_year = Time.now.year

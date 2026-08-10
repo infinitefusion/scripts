@@ -242,7 +242,7 @@ class Game_Character
       this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $MapFactory.getNewMap(@x, @y)
       if this_map[0].deepBush?(this_map[1], this_map[2]) && self.map.deepBush?(xbehind, ybehind)
         @bush_depth = Game_Map::TILE_HEIGHT
-      elsif !moving? && this_map[0].bush?(this_map[1], this_map[2])
+      elsif this_map[0].bush?(this_map[1], this_map[2])
         @bush_depth = 12
       else
         @bush_depth = 0

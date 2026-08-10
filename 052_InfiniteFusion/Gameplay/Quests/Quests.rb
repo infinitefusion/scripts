@@ -297,6 +297,7 @@ define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _
 
 #Route 112
 #Route 111 (North)
+define_quest("route111_cut",:FIELD_QUEST,_INTL("Lawnmower Mon"), _INTL("Use the move Cut in the field to get rid of the tall grass near the campsite."),_INTL("Route 111"),"NPC_Hoenn_Schoolmate_Senior")
 #Route 113
 define_quest("route113_sootgrass",:FIELD_QUEST,_INTL("Clear Out the Soot!"), _INTL("Get rid of the soot on every single patch of grass on Route 113."),_INTL("Route 113"),"NPC_oldman3")
 

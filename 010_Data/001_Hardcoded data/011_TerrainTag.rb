@@ -22,6 +22,7 @@ module GameData
     attr_reader :ignore_passability
 
     attr_reader :acroBike
+    attr_reader :show_footprints
 
 
     # oricorio
@@ -86,6 +87,8 @@ module GameData
       @ignore_passability = hash[:ignore_passability] || false
       @ignore_passability = hash[:ignore_passability] || false
 
+      @show_footprints = hash[:show_footprints] || false
+
       @flowerRed = hash[:flowerRed] || false
       @flowerYellow = hash[:flowerYellow] || false
       @flowerPink = hash[:flowerPink] || false
@@ -140,7 +143,8 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :Sand,
                                 :id_number => 3,
-                                :battle_environment => :Sand
+                                :battle_environment => :Sand,
+                                :show_footprints => true,
                               })
 
 GameData::TerrainTag.register({
@@ -378,4 +382,13 @@ GameData::TerrainTag.register({
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
                                 :must_walk => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :DeepSand,
+                                :id_number => 38,
+                                :battle_environment => :Sand,
+                                :land_wild_encounters => true,
+                                :must_walk => true,
+                                :show_footprints => true,
                               })

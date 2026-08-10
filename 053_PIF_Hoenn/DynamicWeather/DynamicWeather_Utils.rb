@@ -32,7 +32,7 @@ end
 
 def isWeatherAsh?(map_id=$game_map.map_id)
   return true if GameData::Weather.get($game_screen.weather_type).category == :Ash
-  return $game_weather.get_map_weather_type(map_id) == :Fog
+  return $game_weather.get_map_weather_type(map_id) == :Ash
 end
 
 def isWeatherSnow?(map_id=$game_map.map_id)
