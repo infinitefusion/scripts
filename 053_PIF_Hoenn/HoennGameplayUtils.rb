@@ -355,3 +355,34 @@ def obtainBirthdayHat(celebration_id)
   end
 end
 
+def crumbleMirageTower(event_base_id, event_top_id, tiles = 8)
+  event_base = $game_map.events[event_base_id]
+  event_top  = $game_map.events[event_top_id]
+  return unless event_base && event_top
+
+  ground_y = event_base.y
+
+  tiles.times do
+    event_base.move_down
+    event_top.move_down
+    loop do
+      pbSEPlay("Earth4",80,80,)
+      update_crumble_mask(event_base, ground_y)
+      update_crumble_mask(event_top, ground_y)
+      Graphics.update
+      Input.update
+      pbUpdateSceneMap
+      break if !event_base.moving? && !event_top.moving?
+    end
+  end
+end
+
+def update_crumble_mask(ev, ground_y)
+  ground_real = ground_y * Game_Map::REAL_RES_Y
+  sunk_real   = ev.real_y - ground_real
+  sunk_px     = (sunk_real / Game_Map::Y_SUBPIXELS).to_i
+  depth       = [sunk_px, 0].max
+  return if ev.forced_bush_depth == depth
+  ev.forced_bush_depth = depth
+  ev.calculate_bush_depth
+end

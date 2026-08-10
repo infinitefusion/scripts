@@ -216,3 +216,15 @@ GameData::Weather.register({  #Used underwater
        next Tone.new(strength / 2, strength / 2, strength / 2, 0)
      }
    })
+
+GameData::Weather.register({
+                             :id               => :Crumble,
+                             :id_number        => 14,
+                             :category         => :Crumble,
+                             :graphics         => [[], ["crumble_tile"]],
+                             :tile_delta_x     => 0,
+                             :tile_delta_y     => 300,
+                             :tone_proc        => proc { |strength|
+                               next Tone.new(strength / 2, 0, -strength / 2, 0)
+                             }
+                           })
