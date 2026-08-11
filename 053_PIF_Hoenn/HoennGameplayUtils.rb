@@ -386,3 +386,7 @@ def update_crumble_mask(ev, ground_y)
   ev.forced_bush_depth = depth
   ev.calculate_bush_depth
 end
+
+Events.onWildBattleEnd += proc { |_sender, e|
+  $game_switches[SWITCH_ENCOUNTERED_A_POKEMON] = true
+}

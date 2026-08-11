@@ -303,3 +303,7 @@ define_quest("route113_sootgrass",:FIELD_QUEST,_INTL("Clear Out the Soot!"), _IN
 
 #Fallarbor Town
 define_quest("fallarbor_berries",:FIELD_QUEST,_INTL("Fireproof Berries"), _INTL("Fallarbor Town residents cannot grow crops because of a Slugma infestation. Find fire-resistant berries for them to grow."),_INTL("Fallarbor Town"),"NPC_oldman3")
+
+#Route 114
+define_quest("route114_roar",:FIELD_QUEST,_INTL("Hear Me Roar!"), _INTL("Use Roar outside of battles to get to the end of the tunnel on Route 114 without encountering a single Pokémon."),_INTL("Route 114"),"NPC_Hoenn_Gentleman")
+

@@ -412,6 +412,22 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
   end
 end
 
+def getEventsInRadius(radius = 5)
+  player_x = $game_player.x
+  player_y = $game_player.y
+  nearby_events = []
+
+  $game_map.events.each_value do |event|
+    next if event.nil? || !event.active?
+    distance = Math.sqrt((event.x - player_x)**2 + (event.y - player_y)**2)
+    if distance <= radius
+      nearby_events << event
+    end
+  end
+  return nearby_events
+end
+
+
 # Switch 20
 def isDebugMode()
   return $DEBUG

@@ -1246,6 +1246,17 @@ HiddenMoveHandlers::UseMove.add(:THUNDER, proc { |move, pokemon|
   next true
 })
 
+HiddenMoveHandlers::CanUseMove.add(:ROAR, proc { |move, pkmn, showmsg|
+  next true if $PokemonSystem.overworld_encounters
+})
+HiddenMoveHandlers::UseMove.add(:ROAR, proc { |move, pokemon|
+  playAnimation(NOISE_ANIMATION_ID,$game_player.x, $game_player.y)
+  playCry(pokemon.species)
+  scareOffWildPokemon(5)
+  next true
+})
+
+
 HiddenMoveHandlers::CanUseMove.add(:MAGNETRISE, proc { |move, pkmn, showmsg|
   next true unless $PokemonGlobal.surfing
 })
