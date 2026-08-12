@@ -94,3 +94,18 @@ def getRandomPokemonFromRoute(excluded_species,terrain)
   end
   return GameData::Species.get(random_species)
 end
+
+
+#Used when using Roar in the OW. Makes all the pokemon near the player back off.
+def scareOffWildPokemon(radius=5)
+  pokemon_in_radius = []
+  events_in_radius = getEventsInRadius(radius)
+  events_in_radius.each do |event|
+    pokemon_in_radius << event if event.is_a?(OverworldPokemonEvent)
+  end
+  pokemon_in_radius.each do |pokemon_event|
+    playAnimation(EXCLAMATION_ANIMATION_ID,pokemon_event.x,pokemon_event.y)
+    pokemon_event.move_away_from_player
+    pokemon_event.move_away_from_player
+  end
+end

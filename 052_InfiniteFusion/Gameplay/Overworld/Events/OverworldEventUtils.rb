@@ -279,8 +279,6 @@ def sit_on_chair
       $game_player.direction_fix = false
     else
       passable = $game_map.passable?($game_player.x, $game_player.y, direction)
-      dest_x = $game_player.x + (direction == 6 ? 1 : direction == 4 ? -1 : 0)
-      dest_y = $game_player.y + (direction == 2 ? 1 : direction == 8 ? -1 : 0)
       if passable #&& !$game_map.event_at_position(dest_x, dest_y)  #todo Meant to make it so that you can't get stuck, but also prevents from interacting with
         $game_player.turn_generic(direction)
         $game_player.jump_forward
@@ -413,6 +411,22 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
     return false
   end
 end
+
+def getEventsInRadius(radius = 5)
+  player_x = $game_player.x
+  player_y = $game_player.y
+  nearby_events = []
+
+  $game_map.events.each_value do |event|
+    next if event.nil? || !event.active?
+    distance = Math.sqrt((event.x - player_x)**2 + (event.y - player_y)**2)
+    if distance <= radius
+      nearby_events << event
+    end
+  end
+  return nearby_events
+end
+
 
 # Switch 20
 def isDebugMode()

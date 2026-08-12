@@ -275,6 +275,11 @@ ItemHandlers::UseInField.add(:SPAWNER, proc { |item|
   spawn_ow_pokemon(species.species,5,1)
 })
 
+ItemHandlers::UseInField.add(:DEBUGSPONGE, proc { |item|
+  replace_water_autotile_by_seafloor
+})
+
+
 def useSleepingBag()
   currentSecondsValue = pbGet(UnrealTime::EXTRA_SECONDS)
   choices = [_INTL("1 hour"), _INTL("6 hours"), _INTL("12 hours"), _INTL("24 hours"), _INTL("Cancel")]

@@ -178,7 +178,7 @@ QUESTS = {
     "legendary_meloetta_3" => Quest.new("legendary_meloetta_3", _INTL("A legendary band (Part 3)"), _INTL("The drummer from a legendary Pokéband wants you to find its former bandmates. There are rumors about strange music that was heard around the region."), "band_drummer", _INTL("Saffron City"), LegendaryQuestColor),
     "legendary_meloetta_4" => Quest.new("legendary_meloetta_4", _INTL("A legendary band (Part 4)"), _INTL("You assembled the full band! Come watch the show on Saturday night."), "BW117", _INTL("Saffron City"), LegendaryQuestColor),
 
-    "legendary_cresselia_1" => Quest.new(61, _INTL("Mysterious Lunar feathers"), _INTL("A mysterious entity asked you to collect Lunar Feathers for them. It said that they will come at night to tell you where to look. Whoever that may be..."), "lunarFeather", _INTL("Lavender Town"), LegendaryQuestColor),
+    "legendary_cresselia_1" => Quest.new("legendary_cresselia_1", _INTL("Mysterious Lunar feathers"), _INTL("A mysterious entity asked you to collect Lunar Feathers for them. It said that they will come at night to tell you where to look. Whoever that may be..."), "lunarFeather", _INTL("Lavender Town"), LegendaryQuestColor),
     #removed
     #11 => Quest.new(11, "Powering the Lighthouse", "Catch some Voltorb to power up the lighthouse", QuestBranchHotels, "BW (43)", "Vermillion City", HotelQuestColor),
 }
@@ -297,5 +297,13 @@ define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _
 
 #Route 112
 #Route 111 (North)
+define_quest("route111_cut",:FIELD_QUEST,_INTL("Lawnmower Mon"), _INTL("Use the move Cut in the field to get rid of the tall grass near the campsite."),_INTL("Route 111"),"NPC_Hoenn_Schoolmate_Senior")
 #Route 113
 define_quest("route113_sootgrass",:FIELD_QUEST,_INTL("Clear Out the Soot!"), _INTL("Get rid of the soot on every single patch of grass on Route 113."),_INTL("Route 113"),"NPC_oldman3")
+
+#Fallarbor Town
+define_quest("fallarbor_berries",:FIELD_QUEST,_INTL("Fireproof Berries"), _INTL("Fallarbor Town residents cannot grow crops because of a Slugma infestation. Find fire-resistant berries for them to grow."),_INTL("Fallarbor Town"),"NPC_oldman3")
+
+#Route 114
+define_quest("route114_roar",:FIELD_QUEST,_INTL("Hear Me Roar!"), _INTL("Use Roar outside of battles to get to the end of the tunnel on Route 114 without encountering a single Pokémon."),_INTL("Route 114"),"NPC_Hoenn_Gentleman")
+

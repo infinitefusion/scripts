@@ -22,6 +22,7 @@ module GameData
     attr_reader :ignore_passability
 
     attr_reader :acroBike
+    attr_reader :show_footprints
 
 
     # oricorio
@@ -86,6 +87,8 @@ module GameData
       @ignore_passability = hash[:ignore_passability] || false
       @ignore_passability = hash[:ignore_passability] || false
 
+      @show_footprints = hash[:show_footprints] || false
+
       @flowerRed = hash[:flowerRed] || false
       @flowerYellow = hash[:flowerYellow] || false
       @flowerPink = hash[:flowerPink] || false
@@ -140,7 +143,8 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :Sand,
                                 :id_number => 3,
-                                :battle_environment => :Sand
+                                :battle_environment => :Sand,
+                                :show_footprints => true,
                               })
 
 GameData::TerrainTag.register({
@@ -286,7 +290,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt1,
+                                :id => :Grass_alt1, #CLOVERS
                                 :id_number => 24,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -294,7 +298,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt2,
+                                :id => :Grass_alt2, #DRY GRASS
                                 :id_number => 25,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -302,7 +306,7 @@ GameData::TerrainTag.register({
                               })
 
 GameData::TerrainTag.register({
-                                :id => :Grass_alt3,
+                                :id => :Grass_alt3, #FLOWERS
                                 :id_number => 26,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
@@ -359,4 +363,32 @@ GameData::TerrainTag.register({
                                 :id => :AcroBike,
                                 :id_number => 34,
                                 :acroBike => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :CutGrass,
+                                :id_number => 35,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :TallGrassTop,
+                                :id_number => 36,
+                              })
+GameData::TerrainTag.register({
+                                :id => :TallGrassMiddle,
+                                :id_number => 37,
+                                :deep_bush => true,
+                                :land_wild_encounters => true,
+                                :double_wild_encounters => true,
+                                :battle_environment => :TallGrass,
+                                :must_walk => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :DeepSand,
+                                :id_number => 38,
+                                :battle_environment => :Sand,
+                                :land_wild_encounters => true,
+                                :must_walk => true,
+                                :show_footprints => true,
                               })

@@ -88,6 +88,10 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE, proc { |item|
 
 def pbRepel(item, steps)
   message = $game_switches[SWITCH_USED_AN_INCENSE] ? "But an incense's effect still lingers from earlier." : "But a repellent's effect still lingers from earlier."
+  if $game_switches[SWITCH_NO_REPEL]
+    pbMessage(_INTL("It won't have any effect here..."))
+    return 0
+  end
   if $PokemonGlobal.repel > 0
     pbMessage(_INTL(message))
     return 0

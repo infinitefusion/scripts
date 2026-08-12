@@ -195,7 +195,9 @@ class Game_Character
 
   def foot_prints?
     begin
-      return $game_map.terrain_tag(get_last_pos[0], get_last_pos[1]) == FootprintVariables::TERRAIN_FOOT && $scene.is_a?(Scene_Map) && $scene.spriteset?
+      terrain_tag = $game_map.terrain_tag(get_last_pos[0], get_last_pos[1])
+      return terrain_tag.show_footprints && $scene.is_a?(Scene_Map) && $scene.spriteset?
+      #return $game_map.terrain_tag(get_last_pos[0], get_last_pos[1]) == FootprintVariables::TERRAIN_FOOT && $scene.is_a?(Scene_Map) && $scene.spriteset?
     rescue
       return false
     end

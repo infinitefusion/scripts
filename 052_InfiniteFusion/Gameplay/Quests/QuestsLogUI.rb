@@ -1,7 +1,6 @@
 ##=============================================================================
 ##  Easy Questing System - Refactored with Extensible Mode System
 ##  Original by M3rein
-#   Refactored using by Claude
 #   Adapted for Pokemon Infinite Fusion by chardub
 ##=============================================================================
 ##  Main entry point for the quest log

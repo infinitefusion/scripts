@@ -60,6 +60,45 @@ def floorHole(mapBelow, frames_for_fall = 8, bikeOnly = true)
   end
 end
 
+def floorHoleSameMap(x_offset,y_offset, frames_for_fall = 8, bikeOnly = true)
+  return unless x_offset && y_offset
+  return if $game_player.moving?
+
+  event = this_event()
+  event.instance_variable_set(:@idle_frames, 0) unless event.instance_variable_defined?(:@idle_frames)
+  event.instance_variable_set(:@idle_frames, event.instance_variable_get(:@idle_frames) + 1)
+
+  frames_for_fall = 0 if bikeOnly && !$PokemonGlobal.bicycle
+
+  if event.instance_variable_get(:@idle_frames) >= frames_for_fall
+    event.instance_variable_set(:@idle_frames, 0)
+
+    # Find a passable landing tile on the target map
+    target_x, target_y = findPassableLanding($game_map.map_id, $game_player.x+x_offset, $game_player.y+y_offset)
+    return unless target_x
+
+    pbSEPlay("Slash")
+    playAnimation(Settings::EXCLAMATION_ANIMATION_ID, $game_player.x, $game_player.y)
+    event.direction_fix = false
+    event.turn_left
+
+    pbWait(4)
+    pbFadeOutIn {
+      $game_temp.player_new_map_id = $game_map.map_id
+      $game_temp.player_new_x = target_x
+      $game_temp.player_new_y = target_y
+      pbCancelVehicles
+      $scene.transfer_player
+      $game_map.autoplay
+      $game_map.refresh
+    }
+    event.turn_down
+    event.direction_fix = true
+    pbWait(8)
+  end
+end
+
+
 # Loads the target map and spirals outward from (start_x, start_y)
 # until a passable tile is found. Returns [x, y] or [nil, nil].
 def findPassableLanding(map_id, start_x, start_y, max_radius = 10)
@@ -205,3 +244,83 @@ def pokedex_check
   return missing
 end
 
+def replace_water_autotile(target_base_id = 240)
+  map = $MapFactory.getMap($game_map.map_id)
+  tiles_per_autotile = TilemapRenderer::TILES_PER_AUTOTILE rescue 48
+
+  for x in 0..map.width - 1
+    for y in 0..map.height - 1
+      for z in [2, 1, 0]
+        tile_id = map.data[x, y, z]
+        next unless tile_id && tile_id > 0
+
+        terrain_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id]) if map.terrain_tags
+        if terrain_tag && terrain_tag.can_surf
+          shape_index = tile_id % tiles_per_autotile
+          new_tile_id = target_base_id + shape_index
+          if map.data[x, y, z] != new_tile_id
+            echoln "(#{x},#{y},#{z}): #{tile_id} -> #{new_tile_id}"
+            map.set_tile(x, y, z, new_tile_id)
+          end
+        end
+      end
+    end
+  end
+end
+
+
+#checks each of the events passed as ID to see if a berry of a specific type has been planted
+# @return
+# -1 : Berry not found
+# 0 : Berry found, not grown
+# 1 : Berry found, fully grown
+def check_event_for_berries(wanted_berry_type, variable_result,variable_quantity, events_list = [])
+  quantity_found = 0
+  found_berry= false
+  found_full_grown = false
+  events_list.each do |event_id|
+    berry_data = $PokemonGlobal.eventvars[[$game_map.map_id, event_id]]
+    if berry_data
+      berry_type = berry_data[1]
+      growth_stage= berry_data[0]
+      if berry_type == wanted_berry_type
+        found_berry = true
+        quantity_found+=1
+        if growth_stage == 5
+          found_full_grown = true
+        end
+      end
+    end
+  end
+  pbSet(variable_quantity, quantity_found)
+  if found_full_grown
+    pbSet(variable_result, 1) if found_full_grown
+  elsif found_berry
+    pbSet(variable_result, 0) if found_berry
+  else
+    pbSet(variable_result, -1)
+  end
+  return found_berry
+end
+
+# map = $MapFactory.getMap($game_map.map_id)
+#
+# erased_tiles = []
+# for tile in tiles_to_cut
+#   for map_layer in [2, 1, 0]
+#     tile_id = map.data[tile[1], tile[2], map_layer]
+#     cut_tile_id = tile_id -8
+#     next if tile_id == nil
+#     tile_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id])
+#     next unless tile_tag.battle_environment == :Grass
+#     map.erase_tile(tile[1], tile[2], map_layer)
+#     unless tile_tag.id == :CutGrass
+#       map.set_tile(tile[1], tile[2], map_layer,cut_tile_id)
+#     end
+#     erased_tiles << tile
+#   end
+# end
+# unless erased_tiles.empty?
+#   pbSEPlay("Cut", 80)
+#   $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID, $game_player.x, $game_player.y, false, 1)
+# end
