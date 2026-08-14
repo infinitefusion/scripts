@@ -457,7 +457,9 @@ class PokeBattle_Battle
         @opponent.each_with_index do |_t, i|
           @scene.pbShowOpponent(i)
           msg = (@endSpeeches[i] && @endSpeeches[i] != "") ? @endSpeeches[i] : "..."
-          pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
+          msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
+          msg = msg.gsub(/\\n/, "\n")
+          pbDisplayPaused(msg)
         end
       end
       # Gain money from winning a trainer battle, and from Pay Day
@@ -499,7 +501,9 @@ class PokeBattle_Battle
           @opponent.each_with_index do |_t, i|
             @scene.pbShowOpponent(i)
             msg = (@endSpeechesWin[i] && @endSpeechesWin[i] != "") ? @endSpeechesWin[i] : "..."
-            pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
+            msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
+            msg = msg.gsub(/\\n/, "\n")
+            pbDisplayPaused(msg)
           end
         end
       end
