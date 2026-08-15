@@ -706,3 +706,26 @@ def getRandomUnisexName
   return RandTrainerNames_unisex.sample
 end
 
+def playAnimationAroundPlayer(animation_id, radius, only_passable = false)
+  player_x = $game_player.x
+  player_y = $game_player.y
+  valid_tiles = []
+
+  (-radius..radius).each do |dx|
+    (-radius..radius).each do |dy|
+      next if Math.sqrt(dx**2 + dy**2) > radius
+      target_x = player_x + dx
+      target_y = player_y + dy
+      next unless $game_map.valid?(target_x, target_y)
+      if only_passable
+        next unless $game_player.passable?(target_x, target_y, 0)
+      end
+      valid_tiles << [target_x, target_y]
+    end
+  end
+  return if valid_tiles.empty?
+
+  selected_x, selected_y = valid_tiles.sample
+  playAnimation(animation_id, selected_x, selected_y)
+end
+
