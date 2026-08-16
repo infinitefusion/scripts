@@ -625,6 +625,13 @@ HiddenMoveHandlers::UseMove.add(:FLASH, proc { |move, pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
+  useFlash()
+  next true
+})
+
+def useFlash
+  darkness = $PokemonTemp.darknessSprite
+  return if !darkness || darkness.disposed?
   $PokemonGlobal.flashUsed = true
   radiusDiff = 8 * 20 / Graphics.frame_rate
   while darkness.radius < darkness.radiusMax
@@ -634,8 +641,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH, proc { |move, pokemon|
     darkness.radius += radiusDiff
     darkness.radius = darkness.radiusMax if darkness.radius > darkness.radiusMax
   end
-  next true
-})
+end
 
 #===============================================================================
 # Fly / Teleport
