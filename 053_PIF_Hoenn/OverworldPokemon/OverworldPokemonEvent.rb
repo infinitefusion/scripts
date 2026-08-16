@@ -14,6 +14,8 @@ class OverworldPokemonEvent < Game_Event
   attr_reader :noticed_player_once
   attr_reader :last_facing_direction
 
+  attr_reader :glow_in_the_dark
+
   DISTANCE_FOR_DESPAWN = 16
   FLEEING_BEHAVIORS = [:flee, :flee_flying, :teleport_away]
 
@@ -97,7 +99,16 @@ class OverworldPokemonEvent < Game_Event
     end
     set_roaming_movement
     @last_facing_direction = @direction
+    setup_glow
     @setup_complete = true
+  end
+
+  def setup_glow
+    @glow_in_the_dark = POKEMON_BEHAVIOR_DATA[@species][:glow_in_the_dark]
+    if @glow_in_the_dark
+      @light_effect = LightEffect_PokemonGlow.new(self)
+      $scene.spriteset.addUserSprite(@light_effect)
+    end
   end
 
   def roll_for_special_encounters
@@ -190,6 +201,14 @@ class OverworldPokemonEvent < Game_Event
     return @species
   end
 
+
+  def getBodySpecies
+    is_fusion = isSpeciesFusion(@species)
+    if is_fusion
+      return GameData::Species.get(@species).get_body_species_symbol
+    end
+    return @species
+  end
   def initialize_sprite(terrain, species_data)
     @land_sprite = getOverworldLandPath(species_data, @pokemon.shiny?)
     @flying_sprite = getOverworldFlyingPath(species_data, @pokemon.shiny?)
@@ -587,6 +606,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def despawn
+    @light_effect&.dispose
     erase
     $game_map.events.delete(@id)
     $PokemonTemp.overworld_pokemon_on_map&.delete(@id)
