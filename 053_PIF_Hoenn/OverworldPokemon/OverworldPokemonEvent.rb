@@ -641,5 +641,22 @@ class OverworldPokemonEvent < Game_Event
       end
     end
   end
+
+
+  #Override marshall dump to exclude stuff that crashes the game (the ref to lignt_effect)
+  def marshal_dump
+    ivars = {}
+    instance_variables.each do |var|
+      next if var == :@light_effect
+      ivars[var] = instance_variable_get(var)
+    end
+    return ivars
+  end
+
+  def marshal_load(ivars)
+    ivars.each { |var, val| instance_variable_set(var, val) }
+    @light_effect = nil
+  end
+
 end
 

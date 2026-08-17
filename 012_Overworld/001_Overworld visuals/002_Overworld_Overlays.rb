@@ -324,7 +324,11 @@ class LightEffect_PokemonGlow < LightEffect_DayNight
     return if !@light || !@event || @disposed
     update_frame
     @light.update
-    shade = PBDayNight.getShade
+    if $PokemonGlobal&.diving
+      shade = 0
+    else
+      shade = PBDayNight.getShade
+    end
     if shade >= 144
       shade = 255
     elsif shade <= 64
