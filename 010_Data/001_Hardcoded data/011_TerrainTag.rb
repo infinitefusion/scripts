@@ -245,7 +245,8 @@ GameData::TerrainTag.register({
                                 :id => :Puddle,
                                 :id_number => 16,
                                 :battle_environment => :Puddle,
-                                :shows_reflections => false
+                                :land_wild_encounters => true,
+                                :shows_reflections => true
                               })
 
 GameData::TerrainTag.register({

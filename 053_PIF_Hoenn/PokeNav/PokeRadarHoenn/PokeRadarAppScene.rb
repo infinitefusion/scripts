@@ -391,6 +391,8 @@ class PokeRadarAppScene < PokeNavAppScene
       return _INTL("Water")
     when :TallGrass
       return _INTL("Tall Grass")
+    when :Puddle
+      return _INTL("Shallow Water")
     else
       return encounter_type.to_s
     end
