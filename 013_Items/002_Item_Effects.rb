@@ -19,7 +19,7 @@ ItemHandlers::UseText.copy(:BICYCLE, :RACEBIKE)
 #===============================================================================
 
 ItemHandlers::UseFromBag.add(:HONEY, proc { |item|
-  next 4
+  next 2
 })
 
 ItemHandlers::UseFromBag.add(:ESCAPEROPE, proc { |item|
@@ -28,7 +28,7 @@ ItemHandlers::UseFromBag.add(:ESCAPEROPE, proc { |item|
     next 0
   end
   if ($PokemonGlobal.escapePoint rescue false) && $PokemonGlobal.escapePoint.length > 0
-    next 4 # End screen and consume item
+    next 2 # End screen and consume item
   end
   pbMessage(_INTL("Can't use that here."))
   next 0
