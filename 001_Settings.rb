@@ -115,11 +115,6 @@ module Settings
   WIKI_URL = "https://infinitefusion.fandom.com/"
   FAQ_URL = "https://hackmd.io/@PIF-Staff/PIF-Hoenn-FAQ"
 
-  AI_ENTRIES_URL = "https://ai-entries.pkmninfinitefusion.workers.dev/"
-  AI_ENTRIES_RATE_MAX_NB_REQUESTS = 10 # Nb. requests allowed in each time window
-  AI_ENTRIES_RATE_TIME_WINDOW = 120 # In seconds
-  AI_ENTRIES_RATE_LOG_FILE = 'Data/pokedex/dex_rate_limit.log' # Path to the log file
-
   CUSTOMSPRITES_RATE_MAX_NB_REQUESTS = 15 # Nb. requests allowed in each time window
   CUSTOMSPRITES_ENTRIES_RATE_TIME_WINDOW = 120 # In seconds
   CUSTOMSPRITES_RATE_LOG_FILE = 'Data/sprites/sprites_rate_limit.log' # Path to the log file
