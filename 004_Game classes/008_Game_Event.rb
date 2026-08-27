@@ -10,6 +10,7 @@ class Game_Event < Game_Character
   attr_reader :page
   attr_reader :on_bridge
   attr_accessor :refresh_hue
+  attr_accessor :is_rival_following
 
   def initialize(map_id, event, map=nil)
     super(map)
@@ -63,6 +64,10 @@ class Game_Event < Game_Character
 
   def start
     @starting = true if @list.size > 1
+  end
+
+  def name=(value)
+    @event.name = value
   end
 
   def erase

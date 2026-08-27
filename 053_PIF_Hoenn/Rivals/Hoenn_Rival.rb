@@ -6,6 +6,9 @@ HOENN_MOM_BRENDAN_CHARNAME = "NPC_Hoenn_BrendanMom"
 HOENN_MOM_MAY_CHARNAME = "NPC_Hoenn_MayMom"
 HOENN_MAX_CHARNAME = "NPC_Hoenn_Max"
 
+COMMON_EVENT_RIVAL_FOLLOWING_DIALOGUE = 199
+
+
 class Player < Trainer
   attr_accessor :rival_appearance
 
@@ -83,14 +86,13 @@ class Sprite_Character
   def checkModifySpriteGraphics(character)
     PIF_typeExpert_checkModifySpriteGraphics(character)
     return if character == $game_player
-    unless character.visible?
+    if !character.visible? && !character.is_rival_following
       @bitmap_override = nil
       updateBitmap
       return
     end
-    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerFemale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
-    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerMale && character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
-
+    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerFemale && is_rival_character(character)
+    setSpriteToAppearance($Trainer.rival_appearance) if isPlayerMale && is_rival_character(character)
     if character.character_name == HOENN_MOM_BRENDAN_CHARNAME
       skinColor = $Trainer.skin_tone if isPlayerMale
       skinColor = $Trainer.rival_appearance.skin_color if isPlayerFemale
@@ -110,6 +112,11 @@ class Sprite_Character
       setSpriteToStaticAppearance(sprite_path)
     end
   end
+end
+
+def is_rival_character(character)
+  return true if character&.is_rival_following
+  return character.name.start_with?(HOENN_RIVAL_EVENT_NAME) && character.character_name == TEMPLATE_CHARACTER_FILE
 end
 
 def get_hoenn_rival_starter
@@ -356,4 +363,31 @@ def hoennRivalBattle(loseDialog = "...", canLose = false, items = [])
     rival_trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
   end
   return customTrainerBattle(rival_trainer.trainerName, rival_trainer.trainerType, rival_trainer.currentTeam, rival_trainer, loseDialog, nil, $Trainer.rival_appearance, items, canLose)
+end
+
+
+def rival_follow(eventId)
+  trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_RIVAL_KEY]
+  partnerWithTrainer(eventId, $game_map.map_id, trainer, BATTLED_TRAINER_RIVAL_KEY, COMMON_EVENT_RIVAL_FOLLOWING_DIALOGUE)
+
+  partner_event = pbGetDependency(BATTLED_TRAINER_RIVAL_KEY)
+  return unless partner_event
+  partner_event.is_rival_following = true
+  partner_event.name = HOENN_RIVAL_EVENT_NAME
+end
+
+def wally_unfollow()
+  unpartnerWithTrainer()
+end
+
+class DependentEvents
+  alias hoennRival_createEvent createEvent
+  def createEvent(eventData)
+    newEvent = hoennRival_createEvent(eventData)
+    if eventData[8] == BATTLED_TRAINER_RIVAL_KEY
+      newEvent.name = HOENN_RIVAL_EVENT_NAME
+      newEvent.is_rival_following = true
+    end
+    return newEvent
+  end
 end
