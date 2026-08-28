@@ -91,10 +91,13 @@ end
 def pbStartOver(gameover = false)
   $game_variables[VAR_CURRENT_GYM_TYPE] = -1
   $game_switches[SWITCH_LOCK_PLAYER_MOVEMENT] = false
+
   $game_switches[SWITCH_TEAMED_WITH_ERIKA_SEWERS] = false
   if $game_switches[SWITCH_WALLY_CATCHING_POKEMON] || $game_switches[SWITCH_WALLY_GAVE_POKEMON]
     $game_switches[SWITCH_DIED_WITH_WALLY] = true
   end
+  $game_switches[SWITCH_RIVAL_ON_MT_CHIMNEY] = false
+
   pbBridgeOff
   $PokemonTemp.enteredSecretBaseController = nil
   clear_all_images()

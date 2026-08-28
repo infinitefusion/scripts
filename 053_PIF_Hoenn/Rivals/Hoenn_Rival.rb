@@ -6,6 +6,8 @@ HOENN_MOM_BRENDAN_CHARNAME = "NPC_Hoenn_BrendanMom"
 HOENN_MOM_MAY_CHARNAME = "NPC_Hoenn_MayMom"
 HOENN_MAX_CHARNAME = "NPC_Hoenn_Max"
 
+SWITCH_RIVAL_ON_MT_CHIMNEY = 2213
+
 COMMON_EVENT_RIVAL_FOLLOWING_DIALOGUE = 199
 
 
@@ -376,8 +378,16 @@ def rival_follow(eventId)
   partner_event.name = HOENN_RIVAL_EVENT_NAME
 end
 
-def wally_unfollow()
+def rival_unfollow()
   unpartnerWithTrainer()
+end
+
+def playRivalBgm()
+  if isPlayerFemale()
+    pbBGMPlay("rival_brendan")
+  else
+    pbBGMPlay("rival_may")
+  end
 end
 
 class DependentEvents

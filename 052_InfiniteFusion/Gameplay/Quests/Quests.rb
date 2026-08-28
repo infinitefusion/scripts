@@ -205,6 +205,9 @@ define_quest("main_league",:MAIN_QUEST,_INTL("Pokémon League Challenge"), _INTL
 define_quest("main_stolen_parts",:MAIN_QUEST,_INTL("Stolen Package"), _INTL("Recover a package stolen by Team Magma!"),_INTL("Rustboro City"),"NPC_Hoenn_MrStone")
 define_quest("main_steven_letter",:MAIN_QUEST,_INTL("Steven's Letter"), _INTL("Deliver a letter from the Devon Corp. president to Steven in Granite Cave. "),_INTL("Granite Cave"),"NPC_Hoenn_MrStone",MAP_DEWFORD)
 define_quest("main_devon_parts",:MAIN_QUEST,_INTL("Devon Parts Delivery"), _INTL("Deliver the Devon Parts to the Shipyard in Slateport City."),_INTL("Slateport City"),"NPC_Hoenn_MrStone",MAP_SLATEPORT)
+define_quest("main_meteor_falls",:MAIN_QUEST,_INTL("Find Professor Cozmo"), _INTL("Find Professor Cozmo in Meteor Falls."),_INTL("Meteor Falls"),"NPC_Hoenn_AromaLady",MAP_METEOR_FALLS)
+define_quest("mt_chimney_aqua",:MAIN_QUEST,_INTL("Stop Team Magma!"), _INTL("Team Magma wants to use the Meteorite's power at Mt. Chimney. They need to be stopped before it's too late."),_INTL("Mt. Chimney"),"NPC_Hoenn_Magma_Maxie",MAP_MT_CHIMNEY)
+define_quest("mt_chimney_magma",:MAIN_QUEST,_INTL("The Meteorite's Power"), _INTL("Go to Mt. Chimney to help Team Magma harness the power of the Meteorite."),_INTL("Mt. Chimney"),"NPC_Hoenn_Magma_Maxie",MAP_MT_CHIMNEY)
 
 #SIDE QUESTS
 define_quest("template",:FIELD_QUEST,_INTL("Template Quest"), _INTL("Don't forget to change the quest ID if you copy paste this!"),_INTL("Unknown"),"000")
