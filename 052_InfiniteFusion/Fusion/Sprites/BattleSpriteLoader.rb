@@ -124,6 +124,11 @@ class BattleSpriteLoader
     pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
     if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_base_sprite(dex_number)
+      local_path = check_for_local_sprite(pif_sprite)
+      if local_path
+        pif_sprite.local_path = local_path
+      end
+
       $PokemonSystem.alt_sprite_substitutions[substitution_id] = pif_sprite if $PokemonGlobal && !$PokemonSystem.random_sprites
     end
     if pif_sprite.local_path
@@ -181,6 +186,7 @@ class BattleSpriteLoader
     return pif_sprite.local_path if pif_sprite.local_path
     if pif_sprite.type == :BASE
       sprite_path = "#{Settings::CUSTOM_BASE_SPRITES_FOLDER}#{pif_sprite.head_id}#{pif_sprite.alt_letter}.png"
+      echoln sprite_path
     else
       sprite_path = "#{Settings::CUSTOM_BATTLERS_FOLDER_INDEXED}#{pif_sprite.head_id}/#{pif_sprite.head_id}.#{pif_sprite.body_id}#{pif_sprite.alt_letter}.png"
     end
@@ -234,7 +240,13 @@ class BattleSpriteLoader
   def select_new_pif_base_sprite(dex_number)
     random_alt = get_random_alt_letter_for_unfused(dex_number, true) #nil if no main
     random_alt = "" if !random_alt
-    return PIFSprite.new(:BASE, dex_number, nil, random_alt)
+    pif_sprite = PIFSprite.new(:BASE, dex_number, nil, random_alt)
+    local_path = check_for_local_sprite(pif_sprite)
+    if local_path
+      pif_sprite.local_path = local_path
+      pif_sprite.type = :CUSTOM
+    end
+    return pif_sprite
   end
 
   #todo refactor by using get_triple_fusion_components()

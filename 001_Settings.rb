@@ -36,7 +36,7 @@ module Settings
   ANIMATE_REFLECTIONS = false # GAME_ID == :IF_HOENN #true
   USE_REFLECTIONS = false
   # Infinite fusion settings
-  NB_POKEMON = 576
+  NB_POKEMON = 582
   TRANSFER_BOX_DISCLAIMER_MESSAGE = ""
   CUSTOM_BASE_SPRITES_FOLDER = "Graphics/CustomBattlers/local_sprites/BaseSprites/"
   CUSTOM_BATTLERS_FOLDER = "Graphics/CustomBattlers/"
