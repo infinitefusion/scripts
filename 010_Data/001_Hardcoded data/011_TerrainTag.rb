@@ -46,6 +46,7 @@ module GameData
     attr_reader :secretBase_bush
     attr_reader :step_sound
 
+    attr_reader :ambient_sound
 
     attr_reader :shifting_tile_horizontal
     attr_reader :shifting_tile_vertical
@@ -115,6 +116,7 @@ module GameData
       @shifting_tile_vertical = hash[:shifting_tile_vertical] || false
 
       @step_sound = hash[:step_sound]
+      @ambient_sound = hash[:ambient_sound]
 
     end
 
@@ -213,7 +215,7 @@ GameData::TerrainTag.register({
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
                                 :must_walk => true,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/tall_grass",
                               })
 
 GameData::TerrainTag.register({
@@ -428,4 +430,21 @@ GameData::TerrainTag.register({
                                 :shifting_tile_horizontal => true,
                                 :step_sound => "steps/wooden_bridge"
                                 #:bridge => true
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :Beach,
+                                :id_number => 41,
+                                :battle_environment => :Sand,
+                                :show_footprints => true,
+                                :ambient_sound => "ambient/ocean"
+                              })
+
+GameData::TerrainTag.register({   #Like normal water, but with a river flowing sound effect
+                                :id => :RiverWater,
+                                :id_number => 42,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :battle_environment => :MovingWater,
+                                :ambient_sound => "ambient/river"
                               })

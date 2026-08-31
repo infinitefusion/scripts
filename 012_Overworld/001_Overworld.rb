@@ -162,8 +162,6 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
       terrain_tag = $MapFactory.getTerrainTag(event.map.map_id, x, y, true)
       if terrain_tag.step_sound
         playFootstepSound(terrain_tag.step_sound)
-      else
-        playFootstepSound("default")
       end
     end
   end
