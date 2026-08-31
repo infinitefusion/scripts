@@ -151,8 +151,12 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0] # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
-      if $MapFactory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
+      terrain_tag = $MapFactory.getTerrainTag(event.map.map_id, x, y, true)
+      if terrain_tag.shows_grass_rustle
         $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1) unless event.floating
+      end
+      if terrain_tag.step_sound
+        playFootstep(terrain_tag.step_sound)
       end
     end
     if event == $game_player

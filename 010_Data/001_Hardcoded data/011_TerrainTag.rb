@@ -44,6 +44,12 @@ module GameData
     attr_reader :secretBase_tree
     attr_reader :secretBase_cave
     attr_reader :secretBase_bush
+    attr_reader :step_sound
+
+
+    attr_reader :shifting_tile_horizontal
+    attr_reader :shifting_tile_vertical
+
 
     DATA = {}
 
@@ -105,6 +111,10 @@ module GameData
       @secretBase_tree = hash[:secretBase_tree] || false
       @secretBase_cave = hash[:secretBase_cave] || false
       @secretBase_bush = hash[:secretBase_bush] || false
+      @shifting_tile_horizontal = hash[:shifting_tile_horizontal] || false
+      @shifting_tile_vertical = hash[:shifting_tile_vertical] || false
+
+      @step_sound = hash[:step_sound]
 
     end
 
@@ -392,4 +402,21 @@ GameData::TerrainTag.register({
                                 :land_wild_encounters => true,
                                 :must_walk => true,
                                 :show_footprints => true,
+                              })
+
+GameData::TerrainTag.register({
+                                :id => :SuspendedBridgeVertical,
+                                :id_number => 39,
+                                :shifting_tile_vertical => true,
+                                :wooden_bridge_sound => true,
+                                :step_sound => "steps/wooden_bridge"
+
+                                #:bridge => true
+                              })
+GameData::TerrainTag.register({
+                                :id => :SuspendedBridgeHHorizontal,
+                                :id_number => 40,
+                                :shifting_tile_horizontal => true,
+                                :step_sound => "steps/wooden_bridge"
+                                #:bridge => true
                               })
