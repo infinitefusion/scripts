@@ -126,6 +126,13 @@ def pbCheckAllFainted
   end
 end
 
+def playFootstepSound(sound_file)
+  echoln "footstep sound #{sound_file}"
+  volume = rand(20..30)
+  pitch = rand(90..110)
+  pbSEPlay(sound_file,volume,pitch)
+end
+
 # Gather soot from soot grass
 Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0] # Get the event affected by field movement
@@ -146,6 +153,23 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   end
 }
 
+
+Events.onStepTakenFieldMovement += proc { |_sender, e|
+  event = e[0] # Get the event affected by field movement
+  next unless event == $game_player
+  if $scene.is_a?(Scene_Map)
+    event.each_occupied_tile do |x, y|
+      terrain_tag = $MapFactory.getTerrainTag(event.map.map_id, x, y, true)
+      if terrain_tag.step_sound
+        playFootstepSound(terrain_tag.step_sound)
+      else
+        playFootstepSound("default")
+      end
+    end
+  end
+}
+
+
 # Show grass rustle animation, and auto-move the player over waterfalls and ice
 Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0] # Get the event affected by field movement
@@ -154,9 +178,6 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
       terrain_tag = $MapFactory.getTerrainTag(event.map.map_id, x, y, true)
       if terrain_tag.shows_grass_rustle
         $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1) unless event.floating
-      end
-      if terrain_tag.step_sound
-        playFootstep(terrain_tag.step_sound)
       end
     end
     if event == $game_player
