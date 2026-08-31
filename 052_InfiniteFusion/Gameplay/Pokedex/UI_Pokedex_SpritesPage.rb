@@ -294,16 +294,15 @@ class PokemonPokedexInfo_Scene
     end
   end
 
-  SHARED_BODIES = {}
+  SHARED_BODIES = {
+    :SHELLOS_E => :SHELLOS_W,
+    :SHELLOS_W => :SHELLOS_E,
+    :GASTRODON_E => :GASTRODON_W,
+    :GASTRODON_W => :GASTRODON_E
+  }
   SHARED_HEADS = {}
   def get_shared_bodies
-    #return SHARED_BODIES
-    return {
-      GameData::Species.get(NB_POKEMON-3).species => GameData::Species.get(NB_POKEMON-1).species,
-      GameData::Species.get(NB_POKEMON-1).species => GameData::Species.get(NB_POKEMON-3).species,
-      GameData::Species.get(NB_POKEMON-2).species => GameData::Species.get(NB_POKEMON).species,
-      GameData::Species.get(NB_POKEMON).species => GameData::Species.get(NB_POKEMON-2).species,
-    }
+    return SHARED_BODIES
   end
 
   def get_shared_heads
