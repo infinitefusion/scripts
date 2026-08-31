@@ -147,7 +147,8 @@ GameData::TerrainTag.register({
                                 :id_number => 2,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
-                                :battle_environment => :Grass
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -211,14 +212,16 @@ GameData::TerrainTag.register({
                                 :land_wild_encounters => true,
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
-                                :must_walk => true
+                                :must_walk => true,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
                                 :id => :UnderwaterGrass,
                                 :id_number => 11,
                                 :underwater => true,
-                                :land_wild_encounters => true
+                                :land_wild_encounters => true,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -242,7 +245,8 @@ GameData::TerrainTag.register({
                                 :id_number => 14,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
-                                :battle_environment => :Grass
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -305,7 +309,8 @@ GameData::TerrainTag.register({
                                 :id_number => 24,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
-                                :battle_environment => :Grass
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -313,7 +318,8 @@ GameData::TerrainTag.register({
                                 :id_number => 25,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
-                                :battle_environment => :Grass
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -321,7 +327,8 @@ GameData::TerrainTag.register({
                                 :id_number => 26,
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
-                                :battle_environment => :Grass
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -384,6 +391,7 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :TallGrassTop,
                                 :id_number => 36,
+                                :step_sound => "steps/tall_grass",
                               })
 GameData::TerrainTag.register({
                                 :id => :TallGrassMiddle,
@@ -392,7 +400,8 @@ GameData::TerrainTag.register({
                                 :land_wild_encounters => true,
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
-                                :must_walk => true
+                                :must_walk => true,
+                                :step_sound => "steps/tall_grass",
                               })
 
 GameData::TerrainTag.register({
