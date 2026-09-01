@@ -147,9 +147,9 @@ def kick_ball(eventId, obstacleName = nil, targetDestination = nil, targetSwitch
   # Shorter kick distance — scales gently with speed
   player_speed = $game_player.move_speed
   remaining_distance = [player_speed * 0.8, 1].max.floor
-
-  pbSEPlay("jump", 80, 100) rescue nil
+  pbSEPlay("kick_ball", 80, 100) rescue nil
   pbWait(3)
+  pbSEPlay("jump", 80, 100) rescue nil
 
   current_dir = dir
   total_bounces = 0

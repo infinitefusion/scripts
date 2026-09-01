@@ -47,6 +47,7 @@ module GameData
     attr_reader :step_sound
 
     attr_reader :ambient_sound
+    attr_reader :ambient_sound_max_volume
 
     attr_reader :shifting_tile_horizontal
     attr_reader :shifting_tile_vertical
@@ -117,6 +118,7 @@ module GameData
 
       @step_sound = hash[:step_sound]
       @ambient_sound = hash[:ambient_sound]
+      @ambient_sound_max_volume = hash[:ambient_sound_max_volume]
 
     end
 
@@ -150,7 +152,7 @@ GameData::TerrainTag.register({
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
                                 :battle_environment => :Grass,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -163,7 +165,7 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :Rock,
                                 :id_number => 15,
-                                :battle_environment => :Rock
+                                :battle_environment => :Rock,
                               })
 
 GameData::TerrainTag.register({
@@ -196,7 +198,9 @@ GameData::TerrainTag.register({
                                 :id => :Waterfall,
                                 :id_number => 8,
                                 :can_surf => true,
-                                :waterfall => true
+                                :waterfall => true,
+                                :ambient_sound => "ambient/waterfall",
+                                :ambient_sound_max_volume => 60
                               })
 
 GameData::TerrainTag.register({
@@ -204,7 +208,9 @@ GameData::TerrainTag.register({
                                 :id_number => 9,
                                 :can_surf => true,
                                 :can_fish => true,
-                                :waterfall_crest => true
+                                :waterfall_crest => true,
+                                :ambient_sound => "ambient/waterfall",
+                                :ambient_sound_max_volume => 60
                               })
 
 GameData::TerrainTag.register({
@@ -215,7 +221,7 @@ GameData::TerrainTag.register({
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
                                 :must_walk => true,
-                                :step_sound => "steps/tall_grass",
+                                :step_sound => "steps/step_tall_grass",
                               })
 
 GameData::TerrainTag.register({
@@ -223,7 +229,7 @@ GameData::TerrainTag.register({
                                 :id_number => 11,
                                 :underwater => true,
                                 :land_wild_encounters => true,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -248,7 +254,7 @@ GameData::TerrainTag.register({
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
                                 :battle_environment => :Grass,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -312,7 +318,7 @@ GameData::TerrainTag.register({
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
                                 :battle_environment => :Grass,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -321,7 +327,7 @@ GameData::TerrainTag.register({
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
                                 :battle_environment => :Grass,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -330,7 +336,7 @@ GameData::TerrainTag.register({
                                 :shows_grass_rustle => true,
                                 :land_wild_encounters => true,
                                 :battle_environment => :Grass,
-                                :step_sound => "steps/tall_grass"
+                                :step_sound => "steps/step_tall_grass"
                               })
 
 GameData::TerrainTag.register({
@@ -393,7 +399,7 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
                                 :id => :TallGrassTop,
                                 :id_number => 36,
-                                :step_sound => "steps/tall_grass",
+                                :step_sound => "steps/step_tall_grass",
                               })
 GameData::TerrainTag.register({
                                 :id => :TallGrassMiddle,
@@ -403,7 +409,7 @@ GameData::TerrainTag.register({
                                 :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
                                 :must_walk => true,
-                                :step_sound => "steps/tall_grass",
+                                :step_sound => "steps/step_tall_grass",
                               })
 
 GameData::TerrainTag.register({
@@ -413,13 +419,14 @@ GameData::TerrainTag.register({
                                 :land_wild_encounters => true,
                                 :must_walk => true,
                                 :show_footprints => true,
+                                :step_sound => "steps/step_sand",
+                                :can_fish => true,
                               })
 
 GameData::TerrainTag.register({
                                 :id => :SuspendedBridgeVertical,
                                 :id_number => 39,
                                 :shifting_tile_vertical => true,
-                                :wooden_bridge_sound => true,
                                 :step_sound => "steps/wooden_bridge"
 
                                 #:bridge => true
@@ -437,14 +444,25 @@ GameData::TerrainTag.register({
                                 :id_number => 41,
                                 :battle_environment => :Sand,
                                 :show_footprints => true,
-                                :ambient_sound => "ambient/ocean"
+                                :ambient_sound => "ambient/ocean",
+                                :ambient_sound_max_volume => 50,
                               })
 
 GameData::TerrainTag.register({   #Like normal water, but with a river flowing sound effect
                                 :id => :RiverWater,
                                 :id_number => 42,
                                 :can_surf => true,
-                                :can_fish => true,
                                 :battle_environment => :MovingWater,
-                                :ambient_sound => "ambient/river"
+                                :ambient_sound => "ambient/river",
+                                :ambient_sound_max_volume => 60
+
+                              })
+
+GameData::TerrainTag.register({
+                                  :id => :Lava,
+                                  :id_number => 43,
+                                  :battle_environment => :Volcano,
+                                  :ambient_sound => "ambient/lava",
+                                  :ambient_sound_max_volume => 30,
+                                  :can_fish => true,
                               })

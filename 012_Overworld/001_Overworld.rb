@@ -128,7 +128,7 @@ end
 
 def playFootstepSound(sound_file)
   echoln "footstep sound #{sound_file}"
-  volume = rand(20..30)
+  volume = rand(25..40)
   pitch = rand(90..110)
   pbSEPlay(sound_file,volume,pitch)
 end
@@ -148,7 +148,7 @@ def terrainTagEffectsOnStep(event, map)
   event.each_occupied_tile do |x, y|
     terrain_tag = map.terrain_tag(x, y, true)
     next unless terrain_tag
-
+    playFootstepSound(terrain_tag.step_sound) if terrain_tag.step_sound  && event == $game_player
     if terrain_tag.shows_grass_rustle && !event.floating
       $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
     end
@@ -157,7 +157,6 @@ def terrainTagEffectsOnStep(event, map)
 
   # Player-only effects: waterfall descent / ice / water-current sliding.
   return unless event == $game_player
-  playFootstepSound(terrain_tag.step_sound) if terrain_tag.step_sound
   currentTag = $game_player.pbTerrainTag
   if isTerrainWaterfall(currentTag)
     pbDescendWaterfall
