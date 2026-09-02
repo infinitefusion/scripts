@@ -129,6 +129,7 @@ def pbStartOver(gameover = false)
     else
       pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]You scurry back to a Pokémon Center, protecting your exhausted Pokémon from any further harm..."))
     end
+    echoln "GASDHASGJHDASD"
     pbCancelVehicles
     pbRemoveDependencies
     $game_switches[Settings::STARTING_OVER_SWITCH] = true
@@ -136,6 +137,8 @@ def pbStartOver(gameover = false)
     $game_temp.player_new_x = $PokemonGlobal.pokecenterX
     $game_temp.player_new_y = $PokemonGlobal.pokecenterY
     $game_temp.player_new_direction = $PokemonGlobal.pokecenterDirection
+
+    adjustWarpCoordinatesExceptions()
     if $scene.is_a?(Scene_Map)
       $scene.transfer_player
       $scene.reset_map(false)
@@ -179,4 +182,16 @@ def pbStartOver(gameover = false)
     end
   end
   pbEraseEscapePoint
+end
+
+def adjustWarpCoordinatesExceptions()
+  switch_azalea_unflooded = 314
+
+  if Settings::KANTO
+    map_azalea_center_unflooded = 279
+    map_azalea_center_flooded = 339
+    if $game_temp.player_new_map_id == map_azalea_center_flooded && $game_switches[switch_azalea_unflooded]
+      $game_temp.player_new_map_id = map_azalea_center_unflooded
+    end
+  end
 end
