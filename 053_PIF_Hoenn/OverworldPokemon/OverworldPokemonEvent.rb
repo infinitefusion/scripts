@@ -35,7 +35,7 @@ class OverworldPokemonEvent < Game_Event
     @disguised = false
     species_data = GameData::Species.get(@species)
 
-    @pokemon = Pokemon.new(@species, @level)
+    @pokemon = pbGenerateWildPokemon(@species,@level)#Pokemon.new(@species, @level)
     @behavior_species = getBehaviorSpecies(species_data)
 
     unless behavior_roaming
