@@ -207,7 +207,7 @@ class PokemonTilesetScene
               $scene.createSpritesets
             end
           end
-          pbMessage(_INTL("To ensure that the changes remain, close and reopen RPG Maker XP."))
+          pbMessage(_INTL("To ensure that the changes remain, close and reopen RPG Maker XP without saving."))
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
       elsif Input.trigger?(Input::USE)
