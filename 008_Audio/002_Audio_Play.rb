@@ -235,7 +235,6 @@ end
 # volume -- Volume of the file, up to 100
 # pitch -- Pitch of the file, normally 100
 def pbSEPlay(param, volume = nil, pitch = nil)
-  echoln "Audio/SE/" + param if param.is_a?(String)
   return if !param
   param = pbResolveAudioFile(param, volume, pitch)
   if param.name && param.name != ""
