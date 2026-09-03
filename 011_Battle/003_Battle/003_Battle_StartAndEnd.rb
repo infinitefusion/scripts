@@ -103,6 +103,9 @@ class PokeBattle_Battle
     pbClearChoice(idxBattler)
     @successStates[idxBattler] = PokeBattle_SuccessState.new
     @battlers[idxBattler].pbInitialize(pkmn, idxParty)
+
+    side = idxBattler % 2
+    @usedInBattle[side][idxParty] = true if @usedInBattle && @usedInBattle[side]
   end
 
   def pbSetUpSides

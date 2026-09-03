@@ -292,6 +292,13 @@ class BattledTrainer
         obtainClothes(CLOTHES_PSYSHAMAN_F)
       end
 
+    when :TRIATHLETE_BIKE_M, :TRIATHLETE_BIKE_F
+      if !hasClothes?(CLOTHES_BIKE)
+        pbCallBub(2, event.id)
+        pbMessage(_INTL("The best athletes need the best gear! This should help improve your performance even more."))
+        obtainClothes(CLOTHES_BIKE)
+        obtainHat(HAT_BIKE)
+      end
     when :POKEFAN_M, :POKEFAN_F
       possible_masks = [HAT_POOCHYENA_MASK, HAT_LOTAD_MASK, HAT_ZIGZAGOON_MASK, HAT_WURMPLE_MASK,
                         HAT_SEEDOT_MASK, HAT_TAILLOW_MASK, HAT_TREECKO_MASK, HAT_MUDKIP_MASK]

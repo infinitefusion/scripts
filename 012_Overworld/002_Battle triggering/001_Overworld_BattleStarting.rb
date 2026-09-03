@@ -657,6 +657,7 @@ def pbTrainerBattleCore(*args)
   #    2 - Player lost
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    5 - Draw
+  pbAfterTrainerBattle(decision, battle)
   pbSet(outcomeVar, decision)
   return decision
 end
@@ -942,6 +943,7 @@ Events.onEndBattle += proc { |_sender, e|
     pickUpTypeItemSetBonus()
     nurseOutfitHeal()
     qmarkMaskCheck()
+
   when 2, 5 # Lose, draw
     if !canLose
       $game_system.bgm_unpause
@@ -950,6 +952,15 @@ Events.onEndBattle += proc { |_sender, e|
     end
   end
 }
+
+#Called after trainer battles only
+def pbAfterTrainerBattle(decision, battle)
+  case decision
+  when 1# Win
+    checkObtainClothesAfterBattle(battle.list_all_player_participants) if Settings::HOENN
+  else
+  end
+end
 
 Events.onWildBattleEnd += proc { |_sender, e|
   species = e[0]

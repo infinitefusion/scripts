@@ -127,7 +127,6 @@ def pbCheckAllFainted
 end
 
 def playFootstepSound(sound_file)
-  echoln "footstep sound #{sound_file}"
   volume = rand(25..40)
   pitch = rand(90..110)
   pbSEPlay(sound_file,volume,pitch)
