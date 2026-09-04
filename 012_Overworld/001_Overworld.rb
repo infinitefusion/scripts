@@ -147,6 +147,7 @@ def terrainTagEffectsOnStep(event, map)
   event.each_occupied_tile do |x, y|
     terrain_tag = map.terrain_tag(x, y, true)
     next unless terrain_tag
+    next if terrain_tag.bridge && $PokemonGlobal.bridge == 0
     playFootstepSound(terrain_tag.step_sound) if terrain_tag.step_sound  && event == $game_player
     if terrain_tag.shows_grass_rustle && !event.floating
       $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)

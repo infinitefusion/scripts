@@ -427,16 +427,15 @@ GameData::TerrainTag.register({
                                 :id => :SuspendedBridgeVertical,
                                 :id_number => 39,
                                 :shifting_tile_vertical => true,
-                                :step_sound => "steps/wooden_bridge"
-
-                                #:bridge => true
+                                :step_sound => "steps/wooden_bridge",
+                                :bridge => true
                               })
 GameData::TerrainTag.register({
                                 :id => :SuspendedBridgeHHorizontal,
                                 :id_number => 40,
                                 :shifting_tile_horizontal => true,
-                                :step_sound => "steps/wooden_bridge"
-                                #:bridge => true
+                                :step_sound => "steps/wooden_bridge",
+                                :bridge => true
                               })
 
 GameData::TerrainTag.register({

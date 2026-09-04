@@ -15,6 +15,7 @@ def pbGetShiftingTile(map, x, y)
     next if tile_id.nil?
     terrain_tag = GameData::TerrainTag.try_get(map.terrain_tags[tile_id])
     next unless terrain_tag
+    next if terrain_tag.bridge && $PokemonGlobal.bridge == 0
     return [layer, tile_id, :vertical]   if terrain_tag.shifting_tile_vertical
     return [layer, tile_id, :horizontal] if terrain_tag.shifting_tile_horizontal
   end
