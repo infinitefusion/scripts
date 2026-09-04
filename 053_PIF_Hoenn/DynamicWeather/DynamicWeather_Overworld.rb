@@ -24,6 +24,7 @@ def clear_current_map_weather
     $game_screen.weather(:None,0,0)
 end
 
+
 def update_overworld_weather(current_map)
     return if current_map.nil?
     return if !$game_weather.current_weather
@@ -35,6 +36,18 @@ def update_overworld_weather(current_map)
     current_weather_type = :None if !current_weather_type
     current_weather_intensity=0 if !current_weather_intensity
     current_weather_type = :None if PBDayNight.isNight? && current_weather_type == :Sunny
-
+    set_weather_ambient_sounds(current_weather_type,current_weather_intensity)
     $game_screen.weather(current_weather_type,current_weather_intensity,0)
+end
+
+def set_weather_ambient_sounds(weather_type,intensity)
+    base_volume = 20 #At intensity 1
+    volume = [base_volume + base_volume * (intensity/2),10].min #Intensity at 10: volume 100
+    case weather_type
+    when :Rain, :Storm
+        echoln "playing some rain sounds"
+        pbBGSPlay("ambient/rain",volume)
+    when :Wind, :Blizzard, :StrongWind, :Storm
+        pbBGSPlay("ambient/wind",volume)
+    end
 end
