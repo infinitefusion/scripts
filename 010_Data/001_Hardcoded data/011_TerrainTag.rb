@@ -218,7 +218,6 @@ GameData::TerrainTag.register({
                                 :id_number => 10,
                                 :deep_bush => true,
                                 :land_wild_encounters => true,
-                                :double_wild_encounters => true,
                                 :battle_environment => :TallGrass,
                                 :must_walk => true,
                                 :step_sound => "steps/step_tall_grass",

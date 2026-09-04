@@ -389,7 +389,7 @@ class PokeRadarAppScene < PokeNavAppScene
       return _INTL("Grass")
     when :WaterMorning, :WaterDay, :WaterNight
       return _INTL("Water")
-    when :TallGrass
+    when :TallGrass, :TallGrassNight
       return _INTL("Tall Grass")
     when :Puddle
       return _INTL("Shallow Water")
@@ -403,7 +403,7 @@ end
 def getTerrainType
   encounter_type = $PokemonEncounters.encounter_type
   case encounter_type
-  when :Land, :Land1, :Land2, :Land3, :LandMorning, :LandDay, :LandNight, :TallGrass
+  when :Land, :Land1, :Land2, :Land3, :LandMorning, :LandDay, :LandNight, :TallGrass, :TallGrassNight
     return :Grass
   else
     return encounter_type
