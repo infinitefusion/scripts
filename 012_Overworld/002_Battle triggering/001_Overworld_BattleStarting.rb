@@ -13,6 +13,11 @@ class PokemonTemp
   attr_accessor :encounterType
   attr_accessor :evolutionLevels
   attr_accessor :battle_npc_used_items
+  attr_accessor :last_battle_participants
+
+  def last_participants
+    return @last_battle_participants
+  end
 
   def battleRules
     @battleRules = {} if !@battleRules
@@ -955,6 +960,8 @@ Events.onEndBattle += proc { |_sender, e|
 
 #Called after trainer battles only
 def pbAfterTrainerBattle(decision, battle)
+  battle_participants = battle.list_all_player_participants
+  $PokemonTemp.last_battle_participants = battle_participants
   case decision
   when 1# Win
     checkObtainClothesAfterBattle(battle.list_all_player_participants) if Settings::HOENN

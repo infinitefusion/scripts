@@ -135,3 +135,34 @@ def berryContestTVNews
   pbWait(10)
   pbMessage(_INTL("\"This was Gabby, reporting live from Petalburg Town. We'll see you again on our next broadcast!\""))
 end
+
+
+VAR_REPORTER_POKEMON_112 = 976
+def trainerSearchRt112
+  poke_name = pbGet(VAR_REPORTER_POKEMON_112)
+  pbMessage(_INTL("\"...This is Gabby for Trainer Search, We're currently standing at the foot of Mt. Chimney, where local Trainers like to gather.\"",$Trainer.name))
+  pbMessage(_INTL("\"We're currently joined by {1}, a young Trainer who bested me in a Pokémon battle.\"",$Trainer.name))
+  if poke_name.is_a?(String)
+    pbMessage(_INTL("\"Their {1} absolutely wiped the floor with my Pokémon!\"", poke_name))
+  end
+
+
+  player_response_q1 = pbGet(VAR_REPORTER_Q1)
+  player_response_q2 = pbGet(VAR_REPORTER_Q2)
+
+  case player_response_q1
+  when 0
+    pbMessage(_INTL("\"They responded that they were looking for rare Pokémon! Indeed, Mt. Chimney is home to many rare fire-type Pokémon that aren't found anywhere else in the region.\""))
+  when 1
+    pbMessage(_INTL("\"They said that it was the thrill of exploring that brought them here. Such an adventurous spirit at such a young age!\""))
+  when 2
+    pbMessage(_INTL("\"They said that they were simply trying to get the other side of the volcano. Of course, Mt. Chimney sits at the center of the region, so Trainers who want to get Fallarbor Town need to cross right through it.\"",$Trainer.name))
+  when 3
+    pbMessage(_INTL("\"They said they got lost and didn't know where they were! I made sure to point them in the right direction.\""))
+  end
+  pbMessage(_INTL("\"I then asked {1} what exactly it was that they were expecting to find here in Mt. Chimney and their answer totally floored me!\"",$Trainer.name))
+  pbMessage(_INTL("\"They said that they're looking for {1}. How crazy is that!\"",player_response_q2))
+  pbMessage(_INTL("\"But it does makes total sense if you think about it!\""))
+  pbWait(10)
+  pbMessage(_INTL("\"That's all for today. We'll continue our search throughout the region for more Trainers to interview! Thanks for joining me on Trainer Search. This was Gabby, reporting from Mt. Chimney.\""))
+end
