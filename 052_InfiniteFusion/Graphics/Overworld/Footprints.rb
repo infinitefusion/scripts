@@ -69,6 +69,7 @@ module FootprintVariables
 
   def self.show(event, position)
     return if $PokemonGlobal.boat
+    return if $game_player.through
     if event != $game_player
       return if event.character_name == "" || event.character_name == "nil" || event.name.include?("/nofoot/")
       return if pbEventCommentInput(event, 0, "NoFoot")
