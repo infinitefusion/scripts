@@ -257,6 +257,7 @@ class OverworldPokemonEvent < Game_Event
   # ACTIONS
   # ###
   def overworldPokemonBattle()
+    return if $PokemonTemp.overworld_safari
     return if lock?
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
