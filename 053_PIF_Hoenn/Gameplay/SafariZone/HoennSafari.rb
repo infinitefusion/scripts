@@ -125,7 +125,7 @@ end
 
 Events.onAction += proc { |_sender, _e|
   next unless Settings::HOENN && $PokemonTemp.overworld_safari
-  next if $game_player.moving?
+  next if $game_player.jumping? || $game_player.moving?
   next if $game_player.pbFacingEvent
   next if pbSafariState.ballcount <= 0
   pbSafariState.ballcount -= 1
@@ -138,7 +138,7 @@ Events.onAction += proc { |_sender, _e|
 
 #Simplified copy of the method in PokeBattle to be used outside of a battle (safari zone)
 def pbCaptureCalc(pkmn, catch_rate, ball)
-  battler = PokeBattle_FakeBattler.new(nil,0, pkmn)sadf
+  battler = PokeBattle_FakeBattler.new(nil,0, pkmn)
   return 4 if $DEBUG && Input.press?(Input::CTRL)
   # Get a catch rate if one wasn't provided
   catch_rate = pkmn.species_data.catch_rate if !catch_rate
