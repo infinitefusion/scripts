@@ -169,3 +169,11 @@ def pbCaptureCalc(pkmn, catch_rate, ball)
   return numShakes
 end
 
+
+def placePokeblock()
+  block = pbPokeblockCase(false)
+  pbRemovePokeblock(block)
+
+  echoln block
+  return block
+end
