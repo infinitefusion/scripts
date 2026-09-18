@@ -87,9 +87,11 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE, proc { |item|
 #===============================================================================
 
 def pbRepel(item, steps)
-  message = $game_switches[SWITCH_USED_AN_INCENSE] ? "But an incense's effect still lingers from earlier." : "But a repellent's effect still lingers from earlier."
-  if $game_switches[SWITCH_NO_REPEL]
-    pbMessage(_INTL("It won't have any effect here..."))
+  message = $game_switches[SWITCH_USED_AN_INCENSE] ?
+            _INTL("But an incense's effect still lingers from earlier.") :
+            _INTL("But a repellent's effect still lingers from earlier.")
+  if $PokemonGlobal.repel > 0
+    pbMessage(message)
     return 0
   end
   if $PokemonGlobal.repel > 0
@@ -151,8 +153,10 @@ Events.onStepTaken += proc {
 
 ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
   pbUseItemMessage(item)
-  message = $PokemonMap.blackFluteUsed ? "Wild Pokemon will no longer be repelled." : "Wild Pokémon will be repelled."
-  pbMessage(_INTL(message))
+  message = $PokemonMap.blackFluteUsed ?
+            _INTL("Wild Pokemon will no longer be repelled.") :
+            _INTL("Wild Pokémon will be repelled.")
+  pbMessage(message)
   $PokemonMap.blackFluteUsed = !$PokemonMap.blackFluteUsed
   $PokemonMap.whiteFluteUsed = false
   next 1
@@ -160,8 +164,10 @@ ItemHandlers::UseInField.add(:BLACKFLUTE, proc { |item|
 
 ItemHandlers::UseInField.add(:WHITEFLUTE, proc { |item|
   pbUseItemMessage(item)
-  message = $PokemonMap.whiteFluteUsed ? "Wild Pokemon will no longer be lured." : "Wild Pokémon will be lured."
-  pbMessage(_INTL(message))
+  message = $PokemonMap.whiteFluteUsed ?
+            _INTL("Wild Pokemon will no longer be lured.") :
+            _INTL("Wild Pokémon will be lured.")
+  pbMessage(message)
   $PokemonMap.whiteFluteUsed = !$PokemonMap.whiteFluteUsed
   $PokemonMap.blackFluteUsed = false
   next 1

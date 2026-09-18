@@ -221,7 +221,7 @@ class PokemonContest
 					bonus += 80
 				elsif hat_match
 					pbCallBub(1, @crowdNPCs.sample.id)
-					pbMessage(_INTL("It matches its Trainer's!"))
+					pbMessage(_INTL("It matches its Trainer's hat!"))
 					bonus += 40
 				elsif clothes_match
 					pbCallBub(1, @crowdNPCs.sample.id)

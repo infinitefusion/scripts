@@ -459,6 +459,7 @@ class PokeBattle_Battle
         @opponent.each_with_index do |_t, i|
           @scene.pbShowOpponent(i)
           msg = (@endSpeeches[i] && @endSpeeches[i] != "") ? @endSpeeches[i] : "..."
+          msg = MessageTypes.getFromMapHash($game_map.map_id, msg)
           msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
           msg = msg.gsub(/\\n/, "\n")
           pbDisplayPaused(msg)
@@ -503,6 +504,7 @@ class PokeBattle_Battle
           @opponent.each_with_index do |_t, i|
             @scene.pbShowOpponent(i)
             msg = (@endSpeechesWin[i] && @endSpeechesWin[i] != "") ? @endSpeechesWin[i] : "..."
+            msg = MessageTypes.getFromMapHash($game_map.map_id, msg)
             msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
             msg = msg.gsub(/\\n/, "\n")
             pbDisplayPaused(msg)
