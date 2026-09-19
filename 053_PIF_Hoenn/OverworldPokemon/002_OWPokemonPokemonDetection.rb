@@ -42,19 +42,32 @@ class OverworldPokemonEvent < Game_Event
         return
       end
     end
-    @currently_seen_events.each do |event|
-      event_pokemon = event[0]
-      distance = event[1]
-      behavior = POKEMON_BEHAVIOR_DATA[@species]
-      noticed_pokemon_behaviors = behavior[:behavior_pokemon] if behavior
+
+    behavior_data = POKEMON_BEHAVIOR_DATA[@species]
+    noticed_pokemon_behaviors = behavior_data ? behavior_data[:behavior_pokemon] : nil
+    sorted_events = @currently_seen_events.sort_by { |_event, distance| distance }
+
+    sorted_events.each do |event_pokemon, distance|
+      if event_pokemon.is_a?(PokeblockEvent)
+        unless @current_state == :NOTICED_POKEMON
+          playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
+        end
+        update_state(:NOTICED_POKEMON)
+        @target = event_pokemon
+        @noticed_pokemon_behavior = :eat_pokeblock
+        @move_type = MOVE_TYPE_TOWARDS_TARGET
+        self.move_frequency = 6
+        return
+      end
+
       if noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(event_pokemon.species)
         behavior = noticed_pokemon_behaviors[event_pokemon.species]
         playDetectAnimation(behavior)
         update_state(:NOTICED_POKEMON)
         set_noticed_pokemon_movement(behavior, event_pokemon)
+        return
       end
     end
-    #echoln @currently_seen_events
   end
 
   def target_still_valid?
@@ -95,27 +108,34 @@ class OverworldPokemonEvent < Game_Event
 
   def update_attack_target
     unless @current_state == :NOTICED_POKEMON &&
-      [:aggressive, :semi_aggressive].include?(@noticed_pokemon_behavior) && adjacent_to?(@target)
+      [:aggressive, :semi_aggressive, :eat_pokeblock].include?(@noticed_pokemon_behavior) &&
+      adjacent_to?(@target)
       @attack_timer = 0
       return
     end
 
     @attack_timer += 1
     if @attack_timer >= 80
-      hp_chunk = calculate_damage_on_target# equivalent of a base 20 neutral move
-      @target.pokemon.hp -= hp_chunk
-      echoln @target.pokemon.hp
-
-      flash_white(@target)
-      @target.knock_back(self)
+      attack_pokemon_target
       @attack_timer = 0
-      if @target.pokemon.hp <= 0
-        @target.despawn
-        @target = nil
-        update_state(:ROAMING)
-      end
     end
   end
+
+  def attack_pokemon_target
+    hp_chunk = calculate_damage_on_target
+    @target.pokemon.hp -= hp_chunk
+    echoln @target.pokemon.hp
+
+    flash_white(@target)
+    @target.knock_back(self) unless @target.is_a?(PokeblockEvent)
+
+    if @target.pokemon.hp <= 0
+      @target.despawn
+      @target = nil
+      update_state(:ROAMING)
+    end
+  end
+
 
   #Equivalent of a neutral base 20 damage attack
   # Simplified version of PokeBattle_Move.pbCalcDamage
@@ -246,7 +266,7 @@ class OverworldPokemonEvent < Game_Event
     return seen if !$game_map
 
     $game_map.events.each_value do |event|
-      next unless event.is_a?(OverworldPokemonEvent)
+      next unless event.is_a?(OverworldPokemonEvent) || event.is_a?(PokeblockEvent)
       next if event == self
       next if event.erased
       d = pbDistanceTo(event.x, event.y, radius)

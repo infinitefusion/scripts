@@ -8,6 +8,8 @@
 #
 
 TEMPLATE_EVENT_SAFARI_BALL = 15
+TEMPLATE_EVENT_POKEBLOCK = 16
+
 class PokemonTemp
   attr_accessor :overworld_safari
 
@@ -46,6 +48,31 @@ def throw_ow_safari_ball
   return event
 end
 
+def use_safari_feeder(price)
+  if pbConfirmMessage(_INTL("\\GWould you like to use the Feeder for ${1}?",price))
+    colors = [:red, :red, :red,
+              :blue, :blue, :blue,
+              :pink, :pink, :pink,
+              :green, :green, :green,
+              :yellow, :yellow, :yellow].sample(4)
+    pbSpendMoney(price)
+    feeder_event = this_event()
+    positions = [[-1,0], [1,0], [0,1], [0,-1]]
+    i=0
+    template_event = TEMPLATE_EVENT_POKEBLOCK
+
+    colors.each do |color|
+
+      block_event=$PokemonTemp.createTempEvent(template_event,
+                                               $game_map.map_id,
+                                               [feeder_event.x,feeder_event.y],
+                                               $game_player.direction,
+                                               PokeblockEvent, [color,12])
+      block_event.jump(*positions[i])
+      i+=1
+    end
+  end
+end
 
 def create_overworld_pokemon_event(pokemon, position, terrain, behavior_roaming = nil, behavior_noticed = nil)
   template_event = TEMPLATE_EVENT_OW_POKEMON_NORMAL

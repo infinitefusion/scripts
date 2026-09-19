@@ -131,6 +131,7 @@ class OverworldPokemonEvent < Game_Event
     initialize_sprite(@terrain, species_data)
   end
 
+
   def is_pokeradar_chain
     if $PokemonTemp.pokeradar
       pokeradar_species = $PokemonTemp.pokeradar[0]
@@ -332,6 +333,8 @@ class OverworldPokemonEvent < Game_Event
       playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
     elsif behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
+    elsif behavior_noticed == :excited
+      playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
     elsif behavior_noticed == :semi_aggressive
       playAnimation(Settings::ANGRY_SHORT_ANIMATION_ID, @x, @y)
     else
@@ -548,7 +551,7 @@ class OverworldPokemonEvent < Game_Event
       @move_type = MOVE_TYPE_CURIOUS
     when :semi_aggressive
       @move_type = MOVE_TYPE_TOWARDS_PLAYER
-    when :aggressive
+    when :aggressive, :excited
       @move_type = MOVE_TYPE_TOWARDS_PLAYER
       self.move_frequency = 6
     when :skittish
