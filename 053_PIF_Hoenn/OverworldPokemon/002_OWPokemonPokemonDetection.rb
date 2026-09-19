@@ -34,10 +34,19 @@ class OverworldPokemonEvent < Game_Event
   def turn_generic(*args)
     turn_generic_pokemon_detection(*args)
     @currently_seen_events = listEventsInRadius(@detection_radius)
+
+    if @current_state == :NOTICED_POKEMON
+      unless target_still_valid?
+        update_state(:ROAMING)
+        back_to_roaming_action
+        return
+      end
+    end
     @currently_seen_events.each do |event|
       event_pokemon = event[0]
       distance = event[1]
-      noticed_pokemon_behaviors = POKEMON_BEHAVIOR_DATA[@species][:behavior_pokemon]
+      behavior = POKEMON_BEHAVIOR_DATA[@species]
+      noticed_pokemon_behaviors = behavior[:behavior_pokemon] if behavior
       if noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(event_pokemon.species)
         behavior = noticed_pokemon_behaviors[event_pokemon.species]
         playDetectAnimation(behavior)
@@ -46,6 +55,11 @@ class OverworldPokemonEvent < Game_Event
       end
     end
     #echoln @currently_seen_events
+  end
+
+  def target_still_valid?
+    return false unless @target && !@target.erased
+    @currently_seen_events.any? { |event| event[0] == @target }
   end
 
   def set_noticed_pokemon_movement(behavior, target_event)
