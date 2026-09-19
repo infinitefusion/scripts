@@ -5,6 +5,8 @@ class OverworldPokemonEvent < Game_Event
     @currently_seen_events = []
     @previously_seen_events = []
     @target = nil
+    @noticed_pokemon_behavior = nil
+    @attack_timer = 0
   end
 
 
@@ -43,10 +45,11 @@ class OverworldPokemonEvent < Game_Event
         set_noticed_pokemon_movement(behavior, event_pokemon)
       end
     end
-    echoln @currently_seen_events
+    #echoln @currently_seen_events
   end
 
-  def set_noticed_pokemon_movement(behavior, event)
+  def set_noticed_pokemon_movement(behavior, target_event)
+    @noticed_pokemon_behavior = behavior if target_event
     case behavior
     when :random
       @move_type = MOVE_TYPE_RANDOM
@@ -55,10 +58,10 @@ class OverworldPokemonEvent < Game_Event
     when :curious
       @move_type = MOVE_TYPE_CURIOUS
     when :semi_aggressive
-      @target = event
+      @target = target_event
       @move_type = MOVE_TYPE_TOWARDS_TARGET
     when :aggressive
-      @target = event
+      @target = target_event
       @move_type = MOVE_TYPE_TOWARDS_TARGET
       self.move_frequency = 6
     when :skittish
@@ -75,6 +78,81 @@ class OverworldPokemonEvent < Game_Event
     @move_speed = @noticed_move_speed
   end
 
+
+  def update_attack_target
+    unless @current_state == :NOTICED_POKEMON &&
+      [:aggressive, :semi_aggressive].include?(@noticed_pokemon_behavior) && adjacent_to?(@target)
+      @attack_timer = 0
+      return
+    end
+
+    @attack_timer += 1
+    if @attack_timer >= 80
+      hp_chunk = calculate_damage_on_target# equivalent of a base 20 neutral move
+      @target.pokemon.hp -= hp_chunk
+      echoln @target.pokemon.hp
+
+      flash_white(@target)
+      @target.knock_back(self)
+      @attack_timer = 0
+      if @target.pokemon.hp <= 0
+        @target.despawn
+        @target = nil
+        update_state(:ROAMING)
+      end
+    end
+  end
+
+  #Equivalent of a neutral base 20 damage attack
+  # Simplified version of PokeBattle_Move.pbCalcDamage
+  def calculate_damage_on_target()
+    baseDmg = 20
+    atk     = @pokemon.attack
+    defense = @target.pokemon.defense
+    damage  = (((2.0 * @pokemon.level / 5 + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
+    echoln damage
+    return damage
+  end
+  def flash_white(target, duration = 20, alpha = 200)
+    return unless target && $scene && $scene.respond_to?(:spriteset)
+    spriteset = $scene.spriteset
+    return unless spriteset
+
+    sprite = spriteset.character_sprites.find { |s| s.character == target }
+    sprite&.flash(Color.new(255, 255, 255, alpha), duration)
+  end
+
+  def knock_back(event_knocking_back)
+    turnEventTowardsEvent(self,event_knocking_back)
+    original_direction_fix = @direction_fix
+
+    @direction_fix = true
+    self.jump_forward(-1)
+    #self.move_backward
+    @direction_fix = original_direction_fix
+  end
+  # Orthogonal adjacency check (no diagonals), same rule used when
+  # stopping movement toward a target in moveEventTowardsEvent.
+  def adjacent_to?(event)
+    return false unless event && !event.erased
+    dx = event.x - self.x
+    dy = event.y - self.y
+    (dx == 0 && dy.abs == 1) || (dy == 0 && dx.abs == 1)
+  end
+
+  def update
+    super
+    if $game_temp.message_window_showing
+      pause_movement unless @current_state == :PAUSED
+    else
+      update_attack_target
+      @behavior_update_counter = (@behavior_update_counter || 0) + 1
+      if @behavior_update_counter >= UPDATE_TIME
+        @behavior_update_counter = 0
+        update_behavior
+      end
+    end
+  end
 
   #-----------------------------------------------------------------------
   # Returns the forward distance (along the facing axis) to (px, py) if it

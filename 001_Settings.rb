@@ -581,6 +581,7 @@ module Settings
   CUT_TREE_ANIMATION_ID = 19
   ROCK_SMASH_ANIMATION_ID = 20
 
+  ANIMATION_OW_ATTACK = 14
   #=============================================================================
 
   # An array of available languages in the game, and their corresponding message
