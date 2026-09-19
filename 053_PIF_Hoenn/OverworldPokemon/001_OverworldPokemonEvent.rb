@@ -324,15 +324,15 @@ class OverworldPokemonEvent < Game_Event
     initialize_sprite(@terrain, species_data)
   end
 
-  def playDetectPlayerAnimation
+  def playDetectAnimation(behavior_noticed = @behavior_noticed)
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
 
-    if @behavior_noticed == :curious
+    if behavior_noticed == :curious
       playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
-    elsif @behavior_noticed == :aggressive
+    elsif behavior_noticed == :aggressive
       playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
-    elsif @behavior_noticed == :semi_aggressive
+    elsif behavior_noticed == :semi_aggressive
       playAnimation(Settings::ANGRY_SHORT_ANIMATION_ID, @x, @y)
     else
       playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
@@ -362,7 +362,8 @@ class OverworldPokemonEvent < Game_Event
         # check for noticed
         if @current_state == :ROAMING
           if check_detect_trainer
-            playDetectPlayerAnimation
+            playDetectAnimation
+            @target = :player
             breakDisguise if @disguised
             @noticed_player_once = true
             update_state(:NOTICED_PLAYER)
@@ -370,7 +371,7 @@ class OverworldPokemonEvent < Game_Event
         end
       end
     else
-      if @current_state != :ROAMING
+      if @current_state != :ROAMING && @current_state != :NOTICED_POKEMON
         update_state(:ROAMING)
         back_to_roaming_action
       end
@@ -415,6 +416,7 @@ class OverworldPokemonEvent < Game_Event
 
   # called when a pokemon that has noticed the player goes back to roaming
   def back_to_roaming_action
+    @target = nil
     case @behavior_noticed
     when :skittish, :shy
       turn_toward_player
@@ -627,6 +629,8 @@ class OverworldPokemonEvent < Game_Event
     case @move_type
     when MOVE_TYPE_CURIOUS
       move_type_curious(ready_for_next_movement)
+    when MOVE_TYPE_TOWARDS_TARGET
+      move_type_toward_target(@target) if ready_for_next_movement
     end
   end
 

@@ -363,7 +363,7 @@ POKEMON_BEHAVIOR_DATA =
     :CACTURNE => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :SWABLU => { behavior_noticed: :skittish,  behavior_roaming: :random },
     :ALTARIA => { behavior_noticed: nil,  behavior_roaming: :random },
-    :ZANGOOSE => { behavior_noticed: :aggressive, behavior_roaming: :random },
+    :ZANGOOSE => { behavior_noticed: :aggressive, behavior_roaming: :random ,behavior_pokemon: {:SEVIPER => :aggressive}},
     :SEVIPER => { behavior_noticed: :aggressive, behavior_roaming: :random },
     :LUNATONE => { behavior_noticed: :still,  behavior_roaming: :random },
     :SOLROCK => { behavior_noticed: :still,  behavior_roaming: :random },

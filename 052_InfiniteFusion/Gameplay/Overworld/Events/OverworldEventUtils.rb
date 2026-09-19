@@ -19,6 +19,35 @@ def turnEventTowardsEvent(turning, turnedTowards)
   end
 end
 
+def moveEventTowardsEvent(turning, turnedTowards)
+  if turnedTowards.is_a?(Integer)
+    turnedTowards = $game_map.events[turnedTowards]
+  end
+  if turning.is_a?(Integer)
+    turning = $game_map.events[turning]
+  end
+
+  event_x = turnedTowards.x
+  event_y = turnedTowards.y
+  dx = event_x - turning.x
+  dy = event_y - turning.y
+
+  # Already next to it
+  if (dx == 0 && dy.abs == 1) || (dy == 0 && dx.abs == 1)
+    turnEventTowardsEvent(turning, turnedTowards)
+    return
+  end
+  if turning.x < event_x
+    turning.move_right
+  elsif turning.x > event_x
+    turning.move_left
+  elsif turning.y < event_y
+    turning.move_down
+  elsif turning.y > event_y
+    turning.move_up
+  end
+end
+
 def resetFrames(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
