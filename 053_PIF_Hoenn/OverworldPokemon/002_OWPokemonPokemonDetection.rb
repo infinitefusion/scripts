@@ -1,5 +1,7 @@
 class OverworldPokemonEvent < Game_Event
   alias setup_pokemon_detection setup_pokemon
+  RETALIATION_DELAY = 20 # frames of "stunned/reacting" before fighting back
+
   def setup_pokemon(*args)
     setup_pokemon_detection(*args)
     @currently_seen_events = []
@@ -7,6 +9,8 @@ class OverworldPokemonEvent < Game_Event
     @target = nil
     @noticed_pokemon_behavior = nil
     @attack_timer = 0
+    @retaliation_timer = 0
+    @pending_retaliation_target = nil
   end
 
 
@@ -93,7 +97,7 @@ class OverworldPokemonEvent < Game_Event
     when :aggressive
       @move_type = MOVE_TYPE_TOWARDS_TARGET
       self.move_frequency = 6
-    when :shy, :defend
+    when :shy
       @move_type = MOVE_TYPE_SHY_FROM_TARGET
     when :skittish
       @move_type = MOVE_TYPE_AWAY_FROM_TARGET
@@ -112,7 +116,7 @@ class OverworldPokemonEvent < Game_Event
 
   def update_attack_target
     unless @current_state == :NOTICED_POKEMON &&
-      [:aggressive, :semi_aggressive, :eat_pokeblock, :defend].include?(@noticed_pokemon_behavior) &&
+      [:aggressive, :semi_aggressive, :eat_pokeblock].include?(@noticed_pokemon_behavior) &&
       adjacent_to?(@target)
       @attack_timer = 0
       return
@@ -131,12 +135,36 @@ class OverworldPokemonEvent < Game_Event
     echoln @target.pokemon.hp
 
     flash_white(@target)
-    @target.knock_back(self) unless @target.is_a?(PokeblockEvent)
+    unless @target.is_a?(PokeblockEvent)
+      @target.knock_back(self)
+      @target.queue_retaliation_against(self) if @target.pokemon.hp > 0
+    end
 
     if @target.pokemon.hp <= 0
       @target.despawn
       @target = nil
       update_state(:ROAMING)
+    end
+  end
+
+  def queue_retaliation_against(attacker)
+    return unless attacker && !attacker.erased
+    @pending_retaliation_target = attacker
+    @retaliation_timer = RETALIATION_DELAY
+  end
+
+  def update_retaliation
+    return unless @pending_retaliation_target
+    unless @pending_retaliation_target.erased
+      @retaliation_timer -= 1
+      if @retaliation_timer <= 0
+        target = @pending_retaliation_target
+        @pending_retaliation_target = nil
+        update_state(:NOTICED_POKEMON)
+        set_noticed_pokemon_movement(:aggressive, target)
+      end
+    else
+      @pending_retaliation_target = nil
     end
   end
 
@@ -184,6 +212,7 @@ class OverworldPokemonEvent < Game_Event
       pause_movement unless @current_state == :PAUSED
     else
       update_attack_target
+      update_retaliation
       @behavior_update_counter = (@behavior_update_counter || 0) + 1
       if @behavior_update_counter >= UPDATE_TIME
         @behavior_update_counter = 0

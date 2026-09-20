@@ -211,7 +211,7 @@ GameData::Weather.register({  #Used underwater
      :id_number        => 13,
      :graphics         => [["bubble_1", "bubble_2", "bubble_3"]],
      :particle_delta_x => 20,
-     :particle_delta_y => 40,
+     :particle_delta_y => -40,
      :tone_proc        => proc { |strength|
        next Tone.new(strength / 2, strength / 2, strength / 2, 0)
      }
