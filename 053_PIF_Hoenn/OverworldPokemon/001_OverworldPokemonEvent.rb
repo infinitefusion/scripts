@@ -88,6 +88,7 @@ class OverworldPokemonEvent < Game_Event
     @step_anime = @is_flying
     @forced_z = 300 if @is_flying && $PokemonGlobal.boat #@always_on_top = @is_flying
     @part_of_pokeradar_chain = is_pokeradar_chain
+    @pack_size = 0
     if @terrain == :Water
       set_swimming
     end
@@ -541,6 +542,10 @@ class OverworldPokemonEvent < Game_Event
     end
 
     effective_behavior = @behavior_noticed || @behavior_roaming # fallback on @behavior_roaming if no @behavior_noticed
+    if @current_state == :NOTICED_PLAYER && @pack_size && @pack_size >= 3
+      pack_behavior = POKEMON_BEHAVIOR_DATA[@species][:pack_behavior_noticed]
+      effective_behavior = pack_behavior if pack_behavior
+    end
 
     case effective_behavior
     when :random
@@ -575,13 +580,19 @@ class OverworldPokemonEvent < Game_Event
       return
     end
 
-    case @behavior_roaming
+    effective_behavior = @behavior_roaming
+    if @current_state == :ROAMING && @pack_size && @pack_size >= 3
+      pack_behavior = POKEMON_BEHAVIOR_DATA[@species][:pack_behavior_roaming]
+      effective_behavior = pack_behavior if pack_behavior
+    end
+
+    case effective_behavior
     when :random
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
     else
-      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][@behavior_roaming])
+      set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][effective_behavior])
     end
     self.move_frequency = 3
     check_weather_roaming_behavior
@@ -634,6 +645,8 @@ class OverworldPokemonEvent < Game_Event
       move_type_curious(ready_for_next_movement)
     when MOVE_TYPE_TOWARDS_TARGET
       move_type_toward_target(@target) if ready_for_next_movement
+    when MOVE_TYPE_AWAY_FROM_TARGET
+      move_type_away_from_target(@target) if ready_for_next_movement
     end
   end
 

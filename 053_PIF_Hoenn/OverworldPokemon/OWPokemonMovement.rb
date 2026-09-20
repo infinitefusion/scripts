@@ -7,6 +7,7 @@ MOVE_TYPE_CURIOUS = 5
 MOVE_TYPE_SHY = 6
 
 MOVE_TYPE_TOWARDS_TARGET = 7
+MOVE_TYPE_AWAY_FROM_TARGET = 8
 
 class Game_Character
   # @stop_count : nb frames since last movement
@@ -39,6 +40,14 @@ class Game_Character
       return
     end
     moveEventTowardsEvent(self, target_event)
+  end
+
+  def move_type_away_from_target(target_event)
+    unless target_event
+      move_type_random
+      return
+    end
+    moveEventAwayFromEvent(self, target_event)
   end
 
   # def move_type_shy(next_movement_ready = false)

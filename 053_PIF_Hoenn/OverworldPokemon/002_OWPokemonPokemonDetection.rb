@@ -47,6 +47,7 @@ class OverworldPokemonEvent < Game_Event
     noticed_pokemon_behaviors = behavior_data ? behavior_data[:behavior_pokemon] : nil
     sorted_events = @currently_seen_events.sort_by { |_event, distance| distance }
 
+    @pack_size =0
     sorted_events.each do |event_pokemon, distance|
       if event_pokemon.is_a?(PokeblockEvent)
         unless @current_state == :NOTICED_POKEMON
@@ -66,6 +67,8 @@ class OverworldPokemonEvent < Game_Event
         update_state(:NOTICED_POKEMON)
         set_noticed_pokemon_movement(behavior, event_pokemon)
         return
+      elsif event_pokemon.species == @pokemon.species
+        @pack_size += 1
       end
     end
   end
@@ -77,22 +80,23 @@ class OverworldPokemonEvent < Game_Event
 
   def set_noticed_pokemon_movement(behavior, target_event)
     @noticed_pokemon_behavior = behavior if target_event
+    @target = target_event
     case behavior
     when :random
       @move_type = MOVE_TYPE_RANDOM
     when :still
       @move_type = MOVE_TYPE_FIXED
     when :curious
-      @move_type = MOVE_TYPE_CURIOUS
+      @move_type = MOVE_TYPE_TOWARDS_TARGET
     when :semi_aggressive
-      @target = target_event
       @move_type = MOVE_TYPE_TOWARDS_TARGET
     when :aggressive
-      @target = target_event
       @move_type = MOVE_TYPE_TOWARDS_TARGET
       self.move_frequency = 6
+    when :shy
+      @move_type = MOVE_TYPE_AWAY_FROM_TARGET
     when :skittish
-      @move_type = MOVE_TYPE_AWAY_PLAYER
+      @move_type = MOVE_TYPE_AWAY_FROM_TARGET
       self.move_frequency = 6
     when :flee, :flee_flying, :teleport_away
       flee(behavior)

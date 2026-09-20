@@ -48,6 +48,42 @@ def moveEventTowardsEvent(turning, turnedTowards)
   end
 end
 
+def moveEventAwayFromEvent(moving, movingAwayFrom)
+  if movingAwayFrom.is_a?(Integer)
+    movingAwayFrom = $game_map.events[movingAwayFrom]
+  end
+  if moving.is_a?(Integer)
+    moving = $game_map.events[moving]
+  end
+
+  event_x = movingAwayFrom.x
+  event_y = movingAwayFrom.y
+  dx = moving.x - event_x
+  dy = moving.y - event_y
+
+  # Move in whichever axis has the larger distance, away from the target
+  if dx.abs >= dy.abs
+    if moving.x < event_x
+      moving.move_left
+    elsif moving.x > event_x
+      moving.move_right
+    elsif moving.y < event_y
+      moving.move_up
+    elsif moving.y > event_y
+      moving.move_down
+    end
+  else
+    if moving.y < event_y
+      moving.move_up
+    elsif moving.y > event_y
+      moving.move_down
+    elsif moving.x < event_x
+      moving.move_left
+    elsif moving.x > event_x
+      moving.move_right
+    end
+  end
+end
 def resetFrames(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
