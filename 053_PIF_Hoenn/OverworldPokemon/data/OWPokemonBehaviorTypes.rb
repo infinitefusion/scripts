@@ -293,7 +293,7 @@ POKEMON_BEHAVIOR_DATA =
     :MIGHTYENA => { behavior_noticed: :aggressive, behavior_roaming: :random , behavior_pokemon: {:FURRET => :aggressive}},
     :ZIGZAGOON => { behavior_noticed: :curious, behavior_roaming: :random },
     :LINOONE => { behavior_noticed: nil, behavior_roaming: :random },
-    :WURMPLE => { behavior_noticed: :shy, behavior_roaming: :random , behavior_pokemon: {:TAILLOW => :skittish, :SWELLOW => :skittish, :STARLY => :defend}},
+    :WURMPLE => { behavior_noticed: :shy, behavior_roaming: :random , behavior_pokemon: {:TAILLOW => :defend, :SWELLOW => :skittish, :STARLY => :defend}},
     :SILCOON => { behavior_noticed: :still, behavior_roaming: :still },
     :BEAUTIFLY => { behavior_noticed: :skittish,  behavior_roaming: :random , behavior_pokemon: {:COMBEE => :semi_aggressive}},
     :CASCOON => { behavior_noticed: :still, behavior_roaming: :still },

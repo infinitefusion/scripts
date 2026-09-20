@@ -647,6 +647,9 @@ class OverworldPokemonEvent < Game_Event
       move_type_toward_target(@target) if ready_for_next_movement
     when MOVE_TYPE_AWAY_FROM_TARGET
       move_type_away_from_target(@target) if ready_for_next_movement
+    when MOVE_TYPE_SHY_FROM_TARGET
+      move_type_away_from_target(@target) if ready_for_next_movement
+      turnEventTowardsEvent(self, @target)
     end
   end
 

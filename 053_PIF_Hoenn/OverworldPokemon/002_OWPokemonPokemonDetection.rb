@@ -93,8 +93,8 @@ class OverworldPokemonEvent < Game_Event
     when :aggressive
       @move_type = MOVE_TYPE_TOWARDS_TARGET
       self.move_frequency = 6
-    when :shy
-      @move_type = MOVE_TYPE_AWAY_FROM_TARGET
+    when :shy, :defend
+      @move_type = MOVE_TYPE_SHY_FROM_TARGET
     when :skittish
       @move_type = MOVE_TYPE_AWAY_FROM_TARGET
       self.move_frequency = 6
@@ -112,7 +112,7 @@ class OverworldPokemonEvent < Game_Event
 
   def update_attack_target
     unless @current_state == :NOTICED_POKEMON &&
-      [:aggressive, :semi_aggressive, :eat_pokeblock].include?(@noticed_pokemon_behavior) &&
+      [:aggressive, :semi_aggressive, :eat_pokeblock, :defend].include?(@noticed_pokemon_behavior) &&
       adjacent_to?(@target)
       @attack_timer = 0
       return

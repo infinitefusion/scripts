@@ -8,7 +8,7 @@ MOVE_TYPE_SHY = 6
 
 MOVE_TYPE_TOWARDS_TARGET = 7
 MOVE_TYPE_AWAY_FROM_TARGET = 8
-
+MOVE_TYPE_SHY_FROM_TARGET = 9
 class Game_Character
   # @stop_count : nb frames since last movement
 
