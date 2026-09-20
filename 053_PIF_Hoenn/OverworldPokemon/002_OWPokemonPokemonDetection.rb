@@ -73,6 +73,13 @@ class OverworldPokemonEvent < Game_Event
         return
       elsif event_pokemon.species == @pokemon.species
         @pack_size += 1
+      elsif noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(:everything)
+        #everything that's not their own species
+        behavior = noticed_pokemon_behaviors[:everything]
+        playDetectAnimation(behavior)
+        update_state(:NOTICED_POKEMON)
+        set_noticed_pokemon_movement(behavior, event_pokemon)
+        return
       end
     end
   end

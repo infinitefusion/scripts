@@ -57,7 +57,6 @@ def set_weather_ambient_sounds(weather_type,intensity)
     volume = [base_volume + base_volume * (intensity/2),10].min #Intensity at 10: volume 100
     case weather_type
     when :Rain, :Storm
-        echoln "playing some rain sounds"
         pbBGSPlay("ambient/rain",volume)
     when :Wind, :Blizzard, :StrongWind, :Storm
         pbBGSPlay("ambient/wind",volume)

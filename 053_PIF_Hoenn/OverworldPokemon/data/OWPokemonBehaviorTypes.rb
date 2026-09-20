@@ -289,7 +289,7 @@ POKEMON_BEHAVIOR_DATA =
     :MUDKIP => { behavior_noticed: :curious, behavior_roaming: :random },
     :MARSHTOMP => { behavior_noticed: nil, behavior_roaming: :random },
     :SWAMPERT => { behavior_noticed: nil, behavior_roaming: :random },
-    :POOCHYENA => { behavior_noticed: :semi_aggressive, behavior_roaming: :random },
+    :POOCHYENA => { behavior_noticed: :semi_aggressive, behavior_roaming: :random, behavior_pokemon: {:everything => :semi_aggressive} },
     :MIGHTYENA => { behavior_noticed: :aggressive, behavior_roaming: :random , behavior_pokemon: {:FURRET => :aggressive}},
     :ZIGZAGOON => { behavior_noticed: :curious, behavior_roaming: :random },
     :LINOONE => { behavior_noticed: nil, behavior_roaming: :random },
