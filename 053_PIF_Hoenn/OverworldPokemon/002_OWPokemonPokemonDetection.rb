@@ -63,6 +63,8 @@ class OverworldPokemonEvent < Game_Event
     @pack_size =0
     sorted_events.each do |event_pokemon, distance|
       if event_pokemon.is_a?(PokeblockEvent)
+        #behavior towards pokeblock
+        #
         unless @current_state == :NOTICED_POKEMON
           playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
         end
@@ -76,17 +78,20 @@ class OverworldPokemonEvent < Game_Event
       next if event_pokemon.pokemon.shiny?
 
       if noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(event_pokemon.species)
+        #behaviors toward specific species
+        #
         behavior = noticed_pokemon_behaviors[event_pokemon.species]
-        playDetectAnimation(behavior)
+        playDetectAnimation(behavior,false)
         update_state(:NOTICED_POKEMON)
         set_noticed_pokemon_movement(behavior, event_pokemon)
         return
       elsif event_pokemon.species == @pokemon.species
         @pack_size += 1
       elsif noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(:everything)
-        #everything that's not their own species
+        #behavior towards everything that's not their own species
+        #
         behavior = noticed_pokemon_behaviors[:everything]
-        playDetectAnimation(behavior)
+        playDetectAnimation(behavior,false)
         update_state(:NOTICED_POKEMON)
         set_noticed_pokemon_movement(behavior, event_pokemon)
         return

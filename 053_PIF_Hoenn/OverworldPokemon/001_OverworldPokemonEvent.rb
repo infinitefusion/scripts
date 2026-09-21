@@ -1,3 +1,5 @@
+
+
 class OverworldPokemonEvent < Game_Event
 
   attr_accessor :species
@@ -326,20 +328,30 @@ class OverworldPokemonEvent < Game_Event
     initialize_sprite(@terrain, species_data)
   end
 
-  def playDetectAnimation(behavior_noticed = @behavior_noticed)
+  ANIMATION_OW_CURIOUS = 41
+  ANIMATION_OW_ANGRY = 42
+  ANIMATION_OW_EXCITED = 43
+  ANIMATION_OW_SURPRISED = 44
+
+  def playDetectAnimation(behavior_noticed = @behavior_noticed, play_sound = true)
     return unless @current_state == :ROAMING
     return unless noticed_state_different_from_roaming()
 
     if behavior_noticed == :curious
-      playAnimation(Settings::QUESTION_MARK_ANIMATION_ID, @x, @y)
+      pbSEPlay("Exclaim") if play_sound
+      playAnimation(ANIMATION_OW_CURIOUS, @x, @y)
     elsif behavior_noticed == :aggressive
-      playAnimation(Settings::ANGRY_ANIMATION_ID, @x, @y)
+      pbSEPlay("angry") if play_sound
+      playAnimation(ANIMATION_OW_ANGRY, @x, @y)
     elsif behavior_noticed == :excited
-      playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
+      pbSEPlay("Exclaim") if play_sound
+      playAnimation(ANIMATION_OW_EXCITED, @x, @y)
     elsif behavior_noticed == :semi_aggressive
-      playAnimation(Settings::ANGRY_SHORT_ANIMATION_ID, @x, @y)
+      pbSEPlay("angry") if play_sound
+      playAnimation(ANIMATION_OW_ANGRY, @x, @y)
     else
-      playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
+      pbSEPlay("Exclaim") if play_sound
+      playAnimation(ANIMATION_OW_SURPRISED, @x, @y)
     end
   end
 
@@ -602,6 +614,7 @@ class OverworldPokemonEvent < Game_Event
 
   def check_weather_roaming_behavior
     if @weather_type_at_spawn == :Wind || @weather_type_at_spawn == :Storm
+      echoln @species
       wind_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_wind_roaming]
       if wind_behavior
         set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][wind_behavior])
