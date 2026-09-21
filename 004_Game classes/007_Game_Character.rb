@@ -1340,6 +1340,13 @@ class Game_Character
     return (dx + dy) - 1
   end
 
+  def distance_from_target(target)
+    return Float::INFINITY if self.map_id != $game_map.map_id
+    dx = (@x - target.x).abs
+    dy = (@y - target.y).abs
+    return (dx + dy) - 1
+  end
+
   def move_diagonal_freeform(distance_horizontal, distance_vertical, speed)
     real_dx = distance_horizontal * Game_Map::REAL_RES_X
     real_dy = distance_vertical * Game_Map::REAL_RES_Y

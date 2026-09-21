@@ -39,7 +39,18 @@ class Game_Character
       move_type_random
       return
     end
-    moveEventTowardsEvent(self, target_event)
+    if distance_from_target(target_event) > 1
+      moveEventTowardsEvent(self, target_event)
+    else
+      roll = rand(6)
+      if roll == 0
+        turn_random
+      elsif roll == 1
+        jump(0,0)
+      else
+        turnEventTowardsEvent(self,target_event)
+      end
+    end
   end
 
   def move_type_away_from_target(target_event)
