@@ -51,6 +51,15 @@ class OverworldPokemonEvent < Game_Event
     noticed_pokemon_behaviors = behavior_data ? behavior_data[:behavior_pokemon] : nil
     sorted_events = @currently_seen_events.sort_by { |_event, distance| distance }
 
+    if sorted_events.empty?
+      if @current_state == :NOTICED_POKEMON
+        update_state(:ROAMING)
+        back_to_roaming_action
+        @target = nil
+      end
+      return
+    end
+
     @pack_size =0
     sorted_events.each do |event_pokemon, distance|
       if event_pokemon.is_a?(PokeblockEvent)
@@ -64,6 +73,7 @@ class OverworldPokemonEvent < Game_Event
         self.move_frequency = 6
         return
       end
+      next if event_pokemon.pokemon.shiny?
 
       if noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(event_pokemon.species)
         behavior = noticed_pokemon_behaviors[event_pokemon.species]
@@ -137,7 +147,18 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def attack_pokemon_target
+
     hp_chunk = calculate_damage_on_target
+
+    #Attacks of pokemon's type 1, except if it's type 1. Then type 2 (if it has 1) - so that normal/flying uses flying moves.
+    attack_type = @pokemon.type1 == :NORMAL && @pokemon.type2 ? @pokemon.type2 : @pokemon.type1
+    effectiveness = Effectiveness.calculate(attack_type,@target.pokemon.type1,@target.pokemon.type2)/8
+
+    if effectiveness >0
+      hp_chunk *= effectiveness
+    end
+    echoln "#{attack_type} on #{@target.pokemon.type1}, #{@target.pokemon.type2} : x#{effectiveness}"
+
     @target.pokemon.hp -= hp_chunk
     echoln @target.pokemon.hp
 
@@ -183,7 +204,6 @@ class OverworldPokemonEvent < Game_Event
     atk     = @pokemon.attack
     defense = @target.pokemon.defense
     damage  = (((2.0 * @pokemon.level / 5 + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
-    echoln damage
     return damage
   end
   def flash_white(target, duration = 20, alpha = 200)
