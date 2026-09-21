@@ -34,22 +34,38 @@ class Game_Character
     end
   end
 
-  def move_type_toward_target(target_event)
+  def move_type_toward_target(target_event, next_movement_ready = true)
+    return unless next_movement_ready
     unless target_event
       move_type_random
       return
     end
-    if distance_from_target(target_event) > 1
-      moveEventTowardsEvent(self, target_event)
-    else
-      roll = rand(6)
-      if roll == 0
-        turn_random
-      elsif roll == 1
-        jump(0,0)
+
+    dx = (target_event.x - self.x).abs
+    dy = (target_event.y - self.y).abs
+    distance = dx + dy
+
+    if distance > 1
+      if rand(10) == 0
+        move_random
+        #turnEventTowardsEvent(self,target_event)
       else
-        turnEventTowardsEvent(self,target_event)
+        moveEventTowardsEvent(self, target_event)
       end
+      return
+    end
+
+    if @noticed_pokemon_behavior == :curious
+      roll = rand(10)
+      if roll <= 3
+        turn_random
+      elsif roll <= 6
+        turnEventTowardsEvent(self, target_event)
+      else
+        wait
+      end
+    else
+      turnEventTowardsEvent(self, target_event)
     end
   end
 

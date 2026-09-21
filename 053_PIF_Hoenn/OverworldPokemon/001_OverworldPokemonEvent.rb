@@ -235,6 +235,13 @@ class OverworldPokemonEvent < Game_Event
     end
   end
 
+  def pokemon
+    unless @pokemon
+      @pokemon = Pokemon.new(@species, @level)
+    end
+    return @pokemon
+  end
+
   def initialize_water_sprite
     if @flying_sprite
       @character_name = @flying_sprite
@@ -657,7 +664,7 @@ class OverworldPokemonEvent < Game_Event
     when MOVE_TYPE_CURIOUS
       move_type_curious(ready_for_next_movement)
     when MOVE_TYPE_TOWARDS_TARGET
-      move_type_toward_target(@target) if ready_for_next_movement
+      move_type_toward_target(@target, ready_for_next_movement) if ready_for_next_movement
     when MOVE_TYPE_AWAY_FROM_TARGET
       move_type_away_from_target(@target) if ready_for_next_movement
     when MOVE_TYPE_SHY_FROM_TARGET

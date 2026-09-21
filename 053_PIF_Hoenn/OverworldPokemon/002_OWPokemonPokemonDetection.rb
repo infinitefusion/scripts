@@ -33,6 +33,13 @@ class OverworldPokemonEvent < Game_Event
   #   end
   #   echoln @currently_seen_events
   # end
+  BEHAVIOR_PRIORITY = {
+    skittish: 1,
+    aggressive: 2,
+    shy: 3,
+    semi_aggressive: 4,
+    curious: 5
+  }.freeze
 
   alias turn_generic_pokemon_detection turn_generic
   def turn_generic(*args)
@@ -60,43 +67,53 @@ class OverworldPokemonEvent < Game_Event
       return
     end
 
-    @pack_size =0
+    @pack_size = 0
+    nearest_distance = nil
+    candidates = []       # [event, behavior] pairs, all at nearest_distance
+    pokeblock_candidate = nil
+
     sorted_events.each do |event_pokemon, distance|
+      # Once we've passed the nearest distance that had any qualifying target, stop
+      break if nearest_distance && distance > nearest_distance
+
       if event_pokemon.is_a?(PokeblockEvent)
-        #behavior towards pokeblock
-        #
-        unless @current_state == :NOTICED_POKEMON
-          playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
-        end
-        update_state(:NOTICED_POKEMON)
-        @target = event_pokemon
-        @noticed_pokemon_behavior = :eat_pokeblock
-        @move_type = MOVE_TYPE_TOWARDS_TARGET
-        self.move_frequency = 6
-        return
+        pokeblock_candidate ||= event_pokemon
+        nearest_distance ||= distance
+        next
       end
+
       next if event_pokemon.pokemon.shiny?
 
       if noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(event_pokemon.species)
-        #behaviors toward specific species
-        #
-        behavior = noticed_pokemon_behaviors[event_pokemon.species]
-        playDetectAnimation(behavior,false)
-        update_state(:NOTICED_POKEMON)
-        set_noticed_pokemon_movement(behavior, event_pokemon)
-        return
+        candidates << [event_pokemon, noticed_pokemon_behaviors[event_pokemon.species]]
+        nearest_distance ||= distance
       elsif event_pokemon.species == @pokemon.species
         @pack_size += 1
       elsif noticed_pokemon_behaviors && noticed_pokemon_behaviors.include?(:everything)
-        #behavior towards everything that's not their own species
-        #
-        behavior = noticed_pokemon_behaviors[:everything]
-        playDetectAnimation(behavior,false)
-        update_state(:NOTICED_POKEMON)
-        set_noticed_pokemon_movement(behavior, event_pokemon)
-        return
+        candidates << [event_pokemon, noticed_pokemon_behaviors[:everything]]
+        nearest_distance ||= distance
       end
     end
+
+    if pokeblock_candidate
+      unless @current_state == :NOTICED_POKEMON
+        playAnimation(HEART_ANIMATION_SHORT_ID, @x, @y)
+      end
+      update_state(:NOTICED_POKEMON)
+      @target = pokeblock_candidate
+      @noticed_pokemon_behavior = :eat_pokeblock
+      @move_type = MOVE_TYPE_TOWARDS_TARGET
+      self.move_frequency = 6
+      return
+    end
+
+    return if candidates.empty?
+
+    best_event, best_behavior = candidates.min_by { |_event, behavior| BEHAVIOR_PRIORITY[behavior] || 99 }
+
+    playDetectAnimation(best_behavior, false)
+    update_state(:NOTICED_POKEMON)
+    set_noticed_pokemon_movement(best_behavior, best_event)
   end
 
   def target_still_valid?
@@ -110,17 +127,21 @@ class OverworldPokemonEvent < Game_Event
     case behavior
     when :random
       @move_type = MOVE_TYPE_RANDOM
+      self.move_frequency = @roaming_frequency
     when :still
       @move_type = MOVE_TYPE_FIXED
     when :curious
       @move_type = MOVE_TYPE_TOWARDS_TARGET
+      self.move_frequency = @roaming_frequency
     when :semi_aggressive
       @move_type = MOVE_TYPE_TOWARDS_TARGET
+      self.move_frequency = @roaming_frequency
     when :aggressive
       @move_type = MOVE_TYPE_TOWARDS_TARGET
       self.move_frequency = 6
     when :shy
       @move_type = MOVE_TYPE_SHY_FROM_TARGET
+      self.move_frequency = @roaming_frequency
     when :skittish
       @move_type = MOVE_TYPE_AWAY_FROM_TARGET
       self.move_frequency = 6
@@ -152,21 +173,16 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def attack_pokemon_target
-
     hp_chunk = calculate_damage_on_target
 
-    #Attacks of pokemon's type 1, except if it's type 1. Then type 2 (if it has 1) - so that normal/flying uses flying moves.
+    # Attacks of pokemon's type 1, except if it's type 1. Then type 2 (if it has one) - so that normal/flying uses flying moves.
     attack_type = @pokemon.type1 == :NORMAL && @pokemon.type2 ? @pokemon.type2 : @pokemon.type1
-    effectiveness = Effectiveness.calculate(attack_type,@target.pokemon.type1,@target.pokemon.type2)/8
+    effectiveness = Effectiveness.calculate(attack_type, @target.pokemon.type1, @target.pokemon.type2) / 8.0
 
-    if effectiveness >0
-      hp_chunk *= effectiveness
-    end
+    hp_chunk = (hp_chunk * effectiveness).floor
     echoln "#{attack_type} on #{@target.pokemon.type1}, #{@target.pokemon.type2} : x#{effectiveness}"
 
     @target.pokemon.hp -= hp_chunk
-    echoln @target.pokemon.hp
-
     flash_white(@target)
     unless @target.is_a?(PokeblockEvent)
       @target.knock_back(self)
@@ -225,7 +241,7 @@ class OverworldPokemonEvent < Game_Event
     original_direction_fix = @direction_fix
 
     @direction_fix = true
-    self.jump_forward(-1)
+    self.jumpBackward
     #self.move_backward
     @direction_fix = original_direction_fix
   end
