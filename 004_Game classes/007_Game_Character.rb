@@ -1296,11 +1296,13 @@ class Game_Character
     @stopped_this_frame = false
   end
 
-  def step_animation_once
+  def play_step_animation(nb_times)
     return if @lock_pattern
     return if @step_anime_once
     @step_anime_once = true
-    @step_anime_once_count = 0
+    @step_animation_nb_times = nb_times
+    @step_animation_current_time = 0
+    @step_anime_once_frame_count = 0
     @old_step_anime = @step_anime
     @step_anime = true
     @pattern = 0
@@ -1338,8 +1340,13 @@ class Game_Character
   end
 
   def advance_step_animation_once
-    @step_anime_once_count += 1
-    return if @step_anime_once_count < 4
+    @step_anime_once_frame_count += 1
+
+    total_frames = @step_animation_nb_times * 4
+    if @step_anime_once_frame_count % 4 == 0
+      @pattern = 0  #loop
+    end
+    return if @step_anime_once_frame_count < total_frames
     @pattern = 0
     @step_anime = @old_step_anime
     @step_anime_once = false

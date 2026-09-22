@@ -91,11 +91,16 @@ class OverworldPokemonEvent
     @old_character_name = @character_name
     @character_name = @idle_animation_sprite
     @stop_count = 0
-    step_animation_once
+    nb_times = rand(1..3)
+    echoln nb_times
+    play_step_animation(nb_times)
+
   end
 
   def update_idle_animation
-    if @playing_idle_animation && @step_anime_once_count >= 4
+    return unless @playing_idle_animation
+    total_frames = @step_animation_nb_times * 4
+    if @playing_idle_animation && @step_anime_once_frame_count >= total_frames
       @character_name = @old_character_name
       @playing_idle_animation = false
     end
