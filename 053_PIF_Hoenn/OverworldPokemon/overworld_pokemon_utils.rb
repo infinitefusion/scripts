@@ -21,6 +21,21 @@ def getRoamingSprite(species_data,shiny=false)
   return flyingPath if flyingPath
 end
 
+def get_ow_sprite_path(species_data,sprite_name,shiny=false)
+  species = species_data.species
+  is_fusion = isSpeciesFusion(species)
+  if is_fusion
+    species_name = species_data.get_body_species_symbol.to_s
+  else
+    species_name = species.to_s
+  end
+  base_path = get_base_sprite_path(is_fusion, shiny)
+  path = "#{base_path}#{species_name}_#{sprite_name}"
+  if pbResolveBitmap("Graphics/Characters/#{path}")
+    return path
+  end
+end
+
 def getOverworldLandPath(species_data,shiny=false)
   species = species_data.species
   is_fusion = isSpeciesFusion(species)
@@ -37,49 +52,19 @@ def getOverworldLandPath(species_data,shiny=false)
 end
 
 def getOverworldFlyingPath(species_data,shiny=false)
-  species = species_data.species
-  is_fusion = isSpeciesFusion(species)
-  if is_fusion
-    species_name = species_data.get_body_species_symbol.to_s
-  else
-    species_name = species.to_s
-  end
-  base_path = get_base_sprite_path(is_fusion, shiny)
-  path = "#{base_path}#{species_name}_fly"
-  if pbResolveBitmap("Graphics/Characters/#{path}")
-    return path
-  end
+  return get_ow_sprite_path(species_data,"fly",shiny)
 end
 
 def getOverworldNoticedPath(species_data,shiny=false)
-  species = species_data.species
-  is_fusion = isSpeciesFusion(species)
-  if is_fusion
-    species_name = species_data.get_body_species_symbol.to_s
-  else
-    species_name = species.to_s
-  end
-  base_path = get_base_sprite_path(is_fusion, shiny)
-  path = "#{base_path}#{species_name}_notice"
-  if pbResolveBitmap("Graphics/Characters/#{path}")
-    return path
-  end
+  return get_ow_sprite_path(species_data,"notice",shiny)
 end
 
 def getOverworldSwimmingPath(species_data,shiny=false)
-  species = species_data.species
+  return get_ow_sprite_path(species_data,"swim",shiny)
+end
 
-  is_fusion = isSpeciesFusion(species)
-  if is_fusion
-    species_name = species_data.get_body_species_symbol.to_s
-  else
-    species_name = species.to_s
-  end
-  base_path = get_base_sprite_path(is_fusion, shiny)
-  path = "#{base_path}#{species_name}_swim"
-  if pbResolveBitmap("Graphics/Characters/#{path}")
-    return path
-  end
+def getOverworldIdleAnimation(species_data,shiny=false)
+  return get_ow_sprite_path(species_data,"idle",shiny)
 end
 
 def getRandomPokemonFromRoute(excluded_species,terrain)
