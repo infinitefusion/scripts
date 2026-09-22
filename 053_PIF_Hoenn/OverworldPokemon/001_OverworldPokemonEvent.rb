@@ -686,6 +686,8 @@ class OverworldPokemonEvent < Game_Event
     if $game_temp.message_window_showing
       pause_movement unless @current_state == :PAUSED
     else
+      update_attack_target
+      update_retaliation
       @behavior_update_counter = (@behavior_update_counter || 0) + 1
       if @behavior_update_counter >= UPDATE_TIME
         @behavior_update_counter = 0
@@ -693,6 +695,7 @@ class OverworldPokemonEvent < Game_Event
       end
     end
   end
+
 
 
   #Override marshall dump to exclude stuff that crashes the game (the ref to lignt_effect)
