@@ -254,20 +254,20 @@ class OverworldPokemonEvent < Game_Event
     (dx == 0 && dy.abs == 1) || (dy == 0 && dx.abs == 1)
   end
 
-  def update
-    super
-    if $game_temp.message_window_showing
-      pause_movement unless @current_state == :PAUSED
-    else
-      update_attack_target
-      update_retaliation
-      @behavior_update_counter = (@behavior_update_counter || 0) + 1
-      if @behavior_update_counter >= UPDATE_TIME
-        @behavior_update_counter = 0
-        update_behavior
-      end
-    end
-  end
+  # def update
+  #   super
+  #   if $game_temp.message_window_showing
+  #     pause_movement unless @current_state == :PAUSED
+  #   else
+  #     update_attack_target
+  #     update_retaliation
+  #     @behavior_update_counter = (@behavior_update_counter || 0) + 1
+  #     if @behavior_update_counter >= UPDATE_TIME
+  #       @behavior_update_counter = 0
+  #       update_behavior
+  #     end
+  #   end
+  # end
 
   #-----------------------------------------------------------------------
   # Returns the forward distance (along the facing axis) to (px, py) if it

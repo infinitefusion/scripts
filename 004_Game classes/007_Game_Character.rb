@@ -1296,9 +1296,19 @@ class Game_Character
     @stopped_this_frame = false
   end
 
+  def step_animation_once
+    return if @lock_pattern
+    return if @step_anime_once
+    @step_anime_once = true
+    @step_anime_once_count = 0
+    @old_step_anime = @step_anime
+    @step_anime = true
+    @pattern = 0
+    @anime_count = 0
+  end
+
   def update_pattern
     return if @lock_pattern
-    #    return if @jump_count > 0   # Don't animate if jumping on the spot
     # Character has stopped moving, return to original pattern
     if @moved_last_frame && !@moved_this_frame && !@step_anime
       @pattern = @original_pattern
@@ -1311,21 +1321,28 @@ class Game_Character
       @anime_count = 0
       return
     end
-    # Calculate how many frames each pattern should display for, i.e. the time
-    # it takes to move half a tile (or a whole tile if cycling). We assume the
-    # game uses square tiles.
+    # Calculate how many frames each pattern should display for
     real_speed = (jumping?) ? jump_speed_real : move_speed_real
     if @animation_speed
       base = Game_Map::REAL_RES_X / 2.0
       frames_per_pattern = base / @animation_speed
     else
       frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
-      frames_per_pattern *= 2 if move_speed >= 5 # Cycling speed or faster
+      frames_per_pattern *= 2 if move_speed >= 5
     end
     return if @anime_count < frames_per_pattern
     # Advance to the next animation frame
     @pattern = (@pattern + 1) % 4
     @anime_count -= frames_per_pattern
+    advance_step_animation_once if @step_anime_once
+  end
+
+  def advance_step_animation_once
+    @step_anime_once_count += 1
+    return if @step_anime_once_count < 4
+    @pattern = 0
+    @step_anime = @old_step_anime
+    @step_anime_once = false
   end
 
   # def distance_from_player

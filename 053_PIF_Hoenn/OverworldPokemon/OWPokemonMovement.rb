@@ -9,7 +9,7 @@ MOVE_TYPE_SHY = 6
 MOVE_TYPE_TOWARDS_TARGET = 7
 MOVE_TYPE_AWAY_FROM_TARGET = 8
 MOVE_TYPE_SHY_FROM_TARGET = 9
-class Game_Character
+class OverworldPokemonEvent
   # @stop_count : nb frames since last movement
 
   #wait until next frequency frame
@@ -75,6 +75,30 @@ class Game_Character
       return
     end
     moveEventAwayFromEvent(self, target_event)
+  end
+
+  def move_type_random
+    if @idle_animation_sprite && rand(6)==0
+      play_idle_animation
+    else
+      super
+    end
+  end
+
+  def play_idle_animation
+    return if @playing_idle_animation
+    @playing_idle_animation = true
+    @old_character_name = @character_name
+    @character_name = @idle_animation_sprite
+    @stop_count = 0
+    step_animation_once
+  end
+
+  def update_idle_animation
+    if @playing_idle_animation && @step_anime_once_count >= 4
+      @character_name = @old_character_name
+      @playing_idle_animation = false
+    end
   end
 
   # def move_type_shy(next_movement_ready = false)

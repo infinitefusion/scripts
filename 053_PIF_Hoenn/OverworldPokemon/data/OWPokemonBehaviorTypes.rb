@@ -201,7 +201,7 @@ POKEMON_BEHAVIOR_DATA =
     :CHINCHOU => { behavior_noticed: nil, behavior_roaming: :random, glow_in_the_dark: true , behavior_pokemon: {:INKAY => :shy}},
     :LANTURN => { behavior_noticed: nil, behavior_roaming: :random, glow_in_the_dark: true , behavior_pokemon: {:SHARPEDO => :skittish, :STARMIE => :aggressive, :FRILLISHfE => :shy, :FRILLISHmA => :shy}},
     :PICHU => { behavior_noticed: :curious, behavior_roaming: :random },
-    :CLEFFA => { behavior_noticed: :curious, behavior_roaming: :random },
+    :CLEFFA => { behavior_noticed: :shy, behavior_roaming: :random },
     :IGGLYBUFF => { behavior_noticed: :curious, behavior_roaming: :random, behavior_wind_roaming: :blown_away },
     :TOGEPI => { behavior_noticed: :curious, behavior_roaming: :random },
     :TOGETIC => { behavior_noticed: :curious, behavior_roaming: :random },

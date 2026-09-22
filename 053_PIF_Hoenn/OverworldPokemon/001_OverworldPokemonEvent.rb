@@ -223,6 +223,8 @@ class OverworldPokemonEvent < Game_Event
     @flying_sprite = getOverworldFlyingPath(species_data, @pokemon.shiny?)
     @swimming_sprite = getOverworldSwimmingPath(species_data, @pokemon.shiny?)
 
+    @idle_animation_sprite = getOverworldIdleAnimation(species_data, @pokemon.shiny?)
+
     @noticed_sprite = getOverworldNoticedPath(species_data, @pokemon.shiny?)
     @noticed_sprite = @flying_sprite if !@noticed_sprite && @flying_sprite
     @roaming_sprite = @land_sprite
@@ -680,6 +682,7 @@ class OverworldPokemonEvent < Game_Event
 
   def update
     super
+    update_idle_animation
     if $game_temp.message_window_showing
       pause_movement unless @current_state == :PAUSED
     else
