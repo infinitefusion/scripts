@@ -241,6 +241,7 @@ class PokemonPokedexInfo_Scene
 
   def setIconStatus(iconName, position, species_blacklist)
     sprite = @available[position]
+    return if sprite.nil?
     if sprite.type == :AUTOGEN && @available.length == 1
       if @available.length > 1
         setBlacklistIconDisabled(iconName)
