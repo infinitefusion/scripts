@@ -241,7 +241,6 @@ class PokemonPokedexInfo_Scene
 
   def setIconStatus(iconName, position, species_blacklist)
     sprite = @available[position]
-    return if sprite.nil?
     if sprite.type == :AUTOGEN && @available.length == 1
       if @available.length > 1
         setBlacklistIconDisabled(iconName)
@@ -505,14 +504,14 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbChooseAlt(brief = false)
-    checkSpritesPageTutorial
-    @selecting_sprites = true
-    updateBlackListInstructionIcons
-    update_blacklist_icons if @selecting_blacklist
     if @available.size <= 0
       pbPlayBuzzerSE
       return
     end
+    checkSpritesPageTutorial
+    @selecting_sprites = true
+    updateBlackListInstructionIcons
+    update_blacklist_icons if @selecting_blacklist
     loop do
       Graphics.update
       Input.update
