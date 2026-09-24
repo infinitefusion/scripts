@@ -203,7 +203,7 @@ GameData::TerrainTag.register({
                                 :can_surf => true,
                                 :waterfall => true,
                                 :ambient_sound => "ambient/waterfall",
-                                :ambient_sound_max_volume => 60
+                                :ambient_sound_max_volume => 50
                               })
 
 GameData::TerrainTag.register({
@@ -213,7 +213,7 @@ GameData::TerrainTag.register({
                                 :can_fish => true,
                                 :waterfall_crest => true,
                                 :ambient_sound => "ambient/waterfall",
-                                :ambient_sound_max_volume => 60
+                                :ambient_sound_max_volume => 50
                               })
 
 GameData::TerrainTag.register({

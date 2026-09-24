@@ -63,8 +63,12 @@ def getOverworldSwimmingPath(species_data,shiny=false)
   return get_ow_sprite_path(species_data,"swim",shiny)
 end
 
-def getOverworldIdleAnimation(species_data,shiny=false)
-  return get_ow_sprite_path(species_data,"idle",shiny)
+def getOverworldIdleAnimation(species_data,is_flying, shiny=false)
+  if is_flying
+    return get_ow_sprite_path(species_data,"fly_idle",shiny)
+  else
+    return get_ow_sprite_path(species_data,"idle",shiny)
+  end
 end
 
 def getRandomPokemonFromRoute(excluded_species,terrain)

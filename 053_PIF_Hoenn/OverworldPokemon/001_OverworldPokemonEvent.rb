@@ -223,7 +223,7 @@ class OverworldPokemonEvent < Game_Event
     @flying_sprite = getOverworldFlyingPath(species_data, @pokemon.shiny?)
     @swimming_sprite = getOverworldSwimmingPath(species_data, @pokemon.shiny?)
 
-    @idle_animation_sprite = getOverworldIdleAnimation(species_data, @pokemon.shiny?)
+    @idle_animation_sprite = getOverworldIdleAnimation(species_data,@is_flying, @pokemon.shiny?)
 
     @noticed_sprite = getOverworldNoticedPath(species_data, @pokemon.shiny?)
     @noticed_sprite = @flying_sprite if !@noticed_sprite && @flying_sprite
