@@ -361,54 +361,59 @@ end
 #   return Settings::DEFAULT_SPRITE_PATH
 # end
 
-def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true)
+def get_random_alt_letter_for_custom(head_id, body_id, onlyMain = true, weightedByArtist = true)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  if $PokemonSystem.random_sprites && $PokemonGlobal
-    $PokemonSystem.sprites_blacklist = {} unless $PokemonSystem.sprites_blacklist
-    fusion_species = get_fusion_symbol(head_id, body_id)
-    species_blacklist = $PokemonSystem.sprites_blacklist[fusion_species]
-    if species_blacklist
-      alts_list = list_all_sprites_letters(spriteName)
-                    .reject { |letter| species_blacklist.include?(letter) }
-    else
-      alts_list = list_main_sprites_letters(spriteName)
-    end
-    return alts_list.sample
-  else
-    if onlyMain
-      alts_list = list_main_sprites_letters(spriteName)
-    else
-      alts_list = list_all_sprites_letters(spriteName)
-    end
-  end
-  return nil if alts_list.empty?
-  return alts_list.sample
+  blacklistSpecies = get_fusion_symbol(head_id, body_id)
+  return get_random_alt_letter(spriteName, blacklistSpecies, onlyMain, weightedByArtist)
 end
 
-def get_random_alt_letter_for_unfused(dex_num, onlyMain = true)
+def get_random_alt_letter_for_unfused(dex_num, onlyMain = true, weightedByArtist = true)
   spriteName = _INTL("{1}", dex_num)
+  blacklistSpecies = GameData::Species.get(dex_num)&.species
+  return get_random_alt_letter(spriteName, blacklistSpecies, onlyMain, weightedByArtist)
+end
+
+def get_random_alt_letter(spriteName, blacklistSpecies, onlyMain = true, weightedByArtist = true)
+  sprites = map_alt_sprite_letters_for_pokemon(spriteName)
+  return nil if sprites.empty?
 
   if $PokemonSystem.random_sprites
-    species = GameData::Species.get(dex_num)&.species
     if $PokemonSystem
       $PokemonSystem.sprites_blacklist = {} unless $PokemonSystem.sprites_blacklist
-      species_blacklist = $PokemonSystem.sprites_blacklist[species]
+      species_blacklist = $PokemonSystem.sprites_blacklist[blacklistSpecies]
     end
     if species_blacklist
-      letters_list = list_all_sprites_letters(spriteName)
-                       .reject { |letter| species_blacklist.include?(letter) }
+      sprites = list_all_sprites_details(spriteName)
+                       .reject { |key, value| species_blacklist.include?(key) }
     else
-      letters_list = list_main_sprites_letters(spriteName)
+      sprites = list_main_sprites_details(spriteName)
     end
   else
     if onlyMain
-      letters_list = list_main_sprites_letters(spriteName)
+      sprites = list_main_sprites_details(spriteName)
     else
-      letters_list = list_all_sprites_letters(spriteName)
+      sprites = list_all_sprites_details(spriteName)
     end
-    letters_list << "" # add main sprite
   end
-  return letters_list.sample
+
+  return sprites.keys.sample if !weightedByArtist
+
+  artists = {}
+  sprites.each { |key, value| # count how many sprites each artist has
+    sprites[key][:artist] = value[:artist] = sprites[key][:artist].split(' & ').map {|name| name.strip }.sort.join(' & ')  # keep collabs with different order as same artist
+    artists[value[:artist]] = 0 if !artists.has_key?(value[:artist])
+    artists[value[:artist]] += 1
+  }
+
+  weightedLetters = []
+  factor = artists.reduce(1) { |acc, (artist, count)| acc.lcm(count) }
+  sprites.each { |key, value|
+    for i in 1..(factor / artists[value[:artist]]) do # more of artist's sprites = fewer times in list
+      weightedLetters << key
+    end
+  }
+
+  return weightedLetters.sample
 end
 
 def get_species_spritename(species_symbol)
@@ -429,48 +434,38 @@ def list_main_sprites_letters_species(species)
   return list_main_sprites_letters(spritename)
 end
 
-def list_main_sprites_letters(spriteName)
+def list_main_sprites_details(spriteName)
   return list_all_sprites_letters(spriteName) if $PokemonSystem.include_alt_sprites_in_random
   all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
-  main_sprites = []
-  all_sprites.each do |key, value|
-    main_sprites << key if value == "main"
-  end
-
-  # add temp sprites if no main sprites found
-  if main_sprites.empty?
-    all_sprites.each do |key, value|
-      main_sprites << key if value == "temp"
-    end
-  end
+  main_sprites = all_sprites.select { |key, value| value[:status] == 'main' }
+  main_sprites = all_sprites.select { |key, value| value[:status] == 'temp' } if main_sprites.empty?
   return main_sprites
+end
+
+def list_main_sprites_letters(spriteName)
+  return list_main_sprites_details(spriteName).keys
 end
 
 def list_all_sprites_letters_head_body(head_id, body_id)
   spriteName = _INTL("{1}.{2}", head_id, body_id)
-  all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
-  letters = []
-  all_sprites_map.each do |key, value|
-    letters << key
-  end
-  return letters
+  return map_alt_sprite_letters_for_pokemon(spriteName).keys
+end
+
+def list_all_sprites_details(spriteName)
+  return map_alt_sprite_letters_for_pokemon(spriteName)
 end
 
 def list_all_sprites_letters(spriteName)
-  all_sprites_map = map_alt_sprite_letters_for_pokemon(spriteName)
-  letters = []
-  all_sprites_map.each do |key, value|
-    letters << key
-  end
-  return letters
+  return list_all_sprites_details(spriteName).keys
+end
+
+def list_alt_sprite_details(spriteName)
+  return map_alt_sprite_letters_for_pokemon(spriteName)
+    .select { |key, value| value[:status] == 'alt' }
 end
 
 def list_alt_sprite_letters(spriteName)
-  all_sprites = map_alt_sprite_letters_for_pokemon(spriteName)
-  alt_sprites = []
-  all_sprites.each do |key, value|
-    alt_sprites << key if value == "alt"
-  end
+  return list_alt_sprite_details(spriteName).keys
 end
 
 # ex: "1" -> "main"
@@ -496,6 +491,9 @@ end
 #   return alt_sprites
 # end
 
+
+#ex: "" -> { :status => "main", :artist => "urbain" }
+#    "a" -> { :status => "alt", :artist => "taunie" }
 def map_alt_sprite_letters_for_pokemon(spriteName)
   alt_sprites = {}
 
@@ -505,13 +503,13 @@ def map_alt_sprite_letters_for_pokemon(spriteName)
     next unless sprite_name.start_with?(spriteName)
     suffix = sprite_name[spriteName.length..-1] || ""
     if suffix.empty?
-      alt_sprites[""] = row[2]
+      alt_sprites[""] = { :status => row[2], :artist => row[1] }
       next
     end
     # only accept letter-based suffixes: a, b, aa, ab, etc.
     next unless suffix.match?(/\A[a-zA-Z]+\z/)
 
-    alt_sprites[suffix] = row[2]
+    alt_sprites[suffix] = { :status => row[2], :artist => row[1] }
   end
 
   alt_sprites
