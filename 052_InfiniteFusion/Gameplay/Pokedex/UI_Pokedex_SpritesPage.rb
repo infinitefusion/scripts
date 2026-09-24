@@ -504,7 +504,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbChooseAlt(brief = false)
-    if @available.size <= 0
+    if @available.size <= 1
       pbPlayBuzzerSE
       return
     end
