@@ -504,14 +504,14 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbChooseAlt(brief = false)
+    if @available.size <= 1
+      pbPlayBuzzerSE
+      return
+    end
     checkSpritesPageTutorial
     @selecting_sprites = true
     updateBlackListInstructionIcons
     update_blacklist_icons if @selecting_blacklist
-    if @available.size <= 0
-      pbPlayBuzzerSE
-      return
-    end
     loop do
       Graphics.update
       Input.update
