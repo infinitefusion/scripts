@@ -13,6 +13,50 @@ def map_sprites_by_artist
   return creditsMap
 end
 
+def titleize(str)
+  str.split(/ |\_/).map(&:capitalize).join(" ")
+end
+def select_references
+  references_map = map_sprites_by_reference()
+  label_to_key = {}
+
+  references_list = references_map.keys.sort_by { |k| [-references_map[k].length, k] }.map do |key|
+    label = "#{titleize(key)} (#{references_map[key].length})"
+    label_to_key[label] = key
+    label
+  end
+
+  scene = MultiSelectOptionsScene.new(
+    references_list, [],
+    _INTL("Select reference sprites to include"), nil,
+    _INTL("Type to search"),
+    proc { |label| references_map[label_to_key[label]].length }
+  )
+  screen = MultiSelectOptionScreen.new(scene)
+  selected_labels = screen.pbStartScreen
+
+  return [] if selected_labels.nil?
+  selected_keys = selected_labels.map { |label| label_to_key[label] }
+  echoln selected_keys
+  selected_keys
+end
+def map_sprites_by_reference
+  creditsMap = Hash.new { |hash, key| hash[key] = [] }
+  File.foreach(Settings::CREDITS_FILE_PATH) do |line|
+    row = line.split(',')
+    spritename = row[0]
+    next unless row[3]
+
+    tags = row[3].chomp.split(';')
+    next unless tags[0] == 'reference'
+
+    tags[1..-1].each do |reference|
+      creditsMap[reference] << spritename
+    end
+  end
+  return creditsMap
+end
+
 SPRITER_CREDITS_BLACKLIST = ["Game Freak", "Anonymous"]
 def get_top_artists(nb_names = 100)
   filename = Settings::CREDITS_FILE_PATH
