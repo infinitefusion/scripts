@@ -47,7 +47,7 @@ module GameData
     attr_reader :step_sound
 
     attr_reader :ambient_sound
-    attr_reader :ambient_sound_max_volume
+    attr_reader :ambient_sound_priority
 
     attr_reader :shifting_tile_horizontal
     attr_reader :shifting_tile_vertical
@@ -119,7 +119,7 @@ module GameData
 
       @step_sound = hash[:step_sound]
       @ambient_sound = hash[:ambient_sound]
-      @ambient_sound_max_volume = hash[:ambient_sound_max_volume]
+      @ambient_sound_priority = hash[:ambient_sound_priority]
       @is_cliff = hash[:is_cliff]
 
     end
@@ -203,7 +203,7 @@ GameData::TerrainTag.register({
                                 :can_surf => true,
                                 :waterfall => true,
                                 :ambient_sound => "ambient/waterfall",
-                                :ambient_sound_max_volume => 50
+                                :ambient_sound_priority => 80
                               })
 
 GameData::TerrainTag.register({
@@ -213,7 +213,7 @@ GameData::TerrainTag.register({
                                 :can_fish => true,
                                 :waterfall_crest => true,
                                 :ambient_sound => "ambient/waterfall",
-                                :ambient_sound_max_volume => 50
+                                :ambient_sound_priority => 80
                               })
 
 GameData::TerrainTag.register({
@@ -445,7 +445,7 @@ GameData::TerrainTag.register({
                                 :battle_environment => :Sand,
                                 :show_footprints => true,
                                 :ambient_sound => "ambient/ocean",
-                                :ambient_sound_max_volume => 50,
+                                :ambient_sound_priority => 50,
                               })
 
 GameData::TerrainTag.register({   #Like normal water, but with a river flowing sound effect
@@ -454,7 +454,7 @@ GameData::TerrainTag.register({   #Like normal water, but with a river flowing s
                                 :can_surf => true,
                                 :battle_environment => :MovingWater,
                                 :ambient_sound => "ambient/river",
-                                :ambient_sound_max_volume => 60
+                                :ambient_sound_priority => 50
 
                               })
 
@@ -463,7 +463,7 @@ GameData::TerrainTag.register({
                                   :id_number => 43,
                                   :battle_environment => :Volcano,
                                   :ambient_sound => "ambient/lava",
-                                  :ambient_sound_max_volume => 30,
+                                  :ambient_sound_priority => 30,
                                   :can_fish => true,
                               })
 GameData::TerrainTag.register({

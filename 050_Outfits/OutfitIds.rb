@@ -192,6 +192,10 @@ HAT_GYM_REWARD_2 = Settings::KANTO ? "starmieclip" : "brawlyshades"
 HAT_GYM_REWARD_3 = Settings::KANTO ? "surgeglasses" : "magnemitepin"
 HAT_GYM_REWARD_4 = Settings::KANTO ? "erikaHeadband" : "flannerybeanie"
 HAT_GYM_REWARD_5 = Settings::KANTO ? "kogascarf" : "eeveeears"
+
+HAT_GYM_REWARD_5_HOENN_M = "brendanE"
+HAT_GYM_REWARD_5_HOENN_F = "brendanE"
+
 HAT_GYM_REWARD_6 = Settings::KANTO ? "sabrinasballs" : "winona"
 HAT_GYM_REWARD_7 = Settings::KANTO ? "blaineGlasses" : "sabrinasballs"
 HAT_GYM_REWARD_8 = Settings::KANTO ? "giovannifedora" : "starmieclip"

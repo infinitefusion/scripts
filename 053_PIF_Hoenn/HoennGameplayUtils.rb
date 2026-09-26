@@ -390,3 +390,26 @@ end
 Events.onWildBattleEnd += proc { |_sender, e|
   $game_switches[SWITCH_ENCOUNTERED_A_POKEMON] = true
 }
+
+def petalburg_unlock_doors(doors=[])
+  for door in doors
+    pbSetSelfSwitch(door,"A",true)
+  end
+  pbWait(8)
+  pbSEPlay("unlock")
+  pbWait(8)
+  if doors.length >1
+    pbMessage(_INTL("The doors unlocked!"))
+  else
+    pbMessage(_INTL("The door unlocked!"))
+  end
+end
+
+def obtainNormanHat
+  gender=getPlayerGenderId()
+  if gender == GENDER_MALE
+    obtainHat(HAT_GYM_REWARD_5_HOENN_M)
+  else
+    obtainHat(HAT_GYM_REWARD_5_HOENN_F)
+  end
+end
