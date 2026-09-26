@@ -177,12 +177,16 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
       )
     end
 
-    # options << EnumOption.new("Allow legendaries", ["On", "Off"],
-    #                           proc { $game_switches[SWITCH_RANDOM_TRAINER_LEGENDARIES] ? 0 : 1 },
-    #                           proc { |value|
-    #                             $game_switches[SWITCH_RANDOM_TRAINER_LEGENDARIES] = value == 0
-    #                           }, _INTL("Regular Pokémon can also be randomized into legendaries")
-    # )
+    options << EnumOption.new(_INTL("References"), [_INTL("On"), _INTL("Off")],
+                              proc { $game_switches[SWITCH_RANDOM_TRAINER_EGG_GROUP] ? 0 : 1 },
+                              proc { |value|
+                                $game_switches[SWITCH_RANDOM_TRAINER_EGG_GROUP] = value == 0
+                              },
+                              _INTL("Limit to the same egg groups for randomization that feels more natural.")
+
+    )
+
+
 
     return options
   end
