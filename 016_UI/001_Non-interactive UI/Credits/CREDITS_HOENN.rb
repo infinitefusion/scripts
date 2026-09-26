@@ -123,11 +123,11 @@ Coordinated by anthonygourmand
 
 <title>Chinese Translation
 翻译、UI：Leon (Leonnovation)
+日语支持：Charlotte (Charlotte)
 技术支持：白崎时绘 (Shiroe)
-旧文本参考：阿省呦 (Sheng)
 中文Logo：未蓝啊 (Weilan)
 字体支持：狼人小林 (FusionPixel)
-其他支持：小鱼转晴 (XploreLight)
+其他支持：阿省呦 (Sheng) 小鱼转晴 (XploreLight)
 
 The following free resources were also used 
 with their respective authors' consent:
