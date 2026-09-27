@@ -98,10 +98,24 @@ end
 def is_legendary(dex_num,printInfo=false)
   pokemon_id = getPokemon(dex_num).id
   is_legendary = is_fusion_of_any(pokemon_id,LEGENDARIES_LIST)
-
-  #echoln "#{pokemon_id} is legendary? : #{is_legendary}"
-  #echoln "{1} ({2}) {3}",dex_num,pokemon_id,is_legendary) if printInfo
   return is_legendary
+end
+
+
+def build_species_cache(species_ids)
+  bst_cache = {}
+  legendary_cache = {}
+  egg_group_cache = {}
+
+  species_ids.each do |id|
+    next if bst_cache.key?(id)
+    bst_cache[id] = calcBaseStatsSum(id)
+    legendary_cache[id] = is_legendary(id)
+    sp = GameData::Species.get(id)
+    egg_group_cache[id] = Array(sp.egg_groups)
+  end
+
+  [bst_cache, legendary_cache, egg_group_cache]
 end
 
 def show_shuffle_progress(progress_bar, nb_processed, nb_to_process)
