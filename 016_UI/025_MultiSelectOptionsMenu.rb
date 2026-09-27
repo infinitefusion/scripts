@@ -159,6 +159,11 @@ class MultiSelectOptionsScene
         next
       end
 
+      if Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
+        scrollToConfirm
+        next
+      end
+
       if Input.trigger?(Input::BACK)
         @canceled = true
         break
@@ -193,6 +198,11 @@ class MultiSelectOptionsScene
         end
       end
     end
+  end
+
+  def scrollToConfirm
+    @sprites["option"].index = confirmIndex
+    updateCursorPosition
   end
 
   def pbStartSearchEntry

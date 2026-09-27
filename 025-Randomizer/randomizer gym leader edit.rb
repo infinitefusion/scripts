@@ -475,7 +475,7 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
     Kernel.pbMessage(_INTL("To use custom sprites, please place correctly named sprites in the /CustomBattlers folder. See readMe.txt for more information."))
     Kernel.pbMessage(_INTL("Trainer Pokémon will include auto-generated sprites."))
     return Kernel.pbShuffleTrainers(bst_range)
-  elsif customsList.length < 100
+  elsif customsList.length < 100 && ! $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES]
     if Kernel.pbConfirmMessage(_INTL("Too few custom sprites were found. This will result in a very low Pokémon variety for trainers. Would you like to disable the Custom Sprites only option?"))
       Kernel.pbMessage(_INTL("Trainer Pokémon may also include auto-generated sprites."))
       return Kernel.pbShuffleTrainers(bst_range) ##use regular shuffle if not enough sprites
