@@ -61,7 +61,7 @@ def write_selected_references_to_file(selected_keys, references_map)
 
   File.open(output_path, "w") do |file|
     sprite_names.each do |spritename|
-      file.puts(spritename+".png")
+      file.puts(spritename)
     end
   end
 end

@@ -459,7 +459,7 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
 
   Kernel.pbMessage(_INTL("Parsing custom sprites folder...\\wtnp[20]"))
-  reference_sprites = true#$game_switches[SWITCH_RANDOM_TRAINERS]
+  reference_sprites = $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES]
   if reference_sprites
     reference_sprites_list = getSelectedReferenceSprites
     $PokemonTemp.selected_reference_sprites = reference_sprites_list
@@ -467,7 +467,7 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   else
     customsList = getCustomSpeciesList(true, true)
   end
-
+  echoln customsList
 
   Kernel.pbMessage(_INTL("{1} sprites found. Shuffling...\\wtnp[20]", customsList.length.to_s))
 
