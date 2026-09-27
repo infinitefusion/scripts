@@ -26,10 +26,12 @@ def select_references(minimum_allowed = nil)
     label
   end
 
+  current_references = $PokemonSystem.selected_reference_sprite_categories
+  current_references = [] unless current_references
   scene = MultiSelectOptionsScene.new(
-    references_list, [],
+    references_list, current_references,
     _INTL("Select reference sprites to include"), nil,
-    _INTL("Type to search"),
+    _INTL("Press Shift to search"),
     proc { |label| references_map[label_to_key[label]].length }
   )
   screen = MultiSelectOptionScreen.new(scene)
@@ -52,7 +54,8 @@ def select_references(minimum_allowed = nil)
 
   write_selected_references_to_file(selected_keys, references_map)
   scene.pbEndScene
-  selected_keys
+  $PokemonSystem.selected_reference_sprite_categories = selected_keys
+  return selected_keys
 end
 
 def write_selected_references_to_file(selected_keys, references_map)

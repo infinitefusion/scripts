@@ -2,8 +2,9 @@ class MultiSelectOptionsScene
   attr_reader :selected_items
   attr_reader :canceled
 
+  #TODO: Preselected items don't appear as selected
   def initialize(items, preselected = [], title = "Select options",
-                 item_name_proc = nil, filter_placeholder = "Type to search",
+                 item_name_proc = nil, filter_placeholder = "Shift to search",
                  item_weight_proc = nil)
     @items = items
     @item_name_proc = item_name_proc || proc { |item| item.to_s }
@@ -136,7 +137,7 @@ class MultiSelectOptionsScene
     total_weight = @selected_items.sum { |i| @item_weight_proc.call(i) }
     @sprites["selected_title"].text = _INTL("{1} possible sprites", total_weight)
     lines = @selected_items.reverse.map { |i| @item_name_proc.call(i) }
-    lines = [_INTL("(none)")] if lines.empty?
+    lines = [_INTL("")] if lines.empty?
     @sprites["selected_list"].commands = lines
     @sprites["selected_list"].refresh
   end
@@ -146,7 +147,6 @@ class MultiSelectOptionsScene
   end
 
   def pbOptions
-    Input.text_input = true
     loop do
       Graphics.update
       Input.update
@@ -154,16 +154,8 @@ class MultiSelectOptionsScene
       @sprites["option"].update
       updateCursorPosition if @sprites["option"].index != old_index
 
-      typed = Input.gets
-      if typed && !typed.empty?
-        @filterText += typed
-        refreshList
-        next
-      end
-
-      if Input.triggerex?(:BACKSPACE) && @filterText.length > 0
-        @filterText = @filterText[0...-1]
-        refreshList
+      if Input.trigger?(Input::ACTION)
+        pbStartSearchEntry
         next
       end
 
@@ -201,7 +193,27 @@ class MultiSelectOptionsScene
         end
       end
     end
-    Input.text_input = false
+  end
+
+  def pbStartSearchEntry
+    if $PokemonSystem.textinput == 1 # keyboard
+      scene = PokedexTextEntry.new
+    else
+      scene = PokemonEntryScene2.new
+    end
+    scene.pbStartScene(
+      _INTL("Search:"),
+      0,  # min length (0 allows clearing the filter)
+      30, # max length
+      @filterText
+    )
+    query = scene.pbEntry
+    scene.pbEndScene
+
+    if query
+      @filterText = query
+      refreshList
+    end
   end
 
   def pbEndScene
