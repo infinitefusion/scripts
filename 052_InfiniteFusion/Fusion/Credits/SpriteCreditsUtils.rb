@@ -16,7 +16,7 @@ end
 def titleize(str)
   str.split(/ |\_/).map(&:capitalize).join(" ")
 end
-def select_references
+def select_references(minimum_allowed = nil)
   references_map = map_sprites_by_reference()
   label_to_key = {}
 
@@ -38,8 +38,34 @@ def select_references
   return [] if selected_labels.nil?
   selected_keys = selected_labels.map { |label| label_to_key[label] }
   echoln selected_keys
+
+  total_sprites = 0
+  selected_keys.each do |key|
+    sprites = references_map[key]
+    total_sprites += sprites.length
+  end
+
+  if minimum_allowed && total_sprites < minimum_allowed
+    pbMessage(_INTL("The categories you selected only have a total of {1} sprites, and so is likely that you will see repeats during your playthrough.", total_sprites))
+    pbMessage(_INTL("It is recommended to select at least {1} sprites for a new playthrough.", minimum_allowed))
+  end
+
+  write_selected_references_to_file(selected_keys, references_map)
+  scene.pbEndScene
   selected_keys
 end
+
+def write_selected_references_to_file(selected_keys, references_map)
+  output_path = Settings::REFERENCES_FILE_PATH
+  sprite_names = selected_keys.flat_map { |key| references_map[key] }
+
+  File.open(output_path, "w") do |file|
+    sprite_names.each do |spritename|
+      file.puts(spritename+".png")
+    end
+  end
+end
+
 def map_sprites_by_reference
   creditsMap = Hash.new { |hash, key| hash[key] = [] }
   File.foreach(Settings::CREDITS_FILE_PATH) do |line|

@@ -78,16 +78,20 @@ class MultiSelectOptionsScene
     @sprites["cursor"].visible = true
   end
 
-  def selectAllIndex
+  def cancelIndex
     return 0
   end
 
-  def confirmIndex
+  def selectAllIndex
     return 1
   end
 
-  def itemStartIndex
+  def confirmIndex
     return 2
+  end
+
+  def itemStartIndex
+    return 3
   end
 
   def refreshList
@@ -98,6 +102,9 @@ class MultiSelectOptionsScene
 
     display = []
     flags   = []
+
+    display.push(_INTL("Cancel"))
+    flags.push(false)
 
     all_selected = filtered.length > 0 && filtered.all? { |i| @selected_items.include?(i) }
     display.push(all_selected ? _INTL("Unselect All") : _INTL("Select All"))
@@ -115,6 +122,8 @@ class MultiSelectOptionsScene
     @sprites["option"].commands = display
     @sprites["option"].selected_flags = flags
     @sprites["option"].confirm_index = confirmIndex
+    @sprites["option"].selall_index = selectAllIndex
+    @sprites["option"].cancel_index = cancelIndex
     @sprites["option"].index = [old_index, display.length - 1].min
     @sprites["option"].refresh
 
@@ -164,7 +173,10 @@ class MultiSelectOptionsScene
       elsif Input.trigger?(Input::USE)
         index = @sprites["option"].index
 
-        if index == selectAllIndex
+        if index == cancelIndex
+          @canceled = true
+          break
+        elsif index == selectAllIndex
           all_selected = @filteredItems.length > 0 && @filteredItems.all? { |i| @selected_items.include?(i) }
           if all_selected
             @selected_items -= @filteredItems
@@ -215,17 +227,23 @@ end
 
 class Window_MultiSelectFilterList < Window_DrawableCommand
   attr_accessor :commands
-  attr_accessor :selected_flags   # array of booleans, parallel to commands
-  attr_accessor :confirm_index    # index of the row to draw in the confirm color, or nil
+  attr_accessor :selected_flags
+  attr_accessor :confirm_index
+  attr_accessor :selall_index
+  attr_accessor :cancel_index
 
   def initialize(commands, x, y, width, height, viewport = nil)
     @commands = commands
     @selected_flags = []
     @confirm_index = nil
+    @cancel_index = nil
+    @selall_index = nil
     @selBaseColor     = Color.new(48, 96, 216)
     @selShadowColor   = Color.new(32, 32, 32)
     @confirmBaseColor   = Color.new(64, 200, 96)
     @confirmShadowColor = Color.new(24, 96, 40)
+    @cancelBaseColor   = Color.new(216, 64, 64)
+    @cancelShadowColor = Color.new(96, 24, 24)
     super(x, y, width, height, viewport)
   end
 
@@ -243,6 +261,10 @@ class Window_MultiSelectFilterList < Window_DrawableCommand
 
     if index == @confirm_index
       base, shadow = @confirmBaseColor, @confirmShadowColor
+    elsif index == @selall_index
+      base, shadow = @selBaseColor, @selShadowColor
+    elsif index == @cancel_index
+      base, shadow = @cancelBaseColor, @cancelShadowColor
     elsif @selected_flags[index]
       base, shadow = @selBaseColor, @selShadowColor
     else
