@@ -6,6 +6,12 @@ LEGENDARIES_LIST = [:ARTICUNO, :ZAPDOS, :MOLTRES, :MEWTWO, :MEW,
                     :GENESECT, :RESHIRAM, :ZEKROM, :KYUREM, :MELOETTA_A,:MELOETTA_P,
                     :NECROZMA, :U_NECROZMA, :DIANCIE]
 
+
+class PokemonTemp
+  attr_accessor :should_reshuffle_trainers
+  attr_accessor :should_reshuffle_pokemon
+end
+
 class PokemonGlobalMetadata
   attr_accessor :psuedoHash
   attr_accessor :psuedoBSTHash
@@ -128,6 +134,12 @@ def show_shuffle_progress(progress_bar, nb_processed, nb_to_process)
   # end
 end
 
+#equivalent of common event 28 (APPLY randomizer options)
+def reshuffleWithCurrentSettings()
+  #todo: convert the common event into this method & get rid of the common event
+  pbCommonEvent(COMMON_EVENT_RESHUFFLE)
+end
+
 ##############
 # randomizer shuffle
 # ##############
@@ -148,6 +160,7 @@ def Kernel.pbShuffleDex(range = nil, type = nil, force_reshuffle=true)
     pokemon_list = get_pokemon_list(should_include_fusions)
   end
   $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list, range, true)
+  $PokemonTemp.should_reshuffle_pokemon = false
 end
 
 def itemCanBeRandomized(item)

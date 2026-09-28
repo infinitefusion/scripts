@@ -424,6 +424,7 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
   end
   progress_bar.dispose
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
+  $PokemonTemp.should_reshuffle_trainers = false
 end
 
 def update_progress_bar(progress_bar, nb_processed, nb_to_process)
@@ -554,6 +555,20 @@ def getCustomSpeciesList(allowOnline = true, redownload_file = false)
     #end
   return speciesList
 end
+
+def getNonReferenceSprites(full_list, references_map = nil)
+  full_list = getCustomSpeciesList(false, false) unless full_list
+  references_map = map_sprites_by_reference() unless references_map
+
+  referenced = {}
+  references_map.each_value do |sprites|
+    sprites.each { |sprite| referenced[sprite] = true }
+  end
+
+  full_list.reject { |sprite| referenced.key?(sprite) }
+  return full_list
+end
+
 
 def getSelectedReferenceSprites
   spritesList = []

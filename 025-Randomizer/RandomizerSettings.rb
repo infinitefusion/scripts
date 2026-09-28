@@ -178,7 +178,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
       )
     end
 
-    options << EnumOption.new(_INTL("Only References"), [_INTL("On"), _INTL("Off")],
+    options << EnumOption.new(_INTL("References Filter"), [_INTL("On"), _INTL("Off")],
                               proc { $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] ? 0 : 1 },
                               proc { |value|
                                 if !$game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] && value == 0
@@ -198,7 +198,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
   def openReferencesMenu()
     return unless @openReferenceMenu
     pbFadeOutIn {
-      select_references(100)
+      select_randomizer_references(100)
     }
     @openReferenceMenu = false
   end

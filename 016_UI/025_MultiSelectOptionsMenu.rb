@@ -1,8 +1,6 @@
 class MultiSelectOptionsScene
   attr_reader :selected_items
   attr_reader :canceled
-
-  #TODO: Preselected items don't appear as selected
   def initialize(items, preselected = [], title = "Select options",
                  item_name_proc = nil, filter_placeholder = "Shift to search",
                  item_weight_proc = nil)
@@ -10,12 +8,12 @@ class MultiSelectOptionsScene
     @item_name_proc = item_name_proc || proc { |item| item.to_s }
     @item_weight_proc = item_weight_proc || proc { |_item| 1 }
     @selected_items = preselected.dup
-    echoln "PRESELECTED"
-    echoln preselected
 
     @title_text = title
     @filter_placeholder = filter_placeholder
     @canceled = false
+
+    echoln items
   end
 
   def pbStartScene(window_x = 0, window_y = 0)
@@ -140,7 +138,7 @@ class MultiSelectOptionsScene
 
   def refreshSelectedPanel
     total_weight = @selected_items.sum { |i| @item_weight_proc.call(i) }
-    @sprites["selected_title"].text = _INTL("{1} possible sprites", total_weight)
+    @sprites["selected_title"].text = _INTL("{1} selected sprites", total_weight)
     lines = @selected_items.reverse.map { |i| @item_name_proc.call(i) }
     lines = [_INTL("")] if lines.empty?
     @sprites["selected_list"].commands = lines
@@ -164,8 +162,27 @@ class MultiSelectOptionsScene
         next
       end
 
-      if Input.trigger?(Input::LEFT) || Input.trigger?(Input::RIGHT)
-        scrollToConfirm
+      if Input.repeat?(Input::RIGHT)
+        pbSEPlay("GUI party switch")
+        scroll_amount = 8
+        if @sprites["option"].index + scroll_amount >= @items.length
+          @sprites["option"].index = @items.length
+        else
+          @sprites["option"].index += scroll_amount
+        end
+        updateCursorPosition
+        next
+      end
+
+      if Input.repeat?(Input::LEFT)
+        pbSEPlay("GUI party switch")
+
+        scroll_amount = -8
+        if @sprites["option"].index + scroll_amount <= 0
+          scrollToConfirm
+        else
+          @sprites["option"].index += scroll_amount
+        end
         next
       end
 
