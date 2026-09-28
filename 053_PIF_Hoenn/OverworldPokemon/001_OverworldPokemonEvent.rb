@@ -110,8 +110,11 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def setup_glow
-    @glow_in_the_dark = false
-    return
+    unless Settings::EXPERIMENTAL_FEATURES
+      @glow_in_the_dark = false
+      return
+    end
+
     @glow_in_the_dark = POKEMON_BEHAVIOR_DATA[@species][:glow_in_the_dark]
     if @glow_in_the_dark
       @light_effect = LightEffect_PokemonGlow.new(self)

@@ -44,6 +44,7 @@ class OverworldPokemonEvent < Game_Event
   alias turn_generic_pokemon_detection turn_generic
   def turn_generic(*args)
     turn_generic_pokemon_detection(*args)
+    return unless Settings::EXPERIMENTAL_FEATURES
     @currently_seen_events = listEventsInRadius(@detection_radius)
 
     if @current_state == :NOTICED_POKEMON

@@ -2,6 +2,7 @@ DEFAULT_AMBIENT_VOLUME = 40
 
 
 Events.onStepTakenFieldMovement += proc { |_sender, e|
+  next unless Settings::EXPERIMENTAL_FEATURES
   event = e[0]
   next unless event == $game_player
   nearby_ambient_sounds = scan_for_ambient_sounds

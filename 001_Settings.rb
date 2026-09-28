@@ -13,6 +13,7 @@ module Settings
 
   SNOW_DAY = true
 
+  EXPERIMENTAL_FEATURES = false
   KANTO = GAME_ID == :IF_KANTO
   HOENN = GAME_ID == :IF_HOENN
 
