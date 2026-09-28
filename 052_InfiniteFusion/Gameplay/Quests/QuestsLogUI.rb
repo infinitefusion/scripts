@@ -831,7 +831,12 @@ class Questlog
                       Color.new(255, 172, 115), Color.new(0, 0, 0))
     drawTextExMulti(@main, 188, 84, 318, 8, quest.desc.gsub(/\\n/, "\n"),
                     Color.new(255, 255, 255), Color.new(0, 0, 0))
-    pbDrawOutlineText(@main, 188, 330, 512, 384, quest.location,
+    location_y = 330
+    current_language = getCurrentLanguage
+    if current_language == :CHINESE
+      location_y += 10
+    end
+    pbDrawOutlineText(@main, 188, location_y, 512, 384, quest.location,
                       Color.new(255, 172, 115), Color.new(0, 0, 0))
 
 
