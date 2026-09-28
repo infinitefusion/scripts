@@ -10,6 +10,9 @@ class MultiSelectOptionsScene
     @item_name_proc = item_name_proc || proc { |item| item.to_s }
     @item_weight_proc = item_weight_proc || proc { |_item| 1 }
     @selected_items = preselected.dup
+    echoln "PRESELECTED"
+    echoln preselected
+
     @title_text = title
     @filter_placeholder = filter_placeholder
     @canceled = false
@@ -131,6 +134,8 @@ class MultiSelectOptionsScene
     @sprites["filter"].text = @filterText.empty? ? @filter_placeholder : @filterText
     updateCursorPosition
     refreshSelectedPanel
+
+    echoln @selected_items
   end
 
   def refreshSelectedPanel

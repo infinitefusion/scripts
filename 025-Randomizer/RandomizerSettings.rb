@@ -187,8 +187,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
                                 end
                                 $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] = value == 0
                               },
-                              _INTL("All Trainers use reference sprites.")
-
+                              _INTL("All Trainer teams use reference sprites.")
     )
 
 

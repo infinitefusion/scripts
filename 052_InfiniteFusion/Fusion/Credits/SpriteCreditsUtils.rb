@@ -21,15 +21,21 @@ def select_references(minimum_allowed = nil)
   label_to_key = {}
 
   references_list = references_map.keys.sort_by { |k| [-references_map[k].length, k] }.map do |key|
-    label = "#{titleize(key)} (#{references_map[key].length})"
+    label = format_reference_for_menu(references_map,key)
     label_to_key[label] = key
     label
   end
 
   current_references = $PokemonSystem.selected_reference_sprite_categories
   current_references = [] unless current_references
+
+  formatted_current_references = []
+  current_references.each do |reference_key|
+    formatted_current_references << format_reference_for_menu(references_map,reference_key)
+  end
+
   scene = MultiSelectOptionsScene.new(
-    references_list, current_references,
+    references_list, formatted_current_references,
     _INTL("Select reference sprites to include"), nil,
     _INTL("Press Shift to search"),
     proc { |label| references_map[label_to_key[label]].length }
@@ -39,7 +45,7 @@ def select_references(minimum_allowed = nil)
 
   return [] if selected_labels.nil?
   selected_keys = selected_labels.map { |label| label_to_key[label] }
-  echoln selected_keys
+
 
   total_sprites = 0
   selected_keys.each do |key|
@@ -58,6 +64,12 @@ def select_references(minimum_allowed = nil)
   return selected_keys
 end
 
+
+def format_reference_for_menu(references_map, key)
+  return nil unless references_map && references_map.key?(key)
+  label = "#{titleize(key)} (#{references_map[key].length})"
+  return label
+end
 def write_selected_references_to_file(selected_keys, references_map)
   output_path = Settings::REFERENCES_FILE_PATH
   sprite_names = selected_keys.flat_map { |key| references_map[key] }
