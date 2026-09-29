@@ -43,8 +43,8 @@ def select_randomizer_references(minimum_allowed = nil)
   end
 
   if minimum_allowed && total_sprites < minimum_allowed
-    pbMessage(_INTL("The categories you selected only have a total of {1} sprites, and so is likely that you will see repeats during your playthrough.", total_sprites))
-    pbMessage(_INTL("It is recommended to select at least {1} sprites for a new playthrough.", minimum_allowed))
+    pbMessage(_INTL("Warning: The categories you selected only have a total of {1} sprites, and so is likely that you will see repeats during your playthrough.", total_sprites))
+    pbMessage(_INTL("You can still continue but it is recommended to select at least {1} sprites for a new playthrough.", minimum_allowed))
   end
 
   write_selected_references_to_file(selected_keys, references_map)

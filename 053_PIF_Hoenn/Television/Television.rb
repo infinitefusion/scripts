@@ -166,3 +166,33 @@ def trainerSearchRt112
   pbWait(10)
   pbMessage(_INTL("\"That's all for today. We'll continue our search throughout the region for more Trainers to interview! Thanks for joining me on Trainer Search. This was Gabby, reporting from Mt. Chimney.\""))
 end
+
+VAR_REPORTER_POKEMON_118 = 977
+
+def trainerSearchRt118
+  poke_name = pbGet(VAR_REPORTER_POKEMON_118)
+  pbMessage(_INTL("\"...This is Gabby for Trainer Search, We're currently standing on the beach on Route 118\"",$Trainer.name))
+  pbMessage(_INTL("\"We're currently joined by {1}, a young Trainer who bested me in a Pokémon battle.\"",$Trainer.name))
+  if poke_name.is_a?(String)
+    pbMessage(_INTL("\"My Pokémon stood no chance against their {1}!\"", poke_name))
+  end
+
+  player_response_q1 = pbGet(VAR_REPORTER_Q1)
+  player_response_q2 = pbGet(VAR_REPORTER_Q2)
+  pbMessage(_INTL("\"They seemed to be on their way to Fortree City, so I started by asking them what they were expecting to see on the way there.\"",$Trainer.name))
+
+  case player_response_q1
+  when 0
+    pbMessage(_INTL("\"They responded that they were looking for rare Pokémon! Indeed, the way to Fortree City is home to many rare tropical Pokémon that aren't found anywhere else in the region.\""))
+  when 1
+    pbMessage(_INTL("\"As it turns out, they came here to appreciate the beautiful tropical landscapes that the route has to offer.\""))
+  when 2
+    pbMessage(_INTL("\"Apparently, they were looking for strong Trainers to fight! I'm sure they'll find their match somewhere in this untamed wilderness.\""))
+  when 3
+    pbMessage(_INTL("\"They seemed worried about all of the plants that grow on this route. Trainers around here have to watch their steps carefully if they want to avoid getting a mean rash!'\""))
+  end
+  pbMessage(_INTL("\"I then asked {1} what exactly what made them decide to brave the wilderness to go to Fortree City.'\"",$Trainer.name))
+  pbMessage(_INTL("\"They said that they're looking for {1}. That sounds about right!\"",player_response_q2))
+  pbWait(10)
+  pbMessage(_INTL("\"That's all for today. We'll continue our search throughout the region for more Trainers to interview! Thanks for joining me on Trainer Search. This was Gabby, reporting from Mt. Chimney.\""))
+end

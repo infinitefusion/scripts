@@ -198,7 +198,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
   def openReferencesMenu()
     return unless @openReferenceMenu
     pbFadeOutIn {
-      select_randomizer_references(100)
+      select_randomizer_references(200)
     }
     @openReferenceMenu = false
   end
