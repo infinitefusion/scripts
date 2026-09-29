@@ -215,14 +215,14 @@ class PokemonTilesetScene
         params = ChooseNumberParams.new
         params.setRange(0, 99)
         params.setDefaultValue(@tileset.terrain_tags[selected])
-       # set_terrain_tag_for_tile_ID(selected, pbMessageChooseNumber(_INTL("Set the terrain tag."), params))
+        set_terrain_tag_for_tile_ID(selected, pbMessageChooseNumber(_INTL("Set the terrain tag."), params))
 
-        selected_tag = @tileset.terrain_tags[selected]
-        if selected_tag == 0
-          set_terrain_tag_for_tile_ID(selected, 45)
-        else
-          set_terrain_tag_for_tile_ID(selected, 0)
-        end
+        # selected_tag = @tileset.terrain_tags[selected]
+        # if selected_tag == 0
+        #   set_terrain_tag_for_tile_ID(selected, 45)
+        # else
+        #   set_terrain_tag_for_tile_ID(selected, 0)
+        # end
 
         draw_overlay
       end
