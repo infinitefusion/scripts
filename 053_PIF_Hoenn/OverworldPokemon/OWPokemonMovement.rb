@@ -78,7 +78,7 @@ class OverworldPokemonEvent
   end
 
   def move_type_random
-    if @idle_animation_sprite && rand(6)==0
+    if Settings::EXPERIMENTAL_FEATURES && @idle_animation_sprite && rand(6)==0
       play_idle_animation
     else
       super
