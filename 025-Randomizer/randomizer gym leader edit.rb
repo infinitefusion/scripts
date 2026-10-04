@@ -339,7 +339,11 @@ def getNewSpecies(oldSpecies, bst_range = 50, ignoreRivalPlaceholder = false, ma
   return newspecies_dex
 end
 
-def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPlaceholder, includeLegendaries, same_egg_group, bst_cache, legendary_cache, egg_group_cache)
+
+#Don't use cache past this point
+CUSTOM_LIST_THRESHOLD = 5000
+
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPlaceholder, includeLegendaries, same_egg_group, bst_cache, egg_group_cache, legendary_cache, fallback_cache)
   if $game_switches[SWITCH_LEGENDARY_MODE]
     return dexNum(convert_species_to_legendary(oldSpecies))
   end
@@ -348,27 +352,35 @@ def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPla
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
 
-  $candidate_cache ||= {}
-  cache_key = [oldSpecies_dex, bst_range, includeLegendaries, same_egg_group, customSpeciesList.object_id]
-  valid_candidates = $candidate_cache[cache_key]
-
-  if valid_candidates.nil?
-    current_range = bst_range
-    valid_candidates = []
-    10.times do
-      valid_candidates = customSpeciesList.select do |sp|
-        !bstNotOk_cached(sp, oldSpecies_dex, current_range, bst_cache) &&
-          legendaryOk_cached(oldSpecies_dex, sp, includeLegendaries, legendary_cache) &&
-          (!same_egg_group || egg_group_ok_cached(oldSpecies_dex, sp, egg_group_cache))
-      end
-      break unless valid_candidates.empty?
-      current_range += 5
-    end
-    valid_candidates = customSpeciesList.dup if valid_candidates.empty?
-    $candidate_cache[cache_key] = valid_candidates
+  ok = lambda do |sp, range|
+    !bstNotOk_cached(sp, oldSpecies_dex, range, bst_cache) &&
+      legendaryOk_cached(oldSpecies_dex, sp, includeLegendaries, legendary_cache) &&
+      (!same_egg_group || egg_group_ok_cached(oldSpecies_dex, sp, egg_group_cache))
   end
 
-  valid_candidates.sample
+  # Fast path: random picks (works great when the list is big)
+  range = bst_range
+  100.times do |n|
+    sp = customSpeciesList.sample
+    return sp if ok.call(sp, range)
+    range += 5 if (n + 1) % 10 == 0
+  end
+
+  # Slow path (rare with big lists, cheap with small ones): full filter, cached per old species
+  key = [oldSpecies_dex, bst_range, includeLegendaries, same_egg_group]
+  candidates = fallback_cache[key]
+  if candidates.nil?
+    range = bst_range
+    candidates = []
+    10.times do
+      candidates = customSpeciesList.select { |sp| ok.call(sp, range) }
+      break unless candidates.empty?
+      range += 5
+    end
+    candidates = customSpeciesList if candidates.empty?
+    fallback_cache[key] = candidates
+  end
+  candidates.sample
 end
 
 def playShuffleSE(i)
@@ -392,37 +404,42 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
   customsOnly = false if customsOnly && customsList == nil
   randomTrainersHash = Hash.new
 
-  trainers_data = getTrainersDataMode.list_all
-
-  # Collect every species id we'll ever need to validate
-  all_old_species = trainers_data.values.flat_map { |t| t.pokemon.map { |p| GameData::Species.get(p[:species]).id_number } }.uniq
-  all_candidate_species = customsOnly ? customsList : (1...PBSpecies.maxValue).to_a
-  species_to_cache = (all_old_species + all_candidate_species).uniq
-
-  bst_cache, legendary_cache, egg_group_cache = build_species_cache(species_to_cache)
-
-  total = trainers_data.size
-  i = 0
+  # Create the bar BEFORE any heavy work so the screen updates immediately
   progress_bar = ShuffleProgressBar.new(_INTL("Shuffling Trainers..."))
-  trainers_data.each do |key, value|
-    trainer = trainers_data[key]
-    new_party = []
-    same_egg_group = $game_switches[SWITCH_RANDOM_TRAINERS]
-    for poke in trainer.pokemon
-      old_poke = GameData::Species.get(poke[:species]).id_number
-      new_poke = customsOnly ?
-                   getNewCustomSpecies(old_poke, customsList, bst_range, false, true, same_egg_group, bst_cache, legendary_cache, egg_group_cache) :
-                   getNewSpecies(old_poke, bst_range, false, PBSpecies.maxValue, true, same_egg_group, bst_cache, legendary_cache, egg_group_cache)
-      new_party << new_poke
+  update_progress_bar(progress_bar, 0, 1)
+
+  begin
+    trainers_data = getTrainersDataMode.list_all
+
+    bst_cache       = Hash.new { |h, sp| h[sp] = calcBaseStatsSum(sp) }
+    egg_group_cache = Hash.new { |h, sp| h[sp] = Array(GameData::Species.get(sp).egg_groups) }
+    legendary_cache = Hash.new { |h, sp| h[sp] = is_legendary_num(sp) }
+    fallback_cache  = {}
+
+    total = trainers_data.size
+    i = 0
+    trainers_data.each do |key, value|
+      trainer = trainers_data[key]
+      new_party = []
+      same_egg_group = $game_switches[SWITCH_RANDOM_TRAINERS]
+      for poke in trainer.pokemon
+        old_poke = GameData::Species.get(poke[:species]).id_number
+        new_poke = customsOnly ?
+                     getNewCustomSpecies(old_poke, customsList, bst_range, false, true, same_egg_group, bst_cache, egg_group_cache, legendary_cache, fallback_cache) :
+                     getNewSpecies(old_poke, bst_range, false, PBSpecies.maxValue, true, same_egg_group)
+        new_party << new_poke
+      end
+      randomTrainersHash[trainer.id] = new_party
+      i += 1
+      if i % 20 == 0 || i == total
+        playShuffleSE(i)
+        update_progress_bar(progress_bar, i, total)
+      end
     end
-    randomTrainersHash[trainer.id] = new_party
-    i += 1
-    if i % 20 == 0 || i == total
-      playShuffleSE(i)
-      update_progress_bar(progress_bar, i, total)
-    end
+  ensure
+    progress_bar.dispose
   end
-  progress_bar.dispose
+
   $PokemonGlobal.randomTrainersHash = randomTrainersHash
   $PokemonTemp.should_reshuffle_trainers = false
 end
@@ -468,7 +485,6 @@ def Kernel.pbShuffleTrainersCustom(bst_range = 50)
   else
     customsList = getCustomSpeciesList(true, true)
   end
-  echoln customsList
 
   Kernel.pbMessage(_INTL("{1} sprites found. Shuffling...\\wtnp[20]", customsList.length.to_s))
 

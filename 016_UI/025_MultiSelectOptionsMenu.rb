@@ -12,8 +12,6 @@ class MultiSelectOptionsScene
     @title_text = title
     @filter_placeholder = filter_placeholder
     @canceled = false
-
-    echoln items
   end
 
   def pbStartScene(window_x = 0, window_y = 0)
@@ -132,8 +130,6 @@ class MultiSelectOptionsScene
     @sprites["filter"].text = @filterText.empty? ? @filter_placeholder : @filterText
     updateCursorPosition
     refreshSelectedPanel
-
-    echoln @selected_items
   end
 
   def refreshSelectedPanel

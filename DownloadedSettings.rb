@@ -68,7 +68,7 @@ module Settings
 
 
   #Spritepack
-  NEWEST_SPRITEPACK_MONTH = 8
+  NEWEST_SPRITEPACK_MONTH = 9
   NEWEST_SPRITEPACK_YEAR = 2026
 end
 

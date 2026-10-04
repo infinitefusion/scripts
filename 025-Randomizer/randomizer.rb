@@ -101,12 +101,36 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
   return bst_hash
 end
 
-def is_legendary(dex_num,printInfo=false)
-  pokemon_id = getPokemon(dex_num).id
-  is_legendary = is_fusion_of_any(pokemon_id,LEGENDARIES_LIST)
-  return is_legendary
+LEGENDARY_LOOKUP = {}
+LEGENDARIES_LIST.each { |sp| LEGENDARY_LOOKUP[sp] = true }
+def is_legendary(dex_num)
+  if dex_num.is_a?(Integer)
+    return is_legendary_num(dex_num)
+  end
+  id = getPokemon(dex_num).id
+  if species_is_fusion(id)
+    LEGENDARY_LOOKUP.key?(get_body_species_from_symbol(id)) ||
+      LEGENDARY_LOOKUP.key?(get_head_species_from_symbol(id))
+  else
+    LEGENDARY_LOOKUP.key?(id)
+  end
 end
 
+def legendary_nums
+  $legendary_nums ||= begin
+                        h = {}
+                        LEGENDARIES_LIST.each { |sym| h[GameData::Species.get(sym).id_number] = true }
+                        h
+                      end
+end
+
+def is_legendary_num(dex)
+  if dex <= NB_POKEMON
+    legendary_nums.key?(dex)
+  else
+    legendary_nums.key?(dex / NB_POKEMON) || legendary_nums.key?(dex % NB_POKEMON)
+  end
+end
 
 def build_species_cache(species_ids)
   bst_cache = {}
@@ -136,8 +160,24 @@ end
 
 #equivalent of common event 28 (APPLY randomizer options)
 def reshuffleWithCurrentSettings()
-  #todo: convert the common event into this method & get rid of the common event
-  pbCommonEvent(COMMON_EVENT_RESHUFFLE)
+  if $PokemonTemp.should_reshuffle_pokemon
+    bst = pbGet(VAR_RANDOMIZER_WILD_POKE_BST)
+    if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
+      type = 1
+    else
+      type = nil
+    end
+    Kernel.initRandomTypeArray
+    Kernel.pbShuffleDex(bst,type, false)
+
+  end
+  if $PokemonTemp.should_reshuffle_trainers
+    if $game_switches[SWITCH_RANDOM_TRAINERS_CUSTOMS_ONLY]
+      Kernel.pbShuffleTrainersCustom
+    else
+      Kernel.pbShuffleTrainers
+    end
+  end
 end
 
 ##############
