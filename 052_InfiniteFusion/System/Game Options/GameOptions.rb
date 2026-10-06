@@ -4,11 +4,6 @@ def openRandomizerMenu()
     screen = PokemonOptionScreen.new(scene)
     screen.pbStartScreen
   }
-
-  #todo: Handle wild pokemon and trainers separately.
-  # For now, this just calls the common event that always does both at the same time.
-  # Needs to be refactored into individual methods for each
-  echoln $PokemonTemp.should_reshuffle_trainers
   if $PokemonTemp.should_reshuffle_pokemon || $PokemonTemp.should_reshuffle_trainers
     if pbConfirmMessage(_INTL("Your changes won't take effect until you re-shuffle Wild Pokémon. Would you like to do it now?"))
       reshuffleWithCurrentSettings
