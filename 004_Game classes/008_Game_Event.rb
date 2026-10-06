@@ -257,6 +257,9 @@ class Game_Event < Game_Character
       @interpreter    = nil
       return
     end
+    if @forced_bush_depth && @page&.graphic&.character_name == "shadow_event"  #hardcoded hack for ninjakids that hide in the water...
+        @forced_bush_depth = false
+    end
     @tile_id              = @page.graphic.tile_id
     @character_name       = @page.graphic.character_name
     @character_hue        = @page.graphic.character_hue if @refresh_hue

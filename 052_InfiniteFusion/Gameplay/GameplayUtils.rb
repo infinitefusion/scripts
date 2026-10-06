@@ -52,8 +52,15 @@ def floorHole(mapBelow, frames_for_fall = 8, bikeOnly = true)
   end
 end
 
-def floorHoleSameMap(x_offset,y_offset, frames_for_fall = 8, bikeOnly = true)
+def floorHoleSameMap(x_offset,y_offset, frames_for_fall = 8, bikeOnly = true, relative_to_player=true,landing_animation = Settings::EXCLAMATION_ANIMATION_ID)
   return unless x_offset && y_offset
+  if relative_to_player
+    x = $game_player.x+x_offset
+    y = $game_player.y+y_offset
+  else
+    x = x_offset
+    y = y_offset
+  end
   return if $game_player.moving?
 
   event = this_event()
@@ -61,12 +68,11 @@ def floorHoleSameMap(x_offset,y_offset, frames_for_fall = 8, bikeOnly = true)
   event.instance_variable_set(:@idle_frames, event.instance_variable_get(:@idle_frames) + 1)
 
   frames_for_fall = 0 if bikeOnly && !$PokemonGlobal.bicycle
-
   if event.instance_variable_get(:@idle_frames) >= frames_for_fall
     event.instance_variable_set(:@idle_frames, 0)
 
     # Find a passable landing tile on the target map
-    target_x, target_y = findPassableLanding($game_map.map_id, $game_player.x+x_offset, $game_player.y+y_offset)
+    target_x, target_y = findPassableLanding($game_map.map_id, x, y)
     return unless target_x
 
     pbSEPlay("Slash")
@@ -75,12 +81,14 @@ def floorHoleSameMap(x_offset,y_offset, frames_for_fall = 8, bikeOnly = true)
     event.turn_left
 
     pbWait(4)
-    playerFall($game_map.map_id, target_x, target_y)
+    playerFall($game_map.map_id, target_x, target_y, landing_animation)
     event.turn_down
     event.direction_fix = true
     pbWait(8)
   end
 end
+
+
 
 
 # Loads the target map and spirals outward from (start_x, start_y)

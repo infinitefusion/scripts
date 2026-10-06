@@ -261,6 +261,8 @@ HAIR_JASMINE = "jasmine" # does not exist yet
 HAIR_ROXANNE = "roxanne"
 HAIR_BRAWLY = "brawly"
 HAIR_WATTSON = "wattson"
+HAIR_FLANNERY = "flannery"
+HAIR_NORMAN = "norman"
 
 HAIR_HOOH = "ho-oh"
 HAIR_CRESSELIA = "lunarbob"

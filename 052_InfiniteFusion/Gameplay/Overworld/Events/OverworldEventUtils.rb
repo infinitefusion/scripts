@@ -798,7 +798,7 @@ def playAnimationAroundPlayer(animation_id, radius, only_passable = false)
 end
 
 
-def playerFall(mapBelow, target_x, target_y)
+def playerFall(mapBelow, target_x, target_y, landing_animation=DUST_ANIMATION_ID)
   $game_player.walk_anime =false
   $game_player.direction_fix =true
   $game_player.move_speed_override = 5
@@ -821,7 +821,46 @@ def playerFall(mapBelow, target_x, target_y)
   $game_player.move_down
   pbWait(16)
   pbSEPlay("Earth3")
+  playAnimation(landing_animation,$game_player.x,$game_player.y)
+  $game_screen.start_shake(2, 8, 8)
+
+  $game_player.walk_anime =true
+  $game_player.direction_fix =false
+  $game_player.move_speed_override = nil
+  $game_player.through = false
+
+end
+
+def playerLift(mapAbove, target_x, target_y, lift_animation=nil)
+  $game_player.walk_anime =false
+  $game_player.direction_fix =true
+  $game_player.move_speed_override = 6
+  $game_player.through = true
+  pbWait(4)
+
+  playAnimation(lift_animation, $game_player.x, $game_player.y) if lift_animation
+
+  pbWait(1)
+  $game_player.move_up
+  $game_player.move_up
+  $game_player.move_up
+  $game_player.move_up
+  $game_player.move_up
+  $game_player.move_up
+  pbWait(16)
+  pbFadeOutIn {
+    $game_temp.player_new_map_id = mapAbove
+    $game_temp.player_new_x = target_x
+    $game_temp.player_new_y = target_y
+    pbCancelVehicles
+    $scene.transfer_player
+    $game_map.autoplay
+    $game_map.refresh
+  }
+
   playAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y)
+  pbSEPlay("Earth3")
+
   $game_screen.start_shake(2, 8, 8)
 
   $game_player.walk_anime =true
