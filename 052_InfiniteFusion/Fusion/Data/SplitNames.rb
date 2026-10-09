@@ -71,7 +71,7 @@ module GameData
     ["Ma", "champ"],
     ["Bell", "sprout"],
     ["Weepin", "bell"],
-    ["Victree", "bell"],
+    ["Victree", "bel"],
     ["Tenta", "cool"],
     ["Tenta", "cruel"],
     ["Geo", "dude"],
