@@ -283,34 +283,23 @@ class PokemonDataBox < SpriteWrapper
 
   def drawEnemyTypeIcons(imagePos)
     return if @battler.is_a?(PokeBattle_FakeBattler)
-    type_battler = @battler.effects[PBEffects::Illusion] || @battler
-    type1_number = GameData::Type.get(type_battler.type1).id_number
-    type2_number = GameData::Type.get(type_battler.type2).id_number
+
     vertical_margin = 2
     iconHeight = 19
-
+    types_icon_path = "Graphics/Pictures/Battle/typesSmall"
     type_icons_x_position = @spriteBaseX + 210
-    type1_icon_y_position = 16
-    type2_icon_y_position = type1_icon_y_position + vertical_margin + iconHeight
-
-    type1_y_offset = type1_number * iconHeight
-    type2_y_offset = type2_number * iconHeight
+    type_icon_y_position = 16
     x_offset = 0
 
-    types_icon_path = "Graphics/Pictures/Battle/typesSmall"
-    if type1_number == type2_number
-      imagePos.push([types_icon_path, type_icons_x_position, type1_icon_y_position,
-                     x_offset, type1_y_offset, -1, iconHeight])
-    else
-      imagePos.push([types_icon_path, type_icons_x_position,
-                     type1_icon_y_position,
-                     x_offset,
-                     type1_y_offset, -1, iconHeight]
-      )
-      imagePos.push([types_icon_path, type_icons_x_position, type2_icon_y_position,
-                     x_offset,
-                     type2_y_offset, -1, iconHeight])
-    end
+    illusion = @battler.effects[PBEffects::Illusion]
+    types = illusion ? [ illusion.type1, illusion.type2 ] : @battler.pbTypes(true)
+    types.uniq.each { |type|
+      type_number = GameData::Type.get(type).id_number
+      type_y_offset = type_number * iconHeight
+      imagePos.push([types_icon_path, type_icons_x_position, type_icon_y_position,
+                     x_offset, type_y_offset, -1, iconHeight])
+      type_icon_y_position += vertical_margin + iconHeight
+    }
   end
 
   def refreshHP
