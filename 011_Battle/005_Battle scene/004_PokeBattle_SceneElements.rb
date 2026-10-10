@@ -299,6 +299,10 @@ class PokemonDataBox < SpriteWrapper
       imagePos.push([types_icon_path, type_icons_x_position, type_icon_y_position,
                      x_offset, type_y_offset, -1, iconHeight])
       type_icon_y_position += vertical_margin + iconHeight
+      if type_icon_y_position + iconHeight > self.bitmap.height
+        type_icon_y_position = 16
+        type_icons_x_position += vertical_margin + iconHeight
+      end
     }
   end
 
