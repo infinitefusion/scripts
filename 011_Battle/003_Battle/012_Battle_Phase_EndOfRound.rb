@@ -594,7 +594,10 @@ class PokeBattle_Battle
       b.effects[PBEffects::PriorityItem]     = false
       b.effects[PBEffects::Protect]          = false
       b.effects[PBEffects::RagePowder]       = false
-      b.effects[PBEffects::Roost]            = false
+      if b.effects[PBEffects::Roost]
+        b.effects[PBEffects::Roost]          = false
+        @scene.pbRefreshOne(b.index) if $PokemonSystem.type_icons
+      end
       b.effects[PBEffects::Snatch]           = 0
       b.effects[PBEffects::SpikyShield]      = false
       b.effects[PBEffects::Spotlight]        = 0

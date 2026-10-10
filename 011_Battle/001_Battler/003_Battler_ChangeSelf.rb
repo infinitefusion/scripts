@@ -136,6 +136,7 @@ class PokeBattle_Battler
     end
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::Roost]  = false
+    @battle.scene.pbRefreshOne(@index) if $PokemonSystem.type_icons
   end
 
   #=============================================================================
