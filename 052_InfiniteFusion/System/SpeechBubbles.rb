@@ -234,6 +234,8 @@ def setSign(type=:NORMAL)
     setWindowSkin("sign_wood")
   when :WALL
     setWindowSkin("sign_wall")
+  when :GREEN
+    setWindowSkin("sign_green")
   end
 end
 def setWindowSkin(skin)

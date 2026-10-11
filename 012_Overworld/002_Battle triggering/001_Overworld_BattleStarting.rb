@@ -714,6 +714,7 @@ def rematchable_trainer_battle(rematchable_trainers = [], default_level = 50, ca
       end
     }
     loseDialog = trainer_data ? trainer_data.rematch_lose_text : "..."
+    loseDialog = loseDialog.gsub("<PLAYER_NAME>", $Trainer.name)
 
     npc_trainer = NPCTrainer.new(trainer.trainerName, trainer.trainerType, nil, trainer.custom_appearance)
     npc_trainer.lose_text = loseDialog

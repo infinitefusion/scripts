@@ -8,6 +8,8 @@ def getTVAnnouncementsHash #Keep in the function
     :petalburg_contest => _INTL("Attention all Berry enthusiasts! The Petalburg Berry Contest is now about to begin!\nWe'll be covering the event live in Petalburg Town, so make sure to tune in for this special broadcast!"),
     :petalburg_interview => proc { berryContestTVNews },
     :trainer_search_rt112 => proc { trainerSearchRt112 },
+    :trainer_search_rt118 => proc { trainerSearchRt118 },
+
   }
 end
 

@@ -13,6 +13,7 @@ module Settings
 
   SNOW_DAY = true
 
+  EXPERIMENTAL_FEATURES = false
   KANTO = GAME_ID == :IF_KANTO
   HOENN = GAME_ID == :IF_HOENN
 
@@ -47,9 +48,13 @@ module Settings
   DOWNLOADED_SPRITES_FOLDER = "Graphics/temp/"
   DEFAULT_SPRITE_PATH = "Graphics/Battlers/Special/000.png"
   CREDITS_FILE_PATH = "Data/sprites/Sprite_Credits.csv"
+
   VERSION_FILE_PATH = "Data/VERSION"
   CUSTOM_SPRITES_FILE_PATH = "Data/sprites/CUSTOM_SPRITES"
   BASE_SPRITES_FILE_PATH = "Data/sprites/BASE_SPRITES"
+  REFERENCES_FILE_PATH = "Data/sprites/SELECTED_REFERENCES"
+
+
   CUSTOM_DEX_ENTRIES_PATH = "Data/pokedex/dex.json"
   AI_DEX_ENTRIES_PATH = "Data/pokedex/generated_entries.json"
   POKEDEX_ENTRIES_PATH = "Data/pokedex/all_entries.json"
@@ -581,6 +586,7 @@ module Settings
   CUT_TREE_ANIMATION_ID = 19
   ROCK_SMASH_ANIMATION_ID = 20
 
+  ANIMATION_OW_ATTACK = 14
   #=============================================================================
 
   # An array of available languages in the game, and their corresponding message

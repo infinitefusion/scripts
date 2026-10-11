@@ -13,6 +13,27 @@ def map_sprites_by_artist
   return creditsMap
 end
 
+def titleize(str)
+  str.split(/ |\_/).map(&:capitalize).join(" ")
+end
+
+def map_sprites_by_reference
+  creditsMap = Hash.new { |hash, key| hash[key] = [] }
+  File.foreach(Settings::CREDITS_FILE_PATH) do |line|
+    row = line.split(',')
+    spritename = row[0]
+    next unless row[3]
+
+    tags = row[3].chomp.split(';')
+    next unless tags[0] == 'reference'
+
+    tags[1..-1].each do |reference|
+      creditsMap[reference] << spritename
+    end
+  end
+  return creditsMap
+end
+
 SPRITER_CREDITS_BLACKLIST = ["Game Freak", "Anonymous"]
 def get_top_artists(nb_names = 100)
   filename = Settings::CREDITS_FILE_PATH

@@ -91,7 +91,7 @@ class BattleSpriteLoader
   def obtain_fusion_pif_sprite(head_id,body_id)
     substitution_id = get_sprite_substitution_id_for_fusion(head_id, body_id)
     pif_sprite = $PokemonSystem.alt_sprite_substitutions[substitution_id] if $PokemonGlobal
-    #pif_sprite.dump_info if pif_sprite
+
     if !pif_sprite || $PokemonSystem.random_sprites
       pif_sprite = select_new_pif_fusion_sprite(head_id, body_id)
       local_path = check_for_local_sprite(pif_sprite)
@@ -234,7 +234,34 @@ class BattleSpriteLoader
     if $PokemonTemp.forced_alt_sprites && $PokemonTemp.forced_alt_sprites.include?(spritename)
       alt_letter = $PokemonTemp.forced_alt_sprites[spritename]
     end
+    if $game_switches && $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES]
+      unless $PokemonTemp.selected_reference_sprites
+        $PokemonTemp.selected_reference_sprites = getSelectedReferenceSprites()
+      end
+      unless $PokemonTemp.reference_sprite_index
+        $PokemonTemp.reference_sprite_index = build_reference_sprite_index($PokemonTemp.selected_reference_sprites)
+      end
+
+      matching_alts = $PokemonTemp.reference_sprite_index[spritename]
+      if matching_alts && !matching_alts.empty?
+        alt_letter = matching_alts.sample
+        type = :CUSTOM
+      end
+    end
+
+
     return PIFSprite.new(type, head_id, body_id, alt_letter)
+  end
+
+  def build_reference_sprite_index(list)
+    index = Hash.new { |h, k| h[k] = [] }
+    list.each do |entry|
+      # spritename portion is digits/dots only; alt suffix is trailing lowercase letters
+      if entry =~ /\A([\d.]+)([a-z]*)\z/
+        index[$1] << $2
+      end
+    end
+    index
   end
 
   def select_new_pif_base_sprite(dex_number)

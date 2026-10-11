@@ -83,6 +83,14 @@ class Game_Event < Game_Character
     refresh
   end
 
+  def despawn   #Should only ever be called on dynamically created events
+    erase
+    $game_map.events.delete(@id)
+    $PokemonTemp.tempEvents&.each { |_, events| events.delete(self) }
+    $PokemonTemp.tempEvents&.delete_if { |_, v| v.empty? }
+  end
+
+
   def erase_route
     @route_erased = true
     refresh
@@ -248,6 +256,9 @@ class Game_Event < Game_Character
       @list           = nil
       @interpreter    = nil
       return
+    end
+    if @forced_bush_depth && @page&.graphic&.character_name == "shadow_event"  #hardcoded hack for ninjakids that hide in the water...
+        @forced_bush_depth = false
     end
     @tile_id              = @page.graphic.tile_id
     @character_name       = @page.graphic.character_name

@@ -10,6 +10,7 @@ class RandomizerOptionsScene < PokemonOption_Scene
     @openWildOptions = false
     @openGymOptions = false
     @openItemOptions = false
+    @openReferenceMenu = false
     $game_switches[SWITCH_RANDOMIZED_AT_LEAST_ONCE] = true
   end
 
@@ -177,14 +178,29 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
       )
     end
 
-    # options << EnumOption.new("Allow legendaries", ["On", "Off"],
-    #                           proc { $game_switches[SWITCH_RANDOM_TRAINER_LEGENDARIES] ? 0 : 1 },
-    #                           proc { |value|
-    #                             $game_switches[SWITCH_RANDOM_TRAINER_LEGENDARIES] = value == 0
-    #                           }, _INTL("Regular Pokémon can also be randomized into legendaries")
-    # )
+    options << EnumOption.new(_INTL("References Filter"), [_INTL("On"), _INTL("Off")],
+                              proc { $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] ? 0 : 1 },
+                              proc { |value|
+                                if !$game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] && value == 0
+                                  @openReferenceMenu = true
+                                  openReferencesMenu()
+                                end
+                                $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] = value == 0
+                              },
+                              _INTL("All Trainer teams use reference sprites.")
+    )
+
+
 
     return options
+  end
+
+  def openReferencesMenu()
+    return unless @openReferenceMenu
+    pbFadeOutIn {
+      select_randomizer_references(200)
+    }
+    @openReferenceMenu = false
   end
 end
 

@@ -6,6 +6,12 @@ LEGENDARIES_LIST = [:ARTICUNO, :ZAPDOS, :MOLTRES, :MEWTWO, :MEW,
                     :GENESECT, :RESHIRAM, :ZEKROM, :KYUREM, :MELOETTA_A,:MELOETTA_P,
                     :NECROZMA, :U_NECROZMA, :DIANCIE]
 
+
+class PokemonTemp
+  attr_accessor :should_reshuffle_trainers
+  attr_accessor :should_reshuffle_pokemon
+end
+
 class PokemonGlobalMetadata
   attr_accessor :psuedoHash
   attr_accessor :psuedoBSTHash
@@ -95,13 +101,51 @@ def get_randomized_bst_hash(poke_list, bst_range, show_progress = true)
   return bst_hash
 end
 
-def is_legendary(dex_num,printInfo=false)
-  pokemon_id = getPokemon(dex_num).id
-  is_legendary = is_fusion_of_any(pokemon_id,LEGENDARIES_LIST)
+LEGENDARY_LOOKUP = {}
+LEGENDARIES_LIST.each { |sp| LEGENDARY_LOOKUP[sp] = true }
+def is_legendary(dex_num)
+  if dex_num.is_a?(Integer)
+    return is_legendary_num(dex_num)
+  end
+  id = getPokemon(dex_num).id
+  if species_is_fusion(id)
+    LEGENDARY_LOOKUP.key?(get_body_species_from_symbol(id)) ||
+      LEGENDARY_LOOKUP.key?(get_head_species_from_symbol(id))
+  else
+    LEGENDARY_LOOKUP.key?(id)
+  end
+end
 
-  #echoln "#{pokemon_id} is legendary? : #{is_legendary}"
-  #echoln "{1} ({2}) {3}",dex_num,pokemon_id,is_legendary) if printInfo
-  return is_legendary
+def legendary_nums
+  $legendary_nums ||= begin
+                        h = {}
+                        LEGENDARIES_LIST.each { |sym| h[GameData::Species.get(sym).id_number] = true }
+                        h
+                      end
+end
+
+def is_legendary_num(dex)
+  if dex <= NB_POKEMON
+    legendary_nums.key?(dex)
+  else
+    legendary_nums.key?(dex / NB_POKEMON) || legendary_nums.key?(dex % NB_POKEMON)
+  end
+end
+
+def build_species_cache(species_ids)
+  bst_cache = {}
+  legendary_cache = {}
+  egg_group_cache = {}
+
+  species_ids.each do |id|
+    next if bst_cache.key?(id)
+    bst_cache[id] = calcBaseStatsSum(id)
+    legendary_cache[id] = is_legendary(id)
+    sp = GameData::Species.get(id)
+    egg_group_cache[id] = Array(sp.egg_groups)
+  end
+
+  [bst_cache, legendary_cache, egg_group_cache]
 end
 
 def show_shuffle_progress(progress_bar, nb_processed, nb_to_process)
@@ -112,6 +156,28 @@ def show_shuffle_progress(progress_bar, nb_processed, nb_to_process)
   #   n = (i.to_f / NB_POKEMON) * 100
   #   Kernel.pbMessageNoSound(_INTL("\\ts[]Shuffling wild Pokémon...\\n {1}%\\^", sprintf('%.2f', n), NB_POKEMON))
   # end
+end
+
+#equivalent of common event 28 (APPLY randomizer options)
+def reshuffleWithCurrentSettings()
+  if $PokemonTemp.should_reshuffle_pokemon
+    bst = pbGet(VAR_RANDOMIZER_WILD_POKE_BST)
+    if $game_switches[SWITCH_RANDOM_WILD_TO_FUSION]
+      type = 1
+    else
+      type = nil
+    end
+    Kernel.initRandomTypeArray
+    Kernel.pbShuffleDex(bst,type, false)
+
+  end
+  if $PokemonTemp.should_reshuffle_trainers
+    if $game_switches[SWITCH_RANDOM_TRAINERS_CUSTOMS_ONLY]
+      Kernel.pbShuffleTrainersCustom
+    else
+      Kernel.pbShuffleTrainers
+    end
+  end
 end
 
 ##############
@@ -134,6 +200,7 @@ def Kernel.pbShuffleDex(range = nil, type = nil, force_reshuffle=true)
     pokemon_list = get_pokemon_list(should_include_fusions)
   end
   $PokemonGlobal.psuedoBSTHash = get_randomized_bst_hash(pokemon_list, range, true)
+  $PokemonTemp.should_reshuffle_pokemon = false
 end
 
 def itemCanBeRandomized(item)

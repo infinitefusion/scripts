@@ -501,6 +501,7 @@ def pbEncounter(enc_type)
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
   encounter1 = EncounterModifier.trigger(encounter1)
   return false if !encounter1
+
   if $PokemonEncounters.have_double_wild_battle?
     encounter2 = $PokemonEncounters.choose_wild_pokemon(enc_type)
     encounter2 = EncounterModifier.trigger(encounter2)
