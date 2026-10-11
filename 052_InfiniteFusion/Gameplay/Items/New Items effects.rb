@@ -654,13 +654,17 @@ def useAquaUniform()
   return 1
 end
 
-
 def useDreamMirror
-  visitedMap = $PokemonGlobal.visitedMaps[pbGet(226)]
-  map_name = visitedMap ? getMapName(pbGet(226)).to_s : _INTL("an unknown location")
+  map_id = pbGet(226)
+  visitedMap = $PokemonGlobal.visitedMaps[map_id]
+
+  if visitedMap
+    map_name = pbGetMessage(MessageTypes::MapNames, map_id).to_s
+  else
+    map_name = _INTL("an unknown location")
+  end
 
   Kernel.pbMessage(_INTL("You peeked into the Dream Mirror..."))
-
   Kernel.pbMessage(_INTL("You can see a faint glimpse of {1} in the reflection.", map_name))
 end
 
