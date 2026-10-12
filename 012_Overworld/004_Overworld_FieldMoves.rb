@@ -683,6 +683,9 @@ def pbFly(move, pokemon)
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
+  $PokemonGlobal.common_map_entrance_id = nil
+  $PokemonGlobal.common_map_entrance_position = nil
+  reset_pokemart_variables
   pbFadeOutIn {
     $game_temp.player_new_map_id = $PokemonTemp.flydata[0]
     $game_temp.player_new_x = $PokemonTemp.flydata[1]
