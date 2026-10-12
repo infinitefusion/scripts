@@ -522,6 +522,14 @@ def get_triple_fusion_components(species_id)
     return [480,483,486]
   when Settings::ZAPMOLCUNO_NB + 30
     return [481,484,487]
+  when Settings::ZAPMOLCUNO_NB + 31 #Telemauv
+    return [000]
+  when Settings::ZAPMOLCUNO_NB + 32 #Solrock/minior/lunatone
+    return [498,544,545]
+  when Settings::ZAPMOLCUNO_NB + 33  #Solrock/minior_core/lunatone
+    return [499,544,545]
+  when Settings::ZAPMOLCUNO_NB + 34 #stunfisk/bruxish/luvdisc
+    return [420,469,501]
   else
     return [000]
   end
