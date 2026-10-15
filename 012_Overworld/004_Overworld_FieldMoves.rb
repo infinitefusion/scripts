@@ -1212,8 +1212,9 @@ HiddenMoveHandlers::CanUseMove.add(:HAIL, proc { |move, pkmn, showmsg|
   next true if Settings::GAME_ID == :IF_HOENN
 })
 
-HiddenMoveHandlers::UseMove.add(:SUNNYDAY, proc { |move, pokemon|
-  next false if NO_SNOW_MAPS.include?($game_map.map_id)
+HiddenMoveHandlers::UseMove.add(:HAIL, proc { |move, pokemon|
+  next false unless Settings::EXPERIMENTAL_FEATURES
+  next false if GameWeather::NO_SNOW_MAPS.include?($game_map.map_id)
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!", pokemon.name, GameData::Move.get(move).name))
   end
