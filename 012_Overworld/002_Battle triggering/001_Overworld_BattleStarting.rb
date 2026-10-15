@@ -180,6 +180,9 @@ def pbPrepareBattle(battle)
   # Environment
   if battleRules["environment"].nil?
     battle.environment = pbGetEnvironment
+    if Settings::SNOW_DAY && battle.environment == :Grass
+      battle.environment = GameData::Environment.get(:Snow)
+    end
   else
     battle.environment = battleRules["environment"]
   end
