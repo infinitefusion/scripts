@@ -2500,6 +2500,11 @@ class PokeBattle_Move_0D6 < PokeBattle_HealingMove
 
   def pbEffectAfterAllHits(user,target)
     user.effects[PBEffects::Roost] = true
+    if user.pbOwnedByPlayer?
+      @battle.scene.pbRefreshOne(user.index) if $PokemonSystem.type_icons_player
+    else
+      @battle.scene.pbRefreshOne(user.index) if $PokemonSystem.type_icons_opponent
+    end
   end
 end
 
