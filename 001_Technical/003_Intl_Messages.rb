@@ -765,6 +765,10 @@ module MessageTypes
     @@messages.loadMessageFile(filename)
   end
 
+  def self.loadFallbackMessageFile(filename)
+    @@messagesFallback.loadMessageFile(filename)
+  end
+
   def self.get(type, id)
     ret = @@messages.get(type, id)
     if ret == ""
