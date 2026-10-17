@@ -548,7 +548,7 @@ class Messages
     @messages = [] if !@messages
     arr = []
     for i in 0...array.length
-      arr[i] = (array[i]) ? array[i] : ""
+      arr[i] = (array[i] == "") ? nil : array[i]
     end
     @messages[type] = arr
   end
@@ -557,7 +557,8 @@ class Messages
     @messages = [] if !@messages
     arr = (@messages[type]) ? @messages[type] : []
     for i in 0...array.length
-      arr[i] = (array[i]) ? array[i] : (arr[i]) ? arr[i] : ""
+      arr[i] = array[i] if array[i]
+      arr[i] = nil if arr[i] == ""
     end
     @messages[type] = arr
   end
