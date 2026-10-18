@@ -309,6 +309,67 @@ def berryMasterRandomBerry(rare_berries_only=false)
   pbReceiveItem(berry)
 end
 
+def last_map_position_smell_npc
+  last_map = $Trainer.last_visited_town_map_location
+  case last_map
+  when MAP_MT_CHIMNEY
+  when MAP_ROUTE_112
+  when MAP_ROUTE_112_NORTH
+  when MAP_JAGGED_PASS
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell singed."))
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Were you at a volcano or something?"))
+  when MAP_DESERT
+  when MAP_ROUTE_113
+  when MAP_FALLARBOR
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell like dust."))
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Were you in a desert or something?"))
+  when MAP_RUSTURF_TUNNEL
+  when MAP_SHOAL_CAVE
+  when MAP_METEOR_FALLS
+  when MAP_DESERT_UNDERPASS
+  when MAP_GRANITE_CAVE
+    pbCallBub(2,@event_id)
+        pbMessage(_INTL("Sniff...\nUm... You, uh... smell damp."))
+        pbCallBub(2,@event_id)
+        pbMessage(_INTL("Were you in a cave or something?"))
+  when MAP_RUSTBORO
+      pbCallBub(2,@event_id)
+      pbMessage(_INTL("Sniff...\nUm... You, uh... smell like rust."))
+      pbCallBub(2,@event_id)
+      pbMessage(_INTL("Were you in an old city or something?"))
+  when MAP_MAUVILLE
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell like ozone."))
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Were you near a power plant or something?"))
+  when MAP_DEWFORD
+  when MAP_SLATEPORT
+  when MAP_MOSSDEEP
+  when MAP_SOOTOPOLIS
+  when MAP_PACIFIDLOG
+  when MAP_AQUA_CAMP
+  when MAP_ROUTE_104_SOUTH
+  when MAP_ROUTE_105
+  when MAP_ROUTE_106
+  when MAP_ROUTE_107
+  when MAP_ROUTE_108
+  when MAP_ROUTE_109
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell like brine."))
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Were you at the beach or something?"))
+  else
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell the rainforest."))
+    pbCallBub(2,@event_id)
+    pbMessage(_INTL("Ah, the smell of home!"))
+  end
+end
+
 # map = $MapFactory.getMap($game_map.map_id)
 #
 # erased_tiles = []

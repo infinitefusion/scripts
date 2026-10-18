@@ -67,6 +67,10 @@ def exit_common_building()
     $game_map.autoplay
     $game_map.refresh
   }
+  reset_common_building
+end
+
+def reset_common_building
   $PokemonGlobal.common_map_entrance_id = nil
   $PokemonGlobal.common_map_entrance_position = nil
   reset_pokemart_variables
