@@ -530,7 +530,7 @@ def check_feebas_encounter(feebas_odds,min_level, max_level, enc_type,pokeblock)
   return unless [MAP_ROUTE_119_SOUTH,MAP_ROUTE_119_NORTH].include?($game_map.map_id)
   return unless pokeblock && pokeblock.is_a?(PokeblockEvent)
   return unless pokeblock.floating
-  feebas_encounter = true#rand(100) <= feebas_encounter
+  feebas_encounter = rand(100) <= feebas_odds
   if feebas_encounter
     feebas_level = rand(min_level..max_level)
     return [:FEEBAS, feebas_level]
