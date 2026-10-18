@@ -295,6 +295,20 @@ def check_event_for_berries(wanted_berry_type, variable_result,variable_quantity
   return found_berry
 end
 
+def berryMasterRandomBerry(rare_berries_only=false)
+  rare_berries = [    :GREPABERRY, :HONDEWBERRY, :KELPSYBERRY, :MAGOSTBERRY, :NOMELBERRY, :POMEGBERRY,
+                      :QUALOTBERRY, :RABUTABERRY, :TAMATOBERRY,
+
+                      :SPELONBERRY, :PAMTREBERRY, :WATMELBERRY, :DURINBERRY, :BELUEBERRY, # given by the wife in the originals
+  ]
+  normal_berries = [    :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :LEPPABERRY, :LUMBERRY, :ORANBERRY,
+                        :PECHABERRY, :PERSIMBERRY, :RAWSTBERRY, :SITRUSBERRY]
+
+  berries_list = rare_berries_only ? rare_berries : (rare_berries + normal_berries)
+  berry = berries_list.sample
+  pbReceiveItem(berry)
+end
+
 # map = $MapFactory.getMap($game_map.map_id)
 #
 # erased_tiles = []
