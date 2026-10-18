@@ -56,7 +56,7 @@ class GameWeather
   FREQUENT_WEATHER = {MAP_ROUTE_113=> 3,
                       MAP_ROUTE_120 => 2}
   WINDY_MAPS = [MAP_MT_CHIMNEY,MAP_MT_PYRE] #More likely to be windy
-  RAINY_MAPS = [MAP_ROUTE_113,MAP_ROUTE_119,MAP_ROUTE_120] #More likely to be raining,
+  RAINY_MAPS = [MAP_ROUTE_113, MAP_ROUTE_119_SOUTH, MAP_ROUTE_120] #More likely to be raining,
   # 113 is in there because rain turns into soot there
 
   SOOT_MAPS = [MAP_ROUTE_113]

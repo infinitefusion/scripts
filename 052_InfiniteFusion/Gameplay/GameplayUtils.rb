@@ -364,7 +364,7 @@ def last_map_position_smell_npc
     pbMessage(_INTL("Were you at the beach or something?"))
   else
     pbCallBub(2,@event_id)
-    pbMessage(_INTL("Sniff...\nUm... You, uh... smell the rainforest."))
+    pbMessage(_INTL("Sniff...\nUm... You, uh... smell like the rainforest."))
     pbCallBub(2,@event_id)
     pbMessage(_INTL("Ah, the smell of home!"))
   end

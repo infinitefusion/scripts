@@ -11,6 +11,7 @@ class Game_Event < Game_Character
   attr_reader :on_bridge
   attr_accessor :refresh_hue
   attr_accessor :is_rival_following
+  attr_accessor :forced_bush_depth
 
   def initialize(map_id, event, map=nil)
     super(map)
@@ -338,5 +339,9 @@ class Game_Event < Game_Character
     return @page.graphic.character_name != "" && active?
   end
 
+
+  def is_on_water
+    return self.terrain_tag.can_surf
+  end
 
 end

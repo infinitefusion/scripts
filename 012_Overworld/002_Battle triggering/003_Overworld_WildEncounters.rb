@@ -498,7 +498,15 @@ end
 # Pokémon (or two) for a triggered wild encounter.
 def pbEncounter(enc_type)
   $PokemonTemp.encounterType = enc_type
-  encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
+  pokeblock = scan_for_nearby_pokeblock
+  if pokeblock
+    encounter1 = check_feebas_encounter(20,20,25,enc_type,pokeblock)
+    unless encounter1
+      encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type,3) #Higher chance of rare pokemon when you put down a pokeblock near
+    end
+  else
+    encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
+  end
   encounter1 = EncounterModifier.trigger(encounter1)
   return false if !encounter1
 
@@ -514,4 +522,42 @@ def pbEncounter(enc_type)
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd
   return true
+end
+
+#Feebas can only be caught while fishing with a pokeblock in the water
+def check_feebas_encounter(feebas_odds,min_level, max_level, enc_type,pokeblock)
+  return unless [:GoodRod, :SuperRod].include?(enc_type)
+  return unless [MAP_ROUTE_119_SOUTH,MAP_ROUTE_119_NORTH].include?($game_map.map_id)
+  return unless pokeblock && pokeblock.is_a?(PokeblockEvent)
+  return unless pokeblock.floating
+  feebas_encounter = true#rand(100) <= feebas_encounter
+  if feebas_encounter
+    feebas_level = rand(min_level..max_level)
+    return [:FEEBAS, feebas_level]
+  end
+end
+
+
+def scan_for_nearby_pokeblock(px = $game_player.x,py = $game_player.y, scan_radius = 3)
+  map = $MapFactory.getMapNoAdd($game_map.map_id)
+  return nil if !map
+  nearest_event = nil
+  nearest_distance = nil
+
+  $game_map.events.each_value do |event|
+    next unless event.is_a?(PokeblockEvent)
+
+    dx = event.x - px
+    dy = event.y - py
+    distance = Math.sqrt(dx * dx + dy * dy)
+
+    next if distance > scan_radius
+    next if nearest_distance && nearest_distance <= distance
+
+    nearest_event = event
+    nearest_distance = distance
+  end
+
+  return nil if nearest_event.nil?
+  return nearest_event
 end

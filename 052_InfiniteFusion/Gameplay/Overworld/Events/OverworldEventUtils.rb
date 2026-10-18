@@ -19,6 +19,7 @@ def turnEventTowardsEvent(turning, turnedTowards)
   end
 end
 
+
 def moveEventTowardsEvent(turning, turnedTowards)
   if turnedTowards.is_a?(Integer)
     turnedTowards = $game_map.events[turnedTowards]
@@ -376,6 +377,26 @@ def getOnBoat
   set_player_graphics("boat_briney_peeko")
   $PokemonTemp.prevent_ow_battles = true
   $PokemonGlobal.boat = true
+end
+
+def tile_is_water?(x, y, map = $game_map)
+  return false if !map.valid?(x, y)
+  tag = map.terrain_tag(x, y)
+  return !!(tag && tag.can_surf)
+end
+
+def tile_passable_or_water(x, y, map = $game_map)
+  return false if !map.valid?(x, y)
+  map.events.each_value do |event|
+    next if !event.at_coordinate?(x, y) || event.through
+    return false if event.character_name != ""
+  end
+  terrain_tag = map.terrain_tag(x, y)
+  return true if terrain_tag && terrain_tag.can_surf
+  [2, 4, 6, 8].each do |d|
+    return true if map.passable?(x, y, d)
+  end
+  return false
 end
 
 def getOffBoat

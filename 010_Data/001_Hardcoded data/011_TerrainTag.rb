@@ -452,6 +452,7 @@ GameData::TerrainTag.register({   #Like normal water, but with a river flowing s
                                 :id => :RiverWater,
                                 :id_number => 42,
                                 :can_surf => true,
+                                :can_fish => true,
                                 :battle_environment => :MovingWater,
                                 :ambient_sound => "ambient/river",
                                 :ambient_sound_priority => 50

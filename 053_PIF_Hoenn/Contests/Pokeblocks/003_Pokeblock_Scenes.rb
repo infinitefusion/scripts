@@ -201,12 +201,33 @@ class PokeblockCase_Screen
 				next
 
 			when cmdPlace
-				color = :RED
-				$PokemonTemp.createTempEvent(TEMPLATE_EVENT_POKEBLOCK,
+				color = item.color#:RED
+				position = pbFacingTile($game_player.direction)
+				x_pos, y_pos = position[1],position[2]
+
+				if tile_passable_or_water(x_pos, y_pos)
+					if !tile_is_water?($game_player.x, $game_player.y) && tile_is_water?(x_pos, y_pos)
+						dx = x_pos - $game_player.x
+						dy = y_pos - $game_player.y
+						far_x, far_y = x_pos + dx, y_pos + dy
+						if tile_is_water?(far_x, far_y) && tile_passable_or_water(far_x, far_y)
+							x_pos, y_pos = far_x, far_y
+						end
+					end
+				else
+					x_pos, y_pos = $game_player.x, $game_player.y
+				end
+
+				event = $PokemonTemp.createTempEvent(TEMPLATE_EVENT_POKEBLOCK,
 																								 $game_map.map_id,
-																								 [$game_player.x,$game_player.y],
+																								 [x_pos, y_pos],
 																								 $game_player.direction,
 																								 PokeblockEvent, [item])
+				if event.is_on_water
+					event.floating = true
+					event.forced_bush_depth = 8
+					event.calculate_bush_depth
+				end
 				pbRemovePokeblock(item)
 				@scene.pbEndScene
 				break
