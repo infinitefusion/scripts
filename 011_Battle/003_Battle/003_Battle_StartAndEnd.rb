@@ -462,7 +462,12 @@ class PokeBattle_Battle
           msg = MessageTypes.getFromMapHash($game_map.map_id, msg)
           msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
           msg = msg.gsub(/\\n/, "\n")
-          pbDisplayPaused(msg)
+          if Settings::EXPERIMENTAL_FEATURES
+            pbCallBubFixed(60, 4, 340, 100)
+            pbMessage(msg)
+          else
+            pbDisplayPaused(msg)
+          end
         end
       end
       # Gain money from winning a trainer battle, and from Pay Day

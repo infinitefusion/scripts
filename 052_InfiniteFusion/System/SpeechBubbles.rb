@@ -1,7 +1,7 @@
 PluginManager.register({
                          :name => "Carmaniac's Speech Bubbles",
                          :version => "1.1",
-                         :credits => ["Carmaniac","Avery","Boonzeet"],
+                         :credits => ["Carmaniac", "Avery", "Boonzeet"],
                          :link => "https://reliccastle.com/resources/461/"
                        })
 
@@ -40,8 +40,8 @@ class PokemonTemp
 end
 
 module MessageConfig
-  BUBBLETEXTBASE = Color.new(22,22,22)
-  BUBBLETEXTSHADOW = Color.new(166,160,151)
+  BUBBLETEXTBASE = Color.new(22, 22, 22)
+  BUBBLETEXTSHADOW = Color.new(166, 160, 151)
   WindowOpacity = 255
 end
 
@@ -49,30 +49,29 @@ end
 # Function modifiers
 #-------------------------------------------------------------------------------
 
-
 class Window_AdvancedTextPokemon
   def text=(value)
     if value != nil && value != "" && $PokemonTemp.speechbubble_bubble && $PokemonTemp.speechbubble_bubble > 0
       if $PokemonTemp.speechbubble_bubble == 1
         $PokemonTemp.speechbubble_bubble = 0
-        resizeToFit2(value,400,100)
+        resizeToFit2(value, 400, 100)
 
         @x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
         @y = $game_map.events[$PokemonTemp.speechbubble_talking].screen_y - (32 + @height)
 
-        if @y>(Graphics.height-@height-2)
-          @y = (Graphics.height-@height)
-        elsif @y<2
-          @y=2
+        if @y > (Graphics.height - @height - 2)
+          @y = (Graphics.height - @height)
+        elsif @y < 2
+          @y = 2
         end
-        if @x>(Graphics.width-@width-2)
-          @x = ($game_map.events[$PokemonTemp.speechbubble_talking].screen_x-@width)
-        elsif @x<2
-          @x=2
+        if @x > (Graphics.width - @width - 2)
+          @x = ($game_map.events[$PokemonTemp.speechbubble_talking].screen_x - @width)
+        elsif @x < 2
+          @x = 2
         end
       elsif $PokemonTemp.speechbubble_bubble == 3
-        @x=$game_player.x+32
-        @y=$game_player.y+36
+        @x = $game_player.x + 32
+        @y = $game_player.y + 36
       elsif $PokemonTemp.speechbubble_bubble == 4
         resizeToFit2(value,
                      $PokemonTemp.speechbubble_fixed_w || 400,
@@ -85,7 +84,7 @@ class Window_AdvancedTextPokemon
           @x = $PokemonTemp.speechbubble_fixed_x || 0
           @y = $PokemonTemp.speechbubble_fixed_y || 0
         end
-        @x = Graphics.width  - @width  if @x > Graphics.width  - @width
+        @x = Graphics.width - @width if @x > Graphics.width - @width
         @y = Graphics.height - @height if @y > Graphics.height - @height
         @x = 0 if @x < 0
         @y = 0 if @y < 0
@@ -97,42 +96,42 @@ class Window_AdvancedTextPokemon
   end
 end
 
-def pbRepositionMessageWindow(msgwindow, linecount=2)
-  msgwindow.height=32*linecount+msgwindow.borderY
-  msgwindow.y=(Graphics.height)-(msgwindow.height)
+def pbRepositionMessageWindow(msgwindow, linecount = 2)
+  msgwindow.height = 32 * linecount + msgwindow.borderY
+  msgwindow.y = (Graphics.height) - (msgwindow.height)
   in_battle = $game_temp && $game_temp.in_battle && !$scene.respond_to?("update_basic")
   if $PokemonTemp.speechbubble_bubble == 4
     msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
-    msgwindow.width  = $PokemonTemp.speechbubble_fixed_w || 400
+    msgwindow.width = $PokemonTemp.speechbubble_fixed_w || 400
     msgwindow.height = $PokemonTemp.speechbubble_fixed_h || 100
     unless $PokemonTemp.speechbubble_fixed_anchor
       msgwindow.x = $PokemonTemp.speechbubble_fixed_x || 0
       msgwindow.y = $PokemonTemp.speechbubble_fixed_y || 0
     end
   elsif in_battle
-    msgwindow.y=0
+    msgwindow.y = 0
   elsif $game_system && $game_system.respond_to?("message_position")
     case $game_system.message_position
-    when 0  # up
-      msgwindow.y=0
-    when 1  # middle
-      msgwindow.y=(Graphics.height/2)-(msgwindow.height/2)
+    when 0 # up
+      msgwindow.y = 0
+    when 1 # middle
+      msgwindow.y = (Graphics.height / 2) - (msgwindow.height / 2)
     when 2
       if $PokemonTemp.speechbubble_bubble == 1 || $PokemonTemp.speechbubble_bubble == 3
         msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
         msgwindow.height = 100
         msgwindow.width = 400
-      elsif $PokemonTemp.speechbubble_bubble==2
+      elsif $PokemonTemp.speechbubble_bubble == 2
         msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
         msgwindow.height = 102
         msgwindow.width = Graphics.width
-        if ($game_player.direction==DIRECTION_UP && !$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp
+        if ($game_player.direction == DIRECTION_UP && !$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 0, Graphics.width, 280)
           msgwindow.y = 6
         else
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 6 + msgwindow.height, Graphics.width, 280)
           msgwindow.y = (Graphics.height - msgwindow.height) - 6
-          if $PokemonTemp.speechbubble_outofrange==true && !$PokemonTemp.speechbubble_alwaysDown
+          if $PokemonTemp.speechbubble_outofrange == true && !$PokemonTemp.speechbubble_alwaysDown
             msgwindow.y = 6
           end
         end
@@ -149,18 +148,18 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
   end
   if $game_message
     case $game_message.background
-    when 1  # dim
-      msgwindow.opacity=0
-    when 2  # transparent
-      msgwindow.opacity=0
+    when 1 # dim
+      msgwindow.opacity = 0
+    when 2 # transparent
+      msgwindow.opacity = 0
     end
   end
 end
 
-def pbCreateMessageWindow(viewport=nil,skin=nil)
+def pbCreateMessageWindow(viewport = nil, skin = nil)
   arrow = nil
-  if $PokemonTemp.speechbubble_bubble==2 && $game_map.events[$PokemonTemp.speechbubble_talking] != nil # Message window set to floating bubble.
-    if ($game_player.direction==DIRECTION_UP && (!$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp)# Player facing up, message window top.
+  if $PokemonTemp.speechbubble_bubble == 2 && $game_map.events[$PokemonTemp.speechbubble_talking] != nil # Message window set to floating bubble.
+    if ($game_player.direction == DIRECTION_UP && (!$PokemonTemp.speechbubble_alwaysDown) || $PokemonTemp.speechbubble_alwaysUp) # Player facing up, message window top.
       $PokemonTemp.speechbubble_vp = Viewport.new(0, 104, Graphics.width, 280)
       $PokemonTemp.speechbubble_vp.z = 999999
       arrow = Sprite.new($PokemonTemp.speechbubble_vp)
@@ -170,77 +169,78 @@ def pbCreateMessageWindow(viewport=nil,skin=nil)
       arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow4")
       arrow.zoom_x = 2
       arrow.zoom_y = 2
-      if arrow.x<-230
+      if arrow.x < -230
         arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
-        arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow3")
-      end
-    else # Player facing left, down, right, message window bottom.
-    $PokemonTemp.speechbubble_vp = Viewport.new(0, 0, Graphics.width, 280)
-    $PokemonTemp.speechbubble_vp.z = 999999
-    arrow = Sprite.new($PokemonTemp.speechbubble_vp)
-    arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
-    arrow.y = $game_map.events[$PokemonTemp.speechbubble_talking].screen_y
-    arrow.z = 999999
-    arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow1")
-    if arrow.y>=Graphics.height-120 # Change arrow direction.
-      $PokemonTemp.speechbubble_outofrange=true
-      $PokemonTemp.speechbubble_vp.rect.y+=104
-      arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x - Graphics.width
-      arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow4")
-      arrow.y = ($game_map.events[$PokemonTemp.speechbubble_talking].screen_y - Graphics.height) - 136
-      if arrow.x<-250
-        arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
-        arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow3")
-      end
-      if arrow.x>=256
-        arrow.x-=15# = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x-Graphics.width
         arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow3")
       end
     else
-      $PokemonTemp.speechbubble_outofrange=false
-    end
-    arrow.zoom_x = 2
-    arrow.zoom_y = 2
+      # Player facing left, down, right, message window bottom.
+      $PokemonTemp.speechbubble_vp = Viewport.new(0, 0, Graphics.width, 280)
+      $PokemonTemp.speechbubble_vp.z = 999999
+      arrow = Sprite.new($PokemonTemp.speechbubble_vp)
+      arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
+      arrow.y = $game_map.events[$PokemonTemp.speechbubble_talking].screen_y
+      arrow.z = 999999
+      arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow1")
+      if arrow.y >= Graphics.height - 120 # Change arrow direction.
+        $PokemonTemp.speechbubble_outofrange = true
+        $PokemonTemp.speechbubble_vp.rect.y += 104
+        arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x - Graphics.width
+        arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow4")
+        arrow.y = ($game_map.events[$PokemonTemp.speechbubble_talking].screen_y - Graphics.height) - 136
+        if arrow.x < -250
+          arrow.x = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x
+          arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow3")
+        end
+        if arrow.x >= 256
+          arrow.x -= 15 # = $game_map.events[$PokemonTemp.speechbubble_talking].screen_x-Graphics.width
+          arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/Arrow3")
+        end
+      else
+        $PokemonTemp.speechbubble_outofrange = false
+      end
+      arrow.zoom_x = 2
+      arrow.zoom_y = 2
     end
   end
-  arrow.bitmap=nil if $PokemonTemp.speechbubble_outofrange && arrow
+  arrow.bitmap = nil if $PokemonTemp.speechbubble_outofrange && arrow
   $PokemonTemp.speechbubble_arrow = arrow
-  msgwindow=Window_AdvancedTextPokemon.new("")
+  msgwindow = Window_AdvancedTextPokemon.new("")
   if !viewport
-    msgwindow.z=99999
+    msgwindow.z = 99999
   else
-    msgwindow.viewport=viewport
+    msgwindow.viewport = viewport
   end
-  msgwindow.visible=true
-  msgwindow.letterbyletter=true
-  msgwindow.back_opacity=MessageConfig::WindowOpacity
-  pbBottomLeftLines(msgwindow,2)
-  $game_temp.message_window_showing=true if $game_temp
-  $game_message.visible=true if $game_message
-  skin=MessageConfig.pbGetSpeechFrame() if !skin
+  msgwindow.visible = true
+  msgwindow.letterbyletter = true
+  msgwindow.back_opacity = MessageConfig::WindowOpacity
+  pbBottomLeftLines(msgwindow, 2)
+  $game_temp.message_window_showing = true if $game_temp
+  $game_message.visible = true if $game_message
+  skin = MessageConfig.pbGetSpeechFrame() if !skin
   msgwindow.setSkin(skin)
   return msgwindow
 end
 
 def pbDisposeMessageWindow(msgwindow)
-  $game_temp.message_window_showing=false if $game_temp
-  $game_message.visible=false if $game_message
+  $game_temp.message_window_showing = false if $game_temp
+  $game_message.visible = false if $game_message
   msgwindow.dispose
   $PokemonTemp.speechbubble_arrow.dispose if $PokemonTemp.speechbubble_arrow
   $PokemonTemp.speechbubble_vp.dispose if $PokemonTemp.speechbubble_vp
-  $PokemonTemp.speechbubble_bubble=nil
+  $PokemonTemp.speechbubble_bubble = nil
 end
 
-def pbCallBubUp(status=0,value=0)
-  pbCallBub(status,value,false,true)
+def pbCallBubUp(status = 0, value = 0)
+  pbCallBub(status, value, false, true)
 end
 
-def pbCallBubDown(status=0,value=0)
-  pbCallBub(status,value,true,false)
+def pbCallBubDown(status = 0, value = 0)
+  pbCallBub(status, value, true, false)
 end
 
-#always_down, always_up is not ideal but used everywhere in game so too late to change
-def pbCallBub(status=0, event_id=0, always_down=false, always_up=false)
+# always_down, always_up is not ideal but used everywhere in game so too late to change
+def pbCallBub(status = 0, event_id = 0, always_down = false, always_up = false)
   begin
     if status < 3
       if event_id.is_a?(Integer)
@@ -270,18 +270,19 @@ def pbCallBubOverBattler(battler, width = 300, height = 100, offset_x = 40, offs
   $PokemonTemp.speechbubble_fixed_anchor = true
 end
 
+
 def pbCallBubFixed(x, y, width = 400, height = 100)
-  $PokemonTemp.speechbubble_bubble       = 4
-  $PokemonTemp.speechbubble_fixed_x      = x
-  $PokemonTemp.speechbubble_fixed_y      = y
-  $PokemonTemp.speechbubble_fixed_w      = width
-  $PokemonTemp.speechbubble_fixed_h      = height
+  $PokemonTemp.speechbubble_bubble = 4
+  $PokemonTemp.speechbubble_fixed_x = x
+  $PokemonTemp.speechbubble_fixed_y = y
+  $PokemonTemp.speechbubble_fixed_w = width
+  $PokemonTemp.speechbubble_fixed_h = height
   $PokemonTemp.speechbubble_fixed_anchor = false
-  $PokemonTemp.speechbubble_alwaysDown   = false
-  $PokemonTemp.speechbubble_alwaysUp     = false
+  $PokemonTemp.speechbubble_alwaysDown = false
+  $PokemonTemp.speechbubble_alwaysUp = false
 end
 
-def setSign(type=:NORMAL)
+def setSign(type = :NORMAL)
   case type
   when :NORMAL
     setWindowSkin("sign_normal")
@@ -293,6 +294,7 @@ def setSign(type=:NORMAL)
     setWindowSkin("sign_green")
   end
 end
+
 def setWindowSkin(skin)
-  $PokemonTemp.windowSkin=skin
+  $PokemonTemp.windowSkin = skin
 end
