@@ -29,6 +29,12 @@ class PokemonTemp
   attr_accessor :speechbubble_alwaysDown
   attr_accessor :speechbubble_alwaysUp
 
+  attr_accessor :speechbubble_fixed_x
+  attr_accessor :speechbubble_fixed_y
+  attr_accessor :speechbubble_fixed_w
+  attr_accessor :speechbubble_fixed_h
+  attr_accessor :speechbubble_fixed_anchor
+
   attr_accessor :windowSkin
 
 end
@@ -42,6 +48,7 @@ end
 #-------------------------------------------------------------------------------
 # Function modifiers
 #-------------------------------------------------------------------------------
+
 
 class Window_AdvancedTextPokemon
   def text=(value)
@@ -66,6 +73,22 @@ class Window_AdvancedTextPokemon
       elsif $PokemonTemp.speechbubble_bubble == 3
         @x=$game_player.x+32
         @y=$game_player.y+36
+      elsif $PokemonTemp.speechbubble_bubble == 4
+        resizeToFit2(value,
+                     $PokemonTemp.speechbubble_fixed_w || 400,
+                     $PokemonTemp.speechbubble_fixed_h || 100)
+        if $PokemonTemp.speechbubble_fixed_anchor
+          # x/y is the point the bubble sits on: centered horizontally, bottom edge at y
+          @x = ($PokemonTemp.speechbubble_fixed_x || 0) - (@width / 2)
+          @y = ($PokemonTemp.speechbubble_fixed_y || 0) - @height
+        else
+          @x = $PokemonTemp.speechbubble_fixed_x || 0
+          @y = $PokemonTemp.speechbubble_fixed_y || 0
+        end
+        @x = Graphics.width  - @width  if @x > Graphics.width  - @width
+        @y = Graphics.height - @height if @y > Graphics.height - @height
+        @x = 0 if @x < 0
+        @y = 0 if @y < 0
       else
         $PokemonTemp.speechbubble_bubble = 0
       end
@@ -77,7 +100,16 @@ end
 def pbRepositionMessageWindow(msgwindow, linecount=2)
   msgwindow.height=32*linecount+msgwindow.borderY
   msgwindow.y=(Graphics.height)-(msgwindow.height)
-  if $game_temp && $game_temp.in_battle && !$scene.respond_to?("update_basic")
+  in_battle = $game_temp && $game_temp.in_battle && !$scene.respond_to?("update_basic")
+  if $PokemonTemp.speechbubble_bubble == 4
+    msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
+    msgwindow.width  = $PokemonTemp.speechbubble_fixed_w || 400
+    msgwindow.height = $PokemonTemp.speechbubble_fixed_h || 100
+    unless $PokemonTemp.speechbubble_fixed_anchor
+      msgwindow.x = $PokemonTemp.speechbubble_fixed_x || 0
+      msgwindow.y = $PokemonTemp.speechbubble_fixed_y || 0
+    end
+  elsif in_battle
     msgwindow.y=0
   elsif $game_system && $game_system.respond_to?("message_position")
     case $game_system.message_position
@@ -224,6 +256,29 @@ def pbCallBub(status=0, event_id=0, always_down=false, always_up=false)
   rescue
     return
   end
+end
+
+def pbCallBubOverBattler(battler, width = 300, height = 100, offset_x = 40, offset_y = 60)
+  sprite = battler.battle.scene.sprites["pokemon_#{battler.index}"]
+  if !sprite
+    echoln "pbCallBubOverBattler: no sprite for index #{battler.index}"
+    return pbCallBubFixed(100, 70, width, height)
+  end
+  x = sprite.x + offset_x
+  y = sprite.y - sprite.height + offset_y
+  pbCallBubFixed(x.to_i, y.to_i, width, height)
+  $PokemonTemp.speechbubble_fixed_anchor = true
+end
+
+def pbCallBubFixed(x, y, width = 400, height = 100)
+  $PokemonTemp.speechbubble_bubble       = 4
+  $PokemonTemp.speechbubble_fixed_x      = x
+  $PokemonTemp.speechbubble_fixed_y      = y
+  $PokemonTemp.speechbubble_fixed_w      = width
+  $PokemonTemp.speechbubble_fixed_h      = height
+  $PokemonTemp.speechbubble_fixed_anchor = false
+  $PokemonTemp.speechbubble_alwaysDown   = false
+  $PokemonTemp.speechbubble_alwaysUp     = false
 end
 
 def setSign(type=:NORMAL)

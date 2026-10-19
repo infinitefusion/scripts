@@ -314,4 +314,4 @@ define_quest("route114_roar",:FIELD_QUEST,_INTL("Hear Me Roar!"), _INTL("Use Roa
 define_quest("desert_caves",:FIELD_QUEST,_INTL("Find the lost Assistant!"), _INTL("An archeologist lost his assistant in the caves beneath the desert. Help him find him!"),_INTL("Mauville Desert"),"NPC_Hoenn_RuinManiac")
 
 #Route 119
-define_quest("dewford_fishing",:FIELD_QUEST,_INTL("Fishing with Bait!"), _INTL("Fish up a Feebas with the Good Rod by placing a Blue Pokéblock in the water."),_INTL("Route 119"),"NPC_Hoenn_Fisherman")
+define_quest("route_119_fishing",:FIELD_QUEST,_INTL("Fishing with Bait!"), _INTL("Fish up a Feebas with the Good Rod by placing a Blue Pokéblock in the water."),_INTL("Route 119"),"NPC_Hoenn_Fisherman")

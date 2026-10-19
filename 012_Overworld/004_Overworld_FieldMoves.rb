@@ -1289,6 +1289,17 @@ HiddenMoveHandlers::UseMove.add(:ROAR, proc { |move, pokemon|
   next true
 })
 
+HiddenMoveHandlers::CanUseMove.add(:CHATTER, proc { |move, pkmn, showmsg|
+  next true
+})
+HiddenMoveHandlers::UseMove.add(:CHATTER, proc { |move, pokemon|
+  text = pokemon.chatter_text
+  text = "" unless text
+  pokemon.chatter_text = pbEnterText(_INTL("Teach a phrase!"),0,16, text)
+  pokemon.chatter_text = nil if pokemon.chatter_text == ""
+  next true
+})
+
 
 HiddenMoveHandlers::CanUseMove.add(:MAGNETRISE, proc { |move, pkmn, showmsg|
   next true unless $PokemonGlobal.surfing

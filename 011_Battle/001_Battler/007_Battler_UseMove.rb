@@ -770,7 +770,6 @@ class PokeBattle_Battler
     @battle.pbJudgeCheckpoint(user, move)
     # Main effect (recoil/drain, etc.)
     targets.each do |b|
-      echoln b.item
       next if b.damageState.unaffected
       move.pbEffectAgainstTarget(user, b)
     end
