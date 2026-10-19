@@ -463,7 +463,7 @@ class PokeBattle_Battle
           msg = msg.gsub(/\\[Pp][Nn]/, pbPlayer.name)
           msg = msg.gsub(/\\n/, "\n")
           if Settings::EXPERIMENTAL_FEATURES
-            pbCallBubFixed(60, 4, 340, 100)
+            pbCallBubFixed(60, 4, 340, 100, true)
             pbMessage(msg)
           else
             pbDisplayPaused(msg)

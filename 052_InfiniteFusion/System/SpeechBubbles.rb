@@ -34,6 +34,7 @@ class PokemonTemp
   attr_accessor :speechbubble_fixed_w
   attr_accessor :speechbubble_fixed_h
   attr_accessor :speechbubble_fixed_anchor
+  attr_accessor :speechbubble_fixed_arrow
 
   attr_accessor :windowSkin
 
@@ -73,21 +74,36 @@ class Window_AdvancedTextPokemon
         @x = $game_player.x + 32
         @y = $game_player.y + 36
       elsif $PokemonTemp.speechbubble_bubble == 4
-        resizeToFit2(value,
-                     $PokemonTemp.speechbubble_fixed_w || 400,
-                     $PokemonTemp.speechbubble_fixed_h || 100)
+        full_w = ($PokemonTemp.speechbubble_fixed_w || 400).to_i
+        full_h = ($PokemonTemp.speechbubble_fixed_h || 100).to_i
+        fx     = ($PokemonTemp.speechbubble_fixed_x || 0).to_i
+        fy     = ($PokemonTemp.speechbubble_fixed_y || 0).to_i
+
+        resizeToFit2(value, full_w, full_h)
+        w = self.width.to_i
+        h = self.height.to_i
         if $PokemonTemp.speechbubble_fixed_anchor
-          # x/y is the point the bubble sits on: centered horizontally, bottom edge at y
-          @x = ($PokemonTemp.speechbubble_fixed_x || 0) - (@width / 2)
-          @y = ($PokemonTemp.speechbubble_fixed_y || 0) - @height
+          new_x = fx - (w / 2)
+          new_y = fy - h
         else
-          @x = $PokemonTemp.speechbubble_fixed_x || 0
-          @y = $PokemonTemp.speechbubble_fixed_y || 0
+          new_x = fx + ((full_w - w) / 2)
+          new_y = fy
         end
-        @x = Graphics.width - @width if @x > Graphics.width - @width
-        @y = Graphics.height - @height if @y > Graphics.height - @height
-        @x = 0 if @x < 0
-        @y = 0 if @y < 0
+        new_x = [[new_x, 0].max, [Graphics.width  - w, 0].max].min
+        new_y = [[new_y, 0].max, [Graphics.height - h, 0].max].min
+        self.x = new_x
+        self.y = new_y
+
+        arrow = $PokemonTemp.speechbubble_arrow
+        if $PokemonTemp.speechbubble_fixed_arrow && arrow &&
+          !arrow.disposed? && arrow.bitmap
+          arrow.zoom_x = 2
+          arrow.zoom_y = 2
+          arrow.x = new_x + w - 12
+          arrow.y = new_y + (h / 2) - (arrow.bitmap.height / 2) + 8
+          arrow.z = 99999
+          arrow.visible = true
+        end
       else
         $PokemonTemp.speechbubble_bubble = 0
       end
@@ -203,7 +219,17 @@ def pbCreateMessageWindow(viewport = nil, skin = nil)
       arrow.zoom_y = 2
     end
   end
-  arrow.bitmap = nil if $PokemonTemp.speechbubble_outofrange && arrow
+
+  # Battle bubble arrow (type 4)
+  if $PokemonTemp.speechbubble_bubble == 4 &&
+    $PokemonTemp.speechbubble_fixed_arrow
+    arrow = Sprite.new
+    arrow.bitmap = RPG::Cache.load_bitmap_path("Graphics/Pictures/ArrowBattle")
+    arrow.z = 100000
+    arrow.visible = false
+  end
+  arrow.bitmap = nil if $PokemonTemp.speechbubble_bubble == 2 && $PokemonTemp.speechbubble_outofrange && arrow
+
   $PokemonTemp.speechbubble_arrow = arrow
   msgwindow = Window_AdvancedTextPokemon.new("")
   if !viewport
@@ -229,6 +255,8 @@ def pbDisposeMessageWindow(msgwindow)
   $PokemonTemp.speechbubble_arrow.dispose if $PokemonTemp.speechbubble_arrow
   $PokemonTemp.speechbubble_vp.dispose if $PokemonTemp.speechbubble_vp
   $PokemonTemp.speechbubble_bubble = nil
+  $PokemonTemp.speechbubble_arrow = nil
+  $PokemonTemp.speechbubble_fixed_arrow = false
 end
 
 def pbCallBubUp(status = 0, value = 0)
@@ -271,15 +299,16 @@ def pbCallBubOverBattler(battler, width = 300, height = 100, offset_x = 40, offs
 end
 
 
-def pbCallBubFixed(x, y, width = 400, height = 100)
-  $PokemonTemp.speechbubble_bubble = 4
-  $PokemonTemp.speechbubble_fixed_x = x
-  $PokemonTemp.speechbubble_fixed_y = y
-  $PokemonTemp.speechbubble_fixed_w = width
-  $PokemonTemp.speechbubble_fixed_h = height
+def pbCallBubFixed(x, y, width = 400, height = 100, arrow = false)
+  $PokemonTemp.speechbubble_bubble       = 4
+  $PokemonTemp.speechbubble_fixed_x      = x
+  $PokemonTemp.speechbubble_fixed_y      = y
+  $PokemonTemp.speechbubble_fixed_w      = width
+  $PokemonTemp.speechbubble_fixed_h      = height
   $PokemonTemp.speechbubble_fixed_anchor = false
-  $PokemonTemp.speechbubble_alwaysDown = false
-  $PokemonTemp.speechbubble_alwaysUp = false
+  $PokemonTemp.speechbubble_fixed_arrow  = arrow
+  $PokemonTemp.speechbubble_alwaysDown   = false
+  $PokemonTemp.speechbubble_alwaysUp     = false
 end
 
 def setSign(type = :NORMAL)

@@ -281,7 +281,7 @@ class PokeBattle_Move_013 < PokeBattle_ConfuseMove
   def pbOnStartUse(user,target)
     if user.pokemon.chatter_text
       pbCallBubOverBattler(user)
-      pbMessage(user.pokemon.chatter_text + "\\wtnp[15]")
+      pbMessage(user.pokemon.chatter_text + "!\\wtnp[15]")
     end
     super(user,target)
   end
