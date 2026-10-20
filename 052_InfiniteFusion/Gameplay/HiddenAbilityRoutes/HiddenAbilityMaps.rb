@@ -64,5 +64,5 @@ end
 def getMapName(id)
   mapinfos = pbLoadMapInfos
   return _INTL("Unknown location") if !mapinfos[id]
-  return mapinfos[id].name
+  return pbGetMessage(MessageTypes::MapNames, id).to_s
 end
