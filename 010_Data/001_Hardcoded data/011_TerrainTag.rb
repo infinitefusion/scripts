@@ -480,3 +480,10 @@ GameData::TerrainTag.register({
                                 :is_cliff => true,
                                 :battle_environment => :Rock,
                               })
+
+GameData::TerrainTag.register({
+                                :id => :Mud,
+                                :id_number => 46,
+                                :step_sound => "steps/step_mud",
+                                :show_footprints => true,
+                              })
