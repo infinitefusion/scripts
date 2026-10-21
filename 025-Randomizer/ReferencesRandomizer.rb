@@ -1,7 +1,3 @@
-def rewrwe
-  $PokemonSystem.selected_reference_sprite_categories=nil
-end
-
 def select_randomizer_references(minimum_allowed = nil)
   references_map = map_sprites_by_reference()
   label_to_key = {}

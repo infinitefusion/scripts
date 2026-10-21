@@ -27,6 +27,17 @@ class RandomizerOptionsScene < PokemonOption_Scene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
+  def pbEndScene
+    super
+    if $game_switches[SWITCH_RANDOM_WILD]
+      $PokemonTemp.should_reshuffle_pokemon
+    end
+    if $game_switches[SWITCH_RANDOM_TRAINERS]
+      $PokemonTemp.should_reshuffle_trainers
+    end
+  end
+
+
   def pbGetOptions(inloadscreen = false)
     options = [
       EnumOption.new(_INTL("Pokémon"), [_INTL("On"), _INTL("Off")],
@@ -78,6 +89,8 @@ class RandomizerOptionsScene < PokemonOption_Scene
     return options
   end
 
+
+
   def openGymOptionsMenu()
     return if !@openGymOptions
     pbFadeOutIn {
@@ -126,6 +139,20 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
 
   def initialize
     @changedColor = false
+  end
+
+  def pbEndScene
+    super
+    if $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] && !$game_switches[RANDOM_TEAMS_CUSTOM_SPRITES]
+      pbMessage(_INTL("\"The References Filter\" option needs the \"Custom Sprites Only\" option to be enabled in order to work."))
+      if pbConfirmMessage(_INTL("Would you like to turn on the \"Custom Sprites Only\" option?"))
+        $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] = true
+        pbMessage(_INTL("The \"Custom Sprites Only\" option was enabled."))
+      else
+        $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES] = false
+        pbMessage(_INTL("The \"References Filter\" option was disabled."))
+      end
+    end
   end
 
   def pbStartScene(inloadscreen = false)

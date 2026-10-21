@@ -400,6 +400,9 @@ def getTrainersDataMode
 end
 
 def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = nil)
+
+  echoln customsList
+
   bst_range = pbGet(VAR_RANDOMIZER_TRAINER_BST)
   customsOnly = false if customsOnly && customsList == nil
   randomTrainersHash = Hash.new
@@ -595,6 +598,7 @@ def getSelectedReferenceSprites
     spritename = line.chomp
     spritesList << spritename if !spritename.empty?
   end
+  echoln spritesList
   return spritesList
 end
 def getSelectedReferenceSpeciesList(spriteslist)
