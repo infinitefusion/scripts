@@ -185,6 +185,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
         pbMessage(_INTL("The \"References Filter\" option was disabled."))
       end
     end
+    $PokemonTemp.should_reshuffle_trainers = true
   end
 
   def pbStartScene(inloadscreen = false)
