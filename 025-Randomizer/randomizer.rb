@@ -168,7 +168,7 @@ def reshuffleWithCurrentSettings()
       type = nil
     end
     Kernel.initRandomTypeArray
-    Kernel.pbShuffleDex(bst,type, false)
+    Kernel.pbShuffleDex(bst,type, true)
 
   end
   if $PokemonTemp.should_reshuffle_trainers

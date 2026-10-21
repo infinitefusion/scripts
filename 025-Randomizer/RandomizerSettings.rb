@@ -20,6 +20,9 @@ class RandomizerOptionsScene < PokemonOption_Scene
 
   def pbStartScene(inloadscreen = false)
     super
+    @old_wild_pokemon_options = recordCurrentWildPokemonOptions
+    @old_trainer_options = recordCurrentTrainerOptions
+
     @changedColor = true
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
       _INTL("Randomizer settings"), 0, 0, Graphics.width, 64, @viewport)
@@ -29,12 +32,43 @@ class RandomizerOptionsScene < PokemonOption_Scene
 
   def pbEndScene
     super
-    if $game_switches[SWITCH_RANDOM_WILD]
-      $PokemonTemp.should_reshuffle_pokemon
+    new_wild_pokemon_options = recordCurrentWildPokemonOptions
+    new_trainer_options = recordCurrentTrainerOptions
+
+    if new_wild_pokemon_options != @old_wild_pokemon_options
+      $PokemonTemp.should_reshuffle_pokemon = true
     end
-    if $game_switches[SWITCH_RANDOM_TRAINERS]
-      $PokemonTemp.should_reshuffle_trainers
+
+    if new_trainer_options != @old_trainer_options
+      $PokemonTemp.should_reshuffle_pokemon = true
     end
+  end
+
+  def recordCurrentWildPokemonOptions
+    is_on = $game_switches[SWITCH_RANDOM_WILD]
+    randomness_degree = $game_variables[VAR_RANDOMIZER_WILD_POKE_BST]
+    type_global = $game_switches[RandomizerWildPokemonOptionsScene::RANDOM_WILD_GLOBAL]
+    type_area = $game_switches[RandomizerWildPokemonOptionsScene::RANDOM_WILD_AREA]
+    customs_only = $game_switches[SWITCH_RANDOM_WILD_ONLY_CUSTOMS]
+    legendaries = $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES]
+    egg_groups = $game_switches[SWITCH_RANDOM_WILD_EGG_GROUP]
+    starters = $game_switches[SWITCH_RANDOM_STARTERS]
+    starters_first_stage = $game_switches[SWITCH_RANDOM_STARTER_FIRST_STAGE]
+    random_static = $game_switches[RandomizerWildPokemonOptionsScene::RANDOM_STATIC]
+    gift_pokemon = $game_switches[RandomizerWildPokemonOptionsScene::GIFT_POKEMON]
+    fuse_everything = $game_switches[RandomizerWildPokemonOptionsScene::REGULAR_TO_FUSIONS]
+
+    return [is_on, randomness_degree, type_global, type_area, customs_only, legendaries, egg_groups,
+            starters, starters_first_stage, random_static, gift_pokemon, fuse_everything]
+  end
+
+  def recordCurrentTrainerOptions
+    is_on = $game_switches[SWITCH_RANDOM_TRAINERS]
+    randomness_degree = $game_variables[VAR_RANDOMIZER_TRAINER_BST]
+    customs_only = $game_switches[RandomizerTrainerOptionsScene::RANDOM_TEAMS_CUSTOM_SPRITES]
+    egg_groups = $game_switches[SWITCH_RANDOM_TRAINER_EGG_GROUP]
+    references_filter = $game_switches[SWITCH_RANDOM_REFERENCE_SPRITES]
+    return [is_on, randomness_degree, customs_only, egg_groups, references_filter]
   end
 
 
@@ -88,8 +122,6 @@ class RandomizerOptionsScene < PokemonOption_Scene
     ]
     return options
   end
-
-
 
   def openGymOptionsMenu()
     return if !@openGymOptions
@@ -184,7 +216,7 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
                                     $game_variables[VAR_RANDOMIZER_TRAINER_BST] = value
                                   },
                                   _INTL("The higher the number, the more random it is.")
-                                  )
+      )
     end
     options << EnumOption.new(_INTL("Custom Sprites only"), [_INTL("On"), _INTL("Off")],
                               proc { $game_switches[RANDOM_TEAMS_CUSTOM_SPRITES] ? 0 : 1 },
@@ -216,8 +248,6 @@ class RandomizerTrainerOptionsScene < PokemonOption_Scene
                               },
                               _INTL("All Trainer teams use reference sprites.")
     )
-
-
 
     return options
   end
@@ -261,7 +291,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
     super
   end
 
-  #TODO: Move the randomizer settings to $PokemonGlobal instead of living in game switches
+  # TODO: Move the randomizer settings to $PokemonGlobal instead of living in game switches
   def pbGetOptions(inloadscreen = false)
     options = []
     if !$game_switches[SWITCH_DURING_INTRO]
@@ -307,7 +337,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                               proc { $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES] ? 0 : 1 },
                               proc { |value|
                                 $game_switches[SWITCH_RANDOM_WILD_LEGENDARIES] = value == 0
-                              }, 
+                              },
                               [
                                 _INTL("Regular wild Pokémon can also be randomized into legendaries."),
                                 _INTL("Only legendaries can be randomized into legendaries")
@@ -340,7 +370,7 @@ class RandomizerWildPokemonOptionsScene < PokemonOption_Scene
                                   $game_switches[SWITCH_RANDOM_STARTERS] = false
                                   $game_switches[SWITCH_RANDOM_STARTER_FIRST_STAGE] = false
                                 end
-                              }, 
+                              },
                               [
                                 _INTL("The starters will always be a first evolution Pokémon"),
                                 _INTL("The starters can be any Pokémon"),
@@ -436,7 +466,7 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
                               proc { $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] ? 0 : 1 },
                               proc { |value|
                                 $game_switches[SWITCH_RANDOM_GYM_CUSTOMS] = value == 0
-                              }, 
+                              },
                               [
                                 _INTL("Use only Pokémon that have custom sprites in gym trainers or gym leader teams"),
                                 _INTL("Pick any possible fusion, including auto-generated sprites.")
@@ -473,7 +503,7 @@ class RandomizerGymOptionsScene < PokemonOption_Scene
     #                             _INTL("Limit to the same egg groups for randomization that feels more natural.")
     #
     #   )
-    #end
+    # end
 
     return options
   end

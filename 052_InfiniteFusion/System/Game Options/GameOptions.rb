@@ -5,7 +5,7 @@ def openRandomizerMenu()
     screen.pbStartScreen
   }
   if $PokemonTemp.should_reshuffle_pokemon || $PokemonTemp.should_reshuffle_trainers
-    if pbConfirmMessage(_INTL("Your changes won't take effect until you re-shuffle Wild Pokémon. Would you like to do it now?"))
+    if pbConfirmMessage(_INTL("Your changes won't take effect until you re-shuffle. Would you like to do it now?"))
       reshuffleWithCurrentSettings
     end
   end
