@@ -4,7 +4,6 @@ def select_randomizer_references(minimum_allowed = nil)
 
 
   non_ref_list = getNonReferenceSprites(nil, references_map)
-
   references_map["No reference"] = non_ref_list
   references_list = references_map.keys.sort_by { |k| [-references_map[k].length, k] }.map do |key|
     label = format_reference_for_menu(references_map,key)
@@ -49,6 +48,19 @@ def select_randomizer_references(minimum_allowed = nil)
   return selected_keys
 end
 
+
+#Util method to export a list - not used by the game itself
+def print_reference_map_to_file(references_map)
+  output_path = "reference_map_ids.txt"
+
+  File.open(output_path, "w") do |file|
+    references_map.keys.sort.each do |reference_id|
+      file.puts(reference_id)
+    end
+  end
+rescue => e
+  echoln("Failed to write reference map to #{output_path}: #{e.message}")
+end
 
 def format_reference_for_menu(references_map, key)
   return nil unless references_map && references_map.key?(key)
