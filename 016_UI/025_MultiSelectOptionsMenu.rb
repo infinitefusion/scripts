@@ -310,10 +310,11 @@ class MultiSelectOptionsScene
           item = @filteredItems[index - itemStartIndex]
           if @selected_items.include?(item)
             @selected_items.delete(item)
+            pbSEPlay("GUI naming tab swap end")
           else
             @selected_items << item
+            pbSEPlay("GUI naming confirm")
           end
-          pbSEPlay("GUI naming confirm")
           refreshList
           focusLatestSelected
         end
