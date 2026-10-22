@@ -284,33 +284,37 @@ class PokemonDataBox < SpriteWrapper
     refreshExp
   end
 
-  def drawTypeIcons(imagePos, x_position, first_icon_y_position)
+  def drawTypeIcons(imagePos, x_position, first_icon_y_position, wrap_direction)
     return if @battler.is_a?(PokeBattle_FakeBattler)
-    type_battler = @battler.effects[PBEffects::Illusion] || @battler
-    type1_number = GameData::Type.get(type_battler.type1).id_number
-    type2_number = GameData::Type.get(type_battler.type2).id_number
+
     vertical_margin = 2
     iconHeight = 19
-    x_offset = 0
     types_icon_path = "Graphics/Pictures/Battle/typesSmall"
+    y_position = first_icon_y_position
+    x_offset = 0
 
-    icon_rows = [[type1_number, first_icon_y_position]]
-    if type1_number != type2_number
-      icon_rows.push([type2_number, first_icon_y_position + vertical_margin + iconHeight])
-    end
-
-    icon_rows.each do |type_number, y_position|
+    illusion = @battler.effects[PBEffects::Illusion]
+    types = illusion ? [ illusion.type1, illusion.type2 ] : @battler.pbTypes(true)
+    types.uniq.each { |type|
+      type_number = GameData::Type.get(type).id_number
+      type_y_offset = type_number * iconHeight
       imagePos.push([types_icon_path, x_position, y_position,
-                     x_offset, type_number * iconHeight, -1, iconHeight])
-    end
+                     x_offset, type_y_offset, -1, iconHeight])
+
+      y_position += vertical_margin + iconHeight
+      if y_position + iconHeight > self.bitmap.height
+        y_position = first_icon_y_position
+        x_position += (vertical_margin + iconHeight) * wrap_direction
+      end
+    }
   end
 
   def drawEnemyTypeIcons(imagePos)
-    drawTypeIcons(imagePos, @spriteBaseX + 210, 16)
+    drawTypeIcons(imagePos, @spriteBaseX + 210, 16, 1)
   end
 
   def drawPlayerTypeIcons(imagePos)
-    drawTypeIcons(imagePos, @spriteBaseX -20, 16)
+    drawTypeIcons(imagePos, @spriteBaseX -20, 16, -1)
   end
 
   def refreshHP
