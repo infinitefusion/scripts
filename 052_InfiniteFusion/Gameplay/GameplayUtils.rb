@@ -369,6 +369,23 @@ def last_map_position_smell_npc
     pbMessage(_INTL("Ah, the smell of home!"))
   end
 end
+#
+DIRECTION_ARROWS = {
+  left:  "←",
+  right: "→",
+  down:  "↓",
+  up:    "↑"
+}
+def direction_sign(**directions)
+  lines = []
+  directions.each do |key, label|
+    arrow = DIRECTION_ARROWS[key]
+    next if arrow.nil? || label.nil?
+    lines << "#{arrow} #{label}"
+  end
+  pbMessage(lines.join("\n"))
+end
+
 
 # map = $MapFactory.getMap($game_map.map_id)
 #
