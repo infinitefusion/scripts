@@ -1,6 +1,12 @@
 class MultiSelectOptionsScene
   attr_reader :selected_items
   attr_reader :canceled
+
+  SWITCH_FOCUS_BUTTONS = [Input::L, Input::R]
+  CURSOR_X_OFFSET = -4
+  ARROW_NORMAL = "Graphics/Pictures/selarrow"
+  ARROW_ACTIVE = "Graphics/Pictures/selarrow_red"
+
   def initialize(items, preselected = [], title = "Select options",
                  item_name_proc = nil, filter_placeholder = "Shift to search",
                  item_weight_proc = nil)
@@ -8,6 +14,8 @@ class MultiSelectOptionsScene
     @item_name_proc = item_name_proc || proc { |item| item.to_s }
     @item_weight_proc = item_weight_proc || proc { |_item| 1 }
     @selected_items = preselected.dup
+    @selected_display_items = []
+    @focus = :full # :full or :selected
 
     @title_text = title
     @filter_placeholder = filter_placeholder
@@ -44,10 +52,6 @@ class MultiSelectOptionsScene
     @sprites["option"].active = true
     pbSetSystemFont(@sprites["option"].contents)
 
-    @sprites["cursor"] = IconSprite.new(0, 0, @viewport)
-    @sprites["cursor"].setBitmap("Graphics/Pictures/selarrow")
-    @sprites["cursor"].z = 99999
-
     # Right-side panel: selected items + running total
     @sprites["selected_title"] = Window_UnformattedTextPokemon.newWithSize(
       "", right_x, window_y + title_height, right_width, filter_height, @viewport)
@@ -57,42 +61,111 @@ class MultiSelectOptionsScene
       right_width, Graphics.height - (window_y + title_height + filter_height),
       @viewport
     )
+    @sprites["selected_list"].active = false
+    @sprites["selected_list"].index = 0
+
+    @arrow_paths = {}
+    @sprites["cursor"] = IconSprite.new(0, 0, @viewport)
+    @sprites["cursor"].setBitmap(ARROW_ACTIVE)
+    @arrow_paths[@sprites["cursor"]] = ARROW_ACTIVE
+    @sprites["cursor"].z = 99999
+
+    @sprites["cursor2"] = IconSprite.new(0, 0, @viewport)
+    @sprites["cursor2"].setBitmap(ARROW_NORMAL)
+    @arrow_paths[@sprites["cursor2"]] = ARROW_NORMAL
+    @sprites["cursor2"].z = 99999
 
     @filterText    = ""
     @filteredItems = []
     refreshList
   end
 
-  CURSOR_X_OFFSET = -4
+  # ---------------------------------------------------------------- cursors
 
   def updateCursorPosition
-    win = @sprites["option"]
-    rect = win.itemRect(win.index)
-    return if rect.width == 0 && rect.height == 0 # index out of visible range
+    positionArrow(@sprites["cursor"], @sprites["option"], @focus == :full)
+    positionArrow(@sprites["cursor2"], @sprites["selected_list"], @focus == :selected)
+    @sprites["cursor2"].visible = false if @selected_items.empty?
+  end
 
-    arrow_height = @sprites["cursor"].bitmap ? @sprites["cursor"].bitmap.height : 0
+  def positionArrow(arrow, win, focused)
+    rect = win.itemRect(win.index)
+    if rect.width == 0 && rect.height == 0 # index out of visible range
+      arrow.visible = false
+      return
+    end
+
+    # Red arrow for the active list, normal arrow for the other
+    path = focused ? ARROW_ACTIVE : ARROW_NORMAL
+    if @arrow_paths[arrow] != path
+      arrow.setBitmap(path)
+      @arrow_paths[arrow] = path
+    end
+
+    arrow_height = arrow.bitmap ? arrow.bitmap.height : 0
     y_center_offset = (win.rowHeight - arrow_height) / 2
 
-    @sprites["cursor"].x = win.x + win.startX + rect.x + CURSOR_X_OFFSET
-    @sprites["cursor"].y = win.y + win.startY + rect.y + y_center_offset
-    @sprites["cursor"].visible = true
+    arrow.x = win.x + win.startX + rect.x + CURSOR_X_OFFSET
+    arrow.y = win.y + win.startY + rect.y + y_center_offset
+    arrow.opacity = focused ? 255 : 110
+    arrow.visible = true
   end
 
-  def cancelIndex
-    return 0
+  # ---------------------------------------------------------------- focus
+
+  def setFocus(focus)
+    focus = :full if focus == :selected && @selected_items.empty?
+    @focus = focus
+    @sprites["option"].active        = (@focus == :full)
+    @sprites["selected_list"].active = (@focus == :selected)
+    syncFullListToSelected if @focus == :selected
+    updateCursorPosition
   end
 
-  def selectAllIndex
-    return 1
+  def toggleFocus
+    pbSEPlay("GUI naming tab swap start")
+    setFocus(@focus == :full ? :selected : :full)
   end
 
-  def confirmIndex
-    return 2
+  def focusLatestSelected
+    @sprites["selected_list"].index = 0
+    updateCursorPosition
   end
 
-  def itemStartIndex
-    return 3
+  def syncFullListToSelected
+    item = @selected_display_items[@sprites["selected_list"].index]
+    return if item.nil?
+    idx = @filteredItems.index(item)
+    return if idx.nil? # item is hidden by the current search filter
+    @sprites["option"].index = itemStartIndex + idx
+    updateCursorPosition
   end
+
+  def removeFromSelected(list_index)
+    item = @selected_display_items[list_index]
+    return if item.nil?
+    @selected_items.delete(item)
+    pbSEPlay("GUI naming tab swap end")
+    keep_index = @sprites["selected_list"].index
+    refreshList
+
+    max_index = [@selected_items.length - 1, 0].max
+    @sprites["selected_list"].index = [keep_index, max_index].min
+
+    setFocus(:full)
+    idx = @filteredItems.index(item)
+    @sprites["option"].index = itemStartIndex + idx if idx
+    updateCursorPosition
+  end
+
+  # ---------------------------------------------------------------- indices
+
+  def cancelIndex;    return 0; end
+  def selectAllIndex; return 1; end
+  def confirmIndex;   return 2; end
+  def itemStartIndex; return 3; end
+
+  # ---------------------------------------------------------------- refresh
 
   def refreshList
     filtered = @filterText.empty? ? @items.dup : @items.select { |i|
@@ -128,16 +201,21 @@ class MultiSelectOptionsScene
     @sprites["option"].refresh
 
     @sprites["filter"].text = @filterText.empty? ? @filter_placeholder : @filterText
-    updateCursorPosition
     refreshSelectedPanel
+    updateCursorPosition
   end
 
   def refreshSelectedPanel
     total_weight = @selected_items.sum { |i| @item_weight_proc.call(i) }
     @sprites["selected_title"].text = _INTL("{1} selected sprites", total_weight)
-    lines = @selected_items.reverse.map { |i| @item_name_proc.call(i) }
+
+    @selected_display_items = @selected_items.reverse
+    lines = @selected_display_items.map { |i| @item_name_proc.call(i) }
     lines = [_INTL("")] if lines.empty?
+
+    old_index = @sprites["selected_list"].index || 0
     @sprites["selected_list"].commands = lines
+    @sprites["selected_list"].index = [old_index, lines.length - 1].min
     @sprites["selected_list"].refresh
   end
 
@@ -145,24 +223,51 @@ class MultiSelectOptionsScene
     pbUpdateSpriteHash(@sprites)
   end
 
+  # ---------------------------------------------------------------- main loop
+
   def pbOptions
     loop do
       Graphics.update
       Input.update
-      old_index = @sprites["option"].index
-      @sprites["option"].update
-      updateCursorPosition if @sprites["option"].index != old_index
+
+      if SWITCH_FOCUS_BUTTONS.any? { |b| Input.trigger?(b) }
+        toggleFocus
+        next
+      end
 
       if Input.trigger?(Input::ACTION)
         pbStartSearchEntry
         next
       end
 
+      if Input.trigger?(Input::BACK)
+        @canceled = true
+        break
+      end
+
+      if @focus == :selected
+        old_index = @sprites["selected_list"].index
+        @sprites["selected_list"].update
+        syncFullListToSelected if @sprites["selected_list"].index != old_index
+        updateCursorPosition
+
+        if Input.trigger?(Input::USE)
+          removeFromSelected(@sprites["selected_list"].index)
+        end
+        next
+      end
+
+      # ---- full list focused ----
+      old_index = @sprites["option"].index
+      @sprites["option"].update
+      updateCursorPosition if @sprites["option"].index != old_index
+
       if Input.repeat?(Input::RIGHT)
         pbSEPlay("GUI party switch")
         scroll_amount = 8
-        if @sprites["option"].index + scroll_amount >= @items.length
-          @sprites["option"].index = @items.length
+        last = @sprites["option"].itemCount - 1
+        if @sprites["option"].index + scroll_amount >= last
+          @sprites["option"].index = last
         else
           @sprites["option"].index += scroll_amount
         end
@@ -172,7 +277,6 @@ class MultiSelectOptionsScene
 
       if Input.repeat?(Input::LEFT)
         pbSEPlay("GUI party switch")
-
         scroll_amount = -8
         if @sprites["option"].index + scroll_amount <= 0
           scrollToConfirm
@@ -182,10 +286,7 @@ class MultiSelectOptionsScene
         next
       end
 
-      if Input.trigger?(Input::BACK)
-        @canceled = true
-        break
-      elsif Input.trigger?(Input::USE)
+      if Input.trigger?(Input::USE)
         index = @sprites["option"].index
 
         if index == cancelIndex
@@ -202,6 +303,7 @@ class MultiSelectOptionsScene
           end
           pbSEPlay("GUI naming confirm")
           refreshList
+          focusLatestSelected
         elsif index == confirmIndex
           break
         else
@@ -213,6 +315,7 @@ class MultiSelectOptionsScene
           end
           pbSEPlay("GUI naming confirm")
           refreshList
+          focusLatestSelected
         end
       end
     end
@@ -241,6 +344,7 @@ class MultiSelectOptionsScene
     if query
       @filterText = query
       refreshList
+      syncFullListToSelected if @focus == :selected
     end
   end
 
