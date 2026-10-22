@@ -35,11 +35,13 @@ class RandomizerOptionsScene < PokemonOption_Scene
     new_wild_pokemon_options = recordCurrentWildPokemonOptions
     new_trainer_options = recordCurrentTrainerOptions
 
-    if new_wild_pokemon_options != @old_wild_pokemon_options
+    wild_pokemon_on = $game_switches[SWITCH_RANDOM_WILD]
+    trainers_on = $game_switches[SWITCH_RANDOM_TRAINERS]
+    if wild_pokemon_on && new_wild_pokemon_options != @old_wild_pokemon_options
       $PokemonTemp.should_reshuffle_pokemon = true
     end
 
-    if new_trainer_options != @old_trainer_options
+    if trainers_on && new_trainer_options != @old_trainer_options
       $PokemonTemp.should_reshuffle_pokemon = true
     end
   end
