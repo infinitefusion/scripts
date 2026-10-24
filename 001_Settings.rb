@@ -594,15 +594,17 @@ module Settings
   # from.
   LANGUAGES = {
     :IF_KANTO => [
-      ["English", "english.dat"],
-      ["Français", "french.dat"],
-      ["中文", "chinese.dat"]
+      ["English", "english.dat", :ENGLISH],
+      ["Français", "french.dat", :FRENCH],
+      ["Français (Québec)", "french.dat", :FRENCH_QC],
+      ["中文", "chinese.dat", :CHINESE]
     ],
     :IF_HOENN => [
-      ["English", "english.dat"],
-      ["Français", "french.dat"],
-      #["Español", "spanish.dat"],
-      ["中文", "chinese.dat"]
+      ["English", "english.dat", :ENGLISH],
+      ["Français", "french.dat",:FRENCH],
+      ["Français (Québec)", "french.dat", :FRENCH_QC],
+      #["Español", "spanish.dat", :SPANISH],
+      ["中文", "chinese.dat", :CHINESE]
     ]
   }
 

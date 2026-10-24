@@ -285,7 +285,7 @@ module GameData
 
     def get_split_names
       case getCurrentLanguage
-      when :ENGLISH
+      when :ENGLISH, :FRENCH_CANADA
         return GameData::SPLIT_NAMES
       when :FRENCH
         return GameData::SPLIT_NAMES_FRENCH
