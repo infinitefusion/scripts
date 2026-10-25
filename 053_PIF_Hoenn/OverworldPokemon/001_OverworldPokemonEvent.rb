@@ -268,12 +268,13 @@ class OverworldPokemonEvent < Game_Event
   def get_current_state
     return @current_state
   end
-
+  def is_eating?
+    return  @noticed_pokemon_behavior == :eat_pokeblock
+  end
   ####
   # ACTIONS
   # ###
   def overworldPokemonBattle()
-    return if $PokemonTemp.overworld_safari
     return if lock?
     return if $PokemonTemp.prevent_ow_battles
     return if instance_variable_get(:@_triggered)
@@ -293,7 +294,7 @@ class OverworldPokemonEvent < Game_Event
     return
   end
 
-  def flee(behavior)
+  def flee(behavior=nil)
     return if @pokemon.shiny?
     playCry(@species)
     pbSEPlay(SE_FLEE)
@@ -383,6 +384,8 @@ class OverworldPokemonEvent < Game_Event
         if isRepelActive && pokemon_can_be_repelled
           playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
           flee(@behavior_noticed)
+        elsif $PokemonTemp.overworld_safari
+              flee() unless is_eating?
         else
           overworldPokemonBattle
         end

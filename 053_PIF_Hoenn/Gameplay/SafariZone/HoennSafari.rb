@@ -18,6 +18,8 @@ end
 class SafariState
   attr_accessor :caught_pokemon
   attr_accessor :area_types
+  attr_accessor :area_unlock_methods
+
 end
 
 def initialize_safari
@@ -26,18 +28,116 @@ def initialize_safari
   pbSafariState.ballcount = 18
   updateSafariBallDisplay()
   pbSafariState.area_types= initialize_area_types
+  pbSafariState.area_unlock_methods= initialize_unlock_methods
+
 end
 
-#hardcoded for now but would be cool if dynamic for some variety
 def initialize_area_types
   return {
-    :lakeland => [:WATER,3],
-    :wetland => [:BUG,2],
-    :badland => [:PSYCHIC,4],
-    :grassland => [:GRASS,4],
-    :woodland => [nil,12],
-    :badlands => [:PSYCHIC,4],
+    :wetland => [
+      [:different_species,:BUG,2],
+      [:same_species,nil,3],
+    ],
+    :lakeland => [[:different_species,:WATER,3]],
+    :badland => [[:different_species,:PSYCHIC,4]],
+    :grassland => [[:different_species,:GRASS,4]],
+    :woodland => [[:different_species,nil,12]],
+    :mountains => [[:different_species,:PSYCHIC,4]],
   }
+end
+
+def initialize_unlock_methods
+  unlock_methods = {}
+  pbSafariState.area_types.each do |type, methods|
+    chosen_method = rand(methods.size)
+    unlock_methods[type] = chosen_method
+  end
+  echoln unlock_methods
+  return unlock_methods
+end
+
+def get_area_name(area_id)
+  case area_id
+  when :lakeland
+    return _INTL("Lake Zone")
+  when :wetland
+    return _INTL("Wetland Zone")
+  when :badland
+    return _INTL("Badland Zone")
+  when :grassland
+    return _INTL("Grassland Zone")
+  when :woodland
+    return _INTL("Woodland Zone")
+  when :mountains
+    return _INTL("Mountains Zone")
+  end
+
+end
+
+# Returns how many catches count toward the requirement.
+#   :different_species => number of distinct species (optionally only of the given type)
+#   :same_species      => highest number of catches of any single species (optionally only of the given type)
+def count_safari_caught(method_type, type = nil)
+  caught = pbSafariState.caught_pokemon || []
+  caught = caught.select { |s| GameData::Species.get(s).hasType?(type) } if type
+
+  case method_type
+  when :same_species
+    return caught.group_by { |species| species }.values.map(&:size).max || 0
+  else # :different_species
+    return caught.uniq.size
+  end
+end
+
+def safari_requirement_text(method_type, type_id, nb_to_catch)
+  type_name = type_id ? GameData::Type.get(type_id).name : nil
+
+  case method_type
+  when :different_species
+    if type_name
+      return _INTL("I can only let you through if you've caught at least \\C[1]{1}\\C[0] different \\C[1]{2}-type\\C[0] Pokémon on this Safari.", nb_to_catch, type_name)
+    else
+      return _INTL("I can only let you through if you've caught at least \\C[1]{1}\\C[0] different species of Pokémon on this Safari.", nb_to_catch)
+    end
+  when :same_species
+    if type_name
+      return _INTL("I can only let you through if you've caught at least \\C[1]{1}\\C[0] \\C[1]{2}-type\\C[0] Pokémon of the same species on this Safari.", nb_to_catch, type_name)
+    else
+      return _INTL("I can only let you through if you've caught at least \\C[1]{1}\\C[0] Pokémon of the same species on this Safari.", nb_to_catch)
+    end
+  end
+end
+
+def safariNewAreaCheck(area_id)
+  area_name = get_area_name(area_id)
+
+  unlock_methods = pbSafariState.area_types[area_id]
+  unlock_method  = unlock_methods[pbSafariState.area_unlock_methods[area_id]]
+  method_type, type_id, nb_to_catch = unlock_method
+
+  pbCallBub(2, @event_id)
+  pbMessage(_INTL("Halt! This way is the \\C[1]{1}\\C[0].", area_name))
+  pbCallBub(2, @event_id)
+  pbMessage(safari_requirement_text(method_type, type_id, nb_to_catch))
+
+  icons = displayCaughtPokemonIcons
+  pbWait(40)
+  icons.dispose
+
+  nb_caught = count_safari_caught(method_type, type_id)
+  if nb_caught >= nb_to_catch
+    pbSEPlay("GUI naming confirm")
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Yes! You've met the requirement. Go right ahead!"))
+    return true
+  else
+    pbSEPlay("GUI sel buzzer")
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("Oh, no! You've only got {1} so far... That's not enough!", nb_caught))
+    pbCallBub(2, @event_id)
+    pbMessage(_INTL("You need to catch more Pokémon before I can let you through!"))
+    return false
+  end
 end
 
 def updateSafariBallDisplay()
@@ -127,22 +227,7 @@ class Trainer
 end
 def record_safari_catch(pokemon)
   pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
-  pbSafariState.caught_pokemon << pokemon.species unless pbSafariState.caught_pokemon.include?(pokemon.species)
-end
-
-def count_safari_caught(type=nil,result_var=1)
-  count = 0
-  pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
-  pbSafariState.caught_pokemon.each do |species_id|
-    species = GameData::Species.get(species_id)
-    if type
-      count += 1 if species.hasType?(type)
-    else
-      count += 1
-    end
-  end
-  pbSet(result_var,count)
-  return count
+  pbSafariState.caught_pokemon << pokemon.species# unless pbSafariState.caught_pokemon.include?(pokemon.species)
 end
 
 

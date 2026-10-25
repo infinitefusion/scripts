@@ -181,7 +181,7 @@ class OverworldPokemonEvent < Game_Event
     effectiveness = Effectiveness.calculate(attack_type, @target.pokemon.type1, @target.pokemon.type2) / 8.0
 
     hp_chunk = (hp_chunk * effectiveness).floor
-    echoln "#{attack_type} on #{@target.pokemon.type1}, #{@target.pokemon.type2} : x#{effectiveness}"
+    #echoln "#{attack_type} on #{@target.pokemon.type1}, #{@target.pokemon.type2} : x#{effectiveness}"
 
     @target.pokemon.hp -= hp_chunk
     flash_white(@target)
