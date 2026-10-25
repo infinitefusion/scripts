@@ -9,6 +9,7 @@ class SafariState
     @inProgress = false
     @steps      = 0
     @decision   = 0
+    @caught_pokemon = []
   end
 
   def pbReceptionMap

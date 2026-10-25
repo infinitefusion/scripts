@@ -15,11 +15,29 @@ class PokemonTemp
 
 end
 
+class SafariState
+  attr_accessor :caught_pokemon
+  attr_accessor :area_types
+end
+
 def initialize_safari
   pbSafariState
   $PokemonTemp.overworld_safari = true
   pbSafariState.ballcount = 18
   updateSafariBallDisplay()
+  pbSafariState.area_types= initialize_area_types
+end
+
+#hardcoded for now but would be cool if dynamic for some variety
+def initialize_area_types
+  return {
+    :lakeland => [:WATER,3],
+    :wetland => [:BUG,2],
+    :badland => [:PSYCHIC,4],
+    :grassland => [:GRASS,4],
+    :woodland => [nil,12],
+    :badlands => [:PSYCHIC,4],
+  }
 end
 
 def updateSafariBallDisplay()
@@ -103,6 +121,31 @@ def safari_ball_check_collision(ball_event)
   end
 end
 
+
+class Trainer
+  attr_accessor :safari_caught
+end
+def record_safari_catch(pokemon)
+  pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
+  pbSafariState.caught_pokemon << pokemon.species unless pbSafariState.caught_pokemon.include?(pokemon.species)
+end
+
+def count_safari_caught(type=nil,result_var=1)
+  count = 0
+  pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
+  pbSafariState.caught_pokemon.each do |species_id|
+    species = GameData::Species.get(species_id)
+    if type
+      count += 1 if species.hasType?(type)
+    else
+      count += 1
+    end
+  end
+  pbSet(result_var,count)
+  return count
+end
+
+
 ANIMATION_POKEBALL = 8
 def try_catch_safari_pokemon(pokemon_event)
   playAnimation(ANIMATION_POKEBALL, pokemon_event.x, pokemon_event.y)
@@ -137,6 +180,7 @@ def try_catch_safari_pokemon(pokemon_event)
       spritesLoader = BattleSpriteLoader.new
       pokemon.pif_sprite = spritesLoader.obtain_pif_sprite(pokemon.species)
       showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {1}!\\me[Pkmn get]\\wtnp[80]\1",pokemon.name))
+      record_safari_catch(pokemon)
       pbAddPokemonSilent(pokemon)
       pokemon_event.despawn
       return
