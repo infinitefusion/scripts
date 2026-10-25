@@ -16,7 +16,6 @@ class SafariCaughtIcons_UI < PokeRadar_UI
     @viewport.z = SAFARI_GRAPHICS_Z
     @sprites = {}
 
-    # Shrink row height if there are too many species to fit on screen
     available_height = Graphics.height - SAFARI_ICON_START_Y - SAFARI_ICON_BOTTOM
     row_margin = SAFARI_ICON_MARGIN_Y
     if counts.size > 0
