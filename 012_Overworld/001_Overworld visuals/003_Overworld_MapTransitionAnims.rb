@@ -96,7 +96,14 @@ def pbStartOver(gameover = false)
   if $game_switches[SWITCH_WALLY_CATCHING_POKEMON] || $game_switches[SWITCH_WALLY_GAVE_POKEMON]
     $game_switches[SWITCH_DIED_WITH_WALLY] = true
   end
-  $game_switches[SWITCH_RIVAL_ON_MT_CHIMNEY] = false
+  $game_switches[SWITCH_CANNOT_CATCH_POKEMON] = false
+
+  if Settings::HOENN
+    $game_switches[SWITCH_RIVAL_ON_MT_CHIMNEY] = false
+    $game_switches[SWITCH_WAILMER_EGGS_QUEST] = false
+    $game_variables[]
+  end
+
 
   pbBridgeOff
   $PokemonTemp.enteredSecretBaseController = nil
@@ -129,7 +136,6 @@ def pbStartOver(gameover = false)
     else
       pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]You scurry back to a Pokémon Center, protecting your exhausted Pokémon from any further harm..."))
     end
-    echoln "GASDHASGJHDASD"
     pbCancelVehicles
     pbRemoveDependencies
     $game_switches[Settings::STARTING_OVER_SWITCH] = true
