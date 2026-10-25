@@ -142,6 +142,9 @@ HAT_CLOWN = "clownnose"
 HAT_WHITE_HAND = "whitehand"
 HAT_COFFEE = "cupofcoffee"
 
+HAT_GOGOGGLES = "gogoggles"
+
+
 HAT_BREEDER_1 = "breedervisor"
 HAT_BREEDER_2 = "breederbandana"
 HAT_BREEDER_2_2 = "PKMBreeder"
