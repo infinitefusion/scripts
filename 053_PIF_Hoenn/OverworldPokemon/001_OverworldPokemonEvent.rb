@@ -115,7 +115,7 @@ class OverworldPokemonEvent < Game_Event
       return
     end
 
-    @glow_in_the_dark = POKEMON_BEHAVIOR_DATA[@species][:glow_in_the_dark]
+    @glow_in_the_dark = POKEMON_BEHAVIOR_DATA[@behavior_species][:glow_in_the_dark]
     if @glow_in_the_dark
       @light_effect = LightEffect_PokemonGlow.new(self)
       $scene.spriteset.addUserSprite(@light_effect)
@@ -570,7 +570,7 @@ class OverworldPokemonEvent < Game_Event
 
     effective_behavior = @behavior_noticed || @behavior_roaming # fallback on @behavior_roaming if no @behavior_noticed
     if @current_state == :NOTICED_PLAYER && @pack_size && @pack_size >= 3
-      pack_behavior = POKEMON_BEHAVIOR_DATA[@species][:pack_behavior_noticed]
+      pack_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:pack_behavior_noticed]
       effective_behavior = pack_behavior if pack_behavior
     end
 
@@ -609,7 +609,7 @@ class OverworldPokemonEvent < Game_Event
 
     effective_behavior = @behavior_roaming
     if @current_state == :ROAMING && @pack_size && @pack_size >= 3
-      pack_behavior = POKEMON_BEHAVIOR_DATA[@species][:pack_behavior_roaming]
+      pack_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:pack_behavior_roaming]
       effective_behavior = pack_behavior if pack_behavior
     end
 
@@ -630,17 +630,17 @@ class OverworldPokemonEvent < Game_Event
   def check_weather_roaming_behavior
     if @weather_type_at_spawn == :Wind || @weather_type_at_spawn == :Storm
       echoln @species
-      wind_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_wind_roaming]
+      wind_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_wind_roaming]
       if wind_behavior
         set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][wind_behavior])
       end
     elsif @weather_type_at_spawn == :Rain || @weather_type_at_spawn == :Storm
-      rain_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_rain_roaming]
+      rain_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_rain_roaming]
       if rain_behavior
         set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][rain_behavior])
       end
     elsif @weather_type_at_spawn == :Sunny
-      sun_behavior = POKEMON_BEHAVIOR_DATA[@species][:behavior_sunny_roaming]
+      sun_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_sunny_roaming]
       if sun_behavior
         set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][sun_behavior])
       end
