@@ -153,7 +153,7 @@ class Scene_Map
     sscreen = PokemonPauseMenu.new(sscene)
     sscreen.pbStartPokemonMenu
     $game_temp.in_menu = false
-    caught_pokemon_icons.dispose
+    caught_pokemon_icons.dispose if $PokemonTemp.overworld_safari
   end
 
   def call_debug

@@ -343,7 +343,21 @@ end
 #Don't use cache past this point
 CUSTOM_LIST_THRESHOLD = 5000
 
-def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPlaceholder, includeLegendaries, same_egg_group, bst_cache, egg_group_cache, legendary_cache, fallback_cache)
+
+def new_bst_cache
+  Hash.new { |h, sp| h[sp] = calcBaseStatsSum(sp) }
+end
+
+def new_egg_group_cache
+  Hash.new { |h, sp| h[sp] = Array(GameData::Species.get(sp).egg_groups) }
+end
+
+def new_legendary_cache
+  Hash.new { |h, sp| h[sp] = is_legendary_num(sp) }
+end
+
+def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPlaceholder, includeLegendaries, same_egg_group,
+                        bst_cache = nil, egg_group_cache = nil, legendary_cache = nil, fallback_cache = nil)
   if $game_switches[SWITCH_LEGENDARY_MODE]
     return dexNum(convert_species_to_legendary(oldSpecies))
   end
@@ -351,6 +365,12 @@ def getNewCustomSpecies(oldSpecies, customSpeciesList, bst_range, ignoreRivalPla
   oldSpecies_dex = dexNum(oldSpecies)
   return oldSpecies_dex if (oldSpecies_dex == Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES && !ignoreRivalPlaceholder)
   return oldSpecies_dex if oldSpecies_dex >= Settings::ZAPMOLCUNO_NB
+
+  #when cache not passed as argument: initialize
+  bst_cache       ||= new_bst_cache
+  egg_group_cache ||= new_egg_group_cache
+  legendary_cache ||= new_legendary_cache
+  fallback_cache  ||= {}
 
   ok = lambda do |sp, range|
     !bstNotOk_cached(sp, oldSpecies_dex, range, bst_cache) &&
@@ -411,9 +431,9 @@ def Kernel.pbShuffleTrainers(bst_range = 50, customsOnly = false, customsList = 
   begin
     trainers_data = getTrainersDataMode.list_all
 
-    bst_cache       = Hash.new { |h, sp| h[sp] = calcBaseStatsSum(sp) }
-    egg_group_cache = Hash.new { |h, sp| h[sp] = Array(GameData::Species.get(sp).egg_groups) }
-    legendary_cache = Hash.new { |h, sp| h[sp] = is_legendary_num(sp) }
+    bst_cache       = new_bst_cache
+    egg_group_cache = new_egg_group_cache
+    legendary_cache = new_legendary_cache
     fallback_cache  = {}
 
     total = trainers_data.size
