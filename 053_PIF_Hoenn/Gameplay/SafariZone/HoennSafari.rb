@@ -166,7 +166,7 @@ def throw_ow_safari_ball
   return event
 end
 
-def use_safari_feeder(price)
+def use_safari_feeder(price, floating=false)
   if pbConfirmMessage(_INTL("\\GWould you like to use the Feeder for ${1}?",price))
     colors = [:red, :red, :red,
               :blue, :blue, :blue,
@@ -186,6 +186,11 @@ def use_safari_feeder(price)
                                                [feeder_event.x,feeder_event.y],
                                                $game_player.direction,
                                                PokeblockEvent, [color,12])
+      if floating
+        block_event.floating = true
+        block_event.forced_bush_depth = 8
+        block_event.calculate_bush_depth
+      end
       block_event.jump(*positions[i])
       i+=1
     end
@@ -329,7 +334,13 @@ end
 def placePokeblock()
   block = pbPokeblockCase(false)
   pbRemovePokeblock(block)
-
-  echoln block
   return block
+end
+
+def safari_ball_pile(min_nb, max_nb)
+  nb = rand(min_nb...max_nb)
+  pbSafariState.ballcount+=nb
+  pbMEPlay("Item get")
+  pbMessage(_INTL("{1} found {1}\\C[1]Safari Balls\\C[0]!", $game_player.name, nb))
+  updateSafariBallDisplay()
 end
