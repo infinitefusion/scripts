@@ -35,11 +35,10 @@ end
 def initialize_area_types
   return {
     :wetland => [
-      [:different_species,:BUG,2],
       [:same_species,nil,3],
     ],
-    :lakeland => [[:different_species,:WATER,3]],
-    :badland => [[:different_species,:PSYCHIC,4]],
+    :lakeland => [[:different_species,:WATER,5]],
+    :badland => [[:different_species,:ELECTRIC,4]],
     :grassland => [[:different_species,:GRASS,4]],
     :woodland => [[:different_species,nil,12]],
     :mountains => [[:different_species,:PSYCHIC,4]],
@@ -341,6 +340,6 @@ def safari_ball_pile(min_nb, max_nb)
   nb = rand(min_nb...max_nb)
   pbSafariState.ballcount+=nb
   pbMEPlay("Item get")
-  pbMessage(_INTL("{1} found {1}\\C[1]Safari Balls\\C[0]!", $game_player.name, nb))
+  pbMessage(_INTL("{1} found {2} \\C[1]Safari Balls\\C[0]!", $Trainer.name, nb))
   updateSafariBallDisplay()
 end

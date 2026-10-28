@@ -403,7 +403,7 @@ end
 def getTerrainType
   encounter_type = $PokemonEncounters.encounter_type
   case encounter_type
-  when :Land, :Land1, :Land2, :Land3, :LandMorning, :LandDay, :LandNight, :TallGrass, :TallGrassNight
+  when :Land, :Land1, :Land2, :Land3, :Land4, :LandMorning, :LandDay, :LandNight, :TallGrass, :TallGrassNight
     return :Grass
   else
     return encounter_type

@@ -4,7 +4,7 @@ def select_randomizer_references(minimum_allowed = nil)
 
 
   non_ref_list = getNonReferenceSprites(nil, references_map)
-  references_map["No reference"] = non_ref_list
+  references_map["Include non-reference"] = non_ref_list
   references_list = references_map.keys.sort_by { |k| [-references_map[k].length, k] }.map do |key|
     label = format_reference_for_menu(references_map,key)
     label_to_key[label] = key
