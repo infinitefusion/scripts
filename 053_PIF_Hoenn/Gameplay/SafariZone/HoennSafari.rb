@@ -10,9 +10,10 @@
 TEMPLATE_EVENT_SAFARI_BALL = 15
 TEMPLATE_EVENT_POKEBLOCK = 16
 
+HOENN_SAFARI_MAPS = [MAP_SAFARI_1,MAP_SAFARI_2,MAP_SAFARI_3,MAP_SAFARI_4,MAP_SAFARI_5,MAP_SAFARI_6]
+
 class PokemonTemp
   attr_accessor :overworld_safari
-
 end
 
 class SafariState

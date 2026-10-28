@@ -70,7 +70,8 @@ def pbInSafari?
 end
 
 def is_hardcoded_safari_map(map_id)
-  safari_maps = [445,74,484,75,485,82,486,107,487,715,718,488,717]
+  safari_maps = [445,74,484,75,485,82,486,107,487,715,718,488,717] if Settings::KANTO
+  safari_maps = HOENN_SAFARI_MAPS if Settings::HOENN
   return safari_maps.include?(map_id)
 end
 
