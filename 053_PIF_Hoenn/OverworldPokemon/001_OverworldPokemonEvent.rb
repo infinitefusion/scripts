@@ -348,7 +348,8 @@ class OverworldPokemonEvent < Game_Event
 
   def playDetectAnimation(behavior_noticed = @behavior_noticed, play_sound = true)
     return unless @current_state == :ROAMING
-    return unless noticed_state_different_from_roaming()
+    return unless @behavior_noticed
+    #return unless noticed_state_different_from_roaming()
 
     if behavior_noticed == :curious
       pbSEPlay("Exclaim") if play_sound
@@ -465,17 +466,17 @@ class OverworldPokemonEvent < Game_Event
     when :ROAMING
       set_roaming_movement
     when :NOTICED_PLAYER
-      set_noticed_movement
+      set_noticed_movement if @behavior_noticed
     end
     set_sprite_to_current_state
   end
 
-  def check_detect_trainer
-    return unless noticed_state_different_from_roaming()
-    return if $game_system.map_interpreter.running? || @starting
-    # return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
-    return pbPlayerInEventCone?(self, $game_player, @detection_radius)
-  end
+  # def check_detect_trainer
+  #   return unless noticed_state_different_from_roaming()
+  #   return if $game_system.map_interpreter.running? || @starting
+  #   # return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
+  #   return pbPlayerInEventCone?(self, $game_player, @detection_radius)
+  # end
 
   def pbCheckEventTriggerAfterTurning
     return if $game_system.map_interpreter.running? || @starting

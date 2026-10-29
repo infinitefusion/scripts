@@ -377,7 +377,7 @@ class OverworldPokemonEvent < Game_Event
 
 
   def check_detect_trainer
-    return unless noticed_state_different_from_roaming()
+    #return unless noticed_state_different_from_roaming()
     return if $game_system.map_interpreter.running? || @starting
     return pbPlayerInEventCone?($game_player, @detection_radius)
   end
