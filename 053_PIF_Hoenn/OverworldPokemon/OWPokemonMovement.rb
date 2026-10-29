@@ -106,6 +106,22 @@ class OverworldPokemonEvent
     end
   end
 
+  def update_notice_icon
+    if @current_state == :NOTICED_PLAYER && @opacity > 0
+      if !@notice_icon || @notice_icon.disposed?
+        @notice_icon = OverworldNoticeIcon.new(self, @behavior_noticed)
+      end
+      @notice_icon.update
+    else
+      dispose_notice_icon
+    end
+  end
+
+  def dispose_notice_icon
+    @notice_icon.dispose if @notice_icon && !@notice_icon.disposed?
+    @notice_icon = nil
+  end
+
   # def move_type_shy(next_movement_ready = false)
   #   if next_movement_ready
   #     move_type_away_from_player

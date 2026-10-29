@@ -657,6 +657,7 @@ class OverworldPokemonEvent < Game_Event
 
   def despawn
     @light_effect&.dispose
+    dispose_notice_icon
     erase
     $game_map.events.delete(@id)
     $PokemonTemp.overworld_pokemon_on_map&.delete(@id)
@@ -689,6 +690,7 @@ class OverworldPokemonEvent < Game_Event
   def update
     super
     update_idle_animation
+    update_notice_icon if $PokemonTemp.overworld_safari
     if $game_temp.message_window_showing
       pause_movement unless @current_state == :PAUSED
     else
@@ -708,7 +710,7 @@ class OverworldPokemonEvent < Game_Event
   def marshal_dump
     ivars = {}
     instance_variables.each do |var|
-      next if var == :@light_effect
+      next if var == :@light_effect || var == :@notice_icon
       ivars[var] = instance_variable_get(var)
     end
     return ivars
@@ -717,6 +719,7 @@ class OverworldPokemonEvent < Game_Event
   def marshal_load(ivars)
     ivars.each { |var, val| instance_variable_set(var, val) }
     @light_effect = nil
+    @notice_icon = nil
   end
 
 end

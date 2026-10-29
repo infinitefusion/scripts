@@ -40,9 +40,9 @@ def initialize_area_types
     ],
     :lakeland => [[:different_species,:WATER,5]],
     :badland => [[:different_species,:ELECTRIC,4]],
-    :grassland => [[:different_species,:GRASS,4]],
+    :grassland => [[:different_species,:FLYING,5]],
     :woodland => [[:different_species,nil,12]],
-    :mountains => [[:different_species,:PSYCHIC,4]],
+    :mountains => [[:different_species,:ELECTRIC,5]],
   }
 end
 
