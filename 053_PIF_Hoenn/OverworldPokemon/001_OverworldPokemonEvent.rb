@@ -377,7 +377,7 @@ class OverworldPokemonEvent < Game_Event
     distance = distance_from_player()
     is_near_player = distance <= @detection_radius
     if distance >= DISTANCE_FOR_DESPAWN
-      despawn unless @manual_ow_pokemon
+      despawn unless @manual_ow_pokemon || @pokemon.shiny?
     end
     if is_near_player
       if should_start_battle? # Battle
