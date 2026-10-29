@@ -10,6 +10,7 @@ MOVE_TYPE_TOWARDS_TARGET = 7
 MOVE_TYPE_AWAY_FROM_TARGET = 8
 MOVE_TYPE_SHY_FROM_TARGET = 9
 class OverworldPokemonEvent
+  attr_accessor :notice_icon
   # @stop_count : nb frames since last movement
 
   #wait until next frequency frame
@@ -107,7 +108,7 @@ class OverworldPokemonEvent
   end
 
   def update_notice_icon
-    if @current_state == :NOTICED_PLAYER && @opacity > 0
+    if @current_state == :NOTICED_PLAYER && @opacity > 0 && !@notice_icon_hidden
       if !@notice_icon || @notice_icon.disposed?
         @notice_icon = OverworldNoticeIcon.new(self, @behavior_noticed)
       end
@@ -116,36 +117,17 @@ class OverworldPokemonEvent
       dispose_notice_icon
     end
   end
+  def hide_notice_icon
+    @notice_icon_hidden = true
+    dispose_notice_icon
+  end
+
+  def show_notice_icon
+    @notice_icon_hidden = false
+  end
 
   def dispose_notice_icon
     @notice_icon.dispose if @notice_icon && !@notice_icon.disposed?
     @notice_icon = nil
   end
-
-  # def move_type_shy(next_movement_ready = false)
-  #   if next_movement_ready
-  #     move_type_away_from_player
-  #     turn_toward_player
-  #   end
-  # end
-
-
-  # def move_type_bounce_random(frames_since_last_movement, next_movement_ready = false)
-  #   echoln @stop_count
-  #   if next_movement_ready
-  #     case rand(6)
-  #     when 0..3 then
-  #       turn_random
-  #       jump_forward(1)
-  #     when 4 then
-  #       jump_forward(1)
-  #     when 5 then
-  #       wait
-  #     end
-  #   else
-  #     if @stop_count % 15 == 0
-  #       jump(0, 0, false)
-  #     end
-  #   end
-  # end
 end

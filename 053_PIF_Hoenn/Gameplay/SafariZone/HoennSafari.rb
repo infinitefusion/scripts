@@ -241,13 +241,14 @@ def try_catch_safari_pokemon(pokemon_event)
   playAnimation(ANIMATION_POKEBALL, pokemon_event.x, pokemon_event.y)
   initial_name = pokemon_event.character_name
   pokemon_event.character_name="safari_ball_throw"
+  pokemon_event.hide_notice_icon
   pokemon = pokemon_event.pokemon
   pokemon_event.lock
   pbWait(14)
 
   distance_from_player = pokemon_event.distance_from_player
   capture_rate = pokemon.species_data.catch_rate
-  distance_bonus = (5-distance_from_player)*10
+  distance_bonus = (4-distance_from_player)*20
   distance_bonus *= 2 unless pokemon_event.noticed_player_once
   capture_rate += distance_bonus
 
@@ -280,6 +281,7 @@ def try_catch_safari_pokemon(pokemon_event)
   end
   playAnimation(ANIMATION_POKEBALL, pokemon_event.x, pokemon_event.y)
   pokemon_event.character_name = initial_name
+  pokemon_event.show_notice_icon
   pokemon_event.unlock
 end
 

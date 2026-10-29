@@ -1,7 +1,7 @@
 class OverworldNoticeIcon < Sprite
   DEFAULT_PATH = "Graphics/Pictures/Overworld/notice_icon"
-  Y_OFFSET     = -12   # gap between the Pokemon's head and the icon
-  BOB_RANGE    = 1   # pixels of up/down bobbing (0 to disable)
+  Y_OFFSET     = -12
+  BOB_RANGE    = 1
 
   def initialize(event, behavior = nil)
     viewport = ($scene.spriteset.viewport1 rescue nil)
@@ -23,7 +23,6 @@ class OverworldNoticeIcon < Sprite
     return nil
   end
 
-  # The event's current sprite height (it can change when the noticed sprite is swapped in)
   def refresh_character_height
     return unless $scene.respond_to?(:spriteset) && $scene.spriteset
     spr = $scene.spriteset.character_sprites.find { |s| s.character == @event }
