@@ -218,11 +218,12 @@ def safari_ball_check_collision(ball_event)
       echoln "touched a Pokemon! #{colliding_event.name}"
       ball_event.despawn
       try_catch_safari_pokemon(colliding_event)
+      renew_overworld_pokemon(colliding_event.id)
     else
       pbSEPlay("MiningPick")
       echoln "touched something that's not a Pokemon! #{colliding_event.name}"
       ball_event.despawn
-    end
+    endc
   end
 end
 
