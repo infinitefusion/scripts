@@ -1,3 +1,11 @@
+class Trainer
+  attr_accessor :safari_record
+end
+
+class Game_Temp
+  attr_accessor :last_safari_stats
+end
+
 class SafariState
   attr_accessor :ballcount
   attr_accessor :decision
@@ -20,6 +28,10 @@ class SafariState
     return @inProgress
   end
 
+  def recordLastSafari
+    $game_temp.last_safari_stats = [@caught_pokemon, @steps]
+  end
+
   def pbGoToStart
     start_map = Settings::KANTO ? 472 : MAP_SAFARI_ENTRANCE
     start_x = Settings::KANTO ? 28 : 8
@@ -38,6 +50,7 @@ class SafariState
         $scene.transfer_player
       }
     end
+    pbSafariState.pbEnd
   end
 
   def pbStart(ballcount)
@@ -48,6 +61,7 @@ class SafariState
   end
 
   def pbEnd
+    recordLastSafari
     @start      = nil
     @ballcount  = 0
     @inProgress = false
@@ -59,7 +73,26 @@ class SafariState
   end
 end
 
+def tellLatestSafariStats(talking_event_id)
+  pbCallBub(2, talking_event_id)
+  pbMessage(_INTL("Welcome back! How was your Safari adventure?"))
 
+  return unless $game_temp.last_safari_stats
+  nb_caught = $game_temp.last_safari_stats[0].size
+  nb_steps = $game_temp.last_safari_stats[1].abs
+
+  pbCallBub(2, talking_event_id)
+  pbMessage(_INTL("You took \\C[1]{1}\\C[0] steps and caught \\C[1]{2}\\C[0] Pokémon!",nb_steps,nb_caught))
+  $Trainer.safari_record = 0 unless $Trainer.safari_record
+  if nb_caught > $Trainer.safari_record
+    pbCallBub(2, talking_event_id)
+    pbMessage(_INTL("Wow! That's a new personal record. Congratulations!"))
+    $Trainer.safari_record = nb_caught
+  else
+    pbCallBub(2, talking_event_id)
+    pbMessage(_INTL("I hope you had a lot of fun!"))
+  end
+end
 
 Events.onMapChange += proc { |_sender,*args|
   pbSafariState.pbEnd if !pbInSafari?
@@ -92,7 +125,7 @@ end
 Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
-  if pbInSafari? && pbSafariState.decision==0 && Settings::SAFARI_STEPS > 0
+  if pbInSafari? && pbSafariState.decision==0
     pbSafariState.steps -= 1
     if pbSafariState.steps==0
       pbMessage(_INTL("PA:  Ding-dong!\1"))
