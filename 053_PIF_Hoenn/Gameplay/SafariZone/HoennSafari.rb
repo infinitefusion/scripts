@@ -222,7 +222,7 @@ def safari_ball_check_collision(ball_event)
       pbSEPlay("MiningPick")
       echoln "touched something that's not a Pokemon! #{colliding_event.name}"
       ball_event.despawn
-    endc
+    end
   end
 end
 
@@ -236,9 +236,6 @@ def record_safari_catch(pokemon)
   pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
   pbSafariState.caught_pokemon << pokemon.species# unless pbSafariState.caught_pokemon.include?(pokemon.species)
 end
-
-
-
 
 ANIMATION_POKEBALL = 8
 
