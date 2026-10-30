@@ -136,11 +136,9 @@ class PokemonPauseMenu
     commands[cmdTrainer = commands.length] = "  <icon=#{ICON_PLAYER}>  " + _INTL("{1}", $Trainer.name)
     commands[cmdOutfit = commands.length] = "  <icon=#{ICON_OUTFIT}>  " + _INTL("Outfit") if $Trainer.can_change_outfit
     if pbInSafari?
-      if Settings::SAFARI_STEPS <= 0
+      if Settings::SAFARI_STEPS > 0
         @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
-      else
-        @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
-                                pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+        @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}", pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
       commands[cmdQuit = commands.length] = "  <icon=#{ICON_QUIT_SAFARI}>  " + _INTL("Quit")
     elsif pbInBugContest?

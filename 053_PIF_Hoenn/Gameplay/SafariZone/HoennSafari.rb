@@ -29,7 +29,7 @@ def initialize_safari
   updateSafariBallDisplay()
   pbSafariState.area_types= initialize_area_types
   pbSafariState.area_unlock_methods= initialize_unlock_methods
-
+  respawn_safari_ball_piles
 end
 
 def initialize_area_types
@@ -38,9 +38,9 @@ def initialize_area_types
       [:same_species,nil,3],
     ],
     :lakeland => [[:different_species,:WATER,5]],
-    :badland => [[:different_species,:ELECTRIC,4]],
-    :grassland => [[:different_species,:FLYING,5]],
-    :woodland => [[:different_species,nil,12]],
+    :badland => [[:different_species,:NORMAL,6]],
+    :grassland => [[:different_species,:GROUND,5]],
+    :woodland => [[:different_species,nil,20]],
     :mountains => [[:different_species,:ELECTRIC,5]],
   }
 end
@@ -368,6 +368,19 @@ def safari_ball_pile(min_nb, max_nb)
   pbMEPlay("Item get")
   pbMessage(_INTL("{1} found {2} \\C[1]Safari Balls\\C[0]!", $Trainer.name, nb))
   updateSafariBallDisplay()
+end
+
+def respawn_safari_ball_piles
+  HOENN_SAFARI_MAPS.each do |map_id|
+    map = $MapFactory.getMapNoAdd(map_id)
+    for event_data in map.events
+      event_id = event_data[0]
+      event = event_data[1]
+      if event.name == "SafariBalls"
+        pbSetSelfSwitch(event.id,"A",false,map_id)
+      end
+    end
+  end
 end
 
 SWITCH_UNLOCKED_WOODLANDS = 2252
