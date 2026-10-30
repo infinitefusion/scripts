@@ -10,9 +10,10 @@
 TEMPLATE_EVENT_SAFARI_BALL = 15
 TEMPLATE_EVENT_POKEBLOCK = 16
 
+HOENN_SAFARI_MAPS = [MAP_SAFARI_ENTRANCE, MAP_SAFARI_1,MAP_SAFARI_2,MAP_SAFARI_3,MAP_SAFARI_4,MAP_SAFARI_5,MAP_SAFARI_6]
+
 class PokemonTemp
   attr_accessor :overworld_safari
-
 end
 
 class SafariState
@@ -23,9 +24,8 @@ class SafariState
 end
 
 def initialize_safari
-  pbSafariState
+  pbSafariState.pbStart(18)
   $PokemonTemp.overworld_safari = true
-  pbSafariState.ballcount = 18
   updateSafariBallDisplay()
   pbSafariState.area_types= initialize_area_types
   pbSafariState.area_unlock_methods= initialize_unlock_methods
@@ -35,14 +35,13 @@ end
 def initialize_area_types
   return {
     :wetland => [
-      [:different_species,:BUG,2],
       [:same_species,nil,3],
     ],
-    :lakeland => [[:different_species,:WATER,3]],
-    :badland => [[:different_species,:PSYCHIC,4]],
-    :grassland => [[:different_species,:GRASS,4]],
+    :lakeland => [[:different_species,:WATER,5]],
+    :badland => [[:different_species,:ELECTRIC,4]],
+    :grassland => [[:different_species,:FLYING,5]],
     :woodland => [[:different_species,nil,12]],
-    :mountains => [[:different_species,:PSYCHIC,4]],
+    :mountains => [[:different_species,:ELECTRIC,5]],
   }
 end
 
@@ -228,6 +227,8 @@ def safari_ball_check_collision(ball_event)
 end
 
 
+
+
 class Trainer
   attr_accessor :safari_caught
 end
@@ -237,23 +238,39 @@ def record_safari_catch(pokemon)
 end
 
 
+
+
 ANIMATION_POKEBALL = 8
+
+MAX_THROW_DISTANCE = 4
+CATCH_RATE_FLOOR   = 60
+SNEAK_FLAT_BONUS   = 50
 def try_catch_safari_pokemon(pokemon_event)
+  pokemon_state = pokemon_event.current_state
   playAnimation(ANIMATION_POKEBALL, pokemon_event.x, pokemon_event.y)
   initial_name = pokemon_event.character_name
   pokemon_event.character_name="safari_ball_throw"
+  pokemon_event.hide_notice_icon
   pokemon = pokemon_event.pokemon
   pokemon_event.lock
   pbWait(14)
 
   distance_from_player = pokemon_event.distance_from_player
-  capture_rate = pokemon.species_data.catch_rate
-  distance_bonus = (5-distance_from_player)*10
-  distance_bonus *= 2 unless pokemon_event.noticed_player_once
-  capture_rate += distance_bonus
+  unnoticed = !pokemon_event.noticed_player_once
 
-  capture_rate = 0 if pokemon_event.current_state == :NOTICED_PLAYER
+  distance = distance_from_player.clamp(1, MAX_THROW_DISTANCE)
+  closeness = (MAX_THROW_DISTANCE + 1 - distance) / MAX_THROW_DISTANCE.to_f
 
+  capture_rate = [pokemon.species_data.catch_rate, CATCH_RATE_FLOOR].max
+
+  multiplier = unnoticed ? 1 + (2 * closeness) : 1 + closeness
+  capture_rate = (capture_rate * multiplier) + (SNEAK_FLAT_BONUS * closeness)
+
+  capture_rate = 0 if pokemon_state == :NOTICED_PLAYER
+
+  echoln "base capture rate: #{pokemon.species_data.catch_rate}"
+  echoln "safari capture rate: #{capture_rate}"
+  echoln "-----"
   num_shakes = pbCaptureCalc(pokemon, capture_rate, :SAFARIBALL)
 
   shake = 0
@@ -270,7 +287,7 @@ def try_catch_safari_pokemon(pokemon_event)
     if shake >= 4
       spritesLoader = BattleSpriteLoader.new
       pokemon.pif_sprite = spritesLoader.obtain_pif_sprite(pokemon.species)
-      showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {1}!\\me[Pkmn get]\\wtnp[80]\1",pokemon.name))
+      showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,pokemon.name))
       record_safari_catch(pokemon)
       pbAddPokemonSilent(pokemon)
       pokemon_event.despawn
@@ -281,6 +298,7 @@ def try_catch_safari_pokemon(pokemon_event)
   end
   playAnimation(ANIMATION_POKEBALL, pokemon_event.x, pokemon_event.y)
   pokemon_event.character_name = initial_name
+  pokemon_event.show_notice_icon
   pokemon_event.unlock
 end
 
@@ -293,9 +311,18 @@ Events.onAction += proc { |_sender, _e|
   pbSafariState.ballcount -= 1
   updateSafariBallDisplay
   ball_event = throw_ow_safari_ball
-  echoln "#{pbSafariState.ballcount} balls left"
+  check_nb_safari_balls_left
 }
 
+def check_nb_safari_balls_left
+  echoln "#{pbSafariState.ballcount} balls left"
+  if pbSafariState.ballcount <= 0
+    pbMessage(_INTL("PA:  Ding-dong!\1"))
+    pbMessage(_INTL("PA:  Your safari game is over!"))
+    pbSafariState.decision = 1
+    pbSafariState.pbGoToStart
+  end
+end
 
 
 #Simplified copy of the method in PokeBattle to be used outside of a battle (safari zone)
@@ -342,6 +369,24 @@ def safari_ball_pile(min_nb, max_nb)
   nb = rand(min_nb...max_nb)
   pbSafariState.ballcount+=nb
   pbMEPlay("Item get")
-  pbMessage(_INTL("{1} found {1}\\C[1]Safari Balls\\C[0]!", $game_player.name, nb))
+  pbMessage(_INTL("{1} found {2} \\C[1]Safari Balls\\C[0]!", $Trainer.name, nb))
   updateSafariBallDisplay()
+end
+
+SWITCH_UNLOCKED_WOODLANDS = 2252
+SWITCH_UNLOCKED_WETLANDS = 2253
+SWITCH_UNLOCKED_BADLANDS = 2254
+SWITCH_UNLOCKED_GRASSLANDS = 2255
+SWITCH_UNLOCKED_LAKE = 2256
+SWITCH_UNLOCKED_MOUNTAINS = 2257
+
+def list_unlocked_zones
+  unlocked = []
+  unlocked << :woodland if $game_switches[SWITCH_UNLOCKED_WOODLANDS]
+  unlocked << :wetland if $game_switches[SWITCH_UNLOCKED_WETLANDS]
+  unlocked << :badland if $game_switches[SWITCH_UNLOCKED_BADLANDS]
+  unlocked << :grassland if $game_switches[SWITCH_UNLOCKED_GRASSLANDS]
+  unlocked << :lakeland if $game_switches[SWITCH_UNLOCKED_LAKE]
+  unlocked << :mountains if $game_switches[SWITCH_UNLOCKED_MOUNTAINS]
+  return unlocked
 end

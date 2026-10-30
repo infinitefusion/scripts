@@ -56,6 +56,13 @@ GameData::EncounterType.register({
   })
 
 GameData::EncounterType.register({
+                                   :id             => :Land4,
+                                   :type           => :land,
+                                   :trigger_chance => 10,
+                                   :old_slots      => [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                                 })
+
+GameData::EncounterType.register({
                                    :id             => :Puddle,
                                    :type           => :land,
                                    :trigger_chance => 5,

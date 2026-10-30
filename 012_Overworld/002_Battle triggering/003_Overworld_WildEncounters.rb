@@ -269,6 +269,7 @@ class PokemonEncounters
         baseType = :Land1 if terrain_tag == :Grass_alt1
         baseType = :Land2 if terrain_tag == :Grass_alt2
         baseType = :Land3 if terrain_tag == :Grass_alt3
+        baseType = :Land4 if terrain_tag == :Grass_alt4
         baseType = :TallGrass if terrain_tag == :TallGrass
         baseType = :Puddle if terrain_tag == :Puddle
         ret = find_valid_encounter_type_for_time(baseType, time) if !ret

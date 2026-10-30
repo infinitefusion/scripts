@@ -10,6 +10,9 @@ LEGENDARIES_LIST = [:ARTICUNO, :ZAPDOS, :MOLTRES, :MEWTWO, :MEW,
 class PokemonTemp
   attr_accessor :should_reshuffle_trainers
   attr_accessor :should_reshuffle_pokemon
+  attr_accessor :should_reshuffle_items
+  attr_accessor :should_reshuffle_gyms
+
 end
 
 class PokemonGlobalMetadata

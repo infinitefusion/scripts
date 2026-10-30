@@ -487,3 +487,12 @@ GameData::TerrainTag.register({
                                 :step_sound => "steps/step_mud",
                                 :show_footprints => true,
                               })
+
+GameData::TerrainTag.register({
+                                :id => :Grass_alt4, #Additional grass type for maps that need something else aside from grass, clovers, dry grass and flowers
+                                :id_number => 47,
+                                :shows_grass_rustle => true,
+                                :land_wild_encounters => true,
+                                :battle_environment => :Grass,
+                                :step_sound => "steps/step_tall_grass"
+                              })

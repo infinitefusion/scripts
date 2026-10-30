@@ -348,7 +348,8 @@ class OverworldPokemonEvent < Game_Event
 
   def playDetectAnimation(behavior_noticed = @behavior_noticed, play_sound = true)
     return unless @current_state == :ROAMING
-    return unless noticed_state_different_from_roaming()
+    return unless @behavior_noticed
+    #return unless noticed_state_different_from_roaming()
 
     if behavior_noticed == :curious
       pbSEPlay("Exclaim") if play_sound
@@ -377,7 +378,7 @@ class OverworldPokemonEvent < Game_Event
     distance = distance_from_player()
     is_near_player = distance <= @detection_radius
     if distance >= DISTANCE_FOR_DESPAWN
-      despawn unless @manual_ow_pokemon
+      despawn unless @manual_ow_pokemon || @pokemon.shiny?
     end
     if is_near_player
       if should_start_battle? # Battle
@@ -465,17 +466,17 @@ class OverworldPokemonEvent < Game_Event
     when :ROAMING
       set_roaming_movement
     when :NOTICED_PLAYER
-      set_noticed_movement
+      set_noticed_movement if @behavior_noticed
     end
     set_sprite_to_current_state
   end
 
-  def check_detect_trainer
-    return unless noticed_state_different_from_roaming()
-    return if $game_system.map_interpreter.running? || @starting
-    # return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
-    return pbPlayerInEventCone?(self, $game_player, @detection_radius)
-  end
+  # def check_detect_trainer
+  #   return unless noticed_state_different_from_roaming()
+  #   return if $game_system.map_interpreter.running? || @starting
+  #   # return pbEventCanReachPlayer?(self, $game_player, @detection_radius)
+  #   return pbPlayerInEventCone?(self, $game_player, @detection_radius)
+  # end
 
   def pbCheckEventTriggerAfterTurning
     return if $game_system.map_interpreter.running? || @starting
@@ -657,6 +658,7 @@ class OverworldPokemonEvent < Game_Event
 
   def despawn
     @light_effect&.dispose
+    dispose_notice_icon
     erase
     $game_map.events.delete(@id)
     $PokemonTemp.overworld_pokemon_on_map&.delete(@id)
@@ -689,6 +691,7 @@ class OverworldPokemonEvent < Game_Event
   def update
     super
     update_idle_animation
+    update_notice_icon if $PokemonTemp.overworld_safari
     if $game_temp.message_window_showing
       pause_movement unless @current_state == :PAUSED
     else
@@ -708,7 +711,7 @@ class OverworldPokemonEvent < Game_Event
   def marshal_dump
     ivars = {}
     instance_variables.each do |var|
-      next if var == :@light_effect
+      next if var == :@light_effect || var == :@notice_icon
       ivars[var] = instance_variable_get(var)
     end
     return ivars
@@ -717,6 +720,7 @@ class OverworldPokemonEvent < Game_Event
   def marshal_load(ivars)
     ivars.each { |var, val| instance_variable_set(var, val) }
     @light_effect = nil
+    @notice_icon = nil
   end
 
 end

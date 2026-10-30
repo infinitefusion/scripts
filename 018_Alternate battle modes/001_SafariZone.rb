@@ -21,14 +21,20 @@ class SafariState
   end
 
   def pbGoToStart
+    start_map = Settings::KANTO ? 472 : MAP_SAFARI_ENTRANCE
+    start_x = Settings::KANTO ? 28 : 8
+    start_y = Settings::KANTO ? 11 : 7
+    start_direction = Settings::KANTO ? DIRECTION_DOWN : DIRECTION_LEFT
+
+
     if $scene.is_a?(Scene_Map)
       pbFadeOutIn {
         $game_temp.player_transferring   = true
         $game_temp.transition_processing = true
-        $game_temp.player_new_map_id    = 472 #@start[0]
-        $game_temp.player_new_x         = 28#@start[1]
-        $game_temp.player_new_y         = 11#@start[2]
-        $game_temp.player_new_direction = 2
+        $game_temp.player_new_map_id    = start_map #@start[0]
+        $game_temp.player_new_x         = start_x#@start[1]
+        $game_temp.player_new_y         = start_y#@start[2]
+        $game_temp.player_new_direction = start_direction
         $scene.transfer_player
       }
     end
@@ -71,7 +77,8 @@ def pbInSafari?
 end
 
 def is_hardcoded_safari_map(map_id)
-  safari_maps = [445,74,484,75,485,82,486,107,487,715,718,488,717]
+  safari_maps = [445,74,484,75,485,82,486,107,487,715,718,488,717] if Settings::KANTO
+  safari_maps = HOENN_SAFARI_MAPS if Settings::HOENN
   return safari_maps.include?(map_id)
 end
 
