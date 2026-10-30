@@ -44,7 +44,7 @@ class SafariState
     @start      = [$game_map.map_id,$game_player.x,$game_player.y,$game_player.direction]
     @ballcount  = ballcount
     @inProgress = true
-    @steps      =  Settings::KANTO ? Settings::SAFARI_STEPS : 0
+    @steps      =  Settings::SAFARI_STEPS
   end
 
   def pbEnd
@@ -55,6 +55,7 @@ class SafariState
     @decision   = 0
     $game_map.need_refresh = true
     clear_all_images
+    pbSafariState.caught_pokemon=nil
   end
 end
 
@@ -93,7 +94,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   next if handled[0]
   if pbInSafari? && pbSafariState.decision==0 && Settings::SAFARI_STEPS > 0
     pbSafariState.steps -= 1
-    if pbSafariState.steps<=0
+    if pbSafariState.steps==0
       pbMessage(_INTL("PA:  Ding-dong!\1"))
       pbMessage(_INTL("PA:  Your safari game is over!"))
       pbSafariState.decision = 1

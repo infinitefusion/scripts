@@ -357,6 +357,20 @@ class TilemapRenderer
             875 => "tree_sway_group_4",
     },
 
+    36 => { # Route-tropical
+            832 => "tree_sway_tropical_single_1",
+            833 => "tree_sway_tropical_single_2",
+            840 => "tree_sway_tropical_single_3",
+            841 => "tree_sway_tropical_single_4",
+            848 => "tree_sway_tropical_single_5",
+            889 => "tree_sway_tropical_single_6",
+
+            834 => "tree_sway_tropical_group_1",
+            835 => "tree_sway_tropical_group_2",
+            842 => "tree_sway_tropical_group_3",
+            843 => "tree_sway_tropical_group_4",
+    },
+
   }
 
   #=============================================================================

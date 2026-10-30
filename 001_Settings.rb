@@ -279,7 +279,7 @@ module Settings
   #=============================================================================
 
   # The number of steps allowed before a Safari Zone game is over (0=infinite).
-  SAFARI_STEPS = 600
+  SAFARI_STEPS = Settings::KANTO ? 600 : -1
   # The number of seconds a Bug Catching Contest lasts for (0=infinite).
   BUG_CONTEST_TIME = 20 * 60 # 20 minutes
 
