@@ -125,7 +125,12 @@ class PokemonEncounters
     #Always check encounter if pokeradar is active
     return true if $PokemonTemp.pokeradar != nil && !$PokemonSystem.overworld_encounters
 
-    # Get base encounter chance and minimum steps grace period
+    #safari encounters don't get broken up by fights so only spawn hald the time to tone it down a bit
+    if $PokemonTemp.overworld_safari
+      return if rand(2) == 0
+    end
+
+           # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
     min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
     # Apply modifiers to the encounter chance and the minimum steps amount

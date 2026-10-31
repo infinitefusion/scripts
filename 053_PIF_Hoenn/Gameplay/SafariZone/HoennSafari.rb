@@ -139,23 +139,9 @@ def safariNewAreaCheck(area_id)
   end
 end
 
-def updateSafariBallDisplay()
+def updateSafariBallDisplay
   return unless $PokemonTemp.overworld_safari
-  image_width = 28
-  image_height = 28
-
-  clear_all_images()
-  nb_balls = pbSafariState.ballcount
-  balls_per_row = Settings::SCREEN_WIDTH / image_width
-
-  for i in 1..nb_balls
-    index = i - 1
-    col = index % balls_per_row
-    row = index / balls_per_row
-    x_pos = col * image_width
-    y_pos = row * image_height
-    $game_screen.pictures[i].show("safariball_ui", 0, x_pos, y_pos)
-  end
+  pbSafariState.updateBallDisplay
 end
 
 def throw_ow_safari_ball

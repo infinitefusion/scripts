@@ -62,6 +62,7 @@ class SafariState
 
   def pbEnd
     recordLastSafari
+    $PokemonGlobal.encounter_version = 0
     @start      = nil
     @ballcount  = 0
     @inProgress = false
@@ -70,6 +71,45 @@ class SafariState
     $game_map.need_refresh = true
     clear_all_images
     pbSafariState.caught_pokemon=nil
+  end
+end
+
+BALL_ICON_SIZE = 28
+BALL_MARGIN    = 8
+def updateBallDisplay
+  return if !@inProgress
+  createBallDisplay if !@ball_sprite || @ball_sprite.disposed?
+  bmp = @ball_sprite.bitmap
+  bmp.clear
+
+  icon = RPG::Cache.picture("Safari/safariball_ui")
+  bmp.blt(0, 0, icon, Rect.new(0, 0, icon.width, icon.height))
+  baseColor   = pbColor(:LIGHT_TEXT_MAIN_COLOR)
+  shadowColor = pbColor(:LIGHT_TEXT_SHADOW_COLOR)
+  pbSetSystemFont(bmp)
+  text_x = BALL_ICON_SIZE + 4
+  pbDrawShadowText(bmp, text_x, 0, -1, -1, "x #{@ballcount}", baseColor, shadowColor)
+end
+
+def createBallDisplay
+  disposeBallDisplay
+  @ball_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+  @ball_viewport.z = 99999
+  @ball_sprite = Sprite.new(@ball_viewport)
+  @ball_sprite.bitmap = Bitmap.new(120, BALL_ICON_SIZE)
+  @ball_sprite.x = BALL_MARGIN
+  @ball_sprite.y = BALL_MARGIN
+end
+
+def disposeBallDisplay
+  if @ball_sprite
+    @ball_sprite.bitmap.dispose if @ball_sprite.bitmap && !@ball_sprite.bitmap.disposed?
+    @ball_sprite.dispose if !@ball_sprite.disposed?
+    @ball_sprite = nil
+  end
+  if @ball_viewport
+    @ball_viewport.dispose if !@ball_viewport.disposed?
+    @ball_viewport = nil
   end
 end
 
