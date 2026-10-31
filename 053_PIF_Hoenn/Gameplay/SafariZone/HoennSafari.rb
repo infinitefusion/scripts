@@ -300,16 +300,26 @@ def try_catch_safari_pokemon(pokemon_event)
 end
 
 
-Events.onAction += proc { |_sender, _e|
+class Event
+  def prepend(callback)
+    @callbacks.unshift(callback)
+    return self
+  end
+end
+
+
+Events.onAction.prepend(proc { |_sender, _e|
   next unless Settings::HOENN && $PokemonTemp.overworld_safari
   next if $game_player.jumping? || $game_player.moving?
   next if $game_player.pbFacingEvent
+  next if $game_player.pbFacingTerrainTag.can_surf_freely && !$PokemonGlobal.surfing
+
   next if pbSafariState.ballcount <= 0
   pbSafariState.ballcount -= 1
   updateSafariBallDisplay
   ball_event = throw_ow_safari_ball
   check_nb_safari_balls_left
-}
+})
 
 def check_nb_safari_balls_left
   echoln "#{pbSafariState.ballcount} balls left"
