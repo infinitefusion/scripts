@@ -315,3 +315,6 @@ define_quest("desert_caves",:FIELD_QUEST,_INTL("Find the lost Assistant!"), _INT
 
 #Route 119
 define_quest("route_119_fishing",:FIELD_QUEST,_INTL("Fishing with Bait!"), _INTL("Fish up a Feebas with the Good Rod by placing a Blue Pokéblock in the water."),_INTL("Route 119"),"NPC_Hoenn_Fisherman")
+
+#Safari Zone
+define_quest("safari_flowers",:FIELD_QUEST,_INTL("Safari Flowers"), _INTL("Unlock every area in the Safari Zone to scout for spots to plant flowers."),_INTL("Safari Zone"),"NPC_Hoenn_AromaLady")

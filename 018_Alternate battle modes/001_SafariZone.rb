@@ -78,6 +78,8 @@ def tellLatestSafariStats(talking_event_id)
   pbMessage(_INTL("Welcome back! How was your Safari adventure?"))
 
   return unless $game_temp.last_safari_stats
+  return unless $game_temp.last_safari_stats.size >= 2
+
   nb_caught = $game_temp.last_safari_stats[0].size
   nb_steps = $game_temp.last_safari_stats[1].abs
 

@@ -630,7 +630,6 @@ class OverworldPokemonEvent < Game_Event
 
   def check_weather_roaming_behavior
     if @weather_type_at_spawn == :Wind || @weather_type_at_spawn == :Storm
-      echoln @species
       wind_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:behavior_wind_roaming]
       if wind_behavior
         set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][wind_behavior])

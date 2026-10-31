@@ -746,8 +746,20 @@ class TilemapRenderer
     return SNOW_SUBSTITUTIONS[tile_id]
   end
 
+  def check_hoenn_safari_flowers(tile_id)
+    replacement_tile = EMPTY_TILE
+    safari_flower_tiles = [987,998]
+    return tile_id unless Settings::HOENN
+    return tile_id unless HOENN_SAFARI_MAPS.include?(@current_map_id)
+    return tile_id if $game_switches[SWITCH_SAFARI_FLOWERS_PLANTED]
+    return tile_id unless safari_flower_tiles.include?(tile_id)
+    echoln "deleting flowers!"
+    return replacement_tile
+  end
+
   def refresh_tile_bitmap(tile, map, tile_id)
     tile.tile_id = tile_id
+    original_id = tile_id
     if tile_id < TILES_PER_AUTOTILE || (Settings::HOENN && tile_id == INVISIBLE_WALL_TILE_ID)
       tile.set_bitmap("", tile_id, false, false, 0, nil)
       tile.shows_reflection = false
@@ -791,7 +803,14 @@ class TilemapRenderer
         tile.set_bitmap(filename, tile_id, false, false, priority, @tilesets[filename])
       end
       tile_id = get_snow_tile_id(tile_id,map.tileset_id) #returns the original tile if no snow
-
+      tile_id = check_hoenn_safari_flowers(tile_id) #Removes flowers in safari if not unlocked all zones
+      if tile_id == EMPTY_TILE
+        tile.set_bitmap("", original_id, false, false, 0, nil)
+        tile.shows_reflection = false
+        tile.underwater_tile = false
+        tile.bridge = false
+        return
+      end
 
       tile.shows_reflection = terrain_tag_data&.shows_reflections
       tile.underwater_tile = terrain_tag_data&.underwater
