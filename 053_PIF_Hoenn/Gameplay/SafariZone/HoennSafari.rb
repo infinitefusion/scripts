@@ -169,11 +169,11 @@ def use_safari_feeder(price, floating=false)
   discount = pbGet(VAR_HOENN_SAFARI_FEEDER_DISCOUNT)
   price-=discount
   if price > 0
-    message = _INTL("\\GWould you like to use the Pokéblock Feeder for ${1}?")
+    message = _INTL("\\GWould you like to use the Pokéblock Feeder for ${1}?",price)
   else
-    message = _INTL("\\GWould you like to use the Pokéblock Feeder?")
+    message = _INTL("\\GWould you like to use the Pokéblock Feeder?",price)
   end
-  if pbConfirmMessage(message,price)
+  if pbConfirmMessage(message)
     colors = [:red, :red, :red,
               :blue, :blue, :blue,
               :pink, :pink, :pink,
