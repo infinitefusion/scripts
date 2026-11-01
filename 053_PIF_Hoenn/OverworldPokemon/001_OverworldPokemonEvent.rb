@@ -68,6 +68,7 @@ class OverworldPokemonEvent < Game_Event
     @current_state = :ROAMING # Possible values: :ROAMING, :NOTICED_PLAYER, :FLEEING
     @noticed_player_once = false
     @manual_ow_pokemon = false
+    @manual_appearance = nil #if this is set to something, it overrides the pokemon's normal appearance
     #@event.name = "OW/#{species.to_s}/#{level.to_s}"
     weather = $game_weather.get_current_map_weather if $game_weather
     if weather
@@ -159,6 +160,15 @@ class OverworldPokemonEvent < Game_Event
     end
     @pokemon = Pokemon.new(@species, @level)
     return GameData::Species.get(@species)
+  end
+
+  def override_appearance(sprite_path)
+    set_sprite(sprite_path)
+    @manual_appearance =sprite_path
+  end
+
+  def cancel_appearance_override()
+    @manual_appearance =nil
   end
 
   def get_behavior_for_species(species, behavior_type)
@@ -557,6 +567,7 @@ class OverworldPokemonEvent < Game_Event
   end
 
   def set_sprite(sprite_path)
+    return if @manual_appearance
     @character_name = sprite_path
     @need_refresh = true
   end

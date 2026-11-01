@@ -24,7 +24,10 @@ class SafariState
 end
 
 def initialize_safari
-  pbSafariState.pbStart(18)
+  nb_balls = pbGet(VAR_HOENN_SAFARI_NB_BALLS)
+  nb_balls = 18 if nb_balls <= 0
+
+  pbSafariState.pbStart(nb_balls)
   $PokemonTemp.overworld_safari = true
   updateSafariBallDisplay()
   pbSafariState.area_types= initialize_area_types
@@ -86,6 +89,17 @@ def count_safari_caught(method_type, type = nil)
   else # :different_species
     return caught.uniq.size
   end
+end
+
+def count_safari_species(compared_species)
+  nb = 0
+  caught = pbSafariState.caught_pokemon || []
+  caught.each do |caught_species|
+    if caught_species == compared_species
+      nb += 1
+    end
+  end
+  return nb
 end
 
 def safari_requirement_text(method_type, type_id, nb_to_catch)
@@ -152,13 +166,20 @@ def throw_ow_safari_ball
 end
 
 def use_safari_feeder(price, floating=false)
-  if pbConfirmMessage(_INTL("\\GWould you like to use the Feeder for ${1}?",price))
+  discount = pbGet(VAR_HOENN_SAFARI_FEEDER_DISCOUNT)
+  price-=discount
+  if price > 0
+    message = _INTL("\\GWould you like to use the Pokéblock Feeder for ${1}?")
+  else
+    message = _INTL("\\GWould you like to use the Pokéblock Feeder?")
+  end
+  if pbConfirmMessage(message,price)
     colors = [:red, :red, :red,
               :blue, :blue, :blue,
               :pink, :pink, :pink,
               :green, :green, :green,
               :yellow, :yellow, :yellow].sample(4)
-    pbSpendMoney(price)
+    pbSpendMoney(price) if price > 0
     feeder_event = this_event()
     positions = [[-1,0], [1,0], [0,1], [0,-1]]
     i=0
@@ -309,7 +330,7 @@ Events.onAction.prepend(proc { |_sender, _e|
 
 def check_nb_safari_balls_left
   echoln "#{pbSafariState.ballcount} balls left"
-  if pbSafariState.ballcount <= 0
+  if pbSafariState.ballcount < 0  #when directly zero, the player can still run around and find another pile
     pbMessage(_INTL("PA:  Ding-dong!\1"))
     pbMessage(_INTL("PA:  Your safari game is over!"))
     pbSafariState.decision = 1
@@ -359,7 +380,11 @@ def placePokeblock()
 end
 
 def safari_ball_pile(min_nb, max_nb)
-  nb = rand(min_nb...max_nb)
+  if min_nb == max_nb
+    nb = min_nb
+  else
+    nb = rand(min_nb...max_nb)
+  end
   pbSafariState.ballcount+=nb
   pbMEPlay("Item get")
   pbMessage(_INTL("{1} found {2} \\C[1]Safari Balls\\C[0]!", $Trainer.name, nb))

@@ -318,3 +318,8 @@ define_quest("route_119_fishing",:FIELD_QUEST,_INTL("Fishing with Bait!"), _INTL
 
 #Safari Zone
 define_quest("safari_flowers",:FIELD_QUEST,_INTL("Safari Flowers"), _INTL("Unlock every area in the Safari Zone to scout for spots to plant flowers."),_INTL("Safari Zone"),"NPC_Hoenn_AromaLady")
+define_quest("safari_balls1",:FIELD_QUEST,_INTL("Bidoof Population Survey"), _INTL("Catch 5 Bidoof in the Safari Zone."),_INTL("Safari Zone"),"NPC_Hoenn_Ranger_F")
+define_quest("safari_balls2",:FIELD_QUEST,_INTL("Bibarel Population Survey"), _INTL("Catch 3 Bibarel in the Safari Zone."),_INTL("Safari Zone"),"NPC_Hoenn_Ranger_F")
+define_quest("safari_blocks1",:FIELD_QUEST,_INTL("Phanpy Population Survey"), _INTL("Catch 5 Phanpy in the Safari Zone."),_INTL("Safari Zone"),"NPC_Hoenn_Ranger_M")
+define_quest("safari_blocks2",:FIELD_QUEST,_INTL("Kangaskhan Population Survey"), _INTL("Catch 2 Kangaskhan in the Safari Zone."),_INTL("Safari Zone"),"NPC_Hoenn_Ranger_M")
+
