@@ -71,6 +71,7 @@ class SafariState
     $game_map.need_refresh = true
     clear_all_images
     pbSafariState.caught_pokemon=nil
+    disposeBallDisplay
   end
 end
 
@@ -112,13 +113,18 @@ def disposeBallDisplay
     @ball_viewport = nil
   end
 end
-
+def has_caught_some_pokemon?
+  return false unless $game_temp.last_safari_stats
+  return false unless $game_temp.last_safari_stats.size >= 2
+  return false unless $game_temp.last_safari_stats[0]
+  return false unless $game_temp.last_safari_stats[1]
+  return true
+end
 def tellLatestSafariStats(talking_event_id)
   pbCallBub(2, talking_event_id)
   pbMessage(_INTL("Welcome back! How was your Safari adventure?"))
 
-  return unless $game_temp.last_safari_stats
-  return unless $game_temp.last_safari_stats.size >= 2
+  return unless has_caught_some_pokemon?
 
   nb_caught = $game_temp.last_safari_stats[0].size
   nb_steps = $game_temp.last_safari_stats[1].abs

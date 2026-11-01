@@ -234,6 +234,57 @@ def safari_ball_check_collision(ball_event)
 end
 
 
+def release_caught_pokemon
+  allowed_pokemon = ($game_temp.last_safari_stats[0] || []).map(&:personalID)
+  filter = proc {|pokemon|
+      allowed_pokemon.include?(pokemon.personalID)
+  }
+  released = []
+  pbFadeOutIn {
+    scene = SafariReleaseStorageScene.new
+    scene.cursormode == "multiselect"
+    screen = SafariReleaseStorageScreen.new(scene, $PokemonStorage)
+    screen.setFilter(filter)
+    released = screen.pbStartScreen(0) # Boot PC in release only mode
+  }
+  nb_points = calculate_release_points(released)
+  return nb_points
+  echoln "Obtained #{nb_points} points for releasing Pokemon"
+end
+
+def calculate_catch_rate_points(rate)
+  case rate
+  when 0..45    then 4
+  when 45..55   then 3
+  when 55..90  then 2
+  when 90..200 then 1
+  else              0
+  end
+end
+
+#Base points: 2
+# duplicate: -1
+# Shiny: +10 points
+#
+def calculate_release_points(released_pokemon)
+  total_points = 0
+  species_counts = Hash.new(0)
+  released_pokemon.each { |p| species_counts[p.species] += 1 }
+
+  total_points = 0
+  released_pokemon.each do |pokemon|
+    species = GameData::Species.get(pokemon.species)
+    points = 2
+    catch_rate_points =  calculate_catch_rate_points(species.catch_rate)
+    points += catch_rate_points
+    points += 10 if pokemon.shiny?
+    is_duplicate = species_counts[pokemon.species] > 1
+    points -= 1 if is_duplicate
+    total_points += points
+    echoln "calculating points for #{pokemon.species}: #{points}"
+  end
+  return total_points
+end
 
 
 class Trainer
@@ -241,7 +292,7 @@ class Trainer
 end
 def record_safari_catch(pokemon)
   pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
-  pbSafariState.caught_pokemon << pokemon.species# unless pbSafariState.caught_pokemon.include?(pokemon.species)
+  pbSafariState.caught_pokemon << pokemon# unless pbSafariState.caught_pokemon.include?(pokemon.species)
 end
 
 ANIMATION_POKEBALL = 8

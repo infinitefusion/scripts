@@ -20,7 +20,7 @@ class SafariCaughtIcons_UI < PokeRadar_UI
   SAFARI_BG_PADDING = 8
   def initialize(caught_pokemon = [])
     counts = Hash.new(0)
-    caught_pokemon.each { |species| counts[species] += 1 }
+    caught_pokemon.each { |pokemon| counts[pokemon.species] += 1 }
 
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = SAFARI_GRAPHICS_Z
