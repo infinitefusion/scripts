@@ -161,6 +161,9 @@ FUSION_HAT = "fusionnerd"
 FUSION_OUTFIT = "fusionnerd"
 
 HAT_ASH = "ash"
+CLOTHES_ASH = "ash"
+CLOTHES_ASH_2 = "ash_b"
+
 HAT_BIANCA = "bianca"
 HAT_CLEFAIRY = "clefairyearheadband"
 HAT_FLOWER = "mikufairy"
