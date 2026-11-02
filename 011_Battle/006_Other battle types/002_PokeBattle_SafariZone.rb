@@ -26,6 +26,10 @@ class PokeBattle_FakeBattler
   def shiny?;         return @pokemon.shiny?;  end
   alias isShiny? shiny?
 
+  def pbOwnedByPlayer?
+    return @battle.pbOwnedByPlayer?(@index)
+  end
+
   def isSpecies?(check_species)
     return @pokemon && @pokemon.isSpecies?(check_species)
   end
@@ -347,6 +351,10 @@ class PokeBattle_SafariZone
 
   def balls_thrown
     return 30-@ballCount
+  end
+
+  def pbOwnedByPlayer?(idxBattler)
+    return
   end
 
   def defaultWeather=(value); @weather = value; end
