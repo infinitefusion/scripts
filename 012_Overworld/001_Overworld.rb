@@ -418,7 +418,7 @@ Events.onMapSceneChange += proc { |_sender, e|
         break if nosignpost
       end
       mapinfos = pbLoadMapInfos
-      oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
+      oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]]&.name
       nosignpost = true if $game_map.name == oldmapname
     end
     nosignpost = true if $game_switches[SWITCH_AQUA_CAMP]  #Camp is split between 2 maps. Don't want the window when in.
