@@ -260,6 +260,7 @@ Events.onMapChanging += proc { |_sender, e|
 }
 
 def clearOverworldPokemon
+  return unless $game_map&.events
   echoln "Clearing Overworld Pokemon"
   $game_map.events.clone.each do |id, event|
     if event.is_a?(DynamicOverworldPokemonEvent)

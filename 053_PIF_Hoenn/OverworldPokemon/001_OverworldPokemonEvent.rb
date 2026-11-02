@@ -669,6 +669,16 @@ class OverworldPokemonEvent < Game_Event
   def despawn
     @light_effect&.dispose
     dispose_notice_icon
+
+    spriteset = $scene.respond_to?(:spritesets) ? $scene.spritesets[@map_id] : nil
+    if spriteset
+      sprite = spriteset.character_sprites.find { |s| s.character == self }
+      if sprite
+        spriteset.character_sprites.delete(sprite)
+        sprite.dispose
+      end
+    end
+
     erase
     $game_map.events.delete(@id)
     $PokemonTemp.overworld_pokemon_on_map&.delete(@id)
