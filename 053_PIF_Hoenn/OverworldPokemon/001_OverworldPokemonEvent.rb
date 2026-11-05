@@ -49,6 +49,7 @@ class OverworldPokemonEvent < Game_Event
       @behavior_noticed = nil unless @behavior_noticed
     end
 
+
     default_move_speed = calculate_value_from_stat(species_data, :SPEED, 1, 4)
     @roaming_move_speed = POKEMON_BEHAVIOR_DATA[@behavior_species][:roaming_move_speed] || default_move_speed
     @noticed_move_speed = POKEMON_BEHAVIOR_DATA[@behavior_species][:noticed_move_speed] || default_move_speed
@@ -57,7 +58,9 @@ class OverworldPokemonEvent < Game_Event
     @roaming_frequency = POKEMON_BEHAVIOR_DATA[@behavior_species][:roaming_frequency] || default_frequency
     @noticed_frequency = POKEMON_BEHAVIOR_DATA[@behavior_species][:noticed_frequency] || default_frequency
 
-    @detection_radius = calculate_ow_pokemon_sight_radius(species_data)
+    default_detection_radius = calculate_ow_pokemon_sight_radius(species_data)
+    @detection_radius = POKEMON_BEHAVIOR_DATA[@behavior_species][:detection_range] || default_detection_radius
+
 
     # When the player is next to a Pokemon but not facing it, there is a delay before it battles.
     # The battle will start when the timer reaches @nearby_notice_limit
@@ -391,31 +394,33 @@ class OverworldPokemonEvent < Game_Event
       despawn unless @manual_ow_pokemon || @pokemon.shiny?
     end
     if is_near_player
-      if should_start_battle? # Battle
-        if isRepelActive && pokemon_can_be_repelled
-          playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
-          flee(@behavior_noticed)
-        elsif $PokemonTemp.overworld_safari
-              flee() unless is_eating?
-        else
-          overworldPokemonBattle
-        end
-      else
-        # check for noticed
-        if @current_state == :ROAMING
-          if check_detect_trainer
-            playDetectAnimation
-            @target = :player
-            breakDisguise if @disguised
-            @noticed_player_once = true
-            update_state(:NOTICED_PLAYER)
-          end
-        end
-      end
+      handle_pokemon_near_player
     else
       if @current_state != :ROAMING && @current_state != :NOTICED_POKEMON
         update_state(:ROAMING)
         back_to_roaming_action
+      end
+    end
+  end
+
+  def handle_pokemon_near_player
+    if should_start_battle? # Battle
+      if isRepelActive && pokemon_can_be_repelled
+        playAnimation(Settings::EXCLAMATION_ANIMATION_ID, @x, @y)
+        flee(@behavior_noticed)
+      else
+        overworldPokemonBattle
+      end
+    else
+      # check for noticed
+      if @current_state == :ROAMING
+        if check_detect_trainer
+          playDetectAnimation
+          @target = :player
+          breakDisguise if @disguised
+          @noticed_player_once = true
+          update_state(:NOTICED_PLAYER)
+        end
       end
     end
   end
@@ -573,14 +578,15 @@ class OverworldPokemonEvent < Game_Event
   end
 
   # Static
-  def set_noticed_movement
+  def set_noticed_movement(effective_behavior=nil)
+    self.move_frequency = @noticed_frequency
     if isRepelActive
       @move_type = MOVE_TYPE_AWAY_PLAYER
       self.move_frequency = 6
       return
     end
 
-    effective_behavior = @behavior_noticed || @behavior_roaming # fallback on @behavior_roaming if no @behavior_noticed
+    effective_behavior = @behavior_noticed || @behavior_roaming unless effective_behavior# fallback on @behavior_roaming if no @behavior_noticed
     if @current_state == :NOTICED_PLAYER && @pack_size && @pack_size >= 3
       pack_behavior = POKEMON_BEHAVIOR_DATA[@behavior_species][:pack_behavior_noticed]
       effective_behavior = pack_behavior if pack_behavior
@@ -615,7 +621,7 @@ class OverworldPokemonEvent < Game_Event
   def set_roaming_movement
     if isRepelActive
       @move_type = MOVE_TYPE_AWAY_PLAYER
-      self.move_frequency = 3
+      self.move_frequency = @roaming_frequency
       return
     end
 
@@ -633,7 +639,7 @@ class OverworldPokemonEvent < Game_Event
     else
       set_custom_move_route(OW_BEHAVIOR_MOVE_ROUTES[:roaming][effective_behavior])
     end
-    self.move_frequency = 3
+    self.move_frequency = @roaming_frequency
     check_weather_roaming_behavior
     @move_speed = @roaming_move_speed
     @step_anime = false unless @is_flying || @is_swimming
@@ -711,7 +717,6 @@ class OverworldPokemonEvent < Game_Event
   def update
     super
     update_idle_animation
-    update_notice_icon if $PokemonTemp.overworld_safari
     if $game_temp.message_window_showing
       pause_movement unless @current_state == :PAUSED
     else

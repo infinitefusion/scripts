@@ -25,8 +25,6 @@
 #	:teleport_away	The Pokémon flees when it sees the player with a a teleport animation and despawns
 # :explode    Waits a bit, then explodes (despawn)
 
-#todo: defend. Attacks if being attacked by another ow pokemon
-
 POKEMON_BEHAVIOR_DATA =
   {
     :BULBASAUR => { behavior_noticed: nil, behavior_roaming: :random , behavior_pokemon: {:HERACROSS => :shy}},
@@ -540,8 +538,8 @@ POKEMON_BEHAVIOR_DATA =
     :OSHAWOTT => { behavior_noticed: nil, behavior_roaming: :random },
     :DEWOTT => { behavior_noticed: nil, behavior_roaming: :random },
     :SAMUROTT => { behavior_noticed: nil, behavior_roaming: :random },
-    :PATRAT => { behavior_noticed: :curious, behavior_roaming: :random },
-    :WATCHOG => { behavior_noticed: :aggressive, behavior_roaming: :random },
+    :PATRAT => { behavior_noticed: :curious, behavior_roaming: :random, steal_items: true, noticed_frequency: 5, detection_range: 4},
+    :WATCHOG => { behavior_noticed: :aggressive, behavior_roaming: :random, detection_range: 7 },
     :LILLIPUP => { behavior_noticed: :curious, behavior_roaming: :random },
     :HERDIER => { behavior_noticed: nil, behavior_roaming: :random },
     :STOUTLAND => { behavior_noticed: nil, behavior_roaming: :random },

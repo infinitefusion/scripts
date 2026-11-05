@@ -63,6 +63,11 @@ def getOverworldSwimmingPath(species_data,shiny=false)
   return get_ow_sprite_path(species_data,"swim",shiny)
 end
 
+def getOverworlStealPath(species_data,shiny=false)
+  return get_ow_sprite_path(species_data,"steal",shiny)
+end
+
+
 def getOverworldIdleAnimation(species_data,is_flying, shiny=false)
   if is_flying
     return get_ow_sprite_path(species_data,"fly_idle",shiny)

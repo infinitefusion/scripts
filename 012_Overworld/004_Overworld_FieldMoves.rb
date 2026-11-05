@@ -439,9 +439,6 @@ def pbDive
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     if movefinder
       $Trainer.surfing_pokemon = getSpecies(movefinder.species)
-
-      echoln movefinder.species
-      echoln getSpecies(movefinder.species)
     else
       $Trainer.surfing_pokemon = nil
     end
