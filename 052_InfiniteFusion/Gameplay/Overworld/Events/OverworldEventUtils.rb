@@ -92,6 +92,35 @@ def resetFrames(event)
   event.pattern=0
 end
 
+def setFrame(event,frame)
+  if event.is_a?(Integer)
+    event = $game_map.events[event]
+  end
+  event.pattern=frame
+end
+
+def nextFrame(event)
+  if event.is_a?(Integer)
+    event = $game_map.events[event]
+  end
+  event.pattern+=1
+  if event.pattern > 3
+    event.pattern=0
+  end
+end
+
+
+def previousFrame(event)
+  if event.is_a?(Integer)
+    event = $game_map.events[event]
+  end
+  event.pattern-=1
+  if event.pattern < 0
+    event.pattern=3
+  end
+end
+
+
 def turnPlayerTowardsEvent(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
@@ -888,5 +917,13 @@ def playerLift(mapAbove, target_x, target_y, lift_animation=nil)
   $game_player.direction_fix =false
   $game_player.move_speed_override = nil
   $game_player.through = false
+end
+
+#quadrant:
+# top_left
+# top_right
+# bottom_left
+# bottom_right
+def windvane_door(event,quadrant, type)
 
 end

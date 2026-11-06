@@ -345,6 +345,7 @@ def try_catch_safari_pokemon(pokemon_event)
       showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,pokemon.name))
       record_safari_catch(pokemon)
       pbAddPokemonSilent(pokemon)
+      pokemon_event.spawn_safari_ball_event if pokemon_event.stole_item
       pokemon_event.despawn
       return
     end

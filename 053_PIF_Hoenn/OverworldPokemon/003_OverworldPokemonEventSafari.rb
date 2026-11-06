@@ -1,5 +1,5 @@
 class SafariOverworldPokemonEvent < DynamicOverworldPokemonEvent
-
+  attr_reader :stole_item
   def setup_pokemon(species, level, terrain, behavior_roaming = nil, behavior_noticed = nil)
     super
     @safari_thief = POKEMON_BEHAVIOR_DATA[@behavior_species][:steal_items]
