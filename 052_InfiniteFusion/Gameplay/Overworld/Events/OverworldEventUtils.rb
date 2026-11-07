@@ -19,7 +19,6 @@ def turnEventTowardsEvent(turning, turnedTowards)
   end
 end
 
-
 def moveEventTowardsEvent(turning, turnedTowards)
   if turnedTowards.is_a?(Integer)
     turnedTowards = $game_map.events[turnedTowards]
@@ -85,41 +84,40 @@ def moveEventAwayFromEvent(moving, movingAwayFrom)
     end
   end
 end
+
 def resetFrames(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
   end
-  event.pattern=0
+  event.pattern = 0
 end
 
-def setFrame(event,frame)
+def setFrame(event, frame)
   if event.is_a?(Integer)
     event = $game_map.events[event]
   end
-  event.pattern=frame
+  event.pattern = frame
 end
 
 def nextFrame(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
   end
-  event.pattern+=1
+  event.pattern += 1
   if event.pattern > 3
-    event.pattern=0
+    event.pattern = 0
   end
 end
-
 
 def previousFrame(event)
   if event.is_a?(Integer)
     event = $game_map.events[event]
   end
-  event.pattern-=1
+  event.pattern -= 1
   if event.pattern < 0
-    event.pattern=3
+    event.pattern = 3
   end
 end
-
 
 def turnPlayerTowardsEvent(event)
   if event.is_a?(Integer)
@@ -169,16 +167,16 @@ def sign(message, type = 0)
   pbMessage(formatted_message)
 end
 
-def setEventGraphicsToPokemon(species, eventId, shiny=false)
+def setEventGraphicsToPokemon(species, eventId, shiny = false)
   event = $game_map.events[eventId]
   return if !event
-  shiny_folder= shiny ? "Shiny/" : ""
+  shiny_folder = shiny ? "Shiny/" : ""
   path = "Followers/#{shiny_folder}#{species.to_s}"
   echoln path
-  if pbResolveBitmap("Graphics/Characters/" +path)
+  if pbResolveBitmap("Graphics/Characters/" + path)
     event.character_name = path
   else
-    path =  "Followers/#{shiny_folder}#{species.to_s}_fly"
+    path = "Followers/#{shiny_folder}#{species.to_s}_fly"
     event.character_name = path
   end
   event.refresh
@@ -401,6 +399,7 @@ def checkInputDirection
 end
 
 SWITCH_ON_BOAT = 2214
+
 def getOnBoat
   $game_switches[SWITCH_ON_BOAT] = true
   set_player_graphics("boat_briney_peeko")
@@ -515,7 +514,7 @@ def clefairy_minigame(length = 4, clefairy_event_id = nil)
   pbWait(10)
   if player_input == sequence
     pbSEPlay("GUI naming confirm", 80, 100)
-    pbMEPlay("clefairy_correct",100)
+    pbMEPlay("clefairy_correct", 100)
     pbMessage(_INTL("Correct!\\wtnp[40]"))
 
     12.times do
@@ -537,14 +536,13 @@ def getEventsInRadius(radius = 5)
 
   $game_map.events.each_value do |event|
     next if event.nil? || !event.active?
-    distance = Math.sqrt((event.x - player_x)**2 + (event.y - player_y)**2)
+    distance = Math.sqrt((event.x - player_x) ** 2 + (event.y - player_y) ** 2)
     if distance <= radius
       nearby_events << event
     end
   end
   return nearby_events
 end
-
 
 # Switch 20
 def isDebugMode()
@@ -717,7 +715,7 @@ def select_tv_show_quests(episode = 0)
   episode_quests = all_episodes[episode] || []
   completed_ids = get_completed_quests.map { |q| q.id.to_s }
   filtered = episode_quests.select { |q| completed_ids.include?(q.to_s) }
-  #filtered = episode_quests # For debugging with all quests
+  # filtered = episode_quests # For debugging with all quests
 
   filtered.sample(2)
 end
@@ -815,8 +813,8 @@ def setDayCareOverworlds(land_event_ids = [], water_event_ids = [])
   end
 end
 
-def getRandomWonderTradeNames(number=1)
-  names= RandTrainerNames_female + RandTrainerNames_male
+def getRandomWonderTradeNames(number = 1)
+  names = RandTrainerNames_female + RandTrainerNames_male
   return names.sample(number)
 end
 
@@ -831,7 +829,7 @@ def playAnimationAroundPlayer(animation_id, radius, only_passable = false)
 
   (-radius..radius).each do |dx|
     (-radius..radius).each do |dy|
-      next if Math.sqrt(dx**2 + dy**2) > radius
+      next if Math.sqrt(dx ** 2 + dy ** 2) > radius
       target_x = player_x + dx
       target_y = player_y + dy
       next unless $game_map.valid?(target_x, target_y)
@@ -847,10 +845,9 @@ def playAnimationAroundPlayer(animation_id, radius, only_passable = false)
   playAnimation(animation_id, selected_x, selected_y)
 end
 
-
-def playerFall(mapBelow, target_x, target_y, landing_animation=DUST_ANIMATION_ID)
-  $game_player.walk_anime =false
-  $game_player.direction_fix =true
+def playerFall(mapBelow, target_x, target_y, landing_animation = DUST_ANIMATION_ID)
+  $game_player.walk_anime = false
+  $game_player.direction_fix = true
   $game_player.move_speed_override = 5
   $game_player.through = true
 
@@ -858,7 +855,7 @@ def playerFall(mapBelow, target_x, target_y, landing_animation=DUST_ANIMATION_ID
   pbFadeOutIn {
     $game_temp.player_new_map_id = mapBelow
     $game_temp.player_new_x = target_x
-    $game_temp.player_new_y = target_y-4
+    $game_temp.player_new_y = target_y - 4
     pbCancelVehicles
     $scene.transfer_player
     $game_map.autoplay
@@ -871,19 +868,19 @@ def playerFall(mapBelow, target_x, target_y, landing_animation=DUST_ANIMATION_ID
   $game_player.move_down
   pbWait(16)
   pbSEPlay("Earth3")
-  playAnimation(landing_animation,$game_player.x,$game_player.y)
+  playAnimation(landing_animation, $game_player.x, $game_player.y)
   $game_screen.start_shake(2, 8, 8)
 
-  $game_player.walk_anime =true
-  $game_player.direction_fix =false
+  $game_player.walk_anime = true
+  $game_player.direction_fix = false
   $game_player.move_speed_override = nil
   $game_player.through = false
 
 end
 
-def playerLift(mapAbove, target_x, target_y, lift_animation=nil)
-  $game_player.walk_anime =false
-  $game_player.direction_fix =true
+def playerLift(mapAbove, target_x, target_y, lift_animation = nil)
+  $game_player.walk_anime = false
+  $game_player.direction_fix = true
   $game_player.move_speed_override = 6
   $game_player.through = true
   pbWait(4)
@@ -908,22 +905,143 @@ def playerLift(mapAbove, target_x, target_y, lift_animation=nil)
     $game_map.refresh
   }
 
-  playAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y)
+  playAnimation(DUST_ANIMATION_ID, $game_player.x, $game_player.y)
   pbSEPlay("Earth3")
 
   $game_screen.start_shake(2, 8, 8)
 
-  $game_player.walk_anime =true
-  $game_player.direction_fix =false
+  $game_player.walk_anime = true
+  $game_player.direction_fix = false
   $game_player.move_speed_override = nil
   $game_player.through = false
 end
 
-#quadrant:
-# top_left
-# top_right
-# bottom_left
-# bottom_right
-def windvane_door(event,quadrant, type)
 
+#FORTREE GYM STUFF
+#
+CARDINALS_CW = [DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT]
+def rotate_direction(dir, clockwise, steps = 1)
+  i = CARDINALS_CW.index(dir)
+  CARDINALS_CW[(i + (clockwise ? steps : -steps)) % 4]
+end
+
+def clockwise_rotation?(from_dir, to_dir)
+  rotate_direction(from_dir, true) == to_dir
+end
+
+# Arms of each shape when the event is facing DIRECTION_UP.
+GATE_SHAPES = {
+  :cross    => [DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT],
+  :t        => [DIRECTION_LEFT, DIRECTION_UP, DIRECTION_RIGHT],
+  :l        => [DIRECTION_LEFT, DIRECTION_UP],
+  :straight => [DIRECTION_LEFT, DIRECTION_RIGHT]  #unused
+}
+
+# The quadrant an arm sweeps through when it turns clockwise
+SWEPT_QUADRANT_CW = {
+  DIRECTION_UP    => :top_right,
+  DIRECTION_RIGHT => :bottom_right,
+  DIRECTION_DOWN  => :bottom_left,
+  DIRECTION_LEFT  => :top_left
+}
+
+def gate_arms(shape, facing)
+  base = GATE_SHAPES[shape]
+  return nil if base.nil?
+  turns = CARDINALS_CW.index(facing)   # UP = 0 turns, RIGHT = 1, ...
+  return nil if turns.nil?
+  base.map { |a| rotate_direction(a, true, turns) }
+end
+
+def swept_quadrants(arms, clockwise)
+  arms.map do |a|
+    clockwise ? SWEPT_QUADRANT_CW[a] : SWEPT_QUADRANT_CW[rotate_direction(a, false)]
+  end
+end
+
+# Returns [lane_side, clockwise]
+# lane_side = the side of the 2x2 the player is walking along,
+# (also the direction of the arm that would block them)
+def windvane_push_info(event)
+  dir = $game_player.direction
+  case dir
+  when DIRECTION_UP, DIRECTION_DOWN
+    side = $game_player.x == event.x ? DIRECTION_LEFT : DIRECTION_RIGHT
+    clockwise = (dir == DIRECTION_UP) == (side == DIRECTION_LEFT)
+  when DIRECTION_LEFT, DIRECTION_RIGHT
+    side = $game_player.y == event.y ? DIRECTION_DOWN : DIRECTION_UP  # event.y = bottom row
+    clockwise = (dir == DIRECTION_LEFT) == (side == DIRECTION_DOWN)
+  else
+    return nil
+  end
+  [side, clockwise]
+end
+
+def windvane_walk_through
+  pbMoveRoute($game_player, [
+    PBMoveRoute::ThroughOn,
+    PBMoveRoute::Forward,
+    PBMoveRoute::Forward,
+    PBMoveRoute::ThroughOff
+  ], true)
+end
+
+def windvane_walk_through_blocked
+  pbMoveRoute($game_player, [
+    PBMoveRoute::ThroughOn,
+    PBMoveRoute::Forward,
+    PBMoveRoute::Backward,
+    PBMoveRoute::ThroughOff
+  ], true)
+end
+
+def windvane_door(event, shape = :cross, blocked_quadrants = [])
+  arms = gate_arms(shape, event.direction)
+  return if arms.nil?
+
+  side, clockwise = windvane_push_info(event)
+  return if side.nil?
+
+  # No arm where player is walking -> passthrough
+  unless arms.include?(side)
+    windvane_walk_through
+    return
+  end
+
+  # Gate is stuck
+  unless (swept_quadrants(arms, clockwise) & blocked_quadrants).empty?
+    pbSEPlay("creaking")
+    windvane_walk_through_blocked
+    setFrame(event, clockwise ? 1 : 3)
+    pbSEPlay("Player bump")
+    pbWait(4)
+    resetFrames(event.id)
+    pbWait(8)
+    return
+  end
+
+  pbSEPlay("creaking")
+  setFrame(event, clockwise ? 1 : 3)
+  windvane_walk_through
+  pbWait(4)
+  event.direction = rotate_direction(event.direction, clockwise)
+  resetFrames(event.id)
+
+  pbSEPlay("wind")
+  change_wind_direction(event.direction)
+end
+
+#for use in fortree gym
+def change_wind_direction(direction)
+  var_fortree_wind_direction = 1055
+  case direction
+  when DIRECTION_DOWN
+    pbSet(var_fortree_wind_direction,0)
+  when DIRECTION_LEFT
+    pbSet(var_fortree_wind_direction,1)
+  when DIRECTION_UP
+    pbSet(var_fortree_wind_direction,2)
+  when DIRECTION_RIGHT
+    pbSet(var_fortree_wind_direction,3)
+  end
 end
