@@ -270,6 +270,9 @@ HAIR_WATTSON = "wattson"
 HAIR_FLANNERY = "flannery"
 HAIR_NORMAN = "norman"
 
+HAIR_WINONA = "temp"
+
+
 HAIR_HOOH = "ho-oh"
 HAIR_CRESSELIA = "lunarbob"
 HAIR_LYCANROC = "lycanrocshorthair"

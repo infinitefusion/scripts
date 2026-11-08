@@ -22,7 +22,7 @@ end
 
 def isWeatherWind?(map_id=$game_map.map_id)
   return true if GameData::Weather.get($game_screen.weather_type).category == :Wind
-  return $game_weather.get_map_weather_type(map_id) == :Wind || $game_weather.get_map_weather_type(map_id) == :StrongWinds
+  return RPG::Weather::WIND_WEATHER_TYPES.include?($game_weather.get_map_weather_type(map_id))
 end
 
 def isWeatherFog?(map_id=$game_map.map_id)

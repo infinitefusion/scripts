@@ -208,7 +208,7 @@ end
 def check_path_cloud
   case $game_player.direction
   when DIRECTION_DOWN
-    tile_to_check = [$game_player.x, $game_player.y+3]
+    tile_to_check = [$game_player.x, $game_player.y+2]
   when DIRECTION_LEFT
     tile_to_check = [$game_player.x-2, $game_player.y]
   when DIRECTION_UP

@@ -97,7 +97,7 @@ def getWaterBattleBackgroundFromMetadata(metadata)
   echoln metadata.battle_background_water
 
   return battle_bg if battle_bg
-  return "water" #Default fallback when none defined
+  return "water" # Default fallback when none defined
 end
 
 def getBattleBackgroundFromMetadata(metadata)
@@ -147,7 +147,7 @@ def pbPrepareBattle(battle)
   battle.expGain = battleRules["expGain"] if !battleRules["expGain"].nil?
   # Whether the player gains/loses money at the end of the battle (default: true)
   battle.moneyGain = battleRules["moneyGain"] if !battleRules["moneyGain"].nil?
-  #For wild Pokemon that are caught off guard - skips their first turn
+  # For wild Pokemon that are caught off guard - skips their first turn
   battle.caughtOffGuard = battleRules["surprise"] if !battleRules["surprise"].nil?
   # Whether the player is able to switch when an opponent's Pokémon faints
   battle.switchStyle = ($PokemonSystem.battlestyle == 0)
@@ -441,7 +441,7 @@ def pbWildBattle(species, level, outcomeVar = 1, canRun = true, canLose = false)
   end
   species = GameData::Species.get(species).id
   dexnum = getDexNumberForSpecies(species)
-  if $game_switches[SWITCH_RANDOM_WILD] #Randomized wild pokemon
+  if $game_switches[SWITCH_RANDOM_WILD] # Randomized wild pokemon
     if $game_switches[SWITCH_RANDOM_STATIC_ENCOUNTERS] && dexnum <= NB_POKEMON
       newSpecies = $PokemonGlobal.psuedoBSTHash[dexnum]
       if !newSpecies
@@ -754,8 +754,8 @@ end
 #   return updated_trainer, player_won
 # end
 
-#Event_id and map_id when the trainer's event with the graphics is a different one from the one that's starting the battle
-def pbMoveTutorBattle(trainerID, trainerName, moves, scaleLevel=true, event_id=nil, map_id=nil)
+# Event_id and map_id when the trainer's event with the graphics is a different one from the one that's starting the battle
+def pbMoveTutorBattle(trainerID, trainerName, moves, scaleLevel = true, event_id = nil, map_id = nil)
   if moves && moves.is_a?(Array)
     favored_moves = moves
   else
@@ -777,7 +777,7 @@ def pbMoveTutorBattle(trainerID, trainerName, moves, scaleLevel=true, event_id=n
   return res
 end
 
-def scaledLevelBattle(trainerId,trainerName,event_id=nil, map_id=nil)
+def scaledLevelBattle(trainerId, trainerName, event_id = nil, map_id = nil)
   $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH] = true
   pbSet(Settings::OVERRIDE_BATTLE_LEVEL_VALUE_VAR, $Trainer.highest_level_pokemon_in_party)
   res = pbTrainerBattle(trainerId, trainerName, nil, false, 0, false, 1, nil, nil, event_id, map_id)
@@ -854,6 +854,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech = nil,
   setBattleRule("outcomeVar", outcomeVar) if outcomeVar != 1
   setBattleRule("canLose") if canLose
   setBattleRule("double") if doubleBattle || $PokemonTemp.waitingTrainer
+  setBattleWind(thisEvent&.id,map_id) if Settings::HOENN
   # Perform the battle
   if $PokemonTemp.waitingTrainer
     decision = pbTrainerBattleCore($PokemonTemp.waitingTrainer[0],
@@ -904,6 +905,39 @@ def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
   )
   # Return true if the player won the battle, and false if any other result
   return (decision == 1)
+end
+
+def setBattleWind(event_id, map_id)
+  event = $game_map.events[event_id]
+  return if event.nil?
+  if isWeatherWind?(map_id)
+    event_x = event.x
+    event_y = event.y
+    return unless event_x && event_y
+    wind_type = $game_weather.get_map_weather_type(map_id)
+    case wind_type
+    when :Wind_e
+      echoln "wind towards right"
+      wind_direction = 0 if event_x > $game_player.x  # event to the right of player. Tailwind for event
+      wind_direction = 1 if event_x < $game_player.x  # player to the right of event. Tailwind for player
+    when :Wind_n
+      echoln "wind towards up"
+      wind_direction = 0 if event_y > $game_player.x  # player is above event, tailwind for event
+      wind_direction = 1 if event_y < $game_player.y  # event is above player, tailwind for player
+    when :Wind_s
+      echoln "wind towards down"
+      wind_direction = 1 if event_y > $game_player.x  # player is above event, tailwind for player
+      wind_direction = 0 if event_y < $game_player.y  # event is above player, tailwind for event
+    else  #includes wind_w
+      echoln "wind towards left"
+      wind_direction = 1 if event_x > $game_player.x  # event to the right of player. Tailwind for player
+      wind_direction = 0 if event_x < $game_player.x  # player to the right of event. Tailwind for event
+    end
+
+    if wind_direction
+      $PokemonTemp.recordBattleRule("windside", wind_direction) #Otherwise, it's random when not set
+    end
+  end
 end
 
 #===============================================================================
@@ -962,12 +996,12 @@ Events.onEndBattle += proc { |_sender, e|
   end
 }
 
-#Called after trainer battles only
+# Called after trainer battles only
 def pbAfterTrainerBattle(decision, battle)
   battle_participants = battle.list_all_player_participants
   $PokemonTemp.last_battle_participants = battle_participants
   case decision
-  when 1# Win
+  when 1 # Win
     checkObtainClothesAfterBattle(battle.list_all_player_participants) if Settings::HOENN
   else
   end
