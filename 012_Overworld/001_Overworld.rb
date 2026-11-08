@@ -664,6 +664,8 @@ module PBMoveRoute
   FlyForward = 47 # 1 param
   SetFloatingOn = 48
   SetFloatingOff = 49
+  JumpForward = 50
+  JumpBackwards = 51
 
   ScriptAsync = 101 # 1 param
 end
