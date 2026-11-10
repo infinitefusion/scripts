@@ -45,6 +45,21 @@ def wally_update_team_mauville
   updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY, trainer)
 end
 
+def wally_update_team_petalburg
+  trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY]
+  trainer.currentTeam.each do |pokemon|
+    pokemon.level = 30
+    pokemon.reset_moves
+  end
+  trainer = evolveRebattledTrainerPokemon(trainer)
+
+  new_pokemon = Pokemon.new(fusionOf(:MARILL, :FLECTHINDER), 30)
+  new_pokemon.ability=:HUGEPOWER
+  wally_add_pokemon_directly(new_pokemon)
+  updateRebattledTrainerWithKey(BATTLED_TRAINER_WALLY_KEY, trainer)
+end
+
+
 def get_wally_starter()
   wallyTeam = get_wally_team
   wallyStarter=wallyTeam.last  #starter is the oldest so whatever is at the end
@@ -58,9 +73,9 @@ def get_wally_starter_name(variable=1)
   wallyStarter = get_wally_starter
   pbSet(variable,wallyStarter.name)
 end
-def wally_battle()
+def wally_battle(canLose=false)
   trainer = $PokemonGlobal.battledTrainers[BATTLED_TRAINER_WALLY_KEY]
-  return rematchable_trainer_battle([trainer],nil,false)
+  return rematchable_trainer_battle([trainer],nil,canLose)
 end
 
 def wally_remove_pokemon(pokemon_species)
