@@ -342,9 +342,10 @@ def try_catch_safari_pokemon(pokemon_event)
     if shake >= 4
       spritesLoader = BattleSpriteLoader.new
       pokemon.pif_sprite = spritesLoader.obtain_pif_sprite(pokemon.species)
-      showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,pokemon.name))
+      showPokemonInPokeballWithMessage(pokemon.pif_sprite, _INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[15]\1",$Trainer.name,pokemon.name))
       record_safari_catch(pokemon)
       pbAddPokemonSilent(pokemon)
+      pokemon_event.spawn_safari_ball_event if pokemon_event.stole_item
       pokemon_event.despawn
       return
     end
@@ -371,11 +372,11 @@ Events.onAction.prepend(proc { |_sender, _e|
   next if $game_player.jumping? || $game_player.moving?
   next if $game_player.pbFacingEvent
   next if $game_player.pbFacingTerrainTag.can_surf_freely && !$PokemonGlobal.surfing
-
-  next if pbSafariState.ballcount <= 0
-  pbSafariState.ballcount -= 1
-  updateSafariBallDisplay
-  ball_event = throw_ow_safari_ball
+  if pbSafariState.ballcount > 0
+    pbSafariState.ballcount -= 1
+    updateSafariBallDisplay
+    ball_event = throw_ow_safari_ball
+  end
   check_nb_safari_balls_left
 })
 

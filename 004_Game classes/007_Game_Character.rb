@@ -683,6 +683,10 @@ class Game_Character
           @floating = true
         when PBMoveRoute::SetFloatingOff then
           @floating = false
+        when PBMoveRoute::JumpForward then
+          jumpForward
+        when PBMoveRoute::JumpBackwards then
+          jumpBackward
         end
         @move_route_index += 1
       end

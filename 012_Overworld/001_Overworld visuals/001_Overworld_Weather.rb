@@ -69,7 +69,7 @@ module RPG
 
     def get_max_sprites(power, weather_type)
       power= MAX_SPRITES if !power
-      if weather_type == :Wind
+      if WIND_WEATHER_TYPES.include?(weather_type)
         power /= 8
       end
       return (power + 1) * RPG::Weather::MAX_SPRITES / 10
@@ -281,24 +281,49 @@ module RPG
       else
         x_speed = @weatherTypes[weather_type][0].particle_delta_x
         y_speed = @weatherTypes[weather_type][0].particle_delta_y
-        gradient = x_speed.to_f / y_speed
-        if gradient.abs >= 1
-          # Position sprite to the right of the screen
-          sprite.x = @ox + Graphics.width + rand(Graphics.width)
-          sprite.y = @oy + Graphics.height - rand(Graphics.height + sprite.bitmap.height - Graphics.width / gradient)
-          distance_to_cover = sprite.x - @ox - Graphics.width / 2 + sprite.bitmap.width + rand(Graphics.width * 8 / 5)
+        w = sprite.bitmap.width
+        h = sprite.bitmap.height
+        if y_speed == 0 && x_speed != 0
+          # Pure horizontal wind
+          if x_speed > 0   # moving right: spawn off the left edge
+            sprite.x = @ox - w - rand(Graphics.width)
+            distance_to_cover = (@ox + Graphics.width) - sprite.x + rand(Graphics.width / 2)
+          else             # moving left: spawn off the right edge
+            sprite.x = @ox + Graphics.width + rand(Graphics.width)
+            distance_to_cover = sprite.x - @ox + w + rand(Graphics.width / 2)
+          end
+          sprite.y = @oy - h + rand(Graphics.height + h * 2)
           lifetimes[index] = (distance_to_cover.to_f / x_speed).abs
-        else
-          # Position sprite to the top of the screen
-          sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width - gradient * Graphics.height)
-          sprite.y = @oy - sprite.bitmap.height - rand(Graphics.height)
-          distance_to_cover = @oy - sprite.y + Graphics.height / 2 + rand(Graphics.height * 8 / 5)
+        elsif x_speed == 0 && y_speed != 0
+          # Pure vertical wind
+          if y_speed > 0   # moving down: spawn above the screen
+            sprite.y = @oy - h - rand(Graphics.height)
+            distance_to_cover = (@oy + Graphics.height) - sprite.y + rand(Graphics.height / 2)
+          else             # moving up: spawn below the screen
+            sprite.y = @oy + Graphics.height + rand(Graphics.height)
+            distance_to_cover = sprite.y - @oy + h + rand(Graphics.height / 2)
+          end
+          sprite.x = @ox - w + rand(Graphics.width + w * 2)
           lifetimes[index] = (distance_to_cover.to_f / y_speed).abs
+        else
+          # Original diagonal behaviour (unchanged)
+          gradient = x_speed.to_f / y_speed
+          if gradient.abs >= 1
+            sprite.x = @ox + Graphics.width + rand(Graphics.width)
+            sprite.y = @oy + Graphics.height - rand(Graphics.height + sprite.bitmap.height - Graphics.width / gradient)
+            distance_to_cover = sprite.x - @ox - Graphics.width / 2 + sprite.bitmap.width + rand(Graphics.width * 8 / 5)
+            lifetimes[index] = (distance_to_cover.to_f / x_speed).abs
+          else
+            sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width - gradient * Graphics.height)
+            sprite.y = @oy - sprite.bitmap.height - rand(Graphics.height)
+            distance_to_cover = @oy - sprite.y + Graphics.height / 2 + rand(Graphics.height * 8 / 5)
+            lifetimes[index] = (distance_to_cover.to_f / y_speed).abs
+          end
         end
       end
       sprite.opacity = 100
     end
-
+    WIND_WEATHER_TYPES = [:StrongWinds, :Wind, :Wind_e, :Wind_w, :Wind_n, :Wind_s]
     def update_sprite_position(sprite, index, is_new_sprite = false)
       return if !sprite || !sprite.bitmap || !sprite.visible
       delta_t = Graphics.delta_s
@@ -326,15 +351,20 @@ module RPG
           sprite.y += [2, 1, 1, 0, 0, -1][index % 6] * dist_y / 10   # Variety
         end
 
-        if weather_type == :StrongWinds || weather_type == :Wind
-          sprite.opacity-=[20, 0, 10, -10][rand(4)]
-        end
+        # if WIND_WEATHER_TYPES.include?(weather_type)
+        #   sprite.opacity-=[20, 0, 10, -10][rand(4)]
+        # end
 
         sprite.opacity += @weatherTypes[weather_type][0].particle_delta_opacity * delta_t
         x = sprite.x - @ox
         y = sprite.y - @oy
-        # Check if sprite is off-screen; if so, reset it
-        if sprite.opacity < 64 || x < -sprite.bitmap.width || y > Graphics.height
+        dx = @weatherTypes[weather_type][0].particle_delta_x
+        dy = @weatherTypes[weather_type][0].particle_delta_y
+        off_screen = (dx < 0 && x < -sprite.bitmap.width) ||
+          (dx > 0 && x > Graphics.width) ||
+          (dy > 0 && y > Graphics.height) ||
+          (dy < 0 && y < -sprite.bitmap.height)
+        if sprite.opacity < 64 || off_screen
           reset_sprite_position(sprite, index, is_new_sprite)
         end
       end

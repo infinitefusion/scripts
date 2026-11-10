@@ -228,3 +228,36 @@ GameData::Weather.register({
                                next Tone.new(strength / 2, 0, -strength / 2, 0)
                              }
                            })
+
+GameData::Weather.register({
+                             :id               => :Wind_e,
+                             :category         => :StrongWinds,
+                             :id_number        => 15,
+                             :particle_delta_x     => 1000,
+                             :particle_delta_y     => 0,
+                             :graphics         => [["wind1","wind2","wind3","windcloud1","windcloud2"], nil]
+                           })
+GameData::Weather.register({
+                             :id               => :Wind_w,
+                             :category         => :StrongWinds,
+                             :id_number        => 16,
+                             :particle_delta_x     => -1000,
+                             :particle_delta_y     => 0,
+                             :graphics         => [["wind1","wind2","wind3","windcloud1","windcloud2"], nil]
+                           })
+GameData::Weather.register({
+                             :id               => :Wind_n,
+                             :category         => :StrongWinds,
+                             :id_number        => 17,
+                             :particle_delta_x     => 0,
+                             :particle_delta_y     => -1000,
+                             :graphics         => [["wind1_v","wind2_v","wind3_v","windcloud1","windcloud2"], nil]
+                           })
+GameData::Weather.register({
+                             :id               => :Wind_s,
+                             :category         => :StrongWinds,
+                             :id_number        => 18,
+                             :particle_delta_x     => 0,
+                             :particle_delta_y     => 1000,
+                             :graphics         => [["wind1_v","wind2_v","wind3_v","windcloud1","windcloud2"], nil]
+                           })

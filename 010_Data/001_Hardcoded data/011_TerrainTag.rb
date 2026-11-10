@@ -496,3 +496,7 @@ GameData::TerrainTag.register({
                                 :battle_environment => :Grass,
                                 :step_sound => "steps/step_tall_grass"
                               })
+GameData::TerrainTag.register({
+                                :id => :Cloud,
+                                :id_number => 48
+                              })

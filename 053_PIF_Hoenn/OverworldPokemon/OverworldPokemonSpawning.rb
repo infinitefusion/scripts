@@ -40,7 +40,12 @@ def create_overworld_pokemon_event(pokemon, position, terrain, behavior_roaming 
 
   species = pokemon[0]
   level = pokemon[1]
-  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, DynamicOverworldPokemonEvent) do |event|
+  if $PokemonTemp.overworld_safari
+    event_class = SafariOverworldPokemonEvent
+  else
+    event_class = DynamicOverworldPokemonEvent
+  end
+  event = $PokemonTemp.createTempEvent(template_event, $game_map.map_id, position, nil, event_class) do |event|
     event.setup_pokemon(species, level, terrain, behavior_roaming, behavior_noticed)
   end
   return unless event
@@ -224,7 +229,7 @@ def despawn_overworld_pokemon(event_id, terrain)
     clearOverworldPokemon
     return
   end
-  if event.pokemon.shiny? # re-add it ad the end of the list instead
+  if event.pokemon&.shiny? # re-add it ad the end of the list instead
     renew_overworld_pokemon(event.id)
     event_id = $PokemonTemp.overworld_pokemon_on_map[0]
     event = $game_map.events[event_id]
