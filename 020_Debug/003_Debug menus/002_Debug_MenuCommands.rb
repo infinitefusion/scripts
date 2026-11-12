@@ -840,19 +840,40 @@ DebugMenuCommands.register("setplayer", {
   }
 })
 
-DebugMenuCommands.register("changeoutfit", {
+# DebugMenuCommands.register("changeoutfit", {
+#   "parent"      => "playermenu",
+#   "name"        => _INTL("Set Player Outfit"),
+#   "description" => _INTL("Edit the player's outfit number."),
+#   "effect"      => proc {
+#     oldoutfit = $Trainer.outfit
+#     params = ChooseNumberParams.new
+#     params.setRange(0, 99)
+#     params.setDefaultValue(oldoutfit)
+#     $Trainer.outfit = pbMessageChooseNumber(_INTL("Set the player's outfit."), params)
+#     pbMessage(_INTL("Player's outfit was changed.")) if $Trainer.outfit != oldoutfit
+#   }
+# })
+
+DebugMenuCommands.register("obtainhat", {
+    "parent"      => "playermenu",
+    "name"        => _INTL("Obtain Hat"),
+    "description" => _INTL("Type the ID of the hat to obtain"),
+    "effect"      => proc {
+      outfit_id =  pbEnterText("Id?", 0, 20, "")
+      obtainHat(outfit_id)
+    }
+  })
+
+DebugMenuCommands.register("obtainclothes", {
   "parent"      => "playermenu",
-  "name"        => _INTL("Set Player Outfit"),
-  "description" => _INTL("Edit the player's outfit number."),
+  "name"        => _INTL("Obtain Clothes"),
+  "description" => _INTL("Type the ID of the clothes to obtain"),
   "effect"      => proc {
-    oldoutfit = $Trainer.outfit
-    params = ChooseNumberParams.new
-    params.setRange(0, 99)
-    params.setDefaultValue(oldoutfit)
-    $Trainer.outfit = pbMessageChooseNumber(_INTL("Set the player's outfit."), params)
-    pbMessage(_INTL("Player's outfit was changed.")) if $Trainer.outfit != oldoutfit
+    outfit_id =  pbEnterText("Id?", 0, 20, "")
+    obtainClothes(outfit_id)
   }
 })
+
 
 DebugMenuCommands.register("renameplayer", {
   "parent"      => "playermenu",

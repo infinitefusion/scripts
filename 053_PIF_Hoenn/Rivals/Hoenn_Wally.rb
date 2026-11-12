@@ -51,6 +51,8 @@ def wally_update_team_petalburg
     pokemon.level = 30
     pokemon.reset_moves
   end
+  trainer.inventory = [:SUNSTONE, :MOONSTONE, :WATERSTONE, :LEAFSTONE,
+                       :FIRESTONE, :THUNDERSTONE, :ICESTONE]
   trainer = evolveRebattledTrainerPokemon(trainer)
 
   new_pokemon = Pokemon.new(fusionOf(:MARILL, :FLECTHINDER), 30)
