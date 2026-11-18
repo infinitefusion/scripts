@@ -371,7 +371,9 @@ Events.onAction.prepend(proc { |_sender, _e|
   next unless Settings::HOENN && $PokemonTemp.overworld_safari
   next if $game_player.jumping? || $game_player.moving?
   next if $game_player.pbFacingEvent
-  next if $game_player.pbFacingTerrainTag.can_surf_freely && !$PokemonGlobal.surfing
+  facing_terrain = $game_player.pbFacingTerrainTag
+  next if facing_terrain.can_surf_freely && !$PokemonGlobal.surfing
+  next if facing_terrain.acroBike
   if pbSafariState.ballcount > 0
     pbSafariState.ballcount -= 1
     updateSafariBallDisplay

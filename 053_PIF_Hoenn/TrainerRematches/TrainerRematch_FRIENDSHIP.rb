@@ -84,8 +84,6 @@ class BattledTrainer
     TEAM_AQUA_GRUNT_F:        [25, 60, 100],
     TEAM_MAGMA_GRUNT_M:       [25, 60, 100],
     TEAM_MAGMA_GRUNT_F:       [25, 60, 100],
-    TEAM_MAGMAQUA_GRUNT_M:    [25, 60, 100],
-    TEAM_MAGMAQUA_GRUNT_F:    [25, 60, 100],
     POKEFAN_M:    [10, 22, 38],
     POKEFAN_F:    [10, 22, 38],
     SCHOOLMATE_SR:      [12, 25, 50],

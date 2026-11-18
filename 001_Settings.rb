@@ -96,7 +96,12 @@ module Settings
   STARTUP_MESSAGES_HOENN = ""
 
   LEVEL_CAPS_KANTO = [12, 22, 26, 35, 38, 45, 51, 54, 62, 62, 63, 64, 64, 65, 67, 68]
-  LEVEL_CAPS_HOENN = [15, 19, 26, 99, 99, 99, 99, 99]
+  LEVEL_CAPS_HOENN = [15, 18, 26, 99, 99, 99, 99, 99]
+
+  LEVEL_CAP_TRAINERS_HOENN = [[:LEADER_Roxanne, "Roxanne"], [:LEADER_Brawly, "Brawly"], [:LEADER_Wattson, "Wattson"],
+                              [:LEADER_Flannery, "Flannery"],[:LEADER_Norman, "Norman"],[:LEADER_Winona, "Winona"],
+  [:LEADER_Liza, "Liza"],[:LEADER_Wallace, "Wallace"],[:CHAMPION_Steven, "Steven"]
+  ] #todo: to calc level caps dynamically instead of hardcoded
 
   CUSTOM_ENTRIES_NAME_PLACEHOLDER = "POKENAME"
 

@@ -52,6 +52,21 @@ def getCurrentLevelCap()
   return current_max_level&.floor || 100
 end
 
+#todo calculate this once then cache it. Use it in getCurrentLevelCap instead of the hardocded one
+def calculate_level_caps_array
+  level_caps = []
+  Settings::LEVEL_CAP_TRAINERS_HOENN.each do |trainer_id, trainer_name|
+    trainer =pbLoadTrainer(trainer_id,trainer.trainer_name,0)
+    max_level = 1
+    trainer.pokemon.each do |pokemon_data|
+      level = pokemon_data[:level]
+      max_level = level if level > max_level
+    end
+    level_caps << max_level
+  end
+end
+
+
 def pokemonExceedsLevelCap(pokemon)
   return false if $Trainer.badge_count >= Settings::NB_BADGES
   current_max_level = getCurrentLevelCap()
