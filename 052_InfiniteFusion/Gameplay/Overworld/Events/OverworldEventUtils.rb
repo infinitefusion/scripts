@@ -916,4 +916,51 @@ def playerLift(mapAbove, target_x, target_y, lift_animation = nil)
   $game_player.through = false
 end
 
+def unlock_cable_car(cable_car_type)
+  $Trainer.unlocked_cable_cars = [] unless $Trainer.unlocked_cable_cars
+  return if $Trainer.unlocked_cable_cars.include?(cable_car_type)
+  $Trainer.unlocked_cable_cars.push(cable_car_type)
+end
 
+def select_current_cable_car(event_id)
+  cars = $Trainer.unlocked_cable_cars
+  return if !cars || cars.empty?
+
+  event = $game_map.events[event_id]
+  return unless event
+
+  event.forced_character_name = "cableCar_#{cars.first}"
+  echoln cars
+  echoln "current is #{event.character_name}"
+end
+def select_next_cable_car(event_id)
+  return unless $Trainer.unlocked_cable_cars
+  cars = $Trainer.unlocked_cable_cars
+
+  if cars.length > 1
+    current_car = cars.shift
+    cars.push(current_car)
+  end
+
+  next_car = cars.first.to_s
+  event = $game_map.events[event_id]
+  event.forced_character_name = "cableCar_#{next_car}"
+  echoln cars
+  echoln "new is #{event.character_name}"
+end
+
+
+def select_last_cable_car(event_id)
+  cars = $Trainer.unlocked_cable_cars
+  return if !cars || cars.empty?
+
+  selected = cars.last
+  if cars.length > 1
+    cars.pop
+    cars.unshift(selected)
+  end
+
+  event = $game_map.events[event_id]
+  return unless event
+  event.forced_character_name = "cableCar_#{selected}"
+end

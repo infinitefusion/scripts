@@ -299,6 +299,13 @@ define_quest("rusturf_trumpet",:FIELD_QUEST,_INTL("Uproar in B Flat"), _INTL("A 
 define_quest("evergrande_trumpet",:FIELD_QUEST,_INTL("The Trumpet Festival!"), _INTL("Find the 4 Trumpet Brothers and join the Trumpet Festival in Evergrande City."),_INTL("Evergrande City"),"NPC_Hoenn_trumpet_playing",MAP_EVERGRANDE)
 
 #Route 112
+define_quest("route112_cableCar1",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 1)"), _INTL("Show the first Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+define_quest("route112_cableCar2",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 2)"), _INTL("Show the next Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+define_quest("route112_cableCar3",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 3)"), _INTL("Show the next Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+define_quest("route112_cableCar4",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 4)"), _INTL("Show the next Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+define_quest("route112_cableCar5",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 5)"), _INTL("Show the next Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+define_quest("route112_cableCar6",:FIELD_QUEST,_INTL("Painting the Cable Car (Part 6)"), _INTL("Show the next Pokémon from the painter's list of local Pokémon to use as inspiration for the Cable Car's new paint job."),_INTL("Route 112"),"NPC_Hoenn_Painter")
+
 #Route 111 (North)
 define_quest("route111_cut",:FIELD_QUEST,_INTL("Lawnmower Mon"), _INTL("Use the move Cut in the field to get rid of the tall grass near the campsite."),_INTL("Route 111"),"NPC_Hoenn_Schoolmate_Senior")
 #Route 113

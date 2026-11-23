@@ -90,6 +90,7 @@ class Player < Trainer
   attr_accessor :last_visited_map
   attr_accessor :nb_npc_friends
 
+  attr_accessor :unlocked_cable_cars
 
 
   def trainer_type

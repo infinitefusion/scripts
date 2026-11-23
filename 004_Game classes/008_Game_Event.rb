@@ -12,6 +12,7 @@ class Game_Event < Game_Character
   attr_accessor :refresh_hue
   attr_accessor :is_rival_following
   attr_accessor :forced_bush_depth
+  attr_reader :forced_character_name
 
   def initialize(map_id, event, map=nil)
     super(map)
@@ -59,6 +60,12 @@ class Game_Event < Game_Character
     return true if @on_bridge && $PokemonGlobal.bridge <= 0
     return @through
   end
+  def forced_character_name=(value)
+    value = nil if value == ""
+    @forced_character_name = value
+     @character_name = value || @page.graphic.character_name if @page
+  end
+
 
   def id;   return @event.id;   end
   def name; return @event.name; end
@@ -262,7 +269,7 @@ class Game_Event < Game_Character
         @forced_bush_depth = false
     end
     @tile_id              = @page.graphic.tile_id
-    @character_name       = @page.graphic.character_name
+    @character_name       = @forced_character_name || @page.graphic.character_name
     @character_hue        = @page.graphic.character_hue if @refresh_hue
     if @original_direction != @page.graphic.direction
       @direction          = @page.graphic.direction
