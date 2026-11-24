@@ -875,6 +875,15 @@ DebugMenuCommands.register("obtainclothes", {
 })
 
 
+DebugMenuCommands.register("randomizeAppearance", {
+  "parent"      => "playermenu",
+  "name"        => _INTL("Randomize Appearance"),
+  "description" => _INTL("Randomizess the player outfit, hat and hair"),
+  "effect"      => proc {
+    randomizePlayerOutfit()
+  }
+})
+
 DebugMenuCommands.register("renameplayer", {
   "parent"      => "playermenu",
   "name"        => _INTL("Set Player Name"),
