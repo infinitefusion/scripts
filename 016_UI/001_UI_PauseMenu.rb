@@ -142,7 +142,7 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}", pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
-      if $PokemonTemp.overworld_safari
+      if $PokemonTemp.hoenn_safari
         commands[cmdPC = commands.length] = "  <icon=#{ICON_PC}>  " + _INTL("PC")
       end
       commands[cmdQuit = commands.length] = "  <icon=#{ICON_QUIT_SAFARI}>  " + _INTL("Quit")

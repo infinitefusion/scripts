@@ -1,4 +1,5 @@
 def displayCaughtPokemonIcons
+  echoln pbSafariState.caught_pokemon
   pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
   return SafariCaughtIcons_UI.new(pbSafariState.caught_pokemon)
 end

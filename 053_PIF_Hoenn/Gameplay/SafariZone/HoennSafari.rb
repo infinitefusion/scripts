@@ -14,6 +14,7 @@ HOENN_SAFARI_MAPS = [MAP_SAFARI_1,MAP_SAFARI_2,MAP_SAFARI_3,MAP_SAFARI_4,MAP_SAF
 
 class PokemonTemp
   attr_accessor :overworld_safari
+  attr_accessor :hoenn_safari
 end
 
 class SafariState
@@ -28,7 +29,8 @@ def initialize_safari
   nb_balls = 18 if nb_balls <= 0
 
   pbSafariState.pbStart(nb_balls)
-  $PokemonTemp.overworld_safari = true
+  $PokemonTemp.overworld_safari = true if $PokemonSystem.overworld_encounters
+  $PokemonTemp.hoenn_safari = true
   updateSafariBallDisplay()
   pbSafariState.area_types= initialize_area_types
   pbSafariState.area_unlock_methods= initialize_unlock_methods
@@ -275,6 +277,7 @@ class Trainer
   attr_accessor :safari_caught
 end
 def record_safari_catch(pokemon)
+  echoln "recording safari catch #{pokemon.species}"
   pbSafariState.caught_pokemon = [] unless pbSafariState.caught_pokemon
   pbSafariState.caught_pokemon << pokemon# unless pbSafariState.caught_pokemon.include?(pokemon.species)
 end
@@ -352,7 +355,7 @@ end
 
 
 Events.onAction.prepend(proc { |_sender, _e|
-  next unless Settings::HOENN && $PokemonTemp.overworld_safari
+  next unless $PokemonTemp.overworld_safari
   next if $game_player.jumping? || $game_player.moving?
   next if $game_player.pbFacingEvent
   facing_terrain = $game_player.pbFacingTerrainTag

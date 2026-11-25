@@ -192,6 +192,7 @@ Events.onWildBattleOverride += proc { |_sender,e|
   next if handled[0]!=nil
   next if !pbInSafari?
   handled[0] = pbSafariBattle(species,level)
+  updateBallDisplay
 }
 
 def pbSafariBattle(species,level)
@@ -228,6 +229,12 @@ def pbSafariBattle(species,level)
   #    2 - Player ran out of Safari Balls
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
+  if Settings::HOENN
+    if decision == 4
+      record_safari_catch(pkmn)
+    end
+  end
+
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)
