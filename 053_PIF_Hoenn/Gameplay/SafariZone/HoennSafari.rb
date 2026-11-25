@@ -40,7 +40,7 @@ end
 def initialize_area_types
   return {
     :wetland => [[nil,3],],
-    :lakeland => [[nil,3]],
+    :lakeland => [[:WATER,4]],
     :badland => [[:NORMAL,6]],
     :grassland => [[:GROUND,5]],
     :woodland => [[nil,20]],
@@ -81,7 +81,7 @@ end
 def count_safari_caught(type = nil)
   caught_pokemon = pbSafariState.caught_pokemon || []
   caught_species =  caught_pokemon.map(&:species)
-  caught_species = caught.select { |species| GameData::Species.get(species).hasType?(type) } if type
+  caught_species = caught_species.select { |species| GameData::Species.get(species).hasType?(type) } if type
   return caught_species.uniq.size
 end
 
@@ -112,6 +112,7 @@ def safariNewAreaCheck(area_id)
   unlock_methods = pbSafariState.area_types[area_id]
   unlock_method  = unlock_methods[pbSafariState.area_unlock_methods[area_id]]
   type_id, nb_to_catch = unlock_method
+  echoln type_id
 
   pbCallBub(2, @event_id)
   pbMessage(_INTL("Halt! This way is the \\C[1]{1}\\C[0].", area_name))
