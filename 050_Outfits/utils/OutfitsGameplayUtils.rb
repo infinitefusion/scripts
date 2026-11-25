@@ -473,14 +473,14 @@ end
 def randomizePlayerOutfit()
   $Trainer.hat = $PokemonGlobal.hats_data.keys.sample
   $Trainer.hat2 = $PokemonGlobal.hats_data.keys.sample
-  $Trainer.hat2 = nil if(rand(3)==0)
+  $Trainer.hat2 = nil #if(rand(3)==0)
 
   $Trainer.clothes = $PokemonGlobal.clothes_data.keys.sample
   $Trainer.hat_color = rand(2)==0 ? rand(255) : 0
-  $Trainer.hat2_color = rand(2)==0 ? rand(255) : 0
+  #$Trainer.hat2_color = rand(2)==0 ? rand(255) : 0
 
-  $Trainer.clothes_color = rand(2)==0 ? rand(255) : 0
-  $Trainer.hair_color =  rand(2)==0 ? rand(255) : 0
+  #$Trainer.clothes_color = rand(2)==0 ? rand(255) : 0
+  #$Trainer.hair_color =  rand(2)==0 ? rand(255) : 0
 
   hair_id = $PokemonGlobal.hairstyles_data.keys.sample
   hair_color = [1,2,3,4].sample

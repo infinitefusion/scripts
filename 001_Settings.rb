@@ -157,6 +157,9 @@ module Settings
   ZAPMOLCUNO_NB = 999999 # 176821
   MAPS_WITHOUT_SURF_MUSIC = [762]
 
+  CLOTHES_CHANGE_SOUND = "outfit_puton"
+  CLOTHES_REMOVE_SOUND = "outfit_remove"
+
   WONDERTRADE_BASE_URL = "http://localhost:8080"
   WONDERTRADE_PUBLIC_KEY = "http://localhost:8080"
 

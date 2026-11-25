@@ -1,10 +1,10 @@
 def playOutfitRemovedAnimation()
-  pbSEPlay("shiny", 80, 60)
+  pbSEPlay(Settings::CLOTHES_REMOVE_SOUND, 80, 100)
   $scene.spriteset.addUserAnimation(Settings::OW_SHINE_ANIMATION_ID, $game_player.x, $game_player.y, true)
 end
 
 def playOutfitChangeAnimation()
-  pbSEPlay("shiny", 80, 100)
+  pbSEPlay(Settings::CLOTHES_CHANGE_SOUND, 80, 100)
   $scene.spriteset.addUserAnimation(Settings::OW_SHINE_ANIMATION_ID, $game_player.x, $game_player.y, true)
 end
 
